@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Icon Preview</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0D0D0D; color: #E5E5E5; font-family: 'DM Sans', sans-serif; padding: 3rem; }
+        h1 { font-size: 1.2rem; letter-spacing: 0.1em; text-transform: uppercase; color: #FF6B2C; margin-bottom: 2rem; }
+        h2 { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: #8A8A8A; margin: 2.5rem 0 1rem; border-top: 1px solid #1F1F1F; padding-top: 1.5rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 1.5rem; }
+        .icon-card {
+            display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+            padding: 1.25rem; border-radius: 12px; background: #151515;
+            border: 1px solid #1F1F1F; transition: all 0.2s;
+        }
+        .icon-card:hover { border-color: #FF6B2C; background: #1a1a1a; }
+        .icon-card img { width: 32px; height: 32px; filter: brightness(0) invert(1); }
+        .icon-card span { font-size: 0.6rem; color: #8A8A8A; text-align: center; word-break: break-all; }
+        .pick { border-color: #FF6B2C; }
+        .variants { border-color: #00E5FF44; }
+    </style>
+</head>
+<body>
+    <h1>Time Mission Icon Library</h1>
+
+    <h2>Pick Your Favourite — Fire</h2>
+    <div class="grid" id="fire-variants"></div>
+
+    <h2>Pick Your Favourite — Party</h2>
+    <div class="grid" id="party-variants"></div>
+
+    <h2>Pick Your Favourite — Muscle</h2>
+    <div class="grid" id="muscle-variants"></div>
+
+    <h2>Site Icons (Original)</h2>
+    <div class="grid" id="site"></div>
+
+    <h2>New Icons</h2>
+    <div class="grid" id="new"></div>
+
+    <script>
+        const site = ['close','gamepad','arrow-right','arrow-left','challenge-rooms','clock','clock-alt','players','location-pin','calendar','instagram','tiktok','facebook'];
+        const fresh = ['star','heart','thumbs-up','lightning','trophy','rocket','target','crown','sparkles','smile','laugh','explosion','eyes','100','clap'];
+        const fireV = ['fire-v1','fire-v2','fire-v3'];
+        const partyV = ['party-v1','party-v2','party-v3'];
+        const muscleV = ['muscle-v1','muscle-v2','muscle-v3'];
+
+        function render(names, el, cls) {
+            document.getElementById(el).innerHTML = names.map(n =>
+                `<div class="icon-card ${cls||''}"><img src="icon-${n}.svg"><span>${n}</span></div>`
+            ).join('');
+        }
+        render(fireV, 'fire-variants', 'variants');
+        render(partyV, 'party-variants', 'variants');
+        render(muscleV, 'muscle-variants', 'variants');
+        render(site, 'site');
+        render(fresh, 'new');
+    </script>
+</body>
+</html>

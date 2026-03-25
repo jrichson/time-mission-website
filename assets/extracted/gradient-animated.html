@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Gradient — 1920x1080</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0D0D0D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        .gradient {
+            width: 1920px;
+            height: 1080px;
+            background: linear-gradient(90deg,
+                #FF6B2C,
+                #FF00E5,
+                #00E5FF,
+                #FF6B2C,
+                #FF00E5,
+                #00E5FF,
+                #FF6B2C
+            );
+            background-size: 400% 100%;
+            animation: gradient-shift 8s linear infinite;
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient"></div>
+</body>
+</html>
