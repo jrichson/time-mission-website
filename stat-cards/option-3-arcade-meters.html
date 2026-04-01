@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stat Cards - Option 3: Arcade Meters</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #FF6B2C;
+            --cyan: #00E5FF;
+            --magenta: #FF00E5;
+            --lime: #AAFF00;
+            --black: #0D0D0D;
+            --dark: #151515;
+            --dark-light: #1a1a1a;
+            --white: #FFFFFF;
+            --gray: #8A8A8A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--black);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        h1 {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--white);
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .stat-card {
+            background: var(--dark);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+            border: 2px solid var(--dark-light);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--meter-color);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
+                        inset 0 0 30px rgba(var(--meter-rgb), 0.1);
+        }
+
+        .stat-card:nth-child(1) { --meter-color: var(--orange); --meter-rgb: 255, 107, 44; }
+        .stat-card:nth-child(2) { --meter-color: var(--cyan); --meter-rgb: 0, 229, 255; }
+        .stat-card:nth-child(3) { --meter-color: var(--magenta); --meter-rgb: 255, 0, 229; }
+        .stat-card:nth-child(4) { --meter-color: var(--lime); --meter-rgb: 170, 255, 0; }
+
+        .meter-container {
+            width: 100%;
+            height: 12px;
+            background: var(--dark-light);
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--meter-color), rgba(var(--meter-rgb), 0.6));
+            border-radius: 6px;
+            width: 0;
+            animation: meterFill 1.5s ease-out forwards;
+            position: relative;
+            box-shadow: 0 0 20px var(--meter-color);
+        }
+
+        .stat-card:nth-child(1) .meter-fill { animation-delay: 0s; --fill-width: 85%; }
+        .stat-card:nth-child(2) .meter-fill { animation-delay: 0.2s; --fill-width: 75%; }
+        .stat-card:nth-child(3) .meter-fill { animation-delay: 0.4s; --fill-width: 50%; }
+        .stat-card:nth-child(4) .meter-fill { animation-delay: 0.6s; --fill-width: 70%; }
+
+        @keyframes meterFill {
+            0% { width: 0; }
+            100% { width: var(--fill-width); }
+        }
+
+        .meter-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 20px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+            animation: meterShine 2s ease-in-out infinite;
+        }
+
+        @keyframes meterShine {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .meter-segments {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            gap: 3px;
+            padding: 2px;
+        }
+
+        .meter-segments span {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--meter-color);
+        }
+
+        .stat-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--meter-color);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 30px rgba(var(--meter-rgb), 0.5);
+        }
+
+        .stat-number.animate {
+            animation: numberFlash 0.3s ease;
+        }
+
+        @keyframes numberFlash {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.05); }
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 600;
+        }
+
+        /* Arcade cabinet style top */
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--meter-color);
+            border-radius: 16px 16px 0 0;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>OPTION 3: ARCADE METERS</h1>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="meter-container">
+                <div class="meter-fill"></div>
+                <div class="meter-segments">
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <path d="M3 9h18M9 21V9"/>
+                </svg>
+            </div>
+            <div class="stat-number">25+</div>
+            <div class="stat-label">Challenge Rooms</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="meter-container">
+                <div class="meter-fill"></div>
+                <div class="meter-segments">
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                </svg>
+            </div>
+            <div class="stat-number" id="minutes">60</div>
+            <div class="stat-label">Minutes of Play</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="meter-container">
+                <div class="meter-fill"></div>
+                <div class="meter-segments">
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+            </div>
+            <div class="stat-number">2-5</div>
+            <div class="stat-label">Players Per Team</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="meter-container">
+                <div class="meter-fill"></div>
+                <div class="meter-segments">
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+            </div>
+            <div class="stat-number">7</div>
+            <div class="stat-label">Global Locations</div>
+        </div>
+    </div>
+
+    <script>
+        const minutesEl = document.getElementById('minutes');
+        const options = [60, 90, 120];
+        let idx = 0;
+
+        setInterval(() => {
+            idx = (idx + 1) % options.length;
+            minutesEl.classList.add('animate');
+            minutesEl.textContent = options[idx];
+            setTimeout(() => minutesEl.classList.remove('animate'), 300);
+        }, 2500);
+    </script>
+</body>
+</html>

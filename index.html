@@ -1,0 +1,3376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOL Command Center | Step Into The Mission</title>
+    <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #FF6B2C;
+            --orange-light: #FF8F5C;
+            --orange-dark: #E55A1F;
+            --cyan: #00E5FF;
+            --magenta: #FF00E5;
+            --lime: #AAFF00;
+            --black: #0D0D0D;
+            --dark: #151515;
+            --dark-light: #1F1F1F;
+            --white: #FFFFFF;
+            --white-soft: #E5E5E5;
+            --gray: #8A8A8A;
+            --display: 'Bebas Neue', sans-serif;
+            --body: 'DM Sans', sans-serif;
+
+            /* Consistent gradient system */
+            --gradient-primary: linear-gradient(135deg, #f9a41a 0%, #ef4b23 50%, #c7451e 100%);
+            --gradient-secondary: linear-gradient(135deg, #00E5FF 0%, #AAFF00 100%);
+            --gradient-accent: linear-gradient(90deg, #f9a41a 0%, #ef4b23 50%, #c7451e 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--body);
+            background: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(13, 13, 13, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 107, 44, 0.2);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        .nav-logo img {
+            height: 52px;
+            width: auto;
+        }
+
+        /* Hide hamburger on desktop */
+        .nav-menu-btn {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu-btn {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: transparent;
+                border: none;
+                color: var(--white);
+                font-family: var(--body);
+                font-size: 0.85rem;
+                font-weight: 500;
+                cursor: pointer;
+                padding: 0.5rem;
+            }
+
+            .nav-menu-btn .hamburger {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .nav-menu-btn .hamburger span {
+                width: 20px;
+                height: 2px;
+                background: var(--white);
+                transition: all 0.3s ease;
+            }
+        }
+
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            justify-content: center;
+            flex: 2;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white-soft);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--orange);
+            text-shadow: 0 0 10px rgba(249, 164, 26, 0.4);
+        }
+
+        .nav-links a.active {
+            color: var(--orange);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            justify-content: flex-end;
+            flex: 1;
+        }
+
+        .location-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            border: none;
+            color: var(--white);
+            font-family: var(--body);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .location-btn svg {
+            width: 16px;
+            height: 16px;
+            color: var(--orange);
+        }
+
+        .location-dropdown {
+            position: absolute;
+            top: calc(100% + 1rem);
+            right: 0;
+            min-width: 280px;
+            text-align: left;
+            background: var(--dark);
+            border: 1px solid rgba(255, 107, 44, 0.3);
+            border-radius: 12px;
+            padding: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .location-btn.open .location-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .location-group {
+            padding: 0.5rem;
+        }
+
+        .location-group-title {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--orange);
+            padding: 0.5rem 0.75rem;
+        }
+
+        .location-dropdown a {
+            display: block;
+            padding: 0.6rem 0.75rem;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .location-dropdown a:hover {
+            background: rgba(255, 107, 44, 0.1);
+            color: var(--white);
+        }
+
+        .btn-tickets {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
+        }
+
+        .btn-tickets:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-video-container iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 177.78vh;
+            height: 100vh;
+            min-width: 100%;
+            min-height: 56.25vw;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                180deg,
+                rgba(13, 13, 13, 0.3) 0%,
+                rgba(13, 13, 13, 0.1) 30%,
+                rgba(13, 13, 13, 0.5) 70%,
+                rgba(13, 13, 13, 1) 100%
+            );
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            padding: 0 2rem;
+            margin-top: 5rem;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 107, 44, 0.15);
+            border: 1px solid rgba(255, 107, 44, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-eyebrow .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--orange);
+            border-radius: 50%;
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Typewriter effect for rotating taglines */
+        .hero-eyebrow .tagline-text {
+            display: inline-block;
+            min-width: 180px;
+            text-align: left;
+        }
+
+        .hero-eyebrow .tagline-text::after {
+            content: '|';
+            animation: blink-cursor 0.7s step-end infinite;
+            color: var(--cyan);
+            font-weight: 400;
+            margin-left: 2px;
+        }
+
+        @keyframes blink-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .hero-title {
+            font-family: var(--display);
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 400;
+            line-height: 0.9;
+            letter-spacing: 0.02em;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-title .line-1 {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.1rem, 3.1vw, 2.4rem);
+            letter-spacing: 0.30em;
+            color: var(--white);
+        }
+
+        .hero-title .line-2 {
+            display: block;
+            width: 100%;
+            max-width: clamp(360px, 90vw, 960px);
+            height: clamp(48px, 12vw, 120px);
+            margin: 0 auto;
+            background: linear-gradient(90deg, var(--orange), var(--magenta), var(--cyan), var(--orange));
+            background-size: 300% 100%;
+            animation: gradient-shift 5s ease-in-out infinite;
+            transform: scale(1.2);
+            transform-origin: center;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1978.73 257.51'%3E%3Cpath fill='%23fff' d='M0,248.33C9.57,219.98,57.06,84.34,76.19,30.01l-20.84-14.01c-3.76-2.4-1.7-6.83,2.05-6.83h93.95l14.35,47.48c8.2,25.29,16.74,53.65,20.5,66.28,0,5.46-1.7,30.75-1.7,36.22,10.25-11.27,44.4-47.14,76.18-80.97,18.8-19.47,38.61-40.99,60.48-64.23,2.73-3.07,6.49-4.78,10.93-4.78h69.71c-3.42,12.3-75.51,217.64-79.26,228.9-2.4,6.83-7.17,10.26-14.35,10.26h-69.36l32.81-95.32-66.97,65.26c-3.07,2.74-6.49,4.11-10.59,4.11h-57.05l-23.24-69.02-29.38,84.73c-2.39,6.83-7.17,10.26-14.35,10.26H0ZM455.48,30.01c-6.83-5.12-13.32-9.57-21.18-13.66-3.77-2.4-2.05-7.17,1.7-7.17h106.61l-79.26,228.9c-2.4,6.83-7.17,10.26-14.35,10.26h-69.36c13.66-40.65,58.08-163.99,75.85-218.32ZM522.12,248.33l20.15-48.51c2.4-5.82,7.52-9.57,14.01-9.57l166.39.34c3.77,0,5.82-1.37,6.83-4.44l9.23-26.66c1.03-2.73,0-4.09-3.75-4.09h-116.16c-35.54,0-60.48-21.87-48.52-54.67l12.65-37.24c9.9-29.73,39.97-54.32,78.24-54.32h196.8c-5.81,17.42-9.91,29.73-15.38,47.14-2.4,7.17-7.17,10.6-14.35,10.6h-188.94c-3.77,0-5.12,4.44-2.4,6.83l17.43,15.72-2.74,8.54c-1.03,2.73.34,4.09,3.77,4.09h116.51c35.19,0,60.12,21.87,48.17,54.67l-12.64,37.23c-10.94,29.04-36.56,54.33-75.85,54.33h-209.43ZM837.5,248.33l20.15-48.51c2.4-5.82,7.52-9.57,14.01-9.57l166.39.34c3.77,0,5.81-1.37,6.83-4.44l9.23-26.66c1.03-2.73,0-4.09-3.77-4.09h-116.15c-35.54,0-60.48-21.87-48.52-54.67l12.65-37.24c9.9-29.73,39.97-54.32,78.24-54.32h196.8c-5.82,17.42-9.91,29.73-15.38,47.14-2.4,7.17-7.17,10.6-14.35,10.6h-188.94c-3.77,0-5.12,4.44-2.4,6.83l17.42,15.72-2.73,8.54c-1.03,2.73.34,4.09,3.75,4.09h116.51c35.2,0,60.14,21.87,48.18,54.67l-12.64,37.23c-10.94,29.04-36.56,54.33-75.85,54.33h-209.43ZM1227.02,30.01c-6.83-5.12-13.32-9.57-21.18-13.66-3.75-2.4-2.04-7.17,1.71-7.17h106.61l-79.28,228.9c-2.38,6.83-7.17,10.26-14.35,10.26h-69.35c13.66-40.65,58.08-163.99,75.84-218.32ZM1582.36,9.17h-151.35c-38.61,0-67.99,24.59-77.91,54.32l-44.74,130.17c-11.97,32.81,12.98,54.67,48.17,54.67h151.01c39.3,0,67.99-25.62,77.91-54.67l45.09-130.17c10.94-32.45-12.64-54.32-48.17-54.32ZM1547.51,71.35l-39.98,114.81c-.68,3.07-2.73,4.44-6.49,4.44h-106.25c-3.42,0-4.79-1.37-3.77-4.44l32.12-93.28-21.18-19.13c-2.74-2.4-1.03-6.83,2.73-6.83h139.06c3.42,0,4.79,1.37,3.77,4.44ZM1617.58,248.33c10.6-32.12,56.71-162.29,75.85-218.32l-20.84-14.01c-3.77-2.4-1.71-6.83,2.04-6.83h106.26l74.83,154.77,6.49-50.24,36.22-104.54h80.29l-79.26,228.9c-2.4,6.83-7.19,10.26-14.36,10.26h-65.26c-7.17-15.38-25.28-50.22-41.68-82.34-9.57-19.13-19.81-38.26-30.75-59.79-1.36,3.08-48.51,138.38-45.77,131.88-2.4,6.83-7.17,10.26-14.35,10.26h-69.71Z'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1978.73 257.51'%3E%3Cpath fill='%23fff' d='M0,248.33C9.57,219.98,57.06,84.34,76.19,30.01l-20.84-14.01c-3.76-2.4-1.7-6.83,2.05-6.83h93.95l14.35,47.48c8.2,25.29,16.74,53.65,20.5,66.28,0,5.46-1.7,30.75-1.7,36.22,10.25-11.27,44.4-47.14,76.18-80.97,18.8-19.47,38.61-40.99,60.48-64.23,2.73-3.07,6.49-4.78,10.93-4.78h69.71c-3.42,12.3-75.51,217.64-79.26,228.9-2.4,6.83-7.17,10.26-14.35,10.26h-69.36l32.81-95.32-66.97,65.26c-3.07,2.74-6.49,4.11-10.59,4.11h-57.05l-23.24-69.02-29.38,84.73c-2.39,6.83-7.17,10.26-14.35,10.26H0ZM455.48,30.01c-6.83-5.12-13.32-9.57-21.18-13.66-3.77-2.4-2.05-7.17,1.7-7.17h106.61l-79.26,228.9c-2.4,6.83-7.17,10.26-14.35,10.26h-69.36c13.66-40.65,58.08-163.99,75.85-218.32ZM522.12,248.33l20.15-48.51c2.4-5.82,7.52-9.57,14.01-9.57l166.39.34c3.77,0,5.82-1.37,6.83-4.44l9.23-26.66c1.03-2.73,0-4.09-3.75-4.09h-116.16c-35.54,0-60.48-21.87-48.52-54.67l12.65-37.24c9.9-29.73,39.97-54.32,78.24-54.32h196.8c-5.81,17.42-9.91,29.73-15.38,47.14-2.4,7.17-7.17,10.6-14.35,10.6h-188.94c-3.77,0-5.12,4.44-2.4,6.83l17.43,15.72-2.74,8.54c-1.03,2.73.34,4.09,3.77,4.09h116.51c35.19,0,60.12,21.87,48.17,54.67l-12.64,37.23c-10.94,29.04-36.56,54.33-75.85,54.33h-209.43ZM837.5,248.33l20.15-48.51c2.4-5.82,7.52-9.57,14.01-9.57l166.39.34c3.77,0,5.81-1.37,6.83-4.44l9.23-26.66c1.03-2.73,0-4.09-3.77-4.09h-116.15c-35.54,0-60.48-21.87-48.52-54.67l12.65-37.24c9.9-29.73,39.97-54.32,78.24-54.32h196.8c-5.82,17.42-9.91,29.73-15.38,47.14-2.4,7.17-7.17,10.6-14.35,10.6h-188.94c-3.77,0-5.12,4.44-2.4,6.83l17.42,15.72-2.73,8.54c-1.03,2.73.34,4.09,3.75,4.09h116.51c35.2,0,60.14,21.87,48.18,54.67l-12.64,37.23c-10.94,29.04-36.56,54.33-75.85,54.33h-209.43ZM1227.02,30.01c-6.83-5.12-13.32-9.57-21.18-13.66-3.75-2.4-2.04-7.17,1.71-7.17h106.61l-79.28,228.9c-2.38,6.83-7.17,10.26-14.35,10.26h-69.35c13.66-40.65,58.08-163.99,75.84-218.32ZM1582.36,9.17h-151.35c-38.61,0-67.99,24.59-77.91,54.32l-44.74,130.17c-11.97,32.81,12.98,54.67,48.17,54.67h151.01c39.3,0,67.99-25.62,77.91-54.67l45.09-130.17c10.94-32.45-12.64-54.32-48.17-54.32ZM1547.51,71.35l-39.98,114.81c-.68,3.07-2.73,4.44-6.49,4.44h-106.25c-3.42,0-4.79-1.37-3.77-4.44l32.12-93.28-21.18-19.13c-2.74-2.4-1.03-6.83,2.73-6.83h139.06c3.42,0,4.79,1.37,3.77,4.44ZM1617.58,248.33c10.6-32.12,56.71-162.29,75.85-218.32l-20.84-14.01c-3.77-2.4-1.71-6.83,2.04-6.83h106.26l74.83,154.77,6.49-50.24,36.22-104.54h80.29l-79.26,228.9c-2.4,6.83-7.19,10.26-14.36,10.26h-65.26c-7.17-15.38-25.28-50.22-41.68-82.34-9.57-19.13-19.81-38.26-30.75-59.79-1.36,3.08-48.51,138.38-45.77,131.88-2.4,6.83-7.17,10.26-14.35,10.26h-69.71Z'/%3E%3C/svg%3E") center/contain no-repeat;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-title .line-2 {
+                animation: none;
+                background-position: 0% 50%;
+                transform: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: clamp(3rem, 10vw, 8rem);
+            }
+            .hero-title .line-1 {
+                letter-spacing: 0.28em;
+            }
+            .hero-title .line-2 {
+                transform: scale(1.05);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: #c3c8d0; /* slightly lighter than current gray */
+            max-width: 500px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            animation: fadeInUp 0.8s ease 0.8s both;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(199, 69, 30, 0.6);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: transparent;
+            border: 2px solid var(--orange);
+            color: var(--orange);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            border-image: linear-gradient(135deg, #ff6b2c, #ff8a50) 1;
+            border-image: none;
+            border-color: var(--orange);
+            box-shadow: 0 4px 20px rgba(255, 107, 44, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 107, 44, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 107, 44, 0.3);
+            color: var(--white);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            animation: fadeIn 1s ease 1.2s both;
+        }
+
+        .hero-scroll span {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gray);
+        }
+
+        .scroll-indicator {
+            width: 24px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--orange);
+            border-radius: 2px;
+            animation: scrollDown 1.5s ease infinite;
+        }
+
+        @keyframes scrollDown {
+            0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(16px); opacity: 0; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes lineDraw {
+            from { transform: scaleX(0); opacity: 0; }
+            to { transform: scaleX(1); opacity: 1; }
+        }
+
+        /* Welcome Section */
+        .welcome {
+            padding: 4.5rem 2rem 2.5rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--black) 0%, var(--dark) 100%);
+        }
+
+        .welcome-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 107, 44, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-family: var(--display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: 0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .welcome-text {
+            font-size: 1.1rem;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        .welcome-text strong {
+            color: var(--white);
+        }
+
+        /* ==========================================
+           STATS SECTION OPTIONS - Choose one!
+           Current: Option B (Animated Counter Wheels)
+           To switch: Change data-stats-style on .stats
+           Options: "arcade-slots", "counter-wheels", "flip-cards"
+           ========================================== */
+
+        /* Stats Section Base */
+        .stats {
+            padding: 2.5rem 2rem 4rem;
+            background: var(--dark);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ==========================================
+           OPTION A: "Arcade Slots" - Slot machine style
+           Fun spinning numbers like hitting jackpot
+           ========================================== */
+        .stats[data-stats-style="arcade-slots"] .stat-card {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: linear-gradient(180deg, rgba(249, 164, 26, 0.08) 0%, rgba(199, 69, 30, 0.05) 100%);
+            border: 2px solid rgba(249, 164, 26, 0.25);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .stats[data-stats-style="arcade-slots"] .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(249, 164, 26, 0.1), transparent 30%);
+            animation: slot-spin 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stats[data-stats-style="arcade-slots"] .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes slot-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .stats[data-stats-style="arcade-slots"] .stat-card:hover {
+            transform: scale(1.05);
+            border-color: rgba(249, 164, 26, 0.6);
+            box-shadow: 0 0 40px rgba(249, 164, 26, 0.2), inset 0 0 30px rgba(249, 164, 26, 0.05);
+        }
+
+        .stats[data-stats-style="arcade-slots"] .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.25rem;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
+            animation: icon-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes icon-pulse {
+            0%, 100% { box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4); }
+            50% { box-shadow: 0 4px 30px rgba(249, 164, 26, 0.6); }
+        }
+
+        .stats[data-stats-style="arcade-slots"] .stat-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--white);
+        }
+
+        .stats[data-stats-style="arcade-slots"] .stat-number {
+            font-family: var(--display);
+            font-size: 4rem;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            position: relative;
+            text-shadow: 0 0 40px rgba(249, 164, 26, 0.3);
+        }
+
+        .stats[data-stats-style="arcade-slots"] .stat-label {
+            font-size: 0.75rem;
+            color: var(--white-soft);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 600;
+        }
+
+        /* ==========================================
+           OPTION B: "Counter Wheels" - Animated ring meters
+           Progress rings that fill up dramatically
+           ========================================== */
+        .stats[data-stats-style="counter-wheels"] .stat-card {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            background: transparent;
+            position: relative;
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-ring {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-ring circle {
+            fill: none;
+            stroke-width: 6;
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-ring .ring-bg {
+            stroke: rgba(255, 255, 255, 0.08);
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-ring .ring-fill {
+            stroke: url(#ring-gradient);
+            stroke-linecap: round;
+            stroke-dasharray: 377;
+            stroke-dashoffset: 377;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 8px rgba(249, 164, 26, 0.5));
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-card.animated .ring-fill {
+            stroke-dashoffset: var(--ring-offset, 94);
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-number {
+            font-family: var(--display);
+            font-size: 2.5rem;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-unit {
+            font-family: var(--display);
+            font-size: 1rem;
+            color: var(--orange);
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 1rem;
+        }
+
+        .stats[data-stats-style="counter-wheels"] .stat-card:hover .ring-fill {
+            filter: drop-shadow(0 0 15px rgba(249, 164, 26, 0.8));
+        }
+
+        /* ==========================================
+           OPTION C: "Flip Cards" - 3D flip reveal
+           Cards flip on hover to reveal more info
+           ========================================== */
+        .stats[data-stats-style="flip-cards"] .stat-card {
+            perspective: 1000px;
+            height: 200px;
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-card:hover .stat-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-front,
+        .stats[data-stats-style="flip-cards"] .stat-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-front {
+            background: linear-gradient(145deg, rgba(249, 164, 26, 0.1) 0%, rgba(199, 69, 30, 0.15) 100%);
+            border: 1px solid rgba(249, 164, 26, 0.2);
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-back {
+            background: var(--gradient-primary);
+            transform: rotateY(180deg);
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--white);
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-number {
+            font-family: var(--display);
+            font-size: 3.5rem;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-front .stat-label {
+            font-size: 0.7rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-top: 0.5rem;
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-back-title {
+            font-family: var(--display);
+            font-size: 1.5rem;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .stats[data-stats-style="flip-cards"] .stat-back-text {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* Neon Glow Stat Cards */
+        .stat-card {
+            background: var(--dark);
+            border-radius: 20px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--glow-color), transparent 50%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.5;
+            transition: opacity 0.4s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+                        0 0 60px var(--glow-color-alpha);
+        }
+
+        .stat-card:nth-child(1) { --glow-color: var(--orange); --glow-color-alpha: rgba(255, 107, 44, 0.3); }
+        .stat-card:nth-child(2) { --glow-color: var(--cyan); --glow-color-alpha: rgba(0, 229, 255, 0.3); }
+        .stat-card:nth-child(3) { --glow-color: var(--magenta); --glow-color-alpha: rgba(255, 0, 229, 0.3); }
+        .stat-card:nth-child(4) { --glow-color: var(--lime); --glow-color-alpha: rgba(170, 255, 0, 0.3); }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .stat-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--glow-color);
+            border-radius: 50%;
+            opacity: 0.15;
+            filter: blur(15px);
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 0.15; }
+            50% { transform: scale(1.3); opacity: 0.25; }
+        }
+
+        .stat-icon svg {
+            width: 36px;
+            height: 36px;
+            color: var(--glow-color);
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px var(--glow-color));
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px var(--glow-color-alpha);
+        }
+
+        .stat-minutes {
+            position: relative;
+            display: inline-block;
+            min-width: 80px;
+        }
+
+        /* 3D Cube-style flip for minutes rotation */
+        .prism-container {
+            perspective: 400px;
+            height: 58px;
+            overflow: hidden;
+            display: inline-block;
+            min-width: 90px;
+        }
+
+        .prism {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .prism-face {
+            position: absolute;
+            width: 100%;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: inherit;
+            color: inherit;
+            text-shadow: 0 0 20px var(--glow-color-alpha);
+        }
+
+        /* Position faces on a cube (90° apart for clean hiding) */
+        .prism-face:nth-child(1) {
+            transform: rotateX(0deg) translateZ(29px);
+        }
+
+        .prism-face:nth-child(2) {
+            transform: rotateX(90deg) translateZ(29px);
+        }
+
+        .prism-face:nth-child(3) {
+            transform: rotateX(180deg) translateZ(29px);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        /* Experiences Section */
+        .experiences {
+            padding: 6rem 0 3rem;
+            background: var(--dark);
+            overflow: hidden;
+        }
+
+        .experiences-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 0 2rem;
+        }
+
+        .experiences-scroll {
+            display: flex;
+            gap: 1.5rem;
+            padding: 2rem 0;
+            scrollbar-width: none;
+            will-change: transform;
+            cursor: grab;
+        }
+
+        .experiences-scroll.dragging {
+            cursor: grabbing;
+        }
+
+        .experiences-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes rgb-glow {
+            0%   { box-shadow: 0 0 20px rgba(24, 226, 253, 0.4), 0 0 40px rgba(24, 226, 253, 0.15); }
+            25%  { box-shadow: 0 0 20px rgba(253, 5, 227, 0.4), 0 0 40px rgba(253, 5, 227, 0.15); }
+            50%  { box-shadow: 0 0 20px rgba(255, 89, 0, 0.4), 0 0 40px rgba(255, 89, 0, 0.15); }
+            75%  { box-shadow: 0 0 20px rgba(169, 255, 17, 0.4), 0 0 40px rgba(169, 255, 17, 0.15); }
+            100% { box-shadow: 0 0 20px rgba(24, 226, 253, 0.4), 0 0 40px rgba(24, 226, 253, 0.15); }
+        }
+
+        .experience-card {
+            flex: 0 0 350px;
+            height: 480px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.4s ease;
+            transform-style: preserve-3d;
+            will-change: transform;
+            animation: rgb-glow 6s ease-in-out infinite;
+        }
+
+        .experience-card:nth-child(2) { animation-delay: -1s; }
+        .experience-card:nth-child(3) { animation-delay: -2s; }
+        .experience-card:nth-child(4) { animation-delay: -3s; }
+        .experience-card:nth-child(5) { animation-delay: -4s; }
+        .experience-card:nth-child(6) { animation-delay: -5s; }
+
+        .experience-card:hover {
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.5),
+                0 0 50px rgba(24, 226, 253, 0.3),
+                0 0 80px rgba(253, 5, 227, 0.2);
+        }
+
+        .experience-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .experience-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .experience-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                transparent 0%,
+                transparent 40%,
+                rgba(13, 13, 13, 0.9) 80%,
+                rgba(13, 13, 13, 0.98) 100%
+            );
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+        }
+
+        .experience-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--orange);
+            padding: 0.35rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--black);
+            margin-bottom: 0.75rem;
+            width: fit-content;
+        }
+
+        .experience-title {
+            font-family: var(--display);
+            font-size: 2rem;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-desc {
+            font-size: 0.85rem;
+            color: var(--gray);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .experience-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .exp-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.35rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            color: var(--white);
+        }
+
+        .experiences-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .nav-arrow {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-arrow:hover {
+            background: var(--gradient-primary);
+            border-color: transparent;
+            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.5);
+        }
+
+        .nav-arrow svg {
+            width: 20px;
+            height: 20px;
+            color: var(--white);
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 3rem 2rem 6rem;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--black) 100%);
+        }
+
+        .how-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .steps-grid::before {
+            content: '';
+            position: absolute;
+            top: 40px; /* centers on the 80px circles */
+            left: 14%;
+            right: 14%;
+            height: 2px;
+            background: var(--gradient-primary);
+            z-index: 0;
+            transform: scaleX(0);
+            transform-origin: center;
+            opacity: 0;
+            animation: lineDraw 0.6s ease 0.2s forwards;
+        }
+
+        .step-card {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 50%;
+            font-family: var(--display);
+            font-size: 2rem;
+            color: var(--white);
+            position: relative;
+            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
+        }
+
+        .step-card:nth-child(2) .step-number,
+        .step-card:nth-child(3) .step-number,
+        .step-card:nth-child(4) .step-number {
+            background: var(--gradient-primary);
+        }
+
+        .step-title {
+            font-family: var(--display);
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-text {
+            font-size: 0.9rem;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--black) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 107, 44, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-family: var(--display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+        }
+
+        .cta-text {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 2rem;
+            background: var(--black);
+        }
+
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 900px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+        }
+
+        .testimonial-card {
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            border-color: rgba(255, 107, 44, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .testimonial-rating {
+            color: #FFD700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .testimonial-text {
+            color: var(--white-soft);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .author-location {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Press Banner */
+        .press-banner {
+            padding: 4rem 2rem;
+            background: var(--dark);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+
+        .press-label {
+            text-align: center;
+            font-family: var(--display);
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        .press-ticker {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+        }
+
+        .press-logos {
+            display: flex;
+            gap: 4rem;
+            width: max-content;
+            will-change: transform;
+        }
+
+        .press-logo {
+            height: 32px;
+            width: auto;
+            opacity: 0.5;
+            filter: grayscale(100%) brightness(1.5);
+            transition: all 0.3s ease;
+        }
+
+        .press-logo:hover {
+            opacity: 1;
+            filter: grayscale(0%) brightness(1);
+        }
+
+        /* Placeholder logo boxes */
+        .press-logo-placeholder {
+            height: 32px;
+            width: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .press-logo-placeholder:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+        }
+
+        /* press-scroll animation now handled by JS for pixel-perfect looping */
+
+        /* Ticket Popup Panel */
+        .ticket-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 9998;
+        }
+
+        .ticket-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ticket-panel {
+            width: 360px;
+            position: fixed;
+            height: 100%;
+            background: linear-gradient(200deg, var(--dark) 0%, var(--black) 50%);
+            right: 0;
+            top: 0;
+            visibility: hidden;
+            transform: translateX(100%);
+            transition: transform 0.4s ease, visibility 0.4s ease;
+            border-left: 1px solid rgba(255, 107, 44, 0.3);
+            padding: 0;
+            z-index: 9999;
+            overflow-y: auto;
+        }
+
+        .ticket-panel.active {
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .ticket-panel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--dark);
+            z-index: 1;
+        }
+
+        .ticket-panel-header h3 {
+            font-family: var(--display);
+            font-size: 1.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .ticket-panel-close {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ticket-panel-close:hover {
+            background: rgba(255, 107, 44, 0.2);
+            border-color: rgba(255, 107, 44, 0.4);
+            color: var(--white);
+        }
+
+        .ticket-panel-close svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .ticket-panel-content {
+            padding: 2rem 1.5rem;
+        }
+
+        .ticket-panel-content p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .ticket-location-select {
+            margin-bottom: 2rem;
+        }
+
+        .ticket-location-select label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--white-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .ticket-location-select select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 1rem;
+            font-family: var(--body);
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            transition: all 0.3s ease;
+        }
+
+        .ticket-location-select select:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        .ticket-location-select select option {
+            background: var(--dark);
+            color: var(--white);
+        }
+
+        .btn-ticket-book {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
+        }
+
+        .btn-ticket-book:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(239, 75, 35, 0.5);
+        }
+
+        .btn-ticket-book svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .ticket-panel-info {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .ticket-panel-info h4 {
+            font-family: var(--display);
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            color: var(--orange);
+        }
+
+        .ticket-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .ticket-info-item svg {
+            width: 18px;
+            height: 18px;
+            color: var(--orange);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 400px) {
+            .ticket-panel {
+                width: 100%;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(4, 1fr);
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+        }
+
+        .footer-brand img {
+            height: 36px;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 280px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            transform: translateY(-3px) scale(1.1);
+            filter: brightness(1.3);
+        }
+
+        .footer-social svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .footer-title {
+            font-family: var(--display);
+            font-size: 1.25rem;
+            margin-bottom: 1.25rem;
+            color: var(--white);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--orange);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-copyright {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-legal a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--orange);
+        }
+
+        /* Newsletter Section */
+        .footer-newsletter {
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+            padding: 2rem;
+            background: rgba(255, 107, 44, 0.05);
+            border: 1px solid rgba(255, 107, 44, 0.15);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .footer-newsletter .footer-title {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-newsletter p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 500px;
+            margin: 0 auto 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.875rem 1.25rem;
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            color: var(--white);
+            font-family: var(--body);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form input:focus {
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px rgba(255, 107, 44, 0.1);
+        }
+
+        .newsletter-form input::placeholder {
+            color: var(--gray);
+        }
+
+        .btn-subscribe {
+            padding: 0.875rem 1.75rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 100px;
+            color: var(--white);
+            font-family: var(--body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(239, 75, 35, 0.3);
+        }
+
+        .btn-subscribe:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 75, 35, 0.4);
+        }
+
+        .newsletter-legal {
+            color: var(--gray);
+            font-size: 0.75rem;
+        }
+
+        .newsletter-legal a {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        .newsletter-legal a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 3rem;
+            }
+
+            .steps-grid::before {
+                left: 12%;
+                right: 12%;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .hero-content {
+                padding: 0 1rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .steps-grid::before {
+                left: 14%;
+                right: 14%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .experience-card {
+                flex: 0 0 300px;
+                height: 400px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .footer-legal {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================
+           GAME PROMO POPUP
+           Appears after 8 seconds on site
+           ========================================== */
+        .game-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .game-popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .game-popup {
+            position: relative;
+            max-width: 480px;
+            width: 100%;
+            background: linear-gradient(145deg, var(--dark) 0%, var(--black) 100%);
+            border: 2px solid rgba(249, 164, 26, 0.4);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            transform: scale(0.8) translateY(30px);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.5),
+                0 0 80px rgba(249, 164, 26, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+
+        .game-popup-overlay.active .game-popup {
+            transform: scale(1) translateY(0);
+        }
+
+        /* Animated glow border effect */
+        .game-popup::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                rgba(249, 164, 26, 0.3),
+                rgba(239, 75, 35, 0.3),
+                rgba(199, 69, 30, 0.3),
+                transparent 40%
+            );
+            animation: popup-glow-spin 4s linear infinite;
+            z-index: -1;
+        }
+
+        .game-popup::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: linear-gradient(145deg, var(--dark) 0%, var(--black) 100%);
+            border-radius: 22px;
+            z-index: -1;
+        }
+
+        @keyframes popup-glow-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .game-popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .game-popup-close:hover {
+            background: rgba(239, 75, 35, 0.2);
+            border-color: rgba(239, 75, 35, 0.4);
+            transform: rotate(90deg);
+        }
+
+        .game-popup-close svg {
+            width: 16px;
+            height: 16px;
+            color: var(--gray);
+            transition: color 0.3s ease;
+        }
+
+        .game-popup-close:hover svg {
+            color: var(--white);
+        }
+
+        .game-popup-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 30px rgba(239, 75, 35, 0.4);
+            animation: icon-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes icon-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .game-popup-icon svg {
+            width: 40px;
+            height: 40px;
+            color: var(--white);
+        }
+
+        .game-popup-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 229, 255, 0.15);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 1rem;
+        }
+
+        .game-popup-badge .pulse-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--cyan);
+            border-radius: 50%;
+            animation: pulse 1.5s ease infinite;
+        }
+
+        .game-popup-title {
+            font-family: var(--display);
+            font-size: 2.5rem;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .game-popup-title span {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-popup-subtitle {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .game-popup-discount {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--gradient-primary);
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
+            cursor: pointer;
+        }
+
+        .game-popup-discount:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(239, 75, 35, 0.5);
+        }
+
+        .game-popup-discount-text {
+            font-family: var(--display);
+            font-size: 1.3rem;
+            color: var(--white);
+            letter-spacing: 0.05em;
+        }
+
+        .game-popup-discount svg {
+            width: 18px;
+            height: 18px;
+            color: var(--white);
+            transition: transform 0.3s ease;
+        }
+
+        .game-popup-discount:hover svg {
+            transform: translateX(4px);
+        }
+
+        .game-popup-skip {
+            display: block;
+            margin-top: 1rem;
+            color: var(--gray);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            background: none;
+            border: none;
+            font-family: var(--body);
+        }
+
+        .game-popup-skip:hover {
+            color: var(--white);
+        }
+
+        @media (max-width: 520px) {
+            .game-popup {
+                padding: 2rem 1.5rem;
+            }
+
+            .game-popup-title {
+                font-size: 2rem;
+            }
+
+            .game-popup-icon {
+                width: 64px;
+                height: 64px;
+            }
+
+            .game-popup-icon svg {
+                width: 32px;
+                height: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Game Promo Popup -->
+    <div class="game-popup-overlay" id="gamePopup">
+        <div class="game-popup">
+            <button class="game-popup-close" id="gamePopupClose" aria-label="Close popup">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+
+            <div class="game-popup-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="2" y="6" width="20" height="12" rx="2"/>
+                    <line x1="5" y1="12" x2="9" y2="12"/>
+                    <line x1="7" y1="10" x2="7" y2="14"/>
+                    <circle cx="15" cy="10" r="1.25" fill="currentColor" stroke="none"/>
+                    <circle cx="19" cy="12" r="1.25" fill="currentColor" stroke="none"/>
+                    <circle cx="15" cy="14" r="1.25" fill="currentColor" stroke="none"/>
+                    <circle cx="17" cy="12" r="1.25" fill="currentColor" stroke="none"/>
+                </svg>
+            </div>
+
+            <div class="game-popup-badge">
+                <span class="pulse-dot"></span>
+                Limited Time Offer
+            </div>
+
+            <h3 class="game-popup-title">PLAY TO <span>WIN!</span></h3>
+
+            <p class="game-popup-subtitle">
+                Beat our Magma Mayhem mini-game and unlock exclusive discounts on your next mission!
+            </p>
+
+            <a href="https://jrichson.github.io/time-mission-magma-mayhem/" target="_blank" class="game-popup-discount">
+                <span class="game-popup-discount-text">UNLOCK UP TO 20% OFF</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+
+            <button class="game-popup-skip" id="gamePopupSkip">Maybe later</button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-left">
+            <button class="nav-menu-btn">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <a href="index.html" class="nav-logo">
+                <img src="assets/logo/TM_Letters_White.svg" alt="Time Mission">
+            </a>
+        </div>
+
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#experiences">Visit</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="groups.html">Groups</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-right">
+            <button class="location-btn" id="locationBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span id="locationText">Philadelphia</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
+                    <polyline points="6,9 12,15 18,9"/>
+                </svg>
+                <div class="location-dropdown">
+                    <div class="location-group">
+                        <div class="location-group-title">United States</div>
+                        <a href="#">IL - Chicago (Mount Prospect)</a>
+                        <a href="#">PA - Philadelphia</a>
+                        <a href="#">NY - West Nyack</a>
+                        <a href="#">RI - Lincoln</a>
+                        <a href="#">TX - Houston (Marq'E)</a>
+                        <a href="#">VA - Manassas</a>
+                    </div>
+                    <div class="location-group">
+                        <div class="location-group-title">Europe</div>
+                        <a href="#">Belgium - Antwerp</a>
+                    </div>
+                </div>
+            </button>
+            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-tickets">Tickets</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-video-container">
+            <iframe
+                src="https://player.vimeo.com/video/1152964429?h=5f9eedd147&autoplay=1&loop=1&muted=1&background=1"
+                frameborder="0"
+                allow="autoplay; fullscreen"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-eyebrow">
+                <span class="pulse"></span>
+                <span class="tagline-text" id="taglineText">Social Gaming Adventure</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="line-1">STEP INTO THE</span>
+                <span class="line-2" aria-label="MISSION"></span>
+            </h1>
+            <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive challenges. Test your speed, strength, skill, and smarts.</p>
+            <div class="hero-cta">
+                <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-primary">
+                    Book Now
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#experiences" class="btn-secondary">See Portals</a>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll</span>
+            <div class="scroll-indicator"></div>
+        </div>
+    </section>
+
+    <!-- Welcome Section -->
+    <section class="welcome" id="about">
+        <div class="welcome-content reveal">
+            <div class="section-badge">EPIC GAMING ADVENTURE</div>
+            <h2 class="section-title">WHERE EVERY SKILL SHINES</h2>
+            <p class="welcome-text">
+                Step into the mission. Teams race through <strong>time portals</strong>, conquer challenges, and battle for <strong>Momentium</strong> glory.
+            </p>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <path d="M3 9h18M9 21V9"/>
+                    </svg>
+                </div>
+                <div class="stat-number">25+</div>
+                <div class="stat-label">Challenge Rooms</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                </div>
+                <div class="stat-number stat-minutes">
+                    <div class="prism-container">
+                        <div class="prism" id="minutesPrism">
+                            <div class="prism-face">60</div>
+                            <div class="prism-face">90</div>
+                            <div class="prism-face">120</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-label">Minutes of Play</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="stat-number">2-5</div>
+                <div class="stat-label">Players Per Team</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                </div>
+                <div class="stat-number">7</div>
+                <div class="stat-label">Global Locations</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiences Section -->
+    <section class="experiences" id="experiences">
+        <div class="experiences-header reveal">
+            <div class="section-badge">The Portals</div>
+            <h2 class="section-title">THE MISSIONS</h2>
+        </div>
+
+        <div class="experiences-scroll" id="experiencesScroll">
+            <div class="experience-card">
+                <img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Digital Realm</span>
+                    <h3 class="experience-title">GLITCH MATRIX</h3>
+                    <p class="experience-desc">Navigate a fractured digital world where reality bends and patterns hold the key.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Mental</span>
+                        <span class="exp-tag">Pattern</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card">
+                <img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Cosmic</span>
+                    <h3 class="experience-title">BIG BANG</h3>
+                    <p class="experience-desc">Witness the birth of the universe and harness cosmic energy.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Physical</span>
+                        <span class="exp-tag">Coordination</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card">
+                <img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Prehistoric</span>
+                    <h3 class="experience-title">MAGMA MAYHEM</h3>
+                    <p class="experience-desc">The floor is lava—quick feet and faster reflexes are your only salvation.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Speed</span>
+                        <span class="exp-tag">Agility</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card">
+                <img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Cyber</span>
+                    <h3 class="experience-title">SERVER HEIST</h3>
+                    <p class="experience-desc">Infiltrate high-security systems in this high-stakes digital heist.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Skill</span>
+                        <span class="exp-tag">Precision</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card">
+                <img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Adventure</span>
+                    <h3 class="experience-title">JUNGLE TEMPLE</h3>
+                    <p class="experience-desc">Brave ancient traps and decode hieroglyphs in this lost temple.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Physical</span>
+                        <span class="exp-tag">Adventure</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card">
+                <img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Maritime</span>
+                    <h3 class="experience-title">PIRATES ATTACK</h3>
+                    <p class="experience-desc">Defend your vessel from marauders. Aim true and work as a crew.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Skill</span>
+                        <span class="exp-tag">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Duplicate cards for seamless infinite scroll -->
+            <div class="experience-card" aria-hidden="true">
+                <img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Digital Realm</span>
+                    <h3 class="experience-title">GLITCH MATRIX</h3>
+                    <p class="experience-desc">Navigate a fractured digital world where reality bends and patterns hold the key.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Mental</span>
+                        <span class="exp-tag">Pattern</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card" aria-hidden="true">
+                <img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Cosmic</span>
+                    <h3 class="experience-title">BIG BANG</h3>
+                    <p class="experience-desc">Witness the birth of the universe and harness cosmic energy.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Physical</span>
+                        <span class="exp-tag">Coordination</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card" aria-hidden="true">
+                <img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Prehistoric</span>
+                    <h3 class="experience-title">MAGMA MAYHEM</h3>
+                    <p class="experience-desc">The floor is lava—quick feet and faster reflexes are your only salvation.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Speed</span>
+                        <span class="exp-tag">Agility</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card" aria-hidden="true">
+                <img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Cyber</span>
+                    <h3 class="experience-title">SERVER HEIST</h3>
+                    <p class="experience-desc">Infiltrate high-security systems in this high-stakes digital heist.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Skill</span>
+                        <span class="exp-tag">Precision</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card" aria-hidden="true">
+                <img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Adventure</span>
+                    <h3 class="experience-title">JUNGLE TEMPLE</h3>
+                    <p class="experience-desc">Brave ancient traps and decode hieroglyphs in this lost temple.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Physical</span>
+                        <span class="exp-tag">Adventure</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card" aria-hidden="true">
+                <img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack">
+                <div class="experience-overlay">
+                    <span class="experience-badge">Maritime</span>
+                    <h3 class="experience-title">PIRATES ATTACK</h3>
+                    <p class="experience-desc">Defend your vessel from marauders. Aim true and work as a crew.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Skill</span>
+                        <span class="exp-tag">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="experiences-nav">
+            <button class="nav-arrow" id="prevBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <button class="nav-arrow" id="nextBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="how-header reveal">
+            <div class="section-badge">Your Journey</div>
+            <h2 class="section-title">HOW IT WORKS</h2>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card reveal">
+                <div class="step-number">1</div>
+                <h3 class="step-title">ASSEMBLE</h3>
+                <p class="step-text">Gather 2-5 players. Mix different skills for the best team.</p>
+            </div>
+            <div class="step-card reveal">
+                <div class="step-number">2</div>
+                <h3 class="step-title">ENTER</h3>
+                <p class="step-text">Travel through 25+ themed portals with unique challenges.</p>
+            </div>
+            <div class="step-card reveal">
+                <div class="step-number">3</div>
+                <h3 class="step-title">COMPETE</h3>
+                <p class="step-text">Complete challenges to earn Momentium points.</p>
+            </div>
+            <div class="step-card reveal">
+                <div class="step-number">4</div>
+                <h3 class="step-title">CONQUER</h3>
+                <p class="step-text">Climb the leaderboard and come back to beat your score.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="reviews">
+        <div class="testimonials-header reveal">
+            <div class="section-badge">What Players Say</div>
+            <h2 class="section-title">REAL EXPERIENCES</h2>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card reveal">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"This was the most fun my family has had in years! The challenges were exciting for both kids and adults. We're already planning our next visit."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">S</div>
+                    <div class="author-info">
+                        <span class="author-name">Sarah M.</span>
+                        <span class="author-location">Philadelphia</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card reveal">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"Perfect for team building! Our company had a blast competing against each other. The immersive environments and variety of challenges kept everyone engaged."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">M</div>
+                    <div class="author-info">
+                        <span class="author-name">Mike R.</span>
+                        <span class="author-location">Chicago</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card reveal">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"My son's birthday party was absolutely epic! The staff was amazing and all the kids had an incredible time. Highly recommend for any celebration."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">J</div>
+                    <div class="author-info">
+                        <span class="author-name">Jennifer L.</span>
+                        <span class="author-location">Houston</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content reveal">
+            <h2 class="cta-title">READY TO PLAY?</h2>
+            <p class="cta-text">Book your adventure today and discover why Time Mission is the ultimate social gaming experience. Perfect for birthdays, team building, and unforgettable moments.</p>
+            <a href="#" class="btn-primary btn-tickets">
+                Book Your Mission
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Press Banner -->
+    <section class="press-banner">
+        <div class="press-label">As Featured In</div>
+        <div class="press-ticker">
+            <div class="press-logos" id="pressLogos">
+                <!-- Default/National press logos -->
+                <img src="assets/news/NBC_logo.svg" alt="NBC" class="press-logo">
+                <img src="assets/news/FOX_wordmark.svg" alt="FOX" class="press-logo">
+                <img src="assets/news/CBS_logo_(2020).svg" alt="CBS" class="press-logo">
+                <img src="assets/news/Yahoo!_Finance_logo.svg" alt="Yahoo Finance" class="press-logo">
+                <img src="assets/news/BusinessWire_Logo.png" alt="Business Wire" class="press-logo">
+                <img src="assets/news/Logo.svg" alt="News" class="press-logo">
+                <!-- Duplicate for seamless loop -->
+                <img src="assets/news/NBC_logo.svg" alt="NBC" class="press-logo">
+                <img src="assets/news/FOX_wordmark.svg" alt="FOX" class="press-logo">
+                <img src="assets/news/CBS_logo_(2020).svg" alt="CBS" class="press-logo">
+                <img src="assets/news/Yahoo!_Finance_logo.svg" alt="Yahoo Finance" class="press-logo">
+                <img src="assets/news/BusinessWire_Logo.png" alt="Business Wire" class="press-logo">
+                <img src="assets/news/Logo.svg" alt="News" class="press-logo">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="assets/logo/TM_Letters_White.svg" alt="Time Mission">
+                <p>A social gaming adventure where teams compete through immersive challenges across time and space.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="igGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#feda75"/>
+                                    <stop offset="20%" style="stop-color:#fa7e1e"/>
+                                    <stop offset="40%" style="stop-color:#d62976"/>
+                                    <stop offset="60%" style="stop-color:#962fbf"/>
+                                    <stop offset="100%" style="stop-color:#4f5bd5"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="url(#igGrad)" stroke-width="2"/>
+                            <circle cx="12" cy="12" r="4" fill="none" stroke="url(#igGrad)" stroke-width="2"/>
+                            <circle cx="17.5" cy="6.5" r="1.2" fill="url(#igGrad)"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="TikTok">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.6 5.82A4.28 4.28 0 0 1 13.8 3h-3v13a2.9 2.9 0 0 1-2.9 2.9A2.9 2.9 0 0 1 5 16a2.9 2.9 0 0 1 2.9-2.9c.3 0 .6.04.88.12v-3.06A5.89 5.89 0 0 0 7.9 10 5.9 5.9 0 0 0 2 15.9 5.9 5.9 0 0 0 7.9 21.8a5.9 5.9 0 0 0 5.9-5.9V9.65a7.27 7.27 0 0 0 4.2 1.35V8A4.28 4.28 0 0 1 16.6 5.82z" fill="#25F4EE"/>
+                            <path d="M16.6 5.82A4.28 4.28 0 0 1 13.8 3h-1.5v13a2.9 2.9 0 0 1-4.4 2.49A2.9 2.9 0 0 0 10.8 19a2.9 2.9 0 0 0 2.9-2.9V3h1.5a4.28 4.28 0 0 0 1.4 2.82z" fill="#FE2C55" opacity="0.8"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z" fill="#1877F2"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-title">LOCATIONS</h4>
+                <ul class="footer-links">
+                    <li><a href="locations/chicago.html">Chicago</a></li>
+                    <li><a href="locations/philadelphia.html">Philadelphia</a></li>
+                    <li><a href="locations/west-nyack.html">West Nyack</a></li>
+                    <li><a href="locations/lincoln.html">Lincoln</a></li>
+                    <li><a href="locations/houston.html">Houston</a></li>
+                    <li><a href="locations/manassas.html">Manassas</a></li>
+                    <li><a href="locations/antwerp.html">Antwerp</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-title">EXPERIENCE</h4>
+                <ul class="footer-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="experiences.html">All Missions</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#">Leaderboards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-title">GROUPS</h4>
+                <ul class="footer-links">
+                    <li><a href="groups.html">Birthday Parties</a></li>
+                    <li><a href="groups.html">Corporate Events</a></li>
+                    <li><a href="groups.html">School Field Trips</a></li>
+                    <li><a href="groups.html">Private Bookings</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-title">SUPPORT</h4>
+                <ul class="footer-links">
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="gift-cards.html">Gift Cards</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+            <h4 class="footer-title">NEWSLETTER</h4>
+            <p>Stay updated on new missions and exclusive offers.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit" class="btn-subscribe">Subscribe</button>
+            </form>
+            <p class="newsletter-legal">
+                By hitting "Subscribe", you agree to our
+                <a href="terms.html">Terms of Service</a> and
+                <a href="privacy.html">Privacy Policy</a>.
+            </p>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="footer-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="accessibility.html">Accessibility</a>
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="cookies.html">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Ticket Popup Panel -->
+    <div class="ticket-overlay" id="ticketOverlay"></div>
+    <div class="ticket-panel" id="ticketPanel">
+        <div class="ticket-panel-header">
+            <h3>Book Your Mission</h3>
+            <button class="ticket-panel-close" id="ticketClose">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="ticket-panel-content">
+            <p>Select your location and we'll take you to our booking system to choose your date and time.</p>
+
+            <div class="ticket-location-select">
+                <label for="ticketLocation">Choose Location</label>
+                <select id="ticketLocation">
+                    <option value="">Select a Location</option>
+                    <option value="philadelphia">Philadelphia</option>
+                    <option value="chicago">Chicago (Mount Prospect)</option>
+                    <option value="west-nyack">West Nyack</option>
+                    <option value="lincoln">Lincoln</option>
+                    <option value="houston">Houston (Marq'E)</option>
+                    <option value="manassas">Manassas</option>
+                    <option value="antwerp">Antwerp (Belgium)</option>
+                </select>
+            </div>
+
+            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-ticket-book" id="ticketBookBtn" target="_blank">
+                Continue to Booking
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+
+            <div class="ticket-panel-info">
+                <h4>QUICK INFO</h4>
+                <div class="ticket-info-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                    <span>Sessions last approximately 60-90 minutes</span>
+                </div>
+                <div class="ticket-info-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span>Teams of 2-5 players per mission</span>
+                </div>
+                <div class="ticket-info-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>Advance booking recommended</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // ROTATING TYPEWRITER TAGLINES
+        // Changes every 4 seconds with delete/retype effect
+        // ==========================================
+        const taglines = [
+            "Social Gaming Adventure",
+            "Better Than Your Ex's Personality",
+            "Date Night, Leveled Up",
+            "Family Game Night on Steroids",
+            "Where Couch Potatoes Become Heroes",
+            "Touch Grass... Indoors",
+            "Corporate Team Building, But Fun",
+            "Cheaper Than Therapy",
+            "Your New Favorite Addiction",
+            "Making Memories (& Enemies)",
+            "Swipe Right on Adventure"
+        ];
+
+        let currentTaglineIndex = 0;
+        const taglineElement = document.getElementById('taglineText');
+        let isTyping = false;
+
+        async function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function deleteText() {
+            const currentText = taglineElement.textContent;
+            for (let i = currentText.length; i >= 0; i--) {
+                taglineElement.textContent = currentText.substring(0, i);
+                await sleep(30); // Delete speed
+            }
+        }
+
+        async function typeText(text) {
+            for (let i = 0; i <= text.length; i++) {
+                taglineElement.textContent = text.substring(0, i);
+                await sleep(50); // Type speed
+            }
+        }
+
+        async function rotateTagline() {
+            if (isTyping) return;
+            isTyping = true;
+
+            await deleteText();
+            await sleep(200); // Pause between delete and type
+
+            currentTaglineIndex = (currentTaglineIndex + 1) % taglines.length;
+            await typeText(taglines[currentTaglineIndex]);
+
+            isTyping = false;
+        }
+
+        // Start rotation after initial delay
+        setTimeout(() => {
+            setInterval(rotateTagline, 4000);
+        }, 3000); // Wait 3s before first rotation
+
+        // ==========================================
+        // 3D PRISM MINUTES STAT
+        // Rotates triangular prism through 60, 90, 120
+        // ==========================================
+        const prismElement = document.getElementById('minutesPrism');
+        let prismFaceIndex = 0;
+
+        function rotatePrism() {
+            if (!prismElement) return;
+            prismFaceIndex = (prismFaceIndex + 1) % 3;
+            const angles = [0, -90, -180];
+            prismElement.style.transform = `rotateX(${angles[prismFaceIndex]}deg)`;
+        }
+
+        // Initial state
+        if (prismElement) {
+            prismElement.style.transform = 'rotateX(0deg)';
+        }
+
+        setInterval(rotatePrism, 2500);
+
+        // Navigation scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Location dropdown toggle and selection
+        const locationBtn = document.getElementById('locationBtn');
+        const locationText = document.getElementById('locationText');
+        const locationLinks = document.querySelectorAll('.location-dropdown a');
+
+        locationBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            locationBtn.classList.toggle('open');
+        });
+
+        document.addEventListener('click', () => {
+            locationBtn.classList.remove('open');
+        });
+
+        // Handle location selection
+        locationLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const selectedLocation = link.textContent.trim();
+                // Extract city name (e.g., "PA - Philadelphia" -> "Philadelphia")
+                const cityMatch = selectedLocation.match(/- (.+)$/);
+                const cityName = cityMatch ? cityMatch[1].split(' (')[0] : selectedLocation.split(' - ').pop();
+
+                // Update display with animation
+                locationText.style.transition = 'opacity 0.2s ease';
+                locationText.style.opacity = '0';
+
+                setTimeout(() => {
+                    locationText.textContent = cityName;
+                    locationText.style.opacity = '1';
+                    locationText.style.textShadow = '0 0 15px rgba(0, 229, 255, 0.8)';
+
+                    setTimeout(() => {
+                        locationText.style.textShadow = 'none';
+                    }, 400);
+                }, 200);
+
+                locationBtn.classList.remove('open');
+
+                // Save to localStorage
+                localStorage.setItem('timeMissionLocation', cityName);
+            });
+        });
+
+        // Load saved location on page load
+        const savedLocation = localStorage.getItem('timeMissionLocation');
+        if (savedLocation && locationText) {
+            locationText.textContent = savedLocation;
+        }
+
+        // ==========================================
+        // INFINITE CAROUSEL WITH DRAG SCROLL
+        // ==========================================
+        const scrollEl = document.getElementById('experiencesScroll');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        if (scrollEl) {
+            let scrollPos = 0;
+            let autoScrollSpeed = 0.8; // px per frame
+            let isHovering = false;
+            let isDragging = false;
+            let dragStartX = 0;
+            let dragScrollStart = 0;
+            let animationId = null;
+
+            // Calculate the width of original cards (first 6)
+            const originalCards = scrollEl.querySelectorAll('.experience-card:not([aria-hidden])');
+            const cardWidth = 350 + 24; // card width + gap
+
+            function getHalfWidth() {
+                return originalCards.length * cardWidth;
+            }
+
+            // Auto-scroll loop
+            function autoScroll() {
+                if (!isHovering && !isDragging) {
+                    scrollPos += autoScrollSpeed;
+                    const halfW = getHalfWidth();
+                    if (scrollPos >= halfW) {
+                        scrollPos -= halfW;
+                    }
+                    scrollEl.style.transform = `translateX(${-scrollPos}px)`;
+                }
+                animationId = requestAnimationFrame(autoScroll);
+            }
+
+            animationId = requestAnimationFrame(autoScroll);
+
+            // Hover: pause auto-scroll
+            scrollEl.addEventListener('mouseenter', () => { isHovering = true; });
+            scrollEl.addEventListener('mouseleave', () => {
+                isHovering = false;
+                isDragging = false;
+                scrollEl.classList.remove('dragging');
+            });
+
+            // Drag to scroll
+            scrollEl.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                dragStartX = e.clientX;
+                dragScrollStart = scrollPos;
+                scrollEl.classList.add('dragging');
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - dragStartX;
+                scrollPos = dragScrollStart - dx;
+                const halfW = getHalfWidth();
+                if (scrollPos < 0) scrollPos += halfW;
+                if (scrollPos >= halfW) scrollPos -= halfW;
+                scrollEl.style.transform = `translateX(${-scrollPos}px)`;
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    scrollEl.classList.remove('dragging');
+                }
+            });
+
+            // Wheel scroll on hover
+            scrollEl.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                scrollPos += e.deltaY * 0.5;
+                const halfW = getHalfWidth();
+                if (scrollPos < 0) scrollPos += halfW;
+                if (scrollPos >= halfW) scrollPos -= halfW;
+                scrollEl.style.transform = `translateX(${-scrollPos}px)`;
+            }, { passive: false });
+
+            // Prev/Next buttons
+            prevBtn.addEventListener('click', () => {
+                scrollPos -= cardWidth;
+                const halfW = getHalfWidth();
+                if (scrollPos < 0) scrollPos += halfW;
+                scrollEl.style.transform = `translateX(${-scrollPos}px)`;
+            });
+
+            nextBtn.addEventListener('click', () => {
+                scrollPos += cardWidth;
+                const halfW = getHalfWidth();
+                if (scrollPos >= halfW) scrollPos -= halfW;
+                scrollEl.style.transform = `translateX(${-scrollPos}px)`;
+            });
+        }
+
+        // 3D Tilt Effect for Experience Cards
+        const cards = document.querySelectorAll('.experience-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / centerY * -8;
+                const rotateY = (x - centerX) / centerX * 8;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // Respect reduced motion preference
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            cards.forEach(card => {
+                card.style.transition = 'none';
+                card.addEventListener('mousemove', () => {});
+            });
+        }
+
+        // ==========================================
+        // PRESS TICKER — JS-driven seamless loop
+        // ==========================================
+        (function() {
+            const logosContainer = document.getElementById('pressLogos');
+            if (!logosContainer) return;
+
+            const logos = logosContainer.querySelectorAll('.press-logo');
+            const halfCount = logos.length / 2;
+            let tickerPos = 0;
+            let tickerSpeed = 0.6;
+            let tickerPaused = false;
+            let tickerRaf;
+
+            function getHalfWidth() {
+                let w = 0;
+                const gap = 64; // 4rem = 64px
+                for (let i = 0; i < halfCount; i++) {
+                    w += logos[i].getBoundingClientRect().width + gap;
+                }
+                return w;
+            }
+
+            let halfWidth = 0;
+
+            // Wait for images to load to get accurate widths
+            function initTicker() {
+                halfWidth = getHalfWidth();
+                if (halfWidth === 0) {
+                    requestAnimationFrame(initTicker);
+                    return;
+                }
+                tickerRaf = requestAnimationFrame(tickerLoop);
+            }
+
+            function tickerLoop() {
+                if (!tickerPaused) {
+                    tickerPos += tickerSpeed;
+                    if (tickerPos >= halfWidth) {
+                        tickerPos -= halfWidth;
+                    }
+                    logosContainer.style.transform = `translateX(${-tickerPos}px)`;
+                }
+                tickerRaf = requestAnimationFrame(tickerLoop);
+            }
+
+            logosContainer.addEventListener('mouseenter', () => { tickerPaused = true; });
+            logosContainer.addEventListener('mouseleave', () => { tickerPaused = false; });
+
+            // Start after a short delay to let images load
+            window.addEventListener('load', () => {
+                halfWidth = getHalfWidth();
+                tickerRaf = requestAnimationFrame(tickerLoop);
+            });
+
+            // Fallback: start immediately too
+            requestAnimationFrame(initTicker);
+        })();
+
+        // Reveal on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Trigger counter wheel animation
+                    if (entry.target.classList.contains('stat-card')) {
+                        setTimeout(() => {
+                            entry.target.classList.add('animated');
+                        }, 200);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ==========================================
+        // TICKET POPUP PANEL
+        // Opens when clicking booking buttons
+        // ==========================================
+        const ticketPanel = document.getElementById('ticketPanel');
+        const ticketOverlay = document.getElementById('ticketOverlay');
+        const ticketClose = document.getElementById('ticketClose');
+        const ticketLocationSelect = document.getElementById('ticketLocation');
+
+        // Booking URLs by location
+        const bookingUrls = {
+            philadelphia: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            chicago: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            'west-nyack': 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            lincoln: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            houston: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            manassas: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            antwerp: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products'
+        };
+
+        // Select booking buttons (excludes anchor links with #)
+        const bookingButtons = document.querySelectorAll('.btn-tickets, .btn-primary[href*="roller"], .btn-nav[href*="roller"]');
+
+        // Open ticket panel (smart: bypass if location already saved)
+        function openTicketPanel(e) {
+            if (e) e.preventDefault();
+
+            // Check if location is already saved in localStorage
+            const savedLocation = localStorage.getItem('timeMissionLocation');
+
+            if (savedLocation) {
+                // Location already selected - go directly to booking
+                const locationKey = savedLocation.toLowerCase().replace(/\s+/g, '').replace(/,/g, '');
+                const bookingUrl = bookingUrls[locationKey] || bookingUrls.philadelphia;
+                window.open(bookingUrl, '_blank');
+            } else {
+                // No location saved - show popup with selector
+                ticketPanel.classList.add('active');
+                ticketOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Close ticket panel
+        function closeTicketPanel() {
+            ticketPanel.classList.remove('active');
+            ticketOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Attach click handlers to booking buttons
+        bookingButtons.forEach(btn => {
+            btn.addEventListener('click', openTicketPanel);
+        });
+
+        // Close handlers
+        ticketClose.addEventListener('click', closeTicketPanel);
+        ticketOverlay.addEventListener('click', closeTicketPanel);
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && ticketPanel.classList.contains('active')) {
+                closeTicketPanel();
+            }
+        });
+
+        // Update booking URL based on location selection
+        ticketLocationSelect.addEventListener('change', (e) => {
+            const ticketBookBtn = document.getElementById('ticketBookBtn');
+            const selectedLocation = e.target.value;
+            if (selectedLocation && bookingUrls[selectedLocation]) {
+                ticketBookBtn.href = bookingUrls[selectedLocation];
+            }
+        });
+
+        // ==========================================
+        // GAME PROMO POPUP
+        // Shows after 8 seconds, remembers dismissal
+        // ==========================================
+        const gamePopup = document.getElementById('gamePopup');
+        const gamePopupClose = document.getElementById('gamePopupClose');
+        const gamePopupSkip = document.getElementById('gamePopupSkip');
+
+        function showGamePopup() {
+            // Check if user already dismissed the popup this session
+            if (sessionStorage.getItem('gamePopupDismissed')) return;
+
+            gamePopup.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
+        }
+
+        function hideGamePopup() {
+            gamePopup.classList.remove('active');
+            document.body.style.overflow = '';
+            sessionStorage.setItem('gamePopupDismissed', 'true');
+        }
+
+        // Show popup after 8 seconds
+        setTimeout(showGamePopup, 8000);
+
+        // Close popup on X button click
+        gamePopupClose.addEventListener('click', hideGamePopup);
+
+        // Close popup on "Maybe later" click
+        gamePopupSkip.addEventListener('click', hideGamePopup);
+
+        // Close popup when clicking outside
+        gamePopup.addEventListener('click', (e) => {
+            if (e.target === gamePopup) {
+                hideGamePopup();
+            }
+        });
+
+        // Close popup on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && gamePopup.classList.contains('active')) {
+                hideGamePopup();
+            }
+        });
+    </script>
+</body>
+</html>
