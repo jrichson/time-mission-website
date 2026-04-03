@@ -4,146 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Groups & Parties | LOL Command Center</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logo/TM_Favicon.svg">
     <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/footer.css">
     <style>
-        :root {
-            --orange: #FF6B2C;
-            --orange-light: #FF8F5C;
-            --orange-dark: #E55A1F;
-            --cyan: #00E5FF;
-            --magenta: #FF00E5;
-            --lime: #AAFF00;
-            --black: #0D0D0D;
-            --dark: #151515;
-            --dark-light: #1F1F1F;
-            --white: #FFFFFF;
-            --white-soft: #E5E5E5;
-            --gray: #8A8A8A;
-            --display: 'Bebas Neue', sans-serif;
-            --body: 'DM Sans', sans-serif;
-            --gradient-primary: linear-gradient(135deg, #f9a41a 0%, #ef4b23 50%, #c7451e 100%);
-            --gradient-secondary: linear-gradient(135deg, #00E5FF 0%, #AAFF00 100%);
-            --gradient-accent: linear-gradient(90deg, #f9a41a 0%, #ef4b23 50%, #c7451e 100%);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--body);
-            background: var(--black);
-            color: var(--white);
-            overflow-x: hidden;
-        }
-
-        /* Noise texture overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            opacity: 0.03;
-            pointer-events: none;
-            z-index: 10000;
-        }
-
-        /* Navigation */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(13, 13, 13, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 107, 44, 0.2);
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex: 1;
-        }
-
-        .nav-logo img {
-            height: 52px;
-            width: auto;
-        }
-
-        .nav-center {
-            display: flex;
-            align-items: center;
-            gap: 2.5rem;
-            justify-content: center;
-            flex: 2;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--white-soft);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--orange);
-            text-shadow: 0 0 10px rgba(249, 164, 26, 0.4);
-        }
-
-        .nav-links a.active {
-            color: var(--orange);
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            flex: 1;
-            justify-content: flex-end;
-        }
-
-        .btn-tickets {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: 0.75rem 1.5rem;
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(239, 75, 35, 0.3);
-        }
-
-        .btn-tickets:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(239, 75, 35, 0.5);
-        }
-
         /* Hero Section */
         .hero {
             min-height: 70vh;
@@ -307,22 +177,6 @@
         .section-header {
             text-align: center;
             margin-bottom: 4rem;
-        }
-
-        .section-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(0, 229, 255, 0.1);
-            border: 1px solid rgba(0, 229, 255, 0.3);
-            padding: 0.5rem 1.25rem;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--cyan);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
         }
 
         .section-title {
@@ -1296,239 +1150,11 @@
             }
         }
 
-        /* Footer */
-        .footer {
-            padding: 4rem 2rem 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr repeat(4, 1fr);
-            gap: 2.5rem;
-            max-width: 1200px;
-            margin: 0 auto 2rem;
-        }
-
-        .footer-brand img {
-            height: 40px;
-            margin-bottom: 1rem;
-        }
-
-        .footer-brand p {
-            font-size: 0.9rem;
-            color: var(--gray);
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            max-width: 280px;
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .footer-social a {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            transition: all 0.3s ease;
-        }
-
-        .footer-social a:hover {
-            background: var(--orange);
-            transform: translateY(-2px);
-        }
-
-        .footer-social svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .footer-column h4 {
-            font-family: var(--display);
-            font-size: 1rem;
-            letter-spacing: 0.1em;
-            margin-bottom: 1.25rem;
-            color: var(--white);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-links a {
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--orange);
-        }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-copyright {
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-
-        .footer-legal {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .footer-legal a {
-            font-size: 0.85rem;
-            color: var(--gray);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-legal a:hover {
-            color: var(--white);
-        }
-
-        /* Newsletter Section */
-        .footer-newsletter {
-            max-width: 1200px;
-            margin: 0 auto 2rem;
-            padding: 2rem;
-            background: rgba(255, 107, 44, 0.05);
-            border: 1px solid rgba(255, 107, 44, 0.15);
-            border-radius: 16px;
-            text-align: center;
-        }
-
-        .footer-newsletter .footer-title {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-newsletter p {
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .newsletter-form {
-            display: flex;
-            gap: 0.75rem;
-            max-width: 500px;
-            margin: 0 auto 1rem;
-        }
-
-        .newsletter-form input {
-            flex: 1;
-            padding: 0.875rem 1.25rem;
-            background: var(--dark);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 100px;
-            color: var(--white);
-            font-family: var(--body);
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .newsletter-form input:focus {
-            border-color: var(--orange);
-        }
-
-        .newsletter-form input::placeholder {
-            color: var(--gray);
-        }
-
-        .btn-subscribe {
-            padding: 0.875rem 1.75rem;
-            background: var(--gradient-primary);
-            border: none;
-            border-radius: 100px;
-            color: var(--white);
-            font-family: var(--body);
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-subscribe:hover {
-            transform: translateY(-2px);
-        }
-
-        .newsletter-legal {
-            color: var(--gray);
-            font-size: 0.75rem;
-        }
-
-        .newsletter-legal a {
-            color: var(--orange);
-            text-decoration: none;
-        }
-
-        .footer-title {
-            font-family: var(--display);
-            font-size: 1rem;
-            letter-spacing: 0.1em;
-            margin-bottom: 1.25rem;
-            color: var(--white);
-        }
-
-        /* Reveal Animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         /* Mobile Responsive */
-        @media (max-width: 1024px) {
-            .footer-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
         @media (max-width: 768px) {
-            .nav-center {
-                display: none;
-            }
-
-            .nav-left {
-                flex: none;
-            }
-
-            .nav-right {
-                flex: none;
-            }
-
             .hero {
                 min-height: 60vh;
-                padding: 7rem 1.5rem 3rem;
+                padding: 8rem 1.5rem 3rem;
             }
 
             .hero-title {
@@ -1540,59 +1166,88 @@
             .testimonials-grid {
                 grid-template-columns: 1fr;
             }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .footer-brand {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .footer-brand p {
-                max-width: 100%;
-            }
-
-            .footer-social {
-                justify-content: center;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .footer-legal {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1rem;
-            }
         }
     </style>
 </head>
-<body>
+<body class="has-noise">
+    <!-- Announcement Ticker -->
+    <div class="ticker-bar">
+        <div class="ticker-track">
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+        </div>
+    </div>
+
+    <!-- Full-Screen Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-menu-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="experiences.html">Experiences</a></li>
+            <li><a href="gift-cards.html">Gift Cards</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="locations/index.html">Locations</a></li>
+        </ul>
+        <div class="mobile-menu-cta">
+            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-tickets">Book Now</a>
+        </div>
+    </div>
+
     <!-- Navigation -->
-    <nav class="nav">
+    <nav class="nav" id="nav">
         <div class="nav-left">
+            <button class="nav-menu-btn">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
             <a href="index.html" class="nav-logo">
-                <img src="assets/logo/TM_Letters_White.svg" alt="Time Mission">
+                <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
             </a>
         </div>
 
         <div class="nav-center">
             <ul class="nav-links">
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#experiences">Visit</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="experiences.html">Experiences</a></li>
                 <li><a href="faq.html">FAQ</a></li>
-                <li><a href="groups.html" class="active">Groups</a></li>
             </ul>
         </div>
 
         <div class="nav-right">
+            <button class="location-btn" id="locationBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span id="locationText">Philadelphia</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
+                    <polyline points="6,9 12,15 18,9"/>
+                </svg>
+                <div class="location-dropdown">
+                    <div class="location-group">
+                        <div class="location-group-title">United States</div>
+                        <a href="#">IL - Chicago (Mount Prospect)</a>
+                        <a href="#">PA - Philadelphia</a>
+                        <a href="#">NY - West Nyack</a>
+                        <a href="#">RI - Lincoln</a>
+                        <a href="#">TX - Houston (Marq'E)</a>
+                        <a href="#">VA - Manassas</a>
+                    </div>
+                    <div class="location-group">
+                        <div class="location-group-title">Europe</div>
+                        <a href="#">Belgium - Antwerp</a>
+                    </div>
+                </div>
+            </button>
             <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-tickets">Tickets</a>
         </div>
     </nav>
@@ -1633,7 +1288,7 @@
         <!-- Birthday Parties -->
         <div class="gallery-section" data-type="birthday">
             <div class="gallery-image">
-                <img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Birthday celebration at Time Mission">
+                <img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Birthday celebration at Time Mission" width="1920" height="1280">
             </div>
             <div class="gallery-content">
                 <div class="gallery-badge">
@@ -1677,7 +1332,7 @@
         <!-- Corporate Events -->
         <div class="gallery-section" data-type="corporate">
             <div class="gallery-image">
-                <img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Corporate team building event">
+                <img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Corporate team building event" loading="lazy" width="1920" height="1280">
             </div>
             <div class="gallery-content">
                 <div class="gallery-badge">
@@ -1721,7 +1376,7 @@
         <!-- School Field Trips -->
         <div class="gallery-section" data-type="school">
             <div class="gallery-image">
-                <img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="School field trip adventure">
+                <img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="School field trip adventure" loading="lazy" width="1920" height="1280">
             </div>
             <div class="gallery-content">
                 <div class="gallery-badge">
@@ -1761,7 +1416,7 @@
         <!-- Private Events -->
         <div class="gallery-section" data-type="private">
             <div class="gallery-image">
-                <img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Private event at Time Mission">
+                <img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Private event at Time Mission" loading="lazy" width="1920" height="1280">
             </div>
             <div class="gallery-content">
                 <div class="gallery-badge">
@@ -2180,7 +1835,7 @@
     <footer class="footer">
         <div class="footer-grid">
             <div class="footer-brand">
-                <img src="assets/logo/TM_Letters_White.svg" alt="Time Mission">
+                <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
                 <p>A social gaming adventure where teams compete through immersive challenges across time and space.</p>
                 <div class="footer-social">
                     <a href="#" aria-label="Instagram">
@@ -2449,5 +2104,6 @@
             }
         });
     </script>
+    <script defer src="js/nav.js"></script>
 </body>
 </html>

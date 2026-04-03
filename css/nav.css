@@ -1,0 +1,464 @@
+/* ==========================================
+   SHARED NAVIGATION, TICKER & MOBILE MENU
+   Included on all pages
+   ========================================== */
+
+/* @font-face declarations live in base.css (single source) */
+
+/* ---- Announcement Ticker ---- */
+.ticker-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    height: 36px;
+    background: var(--dark);
+    border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 20s linear infinite;
+}
+
+.ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    padding: 0 3rem;
+    font-family: var(--tech);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cyan);
+}
+
+@keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+    .ticker-bar {
+        height: 32px;
+    }
+    .ticker-item {
+        font-size: 0.6rem;
+        padding: 0 2rem;
+    }
+}
+
+/* ---- Navigation ---- */
+.nav {
+    position: fixed;
+    top: 36px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .nav {
+        top: 32px;
+    }
+}
+
+.nav.scrolled {
+    background: rgba(13, 13, 13, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 107, 44, 0.2);
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex: 1;
+}
+
+.nav-logo img {
+    height: 52px;
+    width: auto;
+}
+
+/* Hide hamburger on desktop */
+.nav-menu-btn {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .nav-menu-btn {
+        display: flex;
+        align-items: center;
+        background: transparent;
+        border: none;
+        color: var(--white);
+        cursor: pointer;
+        padding: 0.5rem;
+        z-index: 1002;
+    }
+
+    .nav-menu-btn .hamburger {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 24px;
+    }
+
+    .nav-menu-btn .hamburger span {
+        width: 100%;
+        height: 2px;
+        background: var(--white);
+        transition: all 0.3s ease;
+        transform-origin: center;
+    }
+
+    .nav-menu-btn.active .hamburger span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    .nav-menu-btn.active .hamburger span:nth-child(2) {
+        opacity: 0;
+    }
+    .nav-menu-btn.active .hamburger span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+}
+
+/* ---- Full-screen Mobile Menu ---- */
+.mobile-menu {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 999;
+        background: var(--black);
+        padding: 100px 1.5rem 2rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.35s ease, visibility 0.35s ease;
+        overflow-y: auto;
+    }
+
+    .mobile-menu.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Hide tickets when mobile menu is open */
+    .nav.menu-open .btn-tickets {
+        display: none;
+    }
+
+    /* Show city name next to pin when menu is open */
+    .nav.menu-open .location-btn {
+        display: flex;
+    }
+
+    .nav.menu-open .location-btn #locationText {
+        display: inline !important;
+    }
+
+    .mobile-menu-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .mobile-menu-links li {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mobile-menu-links a {
+        display: block;
+        padding: 1.1rem 0;
+        color: var(--white);
+        text-decoration: none;
+        font-family: var(--tech);
+        font-size: 1rem;
+        font-weight: 400;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        transition: color 0.2s ease;
+    }
+
+    .mobile-menu-links a:hover,
+    .mobile-menu-links a:active {
+        color: var(--orange);
+    }
+
+    .mobile-menu-socials {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        padding-top: 2rem;
+    }
+
+    .mobile-menu-socials a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: var(--white);
+        transition: all 0.3s ease;
+    }
+
+    .mobile-menu-socials a:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+        transform: translateY(-2px);
+    }
+
+    .mobile-menu-socials svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .mobile-menu-cta {
+        padding-top: 1.5rem;
+    }
+
+    .mobile-menu-cta a {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        background: var(--gradient-primary);
+        color: var(--white);
+        text-align: center;
+        text-decoration: none;
+        font-family: var(--tech);
+        font-size: 0.85rem;
+        font-weight: 400;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        border-radius: 100px;
+        box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
+    }
+}
+
+/* ---- Desktop Nav Links ---- */
+.nav-center {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    justify-content: center;
+    flex: 2;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--white-soft, #E5E5E5);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--orange);
+    text-shadow: 0 0 10px rgba(249, 164, 26, 0.4);
+}
+
+.nav-links a.active {
+    color: var(--orange);
+}
+
+/* ---- Nav Right (Location + Tickets) ---- */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    justify-content: flex-end;
+    flex: 1;
+}
+
+.location-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-family: var(--body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.location-btn:hover {
+    transform: translateY(-2px);
+}
+
+.location-btn svg {
+    width: 16px;
+    height: 16px;
+    color: var(--orange);
+    transition: filter 0.3s ease;
+}
+
+.location-btn:hover svg:first-of-type {
+    filter: drop-shadow(0 4px 12px rgba(239, 75, 35, 0.5));
+}
+
+.location-dropdown {
+    position: absolute;
+    top: calc(100% + 1rem);
+    right: 0;
+    min-width: 280px;
+    text-align: left;
+    background: var(--dark);
+    border: 1px solid rgba(255, 107, 44, 0.3);
+    border-radius: 12px;
+    padding: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.location-btn.open .location-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.location-group {
+    padding: 0.5rem;
+}
+
+.location-group-title {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    padding: 0.5rem 0.75rem;
+}
+
+.location-dropdown a {
+    display: block;
+    padding: 0.6rem 0.75rem;
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.location-dropdown a:hover {
+    background: rgba(255, 107, 44, 0.1);
+    color: var(--white);
+}
+
+.btn-tickets {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 100px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
+}
+
+.btn-tickets:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+}
+
+/* ---- Mobile Nav Overrides ---- */
+@media (max-width: 1024px) {
+    .nav-links {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav {
+        padding: 0.75rem 1rem;
+    }
+
+    .nav-left {
+        gap: 0.75rem;
+    }
+
+    .nav-logo img {
+        height: 36px;
+        min-width: 100px;
+    }
+
+    .nav-right {
+        gap: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .nav-center {
+        display: none;
+    }
+
+    /* Location: icon only on mobile */
+    .location-btn #locationText,
+    .location-btn svg:last-of-type {
+        display: none;
+    }
+
+    .location-btn {
+        padding: 0.4rem;
+    }
+
+    .location-btn svg:first-of-type {
+        width: 20px;
+        height: 20px;
+    }
+
+    .location-dropdown {
+        right: -1rem;
+        left: auto;
+        min-width: unset;
+        width: calc(100vw - 2rem);
+        max-width: 300px;
+    }
+
+    /* Compact tickets button */
+    .btn-tickets {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+}

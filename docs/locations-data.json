@@ -1,0 +1,371 @@
+{
+  "_instructions": "SINGLE SOURCE OF TRUTH for all location data. Fill in real values as TM owners provide them. This file feeds the prototype now and imports into the CMS later. To add a new location, copy any location block and update all fields.",
+
+  "locations": [
+    {
+      "id": "philadelphia",
+      "name": "Philadelphia",
+      "status": "open",
+      "slug": "philadelphia",
+      "pageReady": true,
+
+      "address": {
+        "street": "123 Market Street",
+        "city": "Philadelphia",
+        "state": "PA",
+        "zip": "19103",
+        "country": "US"
+      },
+
+      "contact": {
+        "phone": "(215) 555-1234",
+        "phoneLink": "+12155551234",
+        "email": "philadelphia@timemission.com",
+        "phoneVerified": false,
+        "emailVerified": false
+      },
+
+      "hours": {
+        "monday": "10:00 AM - 9:00 PM",
+        "tuesday": "10:00 AM - 9:00 PM",
+        "wednesday": "10:00 AM - 9:00 PM",
+        "thursday": "10:00 AM - 9:00 PM",
+        "friday": "10:00 AM - 10:00 PM",
+        "saturday": "10:00 AM - 10:00 PM",
+        "sunday": "11:00 AM - 8:00 PM"
+      },
+
+      "booking": {
+        "url": "https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products",
+        "verified": false
+      },
+
+      "details": {
+        "opened": "September 15, 2022",
+        "squareFootage": "8,500 SF"
+      },
+
+      "seo": {
+        "metaDescription": "",
+        "ogImage": ""
+      },
+
+      "notes": "Most complete location page. Use as template for others."
+    },
+    {
+      "id": "chicago",
+      "name": "Chicago",
+      "status": "open",
+      "slug": "chicago",
+      "pageReady": false,
+
+      "address": {
+        "street": "NEEDS REAL ADDRESS",
+        "city": "Chicago",
+        "state": "IL",
+        "zip": "",
+        "country": "US"
+      },
+
+      "contact": {
+        "phone": "(847) 555-1234",
+        "phoneLink": "+18475551234",
+        "email": "chicago@timemission.com",
+        "phoneVerified": false,
+        "emailVerified": false
+      },
+
+      "hours": {
+        "monday": "10:00 AM - 9:00 PM",
+        "tuesday": "10:00 AM - 9:00 PM",
+        "wednesday": "10:00 AM - 9:00 PM",
+        "thursday": "10:00 AM - 9:00 PM",
+        "friday": "10:00 AM - 10:00 PM",
+        "saturday": "10:00 AM - 10:00 PM",
+        "sunday": "11:00 AM - 8:00 PM"
+      },
+
+      "booking": {
+        "url": "https://ecom.roller.app/lolcommandcenterchicagoil/test/en-us/products",
+        "verified": false
+      },
+
+      "details": {
+        "opened": "",
+        "squareFootage": ""
+      },
+
+      "seo": {
+        "metaDescription": "",
+        "ogImage": ""
+      },
+
+      "notes": "Sparsest page (370 lines). Needs full buildout."
+    },
+    {
+      "id": "houston",
+      "name": "Houston",
+      "status": "coming_soon",
+      "slug": "houston",
+      "pageReady": false,
+
+      "address": {
+        "street": "NEEDS REAL ADDRESS",
+        "city": "Houston",
+        "state": "TX",
+        "zip": "",
+        "country": "US"
+      },
+
+      "contact": {
+        "phone": "(713) 555-1234",
+        "phoneLink": "+17135551234",
+        "email": "houston@timemission.com",
+        "phoneVerified": false,
+        "emailVerified": false
+      },
+
+      "hours": {
+        "monday": "NEEDS HOURS",
+        "tuesday": "NEEDS HOURS",
+        "wednesday": "NEEDS HOURS",
+        "thursday": "NEEDS HOURS",
+        "friday": "NEEDS HOURS",
+        "saturday": "NEEDS HOURS",
+        "sunday": "NEEDS HOURS"
+      },
+
+      "booking": {
+        "url": "https://ecom.roller.app/lolcommandcenterhoustontx/test/en-us/products",
+        "verified": false
+      },
+
+      "details": {
+        "opened": "Late May 2026",
+        "squareFootage": ""
+      },
+
+      "seo": {
+        "metaDescription": "",
+        "ogImage": ""
+      },
+
+      "notes": "PRIORITY — Houston launch is the deadline. Email missing from page. Needs full buildout."
+    },
+    {
+      "id": "lincoln",
+      "name": "Lincoln",
+      "status": "open",
+      "slug": "lincoln",
+      "pageReady": false,
+
+      "address": {
+        "street": "NEEDS REAL ADDRESS",
+        "city": "Lincoln",
+        "state": "NE",
+        "zip": "",
+        "country": "US"
+      },
+
+      "contact": {
+        "phone": "(402) 555-1234",
+        "phoneLink": "+14025551234",
+        "email": "lincoln@timemission.com",
+        "phoneVerified": false,
+        "emailVerified": false
+      },
+
+      "hours": {
+        "monday": "10:00 AM - 9:00 PM",
+        "tuesday": "10:00 AM - 9:00 PM",
+        "wednesday": "10:00 AM - 9:00 PM",
+        "thursday": "10:00 AM - 9:00 PM",
+        "friday": "10:00 AM - 10:00 PM",
+        "saturday": "10:00 AM - 10:00 PM",
+        "sunday": "11:00 AM - 8:00 PM"
+      },
+
+      "booking": {
+        "url": "https://ecom.roller.app/lolcommandcenterlincolnne/test/en-us/products",
+        "verified": false
+      },
+
+      "details": {
+        "opened": "",
+        "squareFootage": ""
+      },
+
+      "seo": {
+        "metaDescription": "",
+        "ogImage": ""
+      },
+
+      "notes": "Sparse template page. Needs buildout."
+    },
+    {
+      "id": "west-nyack",
+      "name": "West Nyack",
+      "status": "open",
+      "slug": "west-nyack",
+      "pageReady": false,
+
+      "address": {
+        "street": "NEEDS REAL ADDRESS",
+        "city": "West Nyack",
+        "state": "NY",
+        "zip": "",
+        "country": "US"
+      },
+
+      "contact": {
+        "phone": "(845) 555-1234",
+        "phoneLink": "+18455551234",
+        "email": "westnyack@timemission.com",
+        "phoneVerified": false,
+        "emailVerified": false
+      },
+
+      "hours": {
+        "monday": "10:00 AM - 9:00 PM",
+        "tuesday": "10:00 AM - 9:00 PM",
+        "wednesday": "10:00 AM - 9:00 PM",
+        "thursday": "10:00 AM - 9:00 PM",
+        "friday": "10:00 AM - 10:00 PM",
+        "saturday": "10:00 AM - 10:00 PM",
+        "sunday": "11:00 AM - 8:00 PM"
+      },
+
+      "booking": {
+        "url": "https://ecom.roller.app/lolcommandcenterwestnyackny/test/en-us/products",
+        "verified": false
+      },
+
+      "details": {
+        "opened": "",
+        "squareFootage": ""
+      },
+
+      "seo": {
+        "metaDescription": "",
+        "ogImage": ""
+      },
+
+      "notes": "Sparse template page. Needs buildout."
+    },
+    {
+      "id": "manassas",
+      "name": "Manassas",
+      "status": "open",
+      "slug": "manassas",
+      "pageReady": false,
+
+      "address": {
+        "street": "NEEDS REAL ADDRESS",
+        "city": "Manassas",
+        "state": "VA",
+        "zip": "",
+        "country": "US"
+      },
+
+      "contact": {
+        "phone": "(703) 555-1234",
+        "phoneLink": "+17035551234",
+        "email": "manassas@timemission.com",
+        "phoneVerified": false,
+        "emailVerified": false
+      },
+
+      "hours": {
+        "monday": "10:00 AM - 9:00 PM",
+        "tuesday": "10:00 AM - 9:00 PM",
+        "wednesday": "10:00 AM - 9:00 PM",
+        "thursday": "10:00 AM - 9:00 PM",
+        "friday": "10:00 AM - 10:00 PM",
+        "saturday": "10:00 AM - 10:00 PM",
+        "sunday": "11:00 AM - 8:00 PM"
+      },
+
+      "booking": {
+        "url": "https://ecom.roller.app/lolcommandcentermanassasva/test/en-us/products",
+        "verified": false
+      },
+
+      "details": {
+        "opened": "",
+        "squareFootage": ""
+      },
+
+      "seo": {
+        "metaDescription": "",
+        "ogImage": ""
+      },
+
+      "notes": "Sparse template page. Email missing from detail card. Needs buildout."
+    },
+    {
+      "id": "antwerp",
+      "name": "Antwerp",
+      "status": "open",
+      "slug": "antwerp",
+      "pageReady": false,
+
+      "address": {
+        "street": "NEEDS REAL ADDRESS",
+        "city": "Antwerp",
+        "state": "",
+        "zip": "",
+        "country": "BE"
+      },
+
+      "contact": {
+        "phone": "NEEDS PHONE NUMBER",
+        "phoneLink": "",
+        "email": "antwerp@timemission.com",
+        "phoneVerified": false,
+        "emailVerified": false
+      },
+
+      "hours": {
+        "monday": "10:00 AM - 9:00 PM",
+        "tuesday": "10:00 AM - 9:00 PM",
+        "wednesday": "10:00 AM - 9:00 PM",
+        "thursday": "10:00 AM - 9:00 PM",
+        "friday": "10:00 AM - 10:00 PM",
+        "saturday": "10:00 AM - 10:00 PM",
+        "sunday": "11:00 AM - 8:00 PM"
+      },
+
+      "booking": {
+        "url": "https://ecom.roller.app/lolcommandcenterantwerpbe/test/en-us/products",
+        "verified": false
+      },
+
+      "details": {
+        "opened": "",
+        "squareFootage": ""
+      },
+
+      "seo": {
+        "metaDescription": "",
+        "ogImage": ""
+      },
+
+      "notes": "EU location — requires GDPR compliance. No phone number yet."
+    }
+  ],
+
+  "social": {
+    "instagram": "NEEDS URL",
+    "tiktok": "NEEDS URL",
+    "facebook": "NEEDS URL",
+    "twitter": "",
+    "youtube": ""
+  },
+
+  "brand": {
+    "companyName": "Time Mission",
+    "parentCompany": "LOL Entertainment",
+    "generalEmail": "info@timemission.com",
+    "website": "https://timemission.com"
+  }
+}

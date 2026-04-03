@@ -1,0 +1,113 @@
+/* ==========================================================================
+   Time Mission — Base Styles
+   Reset, typography, body defaults, noise texture, shared components
+   ========================================================================== */
+
+/* Monument Extended — single canonical source (removed from nav.css) */
+@font-face {
+    font-family: 'Monument Extended';
+    src: url('../assets/fonts/MonumentExtended-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Monument Extended';
+    src: url('../assets/fonts/MonumentExtended-Ultrabold.otf') format('opentype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--body);
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+}
+
+/* Noise texture overlay — used on all sub-pages */
+body.has-noise::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+/* Shared page header (sub-pages) */
+.page-header {
+    padding: 10rem 2rem 4rem;
+    text-align: center;
+    background: linear-gradient(180deg, var(--black) 0%, var(--dark) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(255, 107, 44, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 107, 44, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 107, 44, 0.2);
+}
+
+.section-badge svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Reveal animation (scroll-triggered) */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        padding: 8rem 1.5rem 3rem;
+    }
+}

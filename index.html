@@ -3,49 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOL Command Center | Step Into The Mission</title>
+    <title>Time Mission – Challenge Room Arcade</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logo/TM_Favicon.svg">
     <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Preload hero video poster for instant display -->
+    <link rel="preload" as="image" href="assets/video/hero-poster.jpg">
+    <!-- Preload Monument Extended fonts to prevent FOUT -->
+    <link rel="preload" as="font" href="assets/fonts/MonumentExtended-Regular.otf" type="font/otf" crossorigin>
+    <link rel="preload" as="font" href="assets/fonts/MonumentExtended-Ultrabold.otf" type="font/otf" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/nav.css">
     <style>
-        :root {
-            --orange: #FF6B2C;
-            --orange-light: #FF8F5C;
-            --orange-dark: #E55A1F;
-            --cyan: #00E5FF;
-            --magenta: #FF00E5;
-            --lime: #AAFF00;
-            --black: #0D0D0D;
-            --dark: #151515;
-            --dark-light: #1F1F1F;
-            --white: #FFFFFF;
-            --white-soft: #E5E5E5;
-            --gray: #8A8A8A;
-            --display: 'Bebas Neue', sans-serif;
-            --body: 'DM Sans', sans-serif;
-
-            /* Consistent gradient system */
-            --gradient-primary: linear-gradient(135deg, #f9a41a 0%, #ef4b23 50%, #c7451e 100%);
-            --gradient-secondary: linear-gradient(135deg, #00E5FF 0%, #AAFF00 100%);
-            --gradient-accent: linear-gradient(90deg, #f9a41a 0%, #ef4b23 50%, #c7451e 100%);
+        /* Subtle grid texture on dark sections — fixed position for seamless alignment */
+        .welcome,
+        .stats,
+        .experiences,
+        .groups-cta,
+        .mini-faq,
+        .cta-section,
+        .newsletter-section {
+            position: relative;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--body);
-            background: var(--black);
-            color: var(--white);
-            overflow-x: hidden;
+        .welcome::before,
+        .stats::before,
+        .experiences::before,
+        .groups-cta::before,
+        .mini-faq::before,
+        .cta-section::before,
+        .newsletter-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 80px 80px;
+            background-attachment: fixed;
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Noise texture overlay */
@@ -62,203 +62,9 @@
             z-index: 10000;
         }
 
-        /* Navigation */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
+        /* Ticker and nav styles provided by css/nav.css */
 
-        .nav.scrolled {
-            background: rgba(13, 13, 13, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 107, 44, 0.2);
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex: 1;
-        }
-
-        .nav-logo img {
-            height: 52px;
-            width: auto;
-        }
-
-        /* Hide hamburger on desktop */
-        .nav-menu-btn {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .nav-menu-btn {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                background: transparent;
-                border: none;
-                color: var(--white);
-                font-family: var(--body);
-                font-size: 0.85rem;
-                font-weight: 500;
-                cursor: pointer;
-                padding: 0.5rem;
-            }
-
-            .nav-menu-btn .hamburger {
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .nav-menu-btn .hamburger span {
-                width: 20px;
-                height: 2px;
-                background: var(--white);
-                transition: all 0.3s ease;
-            }
-        }
-
-        .nav-center {
-            display: flex;
-            align-items: center;
-            gap: 2.5rem;
-            justify-content: center;
-            flex: 2;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--white-soft);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--orange);
-            text-shadow: 0 0 10px rgba(249, 164, 26, 0.4);
-        }
-
-        .nav-links a.active {
-            color: var(--orange);
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            justify-content: flex-end;
-            flex: 1;
-        }
-
-        .location-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: transparent;
-            border: none;
-            color: var(--white);
-            font-family: var(--body);
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .location-btn svg {
-            width: 16px;
-            height: 16px;
-            color: var(--orange);
-        }
-
-        .location-dropdown {
-            position: absolute;
-            top: calc(100% + 1rem);
-            right: 0;
-            min-width: 280px;
-            text-align: left;
-            background: var(--dark);
-            border: 1px solid rgba(255, 107, 44, 0.3);
-            border-radius: 12px;
-            padding: 0.5rem;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .location-btn.open .location-dropdown {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .location-group {
-            padding: 0.5rem;
-        }
-
-        .location-group-title {
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--orange);
-            padding: 0.5rem 0.75rem;
-        }
-
-        .location-dropdown a {
-            display: block;
-            padding: 0.6rem 0.75rem;
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 0.85rem;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .location-dropdown a:hover {
-            background: rgba(255, 107, 44, 0.1);
-            color: var(--white);
-        }
-
-        .btn-tickets {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: 0.75rem 1.5rem;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-radius: 100px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
-        }
-
-        .btn-tickets:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
-        }
+        /* Nav/ticker/mobile-menu styles provided by css/nav.css */
 
         /* Hero Section */
         .hero {
@@ -279,7 +85,7 @@
             z-index: 1;
         }
 
-        .hero-video-container iframe {
+        .hero-video-container video {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -289,6 +95,7 @@
             min-height: 56.25vw;
             transform: translate(-50%, -50%);
             pointer-events: none;
+            object-fit: cover;
         }
 
         .hero-overlay {
@@ -381,8 +188,8 @@
 
         .hero-title .line-1 {
             display: block;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
+            font-family: var(--tech);
+            font-weight: 400;
             font-size: clamp(1.1rem, 3.1vw, 2.4rem);
             letter-spacing: 0.30em;
             color: var(--white);
@@ -417,14 +224,26 @@
         }
 
         @media (max-width: 768px) {
+            .hero-content {
+                margin-top: 0;
+            }
+            .hero-eyebrow {
+                margin-bottom: 1.5rem;
+            }
             .hero-title {
                 font-size: clamp(3rem, 10vw, 8rem);
+                margin-top: 1rem;
+                margin-bottom: 2rem;
             }
             .hero-title .line-1 {
                 letter-spacing: 0.28em;
+                margin-bottom: 0.75rem;
             }
             .hero-title .line-2 {
-                transform: scale(1.05);
+                transform: scale(1);
+            }
+            .hero-subtitle {
+                margin-bottom: 2rem;
             }
         }
 
@@ -444,6 +263,13 @@
             animation: fadeInUp 0.8s ease 0.8s both;
         }
 
+        .hero-cta .btn-primary,
+        .hero-cta .btn-secondary {
+            padding: 0.75rem 1.75rem;
+            font-size: 0.75rem;
+            gap: 0.5rem;
+        }
+
         .btn-primary {
             display: inline-flex;
             align-items: center;
@@ -452,12 +278,13 @@
             color: var(--white);
             padding: 1rem 2rem;
             text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
+            font-family: var(--tech);
+            font-size: 0.85rem;
+            font-weight: 400;
             border-radius: 100px;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             box-shadow: 0 4px 20px rgba(239, 75, 35, 0.5);
         }
 
@@ -471,25 +298,23 @@
             align-items: center;
             gap: 0.75rem;
             background: transparent;
-            border: 2px solid var(--orange);
-            color: var(--orange);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--white);
             padding: 1rem 2rem;
             text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
+            font-family: var(--tech);
+            font-size: 0.85rem;
+            font-weight: 400;
             border-radius: 100px;
             transition: all 0.3s ease;
-            border-image: linear-gradient(135deg, #ff6b2c, #ff8a50) 1;
-            border-image: none;
-            border-color: var(--orange);
-            box-shadow: 0 4px 20px rgba(255, 107, 44, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 107, 44, 0.1);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(255, 107, 44, 0.3);
-            color: var(--white);
+            border-color: var(--orange);
+            color: var(--orange);
+            transform: translateY(-2px);
         }
 
         .hero-scroll {
@@ -505,11 +330,18 @@
             animation: fadeIn 1s ease 1.2s both;
         }
 
-        .hero-scroll span {
+        .hero-scroll .scroll-label,
+        .hero-scroll .swipe-label {
             font-size: 0.7rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--gray);
+        }
+
+        /* Desktop: show scroll, hide swipe */
+        .hero-scroll .swipe-label,
+        .hero-scroll .swipe-indicator {
+            display: none;
         }
 
         .scroll-indicator {
@@ -538,6 +370,18 @@
             100% { transform: translateX(-50%) translateY(16px); opacity: 0; }
         }
 
+        /* Swipe indicator */
+        .swipe-indicator {
+            color: var(--orange);
+            animation: swipeDown 1.5s ease infinite;
+        }
+
+        @keyframes swipeDown {
+            0% { transform: translateY(0); opacity: 0.3; }
+            50% { transform: translateY(8px); opacity: 1; }
+            100% { transform: translateY(0); opacity: 0.3; }
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -561,9 +405,10 @@
 
         /* Welcome Section */
         .welcome {
-            padding: 4.5rem 2rem 2.5rem;
+            padding: 4.5rem 2rem 1rem;
             text-align: center;
             background: linear-gradient(180deg, var(--black) 0%, var(--dark) 100%);
+            scroll-margin-top: 70px;
         }
 
         .welcome-content {
@@ -578,8 +423,9 @@
             background: rgba(255, 107, 44, 0.1);
             padding: 0.5rem 1rem;
             border-radius: 100px;
+            font-family: var(--tech);
             font-size: 0.7rem;
-            font-weight: 600;
+            font-weight: 400;
             letter-spacing: 0.15em;
             text-transform: uppercase;
             color: var(--orange);
@@ -612,7 +458,7 @@
 
         /* Stats Section Base */
         .stats {
-            padding: 2.5rem 2rem 4rem;
+            padding: 1rem 2rem 3rem;
             background: var(--dark);
         }
 
@@ -887,13 +733,18 @@
         /* Neon Glow Stat Cards */
         .stat-card {
             background: var(--dark);
-            border-radius: 20px;
-            padding: 2.5rem 1.5rem;
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
             text-align: center;
             position: relative;
             overflow: hidden;
             border: 1px solid transparent;
             transition: all 0.4s ease;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .stat-card::before {
@@ -903,7 +754,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            border-radius: 20px;
+            border-radius: 12px;
             padding: 2px;
             background: linear-gradient(135deg, var(--glow-color), transparent 50%);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -965,7 +816,8 @@
         }
 
         .stat-number {
-            font-family: 'Orbitron', sans-serif;
+            font-family: var(--tech);
+            font-weight: 400;
             font-size: 3rem;
             font-weight: 700;
             color: var(--white);
@@ -977,52 +829,16 @@
         .stat-minutes {
             position: relative;
             display: inline-block;
-            min-width: 80px;
         }
 
-        /* 3D Cube-style flip for minutes rotation */
-        .prism-container {
-            perspective: 400px;
-            height: 58px;
-            overflow: hidden;
+        .minutes-counter {
             display: inline-block;
-            min-width: 90px;
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        .prism {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .prism-face {
-            position: absolute;
-            width: 100%;
-            height: 58px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backface-visibility: hidden;
-            font-size: inherit;
-            font-family: inherit;
-            font-weight: inherit;
-            color: inherit;
-            text-shadow: 0 0 20px var(--glow-color-alpha);
-        }
-
-        /* Position faces on a cube (90° apart for clean hiding) */
-        .prism-face:nth-child(1) {
-            transform: rotateX(0deg) translateZ(29px);
-        }
-
-        .prism-face:nth-child(2) {
-            transform: rotateX(90deg) translateZ(29px);
-        }
-
-        .prism-face:nth-child(3) {
-            transform: rotateX(180deg) translateZ(29px);
+        .minutes-counter.fade-out {
+            opacity: 0;
+            transform: translateY(-10px);
         }
 
         .stat-label {
@@ -1034,14 +850,14 @@
 
         /* Experiences Section */
         .experiences {
-            padding: 6rem 0 3rem;
+            padding: 3rem 0 3rem;
             background: var(--dark);
             overflow: hidden;
         }
 
         .experiences-header {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 1.5rem;
             padding: 0 2rem;
         }
 
@@ -1198,9 +1014,106 @@
             color: var(--white);
         }
 
+        @media (max-width: 768px) {
+            .experiences-nav {
+                display: none;
+            }
+        }
+
+        /* Groups & Parties CTA — Netflix House style */
+        .groups-cta {
+            position: relative;
+            background: var(--dark);
+            padding: 0;
+            overflow: visible;
+        }
+
+        .groups-cta-photo {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .groups-cta-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+        }
+
+        /* Gradient fade from photo into card */
+        .groups-cta-photo::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 200px;
+            background: linear-gradient(to top, var(--dark) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .groups-cta-card {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: -80px auto 0;
+            background: var(--dark);
+            border-radius: 24px 24px 0 0;
+            padding: 3rem 3rem 3.5rem;
+            text-align: center;
+        }
+
+        .groups-cta-card .section-title {
+            margin-bottom: 0.75rem;
+        }
+
+        .groups-cta-card .welcome-text {
+            color: var(--gray);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .btn-start-planning {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            color: var(--white);
+            padding: 0.85rem 2rem;
+            text-decoration: none;
+            font-family: var(--tech);
+            font-size: 0.85rem;
+            font-weight: 400;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 1.25rem;
+        }
+
+        .btn-start-planning:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .groups-cta-photo {
+                height: 280px;
+            }
+
+            .groups-cta-card {
+                max-width: none;
+                margin: -60px 1rem 0;
+                padding: 2rem 1.5rem 2.5rem;
+            }
+        }
+
         /* How It Works */
         .how-it-works {
-            padding: 3rem 2rem 6rem;
+            padding: 3rem 2rem 3rem;
             background: linear-gradient(180deg, var(--dark) 0%, var(--black) 100%);
         }
 
@@ -1274,38 +1187,192 @@
             line-height: 1.6;
         }
 
-        /* CTA Section */
-        .cta-section {
-            padding: 6rem 2rem;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--black) 100%);
-            text-align: center;
+        /* Mini FAQ */
+        .mini-faq {
+            padding: 3rem 2rem;
+            background: var(--black);
             position: relative;
+        }
+
+        .mini-faq::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent 0%, rgba(239, 75, 35, 0.15) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .mini-faq-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .mini-faq-grid {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .mini-faq-item {
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .mini-faq-item:hover {
+            border-color: rgba(255, 107, 44, 0.2);
+        }
+
+        .mini-faq-q {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            color: var(--white);
+            font-family: var(--body);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .mini-faq-q svg {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            color: var(--orange);
+            transition: transform 0.3s ease;
+        }
+
+        .mini-faq-item.open .mini-faq-q svg {
+            transform: rotate(45deg);
+        }
+
+        .mini-faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .mini-faq-item.open .mini-faq-a {
+            max-height: 200px;
+        }
+
+        .mini-faq-a p {
+            padding: 0 1.5rem 1.25rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .mini-faq-cta {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .btn-see-all-faq {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            color: var(--white);
+            padding: 0.85rem 2rem;
+            text-decoration: none;
+            font-family: var(--tech);
+            font-size: 0.85rem;
+            font-weight: 400;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-see-all-faq:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        /* CTA Section — photo bleed style */
+        .cta-section {
+            position: relative;
+            background: var(--dark);
+            padding: 0;
+            overflow: visible;
+        }
+
+        .cta-photo {
+            width: 100%;
+            height: 400px;
             overflow: hidden;
         }
 
-        .cta-section::before {
+        .cta-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 40%;
+        }
+
+        .cta-photo::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(255, 107, 44, 0.1) 0%, transparent 70%);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 200px;
+            background: linear-gradient(to top, var(--dark) 0%, transparent 100%);
             pointer-events: none;
         }
 
         .cta-content {
             position: relative;
-            z-index: 1;
-            max-width: 600px;
-            margin: 0 auto;
+            z-index: 2;
+            max-width: 800px;
+            margin: -80px auto 0;
+            background: var(--dark);
+            border-radius: 24px;
+            padding: 3rem 3rem 3.5rem;
+            text-align: center;
+        }
+
+        .final-cta {
+            padding-bottom: 5rem;
         }
 
         .cta-title {
             font-family: var(--display);
             font-size: clamp(2.5rem, 5vw, 4rem);
             margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .cta-photo {
+                height: 280px;
+            }
+
+            .cta-content {
+                max-width: none;
+                margin: -60px 1rem 0;
+                padding: 2rem 1.5rem 2.5rem;
+            }
         }
 
         .cta-text {
@@ -1317,89 +1384,147 @@
 
         /* Testimonials */
         .testimonials {
-            padding: 6rem 2rem;
-            background: var(--black);
+            padding: 3rem 0;
+            background: #f5f5f5;
+            position: relative;
+            z-index: 1;
         }
 
-        .testimonials-header {
-            text-align: center;
-            margin-bottom: 3rem;
+        .testimonials::before,
+        .testimonials::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 100px;
+            pointer-events: none;
+            z-index: 10;
         }
 
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+        .testimonials::before {
+            top: 0;
+            background: linear-gradient(to bottom, rgba(239, 75, 35, 0.25) 0%, transparent 40%);
         }
 
-        @media (max-width: 900px) {
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-                max-width: 500px;
-            }
+        .testimonials::after {
+            bottom: 0;
+            background: linear-gradient(to top, rgba(239, 75, 35, 0.25) 0%, transparent 40%);
+        }
+
+        .testimonials-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 1rem 0;
+        }
+
+        .testimonials-scroll::-webkit-scrollbar {
+            display: none;
         }
 
         .testimonial-card {
-            background: var(--dark);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.3s ease;
+            flex: 0 0 100%;
+            scroll-snap-align: center;
+            background: transparent;
+            border: none;
+            padding: 1.5rem 3rem;
+            text-align: center;
+            box-sizing: border-box;
         }
 
-        .testimonial-card:hover {
-            border-color: rgba(255, 107, 44, 0.3);
-            transform: translateY(-5px);
+        @media (max-width: 768px) {
+            .testimonial-card {
+                padding: 1rem 2rem;
+            }
         }
 
         .testimonial-rating {
-            color: #FFD700;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            letter-spacing: 0.1em;
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.25em;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .testimonial-text {
-            color: var(--white-soft);
+            color: #333;
             font-size: 1rem;
             line-height: 1.7;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             font-style: italic;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .testimonial-author {
             display: flex;
             align-items: center;
-            gap: 1rem;
-        }
-
-        .author-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-weight: 600;
-            color: var(--white);
-        }
-
-        .author-info {
-            display: flex;
-            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .author-name {
             font-weight: 600;
-            color: var(--white);
+            color: #111;
+        }
+
+        .author-location {
+            color: #666;
         }
 
         .author-location {
             color: var(--gray);
             font-size: 0.85rem;
+        }
+
+        /* UGC Photo Grid */
+        .ugc-grid {
+            background: var(--dark);
+            padding: 3rem 0 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+
+        .ugc-grid-header {
+            text-align: center;
+            padding: 0 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ugc-photos {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 4px;
+        }
+
+        .ugc-photos img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: cover;
+            transition: transform 0.4s ease, filter 0.4s ease;
+            cursor: pointer;
+        }
+
+        .ugc-photos img:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+            z-index: 1;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .ugc-photos {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+            }
         }
 
         /* Press Banner */
@@ -1413,9 +1538,10 @@
 
         .press-label {
             text-align: center;
-            font-family: var(--display);
-            font-size: 0.9rem;
-            letter-spacing: 0.2em;
+            font-family: var(--tech);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
             color: var(--gray);
             margin-bottom: 2rem;
             text-transform: uppercase;
@@ -1437,9 +1563,9 @@
         }
 
         .press-logo {
-            height: 32px;
+            height: 40px;
             width: auto;
-            opacity: 0.5;
+            opacity: 0.6;
             filter: grayscale(100%) brightness(1.5);
             transition: all 0.3s ease;
         }
@@ -1447,6 +1573,13 @@
         .press-logo:hover {
             opacity: 1;
             filter: grayscale(0%) brightness(1);
+        }
+
+        @media (max-width: 768px) {
+            .press-logo {
+                opacity: 1;
+                filter: grayscale(0%) brightness(1);
+            }
         }
 
         /* Placeholder logo boxes */
@@ -1611,9 +1744,10 @@
             background: var(--gradient-primary);
             color: var(--white);
             text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
-            letter-spacing: 0.05em;
+            font-family: var(--tech);
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
             border-radius: 100px;
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -1672,106 +1806,85 @@
         .footer {
             background: var(--dark);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 4rem 2rem 2rem;
+            padding: 3rem 2rem 2rem;
         }
 
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr repeat(4, 1fr);
-            gap: 2.5rem;
-            max-width: 1200px;
-            margin: 0 auto 2rem;
+        .footer-simple {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
         }
 
-        .footer-brand img {
+        .footer-logo {
             height: 36px;
-            margin-bottom: 1rem;
+            align-self: center;
         }
 
-        .footer-brand p {
+        .footer-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.25rem 2rem;
+            width: 100%;
+        }
+
+        .footer-nav a {
             color: var(--gray);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            max-width: 280px;
+            text-decoration: none;
+            font-family: var(--tech);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            color: var(--orange);
         }
 
         .footer-social {
             display: flex;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
+            gap: 1rem;
+            align-self: center;
         }
 
         .footer-social a {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
+            color: var(--gray);
             transition: all 0.3s ease;
         }
 
         .footer-social a:hover {
-            transform: translateY(-3px) scale(1.1);
-            filter: brightness(1.3);
-        }
-
-        .footer-social svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .footer-title {
-            font-family: var(--display);
-            font-size: 1.25rem;
-            margin-bottom: 1.25rem;
-            color: var(--white);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.6rem;
-        }
-
-        .footer-links a {
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
             color: var(--orange);
+            transform: translateY(-2px);
         }
 
         .footer-bottom {
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 2rem;
+            padding-top: 1.5rem;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
         .footer-copyright {
             color: var(--gray);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .footer-legal {
             display: flex;
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
 
         .footer-legal a {
             color: var(--gray);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: color 0.3s ease;
         }
 
@@ -1779,45 +1892,76 @@
             color: var(--orange);
         }
 
+        @media (max-width: 768px) {
+            .footer-bottom {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+
         /* Newsletter Section */
-        .footer-newsletter {
-            max-width: 1200px;
-            margin: 0 auto 2rem;
-            padding: 2rem;
-            background: rgba(255, 107, 44, 0.05);
-            border: 1px solid rgba(255, 107, 44, 0.15);
-            border-radius: 16px;
-            text-align: center;
+        /* Newsletter Section */
+        .newsletter-section {
+            padding: 4rem 2rem;
+            background: var(--dark);
+            position: relative;
+            overflow: visible;
         }
 
-        .footer-newsletter .footer-title {
-            margin-bottom: 0.5rem;
+        .newsletter-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: linear-gradient(to top, rgba(239, 75, 35, 0.15) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .footer-newsletter p {
+        .newsletter-inner {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-inner h2 {
+            font-family: var(--display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .newsletter-inner > p {
             color: var(--gray);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
         }
 
         .newsletter-form {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 0.75rem;
-            max-width: 500px;
-            margin: 0 auto 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .newsletter-form .full-width {
+            grid-column: 1 / -1;
         }
 
         .newsletter-form input {
-            flex: 1;
-            padding: 0.875rem 1.25rem;
-            background: var(--dark);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 100px;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
             color: var(--white);
             font-family: var(--body);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             outline: none;
             transition: all 0.3s ease;
+            box-sizing: border-box;
         }
 
         .newsletter-form input:focus {
@@ -1829,30 +1973,57 @@
             color: var(--gray);
         }
 
+
+        .newsletter-consent {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+
+        .newsletter-consent input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--orange);
+            margin-top: 2px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .newsletter-consent span {
+            color: var(--gray);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
         .btn-subscribe {
-            padding: 0.875rem 1.75rem;
-            background: var(--gradient-primary);
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--white);
             border: none;
             border-radius: 100px;
-            color: var(--white);
-            font-family: var(--body);
+            color: var(--black);
+            font-family: var(--tech);
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 400;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(239, 75, 35, 0.3);
+            margin-top: 1.5rem;
         }
 
         .btn-subscribe:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(239, 75, 35, 0.4);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
         }
 
         .newsletter-legal {
             color: var(--gray);
             font-size: 0.75rem;
+            margin-top: 1rem;
         }
 
         .newsletter-legal a {
@@ -1860,16 +2031,13 @@
             text-decoration: none;
         }
 
+
         .newsletter-legal a:hover {
             text-decoration: underline;
         }
 
         /* Mobile Styles */
         @media (max-width: 1024px) {
-            .nav-links {
-                display: none;
-            }
-
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -1884,25 +2052,39 @@
                 right: 12%;
             }
 
-            .footer-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
 
         @media (max-width: 768px) {
-            .nav {
-                padding: 1rem;
-            }
-
-            .nav-center {
-                display: none;
-            }
+            /* Nav responsive rules provided by css/nav.css */
 
             .hero-content {
-                padding: 0 1rem;
+                padding: 0 1.5rem;
             }
 
             .hero-cta {
+                flex-direction: row;
+                justify-content: center;
+                gap: 0.75rem;
+            }
+
+            .hero-cta .btn-primary,
+            .hero-cta .btn-outline,
+            .hero-cta .btn-secondary {
+                padding: 0.85rem 1.25rem;
+                font-size: 0.75rem;
+                white-space: nowrap;
+            }
+
+            /* Mobile: show swipe, hide scroll */
+            .hero-scroll .scroll-label,
+            .hero-scroll .scroll-indicator {
+                display: none;
+            }
+            .hero-scroll .swipe-label,
+            .hero-scroll .swipe-indicator {
+                display: block;
+            }
+            .hero-scroll {
                 flex-direction: column;
                 align-items: center;
             }
@@ -1913,7 +2095,8 @@
             }
 
             .stats-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
             }
 
             .stat-card {
@@ -1927,22 +2110,6 @@
 
             .steps-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .footer-legal {
-                flex-wrap: wrap;
-                justify-content: center;
             }
         }
 
@@ -2258,6 +2425,47 @@
         </div>
     </div>
 
+    <!-- Announcement Ticker -->
+    <div class="ticker-bar">
+        <div class="ticker-track">
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+        </div>
+    </div>
+
+    <!-- Full-Screen Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-menu-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="experiences.html">Experiences</a></li>
+            <li><a href="groups.html">Groups & Events</a></li>
+            <li><a href="gift-cards.html">Gift Cards</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="locations/index.html">Locations</a></li>
+        </ul>
+        <div class="mobile-menu-socials">
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78 2.84 2.84 0 0 1 .51.05V8.97a6.34 6.34 0 0 0-.51-.02 6.34 6.34 0 1 0 6.34 6.34V9.87a8.16 8.16 0 0 0 3.76.92V7.35a4.85 4.85 0 0 1 0-.66z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+        </div>
+        <div class="mobile-menu-cta">
+            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-tickets">Book Now</a>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="nav" id="nav">
         <div class="nav-left">
@@ -2269,7 +2477,7 @@
                 </div>
             </button>
             <a href="index.html" class="nav-logo">
-                <img src="assets/logo/TM_Letters_White.svg" alt="Time Mission">
+                <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
             </a>
         </div>
 
@@ -2315,12 +2523,10 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <iframe
-                src="https://player.vimeo.com/video/1152964429?h=5f9eedd147&autoplay=1&loop=1&muted=1&background=1"
-                frameborder="0"
-                allow="autoplay; fullscreen"
-                allowfullscreen>
-            </iframe>
+            <video autoplay muted loop playsinline poster="assets/video/hero-poster.jpg" preload="metadata">
+                <source src="assets/video/hero-bg-mobile.mp4" type="video/mp4" media="(max-width: 768px)">
+                <source src="assets/video/hero-bg-web.mp4" type="video/mp4">
+            </video>
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -2332,7 +2538,7 @@
                 <span class="line-1">STEP INTO THE</span>
                 <span class="line-2" aria-label="MISSION"></span>
             </h1>
-            <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive challenges. Test your speed, strength, skill, and smarts.</p>
+            <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive challenges. Test your speed, strength, skill, and&nbsp;smarts.</p>
             <div class="hero-cta">
                 <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-primary">
                     Book Now
@@ -2344,18 +2550,24 @@
             </div>
         </div>
         <div class="hero-scroll">
-            <span>Scroll</span>
+            <span class="scroll-label">Scroll</span>
+            <span class="swipe-label">Swipe</span>
             <div class="scroll-indicator"></div>
+            <div class="swipe-indicator">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M8 15l4 4 4-4"/>
+                </svg>
+            </div>
         </div>
     </section>
 
     <!-- Welcome Section -->
     <section class="welcome" id="about">
         <div class="welcome-content reveal">
-            <div class="section-badge">EPIC GAMING ADVENTURE</div>
-            <h2 class="section-title">WHERE EVERY SKILL SHINES</h2>
+            <div class="section-badge">ABOUT US</div>
+            <h2 class="section-title" style="white-space: nowrap;">WHAT IS TIME MISSION?</h2>
             <p class="welcome-text">
-                Step into the mission. Teams race through <strong>time portals</strong>, conquer challenges, and battle for <strong>Momentium</strong> glory.
+                Step into a real-life video game where every room is a new adventure. Grab your team and choose your mission. Solve the puzzles. Race the clock. Then jump right into the next one. Play as many games as you want in your chosen time. Game&nbsp;on.
             </p>
         </div>
     </section>
@@ -2381,13 +2593,7 @@
                     </svg>
                 </div>
                 <div class="stat-number stat-minutes">
-                    <div class="prism-container">
-                        <div class="prism" id="minutesPrism">
-                            <div class="prism-face">60</div>
-                            <div class="prism-face">90</div>
-                            <div class="prism-face">120</div>
-                        </div>
-                    </div>
+                    <span class="minutes-counter" id="minutesCounter">60</span>
                 </div>
                 <div class="stat-label">Minutes of Play</div>
             </div>
@@ -2400,7 +2606,7 @@
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                     </svg>
                 </div>
-                <div class="stat-number">2-5</div>
+                <div class="stat-number">2<span style="font-size: 0.5em; vertical-align: middle;">-</span>5</div>
                 <div class="stat-label">Players Per Team</div>
             </div>
             <div class="stat-card reveal">
@@ -2419,13 +2625,14 @@
     <!-- Experiences Section -->
     <section class="experiences" id="experiences">
         <div class="experiences-header reveal">
-            <div class="section-badge">The Portals</div>
-            <h2 class="section-title">THE MISSIONS</h2>
+            <div class="section-badge">THE MISSIONS</div>
+            <h2 class="section-title">Unlimited Ways to Play</h2>
+            <p class="welcome-text" style="max-width: 700px; margin: 0 auto;">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
         </div>
 
         <div class="experiences-scroll" id="experiencesScroll">
             <div class="experience-card">
-                <img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix">
+                <img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280">
                 <div class="experience-overlay">
                     <span class="experience-badge">Digital Realm</span>
                     <h3 class="experience-title">GLITCH MATRIX</h3>
@@ -2438,7 +2645,7 @@
             </div>
 
             <div class="experience-card">
-                <img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang">
+                <img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" loading="lazy" width="1920" height="1280">
                 <div class="experience-overlay">
                     <span class="experience-badge">Cosmic</span>
                     <h3 class="experience-title">BIG BANG</h3>
@@ -2451,7 +2658,7 @@
             </div>
 
             <div class="experience-card">
-                <img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem">
+                <img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" loading="lazy" width="1920" height="1280">
                 <div class="experience-overlay">
                     <span class="experience-badge">Prehistoric</span>
                     <h3 class="experience-title">MAGMA MAYHEM</h3>
@@ -2464,7 +2671,7 @@
             </div>
 
             <div class="experience-card">
-                <img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist">
+                <img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" loading="lazy" width="1920" height="1280">
                 <div class="experience-overlay">
                     <span class="experience-badge">Cyber</span>
                     <h3 class="experience-title">SERVER HEIST</h3>
@@ -2477,7 +2684,7 @@
             </div>
 
             <div class="experience-card">
-                <img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple">
+                <img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" loading="lazy" width="1920" height="1280">
                 <div class="experience-overlay">
                     <span class="experience-badge">Adventure</span>
                     <h3 class="experience-title">JUNGLE TEMPLE</h3>
@@ -2490,7 +2697,7 @@
             </div>
 
             <div class="experience-card">
-                <img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack">
+                <img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" loading="lazy" width="1920" height="1440">
                 <div class="experience-overlay">
                     <span class="experience-badge">Maritime</span>
                     <h3 class="experience-title">PIRATES ATTACK</h3>
@@ -2504,7 +2711,7 @@
 
             <!-- Duplicate cards for seamless infinite scroll -->
             <div class="experience-card" aria-hidden="true">
-                <img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix">
+                <img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" loading="lazy" width="1920" height="1280">
                 <div class="experience-overlay">
                     <span class="experience-badge">Digital Realm</span>
                     <h3 class="experience-title">GLITCH MATRIX</h3>
@@ -2517,7 +2724,7 @@
             </div>
 
             <div class="experience-card" aria-hidden="true">
-                <img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang">
+                <img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" loading="lazy" width="1920" height="1280">
                 <div class="experience-overlay">
                     <span class="experience-badge">Cosmic</span>
                     <h3 class="experience-title">BIG BANG</h3>
@@ -2530,7 +2737,7 @@
             </div>
 
             <div class="experience-card" aria-hidden="true">
-                <img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem">
+                <img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" loading="lazy" width="1920" height="1280">
                 <div class="experience-overlay">
                     <span class="experience-badge">Prehistoric</span>
                     <h3 class="experience-title">MAGMA MAYHEM</h3>
@@ -2543,7 +2750,7 @@
             </div>
 
             <div class="experience-card" aria-hidden="true">
-                <img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist">
+                <img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" loading="lazy" width="1920" height="1280">
                 <div class="experience-overlay">
                     <span class="experience-badge">Cyber</span>
                     <h3 class="experience-title">SERVER HEIST</h3>
@@ -2556,7 +2763,7 @@
             </div>
 
             <div class="experience-card" aria-hidden="true">
-                <img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple">
+                <img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" loading="lazy" width="1920" height="1280">
                 <div class="experience-overlay">
                     <span class="experience-badge">Adventure</span>
                     <h3 class="experience-title">JUNGLE TEMPLE</h3>
@@ -2569,7 +2776,7 @@
             </div>
 
             <div class="experience-card" aria-hidden="true">
-                <img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack">
+                <img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" loading="lazy" width="1920" height="1440">
                 <div class="experience-overlay">
                     <span class="experience-badge">Maritime</span>
                     <h3 class="experience-title">PIRATES ATTACK</h3>
@@ -2596,85 +2803,103 @@
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works">
-        <div class="how-header reveal">
-            <div class="section-badge">Your Journey</div>
-            <h2 class="section-title">HOW IT WORKS</h2>
+    <!-- Groups & Parties CTA -->
+    <section class="groups-cta">
+        <div class="groups-cta-photo">
+            <img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Group playing at Time Mission" loading="lazy" width="1920" height="1280">
         </div>
-
-        <div class="steps-grid">
-            <div class="step-card reveal">
-                <div class="step-number">1</div>
-                <h3 class="step-title">ASSEMBLE</h3>
-                <p class="step-text">Gather 2-5 players. Mix different skills for the best team.</p>
-            </div>
-            <div class="step-card reveal">
-                <div class="step-number">2</div>
-                <h3 class="step-title">ENTER</h3>
-                <p class="step-text">Travel through 25+ themed portals with unique challenges.</p>
-            </div>
-            <div class="step-card reveal">
-                <div class="step-number">3</div>
-                <h3 class="step-title">COMPETE</h3>
-                <p class="step-text">Complete challenges to earn Momentium points.</p>
-            </div>
-            <div class="step-card reveal">
-                <div class="step-number">4</div>
-                <h3 class="step-title">CONQUER</h3>
-                <p class="step-text">Climb the leaderboard and come back to beat your score.</p>
-            </div>
+        <div class="groups-cta-card reveal">
+            <div class="section-badge">GROUPS & PARTIES</div>
+            <h2 class="section-title">CELEBRATE AT TIME&nbsp;MISSION</h2>
+            <p class="welcome-text">Birthdays, team outings, or just a crew ready to compete. We handle the setup so you can focus on the&nbsp;fun.</p>
+            <a href="groups.html" class="btn-start-planning">Start Planning
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
         </div>
     </section>
 
     <!-- Testimonials -->
     <section class="testimonials" id="reviews">
-        <div class="testimonials-header reveal">
-            <div class="section-badge">What Players Say</div>
-            <h2 class="section-title">REAL EXPERIENCES</h2>
-        </div>
-
-        <div class="testimonials-grid">
-            <div class="testimonial-card reveal">
+        <div class="testimonials-scroll">
+            <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
                 <p class="testimonial-text">"This was the most fun my family has had in years! The challenges were exciting for both kids and adults. We're already planning our next visit."</p>
                 <div class="testimonial-author">
-                    <div class="author-avatar">S</div>
-                    <div class="author-info">
-                        <span class="author-name">Sarah M.</span>
-                        <span class="author-location">Philadelphia</span>
-                    </div>
+                    <span class="author-name">Sarah M.</span>
+                    <span class="author-location">— Philadelphia</span>
                 </div>
             </div>
 
-            <div class="testimonial-card reveal">
+            <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
                 <p class="testimonial-text">"Perfect for team building! Our company had a blast competing against each other. The immersive environments and variety of challenges kept everyone engaged."</p>
                 <div class="testimonial-author">
-                    <div class="author-avatar">M</div>
-                    <div class="author-info">
-                        <span class="author-name">Mike R.</span>
-                        <span class="author-location">Chicago</span>
-                    </div>
+                    <span class="author-name">Mike R.</span>
+                    <span class="author-location">— Chicago</span>
                 </div>
             </div>
 
-            <div class="testimonial-card reveal">
+            <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
                 <p class="testimonial-text">"My son's birthday party was absolutely epic! The staff was amazing and all the kids had an incredible time. Highly recommend for any celebration."</p>
                 <div class="testimonial-author">
-                    <div class="author-avatar">J</div>
-                    <div class="author-info">
-                        <span class="author-name">Jennifer L.</span>
-                        <span class="author-location">Houston</span>
-                    </div>
+                    <span class="author-name">Jennifer L.</span>
+                    <span class="author-location">— Houston</span>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Mini FAQ -->
+    <section class="mini-faq">
+        <div class="mini-faq-header reveal">
+            <h2 class="section-title">FREQUENTLY ASKED</h2>
+        </div>
+
+        <div class="mini-faq-grid">
+            <div class="mini-faq-item">
+                <button class="mini-faq-q">
+                    How long is a session?
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+                <div class="mini-faq-a">
+                    <p>Sessions are available in 60, 90, or 120 minute options. Choose the length that works best for your group — more time means more missions to conquer.</p>
+                </div>
+            </div>
+
+            <div class="mini-faq-item">
+                <button class="mini-faq-q">
+                    What ages can play?
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+                <div class="mini-faq-a">
+                    <p>Time Mission is designed for ages 8 and up. Kids under 13 must be accompanied by an adult. The challenges are fun for all skill levels.</p>
+                </div>
+            </div>
+
+            <div class="mini-faq-item">
+                <button class="mini-faq-q">
+                    Do I need to book in advance?
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+                <div class="mini-faq-a">
+                    <p>We recommend booking online to guarantee your spot, especially on weekends. Walk-ins are welcome based on availability.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-faq-cta">
+            <a href="faq.html" class="btn-see-all-faq">See All FAQs
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
     <!-- CTA Section -->
-    <section class="cta-section">
+    <section class="cta-section final-cta">
+        <div class="cta-photo">
+            <img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Time Mission venue" loading="lazy" width="1920" height="1280">
+        </div>
         <div class="cta-content reveal">
             <h2 class="cta-title">READY TO PLAY?</h2>
             <p class="cta-text">Book your adventure today and discover why Time Mission is the ultimate social gaming experience. Perfect for birthdays, team building, and unforgettable moments.</p>
@@ -2687,132 +2912,84 @@
         </div>
     </section>
 
-    <!-- Press Banner -->
-    <section class="press-banner">
-        <div class="press-label">As Featured In</div>
-        <div class="press-ticker">
-            <div class="press-logos" id="pressLogos">
-                <!-- Default/National press logos -->
-                <img src="assets/news/NBC_logo.svg" alt="NBC" class="press-logo">
-                <img src="assets/news/FOX_wordmark.svg" alt="FOX" class="press-logo">
-                <img src="assets/news/CBS_logo_(2020).svg" alt="CBS" class="press-logo">
-                <img src="assets/news/Yahoo!_Finance_logo.svg" alt="Yahoo Finance" class="press-logo">
-                <img src="assets/news/BusinessWire_Logo.png" alt="Business Wire" class="press-logo">
-                <img src="assets/news/Logo.svg" alt="News" class="press-logo">
-                <!-- Duplicate for seamless loop -->
-                <img src="assets/news/NBC_logo.svg" alt="NBC" class="press-logo">
-                <img src="assets/news/FOX_wordmark.svg" alt="FOX" class="press-logo">
-                <img src="assets/news/CBS_logo_(2020).svg" alt="CBS" class="press-logo">
-                <img src="assets/news/Yahoo!_Finance_logo.svg" alt="Yahoo Finance" class="press-logo">
-                <img src="assets/news/BusinessWire_Logo.png" alt="Business Wire" class="press-logo">
-                <img src="assets/news/Logo.svg" alt="News" class="press-logo">
-            </div>
+    <!-- UGC Photo Grid -->
+    <section class="ugc-grid">
+        <div class="ugc-grid-header reveal">
+            <div class="section-badge">LET'S CONNECT</div>
+            <h2 class="section-title">FOLLOW THE MISSION</h2>
+        </div>
+        <div class="ugc-photos">
+            <img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Time Mission gameplay" loading="lazy" width="1920" height="1280">
+            <img src="assets/photos/venue/_Time-Mission_0009.jpg" alt="Time Mission venue" loading="lazy" width="1920" height="1280">
+            <img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" loading="lazy" width="1920" height="1280">
+            <img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Time Mission venue" loading="lazy" width="1920" height="1280">
+            <img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" loading="lazy" width="1920" height="1280">
+            <img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" loading="lazy" width="1920" height="1280">
+            <img src="assets/photos/venue/_Time-Mission_0016.jpg" alt="Time Mission venue" loading="lazy" width="1920" height="1280">
+            <img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" loading="lazy" width="1920" height="1440">
+            <img src="assets/photos/experiences/Time-Mission_Orbital_Pit.jpeg" alt="Orbital Pit" loading="lazy" width="1920" height="1279">
+            <img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Time Mission venue" loading="lazy" width="1920" height="1280">
+            <img src="assets/photos/experiences/Time-Mission_Persian-0Palace.jpg" alt="Persian Palace" loading="lazy" width="1920" height="1280">
+            <img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" loading="lazy" width="1920" height="1280">
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <h2>DON'T MISS A THING</h2>
+            <p>Sign up for sneak peeks and early access to new missions — plus special events, ticket drops, and&nbsp;more.</p>
+            <form class="newsletter-form">
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name">
+                <input type="email" placeholder="Email" class="full-width" required>
+            </form>
+            <label class="newsletter-consent">
+                <input type="checkbox" required>
+                <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+            </label>
+            <button type="submit" class="btn-subscribe">Sign Up</button>
+            <p class="newsletter-legal">
+                By signing up, you agree to our
+                <a href="terms.html">Terms of Service</a> and
+                <a href="privacy.html">Privacy Policy</a>.
+            </p>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <img src="assets/logo/TM_Letters_White.svg" alt="Time Mission">
-                <p>A social gaming adventure where teams compete through immersive challenges across time and space.</p>
-                <div class="footer-social">
-                    <a href="#" aria-label="Instagram">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="igGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:#feda75"/>
-                                    <stop offset="20%" style="stop-color:#fa7e1e"/>
-                                    <stop offset="40%" style="stop-color:#d62976"/>
-                                    <stop offset="60%" style="stop-color:#962fbf"/>
-                                    <stop offset="100%" style="stop-color:#4f5bd5"/>
-                                </linearGradient>
-                            </defs>
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="url(#igGrad)" stroke-width="2"/>
-                            <circle cx="12" cy="12" r="4" fill="none" stroke="url(#igGrad)" stroke-width="2"/>
-                            <circle cx="17.5" cy="6.5" r="1.2" fill="url(#igGrad)"/>
-                        </svg>
-                    </a>
-                    <a href="#" aria-label="TikTok">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16.6 5.82A4.28 4.28 0 0 1 13.8 3h-3v13a2.9 2.9 0 0 1-2.9 2.9A2.9 2.9 0 0 1 5 16a2.9 2.9 0 0 1 2.9-2.9c.3 0 .6.04.88.12v-3.06A5.89 5.89 0 0 0 7.9 10 5.9 5.9 0 0 0 2 15.9 5.9 5.9 0 0 0 7.9 21.8a5.9 5.9 0 0 0 5.9-5.9V9.65a7.27 7.27 0 0 0 4.2 1.35V8A4.28 4.28 0 0 1 16.6 5.82z" fill="#25F4EE"/>
-                            <path d="M16.6 5.82A4.28 4.28 0 0 1 13.8 3h-1.5v13a2.9 2.9 0 0 1-4.4 2.49A2.9 2.9 0 0 0 10.8 19a2.9 2.9 0 0 0 2.9-2.9V3h1.5a4.28 4.28 0 0 0 1.4 2.82z" fill="#FE2C55" opacity="0.8"/>
-                        </svg>
-                    </a>
-                    <a href="#" aria-label="Facebook">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z" fill="#1877F2"/>
-                        </svg>
-                    </a>
+        <div class="footer-simple">
+            <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission" class="footer-logo">
+
+            <nav class="footer-nav">
+                <a href="experiences.html">Experiences</a>
+                <a href="groups.html">Groups</a>
+                <a href="gift-cards.html">Gift Cards</a>
+                <a href="locations/index.html">Locations</a>
+                <a href="faq.html">FAQ</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div class="footer-social">
+                <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.51a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 10.86 4.34A6.28 6.28 0 0 0 15.86 15V8.74a8.18 8.18 0 0 0 4.14 1.15V6.69h-.41z"/></svg>
+                </a>
+                <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"/></svg>
+                </a>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                    <a href="accessibility.html">Accessibility</a>
                 </div>
-            </div>
-
-            <div class="footer-column">
-                <h4 class="footer-title">LOCATIONS</h4>
-                <ul class="footer-links">
-                    <li><a href="locations/chicago.html">Chicago</a></li>
-                    <li><a href="locations/philadelphia.html">Philadelphia</a></li>
-                    <li><a href="locations/west-nyack.html">West Nyack</a></li>
-                    <li><a href="locations/lincoln.html">Lincoln</a></li>
-                    <li><a href="locations/houston.html">Houston</a></li>
-                    <li><a href="locations/manassas.html">Manassas</a></li>
-                    <li><a href="locations/antwerp.html">Antwerp</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4 class="footer-title">EXPERIENCE</h4>
-                <ul class="footer-links">
-                    <li><a href="#about">About</a></li>
-                    <li><a href="experiences.html">All Missions</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#">Leaderboards</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4 class="footer-title">GROUPS</h4>
-                <ul class="footer-links">
-                    <li><a href="groups.html">Birthday Parties</a></li>
-                    <li><a href="groups.html">Corporate Events</a></li>
-                    <li><a href="groups.html">School Field Trips</a></li>
-                    <li><a href="groups.html">Private Bookings</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4 class="footer-title">SUPPORT</h4>
-                <ul class="footer-links">
-                    <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
-                    <li><a href="gift-cards.html">Gift Cards</a></li>
-                    <li><a href="#">Careers</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Newsletter -->
-        <div class="footer-newsletter">
-            <h4 class="footer-title">NEWSLETTER</h4>
-            <p>Stay updated on new missions and exclusive offers.</p>
-            <form class="newsletter-form">
-                <input type="email" placeholder="Enter your email" required>
-                <button type="submit" class="btn-subscribe">Subscribe</button>
-            </form>
-            <p class="newsletter-legal">
-                By hitting "Subscribe", you agree to our
-                <a href="terms.html">Terms of Service</a> and
-                <a href="privacy.html">Privacy Policy</a>.
-            </p>
-        </div>
-
-        <div class="footer-bottom">
-            <p class="footer-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
-            <div class="footer-legal">
-                <a href="accessibility.html">Accessibility</a>
-                <a href="terms.html">Terms</a>
-                <a href="privacy.html">Privacy</a>
-                <a href="cookies.html">Cookies</a>
             </div>
         </div>
     </footer>
@@ -2885,6 +3062,20 @@
 
     <script>
         // ==========================================
+        // RESPONSIVE HERO VIDEO — serve mobile or desktop version
+        // ==========================================
+        (function() {
+            var video = document.querySelector('.hero-video-container video');
+            if (video) {
+                var src = window.innerWidth <= 768
+                    ? 'assets/video/hero-bg-mobile.mp4'
+                    : 'assets/video/hero-bg-web.mp4';
+                video.innerHTML = '<source src="' + src + '" type="video/mp4">';
+                video.load();
+            }
+        })();
+
+        // ==========================================
         // ROTATING TYPEWRITER TAGLINES
         // Changes every 4 seconds with delete/retype effect
         // ==========================================
@@ -2944,33 +3135,72 @@
         }, 3000); // Wait 3s before first rotation
 
         // ==========================================
-        // 3D PRISM MINUTES STAT
-        // Rotates triangular prism through 60, 90, 120
+        // MINUTES COUNTER — fades through 60, 90, 120
         // ==========================================
-        const prismElement = document.getElementById('minutesPrism');
-        let prismFaceIndex = 0;
+        const minutesEl = document.getElementById('minutesCounter');
+        const minuteValues = [60, 90, 120];
+        let minuteIndex = 0;
 
-        function rotatePrism() {
-            if (!prismElement) return;
-            prismFaceIndex = (prismFaceIndex + 1) % 3;
-            const angles = [0, -90, -180];
-            prismElement.style.transform = `rotateX(${angles[prismFaceIndex]}deg)`;
+        function cycleMinutes() {
+            if (!minutesEl) return;
+            minutesEl.classList.add('fade-out');
+            setTimeout(() => {
+                minuteIndex = (minuteIndex + 1) % minuteValues.length;
+                minutesEl.textContent = minuteValues[minuteIndex];
+                minutesEl.classList.remove('fade-out');
+            }, 400);
         }
 
-        // Initial state
-        if (prismElement) {
-            prismElement.style.transform = 'rotateX(0deg)';
+        setInterval(cycleMinutes, 2500);
+
+        // Mobile menu toggle
+        const menuBtn = document.querySelector('.nav-menu-btn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        const navEl = document.getElementById('nav');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                menuBtn.classList.toggle('active');
+                mobileMenu.classList.toggle('open');
+                navEl.classList.toggle('menu-open');
+                document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+            });
+
+            // Close menu when clicking a nav link
+            mobileMenu.querySelectorAll('.mobile-menu-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    menuBtn.classList.remove('active');
+                    navEl.classList.remove('menu-open');
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            // Sync location text with main location picker
+            const mobileLocText = document.getElementById('mobileLocationText');
+            const mainLocText = document.getElementById('locationText');
+            if (mobileLocText && mainLocText) {
+                const observer = new MutationObserver(() => {
+                    mobileLocText.textContent = mainLocText.textContent;
+                });
+                observer.observe(mainLocText, { childList: true, characterData: true, subtree: true });
+            }
         }
 
-        setInterval(rotatePrism, 2500);
+        // Helper to sync all location displays
+        function syncAllLocations(city) {
+            const mainLocText = document.getElementById('locationText');
+            if (mainLocText) mainLocText.textContent = city;
+            localStorage.setItem('timeMissionLocation', city);
+        }
 
         // Navigation scroll effect
-        const nav = document.getElementById('nav');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
+                navEl.classList.add('scrolled');
             } else {
-                nav.classList.remove('scrolled');
+                navEl.classList.remove('scrolled');
             }
         });
 
@@ -3002,7 +3232,7 @@
                 locationText.style.opacity = '0';
 
                 setTimeout(() => {
-                    locationText.textContent = cityName;
+                    syncAllLocations(cityName);
                     locationText.style.opacity = '1';
                     locationText.style.textShadow = '0 0 15px rgba(0, 229, 255, 0.8)';
 
@@ -3012,16 +3242,13 @@
                 }, 200);
 
                 locationBtn.classList.remove('open');
-
-                // Save to localStorage
-                localStorage.setItem('timeMissionLocation', cityName);
             });
         });
 
         // Load saved location on page load
         const savedLocation = localStorage.getItem('timeMissionLocation');
-        if (savedLocation && locationText) {
-            locationText.textContent = savedLocation;
+        if (savedLocation) {
+            syncAllLocations(savedLocation);
         }
 
         // ==========================================
@@ -3033,37 +3260,56 @@
 
         if (scrollEl) {
             let scrollPos = 0;
-            let autoScrollSpeed = 0.8; // px per frame
+            let autoScrollSpeed = 0.8;
             let isHovering = false;
             let isDragging = false;
             let dragStartX = 0;
             let dragScrollStart = 0;
             let animationId = null;
+            let isTouching = false;
+            let touchStartX = 0;
+            let touchScrollStart = 0;
+            let touchVelocity = 0;
+            let lastTouchX = 0;
+            let lastTouchTime = 0;
 
-            // Calculate the width of original cards (first 6)
+            // Measure actual rendered width of original cards
             const originalCards = scrollEl.querySelectorAll('.experience-card:not([aria-hidden])');
-            const cardWidth = 350 + 24; // card width + gap
 
             function getHalfWidth() {
-                return originalCards.length * cardWidth;
+                let total = 0;
+                const gap = parseFloat(getComputedStyle(scrollEl).gap) || 24;
+                originalCards.forEach(card => {
+                    total += card.offsetWidth + gap;
+                });
+                return total;
+            }
+
+            function wrapPos(pos) {
+                const halfW = getHalfWidth();
+                if (halfW <= 0) return pos;
+                while (pos >= halfW) pos -= halfW;
+                while (pos < 0) pos += halfW;
+                return pos;
+            }
+
+            function applyPos() {
+                scrollEl.style.transform = 'translateX(' + (-scrollPos) + 'px)';
             }
 
             // Auto-scroll loop
             function autoScroll() {
-                if (!isHovering && !isDragging) {
+                if (!isHovering && !isDragging && !isTouching) {
                     scrollPos += autoScrollSpeed;
-                    const halfW = getHalfWidth();
-                    if (scrollPos >= halfW) {
-                        scrollPos -= halfW;
-                    }
-                    scrollEl.style.transform = `translateX(${-scrollPos}px)`;
+                    scrollPos = wrapPos(scrollPos);
+                    applyPos();
                 }
                 animationId = requestAnimationFrame(autoScroll);
             }
 
             animationId = requestAnimationFrame(autoScroll);
 
-            // Hover: pause auto-scroll
+            // Hover: pause auto-scroll (desktop)
             scrollEl.addEventListener('mouseenter', () => { isHovering = true; });
             scrollEl.addEventListener('mouseleave', () => {
                 isHovering = false;
@@ -3071,7 +3317,7 @@
                 scrollEl.classList.remove('dragging');
             });
 
-            // Drag to scroll
+            // Mouse drag to scroll (desktop)
             scrollEl.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 dragStartX = e.clientX;
@@ -3083,11 +3329,8 @@
             window.addEventListener('mousemove', (e) => {
                 if (!isDragging) return;
                 const dx = e.clientX - dragStartX;
-                scrollPos = dragScrollStart - dx;
-                const halfW = getHalfWidth();
-                if (scrollPos < 0) scrollPos += halfW;
-                if (scrollPos >= halfW) scrollPos -= halfW;
-                scrollEl.style.transform = `translateX(${-scrollPos}px)`;
+                scrollPos = wrapPos(dragScrollStart - dx);
+                applyPos();
             });
 
             window.addEventListener('mouseup', () => {
@@ -3097,30 +3340,77 @@
                 }
             });
 
-            // Wheel scroll on hover
-            scrollEl.addEventListener('wheel', (e) => {
-                e.preventDefault();
-                scrollPos += e.deltaY * 0.5;
-                const halfW = getHalfWidth();
-                if (scrollPos < 0) scrollPos += halfW;
-                if (scrollPos >= halfW) scrollPos -= halfW;
-                scrollEl.style.transform = `translateX(${-scrollPos}px)`;
-            }, { passive: false });
+            // Touch swipe (mobile)
+            scrollEl.addEventListener('touchstart', (e) => {
+                isTouching = true;
+                touchStartX = e.touches[0].clientX;
+                touchScrollStart = scrollPos;
+                touchVelocity = 0;
+                lastTouchX = touchStartX;
+                lastTouchTime = Date.now();
+            }, { passive: true });
 
-            // Prev/Next buttons
-            prevBtn.addEventListener('click', () => {
-                scrollPos -= cardWidth;
-                const halfW = getHalfWidth();
-                if (scrollPos < 0) scrollPos += halfW;
-                scrollEl.style.transform = `translateX(${-scrollPos}px)`;
-            });
+            scrollEl.addEventListener('touchmove', (e) => {
+                if (!isTouching) return;
+                const x = e.touches[0].clientX;
+                const dx = touchStartX - x;
+                scrollPos = wrapPos(touchScrollStart + dx);
+                applyPos();
 
-            nextBtn.addEventListener('click', () => {
-                scrollPos += cardWidth;
-                const halfW = getHalfWidth();
-                if (scrollPos >= halfW) scrollPos -= halfW;
-                scrollEl.style.transform = `translateX(${-scrollPos}px)`;
-            });
+                // Track velocity for momentum
+                const now = Date.now();
+                const dt = now - lastTouchTime;
+                if (dt > 0) {
+                    touchVelocity = (lastTouchX - x) / dt;
+                }
+                lastTouchX = x;
+                lastTouchTime = now;
+            }, { passive: true });
+
+            scrollEl.addEventListener('touchend', () => {
+                isTouching = false;
+                // Momentum coast
+                let velocity = touchVelocity * 15;
+                function coast() {
+                    if (Math.abs(velocity) < 0.3) return;
+                    scrollPos = wrapPos(scrollPos + velocity);
+                    applyPos();
+                    velocity *= 0.95;
+                    requestAnimationFrame(coast);
+                }
+                coast();
+            }, { passive: true });
+
+            // Wheel scroll on hover — disabled on desktop to avoid hijacking page scroll
+            // Only enable on touch devices where horizontal swipe is natural
+            if ('ontouchstart' in window) {
+                scrollEl.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    scrollPos = wrapPos(scrollPos + e.deltaY * 0.5);
+                    applyPos();
+                }, { passive: false });
+            }
+
+            // Prev/Next buttons — smooth slide
+            function smoothSlide(delta) {
+                const gap = parseFloat(getComputedStyle(scrollEl).gap) || 24;
+                const cw = (originalCards[0] ? originalCards[0].offsetWidth : 350) + gap;
+                scrollEl.style.transition = 'transform 0.4s ease';
+                scrollPos = wrapPos(scrollPos + delta * cw);
+                applyPos();
+                scrollEl.addEventListener('transitionend', function handler() {
+                    scrollEl.style.transition = '';
+                    scrollEl.removeEventListener('transitionend', handler);
+                }, { once: true });
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => smoothSlide(-1));
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => smoothSlide(1));
+            }
         }
 
         // 3D Tilt Effect for Experience Cards
@@ -3153,6 +3443,51 @@
                 card.addEventListener('mousemove', () => {});
             });
         }
+
+        // ==========================================
+        // MINI FAQ ACCORDION
+        // ==========================================
+        document.querySelectorAll('.mini-faq-q').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const wasOpen = item.classList.contains('open');
+                // Close all
+                document.querySelectorAll('.mini-faq-item').forEach(i => i.classList.remove('open'));
+                // Toggle clicked
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+
+        // ==========================================
+        // TESTIMONIALS AUTO-SCROLL
+        // ==========================================
+        (function() {
+            const scroll = document.querySelector('.testimonials-scroll');
+            if (!scroll) return;
+            const cards = scroll.querySelectorAll('.testimonial-card');
+            if (cards.length < 2) return;
+            let current = 0;
+            let timer;
+
+            function goTo(i) {
+                current = i % cards.length;
+                scroll.scrollTo({ left: scroll.offsetWidth * current, behavior: 'smooth' });
+            }
+
+            function startAuto() {
+                timer = setInterval(() => goTo(current + 1), 4000);
+            }
+
+            // Pause on interaction, resume after
+            scroll.addEventListener('touchstart', () => clearInterval(timer), { passive: true });
+            scroll.addEventListener('touchend', () => {
+                // Sync current index to nearest card after swipe
+                current = Math.round(scroll.scrollLeft / scroll.offsetWidth);
+                startAuto();
+            }, { passive: true });
+
+            startAuto();
+        })();
 
         // ==========================================
         // PRESS TICKER — JS-driven seamless loop
@@ -3372,5 +3707,6 @@
             }
         });
     </script>
+    <script defer src="js/nav.js"></script>
 </body>
 </html>

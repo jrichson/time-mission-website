@@ -1,2 +1,22 @@
+# OS
 .DS_Store
 *.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependencies
+node_modules/
+
+# Tools
+.firecrawl/
+
+# Archive (dev experiments, not for production)
+_archive/
+
+# Build artifacts
+*.log
