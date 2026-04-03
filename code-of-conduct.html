@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code of Conduct | Time Mission</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logo/TM_Favicon.svg">
+    <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <style>
+        .legal-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 2rem 6rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .legal-page h2 {
+            font-family: var(--tech);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--orange);
+            margin-top: 3rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 107, 44, 0.2);
+        }
+
+        .legal-page h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .page-header {
+            text-align: left;
+        }
+
+        .page-header .reveal {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .legal-page p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .legal-page a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .legal-page a:hover {
+            text-decoration: underline;
+        }
+
+        .legal-updated {
+            font-family: var(--tech);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.3);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .legal-contacts {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0 1rem;
+        }
+
+        .legal-contacts li {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .legal-contacts li strong {
+            color: var(--white);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="has-noise">
+    <!-- Announcement Ticker -->
+    <div class="ticker-bar">
+        <div class="ticker-track">
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+        </div>
+    </div>
+
+    <!-- Full-Screen Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-menu-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="experiences.html">Experiences</a></li>
+            <li><a href="groups.html">Groups &amp; Events</a></li>
+            <li><a href="gift-cards.html">Gift Cards</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="locations/index.html">Locations</a></li>
+        </ul>
+        <div class="mobile-menu-cta">
+            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-tickets">Book Now</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-left">
+            <button class="nav-menu-btn">
+                <div class="hamburger"><span></span><span></span><span></span></div>
+            </button>
+            <a href="index.html" class="nav-logo">
+                <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
+            </a>
+        </div>
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="experiences.html">Experiences</a></li>
+                <li><a href="groups.html">Groups</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <button class="location-btn" id="locationBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span id="locationText">Philadelphia</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
+                    <polyline points="6,9 12,15 18,9"/>
+                </svg>
+                <div class="location-dropdown">
+                    <div class="location-group">
+                        <div class="location-group-title">United States</div>
+                        <a href="#">IL - Chicago (Mount Prospect)</a>
+                        <a href="#">PA - Philadelphia</a>
+                        <a href="#">NY - West Nyack</a>
+                        <a href="#">RI - Lincoln</a>
+                        <a href="#">TX - Houston (Marq'E)</a>
+                        <a href="#">VA - Manassas</a>
+                    </div>
+                    <div class="location-group">
+                        <div class="location-group-title">Europe</div>
+                        <a href="#">Belgium - Antwerp</a>
+                    </div>
+                </div>
+            </button>
+            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-tickets">Tickets</a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="reveal">
+            <h1 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">CODE OF CONDUCT</h1>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="legal-page">
+        <p>Individuals not adhering to the following policies and guidelines will not be admitted into Time Mission locations and may be asked to leave without refund at the discretion of management.</p>
+
+        <p>Please note that each Time Mission location is operated by a different entity. The general House Rules listed below apply to all Time Mission locations, but additional location-specific policies may also apply. For location-specific rules, please contact the following:</p>
+
+        <ul class="legal-contacts">
+            <li><strong>Time Mission Palisades:</strong> <a href="mailto:palisades@timemission.com">palisades@timemission.com</a></li>
+            <li><strong>Time Mission Manassas:</strong> <a href="mailto:manassas@timemission.com">manassas@timemission.com</a></li>
+            <li><strong>Time Mission Providence (at R1 Indoor Karting):</strong> <a href="mailto:info@r1indoorkarting.com">info@r1indoorkarting.com</a></li>
+            <li><strong>Time Mission Philadelphia:</strong> <a href="mailto:philly@timemission.com">philly@timemission.com</a></li>
+            <li><strong>Time Mission Mount Prospect:</strong> <a href="mailto:mtprospect@timemission.com">mtprospect@timemission.com</a></li>
+        </ul>
+
+        <h2>Smoking Policy</h2>
+        <p>Smoking is strictly prohibited at all Time Mission locations. This includes the use of vaporizers and electronic cigarettes.</p>
+
+        <h2>Language and Behavior</h2>
+        <p>Foul language, inappropriate gestures, and disrespectful behavior are prohibited on the premises. Management reserves the right to ask guests to leave without refund for inappropriate behavior.</p>
+
+        <h2>Outside Food and Beverage</h2>
+        <p>Guests are not permitted to bring outside food or beverages into Time Mission locations unless previously authorized by management.</p>
+
+        <h2>Dress Code</h2>
+        <p>We recommend wearing comfortable athletic wear and sneakers, as Time Mission challenges involve running, jumping, crawling, and climbing. Please avoid wearing baggy or bulky clothing, as it may restrict movement, and high heels are not permitted as they can damage our game equipment.</p>
+        <p><strong>Proper Attire:</strong> Guests wearing torn or visibly soiled clothing may not be admitted at the discretion of management.</p>
+        <p><strong>Prohibited Attire:</strong> Clothing, jewelry, or visible tattoos with offensive language, symbols, or evidence of gang affiliation are not permitted.</p>
+        <p><strong>Exposure:</strong> Clothing that exposes underwear or excessive portions of skin may be considered inappropriate for a family-friendly environment.</p>
+
+        <h2>Weapons Policy</h2>
+        <p>There is no "open carry" of firearms permitted at Time Mission locations, except by sworn law enforcement personnel.</p>
+
+        <h2>Filming and Photography Policy</h2>
+        <p>We encourage guests to take photos and videos of their Time Mission experience! Feel free to tag us on social media (Twitter, Instagram, Facebook: @TimeMissionHQ).</p>
+        <p><strong>Personal Use:</strong> Guests are welcome to take photos or videos for personal use.</p>
+        <p><strong>Commercial Use:</strong> Permission is required for any filming or photography intended for commercial use or journalism.</p>
+        <p><strong>Consent:</strong> Filming or photography that captures other guests or staff members requires their express permission.</p>
+        <p><strong>Management Rights:</strong> Management reserves the right to revoke permission for filming or photography at any time for any reason.</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
+                <p>A social gaming adventure where teams compete through immersive challenges across time and space.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="TikTok">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-title">LOCATIONS</h4>
+                <ul class="footer-links">
+                    <li><a href="locations/chicago.html">Chicago</a></li>
+                    <li><a href="locations/philadelphia.html">Philadelphia</a></li>
+                    <li><a href="locations/west-nyack.html">West Nyack</a></li>
+                    <li><a href="locations/lincoln.html">Lincoln</a></li>
+                    <li><a href="locations/houston.html">Houston</a></li>
+                    <li><a href="locations/manassas.html">Manassas</a></li>
+                    <li><a href="locations/antwerp.html">Antwerp</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-title">EXPERIENCE</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="experiences.html">All Missions</a></li>
+                    <li><a href="index.html#how-it-works">How It Works</a></li>
+                    <li><a href="#">Leaderboards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-title">GROUPS</h4>
+                <ul class="footer-links">
+                    <li><a href="groups.html">Birthday Parties</a></li>
+                    <li><a href="groups.html">Corporate Events</a></li>
+                    <li><a href="groups.html">School Field Trips</a></li>
+                    <li><a href="groups.html">Private Bookings</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-title">SUPPORT</h4>
+                <ul class="footer-links">
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="gift-cards.html">Gift Cards</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-newsletter">
+            <h4 class="footer-title">NEWSLETTER</h4>
+            <p>Stay updated on new missions and exclusive offers.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit" class="btn-subscribe">Subscribe</button>
+            </form>
+            <p class="newsletter-legal">
+                By hitting "Subscribe", you agree to our
+                <a href="terms.html">Terms of Service</a> and
+                <a href="privacy.html">Privacy Policy</a>.
+            </p>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="footer-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="code-of-conduct.html">Code of Conduct</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Reveal on scroll
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
+    <script defer src="js/nav.js"></script>
+</body>
+</html>
