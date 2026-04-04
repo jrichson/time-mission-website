@@ -329,48 +329,326 @@
     filter: drop-shadow(0 4px 12px rgba(239, 75, 35, 0.5));
 }
 
+/* ---- Full-screen Location Overlay ---- */
 .location-dropdown {
-    position: absolute;
-    top: calc(100% + 1rem);
+    position: fixed;
+    top: 0;
+    left: 0;
     right: 0;
-    min-width: 280px;
-    text-align: left;
+    bottom: 0;
+    z-index: 10001;
     background: var(--dark);
-    border: 1px solid rgba(255, 107, 44, 0.3);
-    border-radius: 12px;
-    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 52px 4rem 2rem;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+    overflow-y: auto;
 }
 
-.location-btn.open .location-dropdown {
+.location-dropdown.open {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+}
+
+/* Location overlay header (logo + close) */
+.location-dropdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.location-dropdown a.location-dropdown-logo {
+    display: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+.location-dropdown-logo img {
+    height: 36px;
+    width: auto;
+}
+
+@media (max-width: 768px) {
+    .location-dropdown a.location-dropdown-logo {
+        display: block;
+    }
+}
+
+.location-dropdown-close {
+    position: absolute;
+    top: 52px;
+    right: 2rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: var(--gray);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.location-dropdown-close:hover {
+    background: rgba(255, 107, 44, 0.2);
+    border-color: rgba(255, 107, 44, 0.4);
+    color: var(--white);
+}
+
+
+/* Overlay body: two-column on desktop */
+.location-overlay-body {
+    display: flex;
+    gap: 4rem;
+    width: 100%;
+    align-items: flex-start;
+}
+
+.location-overlay-left {
+    flex: 0 0 auto;
+    width: 360px;
+}
+
+.location-overlay-divider {
+    width: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    align-self: stretch;
+}
+
+.location-overlay-right {
+    flex: 1;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+/* Map square */
+.location-map {
+    flex: 0 0 220px;
+    width: 220px;
+    height: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    display: none;
+}
+
+.location-map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    filter: invert(90%) hue-rotate(180deg) brightness(0.7) contrast(1.1);
+}
+
+.location-info-content {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Page title — sits above the two-column body */
+.location-dropdown-title {
+    font-family: var(--tech);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 2rem;
+}
+
+/* ---- Location Info Panel ---- */
+.location-info-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 0;
+    color: var(--gray);
+}
+
+.location-info-empty svg {
+    opacity: 0.3;
+}
+
+.location-info-empty p {
+    font-family: var(--body);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.location-info-name {
+    font-family: var(--body);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--white);
+    margin: 0 0 1rem;
+    line-height: 1.3;
+}
+
+.location-info-address,
+.location-info-phone {
+    font-family: var(--body);
+    font-size: 0.9rem;
+    color: var(--white-soft, #ccc);
+    line-height: 1.6;
+}
+
+.location-info-phone {
+    margin-top: 0.4rem;
+    color: var(--cyan, #00e5ff);
+}
+
+.location-info-section {
+    margin-top: 1.25rem;
+}
+
+.location-info-section h4 {
+    font-family: var(--tech);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin: 0 0 0.5rem;
+}
+
+.location-info-hours {
+    font-family: var(--body);
+    font-size: 0.85rem;
+    color: var(--white-soft, #ccc);
+    line-height: 1.7;
+}
+
+.location-info-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+.location-dropdown a.location-info-book {
+    display: inline-block;
+    padding: 0.7rem 2rem;
+    background: var(--gradient-primary);
+    color: var(--white);
+    text-decoration: none;
+    font-family: 'Monument Extended', 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
+    transition: all 0.3s ease;
+}
+
+.location-dropdown a.location-info-book:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+    background: var(--gradient-primary);
+    color: var(--white);
+}
+
+.location-dropdown a.location-info-contact {
+    display: inline-block;
+    padding: 0.7rem 2rem;
+    background: transparent;
+    color: var(--white);
+    text-decoration: none;
+    font-family: 'Monument Extended', 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: all 0.3s ease;
+}
+
+.location-dropdown a.location-info-contact:hover {
+    transform: translateY(-2px);
+    border-color: var(--orange);
+    color: var(--orange);
+    background: rgba(255, 107, 44, 0.08);
+}
+
+/* Location overlay footer */
+.location-overlay-footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.location-overlay-social {
+    display: flex;
+    gap: 1rem;
+}
+
+.location-dropdown .location-overlay-social a {
+    color: var(--gray);
+    transition: all 0.3s ease;
+    display: flex;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+}
+
+.location-overlay-social a:hover {
+    color: var(--orange);
+    transform: translateY(-2px);
+}
+
+.location-overlay-copyright {
+    font-family: var(--body);
+    font-size: 0.7rem;
+    color: var(--gray);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .location-overlay-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
 }
 
 .location-group {
-    padding: 0.5rem;
+    padding: 0.25rem 0;
+    width: 100%;
 }
 
 .location-group-title {
-    font-size: 0.65rem;
+    font-family: var(--tech);
+    font-size: 0.6rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--orange);
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0;
 }
 
 .location-dropdown a {
     display: block;
-    padding: 0.6rem 0.75rem;
-    color: var(--gray);
+    padding: 0.65rem 0.75rem;
+    color: var(--white-soft);
     text-decoration: none;
-    font-size: 0.85rem;
+    font-family: var(--body);
+    font-size: 0.95rem;
     border-radius: 8px;
     transition: all 0.2s ease;
 }
@@ -378,6 +656,52 @@
 .location-dropdown a:hover {
     background: rgba(255, 107, 44, 0.1);
     color: var(--white);
+}
+
+
+/* ---- Mobile Location Overlay ---- */
+@media (max-width: 768px) {
+    .location-dropdown {
+        z-index: 10001;
+        padding: 2rem 1.25rem 2rem;
+        align-items: flex-start;
+    }
+
+    .location-dropdown-close {
+        position: static;
+        margin-left: auto;
+    }
+
+    .location-dropdown a {
+        font-size: 0.95rem;
+        padding: 0.75rem 0;
+    }
+
+    /* Hide nav items when location overlay is open (keep logo visible) */
+    .nav.location-open .btn-tickets,
+    .nav.location-open .location-btn,
+    .nav.location-open .nav-menu-btn {
+        display: none;
+    }
+
+    .location-overlay-body {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .location-overlay-left {
+        max-width: 100%;
+    }
+
+    /* Hide info panel, divider, and map on mobile */
+    .location-overlay-divider,
+    .location-overlay-right {
+        display: none;
+    }
+
+    .location-map {
+        display: none !important;
+    }
 }
 
 .btn-tickets {
@@ -388,8 +712,9 @@
     color: var(--white);
     padding: 0.75rem 1.5rem;
     text-decoration: none;
+    font-family: 'Monument Extended', 'Orbitron', sans-serif;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 400;
     border-radius: 100px;
     transition: all 0.3s ease;
     text-transform: uppercase;
@@ -405,6 +730,12 @@
 /* ---- Mobile Nav Overrides ---- */
 @media (max-width: 1024px) {
     .nav-links {
+        display: none;
+    }
+
+    /* Icon only on tablet — hide text and chevron */
+    .location-btn #locationText,
+    .location-btn svg:last-of-type {
         display: none;
     }
 }
@@ -447,13 +778,6 @@
         height: 20px;
     }
 
-    .location-dropdown {
-        right: -1rem;
-        left: auto;
-        min-width: unset;
-        width: calc(100vw - 2rem);
-        max-width: 300px;
-    }
 
     /* Compact tickets button */
     .btn-tickets {

@@ -33,6 +33,8 @@
         const mainLocText = document.getElementById('locationText');
         if (mainLocText) mainLocText.textContent = city;
         localStorage.setItem('timeMissionLocation', city);
+        // Update hero eyebrow on mobile (function exposed by index.html)
+        if (window.updateEyebrowLocation) window.updateEyebrowLocation(city);
     }
 
     // Navigation scroll effect
@@ -46,47 +48,60 @@
         });
     }
 
-    // Location dropdown toggle and selection
+    // Location overlay toggle and selection
     const locationBtn = document.getElementById('locationBtn');
     const locationText = document.getElementById('locationText');
-    const locationLinks = document.querySelectorAll('.location-dropdown a');
+    const locationOverlay = document.getElementById('locationDropdown');
+    const locationLinks = locationOverlay ? locationOverlay.querySelectorAll('a') : [];
 
-    if (locationBtn) {
+    if (locationBtn && locationOverlay) {
+        function openLocationOverlay() {
+            locationOverlay.classList.add('open');
+            if (navEl) navEl.classList.add('location-open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLocationOverlay() {
+            locationOverlay.classList.remove('open');
+            if (navEl) navEl.classList.remove('location-open');
+            document.body.style.overflow = '';
+        }
+
         locationBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            locationBtn.classList.toggle('open');
+            openLocationOverlay();
         });
 
-        document.addEventListener('click', () => {
-            locationBtn.classList.remove('open');
+        // Close button
+        const closeBtn = locationOverlay.querySelector('.location-dropdown-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeLocationOverlay();
+            });
+        }
+
+        // Close on clicking overlay background (not content)
+        locationOverlay.addEventListener('click', (e) => {
+            if (e.target === locationOverlay) {
+                closeLocationOverlay();
+            }
         });
 
         // Handle location selection
+        // Currently uses href="#" as placeholder; will navigate to location pages in production
         locationLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const selectedLocation = link.textContent.trim();
-                const cityMatch = selectedLocation.match(/- (.+)$/);
-                const cityName = cityMatch ? cityMatch[1].split(' (')[0] : selectedLocation.split(' - ').pop();
+                const cityName = link.dataset.city;
+                if (cityName) syncAllLocations(cityName);
 
-                if (locationText) {
-                    locationText.style.transition = 'opacity 0.2s ease';
-                    locationText.style.opacity = '0';
-
-                    setTimeout(() => {
-                        syncAllLocations(cityName);
-                        locationText.style.opacity = '1';
-                        locationText.style.textShadow = '0 0 15px rgba(0, 229, 255, 0.8)';
-
-                        setTimeout(() => {
-                            locationText.style.textShadow = 'none';
-                        }, 400);
-                    }, 200);
-                } else {
-                    syncAllLocations(cityName);
+                // Desktop: save location and navigate to location page
+                if (!window.matchMedia('(max-width: 768px)').matches) {
+                    // Let the default href navigation happen
+                    return;
                 }
 
-                locationBtn.classList.remove('open');
+                // Mobile: save location, close overlay, navigate
+                closeLocationOverlay();
             });
         });
 
@@ -97,17 +112,98 @@
         }
     }
 
-    // Update booking URLs based on selected location
-    const bookingUrls = {
-        'Philadelphia': 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
-        'Chicago': 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
-        'West Nyack': 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
-        'Lincoln': 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
-        'Houston': 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
-        'Manassas': 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
-        'Antwerp': 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products'
+    // Location data for info panel
+    const locationData = {
+        'Chicago': {
+            name: 'IL – Chicago (Mount Prospect)',
+            address: '1500 E Golf Rd\nMount Prospect, IL 60056',
+            phone: '(847) 243-5500',
+            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
+            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            mapQuery: '1500+E+Golf+Rd,+Mount+Prospect,+IL+60056'
+        },
+        'Philadelphia': {
+            name: 'PA – Philadelphia',
+            address: '325 N 12th St\nPhiladelphia, PA 19107',
+            phone: '(215) 515-3500',
+            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
+            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            mapQuery: '325+N+12th+St,+Philadelphia,+PA+19107'
+        },
+        'West Nyack': {
+            name: 'NY – West Nyack',
+            address: '4590 Palisades Center Dr\nWest Nyack, NY 10994',
+            phone: '(845) 348-1555',
+            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 11:00 AM - 7:00 PM',
+            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            mapQuery: '4590+Palisades+Center+Dr,+West+Nyack,+NY+10994'
+        },
+        'Lincoln': {
+            name: 'RI – Lincoln',
+            address: '622 George Washington Hwy\nLincoln, RI 02865',
+            phone: '(401) 333-4100',
+            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
+            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            mapQuery: '622+George+Washington+Hwy,+Lincoln,+RI+02865'
+        },
+        'Houston': {
+            name: 'TX – Houston (Marq\'E)',
+            address: "7620 Katy Fwy, Ste 300\nHouston, TX 77024",
+            phone: '(713) 322-7100',
+            hours: 'Coming Soon',
+            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            mapQuery: '7620+Katy+Fwy,+Houston,+TX+77024'
+        },
+        'Manassas': {
+            name: 'VA – Manassas',
+            address: '8305 Sudley Rd\nManassas, VA 20110',
+            phone: '(703) 420-3600',
+            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
+            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            mapQuery: '8305+Sudley+Rd,+Manassas,+VA+20110'
+        },
+        'Antwerp': {
+            name: 'Belgium – Antwerp',
+            address: 'Borsbeeksebrug 30\n2600 Antwerp, Belgium',
+            phone: '+32 3 444 55 66',
+            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
+            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            mapQuery: 'Borsbeeksebrug+30,+2600+Antwerp,+Belgium'
+        }
     };
 
+    // Show location info in overlay panel
+    function showLocationInfo(cityName) {
+        const infoPanel = document.getElementById('locationInfo');
+        if (!infoPanel) return;
+        const empty = infoPanel.querySelector('.location-info-empty');
+        const details = infoPanel.querySelector('.location-info-details');
+        const mapEl = document.getElementById('locationMap');
+        const data = locationData[cityName];
+        if (!data || !details) return;
+
+        infoPanel.querySelector('.location-info-name').textContent = data.name;
+        infoPanel.querySelector('.location-info-address').innerHTML = data.address.replace(/\n/g, '<br>');
+        infoPanel.querySelector('.location-info-phone').textContent = data.phone;
+        infoPanel.querySelector('.location-info-hours').innerHTML = data.hours.replace(/\n/g, '<br>');
+        infoPanel.querySelector('.location-info-book').href = data.bookUrl;
+
+        // Show map embed
+        if (mapEl && data.mapQuery) {
+            mapEl.innerHTML = '<iframe src="https://www.google.com/maps?q=' + data.mapQuery + '&output=embed&z=12" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map"></iframe>';
+            mapEl.style.display = 'block';
+        }
+
+        if (empty) empty.style.display = 'none';
+        details.style.display = 'block';
+    }
+
+    // Show info for saved location on load
+    const savedLoc = localStorage.getItem('timeMissionLocation');
+    if (savedLoc) showLocationInfo(savedLoc);
+
+    // Update booking URLs based on selected location
+    const bookingUrls = locationData;
     const bookingButtons = document.querySelectorAll('.btn-tickets, .btn-primary[href*="roller"], .btn-nav[href*="roller"]');
     // URL updating will be handled when location-specific URLs are ready
 })();
