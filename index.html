@@ -2588,9 +2588,8 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <video autoplay muted loop playsinline poster="assets/video/hero-poster.jpg" preload="metadata">
-                <source src="assets/video/hero-bg-mobile.mp4" type="video/mp4" media="(max-width: 768px)">
-                <source src="assets/video/hero-bg-web.mp4" type="video/mp4">
+            <video autoplay muted loop playsinline poster="assets/video/hero-poster.jpg" preload="auto">
+                <source src="assets/video/hero-bg-mobile.mp4" type="video/mp4">
             </video>
         </div>
         <div class="hero-overlay"></div>
@@ -3137,6 +3136,7 @@
                     : 'assets/video/hero-bg-web.mp4';
                 video.innerHTML = '<source src="' + src + '" type="video/mp4">';
                 video.load();
+                video.play().catch(function() {});
             }
         })();
 
