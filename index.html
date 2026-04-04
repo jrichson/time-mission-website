@@ -3132,6 +3132,7 @@
         (function() {
             var video = document.querySelector('.hero-video-container video');
             if (!video) return;
+
             if (window.innerWidth > 768) {
                 var source = video.querySelector('source');
                 if (source) {
@@ -3139,11 +3140,25 @@
                     video.load();
                 }
             }
-            // Fallback: ensure autoplay on mobile if browser deferred it
-            if (video.paused) {
-                var p = video.play();
-                if (p) p.catch(function() {});
+
+            // Fallback: ensure playback once first frame is ready
+            // Do NOT call play() before data loads — mobile browsers will stall
+            function tryPlay() {
+                if (video.paused) {
+                    var p = video.play();
+                    if (p !== undefined) p.catch(function() {});
+                }
             }
+
+            video.addEventListener('loadeddata', tryPlay);
+
+            // Handle background tab: retry when page becomes visible
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) tryPlay();
+            });
+
+            // If already cached/loaded, try immediately
+            if (video.readyState >= 2) tryPlay();
         })();
 
         // ==========================================
