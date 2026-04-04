@@ -2589,7 +2589,6 @@
     <section class="hero">
         <div class="hero-video-container">
             <video autoplay muted loop playsinline poster="assets/video/hero-poster.jpg" preload="auto">
-                <source src="assets/video/hero-bg-mobile.mp4" type="video/mp4">
             </video>
         </div>
         <div class="hero-overlay"></div>
@@ -3134,9 +3133,11 @@
                 var src = window.innerWidth <= 768
                     ? 'assets/video/hero-bg-mobile.mp4'
                     : 'assets/video/hero-bg-web.mp4';
-                video.innerHTML = '<source src="' + src + '" type="video/mp4">';
+                video.src = src;
+                video.addEventListener('canplay', function() {
+                    video.play().catch(function() {});
+                }, { once: true });
                 video.load();
-                video.play().catch(function() {});
             }
         })();
 
