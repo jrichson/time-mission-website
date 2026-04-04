@@ -3131,12 +3131,17 @@
         // ==========================================
         (function() {
             var video = document.querySelector('.hero-video-container video');
-            if (video) {
-                var src = window.innerWidth <= 768
-                    ? 'assets/video/hero-bg-mobile.mp4'
-                    : 'assets/video/hero-bg-web.mp4';
-                video.innerHTML = '<source src="' + src + '" type="video/mp4">';
+            if (!video) return;
+            var isMobile = window.innerWidth <= 768;
+            var desiredSrc = isMobile
+                ? 'assets/video/hero-bg-mobile.mp4'
+                : 'assets/video/hero-bg-web.mp4';
+            // Only swap if the browser picked the wrong source
+            var currentSrc = video.currentSrc || '';
+            if (currentSrc.indexOf(desiredSrc) === -1) {
+                video.innerHTML = '<source src="' + desiredSrc + '" type="video/mp4">';
                 video.load();
+                video.play().catch(function() {});
             }
         })();
 
