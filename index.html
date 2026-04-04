@@ -2588,7 +2588,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline poster="assets/video/hero-poster.jpg">
+            <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline src="assets/video/hero-bg-mobile.mp4">
             </video>
         </div>
         <div class="hero-overlay"></div>
@@ -3125,47 +3125,18 @@
 
     <script>
         // ==========================================
-        // RESPONSIVE HERO VIDEO — serve mobile or desktop version
+        // RESPONSIVE HERO VIDEO
+        // Mobile src is set directly in HTML for native autoplay.
+        // JS only swaps to desktop version on wider screens.
         // ==========================================
         (function() {
             var video = document.getElementById('heroVideo');
             if (!video) return;
 
-            // Explicitly set properties — do NOT rely on HTML attributes alone
-            // iOS Safari can lose the muted property during DOM manipulation
-            video.muted = true;
-            video.playsInline = true;
-            video.loop = true;
-            video.autoplay = true;
-
-            // Set src directly — avoid innerHTML which can reset iOS internal state
-            video.src = window.innerWidth <= 768
-                ? 'assets/video/hero-bg-mobile.mp4'
-                : 'assets/video/hero-bg-web.mp4';
-
-            function tryPlay() {
-                // Re-assert muted before every play attempt (iOS safety)
-                video.muted = true;
-                if (video.paused) {
-                    var p = video.play();
-                    if (p !== undefined) p.catch(function() {});
-                }
+            // Desktop: swap to larger video
+            if (window.innerWidth > 768) {
+                video.src = 'assets/video/hero-bg-web.mp4';
             }
-
-            video.addEventListener('loadeddata', tryPlay, { once: true });
-            video.addEventListener('canplay', tryPlay, { once: true });
-
-            // iOS defers play in background tabs
-            document.addEventListener('visibilitychange', function() {
-                if (!document.hidden) tryPlay();
-            });
-
-            // Retry on user interaction as last resort
-            document.addEventListener('touchstart', tryPlay, { once: true });
-
-            video.load();
-
-            if (video.readyState >= 2) tryPlay();
         })();
 
         // ==========================================
