@@ -98,6 +98,14 @@
             object-fit: cover;
         }
 
+        /* Hide native play button (shows on iOS Low Power Mode) */
+        .hero-video-container video::-webkit-media-controls {
+            display: none !important;
+        }
+        .hero-video-container video::-webkit-media-controls-start-playback-button {
+            display: none !important;
+        }
+
         .hero-overlay {
             position: absolute;
             top: 0;
@@ -2588,7 +2596,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline src="assets/video/hero-bg-mobile.mp4">
+            <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline src="assets/video/hero-bg-mobile.mp4" poster="assets/video/hero-poster.jpg">
             </video>
         </div>
         <div class="hero-overlay"></div>
