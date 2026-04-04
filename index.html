@@ -2588,19 +2588,9 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <video id="heroVideo" autoplay muted loop playsinline poster="assets/video/hero-poster.jpg" preload="auto"></video>
-            <script>
-            (function() {
-                var v = document.getElementById('heroVideo');
-                if (!v) return;
-                var m = window.matchMedia('(max-width: 768px)').matches;
-                v.src = m ? 'assets/video/hero-bg-mobile.mp4' : 'assets/video/hero-bg-web.mp4';
-                v.addEventListener('loadeddata', function() {
-                    var p = v.play();
-                    if (p) p.catch(function() {});
-                }, { once: true });
-            })();
-            </script>
+            <video autoplay muted loop playsinline poster="assets/video/hero-poster.jpg" preload="auto">
+                <source src="assets/video/hero-bg-mobile.mp4" type="video/mp4">
+            </video>
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -3135,6 +3125,23 @@
     </div>
 
     <script>
+        // ==========================================
+        // RESPONSIVE HERO VIDEO — swap to desktop version on larger screens
+        // Mobile source is default in HTML for reliable autoplay
+        // ==========================================
+        (function() {
+            if (window.innerWidth > 768) {
+                var video = document.querySelector('.hero-video-container video');
+                if (video) {
+                    var source = video.querySelector('source');
+                    if (source) {
+                        source.src = 'assets/video/hero-bg-web.mp4';
+                        video.load();
+                    }
+                }
+            }
+        })();
+
         // ==========================================
         // ROTATING TYPEWRITER TAGLINES
         // Changes every 4 seconds with delete/retype effect
