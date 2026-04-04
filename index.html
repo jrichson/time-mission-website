@@ -2589,7 +2589,6 @@
     <section class="hero">
         <div class="hero-video-container">
             <video autoplay muted loop playsinline poster="assets/video/hero-poster.jpg" preload="metadata">
-                <source src="assets/video/hero-bg-mobile.mp4" type="video/mp4">
             </video>
         </div>
         <div class="hero-overlay"></div>
@@ -3126,39 +3125,17 @@
 
     <script>
         // ==========================================
-        // RESPONSIVE HERO VIDEO — swap to desktop version on larger screens
-        // Mobile source is default in HTML for reliable autoplay
+        // RESPONSIVE HERO VIDEO — serve mobile or desktop version
         // ==========================================
         (function() {
             var video = document.querySelector('.hero-video-container video');
-            if (!video) return;
-
-            if (window.innerWidth > 768) {
-                var source = video.querySelector('source');
-                if (source) {
-                    source.src = 'assets/video/hero-bg-web.mp4';
-                    video.load();
-                }
+            if (video) {
+                var src = window.innerWidth <= 768
+                    ? 'assets/video/hero-bg-mobile.mp4'
+                    : 'assets/video/hero-bg-web.mp4';
+                video.innerHTML = '<source src="' + src + '" type="video/mp4">';
+                video.load();
             }
-
-            // Fallback: ensure playback once first frame is ready
-            // Do NOT call play() before data loads — mobile browsers will stall
-            function tryPlay() {
-                if (video.paused) {
-                    var p = video.play();
-                    if (p !== undefined) p.catch(function() {});
-                }
-            }
-
-            video.addEventListener('loadeddata', tryPlay);
-
-            // Handle background tab: retry when page becomes visible
-            document.addEventListener('visibilitychange', function() {
-                if (!document.hidden) tryPlay();
-            });
-
-            // If already cached/loaded, try immediately
-            if (video.readyState >= 2) tryPlay();
         })();
 
         // ==========================================
