@@ -2588,10 +2588,19 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <video autoplay muted loop playsinline poster="assets/video/hero-poster.jpg" preload="metadata">
-                <source src="assets/video/hero-bg-mobile.mp4" type="video/mp4">
-                <source src="assets/video/hero-bg-web.mp4" type="video/mp4">
-            </video>
+            <video id="heroVideo" autoplay muted loop playsinline poster="assets/video/hero-poster.jpg" preload="auto"></video>
+            <script>
+            (function() {
+                var v = document.getElementById('heroVideo');
+                if (!v) return;
+                var m = window.matchMedia('(max-width: 768px)').matches;
+                v.src = m ? 'assets/video/hero-bg-mobile.mp4' : 'assets/video/hero-bg-web.mp4';
+                v.addEventListener('loadeddata', function() {
+                    var p = v.play();
+                    if (p) p.catch(function() {});
+                }, { once: true });
+            })();
+            </script>
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -3126,25 +3135,6 @@
     </div>
 
     <script>
-        // ==========================================
-        // RESPONSIVE HERO VIDEO — serve mobile or desktop version
-        // ==========================================
-        (function() {
-            var video = document.querySelector('.hero-video-container video');
-            if (!video) return;
-            var isMobile = window.innerWidth <= 768;
-            var desiredSrc = isMobile
-                ? 'assets/video/hero-bg-mobile.mp4'
-                : 'assets/video/hero-bg-web.mp4';
-            // Only swap if the browser picked the wrong source
-            var currentSrc = video.currentSrc || '';
-            if (currentSrc.indexOf(desiredSrc) === -1) {
-                video.innerHTML = '<source src="' + desiredSrc + '" type="video/mp4">';
-                video.load();
-                video.play().catch(function() {});
-            }
-        })();
-
         // ==========================================
         // ROTATING TYPEWRITER TAGLINES
         // Changes every 4 seconds with delete/retype effect
