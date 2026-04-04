@@ -3129,13 +3129,30 @@
         // ==========================================
         (function() {
             var video = document.querySelector('.hero-video-container video');
-            if (video) {
-                var src = window.innerWidth <= 768
-                    ? 'assets/video/hero-bg-mobile.mp4'
-                    : 'assets/video/hero-bg-web.mp4';
-                video.innerHTML = '<source src="' + src + '" type="video/mp4">';
-                video.load();
+            if (!video) return;
+            var src = window.innerWidth <= 768
+                ? 'assets/video/hero-bg-mobile.mp4'
+                : 'assets/video/hero-bg-web.mp4';
+            video.innerHTML = '<source src="' + src + '" type="video/mp4">';
+
+            function tryPlay() {
+                if (video.paused) {
+                    var p = video.play();
+                    if (p !== undefined) p.catch(function() {});
+                }
             }
+
+            // Play once first frame is available
+            video.addEventListener('loadeddata', tryPlay, { once: true });
+            // Retry when page becomes visible (iOS defers autoplay in background tabs)
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) tryPlay();
+            });
+
+            video.load();
+
+            // If already cached from previous visit
+            if (video.readyState >= 2) tryPlay();
         })();
 
         // ==========================================
