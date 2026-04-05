@@ -98,7 +98,8 @@
     display: none;
 }
 
-@media (max-width: 768px) {
+/* Show hamburger at same breakpoint where nav-links are hidden */
+@media (max-width: 1024px) {
     .nav-menu-btn {
         display: flex;
         align-items: center;
@@ -141,7 +142,7 @@
     display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .mobile-menu {
         display: flex;
         flex-direction: column;
@@ -659,6 +660,38 @@
 }
 
 
+/* ---- Tablet Location Overlay ---- */
+@media (max-width: 1024px) {
+    .location-overlay-body {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .location-overlay-left {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .location-overlay-divider {
+        width: 100%;
+        height: 1px;
+        align-self: auto;
+    }
+
+    .location-overlay-right {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .location-map {
+        flex: 0 0 200px;
+        width: 200px;
+        height: 200px;
+    }
+}
+
 /* ---- Mobile Location Overlay ---- */
 @media (max-width: 768px) {
     .location-dropdown {
@@ -682,11 +715,6 @@
     .nav.location-open .location-btn,
     .nav.location-open .nav-menu-btn {
         display: none;
-    }
-
-    .location-overlay-body {
-        flex-direction: column;
-        gap: 2rem;
     }
 
     .location-overlay-left {
