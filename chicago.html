@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Time Mission – Challenge Room Arcade</title>
     <link rel="icon" type="image/svg+xml" href="assets/logo/TM_Favicon.svg">
     <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
@@ -1853,7 +1853,7 @@
         .footer {
             background: var(--dark);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 3.5rem 4rem 2rem;
+            padding: 3.5rem 4rem calc(2rem + env(safe-area-inset-bottom, 0px));
         }
 
         .footer-grid {
@@ -2085,6 +2085,7 @@
         .footer-bottom {
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             padding-top: 1.5rem;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
