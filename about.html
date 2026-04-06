@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Time Mission</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logo/TM_Favicon.svg">
+    <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <style>
+        /* Hero */
+        .about-hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10rem 2rem 4rem;
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, var(--black) 0%, rgba(28, 28, 28, 0.4) 50%, var(--dark) 100%);
+            z-index: 1;
+        }
+
+        .about-hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .about-hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 40%;
+            opacity: 0.55;
+        }
+
+        .about-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .about-hero .section-badge {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-hero h1 {
+            font-family: var(--display);
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            letter-spacing: 0.02em;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            line-height: 1;
+        }
+
+        .about-hero p {
+            font-family: var(--body);
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Base section title */
+        .section-title {
+            font-family: var(--display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: 0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        /* What Is Section — two-column split */
+        .what-is {
+            padding: 5rem 2rem;
+            background: var(--dark);
+        }
+
+        .what-is-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .what-is-content {
+            text-align: left;
+        }
+
+        .what-is .section-badge {
+            text-align: left;
+            display: inline-block;
+        }
+
+        .what-is .section-title {
+            font-family: var(--display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: 0.02em;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .what-is-text {
+            font-family: var(--body);
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+            margin-bottom: 1.25rem;
+        }
+
+        .what-is-photo {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 4 / 5;
+        }
+
+        .what-is-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+        }
+
+        .what-is-photo::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            pointer-events: none;
+        }
+
+        @media (max-width: 800px) {
+            .what-is-inner {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .what-is-photo {
+                order: -1;
+                aspect-ratio: 16 / 9;
+                max-height: 260px;
+            }
+
+            .what-is-content {
+                text-align: left;
+            }
+
+            .what-is .section-badge,
+            .what-is .section-title {
+                text-align: left;
+            }
+        }
+
+        /* Steps Section — Horizontal Timeline */
+        .steps {
+            padding: 5rem 2rem 4rem;
+            background: var(--black);
+            overflow: hidden;
+        }
+
+        .steps-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .steps-header .section-title {
+            font-family: var(--display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: 0.02em;
+        }
+
+        .timeline {
+            display: flex;
+            align-items: flex-start;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* The connecting line */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 32px;
+            left: 32px;
+            right: 32px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--orange), rgba(255, 107, 44, 0.15));
+            z-index: 0;
+        }
+
+        .timeline-step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding: 0 1rem;
+        }
+
+        /* Numbered circle node */
+        .step-node {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--black);
+            border: 2px solid var(--orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 107, 44, 0.15);
+        }
+
+        .timeline-step:hover .step-node {
+            background: rgba(255, 107, 44, 0.15);
+            box-shadow: 0 0 30px rgba(255, 107, 44, 0.3);
+            transform: scale(1.1);
+        }
+
+        .step-node span {
+            font-family: var(--display);
+            font-size: 1.75rem;
+            color: var(--orange);
+            line-height: 1;
+        }
+
+        /* Chevron connector between nodes */
+        .step-connector {
+            position: absolute;
+            top: 24px;
+            right: -12px;
+            z-index: 2;
+            color: var(--orange);
+            opacity: 0.5;
+        }
+
+        .step-connector svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .timeline-step:last-child .step-connector {
+            display: none;
+        }
+
+        .step-title {
+            font-family: var(--display);
+            font-size: 1.4rem;
+            letter-spacing: 0.02em;
+            color: var(--white);
+            margin-bottom: 0.6rem;
+        }
+
+        .step-desc {
+            font-family: var(--body);
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.6;
+            max-width: 220px;
+        }
+
+        /* Mobile — centered vertical stack */
+        @media (max-width: 768px) {
+            .timeline {
+                flex-direction: column;
+                align-items: center;
+                gap: 2.5rem;
+            }
+
+            .timeline::before {
+                display: none;
+            }
+
+            .timeline-step {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 0;
+            }
+
+            .step-node {
+                width: 56px;
+                height: 56px;
+                margin-bottom: 1rem;
+            }
+
+            .step-node span {
+                font-size: 1.5rem;
+            }
+
+            .step-connector {
+                display: none;
+            }
+
+            .step-desc {
+                max-width: 300px;
+            }
+        }
+
+        /* Photo Break */
+        .photo-break {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-break img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+        }
+
+        .photo-break::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, var(--black) 0%, transparent 30%, transparent 70%, var(--dark) 100%);
+        }
+
+        /* Before You Arrive */
+        .before-arrive {
+            padding: 5rem 2rem;
+            background: var(--dark);
+        }
+
+        .before-arrive-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+
+        .before-arrive-header .section-title {
+            font-family: var(--display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: 0.02em;
+        }
+
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .checklist-item {
+            display: flex;
+            gap: 1.25rem;
+            padding: 1.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .checklist-item:hover {
+            border-color: rgba(255, 107, 44, 0.2);
+        }
+
+        .checklist-icon {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(255, 107, 44, 0.1);
+        }
+
+        .checklist-icon svg {
+            width: 22px;
+            height: 22px;
+            color: var(--orange);
+        }
+
+        .checklist-content h3 {
+            font-family: var(--display);
+            font-size: 1.25rem;
+            letter-spacing: 0.02em;
+            color: var(--white);
+            margin-bottom: 0.4rem;
+        }
+
+        .checklist-content p {
+            font-family: var(--body);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 700px) {
+            .checklist-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Final CTA */
+        .about-cta {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-cta::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 300px;
+            background: radial-gradient(ellipse, rgba(255, 107, 44, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .about-cta-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .about-cta .section-title {
+            font-family: var(--display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: 0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .about-cta p {
+            font-family: var(--body);
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-family: var(--tech);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 107, 44, 0.4);
+        }
+
+        /* Reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Ticker -->
+    <div class="ticker-bar">
+        <div class="ticker-track">
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+            <span class="ticker-item">Time Mission Houston Coming Soon!</span>
+        </div>
+    </div>
+
+    <!-- Full-Screen Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-menu-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="experiences.html">Experiences</a></li>
+            <li><a href="groups.html">Groups & Events</a></li>
+            <li><a href="gift-cards.html">Gift Cards</a></li>
+            <li><a href="groups.html">Groups</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="locations/index.html">Locations</a></li>
+        </ul>
+        <div class="mobile-menu-socials">
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.51a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 10.86 4.34A6.28 6.28 0 0 0 15.86 15V8.74a8.18 8.18 0 0 0 4.14 1.15V6.69h-.41z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"/></svg>
+            </a>
+        </div>
+        <div class="mobile-menu-cta">
+            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-tickets">Book Now</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-left">
+            <button class="nav-menu-btn">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <a href="index.html" class="nav-logo">
+                <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
+            </a>
+        </div>
+
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#experiences">Visit</a></li>
+                <li><a href="groups.html">Groups</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-right">
+            <button class="location-btn" id="locationBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span id="locationText">Select Location</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
+                    <polyline points="6,9 12,15 18,9"/>
+                </svg>
+            </button>
+            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-tickets">Tickets</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="about-hero">
+        <div class="about-hero-bg">
+            <img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Time Mission venue">
+        </div>
+        <div class="about-hero-content reveal">
+            <div class="section-badge">HOW'S IT WORK</div>
+            <h1>STEP INTO THE MISSION</h1>
+            <p>A real-life gaming experience where every room is a new challenge. Grab your team, pick your missions, race the clock, and play as many as you&nbsp;want.</p>
+        </div>
+    </section>
+
+    <!-- What Is Time Mission -->
+    <section class="what-is">
+        <div class="what-is-inner">
+            <div class="what-is-content reveal">
+                <div class="section-badge">THE EXPERIENCE</div>
+                <h2 class="section-title">WHAT IS TIME MISSION?</h2>
+                <p class="what-is-text">Time Mission is an immersive social gaming experience where teams of 2-5 compete through 25+ interactive challenge rooms. Every room is a different game — from brain-bending puzzles to full-body physical challenges. There are no screens, no headsets, and no sitting around. You <em>are</em> the&nbsp;game.</p>
+                <p class="what-is-text">Choose your session length, pick your missions, and play as many rooms as you can. Each challenge lasts just a few minutes, so you can keep moving, keep competing, and keep the energy&nbsp;high.</p>
+                <p class="what-is-text">Whether it's a birthday, a date night, a team outing, or just a crew that wants to see who's really the best — Time Mission is where you come to&nbsp;play.</p>
+            </div>
+            <div class="what-is-photo reveal">
+                <img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Players inside Time Mission challenge room" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Steps -->
+    <section class="steps">
+        <div class="steps-header reveal">
+            <div class="section-badge">GET STARTED</div>
+            <h2 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">HOW IT WORKS</h2>
+        </div>
+        <div class="timeline reveal">
+            <div class="timeline-step">
+                <div class="step-node"><span>01</span></div>
+                <div class="step-connector">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,6 15,12 9,18"/></svg>
+                </div>
+                <h3 class="step-title">BOOK YOUR SESSION</h3>
+                <p class="step-desc">Pick your group size, choose how long you want to play, and reserve your spot&nbsp;online.</p>
+            </div>
+            <div class="timeline-step">
+                <div class="step-node"><span>02</span></div>
+                <div class="step-connector">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,6 15,12 9,18"/></svg>
+                </div>
+                <h3 class="step-title">CHECK IN</h3>
+                <p class="step-desc">Arrive at your location, check in at the front desk, and get your wristbands. You're almost on the&nbsp;clock.</p>
+            </div>
+            <div class="timeline-step">
+                <div class="step-node"><span>03</span></div>
+                <div class="step-connector">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,6 15,12 9,18"/></svg>
+                </div>
+                <h3 class="step-title">MISSION BRIEFING</h3>
+                <p class="step-desc">Watch the briefing, learn how the challenges work, and get ready to hit the&nbsp;floor.</p>
+            </div>
+            <div class="timeline-step">
+                <div class="step-node"><span>04</span></div>
+                <h3 class="step-title">PLAY</h3>
+                <p class="step-desc">Pick your missions, race the clock, and play as many rooms as you can. Every door is a new&nbsp;challenge.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Break -->
+    <div class="photo-break">
+        <img src="assets/photos/TM-Groups.jpg" alt="Players at Time Mission" loading="lazy">
+    </div>
+
+    <!-- Before You Arrive -->
+    <section class="before-arrive">
+        <div class="before-arrive-header reveal">
+            <div class="section-badge">PLAN YOUR VISIT</div>
+            <h2 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">BEFORE YOU ARRIVE</h2>
+        </div>
+        <div class="checklist-grid">
+            <div class="checklist-item reveal">
+                <div class="checklist-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <div class="checklist-content">
+                    <h3>BOOK IN ADVANCE</h3>
+                    <p>We recommend booking ahead to guarantee your spot. Walk-ins are welcome but subject to&nbsp;availability.</p>
+                </div>
+            </div>
+            <div class="checklist-item reveal">
+                <div class="checklist-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                </div>
+                <div class="checklist-content">
+                    <h3>DRESS TO PLAY</h3>
+                    <p>Wear comfortable clothes you can run, jump, and crawl in. Closed-toe shoes with flat soles&nbsp;required.</p>
+                </div>
+            </div>
+            <div class="checklist-item reveal">
+                <div class="checklist-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="checklist-content">
+                    <h3>ARRIVE EARLY</h3>
+                    <p>Show up 10-15 minutes before your session to check in and get briefed. Don't miss a single&nbsp;second.</p>
+                </div>
+            </div>
+            <div class="checklist-item reveal">
+                <div class="checklist-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="checklist-content">
+                    <h3>BRING YOUR CREW</h3>
+                    <p>Teams of 2-5 players per challenge. The more people, the more fun — and the more rooms you can&nbsp;conquer.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="about-cta">
+        <div class="about-cta-inner reveal">
+            <div class="section-badge">READY?</div>
+            <h2 class="section-title">BOOK YOUR MISSION</h2>
+            <p>Gather your team, pick your location, and step into the ultimate social gaming&nbsp;experience.</p>
+            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-primary">
+                Book Now
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
+                <p>A social gaming adventure where teams compete through immersive challenges across time and space.</p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.51a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 10.86 4.34A6.28 6.28 0 0 0 15.86 15V8.74a8.18 8.18 0 0 0 4.14 1.15V6.69h-.41z"/></svg>
+                    </a>
+                    <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-title">EXPERIENCE</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="groups.html">Groups</a></li>
+                    <li><a href="experiences.html">All Missions</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="gift-cards.html">Gift Cards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-locations-title">LOCATIONS</h4>
+                <div class="footer-location-group">
+                    <button class="footer-location-toggle">
+                        United States
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="footer-location-list">
+                        <a href="locations/chicago.html">Chicago (Mount Prospect)</a>
+                        <a href="locations/philadelphia.html">Philadelphia</a>
+                        <a href="locations/west-nyack.html">West Nyack</a>
+                        <a href="locations/lincoln.html">Lincoln</a>
+                        <a href="locations/houston.html">Houston (Marq'E)</a>
+                        <a href="locations/manassas.html">Manassas</a>
+                    </div>
+                </div>
+                <div class="footer-location-group">
+                    <button class="footer-location-toggle">
+                        Europe
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="footer-location-list">
+                        <a href="locations/antwerp.html">Antwerp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="footer-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="code-of-conduct.html">Code of Conduct</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/nav.js"></script>
+    <script>
+    document.querySelectorAll('.footer-location-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            btn.parentElement.classList.toggle('open');
+        });
+    });
+    </script>
+    <script>
+        // Reveal on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

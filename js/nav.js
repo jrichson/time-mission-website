@@ -9,11 +9,14 @@
     const navEl = document.getElementById('nav');
 
     // Mobile menu toggle
+    const tickerBar = document.querySelector('.ticker-bar');
+
     if (menuBtn && mobileMenu && navEl) {
         menuBtn.addEventListener('click', () => {
             menuBtn.classList.toggle('active');
             mobileMenu.classList.toggle('open');
             navEl.classList.toggle('menu-open');
+            if (tickerBar) tickerBar.classList.toggle('menu-hidden');
             document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
         });
 
@@ -23,6 +26,7 @@
                 menuBtn.classList.remove('active');
                 navEl.classList.remove('menu-open');
                 mobileMenu.classList.remove('open');
+                if (tickerBar) tickerBar.classList.remove('menu-hidden');
                 document.body.style.overflow = '';
             });
         });

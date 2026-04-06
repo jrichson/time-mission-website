@@ -193,7 +193,7 @@
             <li><a href="../experiences.html">Experiences</a></li>
             <li><a href="../groups.html">Groups &amp; Events</a></li>
             <li><a href="../gift-cards.html">Gift Cards</a></li>
-            <li><a href="../faq.html">FAQ</a></li>
+            <li><a href="../groups.html">Groups</a></li>
             <li><a href="../contact.html">Contact</a></li>
         </ul>
         <div class="mobile-menu-cta">
@@ -215,8 +215,8 @@
             <ul class="nav-links">
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="../experiences.html">Experiences</a></li>
-                <li><a href="../faq.html">FAQ</a></li>
                 <li><a href="../groups.html">Groups</a></li>
+                <li><a href="../faq.html">FAQ</a></li>
             </ul>
         </div>
         <div class="nav-right">
@@ -412,6 +412,82 @@
         const hoursItems = document.querySelectorAll('.hours-list li');
         hoursItems.forEach(item => { item.classList.remove('today'); if (item.querySelector('.day').textContent === today) { item.classList.add('today'); } });
     </script>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="../assets/logo/TM_Logo_White.svg" alt="Time Mission">
+                <p>A social gaming adventure where teams compete through immersive challenges across time and space.</p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.51a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 10.86 4.34A6.28 6.28 0 0 0 15.86 15V8.74a8.18 8.18 0 0 0 4.14 1.15V6.69h-.41z"/></svg>
+                    </a>
+                    <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-title">EXPERIENCE</h4>
+                <ul class="footer-links">
+                    <li><a href="../about.html">About</a></li>
+                    <li><a href="../faq.html">FAQ</a></li>
+                    <li><a href="../groups.html">Groups</a></li>
+                    <li><a href="../experiences.html">All Missions</a></li>
+                    <li><a href="../contact.html">Contact Us</a></li>
+                    <li><a href="../gift-cards.html">Gift Cards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4 class="footer-locations-title">LOCATIONS</h4>
+                <div class="footer-location-group">
+                    <button class="footer-location-toggle">
+                        United States
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="footer-location-list">
+                        <a href="chicago.html">Chicago (Mount Prospect)</a>
+                        <a href="philadelphia.html">Philadelphia</a>
+                        <a href="west-nyack.html">West Nyack</a>
+                        <a href="lincoln.html">Lincoln</a>
+                        <a href="houston.html">Houston (Marq'E)</a>
+                        <a href="manassas.html">Manassas</a>
+                    </div>
+                </div>
+                <div class="footer-location-group">
+                    <button class="footer-location-toggle">
+                        Europe
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="footer-location-list">
+                        <a href="antwerp.html">Antwerp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="footer-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="../terms.html">Terms</a>
+                <a href="../privacy.html">Privacy</a>
+                <a href="../code-of-conduct.html">Code of Conduct</a>
+            </div>
+        </div>
+    </footer>
+
     <script defer src="../js/nav.js"></script>
+    <script>
+    document.querySelectorAll('.footer-location-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            btn.parentElement.classList.toggle('open');
+        });
+    });
+    </script>
 </body>
 </html>
