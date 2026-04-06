@@ -109,9 +109,10 @@
             });
         });
 
-        // Load saved location on page load
+        // Load saved location on page load (only on location pages, not index)
+        const isIndexPage = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname.endsWith('/index.htm');
         const savedLocation = localStorage.getItem('timeMissionLocation');
-        if (savedLocation) {
+        if (savedLocation && !isIndexPage) {
             syncAllLocations(savedLocation);
         }
     }
@@ -123,7 +124,7 @@
             address: '1500 E Golf Rd\nMount Prospect, IL 60056',
             phone: '(847) 243-5500',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
-            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            bookUrl: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
             mapQuery: '1500+E+Golf+Rd,+Mount+Prospect,+IL+60056'
         },
         'Philadelphia': {
@@ -131,7 +132,7 @@
             address: '325 N 12th St\nPhiladelphia, PA 19107',
             phone: '(215) 515-3500',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
-            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
             mapQuery: '325+N+12th+St,+Philadelphia,+PA+19107'
         },
         'West Nyack': {
@@ -139,7 +140,7 @@
             address: '4590 Palisades Center Dr\nWest Nyack, NY 10994',
             phone: '(845) 348-1555',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 11:00 AM - 7:00 PM',
-            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
             mapQuery: '4590+Palisades+Center+Dr,+West+Nyack,+NY+10994'
         },
         'Lincoln': {
@@ -147,7 +148,7 @@
             address: '622 George Washington Hwy\nLincoln, RI 02865',
             phone: '(401) 333-4100',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
-            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
             mapQuery: '622+George+Washington+Hwy,+Lincoln,+RI+02865'
         },
         'Houston': {
@@ -155,7 +156,7 @@
             address: "7620 Katy Fwy, Ste 300\nHouston, TX 77024",
             phone: '(713) 322-7100',
             hours: 'Coming Soon',
-            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
             mapQuery: '7620+Katy+Fwy,+Houston,+TX+77024'
         },
         'Manassas': {
@@ -163,7 +164,7 @@
             address: '8305 Sudley Rd\nManassas, VA 20110',
             phone: '(703) 420-3600',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
-            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            bookUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
             mapQuery: '8305+Sudley+Rd,+Manassas,+VA+20110'
         },
         'Antwerp': {
@@ -171,7 +172,7 @@
             address: 'Borsbeeksebrug 30\n2600 Antwerp, Belgium',
             phone: '+32 3 444 55 66',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
-            bookUrl: 'https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products',
+            bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
             mapQuery: 'Borsbeeksebrug+30,+2600+Antwerp,+Belgium'
         }
     };

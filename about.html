@@ -523,7 +523,7 @@
             <li><a href="gift-cards.html">Gift Cards</a></li>
             <li><a href="groups.html">Groups</a></li>
             <li><a href="contact.html">Contact</a></li>
-            <li><a href="locations/index.html">Locations</a></li>
+            <li><a href="locations.html">Locations</a></li>
         </ul>
         <div class="mobile-menu-socials">
             <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
@@ -537,7 +537,7 @@
             </a>
         </div>
         <div class="mobile-menu-cta">
-            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-tickets">Book Now</a>
+            <a href="#" class="btn-tickets">Book Now</a>
         </div>
     </div>
 
@@ -576,7 +576,7 @@
                     <polyline points="6,9 12,15 18,9"/>
                 </svg>
             </button>
-            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-tickets">Tickets</a>
+            <a href="#" class="btn-tickets">Tickets</a>
         </div>
     </nav>
 
@@ -704,7 +704,7 @@
             <div class="section-badge">READY?</div>
             <h2 class="section-title">BOOK YOUR MISSION</h2>
             <p>Gather your team, pick your location, and step into the ultimate social gaming&nbsp;experience.</p>
-            <a href="https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products" class="btn-primary">
+            <a href="#" class="btn-primary">
                 Book Now
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -744,30 +744,40 @@
                 </ul>
             </div>
 
-            <div class="footer-column">
+            <div class="footer-column footer-locations-column">
                 <h4 class="footer-locations-title">LOCATIONS</h4>
-                <div class="footer-location-group">
-                    <button class="footer-location-toggle">
-                        United States
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-                    </button>
-                    <div class="footer-location-list">
-                        <a href="locations/chicago.html">Chicago (Mount Prospect)</a>
-                        <a href="locations/philadelphia.html">Philadelphia</a>
-                        <a href="locations/west-nyack.html">West Nyack</a>
-                        <a href="locations/lincoln.html">Lincoln</a>
-                        <a href="locations/houston.html">Houston (Marq'E)</a>
-                        <a href="locations/manassas.html">Manassas</a>
+                <div class="footer-locations-dropdown">
+                    <div class="footer-location-group">
+                        <button class="footer-location-toggle">
+                            United States
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="footer-location-list">
+                            <a href="chicago.html">Chicago (Mount Prospect)</a>
+                            <a href="philadelphia.html">Philadelphia</a>
+                            <a href="west-nyack.html">West Nyack</a>
+                            <a href="lincoln.html">Lincoln</a>
+                            <a href="houston.html">Houston (Marq'E)</a>
+                            <a href="manassas.html">Manassas</a>
+                        </div>
+                    </div>
+                    <div class="footer-location-group">
+                        <button class="footer-location-toggle">
+                            Europe
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="footer-location-list">
+                            <a href="antwerp.html">Antwerp</a>
+                        </div>
                     </div>
                 </div>
-                <div class="footer-location-group">
-                    <button class="footer-location-toggle">
-                        Europe
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-                    </button>
-                    <div class="footer-location-list">
-                        <a href="locations/antwerp.html">Antwerp</a>
-                    </div>
+                <div class="footer-location-info" style="display: none;">
+                    <h5 class="footer-loc-name"></h5>
+                    <p class="footer-loc-address"></p>
+                    <a class="footer-loc-phone" href="tel:"></a>
+                    <div class="footer-loc-hours"></div>
+                    <a class="footer-loc-map" href="#" target="_blank" rel="noopener">Get Directions →</a>
+                    <a class="footer-loc-change" href="#">Change Location</a>
                 </div>
             </div>
         </div>
@@ -802,5 +812,6 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
+    <script src="js/locations.js"></script>
 </body>
 </html>

@@ -1,0 +1,397 @@
+{
+  "locations": [
+    {
+      "id": "chicago",
+      "slug": "chicago",
+      "name": "Time Mission Chicago",
+      "shortName": "Chicago",
+      "venueName": "Mount Prospect",
+      "region": "us",
+      "status": "open",
+      "address": {
+        "line1": "132 Randhurst Village Drive",
+        "city": "Mount Prospect",
+        "state": "IL",
+        "zip": "60056",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "(847) 250-9560",
+        "email": "mtprospect@timemission.com"
+      },
+      "hours": {
+        "mon": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "tue": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "wed": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "thu": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "fri": {
+          "open": "12:00",
+          "close": "00:00",
+          "label": "12pm - Midnight"
+        },
+        "sat": {
+          "open": "10:00",
+          "close": "00:00",
+          "label": "10am - Midnight"
+        },
+        "sun": {
+          "open": "10:00",
+          "close": "20:00",
+          "label": "10am - 8pm"
+        }
+      },
+      "bookingUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products",
+      "navLabel": "IL - Chicago (Mount Prospect)",
+      "mapUrl": "https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056",
+      "faqs": []
+    },
+    {
+      "id": "philadelphia",
+      "slug": "philadelphia",
+      "name": "Time Mission Philadelphia",
+      "shortName": "Philadelphia",
+      "venueName": null,
+      "region": "us",
+      "status": "open",
+      "address": {
+        "line1": "1530 Chestnut Street",
+        "city": "Philadelphia",
+        "state": "PA",
+        "zip": "19102",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "(267) 710-1240",
+        "email": "philly@timemission.com"
+      },
+      "hours": {
+        "mon": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12pm - 10pm"
+        },
+        "tue": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12pm - 10pm"
+        },
+        "wed": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12pm - 10pm"
+        },
+        "thu": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12pm - 10pm"
+        },
+        "fri": {
+          "open": "12:00",
+          "close": "23:00",
+          "label": "12pm - 11pm"
+        },
+        "sat": {
+          "open": "10:00",
+          "close": "23:00",
+          "label": "10am - 11pm"
+        },
+        "sun": {
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
+        }
+      },
+      "bookingUrl": "https://tickets.timemission.com/onlinecheckout/en-us/products",
+      "navLabel": "PA - Philadelphia",
+      "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
+      "faqs": []
+    },
+    {
+      "id": "west-nyack",
+      "slug": "west-nyack",
+      "name": "Time Mission Palisades",
+      "shortName": "West Nyack",
+      "venueName": "Palisades Center",
+      "region": "us",
+      "status": "open",
+      "address": {
+        "line1": "3532 Palisades Center Dr",
+        "line2": "Level 3",
+        "city": "West Nyack",
+        "state": "NY",
+        "zip": "10994",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "(845) 328-4528",
+        "email": "palisades@timemission.com"
+      },
+      "hours": {
+        "mon": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "tue": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "wed": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "thu": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "fri": {
+          "open": "12:00",
+          "close": "23:00",
+          "label": "12pm - 11pm"
+        },
+        "sat": {
+          "open": "10:00",
+          "close": "23:00",
+          "label": "10am - 11pm"
+        },
+        "sun": {
+          "open": "10:00",
+          "close": "20:00",
+          "label": "10am - 8pm"
+        }
+      },
+      "bookingUrl": "",
+      "navLabel": "NY - West Nyack",
+      "mapUrl": "https://maps.google.com/?q=3532+Palisades+Center+Dr+West+Nyack+NY+10994",
+      "faqs": []
+    },
+    {
+      "id": "lincoln",
+      "slug": "lincoln",
+      "name": "Time Mission Providence",
+      "shortName": "Lincoln",
+      "venueName": "R1 Indoor Karting",
+      "region": "us",
+      "status": "open",
+      "address": {
+        "line1": "100 Higginson Ave",
+        "city": "Lincoln",
+        "state": "RI",
+        "zip": "02865",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "(401) 721-5554",
+        "email": "info@r1indoorkarting.com"
+      },
+      "hours": {
+        "mon": {
+          "open": "12:00",
+          "close": "23:00",
+          "label": "12pm - 11pm"
+        },
+        "tue": {
+          "open": "12:00",
+          "close": "23:00",
+          "label": "12pm - 11pm"
+        },
+        "wed": {
+          "open": "12:00",
+          "close": "23:00",
+          "label": "12pm - 11pm"
+        },
+        "thu": {
+          "open": "12:00",
+          "close": "23:00",
+          "label": "12pm - 11pm"
+        },
+        "fri": {
+          "open": "12:00",
+          "close": "00:00",
+          "label": "12pm - Midnight"
+        },
+        "sat": {
+          "open": "09:00",
+          "close": "00:00",
+          "label": "9am - Midnight"
+        },
+        "sun": {
+          "open": "09:00",
+          "close": "23:00",
+          "label": "9am - 11pm"
+        }
+      },
+      "bookingUrl": "",
+      "navLabel": "RI - Lincoln",
+      "mapUrl": "https://maps.google.com/?q=100+Higginson+Ave+Lincoln+RI+02865",
+      "faqs": []
+    },
+    {
+      "id": "manassas",
+      "slug": "manassas",
+      "name": "Time Mission Manassas",
+      "shortName": "Manassas",
+      "venueName": "Manassas Mall",
+      "region": "us",
+      "status": "open",
+      "address": {
+        "line1": "8300 Sudley Rd",
+        "line2": "Unit A2",
+        "city": "Manassas",
+        "state": "VA",
+        "zip": "20109",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "(571) 732-1050",
+        "email": "manassas@timemission.com"
+      },
+      "hours": {
+        "mon": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "tue": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "wed": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "thu": {
+          "open": "12:00",
+          "close": "21:00",
+          "label": "12pm - 9pm"
+        },
+        "fri": {
+          "open": "12:00",
+          "close": "00:00",
+          "label": "12pm - Midnight"
+        },
+        "sat": {
+          "open": "10:00",
+          "close": "00:00",
+          "label": "10am - Midnight"
+        },
+        "sun": {
+          "open": "10:00",
+          "close": "20:00",
+          "label": "10am - 8pm"
+        }
+      },
+      "bookingUrl": "https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products",
+      "navLabel": "VA - Manassas",
+      "mapUrl": "https://maps.google.com/?q=8300+Sudley+Rd+Manassas+VA+20109",
+      "faqs": []
+    },
+    {
+      "id": "houston",
+      "slug": "houston",
+      "name": "Time Mission Houston",
+      "shortName": "Houston",
+      "venueName": "Marq'E",
+      "region": "us",
+      "status": "coming-soon",
+      "address": {
+        "line1": "",
+        "city": "Houston",
+        "state": "TX",
+        "zip": "",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "",
+        "email": ""
+      },
+      "hours": {},
+      "bookingUrl": "",
+      "navLabel": "TX - Houston (Marq'E)",
+      "mapUrl": "",
+      "faqs": []
+    },
+    {
+      "id": "antwerp",
+      "slug": "antwerp",
+      "name": "Experience Factory Antwerp",
+      "shortName": "Antwerp",
+      "venueName": "Experience Factory",
+      "region": "europe",
+      "status": "open",
+      "address": {
+        "line1": "Michiganstraat 1",
+        "city": "Antwerp",
+        "state": "",
+        "zip": "2030",
+        "country": "Belgium"
+      },
+      "contact": {
+        "phone": "+32 3 301 03 03",
+        "email": "info@experience-factory.com"
+      },
+      "hours": {
+        "mon": {
+          "open": "14:00",
+          "close": "23:00",
+          "label": "2pm - 11pm"
+        },
+        "tue": {
+          "open": "14:00",
+          "close": "23:00",
+          "label": "2pm - 11pm"
+        },
+        "wed": {
+          "open": "14:00",
+          "close": "23:00",
+          "label": "2pm - 11pm"
+        },
+        "thu": {
+          "open": "14:00",
+          "close": "23:00",
+          "label": "2pm - 11pm"
+        },
+        "fri": {
+          "open": "14:00",
+          "close": "23:00",
+          "label": "2pm - 11pm"
+        },
+        "sat": {
+          "open": "11:00",
+          "close": "23:00",
+          "label": "11am - 11pm"
+        },
+        "sun": {
+          "open": "11:00",
+          "close": "23:00",
+          "label": "11am - 11pm"
+        }
+      },
+      "bookingUrl": "",
+      "navLabel": "Belgium - Antwerp",
+      "mapUrl": "https://maps.google.com/?q=Michiganstraat+1+Antwerp+2030+Belgium",
+      "faqs": []
+    }
+  ]
+}
