@@ -853,6 +853,54 @@
             transform: translateY(-10px);
         }
 
+        .stat-points-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .points-counter {
+            display: inline-block;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .points-counter.bump {
+            animation: scoreBump 0.3s ease-out;
+        }
+
+        @keyframes scoreBump {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .hit-point {
+            position: absolute;
+            font-family: var(--tech);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--glow-color);
+            pointer-events: none;
+            white-space: nowrap;
+            text-shadow: 0 0 8px var(--glow-color);
+            animation: hitFloat 1s ease-out forwards;
+            z-index: 10;
+        }
+
+        @keyframes hitFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(-30px) scale(1.1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.8);
+            }
+        }
+
         .stat-label {
             font-size: 0.8rem;
             color: var(--gray);
@@ -2862,7 +2910,7 @@
             <div class="section-badge">ABOUT US</div>
             <h2 class="section-title" style="white-space: nowrap;">WHAT IS TIME MISSION?</h2>
             <p class="welcome-text">
-                Step into a real-life video game where every room is a new adventure. Grab your team and choose your mission. Solve the puzzles. Race the clock. Then jump right into the next one. Play as many games as you want in your chosen time. Game&nbsp;on.
+                Step into a real-life video game where every room is a new adventure. Choose your mission, race the clock, and earn points with every challenge you complete. Play as many games as you want in your chosen time. Game&nbsp;on!
             </p>
             <a href="about.html" class="btn-secondary" style="margin-top: 1.5rem;">Learn More</a>
         </div>
@@ -2908,12 +2956,13 @@
             <div class="stat-card reveal">
                 <div class="stat-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        <circle cx="12" cy="10" r="3"/>
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                     </svg>
                 </div>
-                <div class="stat-number">7</div>
-                <div class="stat-label">Global Locations</div>
+                <div class="stat-number stat-points-wrap" id="pointsWrap">
+                    <span class="points-counter" id="pointsCounter">0</span>
+                </div>
+                <div class="stat-label">Collect Points!</div>
             </div>
         </div>
     </section>
@@ -3529,6 +3578,69 @@
         }
 
         setInterval(cycleMinutes, 2500);
+
+        // ==========================================
+        // POINTS COUNTER — score counts up with hit-point popups
+        // ==========================================
+        const pointsEl = document.getElementById('pointsCounter');
+        const pointsWrap = document.getElementById('pointsWrap');
+        let currentScore = 0;
+        const hitValues = [50, 100, 75, 150, 200, 100, 250, 50, 125, 100];
+        let hitIndex = 0;
+
+        function spawnHitPoint(value) {
+            if (!pointsWrap) return;
+            const el = document.createElement('span');
+            el.className = 'hit-point';
+            el.textContent = '+' + value;
+            // Random horizontal position around the number
+            const offsetX = (Math.random() - 0.5) * 80;
+            el.style.left = 'calc(50% + ' + offsetX + 'px)';
+            el.style.top = '-10px';
+            pointsWrap.appendChild(el);
+            el.addEventListener('animationend', () => el.remove());
+        }
+
+        function addPoints() {
+            if (!pointsEl) return;
+            const value = hitValues[hitIndex % hitValues.length];
+            hitIndex++;
+            currentScore += value;
+
+            // Reset after reaching ~1200 so it loops
+            if (currentScore > 1200) {
+                currentScore = 0;
+                pointsEl.textContent = '0';
+                return;
+            }
+
+            // Animate the number counting up
+            const startVal = currentScore - value;
+            const endVal = currentScore;
+            const duration = 400;
+            const startTime = performance.now();
+
+            function tick(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                const current = Math.round(startVal + (endVal - startVal) * eased);
+                pointsEl.textContent = current.toLocaleString();
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+
+            requestAnimationFrame(tick);
+
+            // Bump animation on the number
+            pointsEl.classList.remove('bump');
+            void pointsEl.offsetWidth; // force reflow
+            pointsEl.classList.add('bump');
+
+            // Spawn floating hit point
+            spawnHitPoint(value);
+        }
+
+        setInterval(addPoints, 1800);
 
         // Mobile menu, location picker, and scroll effect are handled by js/nav.js
 

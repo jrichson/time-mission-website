@@ -3,51 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Portals | LOL Command Center</title>
+    <title>Experiences | Time Mission</title>
     <link rel="icon" type="image/svg+xml" href="assets/logo/TM_Favicon.svg">
     <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/nav.css">
+    <link rel="preload" as="font" href="assets/fonts/MonumentExtended-Regular.otf" type="font/otf" crossorigin>
+    <link rel="preload" as="font" href="assets/fonts/MonumentExtended-Ultrabold.otf" type="font/otf" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/nav.css?v=5">
     <link rel="stylesheet" href="css/footer.css">
     <style>
-        /* Page Header Override */
-        .page-header {
-            padding: 12rem 2rem 4rem;
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 10000;
         }
 
-        .page-title {
-            font-family: var(--display);
-            font-size: clamp(4rem, 10vw, 8rem);
-            letter-spacing: 0.02em;
-            margin-bottom: 1rem;
+        /* Grid texture on dark sections */
+        .hero,
+        .portals-section,
+        .how-it-works,
+        .cta-section {
             position: relative;
         }
 
-        .page-title span {
+        .hero::before,
+        .portals-section::before,
+        .how-it-works::before,
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 80px 80px;
+            background-attachment: fixed;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ==========================================
+           HERO SECTION
+           ========================================== */
+        .hero {
+            min-height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 9rem 2rem 3rem;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse at 30% 80%, rgba(255, 107, 44, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 20%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 0, 229, 0.06) 0%, transparent 60%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 107, 44, 0.15);
+            border: 1px solid rgba(255, 107, 44, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 1.25rem;
+            animation: fadeInUp 0.6s ease both;
+        }
+
+        .hero-badge .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--orange);
+            border-radius: 50%;
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero-title {
+            font-family: var(--tech);
+            font-size: clamp(1.8rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: 0.12em;
+            white-space: nowrap;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .hero-title .highlight {
             background: linear-gradient(90deg, var(--orange), var(--magenta), var(--cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .page-subtitle {
+        .hero-subtitle {
+            font-size: 1.05rem;
             color: var(--gray);
-            font-size: 1.1rem;
             max-width: 550px;
-            margin: 0 auto;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+            animation: fadeInUp 0.6s ease 0.2s both;
         }
 
-        /* Filter Tabs */
+        .hero-cta {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--white);
+            padding: 0.85rem 1.75rem;
+            text-decoration: none;
+            font-family: var(--tech);
+            font-size: 0.8rem;
+            font-weight: 400;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--white);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 7rem 1.5rem 2rem;
+            }
+            .hero-badge {
+                margin-bottom: 1rem;
+                font-size: 0.7rem;
+                padding: 0.4rem 1rem;
+            }
+            .hero-title {
+                font-size: clamp(1.4rem, 5.5vw, 2.5rem);
+                margin-bottom: 0.75rem;
+            }
+            .hero-subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 1.25rem;
+                line-height: 1.5;
+            }
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .hero-cta .btn-primary,
+            .hero-cta .btn-secondary {
+                width: 100%;
+                justify-content: center;
+                padding: 0.75rem 1.5rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* ==========================================
+           FILTER TABS
+           ========================================== */
         .filter-section {
-            padding: 2rem;
+            padding: 1.5rem 2rem;
             background: var(--dark);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: sticky;
-            top: 108px;
+            top: 60px;
             z-index: 100;
         }
 
@@ -82,14 +245,33 @@
             color: var(--black);
         }
 
-        /* Portals Grid */
+        .filter-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            font-size: 0.65rem;
+            margin-left: 0.4rem;
+            padding: 0 0.4rem;
+        }
+
+        .filter-tab.active .filter-count {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* ==========================================
+           PORTALS GRID
+           ========================================== */
         .portals-section {
             padding: 4rem 2rem 6rem;
         }
 
         .portals-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
             max-width: 1400px;
             margin: 0 auto;
@@ -99,13 +281,14 @@
             position: relative;
             border-radius: 20px;
             overflow: hidden;
-            height: 450px;
+            aspect-ratio: 3/4;
             cursor: pointer;
-            transition: transform 0.4s ease;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
 
         .portal-card:hover {
             transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
         .portal-card img {
@@ -116,7 +299,7 @@
         }
 
         .portal-card:hover img {
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
         .portal-overlay {
@@ -125,8 +308,8 @@
             background: linear-gradient(
                 180deg,
                 transparent 0%,
-                transparent 30%,
-                rgba(13, 13, 13, 0.85) 70%,
+                transparent 35%,
+                rgba(13, 13, 13, 0.8) 65%,
                 rgba(13, 13, 13, 0.98) 100%
             );
             display: flex;
@@ -138,12 +321,12 @@
         .portal-badge {
             display: inline-flex;
             align-items: center;
-            background: var(--orange);
+            gap: 0.4rem;
             padding: 0.35rem 0.75rem;
             border-radius: 100px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--black);
             margin-bottom: 0.75rem;
@@ -155,32 +338,44 @@
         .portal-badge.skill { background: var(--lime); color: var(--black); }
         .portal-badge.speed { background: var(--orange); }
 
+        .portal-badge svg {
+            width: 12px;
+            height: 12px;
+        }
+
         .portal-title {
             font-family: var(--display);
-            font-size: 2.25rem;
+            font-size: 2rem;
             letter-spacing: 0.02em;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
+            line-height: 1;
         }
 
         .portal-desc {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--gray);
-            line-height: 1.6;
-            margin-bottom: 1.25rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .portal-meta {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.25rem;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
         }
 
         .meta-tag {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.4rem 0.75rem;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.3rem 0.65rem;
             border-radius: 100px;
-            font-size: 0.7rem;
-            color: var(--white);
+            font-size: 0.65rem;
+            color: var(--white-soft);
+            letter-spacing: 0.03em;
         }
 
         .portal-cta {
@@ -188,9 +383,9 @@
             align-items: center;
             gap: 0.5rem;
             color: var(--orange);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
             text-decoration: none;
             opacity: 0;
@@ -204,8 +399,8 @@
         }
 
         .portal-cta svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             transition: transform 0.3s ease;
         }
 
@@ -213,21 +408,224 @@
             transform: translateX(4px);
         }
 
-        /* CTA Section */
+        /* Featured card — first item spans 2 columns */
+        .portal-card.featured {
+            grid-column: span 2;
+            aspect-ratio: 16/9;
+        }
+
+        .portal-card.featured .portal-title {
+            font-size: 3rem;
+        }
+
+        .portal-card.featured .portal-desc {
+            -webkit-line-clamp: 3;
+            max-width: 450px;
+        }
+
+        @media (max-width: 1024px) {
+            .portals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .portal-card.featured {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .portals-section {
+                padding: 3rem 1rem 4rem;
+            }
+            .portals-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .portal-card {
+                aspect-ratio: 4/5;
+            }
+            .portal-card.featured {
+                grid-column: span 1;
+                aspect-ratio: 4/5;
+            }
+            .portal-card.featured .portal-title {
+                font-size: 2rem;
+            }
+            .filter-tabs {
+                gap: 0.4rem;
+            }
+            .filter-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* ==========================================
+           HOW IT WORKS
+           ========================================== */
+        .how-it-works {
+            padding: 6rem 2rem;
+            background: var(--dark);
+        }
+
+        .how-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .how-header .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 107, 44, 0.1);
+            border: 1px solid rgba(255, 107, 44, 0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+        }
+
+        .how-title {
+            font-family: var(--display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            letter-spacing: 0.02em;
+        }
+
+        .how-title span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .how-step {
+            text-align: center;
+            position: relative;
+            padding: 2rem 1rem;
+        }
+
+        .how-step-number {
+            font-family: var(--display);
+            font-size: 4rem;
+            background: linear-gradient(180deg, rgba(255, 107, 44, 0.3) 0%, transparent 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .how-step-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.25rem;
+            background: rgba(255, 107, 44, 0.1);
+            border: 1px solid rgba(255, 107, 44, 0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--orange);
+        }
+
+        .how-step-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .how-step-title {
+            font-family: var(--display);
+            font-size: 1.25rem;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .how-step-desc {
+            font-size: 0.85rem;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* Connecting line between steps */
+        .how-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 5.5rem;
+            right: -1rem;
+            width: 2rem;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255, 107, 44, 0.4), transparent);
+        }
+
+        @media (max-width: 1024px) {
+            .how-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .how-step:not(:last-child)::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .how-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .how-step {
+                display: grid;
+                grid-template-columns: 64px 1fr;
+                text-align: left;
+                gap: 0 1rem;
+                padding: 1.5rem 0;
+            }
+            .how-step-number {
+                display: none;
+            }
+            .how-step-icon {
+                margin: 0;
+                grid-row: span 2;
+            }
+            .how-step-title {
+                align-self: end;
+            }
+        }
+
+        /* ==========================================
+           CTA SECTION
+           ========================================== */
         .cta-section {
             padding: 6rem 2rem;
             background: var(--dark);
             text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .cta-content {
-            max-width: 550px;
+            max-width: 600px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .cta-title {
             font-family: var(--display);
             font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: 0.02em;
             margin-bottom: 1rem;
         }
 
@@ -241,31 +639,35 @@
         .cta-text {
             color: var(--gray);
             margin-bottom: 2rem;
+            line-height: 1.6;
         }
 
         .btn-primary {
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            background: var(--orange);
-            color: var(--black);
+            background: var(--gradient-primary);
+            color: var(--white);
             padding: 1rem 2rem;
             text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
+            font-family: var(--tech);
+            font-size: 0.85rem;
+            font-weight: 400;
             border-radius: 100px;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
+            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.5);
         }
 
         .btn-primary:hover {
-            background: var(--orange-light);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 107, 44, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(199, 69, 30, 0.6);
         }
 
-        /* Ticket Popup Panel */
+        /* ==========================================
+           TICKET POPUP PANEL
+           ========================================== */
         .ticket-overlay {
             position: fixed;
             inset: 0;
@@ -461,34 +863,48 @@
             }
         }
 
-        /* Mobile */
-        @media (max-width: 1024px) {
-            .portals-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        /* ==========================================
+           ANIMATIONS
+           ========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        @media (max-width: 768px) {
-            .page-header {
-                padding: 10rem 1.5rem 3rem;
-            }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-            .portals-grid {
-                grid-template-columns: 1fr;
-            }
+        /* Staggered grid animation */
+        .portal-card.reveal:nth-child(1) { transition-delay: 0s; }
+        .portal-card.reveal:nth-child(2) { transition-delay: 0.1s; }
+        .portal-card.reveal:nth-child(3) { transition-delay: 0.15s; }
+        .portal-card.reveal:nth-child(4) { transition-delay: 0.05s; }
+        .portal-card.reveal:nth-child(5) { transition-delay: 0.1s; }
+        .portal-card.reveal:nth-child(6) { transition-delay: 0.15s; }
+        .portal-card.reveal:nth-child(7) { transition-delay: 0s; }
+        .portal-card.reveal:nth-child(8) { transition-delay: 0.1s; }
+        .portal-card.reveal:nth-child(9) { transition-delay: 0.15s; }
+        .portal-card.reveal:nth-child(10) { transition-delay: 0.05s; }
 
-            .portal-card {
-                height: 400px;
-            }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-            .filter-tabs {
-                gap: 0.5rem;
-            }
+        /* Empty state when filtering */
+        .portals-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            display: none;
+        }
 
-            .filter-tab {
-                padding: 0.5rem 1rem;
-                font-size: 0.75rem;
-            }
+        .portals-empty p {
+            color: var(--gray);
+            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -511,11 +927,10 @@
     <div class="mobile-menu" id="mobileMenu">
         <ul class="mobile-menu-links">
             <li><a href="index.html">Home</a></li>
-            <li><a href="groups.html">Groups &amp; Events</a></li>
+            <li><a href="experiences.html">Experiences</a></li>
             <li><a href="gift-cards.html">Gift Cards</a></li>
-            <li><a href="groups.html">Groups</a></li>
+            <li><a href="faq.html">FAQ</a></li>
             <li><a href="contact.html">Contact</a></li>
-            <li><a href="locations.html">Locations</a></li>
         </ul>
         <div class="mobile-menu-cta">
             <a href="#" class="btn-tickets">Book Now</a>
@@ -552,249 +967,388 @@
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                     <circle cx="12" cy="10" r="3"/>
                 </svg>
-                <span id="locationText">Philadelphia</span>
+                <span id="locationText">Select Location</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
                     <polyline points="6,9 12,15 18,9"/>
                 </svg>
-                <div class="location-dropdown">
-                    <div class="location-group">
-                        <div class="location-group-title">United States</div>
-                        <a href="#">IL - Chicago (Mount Prospect)</a>
-                        <a href="#">PA - Philadelphia</a>
-                        <a href="#">NY - West Nyack</a>
-                        <a href="#">RI - Lincoln</a>
-                        <a href="#">TX - Houston (Marq'E)</a>
-                        <a href="#">VA - Manassas</a>
-                    </div>
-                    <div class="location-group">
-                        <div class="location-group-title">Europe</div>
-                        <a href="#">Belgium - Antwerp</a>
-                    </div>
-                </div>
             </button>
             <a href="#" class="btn-tickets">Tickets</a>
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <header class="page-header">
-        <div class="section-badge">25+ Challenges</div>
-        <h1 class="page-title">THE <span>PORTALS</span></h1>
-        <p class="page-subtitle">Each portal transports you to a different era with unique challenges. Speed, strength, skill, or smarts—find your strength.</p>
-    </header>
+    <!-- Full-screen Location Overlay -->
+    <div class="location-dropdown" id="locationDropdown">
+        <div class="location-dropdown-header">
+            <a href="index.html" class="location-dropdown-logo">
+                <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
+            </a>
+            <button class="location-dropdown-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="location-dropdown-title">Select Your Location</div>
+        <div class="location-overlay-body">
+            <div class="location-overlay-left">
+                <div class="location-group">
+                    <div class="location-group-title">United States</div>
+                    <a href="chicago.html" data-city="Chicago">IL - Chicago (Mount Prospect)</a>
+                    <a href="philadelphia.html" data-city="Philadelphia">PA - Philadelphia</a>
+                    <a href="west-nyack.html" data-city="West Nyack">NY - West Nyack</a>
+                    <a href="lincoln.html" data-city="Lincoln">RI - Lincoln</a>
+                    <a href="houston.html" data-city="Houston">TX - Houston (Marq'E)</a>
+                    <a href="manassas.html" data-city="Manassas">VA - Manassas</a>
+                </div>
+                <div class="location-group">
+                    <div class="location-group-title">Europe</div>
+                    <a href="antwerp.html" data-city="Antwerp">Belgium - Antwerp</a>
+                </div>
+            </div>
+            <div class="location-overlay-divider"></div>
+            <div class="location-overlay-right" id="locationInfo">
+                <div class="location-map" id="locationMap"></div>
+                <div class="location-info-content">
+                    <div class="location-info-empty">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <p>Select a location to view details</p>
+                    </div>
+                    <div class="location-info-details" style="display:none;">
+                        <h3 class="location-info-name"></h3>
+                        <div class="location-info-address"></div>
+                        <div class="location-info-phone"></div>
+                        <div class="location-info-section">
+                            <h4>Hours</h4>
+                            <div class="location-info-hours"></div>
+                        </div>
+                        <div class="location-info-actions">
+                            <a href="#" class="location-info-book">Book Now</a>
+                            <a href="contact.html" class="location-info-contact">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="location-overlay-footer">
+            <div class="location-overlay-social">
+                <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.51a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 10.86 4.34A6.28 6.28 0 0 0 15.86 15V8.74a8.18 8.18 0 0 0 4.14 1.15V6.69h-.41z"/></svg>
+                </a>
+                <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"/></svg>
+                </a>
+            </div>
+            <p class="location-overlay-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse"></span>
+                The Missions
+            </div>
+            <h1 class="hero-title">UNLIMITED WAYS TO <span class="highlight">PLAY</span></h1>
+            <p class="hero-subtitle">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find out.</p>
+            <div class="hero-cta">
+                <a href="#portals" class="btn-secondary">
+                    View All Missions
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- Filter Tabs -->
     <div class="filter-section">
         <div class="filter-tabs">
-            <button class="filter-tab active" data-filter="all">All Portals</button>
-            <button class="filter-tab" data-filter="physical">Physical</button>
-            <button class="filter-tab" data-filter="mental">Mental</button>
-            <button class="filter-tab" data-filter="skill">Skill</button>
-            <button class="filter-tab" data-filter="speed">Speed</button>
+            <button class="filter-tab active" data-filter="all">All Portals <span class="filter-count">10</span></button>
+            <button class="filter-tab" data-filter="physical">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+                Physical <span class="filter-count">3</span>
+            </button>
+            <button class="filter-tab" data-filter="mental">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
+                Mental <span class="filter-count">3</span>
+            </button>
+            <button class="filter-tab" data-filter="skill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                Skill <span class="filter-count">3</span>
+            </button>
+            <button class="filter-tab" data-filter="speed">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Speed <span class="filter-count">1</span>
+            </button>
         </div>
     </div>
 
     <!-- Portals Grid -->
-    <section class="portals-section">
+    <section class="portals-section" id="portals">
         <div class="portals-grid">
-            <article class="portal-card reveal" data-category="mental">
+            <!-- FEATURED: Glitch Matrix -->
+            <article class="portal-card featured reveal" data-category="mental">
                 <img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280">
                 <div class="portal-overlay">
-                    <span class="portal-badge mental">Mental</span>
+                    <span class="portal-badge mental">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
+                        Mental
+                    </span>
                     <h2 class="portal-title">GLITCH MATRIX</h2>
                     <p class="portal-desc">Navigate a fractured digital world where reality bends. Decode patterns, solve visual puzzles, and escape before the system crashes.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Pattern Recognition</span>
                         <span class="meta-tag">Puzzles</span>
                     </div>
-                    <a href="#" class="portal-cta">
+                    <a href="#" class="portal-cta btn-book-now">
                         Book Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </article>
 
+            <!-- Big Bang -->
             <article class="portal-card reveal" data-category="physical">
                 <img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" loading="lazy" width="1920" height="1280">
                 <div class="portal-overlay">
-                    <span class="portal-badge physical">Physical</span>
+                    <span class="portal-badge physical">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+                        Physical
+                    </span>
                     <h2 class="portal-title">BIG BANG</h2>
                     <p class="portal-desc">Witness the birth of the universe. Harness cosmic energy, coordinate throws, and create stellar formations as a team.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Coordination</span>
                         <span class="meta-tag">Teamwork</span>
                     </div>
-                    <a href="#" class="portal-cta">
+                    <a href="#" class="portal-cta btn-book-now">
                         Book Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </article>
 
+            <!-- Magma Mayhem -->
             <article class="portal-card reveal" data-category="speed">
                 <img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" loading="lazy" width="1920" height="1280">
                 <div class="portal-overlay">
-                    <span class="portal-badge speed">Speed</span>
+                    <span class="portal-badge speed">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        Speed
+                    </span>
                     <h2 class="portal-title">MAGMA MAYHEM</h2>
-                    <p class="portal-desc">The floor is lava—literally. Navigate volcanic terrain at speed. Quick feet and faster reflexes are your only salvation.</p>
+                    <p class="portal-desc">The floor is lava — literally. Navigate volcanic terrain at speed. Quick feet and faster reflexes are your only salvation.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Agility</span>
                         <span class="meta-tag">Reflexes</span>
                     </div>
-                    <a href="#" class="portal-cta">
+                    <a href="#" class="portal-cta btn-book-now">
                         Book Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </article>
 
+            <!-- Persian Palace -->
             <article class="portal-card reveal" data-category="mental">
                 <img src="assets/photos/experiences/Time-Mission_Persian-0Palace.jpg" alt="Persian Palace" loading="lazy" width="1920" height="1280">
                 <div class="portal-overlay">
-                    <span class="portal-badge mental">Mental</span>
+                    <span class="portal-badge mental">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
+                        Mental
+                    </span>
                     <h2 class="portal-title">PERSIAN PALACE</h2>
-                    <p class="portal-desc">Uncover secrets in opulent chambers. Ancient riddles guard the path forward—only the wisest will prevail.</p>
+                    <p class="portal-desc">Uncover secrets in opulent chambers. Ancient riddles guard the path forward — only the wisest will prevail.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Problem Solving</span>
                         <span class="meta-tag">Logic</span>
                     </div>
-                    <a href="#" class="portal-cta">
+                    <a href="#" class="portal-cta btn-book-now">
                         Book Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </article>
 
+            <!-- Server Heist -->
             <article class="portal-card reveal" data-category="skill">
                 <img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" loading="lazy" width="1920" height="1280">
                 <div class="portal-overlay">
-                    <span class="portal-badge skill">Skill</span>
+                    <span class="portal-badge skill">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                        Skill
+                    </span>
                     <h2 class="portal-title">SERVER HEIST</h2>
                     <p class="portal-desc">Infiltrate high-security systems. Precision timing and steady hands are essential in this high-stakes digital heist.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Precision</span>
                         <span class="meta-tag">Timing</span>
                     </div>
-                    <a href="#" class="portal-cta">
+                    <a href="#" class="portal-cta btn-book-now">
                         Book Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </article>
 
+            <!-- Jungle Temple -->
             <article class="portal-card reveal" data-category="physical">
                 <img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" loading="lazy" width="1920" height="1280">
                 <div class="portal-overlay">
-                    <span class="portal-badge physical">Physical</span>
+                    <span class="portal-badge physical">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+                        Physical
+                    </span>
                     <h2 class="portal-title">JUNGLE TEMPLE</h2>
                     <p class="portal-desc">Brave ancient traps and decode hieroglyphs. Physical prowess meets mental acuity in this lost temple.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Adventure</span>
                         <span class="meta-tag">Exploration</span>
                     </div>
-                    <a href="#" class="portal-cta">
+                    <a href="#" class="portal-cta btn-book-now">
                         Book Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </article>
 
+            <!-- Artificial Intelligence -->
             <article class="portal-card reveal" data-category="mental">
                 <img src="assets/photos/experiences/Time-Mission_Artificial_Intelligence.jpg" alt="Artificial Intelligence" loading="lazy" width="1920" height="1280">
                 <div class="portal-overlay">
-                    <span class="portal-badge mental">Mental</span>
+                    <span class="portal-badge mental">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
+                        Mental
+                    </span>
                     <h2 class="portal-title">ARTIFICIAL INTELLIGENCE</h2>
                     <p class="portal-desc">Match wits with a machine mind. Logic puzzles and strategic thinking determine whether human or AI prevails.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Strategy</span>
                         <span class="meta-tag">Logic</span>
                     </div>
-                    <a href="#" class="portal-cta">
+                    <a href="#" class="portal-cta btn-book-now">
                         Book Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </article>
 
+            <!-- Pirates Attack -->
             <article class="portal-card reveal" data-category="skill">
                 <img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" loading="lazy" width="1920" height="1440">
                 <div class="portal-overlay">
-                    <span class="portal-badge skill">Skill</span>
+                    <span class="portal-badge skill">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                        Skill
+                    </span>
                     <h2 class="portal-title">PIRATES ATTACK</h2>
-                    <p class="portal-desc">Defend your vessel from marauders. Aim true and work as a crew—the seven seas show no mercy.</p>
+                    <p class="portal-desc">Defend your vessel from marauders. Aim true and work as a crew — the seven seas show no mercy.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Accuracy</span>
                         <span class="meta-tag">Teamwork</span>
                     </div>
-                    <a href="#" class="portal-cta">
+                    <a href="#" class="portal-cta btn-book-now">
                         Book Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </article>
 
+            <!-- Orbital Pit -->
             <article class="portal-card reveal" data-category="physical">
                 <img src="assets/photos/experiences/Time-Mission_Orbital_Pit.jpeg" alt="Orbital Pit" loading="lazy" width="1920" height="1279">
                 <div class="portal-overlay">
-                    <span class="portal-badge physical">Physical</span>
+                    <span class="portal-badge physical">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+                        Physical
+                    </span>
                     <h2 class="portal-title">ORBITAL PIT</h2>
                     <p class="portal-desc">Zero gravity meets full intensity. Navigate the orbital arena where physics works differently.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Teamwork</span>
                         <span class="meta-tag">Coordination</span>
                     </div>
-                    <a href="#" class="portal-cta">
+                    <a href="#" class="portal-cta btn-book-now">
                         Book Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </article>
 
+            <!-- Control Room -->
             <article class="portal-card reveal" data-category="skill">
                 <img src="assets/photos/experiences/Time-Mission_Control-Room.jpg" alt="Control Room" loading="lazy" width="1280" height="1920">
                 <div class="portal-overlay">
-                    <span class="portal-badge skill">Skill</span>
+                    <span class="portal-badge skill">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                        Skill
+                    </span>
                     <h2 class="portal-title">CONTROL ROOM</h2>
                     <p class="portal-desc">Command central awaits. Coordinate systems, manage resources, and prove your team can handle mission control.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Coordination</span>
                         <span class="meta-tag">Communication</span>
                     </div>
-                    <a href="#" class="portal-cta">
+                    <a href="#" class="portal-cta btn-book-now">
                         Book Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </article>
+
+            <div class="portals-empty">
+                <p>No portals match the selected filter.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works reveal">
+        <div class="how-header">
+            <div class="section-badge">Game Day</div>
+            <h2 class="how-title">HOW IT <span>WORKS</span></h2>
+        </div>
+        <div class="how-grid">
+            <div class="how-step">
+                <div class="how-step-number">01</div>
+                <div class="how-step-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <h3 class="how-step-title">BOOK ONLINE</h3>
+                <p class="how-step-desc">Choose your location, date, and time slot. Walk-ins welcome but booking guarantees your spot.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-step-number">02</div>
+                <div class="how-step-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3 class="how-step-title">FORM YOUR TEAM</h3>
+                <p class="how-step-desc">Gather 2-5 players per team. Multiple teams can play simultaneously — perfect for groups.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-step-number">03</div>
+                <div class="how-step-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <h3 class="how-step-title">COMPETE</h3>
+                <p class="how-step-desc">Race through 25+ portals in 90 minutes. Each challenge tests a different skill — everyone shines somewhere.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-step-number">04</div>
+                <div class="how-step-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 15l-2 5 2-1 2 1-2-5z"/><path d="M6 3v7a6 6 0 0 0 12 0V3"/><path d="M6 7h12"/></svg>
+                </div>
+                <h3 class="how-step-title">CLAIM VICTORY</h3>
+                <p class="how-step-desc">Scores are tallied across all challenges. See how you rank on the leaderboard and celebrate your wins.</p>
+            </div>
         </div>
     </section>
 
     <!-- CTA Section -->
     <section class="cta-section">
-        <div class="cta-content">
+        <div class="cta-content reveal">
             <h2 class="cta-title">READY TO <span>PLAY?</span></h2>
             <p class="cta-text">Experience all 25+ portals in a single 90-minute adventure. Book your mission today.</p>
-            <a href="#" class="btn-primary">
+            <a href="#" class="btn-primary btn-book-now">
                 Book Now
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -803,7 +1357,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-grid">
@@ -827,8 +1380,8 @@
                 <h4 class="footer-title">EXPERIENCE</h4>
                 <ul class="footer-links">
                     <li><a href="about.html">About</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
                     <li><a href="groups.html">Groups</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
                     <li><a href="experiences.html">All Missions</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
                     <li><a href="gift-cards.html">Gift Cards</a></li>
@@ -867,7 +1420,7 @@
                     <p class="footer-loc-address"></p>
                     <a class="footer-loc-phone" href="tel:"></a>
                     <div class="footer-loc-hours"></div>
-                    <a class="footer-loc-map" href="#" target="_blank" rel="noopener">Get Directions →</a>
+                    <a class="footer-loc-map" href="#" target="_blank" rel="noopener">Get Directions &rarr;</a>
                     <a class="footer-loc-change" href="#">Change Location</a>
                 </div>
             </div>
@@ -951,6 +1504,7 @@
 
     <script defer src="js/nav.js"></script>
     <script>
+    // Footer location toggles
     document.querySelectorAll('.footer-location-toggle').forEach(btn => {
         btn.addEventListener('click', () => {
             btn.parentElement.classList.toggle('open');
@@ -961,6 +1515,7 @@
         // Filter functionality
         const filterTabs = document.querySelectorAll('.filter-tab');
         const portalCards = document.querySelectorAll('.portal-card');
+        const emptyState = document.querySelector('.portals-empty');
 
         filterTabs.forEach(tab => {
             tab.addEventListener('click', () => {
@@ -968,14 +1523,14 @@
                 tab.classList.add('active');
 
                 const filter = tab.dataset.filter;
+                let visibleCount = 0;
 
                 portalCards.forEach(card => {
                     if (filter === 'all' || card.dataset.category === filter) {
-                        card.style.display = 'block';
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
-                        }, 50);
+                        card.style.display = '';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                        visibleCount++;
                     } else {
                         card.style.opacity = '0';
                         card.style.transform = 'translateY(20px)';
@@ -984,6 +1539,11 @@
                         }, 300);
                     }
                 });
+
+                // Show empty state if no cards visible
+                if (emptyState) {
+                    emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+                }
             });
         });
 
@@ -1005,34 +1565,34 @@
         const ticketLocationSelect = document.getElementById('ticketLocation');
 
         const bookingUrls = {
-            philadelphia: '#',
-            chicago: '#',
+            philadelphia: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+            chicago: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
             'west-nyack': '#',
             lincoln: '#',
             houston: '#',
-            manassas: '#',
+            manassas: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
             antwerp: '#'
         };
 
-        const bookingButtons = document.querySelectorAll('.btn-tickets, .btn-primary[href*="roller"], .portal-cta');
+        const bookingButtons = document.querySelectorAll('.btn-tickets, .btn-book-now, .portal-cta');
 
         function openTicketPanel(e) {
             if (e) e.preventDefault();
 
-            // Check if location is already saved in localStorage
             const savedLocation = localStorage.getItem('timeMissionLocation');
 
             if (savedLocation) {
-                // Location already selected - go directly to booking
-                const locationKey = savedLocation.toLowerCase().replace(/\s+/g, '').replace(/,/g, '');
-                const bookingUrl = bookingUrls[locationKey] || bookingUrls.philadelphia;
-                window.open(bookingUrl, '_blank');
-            } else {
-                // No location saved - show popup with selector
-                ticketPanel.classList.add('active');
-                ticketOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
+                const locationKey = savedLocation.toLowerCase().replace(/\s+/g, '-');
+                const bookingUrl = bookingUrls[locationKey] || '#';
+                if (bookingUrl !== '#') {
+                    window.open(bookingUrl, '_blank');
+                    return;
+                }
             }
+
+            ticketPanel.classList.add('active');
+            ticketOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeTicketPanel() {
