@@ -1447,7 +1447,7 @@
                 margin: -40px 1.25rem 0;
                 padding: 2rem 1.5rem 2.5rem;
                 border-radius: 20px 20px 0 0;
-                box-shadow: 0 -8px 30px rgba(255, 107, 0, 0.15), 0 -2px 15px rgba(255, 107, 0, 0.1);
+                box-shadow: none;
             }
         }
 
@@ -2333,6 +2333,12 @@
                 max-width: 600px;
             }
 
+            /* Reorder so animated cards (Minutes + Points) are diagonal, not side-by-side */
+            .stat-card:nth-child(1) { order: 2; --glow-color: var(--cyan); --glow-color-alpha: rgba(0, 229, 255, 0.3); }
+            .stat-card:nth-child(2) { order: 1; --glow-color: var(--orange); --glow-color-alpha: rgba(255, 107, 44, 0.3); }
+            .stat-card:nth-child(3) { order: 3; }
+            .stat-card:nth-child(4) { order: 4; }
+
             .stat-card {
                 aspect-ratio: auto;
             }
@@ -2927,7 +2933,7 @@
                     </svg>
                 </div>
                 <div class="stat-number">25+</div>
-                <div class="stat-label">Challenge Rooms</div>
+                <div class="stat-label">Mission Rooms</div>
             </div>
             <div class="stat-card reveal">
                 <div class="stat-icon">
