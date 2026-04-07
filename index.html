@@ -829,9 +829,8 @@
 
         .stat-number {
             font-family: var(--tech);
-            font-weight: 400;
-            font-size: 3rem;
             font-weight: 700;
+            font-size: clamp(2.25rem, 7vw, 3rem);
             color: var(--white);
             line-height: 1;
             margin-bottom: 0.5rem;
@@ -2358,6 +2357,10 @@
         @media (max-width: 768px) {
             /* Nav responsive rules provided by css/nav.css */
 
+            /* Tighter scroll-margin on mobile so sections snap closer to nav */
+            .welcome { scroll-margin-top: 60px; padding-top: 3rem; }
+            .experiences { scroll-margin-top: 60px; }
+
             .hero-content {
                 padding: 0 1.5rem;
             }
@@ -2745,7 +2748,7 @@
         <ul class="mobile-menu-links">
             <li><a href="#about">About</a></li>
             <li><a href="#experiences">Experiences</a></li>
-            <li><a href="groups.html">Groups & Events</a></li>
+            <li><a href="#groups">Groups & Events</a></li>
             <li><a href="gift-cards.html">Gift Cards</a></li>
             <li><a href="#faq">FAQ</a></li>
             <li><a href="contact.html">Contact</a></li>
@@ -2889,7 +2892,7 @@
             </h1>
             <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive challenges. Test your speed, strength, skill, and&nbsp;smarts.</p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary">
+                <a href="#" class="btn-primary btn-tickets">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -4023,36 +4026,32 @@
 
         // Booking URLs by location
         const bookingUrls = {
-            philadelphia: '#',
-            chicago: '#',
+            philadelphia: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+            chicago: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
             'west-nyack': '#',
             lincoln: '#',
             houston: '#',
-            manassas: '#',
+            manassas: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
             antwerp: '#'
         };
 
         // Select booking buttons (excludes anchor links with #)
         const bookingButtons = document.querySelectorAll('.btn-tickets, .btn-primary[href*="roller"], .btn-nav[href*="roller"]');
 
-        // Open ticket panel (smart: bypass if location already saved)
+        // Open ticket panel — always show so user can confirm/change location
         function openTicketPanel(e) {
             if (e) e.preventDefault();
 
-            // Check if location is already saved in localStorage
+            // Pre-select saved location if available
             const savedLocation = localStorage.getItem('timeMissionLocation');
-
-            if (savedLocation) {
-                // Location already selected - go directly to booking
-                const locationKey = savedLocation.toLowerCase().replace(/\s+/g, '').replace(/,/g, '');
-                const bookingUrl = bookingUrls[locationKey] || bookingUrls.philadelphia;
-                window.open(bookingUrl, '_blank');
-            } else {
-                // No location saved - show popup with selector
-                ticketPanel.classList.add('active');
-                ticketOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
+            if (savedLocation && ticketLocationSelect) {
+                ticketLocationSelect.value = savedLocation.toLowerCase().replace(/\s+/g, '-');
+                ticketLocationSelect.dispatchEvent(new Event('change'));
             }
+
+            ticketPanel.classList.add('active');
+            ticketOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
         // Close ticket panel
