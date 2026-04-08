@@ -2676,7 +2676,7 @@
         }
     </style>
 </head>
-<body>
+<body data-location="manassas">
     <!-- Game Promo Popup -->
     <div class="game-popup-overlay" id="gamePopup">
         <div class="game-popup">
@@ -2813,7 +2813,7 @@
             <div class="location-overlay-left">
                 <div class="location-group">
                     <div class="location-group-title">United States</div>
-                    <a href="chicago.html" data-city="Chicago">IL - Chicago (Mount Prospect)</a>
+                    <a href="mount-prospect.html" data-city="Mount Prospect">IL - Chicago (Mount Prospect)</a>
                     <a href="philadelphia.html" data-city="Philadelphia">PA - Philadelphia</a>
                     <a href="west-nyack.html" data-city="West Nyack">NY - West Nyack</a>
                     <a href="lincoln.html" data-city="Lincoln">RI - Lincoln</a>
@@ -2883,7 +2883,7 @@
             </h1>
             <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive challenges. Test your speed, strength, skill, and&nbsp;smarts.</p>
             <div class="hero-cta">
-                <a href="https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products" class="btn-primary">
+                <a href="https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products" class="btn-primary btn-tickets">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -3253,7 +3253,7 @@
         <div class="cta-content reveal">
             <h2 class="cta-title">READY TO PLAY?</h2>
             <p class="cta-text">Book your adventure today and discover why Time Mission is the ultimate social gaming experience.</p>
-            <a href="#" class="btn-primary btn-tickets">
+            <a href="https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products" class="btn-primary btn-tickets">
                 Book Your Mission
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -3358,7 +3358,7 @@
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                         </button>
                         <div class="footer-location-list">
-                            <a href="chicago.html">Chicago (Mount Prospect)</a>
+                            <a href="mount-prospect.html">Chicago (Mount Prospect)</a>
                             <a href="philadelphia.html">Philadelphia</a>
                             <a href="west-nyack.html">West Nyack</a>
                             <a href="lincoln.html">Lincoln</a>
@@ -3416,7 +3416,7 @@
                 <select id="ticketLocation">
                     <option value="">Select a Location</option>
                     <option value="philadelphia">Philadelphia</option>
-                    <option value="chicago">Chicago (Mount Prospect)</option>
+                    <option value="mount-prospect">Chicago (Mount Prospect)</option>
                     <option value="west-nyack">West Nyack</option>
                     <option value="lincoln">Lincoln</option>
                     <option value="houston">Houston (Marq'E)</option>
@@ -3999,82 +3999,7 @@
             });
         });
 
-        // ==========================================
-        // TICKET POPUP PANEL
-        // Opens when clicking booking buttons
-        // ==========================================
-        const ticketPanel = document.getElementById('ticketPanel');
-        const ticketOverlay = document.getElementById('ticketOverlay');
-        const ticketClose = document.getElementById('ticketClose');
-        const ticketLocationSelect = document.getElementById('ticketLocation');
-
-        // Booking URLs by location
-        const bookingUrls = {
-            philadelphia: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-            chicago: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-            'west-nyack': 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-            lincoln: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-            houston: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-            manassas: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-            antwerp: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products'
-        };
-
-        // Select booking buttons (excludes anchor links with #)
-        const bookingButtons = document.querySelectorAll('.btn-tickets, .btn-primary[href*="roller"], .btn-nav[href*="roller"]');
-
-        // Open ticket panel (smart: bypass if location already saved)
-        function openTicketPanel(e) {
-            if (e) e.preventDefault();
-
-            // Check if location is already saved in localStorage
-            const savedLocation = localStorage.getItem('timeMissionLocation');
-
-            if (savedLocation) {
-                // Location already selected - go directly to booking
-                const locationKey = savedLocation.toLowerCase().replace(/\s+/g, '').replace(/,/g, '');
-                const bookingUrl = bookingUrls[locationKey] || bookingUrls.philadelphia;
-                window.open(bookingUrl, '_blank');
-            } else {
-                // No location saved - show popup with selector
-                ticketPanel.classList.add('active');
-                ticketOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        // Close ticket panel
-        function closeTicketPanel() {
-            ticketPanel.classList.remove('active');
-            ticketOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // Attach click handlers to booking buttons
-        bookingButtons.forEach(btn => {
-            btn.addEventListener('click', openTicketPanel);
-        });
-
-        // Close handlers
-        ticketClose.addEventListener('click', closeTicketPanel);
-        ticketOverlay.addEventListener('click', closeTicketPanel);
-
-        // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && ticketPanel.classList.contains('active')) {
-                closeTicketPanel();
-            }
-        });
-
-        // Update booking URL based on location selection
-        ticketLocationSelect.addEventListener('change', (e) => {
-            const ticketBookBtn = document.getElementById('ticketBookBtn');
-            const selectedLocation = e.target.value;
-            if (selectedLocation && bookingUrls[selectedLocation]) {
-                ticketBookBtn.href = bookingUrls[selectedLocation];
-            }
-        });
-
-        // ==========================================
+                // ==========================================
         // GAME PROMO POPUP
         // Shows after 8 seconds, remembers dismissal
         // ==========================================
@@ -4121,6 +4046,7 @@
     </script>
     <script defer src="js/nav.js?v=2"></script>
     <script src="js/locations.js"></script>
+    <script src="js/ticket-panel.js"></script>
     <script>
     (function() {
         var id = 'manassas';

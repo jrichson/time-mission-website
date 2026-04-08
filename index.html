@@ -1838,11 +1838,12 @@
             background: var(--gradient-primary);
             color: var(--white);
             text-decoration: none;
-            font-family: var(--tech);
+            font-family: var(--display);
             font-weight: 400;
-            font-size: 0.85rem;
-            letter-spacing: 0.08em;
+            font-size: 1.3rem;
+            letter-spacing: 0.06em;
             border-radius: 100px;
+            white-space: nowrap;
             transition: all 0.3s ease;
             text-transform: uppercase;
             box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
@@ -2822,7 +2823,7 @@
             <div class="location-overlay-left">
                 <div class="location-group">
                     <div class="location-group-title">United States</div>
-                    <a href="chicago.html" data-city="Chicago">IL - Chicago (Mount Prospect)</a>
+                    <a href="mount-prospect.html" data-city="Mount Prospect">IL - Chicago (Mount Prospect)</a>
                     <a href="philadelphia.html" data-city="Philadelphia">PA - Philadelphia</a>
                     <a href="west-nyack.html" data-city="West Nyack">NY - West Nyack</a>
                     <a href="lincoln.html" data-city="Lincoln">RI - Lincoln</a>
@@ -3193,7 +3194,7 @@
                 <p class="testimonial-text">"Perfect for team building! Our company had a blast competing against each other. The immersive environments and variety of challenges kept everyone engaged."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Mike R.</span>
-                    <span class="author-location">— Chicago</span>
+                    <span class="author-location">— Mount Prospect</span>
                 </div>
             </div>
 
@@ -3202,7 +3203,7 @@
                 <p class="testimonial-text">"My son's birthday party was absolutely epic! The staff was amazing and all the kids had an incredible time. Highly recommend for any celebration."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Jennifer L.</span>
-                    <span class="author-location">— Houston</span>
+                    <span class="author-location">— Manassas</span>
                 </div>
             </div>
         </div>
@@ -3367,7 +3368,7 @@
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                         </button>
                         <div class="footer-location-list">
-                            <a href="chicago.html">Chicago (Mount Prospect)</a>
+                            <a href="mount-prospect.html">Chicago (Mount Prospect)</a>
                             <a href="philadelphia.html">Philadelphia</a>
                             <a href="west-nyack.html">West Nyack</a>
                             <a href="lincoln.html">Lincoln</a>
@@ -3426,7 +3427,7 @@
                 <select id="ticketLocation">
                     <option value="">Select a Location</option>
                     <option value="philadelphia">Philadelphia</option>
-                    <option value="chicago">Chicago (Mount Prospect)</option>
+                    <option value="mount-prospect">Chicago (Mount Prospect)</option>
                     <option value="west-nyack">West Nyack</option>
                     <option value="lincoln">Lincoln</option>
                     <option value="houston">Houston (Marq'E)</option>
@@ -4015,78 +4016,7 @@
             });
         });
 
-        // ==========================================
-        // TICKET POPUP PANEL
-        // Opens when clicking booking buttons
-        // ==========================================
-        const ticketPanel = document.getElementById('ticketPanel');
-        const ticketOverlay = document.getElementById('ticketOverlay');
-        const ticketClose = document.getElementById('ticketClose');
-        const ticketLocationSelect = document.getElementById('ticketLocation');
-
-        // Booking URLs by location
-        const bookingUrls = {
-            philadelphia: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-            chicago: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
-            'west-nyack': '#',
-            lincoln: '#',
-            houston: '#',
-            manassas: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-            antwerp: '#'
-        };
-
-        // Select booking buttons (excludes anchor links with #)
-        const bookingButtons = document.querySelectorAll('.btn-tickets, .btn-primary[href*="roller"], .btn-nav[href*="roller"]');
-
-        // Open ticket panel — always show so user can confirm/change location
-        function openTicketPanel(e) {
-            if (e) e.preventDefault();
-
-            // Pre-select saved location if available
-            const savedLocation = localStorage.getItem('timeMissionLocation');
-            if (savedLocation && ticketLocationSelect) {
-                ticketLocationSelect.value = savedLocation.toLowerCase().replace(/\s+/g, '-');
-                ticketLocationSelect.dispatchEvent(new Event('change'));
-            }
-
-            ticketPanel.classList.add('active');
-            ticketOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Close ticket panel
-        function closeTicketPanel() {
-            ticketPanel.classList.remove('active');
-            ticketOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // Attach click handlers to booking buttons
-        bookingButtons.forEach(btn => {
-            btn.addEventListener('click', openTicketPanel);
-        });
-
-        // Close handlers
-        ticketClose.addEventListener('click', closeTicketPanel);
-        ticketOverlay.addEventListener('click', closeTicketPanel);
-
-        // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && ticketPanel.classList.contains('active')) {
-                closeTicketPanel();
-            }
-        });
-
-        // Update booking URL based on location selection
-        ticketLocationSelect.addEventListener('change', (e) => {
-            const ticketBookBtn = document.getElementById('ticketBookBtn');
-            const selectedLocation = e.target.value;
-            if (selectedLocation && bookingUrls[selectedLocation]) {
-                ticketBookBtn.href = bookingUrls[selectedLocation];
-            }
-        });
-
-        // ==========================================
+                // ==========================================
         // GAME PROMO POPUP
         // Shows after 8 seconds, remembers dismissal
         // ==========================================
@@ -4133,5 +4063,6 @@
     </script>
     <script defer src="js/nav.js?v=2"></script>
     <script src="js/locations.js"></script>
+    <script src="js/ticket-panel.js"></script>
 </body>
 </html>

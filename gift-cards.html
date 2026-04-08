@@ -797,7 +797,7 @@
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                         </button>
                         <div class="footer-location-list">
-                            <a href="chicago.html">Chicago (Mount Prospect)</a>
+                            <a href="mount-prospect.html">Chicago (Mount Prospect)</a>
                             <a href="philadelphia.html">Philadelphia</a>
                             <a href="west-nyack.html">West Nyack</a>
                             <a href="lincoln.html">Lincoln</a>
@@ -856,7 +856,7 @@
                 <select id="ticketLocation">
                     <option value="">Select a Location</option>
                     <option value="philadelphia">Philadelphia</option>
-                    <option value="chicago">Chicago (Mount Prospect)</option>
+                    <option value="mount-prospect">Chicago (Mount Prospect)</option>
                     <option value="west-nyack">West Nyack</option>
                     <option value="lincoln">Lincoln</option>
                     <option value="houston">Houston (Marq'E)</option>
@@ -932,70 +932,6 @@
                 }
             });
         });
-
-        // Ticket Popup Panel
-        const ticketPanel = document.getElementById('ticketPanel');
-        const ticketOverlay = document.getElementById('ticketOverlay');
-        const ticketClose = document.getElementById('ticketClose');
-        const ticketLocationSelect = document.getElementById('ticketLocation');
-
-        const bookingUrls = {
-            philadelphia: '#',
-            chicago: '#',
-            'west-nyack': '#',
-            lincoln: '#',
-            houston: '#',
-            manassas: '#',
-            antwerp: '#'
-        };
-
-        const bookingButtons = document.querySelectorAll('.btn-tickets, .btn-primary[href*="roller"]');
-
-        function openTicketPanel(e) {
-            if (e) e.preventDefault();
-
-            // Check if location is already saved in localStorage
-            const savedLocation = localStorage.getItem('timeMissionLocation');
-
-            if (savedLocation) {
-                // Location already selected - go directly to booking
-                const locationKey = savedLocation.toLowerCase().replace(/\s+/g, '').replace(/,/g, '');
-                const bookingUrl = bookingUrls[locationKey] || bookingUrls.philadelphia;
-                window.open(bookingUrl, '_blank');
-            } else {
-                // No location saved - show popup with selector
-                ticketPanel.classList.add('active');
-                ticketOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function closeTicketPanel() {
-            ticketPanel.classList.remove('active');
-            ticketOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        bookingButtons.forEach(btn => {
-            btn.addEventListener('click', openTicketPanel);
-        });
-
-        ticketClose.addEventListener('click', closeTicketPanel);
-        ticketOverlay.addEventListener('click', closeTicketPanel);
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && ticketPanel.classList.contains('active')) {
-                closeTicketPanel();
-            }
-        });
-
-        ticketLocationSelect.addEventListener('change', (e) => {
-            const ticketBookBtn = document.getElementById('ticketBookBtn');
-            const selectedLocation = e.target.value;
-            if (selectedLocation && bookingUrls[selectedLocation]) {
-                ticketBookBtn.href = bookingUrls[selectedLocation];
-            }
-        });
     </script>
     <script defer src="js/nav.js"></script>
     <script>
@@ -1006,5 +942,6 @@
     });
     </script>
     <script src="js/locations.js"></script>
+    <script src="js/ticket-panel.js"></script>
 </body>
 </html>

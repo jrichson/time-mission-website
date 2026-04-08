@@ -58,17 +58,29 @@
            HERO SECTION
            ========================================== */
         .hero {
-            min-height: auto;
+            min-height: 55vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 9rem 2rem 5rem;
+            padding: 8rem 2rem 6rem;
             overflow: hidden;
+            margin-bottom: 0;
             background:
-                linear-gradient(to bottom, transparent 70%, var(--dark) 100%),
                 radial-gradient(ellipse at 30% 80%, rgba(255, 107, 44, 0.12) 0%, transparent 50%),
                 radial-gradient(ellipse at 70% 20%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
                 radial-gradient(ellipse at 50% 50%, rgba(255, 0, 229, 0.06) 0%, transparent 60%);
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 160px;
+            background: linear-gradient(to bottom, transparent, var(--dark));
+            pointer-events: none;
+            z-index: 1;
         }
 
         .hero-content {
@@ -175,7 +187,8 @@
 
         @media (max-width: 768px) {
             .hero {
-                padding: 9rem 2rem 4rem;
+                min-height: 50vh;
+                padding: 8rem 2rem 5rem;
                 overflow: visible;
             }
             .hero-badge {
@@ -280,7 +293,8 @@
            PORTALS GRID
            ========================================== */
         .portals-section {
-            padding: 4rem 2rem 6rem;
+            padding: 0 2rem 6rem;
+            margin-top: -2rem;
         }
 
         .portals-grid {
@@ -1003,7 +1017,7 @@
             <div class="location-overlay-left">
                 <div class="location-group">
                     <div class="location-group-title">United States</div>
-                    <a href="chicago.html" data-city="Chicago">IL - Chicago (Mount Prospect)</a>
+                    <a href="mount-prospect.html" data-city="Mount Prospect">IL - Chicago (Mount Prospect)</a>
                     <a href="philadelphia.html" data-city="Philadelphia">PA - Philadelphia</a>
                     <a href="west-nyack.html" data-city="West Nyack">NY - West Nyack</a>
                     <a href="lincoln.html" data-city="Lincoln">RI - Lincoln</a>
@@ -1884,7 +1898,7 @@
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                         </button>
                         <div class="footer-location-list">
-                            <a href="chicago.html">Chicago (Mount Prospect)</a>
+                            <a href="mount-prospect.html">Chicago (Mount Prospect)</a>
                             <a href="philadelphia.html">Philadelphia</a>
                             <a href="west-nyack.html">West Nyack</a>
                             <a href="lincoln.html">Lincoln</a>
@@ -1943,7 +1957,7 @@
                 <select id="ticketLocation">
                     <option value="">Select a Location</option>
                     <option value="philadelphia">Philadelphia</option>
-                    <option value="chicago">Chicago (Mount Prospect)</option>
+                    <option value="mount-prospect">Chicago (Mount Prospect)</option>
                     <option value="west-nyack">West Nyack</option>
                     <option value="lincoln">Lincoln</option>
                     <option value="houston">Houston (Marq'E)</option>
@@ -2054,67 +2068,8 @@
             }, { passive: true });
         }
 
-        // Ticket Popup Panel
-        const ticketPanel = document.getElementById('ticketPanel');
-        const ticketOverlay = document.getElementById('ticketOverlay');
-        const ticketClose = document.getElementById('ticketClose');
-        const ticketLocationSelect = document.getElementById('ticketLocation');
-
-        const bookingUrls = {
-            philadelphia: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-            chicago: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
-            'west-nyack': '#',
-            lincoln: '#',
-            houston: '#',
-            manassas: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-            antwerp: '#'
-        };
-
-        const bookingButtons = document.querySelectorAll('.btn-tickets, .btn-book-now, .portal-cta');
-
-        // Open ticket panel — always show so user can confirm/change location
-        function openTicketPanel(e) {
-            if (e) e.preventDefault();
-
-            // Pre-select saved location if available
-            const savedLocation = localStorage.getItem('timeMissionLocation');
-            if (savedLocation && ticketLocationSelect) {
-                ticketLocationSelect.value = savedLocation.toLowerCase().replace(/\s+/g, '-');
-                ticketLocationSelect.dispatchEvent(new Event('change'));
-            }
-
-            ticketPanel.classList.add('active');
-            ticketOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeTicketPanel() {
-            ticketPanel.classList.remove('active');
-            ticketOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        bookingButtons.forEach(btn => {
-            btn.addEventListener('click', openTicketPanel);
-        });
-
-        ticketClose.addEventListener('click', closeTicketPanel);
-        ticketOverlay.addEventListener('click', closeTicketPanel);
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && ticketPanel.classList.contains('active')) {
-                closeTicketPanel();
-            }
-        });
-
-        ticketLocationSelect.addEventListener('change', (e) => {
-            const ticketBookBtn = document.getElementById('ticketBookBtn');
-            const selectedLocation = e.target.value;
-            if (selectedLocation && bookingUrls[selectedLocation]) {
-                ticketBookBtn.href = bookingUrls[selectedLocation];
-            }
-        });
     </script>
     <script src="js/locations.js"></script>
+    <script src="js/ticket-panel.js"></script>
 </body>
 </html>

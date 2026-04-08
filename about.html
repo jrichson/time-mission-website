@@ -153,11 +153,45 @@
             aspect-ratio: 4 / 5;
         }
 
-        .what-is-photo img {
+        .what-is-carousel {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .what-is-carousel img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             object-position: center 30%;
+            flex-shrink: 0;
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 2;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .carousel-dot.active {
+            background: var(--orange);
+            transform: scale(1.3);
         }
 
         .what-is-photo::after {
@@ -167,6 +201,7 @@
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             pointer-events: none;
+            z-index: 1;
         }
 
         @media (max-width: 800px) {
@@ -178,7 +213,7 @@
             .what-is-photo {
                 order: -1;
                 aspect-ratio: 16 / 9;
-                max-height: 260px;
+                max-height: 300px;
             }
 
             .what-is-content {
@@ -769,7 +804,7 @@
             text-decoration: none;
             font-family: var(--tech);
             font-size: 0.9rem;
-            font-weight: 600;
+            font-weight: 400;
             border-radius: 100px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -897,8 +932,21 @@
                 <p class="what-is-text">Choose your session length, pick your missions, and play as many rooms as you can. Each challenge lasts just a few minutes, so you can keep moving, keep competing, and keep the energy&nbsp;high.</p>
                 <p class="what-is-text">Whether it's a birthday, a date night, a team outing, or just a crew that wants to see who's really the best — Time Mission is where you come to&nbsp;play.</p>
             </div>
-            <div class="what-is-photo reveal">
-                <img src="assets/photos/experiences/_Time-Mission_0321.jpg" alt="Players having fun inside Time Mission challenge room" loading="lazy">
+            <div class="what-is-photo reveal" id="whatIsCarousel">
+                <div class="what-is-carousel">
+                    <img src="assets/photos/experiences/_Time-Mission_0321.jpg" alt="Players in a Time Mission challenge room" loading="lazy">
+                    <img src="assets/photos/experiences/_Time-Mission_0230.jpg" alt="Team competing in Time Mission" loading="lazy">
+                    <img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix experience" loading="lazy">
+                    <img src="assets/photos/experiences/_Time-Mission_0450.jpg" alt="Players having fun at Time Mission" loading="lazy">
+                    <img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang experience" loading="lazy">
+                </div>
+                <div class="carousel-dots">
+                    <button class="carousel-dot active" aria-label="Slide 1"></button>
+                    <button class="carousel-dot" aria-label="Slide 2"></button>
+                    <button class="carousel-dot" aria-label="Slide 3"></button>
+                    <button class="carousel-dot" aria-label="Slide 4"></button>
+                    <button class="carousel-dot" aria-label="Slide 5"></button>
+                </div>
             </div>
         </div>
     </section>
@@ -1047,7 +1095,7 @@
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                         </button>
                         <div class="footer-location-list">
-                            <a href="chicago.html">Chicago (Mount Prospect)</a>
+                            <a href="mount-prospect.html">Chicago (Mount Prospect)</a>
                             <a href="philadelphia.html">Philadelphia</a>
                             <a href="west-nyack.html">West Nyack</a>
                             <a href="lincoln.html">Lincoln</a>
@@ -1107,5 +1155,43 @@
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
     <script src="js/locations.js"></script>
+    <script src="js/ticket-panel.js"></script>
+    <script>
+    // What-Is photo carousel
+    (function() {
+        const wrap = document.getElementById('whatIsCarousel');
+        if (!wrap) return;
+        const track = wrap.querySelector('.what-is-carousel');
+        const dots = wrap.querySelectorAll('.carousel-dot');
+        const total = dots.length;
+        let current = 0;
+        let timer;
+
+        function goTo(i) {
+            current = (i + total) % total;
+            track.style.transform = 'translateX(-' + (current * 100) + '%)';
+            dots.forEach((d, idx) => d.classList.toggle('active', idx === current));
+        }
+
+        function autoPlay() {
+            timer = setInterval(() => goTo(current + 1), 4000);
+        }
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => { clearInterval(timer); goTo(i); autoPlay(); });
+        });
+
+        // Swipe support
+        let startX = 0;
+        wrap.addEventListener('touchstart', e => { startX = e.touches[0].clientX; clearInterval(timer); }, { passive: true });
+        wrap.addEventListener('touchend', e => {
+            const diff = startX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 40) goTo(current + (diff > 0 ? 1 : -1));
+            autoPlay();
+        }, { passive: true });
+
+        autoPlay();
+    })();
+    </script>
 </body>
 </html>
