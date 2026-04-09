@@ -19,10 +19,10 @@
         philadelphia: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
         'mount-prospect': 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
         manassas: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-        'west-nyack': '',
-        lincoln: '',
-        houston: '',
-        antwerp: ''
+        'west-nyack': 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+        lincoln: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+        houston: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+        antwerp: 'https://tickets.timemission.com/onlinecheckout/en-us/products'
     };
 
     // Detect if this is a location page (body has data-location attribute)
@@ -81,6 +81,20 @@
 
     // Update booking URL when location changes
     ticketLocationSelect.addEventListener('change', syncBookingBtn);
+
+    // Explicitly handle "Continue to Booking" click to ensure navigation works
+    if (ticketBookBtn) {
+        ticketBookBtn.removeAttribute('target');
+        ticketBookBtn.addEventListener('click', function (e) {
+            var url = ticketBookBtn.getAttribute('href');
+            if (!url || url === '#') {
+                e.preventDefault();
+                return;
+            }
+            e.preventDefault();
+            window.location.href = url;
+        });
+    }
 
     // Expose for external use
     window.TMTicketPanel = {

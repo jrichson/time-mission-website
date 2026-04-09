@@ -92,11 +92,19 @@
         });
 
         // Handle location selection
-        // Currently uses href="#" as placeholder; will navigate to location pages in production
         locationLinks.forEach(link => {
+            // Show info panel on hover (desktop) and click
+            link.addEventListener('mouseenter', () => {
+                const cityName = link.dataset.city;
+                if (cityName) showLocationInfo(cityName);
+            });
+
             link.addEventListener('click', (e) => {
                 const cityName = link.dataset.city;
-                if (cityName) syncAllLocations(cityName);
+                if (cityName) {
+                    syncAllLocations(cityName);
+                    showLocationInfo(cityName);
+                }
 
                 // Desktop: save location and navigate to location page
                 if (!window.matchMedia('(max-width: 768px)').matches) {
@@ -119,7 +127,7 @@
 
     // Location data for info panel
     const locationData = {
-        'Chicago': {
+        'Mount Prospect': {
             name: 'IL – Chicago (Mount Prospect)',
             address: '1500 E Golf Rd\nMount Prospect, IL 60056',
             phone: '(847) 243-5500',
