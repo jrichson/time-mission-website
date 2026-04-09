@@ -133,6 +133,7 @@
             phone: '(847) 243-5500',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
             bookUrl: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
+            pageUrl: 'mount-prospect.html',
             mapQuery: '1500+E+Golf+Rd,+Mount+Prospect,+IL+60056'
         },
         'Philadelphia': {
@@ -141,6 +142,7 @@
             phone: '(215) 515-3500',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+            pageUrl: 'philadelphia.html',
             mapQuery: '325+N+12th+St,+Philadelphia,+PA+19107'
         },
         'West Nyack': {
@@ -149,6 +151,7 @@
             phone: '(845) 348-1555',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 11:00 AM - 7:00 PM',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+            pageUrl: 'west-nyack.html',
             mapQuery: '4590+Palisades+Center+Dr,+West+Nyack,+NY+10994'
         },
         'Lincoln': {
@@ -157,6 +160,7 @@
             phone: '(401) 333-4100',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+            pageUrl: 'lincoln.html',
             mapQuery: '622+George+Washington+Hwy,+Lincoln,+RI+02865'
         },
         'Houston': {
@@ -165,6 +169,7 @@
             phone: '(713) 322-7100',
             hours: 'Coming Soon',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+            pageUrl: 'houston.html',
             mapQuery: '7620+Katy+Fwy,+Houston,+TX+77024'
         },
         'Manassas': {
@@ -173,6 +178,7 @@
             phone: '(703) 420-3600',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
             bookUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
+            pageUrl: 'manassas.html',
             mapQuery: '8305+Sudley+Rd,+Manassas,+VA+20110'
         },
         'Antwerp': {
@@ -181,6 +187,7 @@
             phone: '+32 3 444 55 66',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+            pageUrl: 'antwerp.html',
             mapQuery: 'Borsbeeksebrug+30,+2600+Antwerp,+Belgium'
         }
     };
@@ -196,10 +203,12 @@
         if (!data || !details) return;
 
         infoPanel.querySelector('.location-info-name').textContent = data.name;
-        infoPanel.querySelector('.location-info-address').innerHTML = data.address.replace(/\n/g, '<br>');
+        const addrEl = infoPanel.querySelector('.location-info-address');
+        addrEl.innerHTML = data.address.replace(/\n/g, '<br>');
+        addrEl.href = 'https://www.google.com/maps/dir/?api=1&destination=' + data.mapQuery;
         infoPanel.querySelector('.location-info-phone').textContent = data.phone;
         infoPanel.querySelector('.location-info-hours').innerHTML = data.hours.replace(/\n/g, '<br>');
-        infoPanel.querySelector('.location-info-book').href = data.bookUrl;
+        infoPanel.querySelector('.location-info-book').href = data.pageUrl + '?book=1';
 
         // Show map embed
         if (mapEl && data.mapQuery) {

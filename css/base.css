@@ -28,14 +28,14 @@
 
 html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 body {
     font-family: var(--body);
     background: var(--black);
     color: var(--white);
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 /* Noise texture overlay — used on all sub-pages */

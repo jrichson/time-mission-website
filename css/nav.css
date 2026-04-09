@@ -515,6 +515,30 @@
     line-height: 1.6;
 }
 
+.location-dropdown a.location-info-address {
+    display: block;
+    text-decoration: none;
+    color: var(--white-soft, #ccc);
+    transition: color 0.2s;
+}
+
+.location-dropdown a.location-info-address:hover {
+    color: var(--cyan, #00e5ff);
+}
+
+.location-dropdown a.location-info-address::after {
+    content: 'Get Directions \2197';
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--cyan, #00e5ff);
+    opacity: 0.8;
+}
+
+.location-dropdown a.location-info-address:hover::after {
+    opacity: 1;
+}
+
 .location-info-phone {
     margin-top: 0.4rem;
     color: var(--cyan, #00e5ff);

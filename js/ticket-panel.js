@@ -1,6 +1,9 @@
 // ==========================================
 // TICKET POPUP PANEL — Shared across all pages
 // Single source of truth for booking logic
+// On index: Book Now opens ticket panel, Continue routes through location page
+// On location pages: Book Now navigates directly to booking
+// Supports ?book=1 auto-redirect from ticket panel flow
 // ==========================================
 (function () {
     'use strict';
@@ -11,10 +14,7 @@
     var ticketLocationSelect = document.getElementById('ticketLocation');
     var ticketBookBtn = document.getElementById('ticketBookBtn');
 
-    if (!ticketPanel || !ticketLocationSelect) return;
-
     // Central booking URLs — SINGLE SOURCE OF TRUTH
-    // Update here and every page picks it up automatically
     var bookingUrls = {
         philadelphia: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
         'mount-prospect': 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
@@ -25,15 +25,51 @@
         antwerp: 'https://tickets.timemission.com/onlinecheckout/en-us/products'
     };
 
+    // Location page URLs — for routing through location page before booking
+    var locationPages = {
+        philadelphia: 'philadelphia.html',
+        'mount-prospect': 'mount-prospect.html',
+        manassas: 'manassas.html',
+        'west-nyack': 'west-nyack.html',
+        lincoln: 'lincoln.html',
+        houston: 'houston.html',
+        antwerp: 'antwerp.html'
+    };
+
     // Detect if this is a location page (body has data-location attribute)
     var pageLocation = document.body.dataset.location || '';
 
-    // Sync the "Continue to Booking" button href with the selected location
+    // --- Auto-redirect: location pages with ?book=1 go straight to booking ---
+    if (pageLocation && window.location.search.indexOf('book=1') !== -1) {
+        // Clean the URL so the back button doesn't trigger redirect again
+        if (history.replaceState) {
+            history.replaceState(null, '', window.location.pathname);
+        }
+        var autoUrl = bookingUrls[pageLocation];
+        if (autoUrl) {
+            // Wait for page to fully load so the history entry is established,
+            // then redirect — back button will return to this location page
+            window.addEventListener('load', function () {
+                setTimeout(function () { window.location.href = autoUrl; }, 300);
+            });
+        }
+    }
+
+    if (!ticketPanel || !ticketLocationSelect) return;
+
+    // Sync the "Continue to Booking" button with the selected location
     function syncBookingBtn() {
         if (!ticketBookBtn) return;
         var selected = ticketLocationSelect.value;
-        var url = bookingUrls[selected];
-        ticketBookBtn.href = (url && url !== '') ? url : '#';
+        var page = locationPages[selected];
+        // On index/non-location pages: route through location page
+        // On location pages: go directly to booking
+        if (!pageLocation && page) {
+            ticketBookBtn.href = page + '?book=1';
+        } else {
+            var url = bookingUrls[selected];
+            ticketBookBtn.href = (url && url !== '') ? url : '#';
+        }
     }
 
     // Open ticket panel
@@ -82,7 +118,7 @@
     // Update booking URL when location changes
     ticketLocationSelect.addEventListener('change', syncBookingBtn);
 
-    // Explicitly handle "Continue to Booking" click to ensure navigation works
+    // Handle "Continue to Booking" click
     if (ticketBookBtn) {
         ticketBookBtn.removeAttribute('target');
         ticketBookBtn.addEventListener('click', function (e) {
