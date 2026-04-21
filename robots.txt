@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /_archive/
+Disallow: /test-results/
+Disallow: /.playwright-mcp/
+
+Sitemap: https://timemission.com/sitemap.xml
