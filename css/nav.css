@@ -517,13 +517,17 @@
 
 .location-dropdown a.location-info-address {
     display: block;
+    padding: 0;
     text-decoration: none;
     color: var(--white-soft, #ccc);
     transition: color 0.2s;
+    border-radius: 0;
+    background: none;
 }
 
 .location-dropdown a.location-info-address:hover {
     color: var(--cyan, #00e5ff);
+    background: none;
 }
 
 .location-dropdown a.location-info-address::after {

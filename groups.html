@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Groups & Parties | LOL Command Center</title>
+    <title>Groups & Events | Time Mission</title>
+    <meta property="og:title" content="Groups & Events | Time Mission">
     <link rel="icon" type="image/svg+xml" href="assets/logo/TM_Favicon.svg">
     <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/nav.css?v=7">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/ticket-panel.css">
     <style>
         /* Hero Section */
         .hero {
@@ -39,7 +41,6 @@
             z-index: 0;
         }
 
-        /* Animated grid background */
         .hero-grid {
             position: absolute;
             top: 0;
@@ -168,12 +169,7 @@
             }
         }
 
-        /* Event Types Section */
-        .event-types {
-            padding: 6rem 2rem;
-            position: relative;
-        }
-
+        /* Section Common */
         .section-header {
             text-align: center;
             margin-bottom: 4rem;
@@ -193,116 +189,131 @@
             margin: 0 auto;
         }
 
-        .event-grid {
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 107, 44, 0.1);
+            border: 1px solid rgba(255, 107, 44, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        /* Two Paths Section */
+        .two-paths {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .two-paths-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 2rem;
-            max-width: 1400px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
-        .event-card {
+        .path-card {
             background: var(--dark);
             border-radius: 24px;
-            overflow: hidden;
+            padding: 2.5rem;
             position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
         }
 
-        .event-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 107, 44, 0.3);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        .path-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
         }
 
-        .event-card-image {
-            height: 200px;
-            background: linear-gradient(135deg, var(--dark-light) 0%, var(--dark) 100%);
-            position: relative;
-            overflow: hidden;
+        .path-card.recommended {
+            border-color: rgba(255, 107, 44, 0.4);
+            background: linear-gradient(135deg, rgba(255, 107, 44, 0.05) 0%, var(--dark) 100%);
+        }
+
+        .path-recommended-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-primary);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+        }
+
+        .path-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 1.5rem;
         }
 
-        .event-card-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .event-card-icon svg {
-            width: 40px;
-            height: 40px;
-            stroke-width: 1.5;
-        }
-
-        .event-card:nth-child(1) .event-card-icon {
-            background: linear-gradient(135deg, rgba(255, 107, 44, 0.2), rgba(255, 0, 229, 0.2));
+        .path-card.recommended .path-icon {
+            background: rgba(255, 107, 44, 0.15);
             color: var(--orange);
         }
 
-        .event-card:nth-child(2) .event-card-icon {
-            background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(170, 255, 0, 0.2));
+        .path-card:not(.recommended) .path-icon {
+            background: rgba(0, 229, 255, 0.1);
             color: var(--cyan);
         }
 
-        .event-card:nth-child(3) .event-card-icon {
-            background: linear-gradient(135deg, rgba(255, 0, 229, 0.2), rgba(255, 107, 44, 0.2));
-            color: var(--magenta);
+        .path-icon svg {
+            width: 28px;
+            height: 28px;
         }
 
-        .event-card:nth-child(4) .event-card-icon {
-            background: linear-gradient(135deg, rgba(170, 255, 0, 0.2), rgba(0, 229, 255, 0.2));
-            color: var(--lime);
-        }
-
-        .event-card-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, transparent 0%, var(--dark) 100%);
-        }
-
-        .event-card-content {
-            padding: 2rem;
-        }
-
-        .event-card-title {
+        .path-title {
             font-family: var(--display);
             font-size: 1.75rem;
             margin-bottom: 0.75rem;
             letter-spacing: 0.02em;
         }
 
-        .event-card-text {
+        .path-description {
             color: var(--gray);
             font-size: 0.95rem;
-            line-height: 1.6;
+            line-height: 1.7;
             margin-bottom: 1.5rem;
         }
 
-        .event-card-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+        .path-perfect {
+            font-size: 0.85rem;
+            color: var(--white-soft);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .event-feature {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.4rem 0.8rem;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            color: var(--white-soft);
+        .path-perfect strong {
+            color: var(--orange);
+            font-weight: 600;
+        }
+
+        .path-card .btn-primary,
+        .path-card .btn-secondary {
+            margin-top: auto;
+            justify-content: center;
         }
 
         /* Experience Gallery - Full-Bleed Photo Showcase */
@@ -432,29 +443,6 @@
             color: var(--orange);
         }
 
-        .gallery-quote {
-            position: relative;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-left: 3px solid var(--orange);
-            border-radius: 0 12px 12px 0;
-            margin-bottom: 2.5rem;
-        }
-
-        .gallery-quote p {
-            font-style: italic;
-            color: var(--white-soft);
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 0.75rem;
-        }
-
-        .gallery-quote cite {
-            font-size: 0.85rem;
-            color: var(--gray);
-            font-style: normal;
-        }
-
         .btn-gallery {
             display: inline-flex;
             align-items: center;
@@ -489,7 +477,6 @@
             transform: translateX(4px);
         }
 
-        /* Gallery Section Dividers */
         .gallery-divider {
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(255, 107, 44, 0.3), transparent);
@@ -531,14 +518,14 @@
             }
         }
 
-        /* Packages Section */
-        .packages {
+        /* How It Works Section */
+        .how-it-works {
             padding: 6rem 2rem;
             background: var(--dark);
             position: relative;
         }
 
-        .packages::before {
+        .how-it-works::before {
             content: '';
             position: absolute;
             top: 0;
@@ -548,274 +535,51 @@
             background: linear-gradient(90deg, transparent, rgba(255, 107, 44, 0.3), transparent);
         }
 
-        .packages-grid {
+        .steps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        .package-card {
+        .step-card {
             background: var(--black);
             border-radius: 24px;
             padding: 2.5rem;
             position: relative;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.4s ease;
+            text-align: center;
         }
 
-        .package-card:hover {
-            border-color: rgba(255, 107, 44, 0.3);
+        .step-card:hover {
+            border-color: rgba(255, 107, 44, 0.2);
             transform: translateY(-4px);
         }
 
-        .package-card.featured {
-            border-color: var(--orange);
-            background: linear-gradient(135deg, rgba(255, 107, 44, 0.05) 0%, var(--black) 100%);
-        }
-
-        .package-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--gradient-primary);
-            padding: 0.4rem 1rem;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .package-name {
+        .step-number {
             font-family: var(--display);
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.02em;
-        }
-
-        .package-price {
-            font-size: 0.95rem;
-            color: var(--gray);
-            margin-bottom: 2rem;
-        }
-
-        .package-price span {
-            font-family: var(--display);
-            font-size: 2.5rem;
-            color: var(--white);
-        }
-
-        .package-features {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .package-features li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.95rem;
-            color: var(--white-soft);
-        }
-
-        .package-features li:last-child {
-            border-bottom: none;
-        }
-
-        .package-features svg {
-            width: 18px;
-            height: 18px;
-            color: var(--lime);
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .package-cta {
-            display: block;
-            text-align: center;
-            background: transparent;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            color: var(--white);
-            padding: 1rem;
-            border-radius: 100px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .package-cta:hover {
-            border-color: var(--orange);
-            background: rgba(255, 107, 44, 0.1);
-            color: var(--orange);
-        }
-
-        .package-card.featured .package-cta {
-            background: var(--gradient-primary);
-            border: none;
-            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.3);
-        }
-
-        .package-card.featured .package-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(239, 75, 35, 0.5);
-            color: var(--white);
-        }
-
-        /* What's Included */
-        .included {
-            padding: 6rem 2rem;
-        }
-
-        .included-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .included-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 1.5rem;
-            background: var(--dark);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .included-item:hover {
-            border-color: rgba(255, 107, 44, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .included-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: rgba(255, 107, 44, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .included-icon svg {
-            width: 24px;
-            height: 24px;
-            color: var(--orange);
-        }
-
-        .included-content h4 {
-            font-family: var(--display);
-            font-size: 1.1rem;
-            margin-bottom: 0.25rem;
-            letter-spacing: 0.02em;
-        }
-
-        .included-content p {
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-
-        /* Testimonials */
-        .testimonials {
-            padding: 6rem 2rem;
-            background: var(--dark);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .testimonials::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .testimonial-card {
-            background: var(--black);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-        }
-
-        .testimonial-quote {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
             font-size: 4rem;
-            font-family: Georgia, serif;
-            color: rgba(255, 107, 44, 0.15);
-            line-height: 1;
-        }
-
-        .testimonial-text {
-            font-size: 1rem;
-            line-height: 1.7;
-            color: var(--white-soft);
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .testimonial-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
             background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.1rem;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 1rem;
         }
 
-        .testimonial-info h5 {
-            font-weight: 600;
-            margin-bottom: 0.15rem;
+        .step-title {
+            font-family: var(--display);
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.02em;
         }
 
-        .testimonial-info span {
-            font-size: 0.85rem;
+        .step-text {
             color: var(--gray);
-        }
-
-        .testimonial-rating {
-            display: flex;
-            gap: 0.25rem;
-            margin-top: 0.5rem;
-        }
-
-        .testimonial-rating svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--orange);
-            color: var(--orange);
+            font-size: 0.95rem;
+            line-height: 1.7;
         }
 
         /* FAQ Section */
@@ -935,221 +699,6 @@
             flex-wrap: wrap;
         }
 
-        .cta-contact {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 2rem;
-            color: var(--gray);
-            font-size: 0.95rem;
-        }
-
-        .cta-contact a {
-            color: var(--cyan);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .cta-contact a:hover {
-            color: var(--white);
-        }
-
-        /* Ticket Popup Panel */
-        .ticket-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            z-index: 9998;
-        }
-
-        .ticket-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .ticket-panel {
-            width: 360px;
-            position: fixed;
-            height: 100%;
-            background: linear-gradient(200deg, var(--dark) 0%, var(--black) 50%);
-            right: 0;
-            top: 0;
-            visibility: hidden;
-            transform: translateX(100%);
-            transition: transform 0.4s ease, visibility 0.4s ease;
-            border-left: 1px solid rgba(255, 107, 44, 0.3);
-            padding: 0;
-            z-index: 9999;
-            overflow-y: auto;
-        }
-
-        .ticket-panel.active {
-            visibility: visible;
-            transform: translateX(0);
-        }
-
-        .ticket-panel-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            background: var(--dark);
-            z-index: 1;
-        }
-
-        .ticket-panel-header h3 {
-            font-family: var(--display);
-            font-size: 1.5rem;
-            letter-spacing: 0.02em;
-        }
-
-        .ticket-panel-close {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: var(--gray);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .ticket-panel-close:hover {
-            background: rgba(255, 107, 44, 0.2);
-            border-color: rgba(255, 107, 44, 0.4);
-            color: var(--white);
-        }
-
-        .ticket-panel-close svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .ticket-panel-content {
-            padding: 2rem 1.5rem;
-        }
-
-        .ticket-panel-content p {
-            color: var(--gray);
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-
-        .ticket-location-select {
-            margin-bottom: 2rem;
-        }
-
-        .ticket-location-select label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--white-soft);
-            margin-bottom: 0.5rem;
-        }
-
-        .ticket-location-select select {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: var(--white);
-            font-size: 1rem;
-            font-family: var(--body);
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            transition: all 0.3s ease;
-        }
-
-        .ticket-location-select select:focus {
-            outline: none;
-            border-color: var(--orange);
-        }
-
-        .ticket-location-select select option {
-            background: var(--dark);
-            color: var(--white);
-        }
-
-        .btn-ticket-book {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            width: 100%;
-            padding: 1rem 2rem;
-            background: var(--gradient-primary);
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
-            letter-spacing: 0.05em;
-            border-radius: 100px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
-        }
-
-        .btn-ticket-book:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(239, 75, 35, 0.5);
-        }
-
-        .btn-ticket-book svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .ticket-panel-info {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .ticket-panel-info h4 {
-            font-family: var(--display);
-            font-size: 1rem;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-            color: var(--orange);
-        }
-
-        .ticket-info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-            color: var(--gray);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .ticket-info-item svg {
-            width: 18px;
-            height: 18px;
-            color: var(--orange);
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        @media (max-width: 400px) {
-            .ticket-panel {
-                width: 100%;
-            }
-        }
-
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .hero {
@@ -1161,9 +710,11 @@
                 font-size: clamp(2.5rem, 12vw, 4rem);
             }
 
-            .event-grid,
-            .packages-grid,
-            .testimonials-grid {
+            .two-paths-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -1264,22 +815,76 @@
                     <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
                     <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                 </svg>
-                Groups & Private Events
+                Groups & Events
             </div>
             <h1 class="hero-title">
-                LEVEL UP YOUR <span class="highlight">NEXT EVENT</span>
+                YOUR NEXT EVENT, <span class="highlight">LEVELED UP</span>
             </h1>
             <p class="hero-subtitle">
-                From epic birthday bashes to corporate team building that doesn't suck—LOL Command Center delivers unforgettable experiences for groups of all sizes.
+                Whether it's a birthday, team outing, or private event — Time Mission delivers an unforgettable experience for groups of all sizes.
             </p>
             <div class="hero-cta">
-                <a href="#packages" class="btn-primary">
-                    View Packages
+                <a href="#" class="btn-primary btn-tickets">
+                    Book Group Tickets
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <a href="#contact" class="btn-secondary">Contact Us</a>
+                <a href="contact.html?type=event" class="btn-secondary">Plan a Custom Event</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Two Paths Section -->
+    <section class="two-paths">
+        <div class="section-header reveal">
+            <div class="section-badge">Two Ways to Book</div>
+            <h2 class="section-title">PICK YOUR PATH</h2>
+            <p class="section-subtitle">Whether you want to book in seconds or plan something custom, we've got you covered.</p>
+        </div>
+
+        <div class="two-paths-grid">
+            <!-- Path 1: Self-Serve -->
+            <div class="path-card recommended reveal">
+                <div class="path-recommended-badge">Recommended</div>
+                <div class="path-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                </div>
+                <h3 class="path-title">BOOK GROUP TICKETS</h3>
+                <p class="path-description">The fastest way to lock in your group outing. Pick your location, choose a date, and book tickets for your crew. No back-and-forth needed.</p>
+                <p class="path-perfect"><strong>Perfect for:</strong> Birthday parties, friend groups, casual team outings, family events</p>
+                <a href="#" class="btn-primary btn-tickets">
+                    Book Now
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Path 2: Custom Events -->
+            <div class="path-card reveal">
+                <div class="path-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                        <line x1="9" y1="12" x2="15" y2="12"/>
+                        <line x1="9" y1="16" x2="15" y2="16"/>
+                    </svg>
+                </div>
+                <h3 class="path-title">PLAN A CUSTOM EVENT</h3>
+                <p class="path-description">Need something bigger? Private venue rentals, corporate team building, school field trips, and large-scale events — our team will work with you to create the perfect experience.</p>
+                <p class="path-perfect"><strong>Perfect for:</strong> Corporate events, private rentals, school trips, 50+ guests</p>
+                <a href="contact.html?type=event" class="btn-secondary">
+                    Submit Event Request
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </div>
         </div>
     </section>
@@ -1300,7 +905,7 @@
                     Most Popular
                 </div>
                 <h2>BIRTHDAY <span class="highlight">PARTIES</span></h2>
-                <p class="gallery-description">Make their special day legendary. Our party packages include dedicated hosts, private party rooms, and enough excitement to make cake seem boring.</p>
+                <p class="gallery-description">Make their special day legendary. Book group tickets and bring the crew — or go all out with a private party room and dedicated host.</p>
                 <div class="gallery-features">
                     <span class="gallery-feature">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1308,19 +913,15 @@
                     </span>
                     <span class="gallery-feature">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        2-Hour Sessions
+                        Groups of 6+
                     </span>
                     <span class="gallery-feature">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        Dedicated Party Host
+                        Party Rooms Available
                     </span>
                 </div>
-                <div class="gallery-quote">
-                    <p>"My son's birthday party was absolutely epic! The staff was amazing and all the kids had an incredible time."</p>
-                    <cite>— Jennifer L., Houston</cite>
-                </div>
-                <a href="#packages" class="btn-gallery">
-                    View Party Packages
+                <a href="#" class="btn-gallery btn-tickets">
+                    Book Birthday Tickets
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
@@ -1344,7 +945,7 @@
                     Team Building
                 </div>
                 <h2>CORPORATE <span class="highlight">EVENTS</span></h2>
-                <p class="gallery-description">Team building that actually builds teams. Watch Karen from accounting discover her inner warrior while competing in 25+ challenges.</p>
+                <p class="gallery-description">Team building that actually builds teams. 25+ immersive challenges that bring out everyone's competitive side — from the CEO to the new hire.</p>
                 <div class="gallery-features">
                     <span class="gallery-feature">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1352,59 +953,15 @@
                     </span>
                     <span class="gallery-feature">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        Catering Available
+                        Flexible Scheduling
                     </span>
                     <span class="gallery-feature">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
                         Custom Packages
                     </span>
                 </div>
-                <div class="gallery-quote">
-                    <p>"Perfect for team building! Our company had a blast competing against each other. The immersive environments kept everyone engaged."</p>
-                    <cite>— Mike R., Chicago</cite>
-                </div>
-                <a href="#contact" class="btn-gallery">
-                    Get a Quote
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
-
-        <div class="gallery-divider"></div>
-
-        <!-- School Field Trips -->
-        <div class="gallery-section" data-type="school">
-            <div class="gallery-image">
-                <img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="School field trip adventure" loading="lazy" width="1920" height="1280">
-            </div>
-            <div class="gallery-content">
-                <div class="gallery-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                    </svg>
-                    Educational
-                </div>
-                <h2>SCHOOL <span class="highlight">FIELD TRIPS</span></h2>
-                <p class="gallery-description">Educational entertainment that kids actually enjoy. STEM concepts wrapped in so much fun they won't even realize they're learning.</p>
-                <div class="gallery-features">
-                    <span class="gallery-feature">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        STEM Focus
-                    </span>
-                    <span class="gallery-feature">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        Chaperone Discounts
-                    </span>
-                    <span class="gallery-feature">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        Flexible Scheduling
-                    </span>
-                </div>
-                <a href="#contact" class="btn-gallery">
-                    Plan Your Trip
+                <a href="contact.html?type=event" class="btn-gallery">
+                    Plan Your Event
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
@@ -1427,7 +984,7 @@
                     Exclusive
                 </div>
                 <h2>PRIVATE <span class="highlight">EVENTS</span></h2>
-                <p class="gallery-description">Want the whole venue to yourself? Bachelor parties, reunions, or just because you're that person—we've got you covered.</p>
+                <p class="gallery-description">Want the whole venue to yourself? Bachelor parties, reunions, fundraisers, or just because — we've got you covered.</p>
                 <div class="gallery-features">
                     <span class="gallery-feature">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1435,14 +992,14 @@
                     </span>
                     <span class="gallery-feature">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        Custom Experiences
+                        Fully Customizable
                     </span>
                     <span class="gallery-feature">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
                         VIP Treatment
                     </span>
                 </div>
-                <a href="#contact" class="btn-gallery">
+                <a href="contact.html?type=event" class="btn-gallery">
                     Inquire Now
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -1452,284 +1009,30 @@
         </div>
     </section>
 
-    <!-- Packages Section -->
-    <section class="packages" id="packages">
+    <!-- How It Works Section -->
+    <section class="how-it-works">
         <div class="section-header reveal">
-            <div class="section-badge">Packages & Pricing</div>
-            <h2 class="section-title">CHOOSE YOUR ADVENTURE</h2>
-            <p class="section-subtitle">All packages include full venue access and unforgettable memories (bragging rights sold separately).</p>
+            <div class="section-badge">How It Works</div>
+            <h2 class="section-title">THREE SIMPLE STEPS</h2>
         </div>
 
-        <div class="packages-grid">
-            <div class="package-card reveal">
-                <h3 class="package-name">STARTER</h3>
-                <div class="package-price">From <span>$25</span>/person</div>
-                <ul class="package-features">
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        90-minute game session
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Access to all 25+ portals
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Leaderboard tracking
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Digital photos
-                    </li>
-                </ul>
-                <a href="#contact" class="package-cta">Get Started</a>
+        <div class="steps-grid">
+            <div class="step-card reveal">
+                <div class="step-number">01</div>
+                <h3 class="step-title">CHOOSE YOUR PATH</h3>
+                <p class="step-text">Book group tickets online for a self-serve experience, or submit an event request for something custom.</p>
             </div>
 
-            <div class="package-card featured reveal">
-                <div class="package-badge">Most Popular</div>
-                <h3 class="package-name">PARTY PACK</h3>
-                <div class="package-price">From <span>$35</span>/person</div>
-                <ul class="package-features">
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        2-hour game session
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Private party room (45 min)
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Dedicated party host
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Pizza & drinks included
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Winner medals & prizes
-                    </li>
-                </ul>
-                <a href="#contact" class="package-cta">Book Now</a>
+            <div class="step-card reveal">
+                <div class="step-number">02</div>
+                <h3 class="step-title">SHOW UP & PLAY</h3>
+                <p class="step-text">Your crew competes through 25+ immersive challenges testing speed, strength, skill, and smarts.</p>
             </div>
 
-            <div class="package-card reveal">
-                <h3 class="package-name">VIP EXPERIENCE</h3>
-                <div class="package-price">From <span>$50</span>/person</div>
-                <ul class="package-features">
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        3-hour exclusive access
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Private venue rental
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Full catering package
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Custom branding options
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        Professional photographer
-                    </li>
-                </ul>
-                <a href="#contact" class="package-cta">Contact Sales</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- What's Included -->
-    <section class="included">
-        <div class="section-header reveal">
-            <div class="section-badge">The Full Experience</div>
-            <h2 class="section-title">WHAT'S INCLUDED</h2>
-        </div>
-
-        <div class="included-grid">
-            <div class="included-item reveal">
-                <div class="included-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                </div>
-                <div class="included-content">
-                    <h4>FLEXIBLE TIMING</h4>
-                    <p>Book sessions that fit your schedule</p>
-                </div>
-            </div>
-
-            <div class="included-item reveal">
-                <div class="included-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                </div>
-                <div class="included-content">
-                    <h4>DEDICATED HOST</h4>
-                    <p>Personal guide for your group</p>
-                </div>
-            </div>
-
-            <div class="included-item reveal">
-                <div class="included-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                        <circle cx="8.5" cy="8.5" r="1.5"/>
-                        <polyline points="21 15 16 10 5 21"/>
-                    </svg>
-                </div>
-                <div class="included-content">
-                    <h4>PHOTO MEMORIES</h4>
-                    <p>Digital photos of your adventure</p>
-                </div>
-            </div>
-
-            <div class="included-item reveal">
-                <div class="included-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
-                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
-                        <line x1="6" y1="1" x2="6" y2="4"/>
-                        <line x1="10" y1="1" x2="10" y2="4"/>
-                        <line x1="14" y1="1" x2="14" y2="4"/>
-                    </svg>
-                </div>
-                <div class="included-content">
-                    <h4>FOOD & DRINKS</h4>
-                    <p>Catering options available</p>
-                </div>
-            </div>
-
-            <div class="included-item reveal">
-                <div class="included-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="8" r="7"/>
-                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
-                    </svg>
-                </div>
-                <div class="included-content">
-                    <h4>PRIZES & AWARDS</h4>
-                    <p>Medals for top performers</p>
-                </div>
-            </div>
-
-            <div class="included-item reveal">
-                <div class="included-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                        <line x1="12" y1="22.08" x2="12" y2="12"/>
-                    </svg>
-                </div>
-                <div class="included-content">
-                    <h4>PRIVATE SPACE</h4>
-                    <p>Party rooms for celebrations</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="section-header reveal">
-            <div class="section-badge">What People Say</div>
-            <h2 class="section-title">MISSION ACCOMPLISHED</h2>
-        </div>
-
-        <div class="testimonials-grid">
-            <div class="testimonial-card reveal">
-                <div class="testimonial-quote">"</div>
-                <p class="testimonial-text">Best team building event we've ever done. Watching our CEO fail miserably at the physical challenges while the intern crushed it was worth every penny.</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">MR</div>
-                    <div class="testimonial-info">
-                        <h5>Mike Richardson</h5>
-                        <span>Corporate Event, 45 people</span>
-                        <div class="testimonial-rating">
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="testimonial-card reveal">
-                <div class="testimonial-quote">"</div>
-                <p class="testimonial-text">My son said it was the best birthday ever. He's 13, so that's basically the highest compliment a parent can receive. Already booked for next year!</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">SJ</div>
-                    <div class="testimonial-info">
-                        <h5>Sarah Johnson</h5>
-                        <span>Birthday Party, 12 kids</span>
-                        <div class="testimonial-rating">
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="testimonial-card reveal">
-                <div class="testimonial-quote">"</div>
-                <p class="testimonial-text">The kids were engaged the entire time—no phones, no complaints. As a teacher, I can confirm that's basically a miracle. Highly recommend for field trips!</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">DL</div>
-                    <div class="testimonial-info">
-                        <h5>David Lee</h5>
-                        <span>School Field Trip, 60 students</span>
-                        <div class="testimonial-rating">
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        </div>
-                    </div>
-                </div>
+            <div class="step-card reveal">
+                <div class="step-number">03</div>
+                <h3 class="step-title">CELEBRATE</h3>
+                <p class="step-text">Whether you're toasting a birthday or crowning the office champion — the memories (and bragging rights) last forever.</p>
             </div>
         </div>
     </section>
@@ -1744,95 +1047,75 @@
         <div class="faq-grid">
             <div class="faq-item reveal">
                 <button class="faq-question">
-                    What's the minimum group size for a private event?
+                    How do I book for a group?
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"/>
                         <line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
                 </button>
                 <div class="faq-answer">
-                    <p>We recommend a minimum of 10 guests for our party packages. For private venue rentals, we typically require 20+ guests. However, we're flexible—contact us to discuss your specific needs!</p>
+                    <p>The easiest way is to book group tickets directly through our online system — just select your location, pick a date, and add your group. For larger or custom events, submit an event request and our team will be in touch.</p>
                 </div>
             </div>
 
             <div class="faq-item reveal">
                 <button class="faq-question">
-                    How far in advance should I book?
+                    What's the minimum group size?
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"/>
                         <line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
                 </button>
                 <div class="faq-answer">
-                    <p>We recommend booking at least 2 weeks in advance for standard parties, and 4+ weeks for large corporate events or private rentals. Weekend slots fill up fast, so the earlier the better!</p>
+                    <p>There's no minimum for booking group tickets online. For private events and venue rentals, requirements vary by location — submit an event request to learn more.</p>
                 </div>
             </div>
 
             <div class="faq-item reveal">
                 <button class="faq-question">
-                    Can you accommodate dietary restrictions?
+                    Do you offer private party rooms?
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"/>
                         <line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
                 </button>
                 <div class="faq-answer">
-                    <p>Absolutely! We work with catering partners who can accommodate vegetarian, vegan, gluten-free, and allergy-friendly options. Just let us know your requirements when booking.</p>
+                    <p>Yes! Party room availability and packages vary by location. You can book group tickets for the gaming experience and add a party room, or submit a custom event request for the full package.</p>
                 </div>
             </div>
 
             <div class="faq-item reveal">
                 <button class="faq-question">
-                    What's the age range for birthday parties?
+                    Can you accommodate corporate events and large groups?
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"/>
                         <line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
                 </button>
                 <div class="faq-answer">
-                    <p>LOL Command Center is designed for ages 7 and up. Our challenges are calibrated so everyone can participate—whether you're 7 or 70. Kids under 7 can attend but may need extra assistance from adults.</p>
-                </div>
-            </div>
-
-            <div class="faq-item reveal">
-                <button class="faq-question">
-                    Do you offer corporate invoicing?
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"/>
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                    </svg>
-                </button>
-                <div class="faq-answer">
-                    <p>Yes! We offer corporate invoicing, PO numbers, and flexible payment terms for qualified businesses. Our corporate sales team can also help with W-9s and other documentation.</p>
+                    <p>Absolutely. We regularly host corporate outings, team building events, and groups of 50-200+. Submit an event request and our team will create a custom package for your needs.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="cta-section" id="contact">
+    <section class="cta-section">
         <div class="cta-content reveal">
             <h2 class="cta-title">READY TO <span>BOOK?</span></h2>
-            <p class="cta-text">Let's make your next event unforgettable. Our events team is standing by to help you create the perfect experience.</p>
+            <p class="cta-text">Lock in your group's next adventure at Time Mission.</p>
             <div class="cta-buttons">
-                <a href="#" class="btn-primary">
-                    Book Online
+                <a href="#" class="btn-primary btn-tickets">
+                    Book Group Tickets
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <a href="tel:+12155551234" class="btn-secondary">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                    </svg>
-                    Call Us
-                </a>
+                <a href="contact.html?type=event" class="btn-secondary">Plan a Custom Event</a>
             </div>
-            <p class="cta-contact">Or email us at <a href="mailto:events@lolcommandcenter.com">events@lolcommandcenter.com</a></p>
         </div>
     </section>
 
-    <!-- Footer -->
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-grid">
@@ -2023,7 +1306,7 @@
             galleryObserver.observe(section);
         });
     </script>
-    <script defer src="js/nav.js"></script>
+    <script defer src="js/nav.js?v=3"></script>
     <script>
     document.querySelectorAll('.footer-location-toggle').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -2032,6 +1315,6 @@
     });
     </script>
     <script src="js/locations.js"></script>
-    <script src="js/ticket-panel.js?v=2"></script>
+    <script src="js/ticket-panel.js?v=3"></script>
 </body>
 </html>

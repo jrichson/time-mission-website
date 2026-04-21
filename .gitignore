@@ -20,3 +20,6 @@ _archive/
 
 # Build artifacts
 *.log
+
+# Test artifacts
+test-results/

@@ -9,10 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/nav.css?v=7">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/ticket-panel.css">
     <style>
         /* Subtle grid texture — matches homepage */
         .what-is,
@@ -1134,6 +1135,68 @@
         </div>
     </footer>
 
+    <!-- Ticket Popup Panel -->
+    <div class="ticket-overlay" id="ticketOverlay"></div>
+    <div class="ticket-panel" id="ticketPanel">
+        <div class="ticket-panel-header">
+            <h3>Book Your Mission</h3>
+            <button class="ticket-panel-close" id="ticketClose">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="ticket-panel-content">
+            <p>Select your location and we'll take you to our booking system to choose your date and time.</p>
+            <div class="ticket-location-select">
+                <label for="ticketLocation">Choose Location</label>
+                <select id="ticketLocation">
+                    <option value="philadelphia">Philadelphia</option>
+                    <option value="mount-prospect">Chicago (Mount Prospect)</option>
+                    <option value="west-nyack">West Nyack</option>
+                    <option value="lincoln">Lincoln</option>
+                    <option value="houston">Houston (Marq'E)</option>
+                    <option value="manassas">Manassas</option>
+                    <option value="antwerp">Antwerp (Belgium)</option>
+                </select>
+            </div>
+            <a href="#" class="btn-ticket-book" id="ticketBookBtn" target="_blank">
+                Continue to Booking
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+            <div class="ticket-panel-info">
+                <h4>QUICK INFO</h4>
+                <div class="ticket-info-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                    <span>Sessions last approximately 60-90 minutes</span>
+                </div>
+                <div class="ticket-info-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span>Teams of 2-5 players per mission</span>
+                </div>
+                <div class="ticket-info-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>Advance booking recommended</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/nav.js"></script>
     <script>
     document.querySelectorAll('.footer-location-toggle').forEach(btn => {
@@ -1155,7 +1218,7 @@
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
     <script src="js/locations.js"></script>
-    <script src="js/ticket-panel.js?v=2"></script>
+    <script src="js/ticket-panel.js?v=3"></script>
     <script>
     // What-Is photo carousel
     (function() {

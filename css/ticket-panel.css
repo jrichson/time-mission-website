@@ -1,0 +1,197 @@
+/* Ticket Panel — Shared across all pages */
+.ticket-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 9998;
+}
+
+.ticket-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ticket-panel {
+    width: 360px;
+    position: fixed;
+    height: 100%;
+    background: linear-gradient(200deg, var(--dark) 0%, var(--black) 50%);
+    right: 0;
+    top: 0;
+    visibility: hidden;
+    transform: translateX(100%);
+    transition: transform 0.4s ease, visibility 0.4s ease;
+    border-left: 1px solid rgba(255, 107, 44, 0.3);
+    padding: 0;
+    z-index: 9999;
+    overflow-y: auto;
+}
+
+.ticket-panel.active {
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.ticket-panel-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: var(--dark);
+    z-index: 1;
+}
+
+.ticket-panel-header h3 {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    letter-spacing: 0.02em;
+}
+
+.ticket-panel-close {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: var(--gray);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ticket-panel-close:hover {
+    background: rgba(255, 107, 44, 0.2);
+    border-color: rgba(255, 107, 44, 0.4);
+    color: var(--white);
+}
+
+.ticket-panel-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+.ticket-panel-content {
+    padding: 2rem 1.5rem;
+}
+
+.ticket-panel-content p {
+    color: var(--gray);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.ticket-location-select {
+    margin-bottom: 2rem;
+}
+
+.ticket-location-select label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--white-soft);
+    margin-bottom: 0.5rem;
+}
+
+.ticket-location-select select {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: var(--white);
+    font-size: 1rem;
+    font-family: var(--body);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    transition: all 0.3s ease;
+}
+
+.ticket-location-select select:focus {
+    outline: none;
+    border-color: var(--orange);
+}
+
+.ticket-location-select select option {
+    background: var(--dark);
+    color: var(--white);
+}
+
+.btn-ticket-book {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 1rem 2rem;
+    background: var(--gradient-primary);
+    color: var(--white);
+    text-decoration: none;
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    border-radius: 100px;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
+}
+
+.btn-ticket-book:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(239, 75, 35, 0.5);
+}
+
+.btn-ticket-book svg {
+    width: 18px;
+    height: 18px;
+}
+
+.ticket-panel-info {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ticket-panel-info h4 {
+    font-family: var(--display);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    color: var(--orange);
+}
+
+.ticket-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    color: var(--gray);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.ticket-info-item svg {
+    width: 18px;
+    height: 18px;
+    color: var(--orange);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+@media (max-width: 400px) {
+    .ticket-panel {
+        width: 100%;
+    }
+}
