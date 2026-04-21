@@ -3,8 +3,8 @@
     {
       "id": "mount-prospect",
       "slug": "mount-prospect",
-      "name": "Time Mission Chicago",
-      "shortName": "Chicago",
+      "name": "Time Mission Mount Prospect",
+      "shortName": "Mount Prospect",
       "venueName": "Mount Prospect",
       "region": "us",
       "status": "open",
@@ -57,7 +57,7 @@
         }
       },
       "bookingUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products",
-      "navLabel": "IL - Chicago (Mount Prospect)",
+      "navLabel": "IL - Mount Prospect",
       "mapUrl": "https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056",
       "faqs": []
     },

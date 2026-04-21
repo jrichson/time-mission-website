@@ -128,8 +128,8 @@
     // Location data for info panel
     const locationData = {
         'Mount Prospect': {
-            name: 'IL – Chicago (Mount Prospect)',
-            address: '1500 E Golf Rd\nMount Prospect, IL 60056',
+            name: 'IL – Mount Prospect',
+            address: '132 Randhurst Village Drive\nMount Prospect, IL 60056',
             phone: '(847) 243-5500',
             hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
             bookUrl: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
