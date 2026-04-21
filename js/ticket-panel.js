@@ -106,6 +106,21 @@
         btn.addEventListener('click', openTicketPanel);
     });
 
+    // Portal card "Book Now" buttons — navigate if location set, else open ticket panel
+    document.querySelectorAll('.btn-book-now').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            var href = btn.getAttribute('href');
+            if (href && href !== '#' && href.indexOf('http') === 0) {
+                // Location is selected — navigate directly to booking
+                e.preventDefault();
+                window.open(href, '_blank');
+                return;
+            }
+            // No location selected — open ticket panel to choose
+            openTicketPanel(e);
+        });
+    });
+
     // Close handlers
     if (ticketClose) ticketClose.addEventListener('click', closeTicketPanel);
     if (ticketOverlay) ticketOverlay.addEventListener('click', closeTicketPanel);
