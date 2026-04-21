@@ -3197,19 +3197,19 @@
 
             <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
-                <p class="testimonial-text">"Perfect for team building! Our company had a blast competing against each other. The immersive environments and variety of challenges kept everyone engaged."</p>
+                <p class="testimonial-text">"We brought 15 people for a team outing and everyone was raving about it for weeks. The competitive element really brings out the best energy in a group."</p>
                 <div class="testimonial-author">
-                    <span class="author-name">Mike R.</span>
-                    <span class="author-location">— Chicago</span>
+                    <span class="author-name">David K.</span>
+                    <span class="author-location">— Philadelphia</span>
                 </div>
             </div>
 
             <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
-                <p class="testimonial-text">"My son's birthday party was absolutely epic! The staff was amazing and all the kids had an incredible time. Highly recommend for any celebration."</p>
+                <p class="testimonial-text">"My daughter's 10th birthday party here was unforgettable. The kids were completely immersed and the staff made everything seamless from start to finish."</p>
                 <div class="testimonial-author">
-                    <span class="author-name">Jennifer L.</span>
-                    <span class="author-location">— Houston</span>
+                    <span class="author-name">Rachel T.</span>
+                    <span class="author-location">— Philadelphia</span>
                 </div>
             </div>
         </div>
@@ -3407,7 +3407,9 @@
             <div class="footer-legal">
                 <a href="terms.html">Terms</a>
                 <a href="privacy.html">Privacy</a>
+                <a href="cookies.html">Cookies</a>
                 <a href="code-of-conduct.html">Code of Conduct</a>
+                <a href="accessibility.html">Accessibility</a>
             </div>
         </div>
     </footer>
@@ -4087,24 +4089,6 @@
             if (window.TM && TM.ready) {
                 TM.ready.then(function() { TM.select(id); });
             }
-        });
-    })();
-    </script>
-
-    <!-- Roller Checkout Embed (Philadelphia) -->
-    <script id="roller-checkout"
-            src="https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js"
-            data-checkout="https://ecom.roller.app/timemissionphiladelphiapa/onlinecheckout/en-us/products">
-    </script>
-    <script>
-    // Intercept clicks on all ticket CTAs → open Roller popup instead of navigating
-    (function () {
-        document.addEventListener('click', function (e) {
-            var target = e.target.closest && e.target.closest('.btn-tickets, .location-info-book');
-            if (!target) return;
-            if (typeof RollerCheckout === 'undefined' || !RollerCheckout.show) return; // fallback: let href work
-            e.preventDefault();
-            RollerCheckout.show();
         });
     })();
     </script>
