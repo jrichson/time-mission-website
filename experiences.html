@@ -45,13 +45,11 @@
 
         /* Grid texture on dark sections */
         .portals-section,
-        .how-it-works,
         .cta-section {
             position: relative;
         }
 
         .portals-section::before,
-        .how-it-works::before,
         .cta-section::before {
             content: '';
             position: absolute;
@@ -70,12 +68,12 @@
            ========================================== */
         .hero {
             position: relative;
-            min-height: 70vh;
+            min-height: 60vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 10rem 2rem 4rem;
+            padding: 10rem 2rem 2rem;
             overflow: hidden;
         }
 
@@ -401,152 +399,6 @@
             .filter-tab {
                 padding: 0.5rem 1rem;
                 font-size: 0.75rem;
-            }
-        }
-
-        /* ==========================================
-           HOW IT WORKS
-           ========================================== */
-        .how-it-works {
-            padding: 6rem 2rem;
-            background: var(--dark);
-        }
-
-        .how-header {
-            text-align: center;
-            margin-bottom: 4rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .how-header .section-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 107, 44, 0.1);
-            border: 1px solid rgba(255, 107, 44, 0.2);
-            padding: 0.4rem 1rem;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--orange);
-            margin-bottom: 1.5rem;
-        }
-
-        .how-title {
-            font-family: var(--display);
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            letter-spacing: 0.02em;
-        }
-
-        .how-title span {
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .how-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .how-step {
-            text-align: center;
-            position: relative;
-            padding: 2rem 1rem;
-        }
-
-        .how-step-number {
-            font-family: var(--display);
-            font-size: 4rem;
-            background: linear-gradient(180deg, rgba(255, 107, 44, 0.3) 0%, transparent 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-            margin-bottom: 1rem;
-        }
-
-        .how-step-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 1.25rem;
-            background: rgba(255, 107, 44, 0.1);
-            border: 1px solid rgba(255, 107, 44, 0.2);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--orange);
-        }
-
-        .how-step-icon svg {
-            width: 28px;
-            height: 28px;
-        }
-
-        .how-step-title {
-            font-family: var(--display);
-            font-size: 1.25rem;
-            letter-spacing: 0.02em;
-            margin-bottom: 0.5rem;
-        }
-
-        .how-step-desc {
-            font-size: 0.85rem;
-            color: var(--gray);
-            line-height: 1.6;
-        }
-
-        /* Connecting line between steps */
-        .how-step:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            top: 5.5rem;
-            right: -1rem;
-            width: 2rem;
-            height: 1px;
-            background: linear-gradient(90deg, rgba(255, 107, 44, 0.4), transparent);
-        }
-
-        @media (max-width: 1024px) {
-            .how-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .how-step:not(:last-child)::after {
-                display: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .how-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            .how-step {
-                display: grid;
-                grid-template-columns: 64px 1fr;
-                text-align: left;
-                gap: 0 1rem;
-                padding: 1.5rem 0;
-            }
-            .how-step-number {
-                display: none;
-            }
-            .how-step-icon {
-                margin: 0;
-                grid-row: span 2;
-            }
-            .how-step-title {
-                align-self: end;
             }
         }
 
@@ -1025,10 +877,10 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-bg">
-            <img src="assets/photos/experiences/_Time-Mission_0321.jpg" alt="Players competing in Time Mission challenges">
+            <picture><source srcset="assets/photos/experiences/_Time-Mission_0321.webp" type="image/webp"><img src="assets/photos/experiences/_Time-Mission_0321.jpg" alt="Players competing in Time Mission challenges" loading="eager" fetchpriority="high" decoding="async"></picture>
         </div>
         <div class="hero-content">
-            <div class="section-badge">THE EXPERIENCES</div>
+            <div class="section-badge">THE MISSIONS</div>
             <h1 class="hero-title">UNLIMITED WAYS TO <span class="highlight">PLAY</span></h1>
             <p class="hero-subtitle">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
         </div>
@@ -1049,14 +901,14 @@
         <div class="portals-grid">
             <!-- 1. GLITCH MATRIX — has photo -->
             <article class="portal-card featured reveal" data-category="mental">
-                <img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280">
+                <picture><source srcset="assets/photos/experiences/Time-Mission_Glitch-Matrix.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
                         Mental
                     </span>
                     <h2 class="portal-title">GLITCH MATRIX</h2>
-                    <p class="portal-desc">Navigate a fractured digital world where reality bends. Decode patterns, solve visual puzzles, and escape before the system crashes.</p>
+                    <p class="portal-desc">//ERROR// You are drifting outside time and space. To get home, you must navigate a dangerous virtual world full of glitches and digital traps.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Pattern Recognition</span>
                         <span class="meta-tag">Puzzles</span>
@@ -1070,14 +922,14 @@
 
             <!-- Big Bang -->
             <article class="portal-card reveal" data-category="physical">
-                <img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/experiences/Time-Mission_Big-Bang.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge physical">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
                         Physical
                     </span>
                     <h2 class="portal-title">BIG BANG</h2>
-                    <p class="portal-desc">Witness the birth of the universe. Harness cosmic energy, coordinate throws, and create stellar formations as a team.</p>
+                    <p class="portal-desc">You are transported to the birth of the universe. The monumental task of creating galaxies is in your hands. But it won't be easy... you need to throw to create.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Coordination</span>
                         <span class="meta-tag">Teamwork</span>
@@ -1091,14 +943,14 @@
 
             <!-- Magma Mayhem -->
             <article class="portal-card reveal" data-category="speed">
-                <img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge speed">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                         Speed
                     </span>
                     <h2 class="portal-title">MAGMA MAYHEM</h2>
-                    <p class="portal-desc">The floor is lava — literally. Navigate volcanic terrain at speed. Quick feet and faster reflexes are your only salvation.</p>
+                    <p class="portal-desc">You are a virtual volcanologist transported to a digital volcano on the brink of eruption. Navigate treacherous terrain, collect vital data samples, and outrun the advancing lava flows.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Agility</span>
                         <span class="meta-tag">Reflexes</span>
@@ -1112,14 +964,14 @@
 
             <!-- Persian Palace -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/experiences/Time-Mission_Persian-0Palace.jpg" alt="Persian Palace" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/experiences/Time-Mission_Persian-0Palace.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Persian-0Palace.jpg" alt="Persian Palace" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
                         Mental
                     </span>
                     <h2 class="portal-title">PERSIAN PALACE</h2>
-                    <p class="portal-desc">Uncover secrets in opulent chambers. Ancient riddles guard the path forward — only the wisest will prevail.</p>
+                    <p class="portal-desc">You are mystics seeking the wonders of the universe. You've heard that the Persian Palace contains great knowledge. Uncover the secrets within the palace walls.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Problem Solving</span>
                         <span class="meta-tag">Logic</span>
@@ -1133,14 +985,14 @@
 
             <!-- Server Heist -->
             <article class="portal-card reveal" data-category="skill">
-                <img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/experiences/Time-Mission_Server_Heist5.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge skill">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
                         Skill
                     </span>
                     <h2 class="portal-title">SERVER HEIST</h2>
-                    <p class="portal-desc">Infiltrate high-security systems. Precision timing and steady hands are essential in this high-stakes digital heist.</p>
+                    <p class="portal-desc">You are covert operatives infiltrating the server farm of the world's most secure tech conglomerate. Your mission: steal the master encryption key before the security AI detects your presence.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Precision</span>
                         <span class="meta-tag">Timing</span>
@@ -1154,14 +1006,14 @@
 
             <!-- Jungle Temple -->
             <article class="portal-card reveal" data-category="physical">
-                <img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/experiences/Time-Mission_Jungle-Temple.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge physical">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
                         Physical
                     </span>
                     <h2 class="portal-title">JUNGLE TEMPLE</h2>
-                    <p class="portal-desc">Brave ancient traps and decode hieroglyphs. Physical prowess meets mental acuity in this lost temple.</p>
+                    <p class="portal-desc">You are initiates performing an ancient rite to pacify your temple gods. Travel through the jungle, extract precious gems, and place them on the temple altar.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Adventure</span>
                         <span class="meta-tag">Exploration</span>
@@ -1175,14 +1027,14 @@
 
             <!-- Artificial Intelligence -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/experiences/Time-Mission_Artificial_Intelligence.jpg" alt="Artificial Intelligence" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/experiences/Time-Mission_Artificial_Intelligence.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Artificial_Intelligence.jpg" alt="Artificial Intelligence" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
                         Mental
                     </span>
                     <h2 class="portal-title">ARTIFICIAL INTELLIGENCE</h2>
-                    <p class="portal-desc">Match wits with a machine mind. Logic puzzles and strategic thinking determine whether human or AI prevails.</p>
+                    <p class="portal-desc">You are human test subjects providing intriguing data for a rogue AI that is experimenting on humans. Use your wits to escape the facility before the AI locks you in permanently.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Strategy</span>
                         <span class="meta-tag">Logic</span>
@@ -1196,14 +1048,14 @@
 
             <!-- Pirates Attack -->
             <article class="portal-card reveal" data-category="skill">
-                <img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" loading="lazy" width="1920" height="1440">
+                <picture><source srcset="assets/photos/experiences/Time-Mission_Pirates_Attack.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" width="1920" height="1440" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge skill">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
                         Skill
                     </span>
                     <h2 class="portal-title">PIRATES ATTACK</h2>
-                    <p class="portal-desc">Defend your vessel from marauders. Aim true and work as a crew — the seven seas show no mercy.</p>
+                    <p class="portal-desc">You are a crew of swarthy buccaneers on the stormy Caribbean sea. You must work together, man the cannons and fend off the enemy pirates' attack.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Accuracy</span>
                         <span class="meta-tag">Teamwork</span>
@@ -1218,14 +1070,14 @@
             <!-- Orbital Pit -->
             <!-- Control Room -->
             <article class="portal-card reveal" data-category="skill">
-                <img src="assets/photos/experiences/Time-Mission_Control-Room.jpg" alt="Control Room" loading="lazy" width="1280" height="1920">
+                <picture><source srcset="assets/photos/experiences/Time-Mission_Control-Room.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Control-Room.jpg" alt="Control Room" width="1280" height="1920" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge skill">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
                         Skill
                     </span>
                     <h2 class="portal-title">CONTROL ROOM</h2>
-                    <p class="portal-desc">Command central awaits. Coordinate systems, manage resources, and prove your team can handle mission control.</p>
+                    <p class="portal-desc">You are technicians deep inside a nuclear power plant scrambling to prevent a catastrophic meltdown. Operate the control panels, manage pressure levels, and coordinate emergency protocols.</p>
                     <div class="portal-meta">
                         <span class="meta-tag">Coordination</span>
                         <span class="meta-tag">Communication</span>
@@ -1239,7 +1091,7 @@
 
             <!-- Paleontologist's Study -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Paleontologist's Study" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0042.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Paleontologist's Study" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
@@ -1260,7 +1112,7 @@
 
             <!-- Sea Lab -->
             <article class="portal-card reveal" data-category="skill">
-                <img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Sea Lab" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0024.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Sea Lab" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge skill">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -1281,7 +1133,7 @@
 
             <!-- Machine Gut -->
             <article class="portal-card reveal" data-category="skill">
-                <img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Machine Gut" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0031.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Machine Gut" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge skill">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -1302,7 +1154,7 @@
 
             <!-- Submarine Plunge -->
             <article class="portal-card reveal" data-category="physical">
-                <img src="assets/photos/venue/_Time-Mission_0016.jpg" alt="Submarine Plunge" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0016.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0016.jpg" alt="Submarine Plunge" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge physical">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
@@ -1323,7 +1175,7 @@
 
             <!-- Koi Gardens -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/venue/_Time-Mission_0009.jpg" alt="Koi Gardens" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0009.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0009.jpg" alt="Koi Gardens" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
@@ -1344,7 +1196,7 @@
 
             <!-- Egyptian Tomb -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Egyptian Tomb" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0078.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Egyptian Tomb" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
@@ -1365,7 +1217,7 @@
 
             <!-- Dystopian Forest -->
             <article class="portal-card reveal" data-category="physical">
-                <img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Dystopian Forest" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0042.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Dystopian Forest" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge physical">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
@@ -1386,7 +1238,7 @@
 
             <!-- Piano Piano -->
             <article class="portal-card reveal" data-category="skill">
-                <img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Piano Piano" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0031.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Piano Piano" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge skill">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -1407,7 +1259,7 @@
 
             <!-- Lovecraft Circle -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Lovecraft Circle" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0078.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Lovecraft Circle" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
@@ -1428,7 +1280,7 @@
 
             <!-- Flash Back -->
             <article class="portal-card reveal" data-category="speed">
-                <img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Flash Back" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0024.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Flash Back" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge speed">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -1449,7 +1301,7 @@
 
             <!-- Alien Awakening -->
             <article class="portal-card reveal" data-category="skill">
-                <img src="assets/photos/venue/_Time-Mission_0016.jpg" alt="Alien Awakening" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0016.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0016.jpg" alt="Alien Awakening" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge skill">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -1470,7 +1322,7 @@
 
             <!-- Private Eye -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/venue/_Time-Mission_0009.jpg" alt="Private Eye" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0009.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0009.jpg" alt="Private Eye" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
@@ -1491,7 +1343,7 @@
 
             <!-- Mayan Court -->
             <article class="portal-card reveal" data-category="physical">
-                <img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Mayan Court" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0024.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Mayan Court" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge physical">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
@@ -1512,7 +1364,7 @@
 
             <!-- Martian Greenhouse -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Martian Greenhouse" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0031.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Martian Greenhouse" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
@@ -1533,7 +1385,7 @@
 
             <!-- Tartarus Abyss -->
             <article class="portal-card reveal" data-category="physical">
-                <img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Tartarus Abyss" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0078.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Tartarus Abyss" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge physical">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
@@ -1554,7 +1406,7 @@
 
             <!-- Castle Conquest -->
             <article class="portal-card reveal" data-category="physical">
-                <img src="assets/photos/venue/_Time-Mission_0016.jpg" alt="Castle Conquest" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0016.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0016.jpg" alt="Castle Conquest" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge physical">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
@@ -1575,7 +1427,7 @@
 
             <!-- Head Hunter -->
             <article class="portal-card reveal" data-category="physical">
-                <img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Head Hunter" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0042.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Head Hunter" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge physical">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
@@ -1596,7 +1448,7 @@
 
             <!-- Element Zero -->
             <article class="portal-card reveal" data-category="skill">
-                <img src="assets/photos/venue/_Time-Mission_0009.jpg" alt="Element Zero" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0009.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0009.jpg" alt="Element Zero" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge skill">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -1617,7 +1469,7 @@
 
             <!-- Looking Glass -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Looking Glass" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0031.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0031.jpg" alt="Looking Glass" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
@@ -1638,7 +1490,7 @@
 
             <!-- Orbital Relay -->
             <article class="portal-card reveal" data-category="skill">
-                <img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Orbital Relay" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0024.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Orbital Relay" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge skill">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -1659,7 +1511,7 @@
 
             <!-- Gene Vault -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/venue/_Time-Mission_0016.jpg" alt="Gene Vault" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0016.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0016.jpg" alt="Gene Vault" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>
@@ -1680,7 +1532,7 @@
 
             <!-- Star Struck -->
             <article class="portal-card reveal" data-category="skill">
-                <img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Star Struck" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0078.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Star Struck" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge skill">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -1701,7 +1553,7 @@
 
             <!-- Hive Escape -->
             <article class="portal-card reveal" data-category="physical">
-                <img src="assets/photos/venue/_Time-Mission_0009.jpg" alt="Hive Escape" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0009.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0009.jpg" alt="Hive Escape" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge physical">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
@@ -1722,7 +1574,7 @@
 
             <!-- Orbital Pit -->
             <article class="portal-card reveal" data-category="mental">
-                <img src="assets/photos/experiences/Time-Mission_Orbital_Pit.jpeg" alt="Orbital Pit" loading="lazy" width="1920" height="1280">
+                <picture><source srcset="assets/photos/experiences/Time-Mission_Orbital_Pit.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Orbital_Pit.jpeg" alt="Orbital Pit" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
                     <span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>

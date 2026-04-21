@@ -24,3 +24,6 @@ _archive/
 # Test artifacts
 test-results/
 .playwright-mcp/
+
+# Full-resolution photo backups (kept locally, not in repo)
+assets/photos/**/.orig-full/
