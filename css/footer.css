@@ -323,11 +323,11 @@ html {
     justify-content: space-between;
     font-family: var(--body);
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .footer-hours-row span:first-child {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.85);
     min-width: 80px;
 }
 
