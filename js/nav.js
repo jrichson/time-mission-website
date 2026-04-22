@@ -75,7 +75,12 @@
         function openLocationOverlay() {
             locationOverlay.classList.add('open');
             if (navEl) navEl.classList.add('location-open');
-            document.body.style.overflow = 'hidden';
+            // Defer scroll lock so it doesn't interrupt the overlay's fade-in transition
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                    document.body.style.overflow = 'hidden';
+                });
+            });
         }
         function closeLocationOverlay() {
             locationOverlay.classList.remove('open');

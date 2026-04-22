@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/nav.css?v=7">
+    <link rel="stylesheet" href="css/nav.css?v=10">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/footer.css?v=2">
@@ -828,5 +828,72 @@
     </script>
     <script src="js/locations.js?v=2"></script>
     <script src="js/ticket-panel.js?v=4"></script>
-</body>
+<div class="location-dropdown" id="locationDropdown">
+        <div class="location-dropdown-header">
+            <a href="index.html" class="location-dropdown-logo">
+                <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
+            </a>
+            <button class="location-dropdown-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="location-dropdown-title">Select Your Location</div>
+        <div class="location-overlay-body">
+            <div class="location-overlay-left">
+                <div class="location-group">
+                    <div class="location-group-title">United States</div>
+                    <a href="mount-prospect.html" data-city="Mount Prospect">IL - Mount Prospect</a>
+                    <a href="philadelphia.html" data-city="Philadelphia">PA - Philadelphia</a>
+                    <a href="west-nyack.html" data-city="West Nyack">NY - West Nyack</a>
+                    <a href="lincoln.html" data-city="Lincoln">RI - Lincoln</a>
+                    <a href="houston.html" data-city="Houston">TX - Houston</a>
+                    <a href="manassas.html" data-city="Manassas">VA - Manassas</a>
+                    <a href="#" data-city="Orland Park" class="location-coming-soon">IL - Orland Park <span class="coming-soon-tag">Coming Soon</span></a>
+                    <a href="#" data-city="Dallas" class="location-coming-soon">TX - Dallas <span class="coming-soon-tag">Coming Soon</span></a>
+                </div>
+                <div class="location-group">
+                    <div class="location-group-title">Europe</div>
+                    <a href="antwerp.html" data-city="Antwerp">BE - Antwerp</a>
+                    <a href="#" data-city="Brussels" class="location-coming-soon">BE - Brussels <span class="coming-soon-tag">Coming Soon</span></a>
+                </div>
+            </div>
+            <div class="location-overlay-divider"></div>
+            <div class="location-overlay-right" id="locationInfo">
+                <div class="location-map" id="locationMap"></div>
+                <div class="location-info-content">
+                    <div class="location-info-empty">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <p>Select a location to view details</p>
+                    </div>
+                    <div class="location-info-details" style="display:none;">
+                        <h3 class="location-info-name"></h3>
+                        <a href="#" class="location-info-address" target="_blank" rel="noopener"></a>
+                        <div class="location-info-phone"></div>
+                        <div class="location-info-section">
+                            <h4>Hours</h4>
+                            <div class="location-info-hours"></div>
+                        </div>
+                        <div class="location-info-actions">
+                            <a href="#" class="location-info-book">Book Now</a>
+                            <a href="contact.html" class="location-info-contact">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="location-overlay-footer">
+            <div class="location-overlay-social">
+                <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.51a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 10.86 4.34A6.28 6.28 0 0 0 15.86 15V8.74a8.18 8.18 0 0 0 4.14 1.15V6.69h-.41z"/></svg>
+                </a>
+                <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"/></svg>
+                </a>
+            </div>
+            <p class="location-overlay-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+        </div>
+    </div>
+
+    </body>
 </html>

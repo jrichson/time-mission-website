@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Time Mission — Missions Ad (1080×1080)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #FF6B2C;
+            --cyan: #00E5FF;
+            --magenta: #FF00E5;
+            --lime: #AAFF00;
+            --black: #0D0D0D;
+            --dark: #151515;
+            --white: #FFFFFF;
+            --gray: #8A8A8A;
+            --display: 'Bebas Neue', sans-serif;
+            --body: 'DM Sans', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 1080px;
+            height: 1080px;
+            overflow: hidden;
+            background: var(--dark);
+            font-family: var(--body);
+            color: var(--white);
+        }
+
+        /* Stage wrapper — exact 1080x1080 */
+        .stage {
+            position: relative;
+            width: 1080px;
+            height: 1080px;
+            overflow: hidden;
+            background: var(--dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Grid overlay (matches homepage) */
+        .stage::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Subtle noise */
+        .stage::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        /* Top heading */
+        .ad-header {
+            position: relative;
+            z-index: 5;
+            padding: 70px 60px 0;
+            text-align: center;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 107, 44, 0.12);
+            border: 1px solid rgba(255, 107, 44, 0.4);
+            color: var(--orange);
+            padding: 0.5rem 1.1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .ad-title {
+            font-family: var(--display);
+            font-size: 5.5rem;
+            line-height: 0.95;
+            letter-spacing: 0.02em;
+            margin-top: 1rem;
+            background: linear-gradient(90deg, var(--orange), var(--magenta), var(--cyan), var(--orange));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: hueShift 6s linear infinite;
+        }
+
+        @keyframes hueShift {
+            0%   { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .ad-subtitle {
+            font-size: 1.15rem;
+            color: var(--gray);
+            margin-top: 1rem;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.45;
+        }
+
+        /* Scroll row — centered vertically */
+        .scroll-wrapper {
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            height: 520px;
+            overflow: hidden;
+        }
+
+        /* Fade edges so cards enter/exit smoothly */
+        .scroll-wrapper::before,
+        .scroll-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 120px;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .scroll-wrapper::before {
+            left: 0;
+            background: linear-gradient(90deg, var(--dark) 0%, rgba(21,21,21,0) 100%);
+        }
+        .scroll-wrapper::after {
+            right: 0;
+            background: linear-gradient(-90deg, var(--dark) 0%, rgba(21,21,21,0) 100%);
+        }
+
+        .experiences-scroll {
+            display: flex;
+            gap: 28px;
+            padding: 20px 0;
+            will-change: transform;
+            height: 100%;
+            align-items: center;
+        }
+
+        @keyframes rgb-glow {
+            0%   { box-shadow: 0 0 25px rgba(24, 226, 253, 0.45), 0 0 55px rgba(24, 226, 253, 0.18); }
+            25%  { box-shadow: 0 0 25px rgba(253, 5, 227, 0.45), 0 0 55px rgba(253, 5, 227, 0.18); }
+            50%  { box-shadow: 0 0 25px rgba(255, 107, 44, 0.45), 0 0 55px rgba(255, 107, 44, 0.18); }
+            75%  { box-shadow: 0 0 25px rgba(169, 255, 17, 0.45), 0 0 55px rgba(169, 255, 17, 0.18); }
+            100% { box-shadow: 0 0 25px rgba(24, 226, 253, 0.45), 0 0 55px rgba(24, 226, 253, 0.18); }
+        }
+
+        .experience-card {
+            flex: 0 0 340px;
+            height: 460px;
+            border-radius: 22px;
+            overflow: hidden;
+            position: relative;
+            animation: rgb-glow 6s ease-in-out infinite;
+        }
+
+        .experience-card:nth-child(2) { animation-delay: -1s; }
+        .experience-card:nth-child(3) { animation-delay: -2s; }
+        .experience-card:nth-child(4) { animation-delay: -3s; }
+        .experience-card:nth-child(5) { animation-delay: -4s; }
+        .experience-card:nth-child(6) { animation-delay: -5s; }
+
+        .experience-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .experience-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, transparent 40%, rgba(13,13,13,0.92) 78%, rgba(13,13,13,0.98) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.75rem;
+        }
+
+        .experience-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: var(--orange);
+            padding: 0.4rem 0.85rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--black);
+            margin-bottom: 0.75rem;
+            width: fit-content;
+        }
+
+        .experience-badge svg { width: 12px; height: 12px; }
+        .experience-badge.mental   { background: var(--cyan); }
+        .experience-badge.physical { background: var(--magenta); color: var(--white); }
+        .experience-badge.skill    { background: var(--lime); }
+        .experience-badge.speed    { background: var(--orange); }
+
+        .experience-title {
+            font-family: var(--display);
+            font-size: 2.1rem;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.4rem;
+        }
+
+        .experience-desc {
+            font-size: 0.85rem;
+            color: var(--gray);
+            line-height: 1.5;
+            margin-bottom: 0.9rem;
+        }
+
+        .experience-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .exp-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.35rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            color: var(--white);
+        }
+
+        /* Footer */
+        .ad-footer {
+            position: relative;
+            z-index: 5;
+            padding: 0 60px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--orange);
+            color: var(--black);
+            padding: 1rem 2.25rem;
+            border-radius: 100px;
+            font-family: var(--display);
+            font-size: 1.6rem;
+            letter-spacing: 0.08em;
+            box-shadow: 0 0 40px rgba(255, 107, 44, 0.4);
+        }
+
+        .ad-url {
+            font-family: var(--display);
+            font-size: 1.4rem;
+            letter-spacing: 0.2em;
+            color: var(--white);
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage">
+        <div class="ad-header">
+            <div class="section-badge">THE MISSIONS</div>
+            <h1 class="ad-title">UNLIMITED WAYS TO PLAY</h1>
+            <p class="ad-subtitle">25+ immersive challenges. Race the clock. Earn points. Game on.</p>
+        </div>
+
+        <div class="scroll-wrapper">
+            <div class="experiences-scroll" id="experiencesScroll">
+                <!-- Set A -->
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge mental">Mental</span>
+                        <h3 class="experience-title">GLITCH MATRIX</h3>
+                        <p class="experience-desc">Navigate a fractured digital world where reality bends.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Mental</span>
+                            <span class="exp-tag">Pattern</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge physical">Physical</span>
+                        <h3 class="experience-title">BIG BANG</h3>
+                        <p class="experience-desc">Witness the birth of the universe and harness cosmic energy.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Physical</span>
+                            <span class="exp-tag">Coordination</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge speed">Speed</span>
+                        <h3 class="experience-title">MAGMA MAYHEM</h3>
+                        <p class="experience-desc">The floor is lava—quick feet and faster reflexes.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Speed</span>
+                            <span class="exp-tag">Agility</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge skill">Skill</span>
+                        <h3 class="experience-title">SERVER HEIST</h3>
+                        <p class="experience-desc">Infiltrate high-security systems in this digital heist.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Skill</span>
+                            <span class="exp-tag">Precision</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge physical">Physical</span>
+                        <h3 class="experience-title">JUNGLE TEMPLE</h3>
+                        <p class="experience-desc">Brave ancient traps and decode hieroglyphs.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Physical</span>
+                            <span class="exp-tag">Adventure</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge skill">Skill</span>
+                        <h3 class="experience-title">PIRATES ATTACK</h3>
+                        <p class="experience-desc">Defend your vessel. Aim true. Work as a crew.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Skill</span>
+                            <span class="exp-tag">Accuracy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Set B (duplicate for seamless loop) -->
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge mental">Mental</span>
+                        <h3 class="experience-title">GLITCH MATRIX</h3>
+                        <p class="experience-desc">Navigate a fractured digital world where reality bends.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Mental</span>
+                            <span class="exp-tag">Pattern</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge physical">Physical</span>
+                        <h3 class="experience-title">BIG BANG</h3>
+                        <p class="experience-desc">Witness the birth of the universe and harness cosmic energy.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Physical</span>
+                            <span class="exp-tag">Coordination</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge speed">Speed</span>
+                        <h3 class="experience-title">MAGMA MAYHEM</h3>
+                        <p class="experience-desc">The floor is lava—quick feet and faster reflexes.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Speed</span>
+                            <span class="exp-tag">Agility</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge skill">Skill</span>
+                        <h3 class="experience-title">SERVER HEIST</h3>
+                        <p class="experience-desc">Infiltrate high-security systems in this digital heist.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Skill</span>
+                            <span class="exp-tag">Precision</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge physical">Physical</span>
+                        <h3 class="experience-title">JUNGLE TEMPLE</h3>
+                        <p class="experience-desc">Brave ancient traps and decode hieroglyphs.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Physical</span>
+                            <span class="exp-tag">Adventure</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <img src="../assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="">
+                    <div class="experience-overlay">
+                        <span class="experience-badge skill">Skill</span>
+                        <h3 class="experience-title">PIRATES ATTACK</h3>
+                        <p class="experience-desc">Defend your vessel. Aim true. Work as a crew.</p>
+                        <div class="experience-tags">
+                            <span class="exp-tag">Skill</span>
+                            <span class="exp-tag">Accuracy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-footer">
+            <div class="cta-pill">BOOK YOUR MISSION</div>
+            <div class="ad-url">TIMEMISSION.COM</div>
+        </div>
+    </div>
+
+    <script>
+        // ==================================================================
+        // Missions ad — 1080x1080
+        //
+        // Two modes:
+        //   - Default (live preview): auto-scroll via requestAnimationFrame.
+        //   - Capture mode (?capture=1): expose deterministic window.__setTime(t)
+        //     so Playwright can scrub every frame pixel-perfectly for MP4 export.
+        // ==================================================================
+        const scrollEl = document.getElementById('experiencesScroll');
+        const titleEl = document.querySelector('.ad-title');
+        const originalCards = scrollEl.querySelectorAll('.experience-card');
+        const cardCount = originalCards.length / 2; // second half are duplicates
+
+        const GLOW_PERIOD = 6;  // seconds, matches rgb-glow keyframes
+        const HUE_PERIOD = 6;   // seconds, matches hueShift keyframes
+
+        function getHalfWidth() {
+            let total = 0;
+            const gap = parseFloat(getComputedStyle(scrollEl).gap) || 28;
+            for (let i = 0; i < cardCount; i++) {
+                total += originalCards[i].offsetWidth + gap;
+            }
+            return total;
+        }
+
+        const captureMode = new URLSearchParams(location.search).get('capture') === '1';
+
+        function waitForImages() {
+            const imgs = [...document.images];
+            return Promise.all(imgs.map(img =>
+                img.complete && img.naturalWidth > 0
+                    ? Promise.resolve()
+                    : new Promise(res => { img.onload = img.onerror = res; })
+            ));
+        }
+
+        if (captureMode) {
+            // Expose deterministic scrubbing API; disable all time-based animations.
+            waitForImages().then(() => {
+                const halfWidth = getHalfWidth();
+
+                // Seed per-card baseline phase matching CSS nth-child(N): animation-delay:-(N-1)s.
+                const cardDelays = Array.from(originalCards).map((_, i) => i % GLOW_PERIOD);
+
+                // Pause CSS animations at time 0 so Web Animations API controls them.
+                const allAnims = [
+                    ...document.getAnimations(),
+                ];
+                allAnims.forEach(a => { a.pause(); });
+
+                window.__halfWidth = halfWidth;
+                window.__setTime = function (t) {
+                    // t is seconds of virtual video time.
+
+                    // Scroll — one full half-width loop spans the full video duration,
+                    // which the capture script maps via pos = (t / duration) * halfWidth.
+                    // To allow the caller to pick the loop count, we accept scrollPx directly too.
+                    // Use window.__setScrollPx for direct scroll control.
+
+                    // Glow scrub — per-card, preserving staggered delays.
+                    originalCards.forEach((card, i) => {
+                        const a = card.getAnimations()[0];
+                        if (a) {
+                            const phase = ((t + cardDelays[i]) % GLOW_PERIOD) * 1000;
+                            a.currentTime = phase;
+                        }
+                    });
+
+                    // Title hue scrub.
+                    const ta = titleEl.getAnimations()[0];
+                    if (ta) {
+                        ta.currentTime = (t % HUE_PERIOD) * 1000;
+                    }
+                };
+
+                window.__setScrollPx = function (px) {
+                    scrollEl.style.transform = 'translateX(' + (-px) + 'px)';
+                };
+
+                window.__ready = true;
+            });
+        } else {
+            // Live preview — original rAF auto-scroll.
+            let scrollPos = 0;
+            const autoScrollSpeed = 1.2;
+
+            function wrapPos(pos) {
+                const halfW = getHalfWidth();
+                if (halfW <= 0) return pos;
+                while (pos >= halfW) pos -= halfW;
+                while (pos < 0) pos += halfW;
+                return pos;
+            }
+
+            function tick() {
+                scrollPos += autoScrollSpeed;
+                scrollPos = wrapPos(scrollPos);
+                scrollEl.style.transform = 'translateX(' + (-scrollPos) + 'px)';
+                requestAnimationFrame(tick);
+            }
+
+            window.addEventListener('load', () => {
+                waitForImages().then(() => requestAnimationFrame(tick));
+            });
+        }
+    </script>
+</body>
+</html>

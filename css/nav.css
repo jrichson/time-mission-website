@@ -350,19 +350,15 @@
     bottom: 0;
     z-index: 10001;
     background: var(--dark);
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: flex-start;
     padding: 52px 4rem 2rem;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.35s ease, visibility 0.35s ease;
     overflow-y: auto;
 }
 
 .location-dropdown.open {
-    opacity: 1;
-    visibility: visible;
+    display: flex;
 }
 
 /* Location overlay header (logo + close) */
@@ -769,7 +765,16 @@
 
     .location-dropdown a {
         font-size: 0.95rem;
-        padding: 0.75rem 0;
+        padding: 0.85rem 1.25rem;
+        margin: 0 -1.25rem;
+        border-radius: 0;
+        display: block;
+    }
+
+    /* Coming Soon links stack on their own line on mobile */
+    .location-dropdown a.location-coming-soon {
+        display: flex;
+        justify-content: flex-start;
     }
 
     /* Hide nav items when location overlay is open (keep logo visible) */
