@@ -8,6 +8,19 @@
     const mobileMenu = document.getElementById('mobileMenu');
     const navEl = document.getElementById('nav');
 
+    // Logo — if a location is saved, route home to that location's page
+    // (reads localStorage synchronously so it works before locations.json finishes loading)
+    document.querySelectorAll('.nav-logo, .location-dropdown-logo').forEach(logo => {
+        logo.addEventListener('click', function (e) {
+            let slug = '';
+            try { slug = localStorage.getItem('tm_location') || ''; } catch (err) {}
+            if (!slug) return; // no location — let the default index.html link work
+            e.preventDefault();
+            const inSubdir = window.location.pathname.includes('/locations/');
+            window.location.href = (inSubdir ? '../' : '') + slug + '.html';
+        });
+    });
+
     // Mobile menu toggle
     const tickerBar = document.querySelector('.ticker-bar');
 

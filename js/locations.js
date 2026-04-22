@@ -172,6 +172,15 @@
                 });
             }
 
+            // Nav logo — route home to the selected location's page
+            if (loc && loc.slug) {
+                const inSubdir = window.location.pathname.includes('/locations/');
+                const homePath = (inSubdir ? '../' : '') + loc.slug + '.html';
+                document.querySelectorAll('.nav-logo, .location-dropdown-logo').forEach(el => {
+                    el.href = homePath;
+                });
+            }
+
             // Location-specific text content — [data-tm-field]
             if (loc) {
                 document.querySelectorAll('[data-tm-field]').forEach(el => {
