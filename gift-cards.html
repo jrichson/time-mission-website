@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/nav.css?v=15">
+    <link rel="stylesheet" href="css/nav.css?v=16">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/footer.css?v=2">
@@ -91,38 +91,40 @@
             height: 100%;
         }
 
-        /* Dynamic location text overlaid on the card where "YOUR LOCATION" used to be baked in. */
+        /* Dynamic location text overlaid on the card's white bar — centered. */
         .gift-card-location-overlay {
             position: absolute;
-            left: 19%;
-            top: 64%;
+            left: 50%;
+            top: 71%;
+            transform: translate(-50%, -50%);
             z-index: 2;
             display: flex;
             align-items: center;
-            gap: 0.25em;
-            font-family: var(--display);
-            font-size: 8.5cqw;
+            justify-content: center;
+            font-family: var(--tech);
+            font-size: 6.5cqw;
             line-height: 1;
-            letter-spacing: 0.01em;
+            letter-spacing: 0.02em;
             white-space: nowrap;
             pointer-events: none;
         }
 
-        .gift-card-pin {
-            width: 1em;
-            height: 1em;
-            color: var(--orange);
-            flex-shrink: 0;
-        }
-
         .gift-card-location-text {
-            background: linear-gradient(90deg, var(--orange) 0%, #e5394d 55%, var(--magenta) 100%);
+            background: linear-gradient(90deg, var(--orange), var(--magenta), var(--cyan), var(--orange));
+            background-size: 300% 100%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             color: transparent;
             text-transform: uppercase;
             font-weight: 700;
+            animation: gradient-shift 5s ease-in-out infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .gift-card-location-text {
+                animation: none;
+            }
         }
 
         /* Full-opacity animated gradient inside the card's rounded shape —
@@ -570,11 +572,7 @@
                         <img src="assets/logo/tm-gift-card.png" alt="Time Mission gift card" width="5834" height="3750">
                     </picture>
                     <div class="gift-card-location-overlay">
-                        <svg class="gift-card-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        <span class="gift-card-location-text" data-tm-field="name">YOUR LOCATION</span>
+                        <span class="gift-card-location-text" data-tm-field="shortName" id="giftCardLocationText">YOUR LOCATION</span>
                     </div>
                 </div>
             </div>
@@ -976,6 +974,25 @@
 
         // Re-apply when user changes location via the overlay
         document.addEventListener('tm:location-changed', applySelectedLocation);
+    })();
+
+    // Keep the gift card overlay text in sync with the nav's location label,
+    // so it reflects whatever the user sees selected in the top nav.
+    (function () {
+        var navEl = document.getElementById('locationText');
+        var cardEl = document.getElementById('giftCardLocationText');
+        if (!navEl || !cardEl) return;
+        function sync() {
+            var t = (navEl.textContent || '').trim();
+            if (!t || /^select location$/i.test(t)) {
+                cardEl.textContent = 'YOUR LOCATION';
+            } else {
+                cardEl.textContent = t;
+            }
+        }
+        sync();
+        new MutationObserver(sync).observe(navEl, { characterData: true, childList: true, subtree: true });
+        document.addEventListener('tm:location-changed', sync);
     })();
 
     // FAQ accordion — same pattern as faq.html
