@@ -1,0 +1,5 @@
+#,Date,Reviewer,Role,Page URL,Device,Section,What you saw,What it should be,Priority,Screenshot link,Status,Jefferson's notes
+1,2026-04-22,Jefferson,Site Owner,—,—,—,EXAMPLE ROW — delete before launch,Use this row as a format reference,Nice-to-have,—,Example,—
+2,,,TM Operator (Philadelphia),/philadelphia.html,Mobile,Hero,Sunday hours show "10am – 10pm" but we are actually 12pm – 10pm on Sundays,12pm – 10pm,Blocker,,New,
+3,,,LOL Owner,/,Desktop,Homepage hero,A first-time visitor doesn't immediately understand what Time Mission IS,Add a short explainer section above the fold — "Teams of 2-5 compete through 25+ challenge rooms",Important,,New,
+4,,,Customer (iPhone),/groups.html,Mobile,Gallery section,Horizontal swipe on the gallery conflicts with page scroll on iOS Safari,Lock horizontal scroll or add a clearer swipe indicator,Nice-to-have,,New,
