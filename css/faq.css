@@ -1,17 +1,24 @@
-/* Unified FAQ Styles — shared across all pages */
+/* Unified FAQ Styles — matches .mini-faq design on index.html / location pages */
+
+.faq-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
 .faq-item {
     background: var(--dark);
-    border: 1px solid rgba(255, 107, 44, 0.15);
-    border-radius: 16px;
-    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease;
     position: relative;
     z-index: 2;
+    margin-bottom: 0;
 }
 
 .faq-item:hover {
-    border-color: rgba(255, 107, 44, 0.3);
+    border-color: rgba(255, 107, 44, 0.2);
 }
 
 .faq-question {
@@ -19,16 +26,17 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.5rem 2rem;
+    padding: 1.25rem 1.5rem;
     background: none;
     border: none;
     cursor: pointer;
     text-align: left;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
+    gap: 1rem;
 }
 
 .faq-question:hover {
-    background: rgba(255, 107, 44, 0.05);
+    background: transparent;
 }
 
 .faq-question h3,
@@ -36,10 +44,11 @@
 .faq-question-text,
 .faq-question {
     font-family: var(--body);
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 500;
     color: var(--white);
     margin: 0;
+    line-height: 1.4;
 }
 
 .faq-question h3,
@@ -47,58 +56,63 @@
     margin: 0;
 }
 
+/* Icon — bare + that rotates to X. No circle wrapper. */
 .faq-icon {
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 107, 44, 0.1);
-    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
     flex-shrink: 0;
-    margin-left: 1rem;
+    color: var(--orange);
+    transition: transform 0.3s ease;
+    transform-origin: 50% 50%;
+    box-sizing: content-box;
+    line-height: 0;
 }
 
 .faq-icon svg,
 .faq-question > svg {
-    width: 16px;
-    height: 16px;
+    display: block;
+    width: 18px;
+    height: 18px;
     color: var(--orange);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
     transition: transform 0.3s ease;
+    transform-origin: 50% 50%;
     flex-shrink: 0;
-    margin-left: 1rem;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-sizing: content-box;
+    overflow: visible;
 }
 
-/* Bare svg fallback — mimic .faq-icon circle */
-.faq-question > svg {
-    width: 32px;
-    height: 32px;
-    padding: 8px;
-    background: rgba(255, 107, 44, 0.1);
-    border-radius: 50%;
-    box-sizing: border-box;
-}
-
+/* Rotate the plus into an X when active. Rotate the SVG itself so wrapper
+   and SVG don't double-rotate (cancelling each other out). Covers:
+   (1) <div class="faq-icon"><svg>…</svg></div>   (faq.html)
+   (2) <svg class="faq-icon">…</svg>              (gift-cards.html / groups.html)
+   (3) <button class="faq-question"><svg>…</svg></button>  (bare svg fallback) */
+.faq-item.active .faq-icon > svg,
+.faq-item.active svg.faq-icon,
 .faq-item.active .faq-question > svg {
-    background: var(--gradient-primary);
-    color: var(--white);
     transform: rotate(45deg);
-}
-
-.faq-item.active .faq-icon {
-    background: var(--gradient-primary);
-}
-
-.faq-item.active .faq-icon svg {
-    color: var(--white);
-    transform: rotate(45deg);
+    color: var(--orange);
 }
 
 .faq-answer {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.3s ease;
+    transition: max-height 0.4s ease;
 }
 
 .faq-item.active .faq-answer {
@@ -107,10 +121,10 @@
 
 .faq-answer-content,
 .faq-answer > p {
-    padding: 0 2rem 1.5rem;
+    padding: 0 1.5rem 1.25rem;
     color: var(--gray);
-    line-height: 1.8;
-    font-size: 1rem;
+    line-height: 1.6;
+    font-size: 0.9rem;
     margin: 0;
 }
 
@@ -124,16 +138,17 @@
 
 @media (max-width: 768px) {
     .faq-question {
-        padding: 1.25rem 1.5rem;
+        padding: 1.25rem 1.25rem;
     }
 
     .faq-question h3,
+    .faq-question h4,
     .faq-question-text {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .faq-answer-content,
     .faq-answer > p {
-        padding: 0 1.5rem 1.25rem;
+        padding: 0 1.25rem 1.25rem;
     }
 }
