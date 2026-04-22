@@ -312,7 +312,7 @@
       "slug": "houston",
       "name": "Time Mission Houston",
       "shortName": "Houston",
-      "venueName": "Marq'E",
+      "venueName": null,
       "region": "us",
       "status": "coming-soon",
       "address": {
@@ -328,7 +328,7 @@
       },
       "hours": {},
       "bookingUrl": "",
-      "navLabel": "TX - Houston (Marq'E)",
+      "navLabel": "TX - Houston",
       "mapUrl": "",
       "faqs": []
     },
@@ -391,6 +391,81 @@
       "bookingUrl": "",
       "navLabel": "Belgium - Antwerp",
       "mapUrl": "https://maps.google.com/?q=Michiganstraat+1+Antwerp+2030+Belgium",
+      "faqs": []
+    },
+    {
+      "id": "orland-park",
+      "slug": "orland-park",
+      "name": "Time Mission Orland Park",
+      "shortName": "Orland Park",
+      "venueName": null,
+      "region": "us",
+      "status": "coming-soon",
+      "address": {
+        "line1": "66 Orland Park",
+        "city": "Orland Park",
+        "state": "IL",
+        "zip": "60462",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "",
+        "email": ""
+      },
+      "hours": {},
+      "bookingUrl": "",
+      "navLabel": "IL - Orland Park",
+      "mapUrl": "https://maps.google.com/?q=66+Orland+Park+IL+60462",
+      "faqs": []
+    },
+    {
+      "id": "brussels",
+      "slug": "brussels",
+      "name": "Time Mission Brussels",
+      "shortName": "Brussels",
+      "venueName": null,
+      "region": "europe",
+      "status": "coming-soon",
+      "address": {
+        "line1": "Av. Imp\u00e9ratrice Charlotte",
+        "city": "Bruxelles",
+        "state": "",
+        "zip": "1020",
+        "country": "Belgium"
+      },
+      "contact": {
+        "phone": "",
+        "email": ""
+      },
+      "hours": {},
+      "bookingUrl": "",
+      "navLabel": "BE - Brussels",
+      "mapUrl": "https://maps.google.com/?q=Av.+Imp%C3%A9ratrice+Charlotte+1020+Bruxelles+Belgium",
+      "faqs": []
+    },
+    {
+      "id": "dallas",
+      "slug": "dallas",
+      "name": "Time Mission Dallas",
+      "shortName": "Dallas",
+      "venueName": null,
+      "region": "us",
+      "status": "coming-soon",
+      "address": {
+        "line1": "",
+        "city": "Dallas",
+        "state": "TX",
+        "zip": "",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "",
+        "email": ""
+      },
+      "hours": {},
+      "bookingUrl": "",
+      "navLabel": "TX - Dallas",
+      "mapUrl": "https://maps.google.com/?q=Dallas+TX",
       "faqs": []
     }
   ]

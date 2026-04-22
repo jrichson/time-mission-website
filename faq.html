@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/footer.css?v=2">
+    <link rel="stylesheet" href="css/newsletter.css">
+    <link rel="stylesheet" href="css/faq.css">
     <style>
         .section-title {
             font-family: var(--display);
@@ -46,92 +48,6 @@
             padding: 2rem 2rem 6rem;
             max-width: 900px;
             margin: 0 auto;
-        }
-
-        .faq-item {
-            background: var(--dark);
-            border: 1px solid rgba(255, 107, 44, 0.15);
-            border-radius: 16px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 2;
-        }
-
-        .faq-item:hover {
-            border-color: rgba(255, 107, 44, 0.3);
-        }
-
-        .faq-question {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.5rem 2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .faq-question:hover {
-            background: rgba(255, 107, 44, 0.05);
-        }
-
-        .faq-question h3 {
-            font-family: var(--body);
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--white);
-            margin: 0;
-        }
-
-        .faq-icon {
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 107, 44, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-            margin-left: 1rem;
-        }
-
-        .faq-icon svg {
-            width: 16px;
-            height: 16px;
-            color: var(--orange);
-            transition: transform 0.3s ease;
-        }
-
-        .faq-item.active .faq-icon {
-            background: var(--gradient-primary);
-        }
-
-        .faq-item.active .faq-icon svg {
-            color: var(--white);
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-
-        .faq-item.active .faq-answer {
-            max-height: 500px;
-        }
-
-        .faq-answer-content {
-            padding: 0 2rem 1.5rem;
-            color: var(--gray);
-            line-height: 1.8;
-            font-size: 1rem;
-        }
-
-        .faq-answer-content strong {
-            color: var(--white);
         }
 
         /* CTA Section */
@@ -376,26 +292,11 @@
             }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .faq-question {
-                padding: 1.25rem 1.5rem;
-            }
-
-            .faq-question h3 {
-                font-size: 1rem;
-            }
-
-            .faq-answer-content {
-                padding: 0 1.5rem 1.25rem;
-            }
-        }
-
     </style>
     <!-- JSON-LD -->
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How long is a session?","acceptedAnswer":{"@type":"Answer","text":"Sessions come in 60, 90, or 120 minutes. More time = more portals to conquer. Pick your adventure."}},{"@type":"Question","name":"What ages can play?","acceptedAnswer":{"@type":"Answer","text":"Ages 6 and up! Kids 6\u201313 need an adult in the group. Ages 14+ can play on their own."}},{"@type":"Question","name":"Do I need to book in advance?","acceptedAnswer":{"@type":"Answer","text":"We recommend it, especially on weekends. Walk-ins are welcome based on availability, but booking online guarantees your spot."}},{"@type":"Question","name":"What are portals?","acceptedAnswer":{"@type":"Answer","text":"Portals are individual challenge rooms, each with a unique puzzle or mission to solve. Every portal takes 1\u20135 minutes, and you can play them in any order or replay your favorites."}},{"@type":"Question","name":"How many portals are there?","acceptedAnswer":{"@type":"Answer","text":"25\u201330 depending on your Time Mission location. Most groups tackle 15\u201320 portals in a 90-minute session."}},{"@type":"Question","name":"How physical is it?","acceptedAnswer":{"@type":"Answer","text":"It's a mix. Some portals are brain teasers, others get you moving (throwing balls, dodging lasers, pressing buttons). Your team picks which portals to play, so you control the intensity. Meters outside each room show what skills you'll need before you walk in."}},{"@type":"Question","name":"How many people can play together?","acceptedAnswer":{"@type":"Answer","text":"Teams are up to 5 players. Bigger crew? Book multiple teams and compete for the highest score."}},{"@type":"Question","name":"What's the dress code?","acceptedAnswer":{"@type":"Answer","text":"Closed-toe shoes required (no sandals). Sneakers and flexible clothing are your best bet since about half the portals get physical."}},{"@type":"Question","name":"Do we need experience with escape rooms?","acceptedAnswer":{"@type":"Answer","text":"Nope. Time Mission is built for everyone, from first-timers to escape room pros. No experience needed."}},{"@type":"Question","name":"What if we're late?","acceptedAnswer":{"@type":"Answer","text":"Your session starts at your booked time, so arriving 10\u201315 minutes early is recommended. Late arrivals may have a shorter session."}},{"@type":"Question","name":"Can we host a birthday party or private event?","acceptedAnswer":{"@type":"Answer","text":"Absolutely. We offer group packages for birthdays, team outings, and private events. Check out our Groups &amp; Events page or contact us for details."}},{"@type":"Question","name":"Is it wheelchair accessible?","acceptedAnswer":{"@type":"Answer","text":"Details vary by location. Contact your nearest Time Mission for specifics."}},{"@type":"Question","name":"Is there a waiting area for non-players?","acceptedAnswer":{"@type":"Answer","text":"Details vary by location. Contact your nearest Time Mission for specifics."}}]}</script>
-    <!-- JSON-LD --> END
+    <!-- JSON-LD -->
 </head>
 <body class="has-noise">
     <!-- Announcement Ticker -->
@@ -462,12 +363,14 @@
                         <a href="#">PA - Philadelphia</a>
                         <a href="#">NY - West Nyack</a>
                         <a href="#">RI - Lincoln</a>
-                        <a href="#">TX - Houston (Marq'E)</a>
+                        <a href="#">TX - Houston</a>
                         <a href="#">VA - Manassas</a>
+                        <a href="#" class="location-coming-soon">IL - Orland Park <span class="coming-soon-tag">Coming Soon</span></a>
+                        <a href="#" class="location-coming-soon">TX - Dallas <span class="coming-soon-tag">Coming Soon</span></a>
                     </div>
                     <div class="location-group">
                         <div class="location-group-title">Europe</div>
-                        <a href="#">Belgium - Antwerp</a>
+                        <a href="#">BE - Antwerp</a>
                     </div>
                 </div>
             </button>
@@ -709,6 +612,29 @@
         </div>
     </section>
 
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <h2>DON'T MISS A THING</h2>
+            <p>Sign up for sneak peeks and early access to new missions — plus special events, ticket drops, and&nbsp;more.</p>
+            <form class="newsletter-form">
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name">
+                <input type="email" placeholder="Email" class="full-width" required>
+            </form>
+            <label class="newsletter-consent">
+                <input type="checkbox" required>
+                <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+            </label>
+            <button type="submit" class="btn-subscribe">Sign Up</button>
+            <p class="newsletter-legal">
+                By signing up, you agree to our
+                <a href="terms.html">Terms of Service</a> and
+                <a href="privacy.html">Privacy Policy</a>.
+            </p>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-grid">
@@ -753,8 +679,10 @@
                             <a href="philadelphia.html">Philadelphia</a>
                             <a href="west-nyack.html">West Nyack</a>
                             <a href="lincoln.html">Lincoln</a>
-                            <a href="houston.html">Houston (Marq'E)</a>
+                            <a href="houston.html">Houston</a>
                             <a href="manassas.html">Manassas</a>
+                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Orland Park <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Dallas <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
                         </div>
                     </div>
                     <div class="footer-location-group">
@@ -764,6 +692,7 @@
                         </button>
                         <div class="footer-location-list">
                             <a href="antwerp.html">Antwerp</a>
+                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Brussels <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
                         </div>
                     </div>
                 </div>
@@ -812,9 +741,12 @@
                     <option value="mount-prospect">Mount Prospect</option>
                     <option value="west-nyack">West Nyack</option>
                     <option value="lincoln">Lincoln</option>
-                    <option value="houston">Houston (Marq'E)</option>
+                    <option value="houston">Houston</option>
                     <option value="manassas">Manassas</option>
                     <option value="antwerp">Antwerp (Belgium)</option>
+                    <option value="orland-park" disabled>Orland Park — Coming Soon</option>
+                    <option value="dallas" disabled>Dallas — Coming Soon</option>
+                    <option value="brussels" disabled>Brussels — Coming Soon</option>
                 </select>
             </div>
 

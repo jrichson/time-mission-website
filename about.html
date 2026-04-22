@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/footer.css?v=2">
     <link rel="stylesheet" href="css/ticket-panel.css">
+    <link rel="stylesheet" href="css/newsletter.css">
     <style>
         /* Subtle grid texture — matches homepage */
         .what-is,
@@ -173,12 +174,18 @@
             transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
+        .what-is-carousel > picture {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
         .what-is-carousel img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             object-position: center 30%;
-            flex-shrink: 0;
         }
 
         .carousel-dots {
@@ -773,7 +780,7 @@
             overflow: hidden;
         }
 
-        .about-cta::before {
+        .about-cta::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -783,6 +790,7 @@
             height: 300px;
             background: radial-gradient(ellipse, rgba(255, 107, 44, 0.15) 0%, transparent 70%);
             pointer-events: none;
+            z-index: 0;
         }
 
         .about-cta-inner {
@@ -843,7 +851,7 @@
     </style>
     <!-- JSON-LD -->
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}</script>
-    <!-- JSON-LD --> END
+    <!-- JSON-LD -->
 </head>
 <body>
     <!-- Announcement Ticker -->
@@ -925,6 +933,74 @@
             <a href="#" class="btn-tickets">Tickets</a>
         </div>
     </nav>
+
+    <!-- Location Dropdown -->
+    <div class="location-dropdown" id="locationDropdown">
+        <div class="location-dropdown-header">
+            <a href="index.html" class="location-dropdown-logo">
+                <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
+            </a>
+            <button class="location-dropdown-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="location-dropdown-title">Select Your Location</div>
+        <div class="location-overlay-body">
+            <div class="location-overlay-left">
+                <div class="location-group">
+                    <div class="location-group-title">United States</div>
+                    <a href="mount-prospect.html" data-city="Mount Prospect">IL - Mount Prospect</a>
+                    <a href="philadelphia.html" data-city="Philadelphia">PA - Philadelphia</a>
+                    <a href="west-nyack.html" data-city="West Nyack">NY - West Nyack</a>
+                    <a href="lincoln.html" data-city="Lincoln">RI - Lincoln</a>
+                    <a href="houston.html" data-city="Houston">TX - Houston</a>
+                    <a href="manassas.html" data-city="Manassas">VA - Manassas</a>
+                    <a href="#" data-city="Orland Park" class="location-coming-soon">IL - Orland Park <span class="coming-soon-tag">Coming Soon</span></a>
+                    <a href="#" data-city="Dallas" class="location-coming-soon">TX - Dallas <span class="coming-soon-tag">Coming Soon</span></a>
+                </div>
+                <div class="location-group">
+                    <div class="location-group-title">Europe</div>
+                    <a href="antwerp.html" data-city="Antwerp">BE - Antwerp</a>
+                    <a href="#" data-city="Brussels" class="location-coming-soon">BE - Brussels <span class="coming-soon-tag">Coming Soon</span></a>
+                </div>
+            </div>
+            <div class="location-overlay-divider"></div>
+            <div class="location-overlay-right" id="locationInfo">
+                <div class="location-map" id="locationMap"></div>
+                <div class="location-info-content">
+                    <div class="location-info-empty">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <p>Select a location to view details</p>
+                    </div>
+                    <div class="location-info-details" style="display:none;">
+                        <h3 class="location-info-name"></h3>
+                        <a href="#" class="location-info-address" target="_blank" rel="noopener"></a>
+                        <div class="location-info-phone"></div>
+                        <div class="location-info-section">
+                            <h4>Hours</h4>
+                            <div class="location-info-hours"></div>
+                        </div>
+                        <div class="location-info-actions">
+                            <a href="#" class="location-info-book">Book Now</a>
+                            <a href="contact.html" class="location-info-contact">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="location-overlay-footer">
+            <div class="location-overlay-social">
+                <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.51a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 10.86 4.34A6.28 6.28 0 0 0 15.86 15V8.74a8.18 8.18 0 0 0 4.14 1.15V6.69h-.41z"/></svg>
+                </a>
+                <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"/></svg>
+                </a>
+            </div>
+            <p class="location-overlay-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+        </div>
+    </div>
 
     <!-- Hero -->
     <section class="about-hero">
@@ -1071,6 +1147,29 @@
         </div>
     </section>
 
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <h2>DON'T MISS A THING</h2>
+            <p>Sign up for sneak peeks and early access to new missions — plus special events, ticket drops, and&nbsp;more.</p>
+            <form class="newsletter-form">
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name">
+                <input type="email" placeholder="Email" class="full-width" required>
+            </form>
+            <label class="newsletter-consent">
+                <input type="checkbox" required>
+                <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+            </label>
+            <button type="submit" class="btn-subscribe">Sign Up</button>
+            <p class="newsletter-legal">
+                By signing up, you agree to our
+                <a href="terms.html">Terms of Service</a> and
+                <a href="privacy.html">Privacy Policy</a>.
+            </p>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-grid">
@@ -1115,8 +1214,10 @@
                             <a href="philadelphia.html">Philadelphia</a>
                             <a href="west-nyack.html">West Nyack</a>
                             <a href="lincoln.html">Lincoln</a>
-                            <a href="houston.html">Houston (Marq'E)</a>
+                            <a href="houston.html">Houston</a>
                             <a href="manassas.html">Manassas</a>
+                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Orland Park <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Dallas <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
                         </div>
                     </div>
                     <div class="footer-location-group">
@@ -1126,6 +1227,7 @@
                         </button>
                         <div class="footer-location-list">
                             <a href="antwerp.html">Antwerp</a>
+                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Brussels <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
                         </div>
                     </div>
                 </div>
@@ -1173,9 +1275,12 @@
                     <option value="mount-prospect">Mount Prospect</option>
                     <option value="west-nyack">West Nyack</option>
                     <option value="lincoln">Lincoln</option>
-                    <option value="houston">Houston (Marq'E)</option>
+                    <option value="houston">Houston</option>
                     <option value="manassas">Manassas</option>
                     <option value="antwerp">Antwerp (Belgium)</option>
+                    <option value="orland-park" disabled>Orland Park — Coming Soon</option>
+                    <option value="dallas" disabled>Dallas — Coming Soon</option>
+                    <option value="brussels" disabled>Brussels — Coming Soon</option>
                 </select>
             </div>
             <a href="#" class="btn-ticket-book" id="ticketBookBtn" target="_blank">

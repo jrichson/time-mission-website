@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/footer.css?v=2">
+    <link rel="stylesheet" href="css/newsletter.css">
+    <link rel="stylesheet" href="css/faq.css">
     <style>
         .section-title {
             font-family: var(--display);
@@ -246,60 +248,6 @@
             letter-spacing: 0.02em;
             text-align: center;
             margin-bottom: 2.5rem;
-        }
-
-        .faq-item {
-            background: var(--dark);
-            border: 1px solid rgba(255, 107, 44, 0.15);
-            border-radius: 16px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .faq-item:hover {
-            border-color: rgba(255, 107, 44, 0.3);
-        }
-
-        .faq-question {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.25rem 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .faq-question h4 {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .faq-icon {
-            width: 24px;
-            height: 24px;
-            color: var(--orange);
-            transition: transform 0.3s ease;
-        }
-
-        .faq-item.active .faq-icon {
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-        }
-
-        .faq-item.active .faq-answer {
-            max-height: 300px;
-            padding: 0 1.5rem 1.5rem;
-        }
-
-        .faq-answer p {
-            color: var(--gray);
-            line-height: 1.7;
         }
 
         /* CTA Section */
@@ -552,7 +500,7 @@
     </style>
     <!-- JSON-LD -->
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}</script>
-    <!-- JSON-LD --> END
+    <!-- JSON-LD -->
 </head>
 <body class="has-noise">
     <!-- Announcement Ticker -->
@@ -619,12 +567,14 @@
                         <a href="#">PA - Philadelphia</a>
                         <a href="#">NY - West Nyack</a>
                         <a href="#">RI - Lincoln</a>
-                        <a href="#">TX - Houston (Marq'E)</a>
+                        <a href="#">TX - Houston</a>
                         <a href="#">VA - Manassas</a>
+                        <a href="#" class="location-coming-soon">IL - Orland Park <span class="coming-soon-tag">Coming Soon</span></a>
+                        <a href="#" class="location-coming-soon">TX - Dallas <span class="coming-soon-tag">Coming Soon</span></a>
                     </div>
                     <div class="location-group">
                         <div class="location-group-title">Europe</div>
-                        <a href="#">Belgium - Antwerp</a>
+                        <a href="#">BE - Antwerp</a>
                     </div>
                 </div>
             </button>
@@ -771,6 +721,29 @@
         </div>
     </section>
 
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <h2>DON'T MISS A THING</h2>
+            <p>Sign up for sneak peeks and early access to new missions — plus special events, ticket drops, and&nbsp;more.</p>
+            <form class="newsletter-form">
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name">
+                <input type="email" placeholder="Email" class="full-width" required>
+            </form>
+            <label class="newsletter-consent">
+                <input type="checkbox" required>
+                <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+            </label>
+            <button type="submit" class="btn-subscribe">Sign Up</button>
+            <p class="newsletter-legal">
+                By signing up, you agree to our
+                <a href="terms.html">Terms of Service</a> and
+                <a href="privacy.html">Privacy Policy</a>.
+            </p>
+        </div>
+    </section>
+
     <!-- Footer -->
     <!-- Footer -->
     <footer class="footer">
@@ -816,8 +789,10 @@
                             <a href="philadelphia.html">Philadelphia</a>
                             <a href="west-nyack.html">West Nyack</a>
                             <a href="lincoln.html">Lincoln</a>
-                            <a href="houston.html">Houston (Marq'E)</a>
+                            <a href="houston.html">Houston</a>
                             <a href="manassas.html">Manassas</a>
+                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Orland Park <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Dallas <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
                         </div>
                     </div>
                     <div class="footer-location-group">
@@ -827,6 +802,7 @@
                         </button>
                         <div class="footer-location-list">
                             <a href="antwerp.html">Antwerp</a>
+                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Brussels <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
                         </div>
                     </div>
                 </div>
@@ -875,9 +851,12 @@
                     <option value="mount-prospect">Mount Prospect</option>
                     <option value="west-nyack">West Nyack</option>
                     <option value="lincoln">Lincoln</option>
-                    <option value="houston">Houston (Marq'E)</option>
+                    <option value="houston">Houston</option>
                     <option value="manassas">Manassas</option>
                     <option value="antwerp">Antwerp (Belgium)</option>
+                    <option value="orland-park" disabled>Orland Park — Coming Soon</option>
+                    <option value="dallas" disabled>Dallas — Coming Soon</option>
+                    <option value="brussels" disabled>Brussels — Coming Soon</option>
                 </select>
             </div>
 
