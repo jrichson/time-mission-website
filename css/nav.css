@@ -766,9 +766,9 @@
 
     .location-dropdown a {
         font-size: 0.95rem;
-        padding: 0.85rem 1rem;
-        margin: 0 -1rem;
-        border-radius: 12px;
+        padding: 0.85rem 1.25rem;
+        margin: 0 -1.25rem;
+        border-radius: 0;
         display: block;
     }
 
