@@ -766,17 +766,10 @@
 
     .location-dropdown a {
         font-size: 0.95rem;
-        padding: 1.1rem 0;
-        margin: 0;
-        border-radius: 0;
-        display: block;
-    }
-    /* Active highlight: tall pill, aligned with the group title text start */
-    .location-dropdown a.active,
-    .location-dropdown a:hover {
-        padding: 1.1rem 1rem;
+        padding: 0.85rem 1rem;
         margin: 0 -1rem;
         border-radius: 12px;
+        display: block;
     }
 
     /* Coming Soon links stack on their own line on mobile */
