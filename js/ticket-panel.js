@@ -14,15 +14,18 @@
     var ticketLocationSelect = document.getElementById('ticketLocation');
     var ticketBookBtn = document.getElementById('ticketBookBtn');
 
-    // Central booking URLs — SINGLE SOURCE OF TRUTH
+    // Central booking URLs — keep aligned with data/locations.json.
+    // Antwerp uses Experience Factory's booking (not Roller) — we route to email
+    // until the operator provides a direct booking URL.
+    // Houston is pre-launch — we route to its page (which has waitlist/info).
     var bookingUrls = {
         philadelphia: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
         'mount-prospect': 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
         manassas: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
         'west-nyack': 'https://tickets.timemission.com/onlinecheckout/en-us/products',
         lincoln: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-        houston: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-        antwerp: 'https://tickets.timemission.com/onlinecheckout/en-us/products'
+        houston: 'houston.html',
+        antwerp: 'mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Booking%20Request'
     };
 
     // Location page URLs — for routing through location page before booking
@@ -100,15 +103,27 @@
         document.body.style.overflow = '';
     }
 
-    // Unified handler: if button has a real http URL (location-specific), navigate directly;
-    // otherwise open the ticket panel so the user can pick a location.
+    // A URL is "direct" if it's an http(s) booking URL or a mailto/tel scheme —
+    // in any of those cases we navigate straight there instead of opening the panel.
+    function isDirectBookingUrl(href) {
+        if (!href || href === '#') return false;
+        return /^(https?:|mailto:|tel:)/i.test(href);
+    }
+
+    // Unified handler: if button has a direct URL, navigate; otherwise open the
+    // ticket panel so the user can pick a location.
     function bookOrOpenPanel(e) {
         var btn = e.currentTarget;
         var href = btn.getAttribute('href');
-        if (href && href !== '#' && href.indexOf('http') === 0) {
-            // Location selected (or baked-in URL) — go directly to booking
+        if (isDirectBookingUrl(href)) {
             e.preventDefault();
-            window.open(href, '_blank');
+            // mailto/tel should stay in the same tab (new tabs often end up blank);
+            // external booking URLs open in a new tab so the site stays put.
+            if (/^(mailto:|tel:)/i.test(href)) {
+                window.location.href = href;
+            } else {
+                window.open(href, '_blank');
+            }
             return;
         }
         // No location — open ticket panel to choose
