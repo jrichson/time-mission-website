@@ -1,38 +1,42 @@
 {
-  "_instructions": "SINGLE SOURCE OF TRUTH for all location data. Fill in real values as TM owners provide them. This file feeds the prototype now and imports into the CMS later. To add a new location, copy any location block and update all fields.",
+  "_instructions": "SINGLE SOURCE OF TRUTH for all location data. Real data captured from live timemission.com on 2026-04-22. When operators confirm changes, update here and regenerate page content.",
 
   "locations": [
     {
       "id": "philadelphia",
       "name": "Philadelphia",
+      "displayName": "Philly (Philadelphia, PA)",
+      "venue": "Philly",
       "status": "open",
       "slug": "philadelphia",
       "pageReady": true,
 
       "address": {
-        "street": "123 Market Street",
+        "street": "1530 Chestnut Street",
         "city": "Philadelphia",
         "state": "PA",
-        "zip": "19103",
+        "zip": "19102",
         "country": "US"
       },
 
       "contact": {
-        "phone": "(215) 555-1234",
-        "phoneLink": "+12155551234",
-        "email": "philadelphia@timemission.com",
-        "phoneVerified": false,
-        "emailVerified": false
+        "phone": "(267) 710-1240",
+        "phoneLink": "+12677101240",
+        "email": "philly@timemission.com",
+        "phoneVerified": true,
+        "emailVerified": true,
+        "verifiedDate": "2026-04-22",
+        "source": "timemission.com live site"
       },
 
       "hours": {
-        "monday": "10:00 AM - 9:00 PM",
-        "tuesday": "10:00 AM - 9:00 PM",
-        "wednesday": "10:00 AM - 9:00 PM",
-        "thursday": "10:00 AM - 9:00 PM",
-        "friday": "10:00 AM - 10:00 PM",
-        "saturday": "10:00 AM - 10:00 PM",
-        "sunday": "11:00 AM - 8:00 PM"
+        "monday": "12:00 PM - 10:00 PM",
+        "tuesday": "12:00 PM - 10:00 PM",
+        "wednesday": "12:00 PM - 10:00 PM",
+        "thursday": "12:00 PM - 10:00 PM",
+        "friday": "12:00 PM - 11:00 PM",
+        "saturday": "10:00 AM - 11:00 PM",
+        "sunday": "10:00 AM - 10:00 PM"
       },
 
       "booking": {
@@ -40,77 +44,64 @@
         "verified": false
       },
 
-      "details": {
-        "opened": "September 15, 2022",
-        "squareFootage": "8,500 SF"
-      },
-
-      "seo": {
-        "metaDescription": "",
-        "ogImage": ""
-      },
-
       "notes": "Most complete location page. Use as template for others."
     },
     {
-      "id": "chicago",
-      "name": "Chicago",
+      "id": "mount-prospect",
+      "name": "Mount Prospect",
+      "displayName": "Mt Prospect (Mount Prospect, IL)",
+      "venue": "Mt Prospect (at Randhurst Village)",
       "status": "open",
-      "slug": "chicago",
-      "pageReady": false,
+      "slug": "mount-prospect",
+      "altSlugs": ["mountprospect", "chicago"],
+      "pageReady": true,
 
       "address": {
-        "street": "NEEDS REAL ADDRESS",
-        "city": "Chicago",
+        "street": "132 Randhurst Village Drive",
+        "city": "Mount Prospect",
         "state": "IL",
-        "zip": "",
+        "zip": "60056",
         "country": "US"
       },
 
       "contact": {
-        "phone": "(847) 555-1234",
-        "phoneLink": "+18475551234",
-        "email": "chicago@timemission.com",
-        "phoneVerified": false,
-        "emailVerified": false
+        "phone": "(847) 250-9560",
+        "phoneLink": "+18472509560",
+        "email": "mtprospect@timemission.com",
+        "phoneVerified": true,
+        "emailVerified": true,
+        "verifiedDate": "2026-04-22",
+        "source": "timemission.com live site"
       },
 
       "hours": {
-        "monday": "10:00 AM - 9:00 PM",
-        "tuesday": "10:00 AM - 9:00 PM",
-        "wednesday": "10:00 AM - 9:00 PM",
-        "thursday": "10:00 AM - 9:00 PM",
-        "friday": "10:00 AM - 10:00 PM",
-        "saturday": "10:00 AM - 10:00 PM",
-        "sunday": "11:00 AM - 8:00 PM"
+        "monday": "12:00 PM - 9:00 PM",
+        "tuesday": "12:00 PM - 9:00 PM",
+        "wednesday": "12:00 PM - 9:00 PM",
+        "thursday": "12:00 PM - 9:00 PM",
+        "friday": "12:00 PM - 12:00 AM",
+        "saturday": "10:00 AM - 12:00 AM",
+        "sunday": "10:00 AM - 8:00 PM"
       },
 
       "booking": {
-        "url": "https://ecom.roller.app/lolcommandcenterchicagoil/test/en-us/products",
+        "url": "https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products",
         "verified": false
       },
 
-      "details": {
-        "opened": "",
-        "squareFootage": ""
-      },
-
-      "seo": {
-        "metaDescription": "",
-        "ogImage": ""
-      },
-
-      "notes": "Sparsest page (370 lines). Needs full buildout."
+      "notes": "Old site uses slug /mountprospect (no dash). Set up redirect."
     },
     {
       "id": "houston",
       "name": "Houston",
+      "displayName": "Houston (Marq'E)",
+      "venue": "",
       "status": "coming_soon",
       "slug": "houston",
-      "pageReady": false,
+      "pageReady": true,
 
       "address": {
-        "street": "NEEDS REAL ADDRESS",
+        "street": "",
         "city": "Houston",
         "state": "TX",
         "zip": "",
@@ -118,254 +109,240 @@
       },
 
       "contact": {
-        "phone": "(713) 555-1234",
-        "phoneLink": "+17135551234",
-        "email": "houston@timemission.com",
+        "phone": "",
+        "phoneLink": "",
+        "email": "",
         "phoneVerified": false,
-        "emailVerified": false
+        "emailVerified": false,
+        "source": "pending operator"
       },
 
       "hours": {
-        "monday": "NEEDS HOURS",
-        "tuesday": "NEEDS HOURS",
-        "wednesday": "NEEDS HOURS",
-        "thursday": "NEEDS HOURS",
-        "friday": "NEEDS HOURS",
-        "saturday": "NEEDS HOURS",
-        "sunday": "NEEDS HOURS"
+        "monday": "",
+        "tuesday": "",
+        "wednesday": "",
+        "thursday": "",
+        "friday": "",
+        "saturday": "",
+        "sunday": ""
       },
 
       "booking": {
-        "url": "https://ecom.roller.app/lolcommandcenterhoustontx/test/en-us/products",
+        "url": "",
         "verified": false
       },
 
-      "details": {
-        "opened": "Late May 2026",
-        "squareFootage": ""
-      },
-
-      "seo": {
-        "metaDescription": "",
-        "ogImage": ""
-      },
-
-      "notes": "PRIORITY — Houston launch is the deadline. Email missing from page. Needs full buildout."
+      "notes": "Coming soon. Targeting Marq'E entertainment district. Hard deadline May 22, 2026. All fields pending operator."
     },
     {
       "id": "lincoln",
       "name": "Lincoln",
+      "displayName": "R1 Indoor Karting (Lincoln, RI)",
+      "venue": "R1 Indoor Karting",
       "status": "open",
       "slug": "lincoln",
-      "pageReady": false,
+      "altSlugs": ["providence"],
+      "pageReady": true,
 
       "address": {
-        "street": "NEEDS REAL ADDRESS",
+        "street": "100 Higginson Ave",
         "city": "Lincoln",
-        "state": "NE",
-        "zip": "",
+        "state": "RI",
+        "zip": "02865",
         "country": "US"
       },
 
       "contact": {
-        "phone": "(402) 555-1234",
-        "phoneLink": "+14025551234",
-        "email": "lincoln@timemission.com",
-        "phoneVerified": false,
-        "emailVerified": false
+        "phone": "(401) 721-5554",
+        "phoneLink": "+14017215554",
+        "email": "info@r1indoorkarting.com",
+        "phoneVerified": true,
+        "emailVerified": true,
+        "verifiedDate": "2026-04-22",
+        "source": "timemission.com live site",
+        "notes": "Operator R1 Indoor Karting owns the mailbox"
       },
 
       "hours": {
-        "monday": "10:00 AM - 9:00 PM",
-        "tuesday": "10:00 AM - 9:00 PM",
-        "wednesday": "10:00 AM - 9:00 PM",
-        "thursday": "10:00 AM - 9:00 PM",
-        "friday": "10:00 AM - 10:00 PM",
-        "saturday": "10:00 AM - 10:00 PM",
-        "sunday": "11:00 AM - 8:00 PM"
+        "monday": "12:00 PM - 11:00 PM",
+        "tuesday": "12:00 PM - 11:00 PM",
+        "wednesday": "12:00 PM - 11:00 PM",
+        "thursday": "12:00 PM - 11:00 PM",
+        "friday": "12:00 PM - 12:00 AM",
+        "saturday": "9:00 AM - 12:00 AM",
+        "sunday": "9:00 AM - 11:00 PM"
       },
 
       "booking": {
-        "url": "https://ecom.roller.app/lolcommandcenterlincolnne/test/en-us/products",
+        "url": "https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products",
         "verified": false
       },
 
-      "details": {
-        "opened": "",
-        "squareFootage": ""
-      },
-
-      "seo": {
-        "metaDescription": "",
-        "ogImage": ""
-      },
-
-      "notes": "Sparse template page. Needs buildout."
+      "notes": "Hosted inside R1 Indoor Karting. Old site sometimes calls this 'Providence'."
     },
     {
       "id": "west-nyack",
       "name": "West Nyack",
+      "displayName": "Palisades Center (West Nyack, NY)",
+      "venue": "Palisades Center",
       "status": "open",
       "slug": "west-nyack",
-      "pageReady": false,
+      "altSlugs": ["westnyack", "palisades"],
+      "pageReady": true,
 
       "address": {
-        "street": "NEEDS REAL ADDRESS",
+        "street": "3532 Palisades Center Dr, Level 3",
         "city": "West Nyack",
         "state": "NY",
-        "zip": "",
+        "zip": "10994",
         "country": "US"
       },
 
       "contact": {
-        "phone": "(845) 555-1234",
-        "phoneLink": "+18455551234",
-        "email": "westnyack@timemission.com",
-        "phoneVerified": false,
-        "emailVerified": false
+        "phone": "(845) 328-4528",
+        "phoneLink": "+18453284528",
+        "email": "palisades@timemission.com",
+        "phoneVerified": true,
+        "emailVerified": true,
+        "verifiedDate": "2026-04-22",
+        "source": "timemission.com live site"
       },
 
       "hours": {
-        "monday": "10:00 AM - 9:00 PM",
-        "tuesday": "10:00 AM - 9:00 PM",
-        "wednesday": "10:00 AM - 9:00 PM",
-        "thursday": "10:00 AM - 9:00 PM",
-        "friday": "10:00 AM - 10:00 PM",
-        "saturday": "10:00 AM - 10:00 PM",
-        "sunday": "11:00 AM - 8:00 PM"
+        "monday": "12:00 PM - 9:00 PM",
+        "tuesday": "12:00 PM - 9:00 PM",
+        "wednesday": "12:00 PM - 9:00 PM",
+        "thursday": "12:00 PM - 9:00 PM",
+        "friday": "12:00 PM - 11:00 PM",
+        "saturday": "10:00 AM - 11:00 PM",
+        "sunday": "10:00 AM - 8:00 PM"
       },
 
       "booking": {
-        "url": "https://ecom.roller.app/lolcommandcenterwestnyackny/test/en-us/products",
+        "url": "https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products",
         "verified": false
       },
 
-      "details": {
-        "opened": "",
-        "squareFootage": ""
-      },
-
-      "seo": {
-        "metaDescription": "",
-        "ogImage": ""
-      },
-
-      "notes": "Sparse template page. Needs buildout."
+      "notes": "Inside Palisades Center mall on Level 3. Old-site slug /west-nyack."
     },
     {
       "id": "manassas",
       "name": "Manassas",
+      "displayName": "Manassas Mall (Manassas, VA)",
+      "venue": "Manassas Mall",
       "status": "open",
       "slug": "manassas",
-      "pageReady": false,
+      "pageReady": true,
 
       "address": {
-        "street": "NEEDS REAL ADDRESS",
+        "street": "8300 Sudley Rd, Unit A2",
         "city": "Manassas",
         "state": "VA",
-        "zip": "",
+        "zip": "20109",
         "country": "US"
       },
 
       "contact": {
-        "phone": "(703) 555-1234",
-        "phoneLink": "+17035551234",
+        "phone": "(571) 732-1050",
+        "phoneLink": "+15717321050",
         "email": "manassas@timemission.com",
-        "phoneVerified": false,
-        "emailVerified": false
+        "phoneVerified": true,
+        "emailVerified": true,
+        "verifiedDate": "2026-04-22",
+        "source": "timemission.com live site"
       },
 
       "hours": {
-        "monday": "10:00 AM - 9:00 PM",
-        "tuesday": "10:00 AM - 9:00 PM",
-        "wednesday": "10:00 AM - 9:00 PM",
-        "thursday": "10:00 AM - 9:00 PM",
-        "friday": "10:00 AM - 10:00 PM",
-        "saturday": "10:00 AM - 10:00 PM",
-        "sunday": "11:00 AM - 8:00 PM"
+        "monday": "12:00 PM - 9:00 PM",
+        "tuesday": "12:00 PM - 9:00 PM",
+        "wednesday": "12:00 PM - 9:00 PM",
+        "thursday": "12:00 PM - 9:00 PM",
+        "friday": "12:00 PM - 12:00 AM",
+        "saturday": "10:00 AM - 12:00 AM",
+        "sunday": "10:00 AM - 8:00 PM"
       },
 
       "booking": {
-        "url": "https://ecom.roller.app/lolcommandcentermanassasva/test/en-us/products",
+        "url": "https://ecom.roller.app/lolcommandcenterphiladelphiapa/test/en-us/products",
         "verified": false
       },
 
-      "details": {
-        "opened": "",
-        "squareFootage": ""
-      },
-
-      "seo": {
-        "metaDescription": "",
-        "ogImage": ""
-      },
-
-      "notes": "Sparse template page. Email missing from detail card. Needs buildout."
+      "notes": "Inside Manassas Mall."
     },
     {
       "id": "antwerp",
       "name": "Antwerp",
+      "displayName": "Experience Factory (Antwerp, BE)",
+      "venue": "Experience Factory",
       "status": "open",
       "slug": "antwerp",
-      "pageReady": false,
+      "pageReady": true,
 
       "address": {
-        "street": "NEEDS REAL ADDRESS",
+        "street": "Michiganstraat 1",
         "city": "Antwerp",
         "state": "",
-        "zip": "",
+        "zip": "2030",
         "country": "BE"
       },
 
       "contact": {
-        "phone": "NEEDS PHONE NUMBER",
-        "phoneLink": "",
-        "email": "antwerp@timemission.com",
-        "phoneVerified": false,
-        "emailVerified": false
+        "phone": "+32 3 301 03 03",
+        "phoneLink": "+3233010303",
+        "email": "info@experience-factory.com",
+        "phoneVerified": true,
+        "emailVerified": true,
+        "verifiedDate": "2026-04-22",
+        "source": "timemission.com live site",
+        "notes": "Operator Experience Factory owns the mailbox"
       },
 
       "hours": {
-        "monday": "10:00 AM - 9:00 PM",
-        "tuesday": "10:00 AM - 9:00 PM",
-        "wednesday": "10:00 AM - 9:00 PM",
-        "thursday": "10:00 AM - 9:00 PM",
-        "friday": "10:00 AM - 10:00 PM",
-        "saturday": "10:00 AM - 10:00 PM",
-        "sunday": "11:00 AM - 8:00 PM"
+        "monday": "2:00 PM - 11:00 PM",
+        "tuesday": "2:00 PM - 11:00 PM",
+        "wednesday": "2:00 PM - 11:00 PM",
+        "thursday": "2:00 PM - 11:00 PM",
+        "friday": "2:00 PM - 11:00 PM",
+        "saturday": "11:00 AM - 11:00 PM",
+        "sunday": "11:00 AM - 11:00 PM"
       },
 
       "booking": {
-        "url": "https://ecom.roller.app/lolcommandcenterantwerpbe/test/en-us/products",
-        "verified": false
+        "url": "",
+        "verified": false,
+        "notes": "Separate booking flow (not Roller). Pending."
       },
 
-      "details": {
-        "opened": "",
-        "squareFootage": ""
-      },
-
-      "seo": {
-        "metaDescription": "",
-        "ogImage": ""
-      },
-
-      "notes": "EU location — requires GDPR compliance. No phone number yet."
+      "notes": "Hosted inside Experience Factory. European office; different booking system. Multi-language (NL/FR) missing on new site."
     }
   ],
 
-  "social": {
-    "instagram": "NEEDS URL",
-    "tiktok": "NEEDS URL",
-    "facebook": "NEEDS URL",
-    "twitter": "",
-    "youtube": ""
+  "corporate": {
+    "usa": {
+      "name": "Time Mission Corp Inc. (USA)",
+      "street": "180 Mill Street",
+      "city": "Cranston",
+      "state": "RI",
+      "zip": "02905",
+      "country": "US",
+      "phone": "+1 401 321 4546",
+      "email": "info@timemission.com"
+    },
+    "europe": {
+      "name": "Time Mission Corp Inc. (Europe)",
+      "street": "Kruisakker 12",
+      "city": "Nuenen",
+      "state": "",
+      "zip": "5674 TZ",
+      "country": "NL",
+      "phone": "",
+      "email": "info@timemission.eu"
+    }
   },
 
-  "brand": {
-    "companyName": "Time Mission",
-    "parentCompany": "LOL Entertainment",
-    "generalEmail": "info@timemission.com",
-    "website": "https://timemission.com"
+  "social": {
+    "instagram": "https://www.instagram.com/timemission/",
+    "tiktok": "https://www.tiktok.com/@timemissionhq",
+    "facebook": "https://www.facebook.com/TimeMissionHQ/"
   }
 }
