@@ -100,25 +100,28 @@
         document.body.style.overflow = '';
     }
 
-    // Attach click handlers to all booking buttons
-    var bookingButtons = document.querySelectorAll('.btn-tickets, .btn-primary[href*="roller"], .btn-nav[href*="roller"], .btn-primary[href*="tickets.timemission"]');
-    bookingButtons.forEach(function (btn) {
-        btn.addEventListener('click', openTicketPanel);
-    });
+    // Unified handler: if button has a real http URL (location-specific), navigate directly;
+    // otherwise open the ticket panel so the user can pick a location.
+    function bookOrOpenPanel(e) {
+        var btn = e.currentTarget;
+        var href = btn.getAttribute('href');
+        if (href && href !== '#' && href.indexOf('http') === 0) {
+            // Location selected (or baked-in URL) — go directly to booking
+            e.preventDefault();
+            window.open(href, '_blank');
+            return;
+        }
+        // No location — open ticket panel to choose
+        openTicketPanel(e);
+    }
 
-    // Portal card "Book Now" buttons — navigate if location set, else open ticket panel
-    document.querySelectorAll('.btn-book-now').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            var href = btn.getAttribute('href');
-            if (href && href !== '#' && href.indexOf('http') === 0) {
-                // Location is selected — navigate directly to booking
-                e.preventDefault();
-                window.open(href, '_blank');
-                return;
-            }
-            // No location selected — open ticket panel to choose
-            openTicketPanel(e);
-        });
+    // Attach to all booking buttons site-wide
+    var bookingButtons = document.querySelectorAll(
+        '.btn-tickets, .btn-book-now, ' +
+        '.btn-primary[href*="roller"], .btn-nav[href*="roller"], .btn-primary[href*="tickets.timemission"]'
+    );
+    bookingButtons.forEach(function (btn) {
+        btn.addEventListener('click', bookOrOpenPanel);
     });
 
     // Close handlers

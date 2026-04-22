@@ -118,10 +118,12 @@
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
 }
 
-.newsletter-legal {
+.newsletter-inner > p.newsletter-legal {
     color: var(--gray);
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
     margin-top: 1rem;
+    margin-bottom: 0;
 }
 
 .newsletter-legal a {
