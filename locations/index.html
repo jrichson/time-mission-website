@@ -806,14 +806,15 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        const revealEls = document.querySelectorAll('.reveal');
+        revealEls.forEach(el => observer.observe(el));
 
-        // Ticket Popup Panel
-const selectedLocation = e.target.value;
-            if (selectedLocation && bookingUrls[selectedLocation]) {
-                ticketBookBtn.href = bookingUrls[selectedLocation];
-            }
-        });
+        // Failsafe — if IntersectionObserver never fires (older browsers,
+        // in-app webviews), reveal everything after 800ms so content never
+        // stays stuck at opacity 0.
+        setTimeout(() => {
+            revealEls.forEach(el => el.classList.add('visible'));
+        }, 800);
     </script>
     <script defer src="../js/nav.js?v=4"></script>
     <script>
