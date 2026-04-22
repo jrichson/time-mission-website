@@ -238,7 +238,7 @@
             overflow: hidden;
             aspect-ratio: 3/4;
             cursor: pointer;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, aspect-ratio 0.4s ease;
         }
 
         .portal-card:hover {
@@ -255,6 +255,36 @@
 
         .portal-card:hover img {
             transform: scale(1.08);
+        }
+
+        /* Expanded state — shows full description */
+        .portal-card.expanded {
+            aspect-ratio: auto;
+        }
+
+        .portal-card.expanded:hover img {
+            transform: none;
+        }
+
+        .portal-card.expanded .portal-overlay {
+            background: linear-gradient(
+                180deg,
+                transparent 0%,
+                rgba(13, 13, 13, 0.6) 30%,
+                rgba(13, 13, 13, 0.95) 50%,
+                rgba(13, 13, 13, 1) 100%
+            );
+            padding-top: 30%;
+        }
+
+        .portal-card.expanded .portal-desc {
+            -webkit-line-clamp: unset;
+            display: block;
+        }
+
+        .portal-card.expanded .portal-cta {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .portal-overlay {
@@ -1862,6 +1892,16 @@
                 filterSection.classList.toggle('stuck', rect.top <= 60);
             }, { passive: true });
         }
+
+        // Click card to expand/collapse full description.
+        // Clicks on the Book Now CTA pass through (don't toggle).
+        document.querySelectorAll('.portal-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                // Let clicks on book-now CTAs, links, and badges pass through
+                if (e.target.closest('.portal-cta, a, .portal-badge')) return;
+                card.classList.toggle('expanded');
+            });
+        });
 
     </script>
     <script src="js/locations.js?v=4"></script>
