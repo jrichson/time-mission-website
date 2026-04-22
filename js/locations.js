@@ -131,11 +131,19 @@
         /** Restore location from localStorage */
         restore() {
             try {
-                const saved = localStorage.getItem(STORAGE_KEY);
+                // Primary key (slug)
+                let saved = localStorage.getItem(STORAGE_KEY);
+                // Fallback — legacy/nav.js key stores display name ("Philadelphia")
+                if (!saved) {
+                    const legacy = localStorage.getItem('timeMissionLocation');
+                    if (legacy) saved = legacy.toLowerCase().replace(/\s+/g, '-');
+                }
                 if (saved) {
                     const loc = TM.get(saved);
                     if (loc) {
                         TM.current = loc;
+                        // Heal the canonical key for next time
+                        try { localStorage.setItem(STORAGE_KEY, loc.id); } catch (e) {}
                         return;
                     }
                     // If locations haven't loaded (e.g. file:// protocol),
@@ -178,6 +186,14 @@
                 const homePath = (inSubdir ? '../' : '') + loc.slug + '.html';
                 document.querySelectorAll('.nav-logo, .location-dropdown-logo').forEach(el => {
                     el.href = homePath;
+                });
+            }
+
+            // Ticker bar — match the selected location's ticker message
+            if (loc && loc.ticker) {
+                document.querySelectorAll('.ticker-track').forEach(track => {
+                    const items = track.querySelectorAll('.ticker-item');
+                    items.forEach(item => { item.textContent = loc.ticker; });
                 });
             }
 

@@ -59,7 +59,8 @@
       "bookingUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products",
       "navLabel": "IL - Mount Prospect",
       "mapUrl": "https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056",
-      "faqs": []
+      "faqs": [],
+      "ticker": "ORLAND PARK, IL OPENING SOON!"
     },
     {
       "id": "philadelphia",
@@ -120,7 +121,8 @@
       "bookingUrl": "https://tickets.timemission.com/onlinecheckout/en-us/products",
       "navLabel": "PA - Philadelphia",
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
-      "faqs": []
+      "faqs": [],
+      "ticker": "SPRING BREAK AT TIME MISSION PHILADELPHIA"
     },
     {
       "id": "west-nyack",
@@ -182,7 +184,8 @@
       "bookingUrl": "",
       "navLabel": "NY - West Nyack",
       "mapUrl": "https://maps.google.com/?q=3532+Palisades+Center+Dr+West+Nyack+NY+10994",
-      "faqs": []
+      "faqs": [],
+      "ticker": "SPRING BREAK AT TIME MISSION WEST NYACK"
     },
     {
       "id": "lincoln",
@@ -243,7 +246,8 @@
       "bookingUrl": "",
       "navLabel": "RI - Lincoln",
       "mapUrl": "https://maps.google.com/?q=100+Higginson+Ave+Lincoln+RI+02865",
-      "faqs": []
+      "faqs": [],
+      "ticker": "SPRING BREAK AT TIME MISSION LINCOLN"
     },
     {
       "id": "manassas",
@@ -305,7 +309,8 @@
       "bookingUrl": "https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products",
       "navLabel": "VA - Manassas",
       "mapUrl": "https://maps.google.com/?q=8300+Sudley+Rd+Manassas+VA+20109",
-      "faqs": []
+      "faqs": [],
+      "ticker": "SPRING BREAK AT TIME MISSION MANASSAS"
     },
     {
       "id": "houston",
@@ -330,7 +335,8 @@
       "bookingUrl": "",
       "navLabel": "TX - Houston",
       "mapUrl": "",
-      "faqs": []
+      "faqs": [],
+      "ticker": "COMING SOON \u2014 TIME MISSION HOUSTON"
     },
     {
       "id": "antwerp",
@@ -391,7 +397,8 @@
       "bookingUrl": "",
       "navLabel": "Belgium - Antwerp",
       "mapUrl": "https://maps.google.com/?q=Michiganstraat+1+Antwerp+2030+Belgium",
-      "faqs": []
+      "faqs": [],
+      "ticker": "SPRING BREAK AT TIME MISSION ANTWERP"
     },
     {
       "id": "orland-park",
@@ -416,7 +423,8 @@
       "bookingUrl": "",
       "navLabel": "IL - Orland Park",
       "mapUrl": "https://maps.google.com/?q=66+Orland+Park+IL+60462",
-      "faqs": []
+      "faqs": [],
+      "ticker": "ORLAND PARK, IL OPENING SOON!"
     },
     {
       "id": "brussels",
@@ -441,7 +449,8 @@
       "bookingUrl": "",
       "navLabel": "BE - Brussels",
       "mapUrl": "https://maps.google.com/?q=Av.+Imp%C3%A9ratrice+Charlotte+1020+Bruxelles+Belgium",
-      "faqs": []
+      "faqs": [],
+      "ticker": "TIME MISSION BRUSSELS COMING SOON!"
     },
     {
       "id": "dallas",
@@ -466,7 +475,8 @@
       "bookingUrl": "",
       "navLabel": "TX - Dallas",
       "mapUrl": "https://maps.google.com/?q=Dallas+TX",
-      "faqs": []
+      "faqs": [],
+      "ticker": "TIME MISSION DALLAS COMING SOON!"
     }
   ]
 }
