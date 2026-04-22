@@ -1,59 +1,51 @@
-# Google Sheet setup for site review
+# Site review workbook
 
-Two CSVs in this folder import directly into Google Sheets as separate tabs:
-- `feedback.csv` — the main feedback log (one row per issue)
-- `questions.csv` — secondary tab for things that need your decision, not a fix
+**Use this file:** `Time-Mission-Site-Review.xlsx`
 
-## Fast path (~10 min)
+Pre-formatted with 3 tabs, dropdowns, conditional formatting, frozen headers, and example rows. Just import into Google Sheets.
 
-1. Create a new Google Sheet. Name it `Time Mission — Site Review Feb 2026` (or similar).
-2. **Tab 1: Feedback**
-   - `File → Import → Upload → feedback.csv`
-   - Import location: "Replace current sheet"
-   - Rename the tab `Feedback`
-3. **Tab 2: Questions**
-   - Add a new tab (bottom-left +)
-   - `File → Import → Upload → questions.csv`
-   - Import location: "Insert new sheet(s)"
-   - Rename to `Questions`
-4. Delete the example rows (row 1 of each tab) once real rows start coming in.
+## Import into Google Sheets (30 seconds)
 
-## Add dropdowns (5 min — worth it)
+1. Go to [sheets.new](https://sheets.new) (blank sheet)
+2. `File → Import → Upload → Time-Mission-Site-Review.xlsx`
+3. Choose **"Replace spreadsheet"** and click **Import data**
+4. Rename the file in the title bar to something like `Time Mission — Site Review Apr 2026`
 
-### Feedback tab
-Select the full column, then `Data → Data validation → Add rule`:
+That's it. Dropdowns, conditional formatting, frozen header rows, and column widths all carry over.
 
-| Column | Values |
-|---|---|
-| **Role** (D) | `TM Operator, LOL Owner, Agency Dev, Ads/SEO, Legal, Customer, Other` |
-| **Device** (F) | `Mobile, Desktop, Both, N/A` |
-| **Priority** (J) | `Blocker, Important, Nice-to-have` |
-| **Status** (L) | `New, In progress, Resolved, Won't fix, Clarification needed` |
+## Share with reviewers
 
-### Conditional formatting for Priority
-`Format → Conditional formatting`:
-- `Blocker` → red background
-- `Important` → orange background
-- `Nice-to-have` → gray background
+`Share` button → set to **"Anyone with the link — Commenter"**.
+Editors: Jefferson + direct collaborators only.
+Commenters can add rows and change dropdown values; they can't delete columns or break the structure.
 
-### Freeze header row
-`View → Freeze → 1 row`
+## What's in the workbook
 
-### Wrap text
-Select all columns → `Format → Wrapping → Wrap`
+### Tab 1 — Instructions
+One-page README for reviewers. Covers how to use the sheet, what to focus on, what to ignore.
 
-## Share
+### Tab 2 — Feedback  (main tab)
+One row per issue. 13 columns:
 
-`Share` → set to **"Anyone with the link — Commenter"** so reviewers can add rows without breaking existing ones. Use Editor only for Jefferson + direct collaborators.
+| # | Date | Reviewer | Role (dropdown) | Page URL | Device (dropdown) | Section | What you saw | What it should be | Priority (dropdown) | Screenshot link | Status (dropdown) | Jefferson's notes |
 
-Optional: add a `Priority` column filter view so you can slice by Blocker only when triaging.
+- **Priority dropdown** (`Blocker` / `Important` / `Nice-to-have`) — color-coded: red / orange / gray
+- **Status dropdown** (`New` / `In progress` / `Resolved` / `Won't fix` / `Clarification needed`) — "New" is yellow, "Resolved" is green
+- **Role dropdown** (`TM Operator` / `LOL Owner` / `Agency Dev` / `Ads/SEO` / `Legal` / `Customer` / `Other`)
+- **Device dropdown** (`Mobile` / `Desktop` / `Both` / `N/A`)
+- 3 example rows show the format; delete them before launch
+- Room for ~200 rows; extend by inserting rows as needed (dropdowns will extend automatically with Google Sheets fill)
+
+### Tab 3 — Questions
+Secondary tab for things that need a DECISION (not a fix). 9 columns. Same dropdown pattern.
 
 ## Triage workflow
 
-- **End of day Friday (feedback deadline):** export a view of Status = New, Blocker/Important rows. Triage Monday morning.
-- Update Status column as you resolve. Add notes in the last column.
-- At launch, archive the sheet as `Time Mission — Site Review Feb 2026 (ARCHIVED)` for future reference.
+- **End of day Friday** — feedback window closes
+- **Monday** — filter by `Status = New, Priority = Blocker`, triage that first
+- Update Status as you resolve. Drop notes in the last column.
+- Before launch, archive the Google Sheet as `(ARCHIVED)` for reference.
 
-## CSV reimport
+## Also in this folder
 
-If you want to reset the sheet with the template rows, delete the tab and re-import the CSV. Don't edit the CSV after importing — treat the Google Sheet as the live source.
+- `feedback.csv`, `questions.csv` — simpler CSV versions if you'd rather build from scratch; not needed if you use the xlsx file.
