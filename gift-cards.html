@@ -170,71 +170,6 @@
             height: 18px;
         }
 
-        /* How It Works */
-        .how-it-works {
-            padding: 5rem 2rem;
-            background: var(--dark);
-        }
-
-        .how-it-works-content {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .how-it-works h2 {
-            font-family: var(--display);
-            font-size: 2rem;
-            letter-spacing: 0.02em;
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .step-card {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .step-card:hover {
-            border-color: rgba(255, 107, 44, 0.3);
-            transform: translateY(-5px);
-        }
-
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--display);
-            font-size: 1.5rem;
-            margin: 0 auto 1.5rem;
-        }
-
-        .step-card h3 {
-            font-family: var(--display);
-            font-size: 1.3rem;
-            letter-spacing: 0.02em;
-            margin-bottom: 0.75rem;
-        }
-
-        .step-card p {
-            color: var(--gray);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
         /* Gift Card FAQ */
         .gift-faq {
             padding: 5rem 2rem;
@@ -577,44 +512,20 @@
             <div class="gift-card-visual reveal">
                 <div class="gift-card-mockup">
                     <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission" class="gift-card-logo">
-                    <div class="gift-card-amount">$50</div>
                     <div class="gift-card-text">Gift Card</div>
                 </div>
             </div>
 
             <div class="gift-card-info reveal">
                 <h2>GIVE THE GIFT OF <span>ADVENTURE</span></h2>
-                <p>Time Mission gift cards make the perfect present for friends, family, or coworkers. Available in any amount, redeemable at all locations, and they never expire.</p>
-                <a href="#" class="btn-primary">
+                <p>Time Mission gift cards make the perfect present for friends, family, or coworkers. Available in any amount, redeemable at your chosen location, and they never expire.</p>
+                <a href="#" class="btn-primary btn-gift-card" id="giftCardBuyBtn" data-gift="1">
                     Buy a Gift Card
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works -->
-    <section class="how-it-works">
-        <div class="how-it-works-content">
-            <h2>HOW IT WORKS</h2>
-            <div class="steps-grid">
-                <div class="step-card reveal">
-                    <div class="step-number">1</div>
-                    <h3>CHOOSE AMOUNT</h3>
-                    <p>Select any amount from $25 to $500, or enter a custom value for the perfect gift.</p>
-                </div>
-                <div class="step-card reveal">
-                    <div class="step-number">2</div>
-                    <h3>PERSONALIZE</h3>
-                    <p>Add a personal message and choose to send it via email or print it at home.</p>
-                </div>
-                <div class="step-card reveal">
-                    <div class="step-number">3</div>
-                    <h3>SEND & ENJOY</h3>
-                    <p>Recipient can redeem at any Time Mission location for tickets, parties, or merchandise.</p>
-                </div>
+                <p class="gift-card-location-hint" id="giftCardLocationHint" style="font-size: 0.85rem; color: var(--gray); margin-top: 0.5rem;">Select a location to purchase, or we'll help you pick one.</p>
             </div>
         </div>
     </section>
@@ -752,7 +663,7 @@
                     <li><a href="about.html">About</a></li>
                     <li><a href="faq.html">FAQ</a></li>
                     <li><a href="groups.html">Groups</a></li>
-                    <li><a href="experiences.html">All Missions</a></li>
+                    <li><a href="experiences.html">The Missions</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
                     <li><a href="gift-cards.html">Gift Cards</a></li>
                     <li><a href="licensing.html">Licensing</a></li>
@@ -922,6 +833,83 @@
     </script>
     <script src="js/locations.js?v=4"></script>
     <script src="js/ticket-panel.js?v=4"></script>
+    <script>
+    // Gift-card Buy CTA — routes to the selected location's gift card checkout.
+    // If no location is selected, opens the location overlay so the user can pick one.
+    (function () {
+        var btn = document.getElementById('giftCardBuyBtn');
+        var hint = document.getElementById('giftCardLocationHint');
+        if (!btn) return;
+
+        function titleCase(s) { return s.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); }
+
+        function applySelectedLocation() {
+            var slug = '';
+            try { slug = localStorage.getItem('tm_location') || ''; } catch (e) {}
+            if (!slug || !window.TM || typeof window.TM.get !== 'function') return false;
+            var loc = window.TM.get(slug);
+            if (!loc) return false;
+            var url = loc.giftCardUrl || '';
+            if (!url) {
+                if (hint) hint.textContent = 'Gift cards for ' + (loc.shortName || loc.name) + ' are coming soon — contact us to arrange one.';
+                btn.setAttribute('href', 'contact.html?subject=gift-card');
+                return true;
+            }
+            btn.setAttribute('href', url);
+            if (/^mailto:/i.test(url)) {
+                if (hint) hint.textContent = 'Email ' + (loc.shortName || loc.name) + ' directly for a gift card.';
+            } else {
+                if (hint) hint.textContent = 'Purchasing for ' + (loc.shortName || loc.name) + '. Change location in the top nav if needed.';
+            }
+            return true;
+        }
+
+        function openLocationOverlay() {
+            var overlay = document.getElementById('locationDropdown');
+            var navEl = document.getElementById('nav');
+            if (!overlay) return;
+            overlay.classList.add('open');
+            if (navEl) navEl.classList.add('location-open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        btn.addEventListener('click', function (e) {
+            var href = btn.getAttribute('href');
+            if (!href || href === '#') {
+                e.preventDefault();
+                openLocationOverlay();
+                return;
+            }
+            if (/^mailto:/i.test(href)) {
+                e.preventDefault();
+                window.location.href = href;
+                return;
+            }
+            e.preventDefault();
+            window.open(href, '_blank');
+        });
+
+        // Wait for TM (locations.js) to finish loading, then apply
+        if (window.TM && window.TM.ready && window.TM.ready.then) {
+            window.TM.ready.then(applySelectedLocation);
+        } else {
+            // Fallback: poll briefly until TM is attached
+            var tries = 0;
+            var iv = setInterval(function () {
+                tries++;
+                if (window.TM && window.TM.locations && window.TM.locations.length) {
+                    clearInterval(iv);
+                    applySelectedLocation();
+                } else if (tries > 40) {
+                    clearInterval(iv);
+                }
+            }, 100);
+        }
+
+        // Re-apply when user changes location via the overlay
+        document.addEventListener('tm:location-changed', applySelectedLocation);
+    })();
+    </script>
 <div class="location-dropdown" id="locationDropdown">
         <div class="location-dropdown-header">
             <a href="index.html" class="location-dropdown-logo">
