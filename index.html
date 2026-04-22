@@ -2999,7 +2999,9 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline src="assets/video/hero-bg-mobile.mp4" poster="assets/video/hero-poster.jpg">
+            <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline poster="assets/video/hero-poster.jpg" preload="metadata">
+                <source src="assets/video/hero-bg-mobile.mp4" media="(max-width: 768px)" type="video/mp4">
+                <source src="assets/video/hero-bg-web.mp4" type="video/mp4">
             </video>
         </div>
         <div class="hero-overlay"></div>
@@ -3630,20 +3632,6 @@
     </div>
 
     <script>
-        // ==========================================
-        // RESPONSIVE HERO VIDEO
-        // Mobile src is set directly in HTML for native autoplay.
-        // JS only swaps to desktop version on wider screens.
-        // ==========================================
-        (function() {
-            var video = document.getElementById('heroVideo');
-            if (!video) return;
-
-            // Desktop: swap to larger video
-            if (window.innerWidth > 768) {
-                video.src = 'assets/video/hero-bg-web.mp4';
-            }
-        })();
 
         // ==========================================
         // ROTATING TYPEWRITER TAGLINES

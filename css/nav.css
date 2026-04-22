@@ -540,9 +540,10 @@
     color: var(--gray, #999);
     cursor: default;
     pointer-events: none;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 0.5rem;
+    justify-content: flex-start;
 }
 
 .location-dropdown a.location-coming-soon .coming-soon-tag {
