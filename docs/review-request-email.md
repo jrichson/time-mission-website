@@ -17,12 +17,12 @@ Hi team,
 
 The new Time Mission site is on staging and ready for initial review before full development kicks off next week. I'm only sending to this group — please forward to anyone on your side who should weigh in.
 
-### What this rebuild unlocks
-Building on everything the current site has taught us, the new version is designed around three goals:
+### Why the rebuild
+Building on everything the current site has taught us, the new version is focused on three things:
 
-- **Better visibility in search and AI answers (SEO / GEO / AEO).** Every location page now carries structured schema.org data, so Google, ChatGPT, Perplexity, and Gemini can read our addresses, hours, and phones directly into their results.
-- **One source of truth for location data.** Adding Houston, updating hours, or swapping a phone number is now a single edit that flows everywhere — no more multi-file updates.
-- **Ready for a CMS and new locations.** Structured so Ari's team can drop in a CMS and let operators self-serve edits without a developer in the loop. Faster page loads too (mobile weight down ~90%, Lighthouse 97+ desktop).
+- **New brand direction.** The visual system, typography, voice, and photography align with where Time Mission is headed — especially ahead of Houston and future launches.
+- **Easier to maintain day-to-day.** Adding Houston, spinning up a new location, swapping hours, or rotating a promo is now a single edit that flows across the whole site. Structured for a CMS so operators can eventually self-serve without a developer in the loop.
+- **SEO, visibility, and data tracking.** Structured schema.org data on every location means Google and AI answer engines (ChatGPT, Perplexity, Gemini) can read our addresses, hours, and phones directly. Analytics and conversion tracking are being wired in during development so we know what's working by launch.
 
 SEO equity from the current site is preserved — 301 redirects are mapped from the existing URLs so our rankings carry over.
 
