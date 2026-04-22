@@ -110,7 +110,7 @@ time-mission-website/
 ├── docs/
 │   ├── DESIGN-DOCUMENTATION.md
 │   ├── LAUNCH-TIMELINE.md
-│   ├── locations-data.json  # Location data for all cities
+│   ├── locations-snapshot-2026-04-22.json  # Historical reference snapshot (see data/locations.json for live data)
 │   └── TM-Website-Launch-Plan.xlsx
 └── _archive/                # Old experiments (not for production)
 ```
@@ -144,6 +144,7 @@ time-mission-website/
 ## Reference Docs
 
 - `docs/DESIGN-DOCUMENTATION.md` — Design system history and rationale
-- `docs/locations-data.json` — Structured location data (addresses, hours, coordinates)
+- `data/locations.json` — Live location data read by `js/locations.js`. **This is the source of truth.** Edit here, not in `docs/`.
+- `docs/locations-snapshot-2026-04-22.json` — Historical snapshot from the old timemission.com site (reference only, do not edit for live changes)
 - `docs/LAUNCH-TIMELINE.md` — Launch milestones
 - `assets/mockup-reference/` — Original design mockups (desktop + mobile PNGs)

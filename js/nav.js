@@ -49,7 +49,11 @@
     function syncAllLocations(city) {
         const mainLocText = document.getElementById('locationText');
         if (mainLocText) mainLocText.textContent = city;
+        // Write both storage keys so every consumer agrees:
+        //   timeMissionLocation (city display name) — nav.js, ticket-panel.js
+        //   tm_location (slug)                     — nav.js logo routing, locations.js
         localStorage.setItem('timeMissionLocation', city);
+        localStorage.setItem('tm_location', city.toLowerCase().replace(/\s+/g, '-'));
         // Update hero eyebrow on mobile (function exposed by index.html)
         if (window.updateEyebrowLocation) window.updateEyebrowLocation(city);
     }
@@ -143,70 +147,72 @@
         }
     }
 
-    // Location data for info panel
+    // Location data for info panel.
+    // KEEP IN SYNC WITH data/locations.json — long-term source of truth will feed this
+    // at runtime. Verified against live timemission.com on 2026-04-22.
     const locationData = {
         'Mount Prospect': {
             name: 'IL – Mount Prospect',
             address: '132 Randhurst Village Drive\nMount Prospect, IL 60056',
-            phone: '(847) 243-5500',
-            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
+            phone: '(847) 250-9560',
+            hours: 'Mon - Thurs: 12pm - 9pm\nFri: 12pm - Midnight\nSat: 10am - Midnight\nSun: 10am - 8pm',
             bookUrl: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
             pageUrl: 'mount-prospect.html',
-            mapQuery: '1500+E+Golf+Rd,+Mount+Prospect,+IL+60056'
+            mapQuery: '132+Randhurst+Village+Drive+Mount+Prospect+IL+60056'
         },
         'Philadelphia': {
             name: 'PA – Philadelphia',
-            address: '325 N 12th St\nPhiladelphia, PA 19107',
-            phone: '(215) 515-3500',
-            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
+            address: '1530 Chestnut Street\nPhiladelphia, PA 19102',
+            phone: '(267) 710-1240',
+            hours: 'Mon - Thurs: 12pm - 10pm\nFri: 12pm - 11pm\nSat: 10am - 11pm\nSun: 10am - 10pm',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
             pageUrl: 'philadelphia.html',
-            mapQuery: '325+N+12th+St,+Philadelphia,+PA+19107'
+            mapQuery: '1530+Chestnut+Street+Philadelphia+PA+19102'
         },
         'West Nyack': {
             name: 'NY – West Nyack',
-            address: '4590 Palisades Center Dr\nWest Nyack, NY 10994',
-            phone: '(845) 348-1555',
-            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 11:00 AM - 7:00 PM',
+            address: '3532 Palisades Center Dr, Level 3\nWest Nyack, NY 10994',
+            phone: '(845) 328-4528',
+            hours: 'Mon - Thurs: 12pm - 9pm\nFri: 12pm - 11pm\nSat: 10am - 11pm\nSun: 10am - 8pm',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
             pageUrl: 'west-nyack.html',
-            mapQuery: '4590+Palisades+Center+Dr,+West+Nyack,+NY+10994'
+            mapQuery: '3532+Palisades+Center+Dr+West+Nyack+NY+10994'
         },
         'Lincoln': {
             name: 'RI – Lincoln',
-            address: '622 George Washington Hwy\nLincoln, RI 02865',
-            phone: '(401) 333-4100',
-            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
+            address: 'R1 Indoor Karting, 100 Higginson Ave\nLincoln, RI 02865',
+            phone: '(401) 721-5554',
+            hours: 'Mon - Thurs: 12pm - 11pm\nFri: 12pm - Midnight\nSat: 9am - Midnight\nSun: 9am - 11pm',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
             pageUrl: 'lincoln.html',
-            mapQuery: '622+George+Washington+Hwy,+Lincoln,+RI+02865'
+            mapQuery: '100+Higginson+Ave+Lincoln+RI+02865'
         },
         'Houston': {
             name: 'TX – Houston (Marq\'E)',
-            address: "7620 Katy Fwy, Ste 300\nHouston, TX 77024",
-            phone: '(713) 322-7100',
+            address: "Marq'E Entertainment District\nHouston, TX",
+            phone: '',
             hours: 'Coming Soon',
-            bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
+            bookUrl: '',
             pageUrl: 'houston.html',
-            mapQuery: '7620+Katy+Fwy,+Houston,+TX+77024'
+            mapQuery: 'Marq+E+Entertainment+District+Houston+TX'
         },
         'Manassas': {
             name: 'VA – Manassas',
-            address: '8305 Sudley Rd\nManassas, VA 20110',
-            phone: '(703) 420-3600',
-            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
+            address: 'Manassas Mall, 8300 Sudley Rd, Unit A2\nManassas, VA 20109',
+            phone: '(571) 732-1050',
+            hours: 'Mon - Thurs: 12pm - 9pm\nFri: 12pm - Midnight\nSat: 10am - Midnight\nSun: 10am - 8pm',
             bookUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
             pageUrl: 'manassas.html',
-            mapQuery: '8305+Sudley+Rd,+Manassas,+VA+20110'
+            mapQuery: '8300+Sudley+Rd+Manassas+VA+20109'
         },
         'Antwerp': {
             name: 'Belgium – Antwerp',
-            address: 'Borsbeeksebrug 30\n2600 Antwerp, Belgium',
-            phone: '+32 3 444 55 66',
-            hours: 'Mon - Thurs: 10:00 AM - 9:00 PM\nFri - Sat: 10:00 AM - 11:00 PM\nSun: 10:00 AM - 9:00 PM',
+            address: 'Experience Factory, Michiganstraat 1\n2030 Antwerp, Belgium',
+            phone: '+32 3 301 03 03',
+            hours: 'Mon - Fri: 2pm - 11pm\nSat - Sun: 11am - 11pm',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
             pageUrl: 'antwerp.html',
-            mapQuery: 'Borsbeeksebrug+30,+2600+Antwerp,+Belgium'
+            mapQuery: 'Michiganstraat+1+Antwerp+Belgium'
         }
     };
 
