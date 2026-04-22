@@ -764,7 +764,7 @@
         margin-left: auto;
     }
 
-    .location-dropdown a {
+    .location-overlay-left .location-group a {
         font-size: 0.95rem;
         padding: 0.85rem 1.25rem;
         margin: 0 -1.25rem;
