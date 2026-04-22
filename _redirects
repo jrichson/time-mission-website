@@ -1,0 +1,31 @@
+# Netlify / Cloudflare Pages _redirects file
+# Preserves SEO and prevents 404s from the old site's URLs.
+# See docs/redirect-map.md for reasoning and alternate host formats.
+
+# Old event-type landing pages -> consolidated groups page
+/adult-birthday-parties      /groups.html#birthday           301
+/kids-birthday-party         /groups.html#birthday           301
+/bachelorette-party          /groups.html#private            301
+/date-night-ideas            /groups.html#private            301
+/corporate-events            /groups.html#corporate          301
+/team-building               /groups.html#corporate          301
+/school-field-trips          /groups.html#private            301
+/youth-group-camp            /groups.html#private            301
+/family-gathering            /groups.html#private            301
+/bus-tour                    /groups.html                    301
+
+# Renamed policy pages
+/house-rules                 /code-of-conduct.html           301
+/licensing                   /licensing.html                 301
+/privacy-policy              /privacy.html                   301
+/privacy-policy/             /privacy.html                   301
+/terms-and-conditions        /terms.html                     301
+
+# Location slug migration
+/mountprospect               /mount-prospect.html            301
+/providence                  /lincoln.html                   301
+
+# Coming-soon placeholder cities — route to hub until they have pages
+/orland-park                 /locations/                     302
+/dallas                      /locations/                     302
+/brussels                    /locations/                     302
