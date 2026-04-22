@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/footer.css?v=2">
     <link rel="stylesheet" href="css/newsletter.css">
-    <link rel="stylesheet" href="css/faq.css">
+    <link rel="stylesheet" href="css/faq.css?v=2">
     <style>
         .section-title {
             font-family: var(--display);
@@ -61,59 +61,64 @@
             position: relative;
         }
 
-        .gift-card-mockup {
-            background: linear-gradient(135deg, var(--dark) 0%, var(--black) 100%);
-            border: 2px solid rgba(255, 107, 44, 0.3);
-            border-radius: 20px;
-            padding: 2.5rem;
+        .gift-card-visual {
             position: relative;
-            overflow: hidden;
-            aspect-ratio: 1.6/1;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
         }
 
+        .gift-card-mockup {
+            position: relative;
+            display: block;
+            width: 100%;
+            max-width: 520px;
+            aspect-ratio: 1600 / 1028;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4),
+                        0 0 60px rgba(255, 107, 44, 0.25);
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Full-opacity animated gradient inside the card's rounded shape —
+           same palette + motion as the MISSION text on the homepage hero. */
         .gift-card-mockup::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255, 107, 44, 0.1), transparent 30%);
-            animation: card-glow 6s linear infinite;
+            inset: 0;
+            background: linear-gradient(90deg, var(--orange), var(--magenta), var(--cyan), var(--orange));
+            background-size: 300% 100%;
+            animation: gradient-shift 5s ease-in-out infinite;
+            z-index: 0;
         }
 
-        @keyframes card-glow {
-            to { transform: rotate(360deg); }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
-        .gift-card-mockup > * {
+        .gift-card-mockup img {
             position: relative;
             z-index: 1;
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
         }
 
-        .gift-card-logo {
-            height: 40px;
-            width: auto;
+        .gift-card-visual:hover .gift-card-mockup {
+            transform: translateY(-6px) rotate(-1.5deg);
         }
 
-        .gift-card-amount {
-            font-family: var(--display);
-            font-size: 3.5rem;
-            letter-spacing: 0.02em;
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .gift-card-text {
-            font-size: 0.85rem;
-            color: var(--gray);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+        @media (prefers-reduced-motion: reduce) {
+            .gift-card-mockup::before {
+                animation: none;
+            }
+            .gift-card-visual:hover .gift-card-mockup {
+                transform: none;
+            }
         }
 
         .gift-card-info {
@@ -150,9 +155,10 @@
             background: var(--gradient-primary);
             color: var(--white);
             text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
-            letter-spacing: 0.05em;
+            font-family: var(--tech);
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
             border-radius: 100px;
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -171,13 +177,14 @@
         }
 
         /* Gift Card FAQ */
-        .gift-faq {
+        /* Gift Card FAQ — uses shared css/faq.css, just layout overrides here */
+        .faq-section.gift-faq {
             padding: 5rem 2rem;
             max-width: 800px;
             margin: 0 auto;
         }
 
-        .gift-faq h2 {
+        .faq-section.gift-faq h2 {
             font-family: var(--display);
             font-size: 2rem;
             letter-spacing: 0.02em;
@@ -510,10 +517,10 @@
     <section class="gift-card-hero">
         <div class="gift-card-showcase">
             <div class="gift-card-visual reveal">
-                <div class="gift-card-mockup">
-                    <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission" class="gift-card-logo">
-                    <div class="gift-card-text">Gift Card</div>
-                </div>
+                <picture class="gift-card-mockup">
+                    <source srcset="assets/logo/tm-gift-card.webp" type="image/webp">
+                    <img src="assets/logo/tm-gift-card.png" alt="Time Mission gift card" width="1600" height="1028">
+                </picture>
             </div>
 
             <div class="gift-card-info reveal">
@@ -531,71 +538,66 @@
     </section>
 
     <!-- Gift Card FAQ -->
-    <section class="gift-faq">
+    <section class="faq-section gift-faq">
         <h2>FREQUENTLY ASKED QUESTIONS</h2>
 
         <div class="faq-item reveal">
             <div class="faq-question">
-                <h4>Do gift cards expire?</h4>
-                <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
+                <h3>Do gift cards expire?</h3>
+                <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg></div>
             </div>
             <div class="faq-answer">
-                <p>No! Time Mission gift cards never expire. The recipient can use them whenever they're ready for their adventure.</p>
+                <div class="faq-answer-content">No! Time Mission gift cards never expire. The recipient can use them whenever they're ready for their adventure.</div>
             </div>
         </div>
 
         <div class="faq-item reveal">
             <div class="faq-question">
-                <h4>Can gift cards be used at any location?</h4>
-                <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
+                <h3>Can gift cards be used at any location?</h3>
+                <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg></div>
             </div>
             <div class="faq-answer">
-                <p>Yes! Gift cards are valid at all Time Mission locations in the US and internationally.</p>
+                <div class="faq-answer-content">Yes! Gift cards are valid at all Time Mission locations in the US and internationally.</div>
             </div>
         </div>
 
         <div class="faq-item reveal">
             <div class="faq-question">
-                <h4>What can gift cards be used for?</h4>
-                <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
+                <h3>What can gift cards be used for?</h3>
+                <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg></div>
             </div>
             <div class="faq-answer">
-                <p>Gift cards can be used for general admission tickets, birthday party packages, corporate events, and any merchandise at our locations.</p>
+                <div class="faq-answer-content">Gift cards can be used for general admission tickets, birthday party packages, corporate events, and any merchandise at our locations.</div>
             </div>
         </div>
 
         <div class="faq-item reveal">
             <div class="faq-question">
-                <h4>Can I check my gift card balance?</h4>
-                <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
+                <h3>Can I check my gift card balance?</h3>
+                <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg></div>
             </div>
             <div class="faq-answer">
-                <p>Yes! You can check your balance at any location or by contacting our customer service team at info@timemission.com.</p>
+                <div class="faq-answer-content">Yes! You can check your balance at any location or by contacting our customer service team at info@timemission.com.</div>
             </div>
         </div>
 
         <div class="faq-item reveal">
             <div class="faq-question">
-                <h4>Can I get a refund on a gift card?</h4>
-                <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
+                <h3>Can I get a refund on a gift card?</h3>
+                <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg></div>
             </div>
             <div class="faq-answer">
-                <p>Gift cards are non-refundable but they never expire, so the recipient can use them whenever they're ready!</p>
+                <div class="faq-answer-content">Gift cards are non-refundable but they never expire, so the recipient can use them whenever they're ready!</div>
             </div>
         </div>
     </section>
@@ -603,10 +605,10 @@
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="cta-content reveal">
-            <h2>READY TO <span>GIVE?</span></h2>
-            <p>Purchase a gift card today and give someone an adventure they'll never forget.</p>
-            <a href="#" class="btn-primary">
-                Buy Now
+            <h2>GIVE THE GIFT OF <span>TIME MISSION</span></h2>
+            <p>A gift card today means a night they'll actually remember. Pick your location, choose any amount, send it instantly.</p>
+            <a href="#" class="btn-primary btn-gift-card" id="giftCardBuyBtnBottom" data-gift="1">
+                Buy a Gift Card
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -763,7 +765,7 @@
             </a>
 
             <div class="ticket-panel-info">
-                <h4>QUICK INFO</h4>
+                <h3>QUICK INFO</h3>
                 <div class="ticket-info-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"/>
@@ -834,14 +836,19 @@
     <script src="js/locations.js?v=4"></script>
     <script src="js/ticket-panel.js?v=4"></script>
     <script>
-    // Gift-card Buy CTA — routes to the selected location's gift card checkout.
-    // If no location is selected, opens the location overlay so the user can pick one.
+    // Gift-card Buy CTAs — route to the selected location's gift card checkout.
+    // If no location is selected, open the location overlay so the user can pick one.
     (function () {
-        var btn = document.getElementById('giftCardBuyBtn');
+        var btns = Array.prototype.slice.call(document.querySelectorAll('.btn-gift-card, [data-gift="1"]'));
         var hint = document.getElementById('giftCardLocationHint');
-        if (!btn) return;
+        if (!btns.length) return;
+        var btn = btns[0]; // back-compat so the rest of the closure still compiles
 
         function titleCase(s) { return s.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); }
+
+        function setAll(href) {
+            btns.forEach(function (b) { b.setAttribute('href', href); });
+        }
 
         function applySelectedLocation() {
             var slug = '';
@@ -852,10 +859,10 @@
             var url = loc.giftCardUrl || '';
             if (!url) {
                 if (hint) hint.textContent = 'Gift cards for ' + (loc.shortName || loc.name) + ' are coming soon — contact us to arrange one.';
-                btn.setAttribute('href', 'contact.html?subject=gift-card');
+                setAll('contact.html?subject=gift-card');
                 return true;
             }
-            btn.setAttribute('href', url);
+            setAll(url);
             if (/^mailto:/i.test(url)) {
                 if (hint) hint.textContent = 'Email ' + (loc.shortName || loc.name) + ' directly for a gift card.';
             } else {
@@ -873,20 +880,22 @@
             document.body.style.overflow = 'hidden';
         }
 
-        btn.addEventListener('click', function (e) {
-            var href = btn.getAttribute('href');
-            if (!href || href === '#') {
+        btns.forEach(function (b) {
+            b.addEventListener('click', function (e) {
+                var href = b.getAttribute('href');
+                if (!href || href === '#') {
+                    e.preventDefault();
+                    openLocationOverlay();
+                    return;
+                }
+                if (/^mailto:/i.test(href)) {
+                    e.preventDefault();
+                    window.location.href = href;
+                    return;
+                }
                 e.preventDefault();
-                openLocationOverlay();
-                return;
-            }
-            if (/^mailto:/i.test(href)) {
-                e.preventDefault();
-                window.location.href = href;
-                return;
-            }
-            e.preventDefault();
-            window.open(href, '_blank');
+                window.open(href, '_blank');
+            });
         });
 
         // Wait for TM (locations.js) to finish loading, then apply
@@ -909,6 +918,16 @@
         // Re-apply when user changes location via the overlay
         document.addEventListener('tm:location-changed', applySelectedLocation);
     })();
+
+    // FAQ accordion — same pattern as faq.html
+    document.querySelectorAll('.faq-section .faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+            const wasActive = item.classList.contains('active');
+            document.querySelectorAll('.faq-section .faq-item').forEach(faq => faq.classList.remove('active'));
+            if (!wasActive) item.classList.add('active');
+        });
+    });
     </script>
 <div class="location-dropdown" id="locationDropdown">
         <div class="location-dropdown-header">
@@ -950,7 +969,7 @@
                         <a href="#" class="location-info-address" target="_blank" rel="noopener"></a>
                         <div class="location-info-phone"></div>
                         <div class="location-info-section">
-                            <h4>Hours</h4>
+                            <h3>Hours</h3>
                             <div class="location-info-hours"></div>
                         </div>
                         <div class="location-info-actions">
