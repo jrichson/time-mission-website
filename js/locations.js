@@ -19,6 +19,20 @@
 
     const STORAGE_KEY = 'tm_location';
 
+    // Minimal fallback used when locations.json can't load
+    // (e.g. file:// protocol blocks fetch, offline, transient network error).
+    // Keeps the nav/active-state/Tickets button working without the full JSON.
+    // KEEP IN SYNC with data/locations.json.
+    const FALLBACK = {
+        'mount-prospect': { shortName: 'Mount Prospect', bookingUrl: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products', giftCardUrl: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/giftcards' },
+        'philadelphia':   { shortName: 'Philadelphia',   bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/giftcards' },
+        'west-nyack':     { shortName: 'West Nyack',     bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/giftcards' },
+        'lincoln':        { shortName: 'Lincoln',        bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/giftcards' },
+        'houston':        { shortName: 'Houston',        bookingUrl: '',                                                                              giftCardUrl: '' },
+        'manassas':       { shortName: 'Manassas',       bookingUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products', giftCardUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/giftcards' },
+        'antwerp':        { shortName: 'Antwerp',        bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Gift%20Card' }
+    };
+
     // Resolve data path relative to site root
     function getDataUrl() {
         const base = document.querySelector('meta[name="tm-base"]');
@@ -146,8 +160,14 @@
                         try { localStorage.setItem(STORAGE_KEY, loc.id); } catch (e) {}
                         return;
                     }
-                    // If locations haven't loaded (e.g. file:// protocol),
-                    // don't clear current — keep whatever was set by page script
+                    // If locations.json didn't load (e.g. file:// protocol),
+                    // build a synthetic current from the embedded fallback so
+                    // active-state highlighting and the Tickets button still work.
+                    if (TM.locations.length === 0 && FALLBACK[saved]) {
+                        TM.current = Object.assign({ id: saved, slug: saved }, FALLBACK[saved]);
+                        try { localStorage.setItem(STORAGE_KEY, saved); } catch (e) {}
+                        return;
+                    }
                     if (TM.locations.length === 0) return;
                 }
             } catch (e) { /* localStorage unavailable */ }
@@ -309,9 +329,9 @@
                 const mapEl = infoPanel.querySelector('.footer-loc-map');
                 const changeEl = infoPanel.querySelector('.footer-loc-change');
 
-                if (nameEl) nameEl.textContent = loc.name;
+                if (nameEl) nameEl.textContent = loc.name || loc.shortName || '';
                 if (addrEl) addrEl.innerHTML = formatAddress(loc.address);
-                if (phoneEl) {
+                if (phoneEl && loc.contact && loc.contact.phone) {
                     phoneEl.textContent = loc.contact.phone;
                     phoneEl.href = 'tel:' + loc.contact.phone.replace(/[^\d+]/g, '');
                 }

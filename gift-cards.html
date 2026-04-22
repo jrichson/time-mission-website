@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/nav.css?v=16">
+    <link rel="stylesheet" href="css/nav.css?v=17">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/footer.css?v=2">
@@ -890,7 +890,7 @@
         });
     });
     </script>
-    <script src="js/locations.js?v=4"></script>
+    <script src="js/locations.js?v=7"></script>
     <script src="js/ticket-panel.js?v=4"></script>
     <script>
     // Gift-card Buy CTAs — route to the selected location's gift card checkout.
@@ -908,12 +908,21 @@
         }
 
         function applySelectedLocation() {
-            var slug = '';
-            try { slug = localStorage.getItem('tm_location') || ''; } catch (e) {}
-            if (!slug || !window.TM || typeof window.TM.get !== 'function') return false;
-            var loc = window.TM.get(slug);
+            // Prefer TM.current (also populated by the file:// fallback) over
+            // TM.get(slug) which only works once locations.json has loaded.
+            var loc = (window.TM && window.TM.current) || null;
+            if (!loc) {
+                var slug = '';
+                try { slug = localStorage.getItem('tm_location') || ''; } catch (e) {}
+                if (slug && window.TM && typeof window.TM.get === 'function') {
+                    loc = window.TM.get(slug);
+                }
+            }
             if (!loc) return false;
-            var url = loc.giftCardUrl || '';
+            // Route to the location's gift-card checkout; fall back to the
+            // regular tickets/booking URL (same Roller link used by the Tickets
+            // button) when no gift-card URL exists for this location.
+            var url = loc.giftCardUrl || loc.bookingUrl || '';
             if (!url) {
                 if (hint) hint.textContent = 'Gift cards for ' + (loc.shortName || loc.name) + ' are coming soon — contact us to arrange one.';
                 setAll('contact.html?subject=gift-card');

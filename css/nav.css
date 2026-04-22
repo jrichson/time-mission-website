@@ -721,7 +721,6 @@
     background: rgba(255, 107, 44, 0.18);
     color: var(--orange);
     font-weight: 600;
-    box-shadow: inset 3px 0 0 var(--orange);
 }
 
 
