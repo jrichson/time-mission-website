@@ -25,5 +25,6 @@ _archive/
 test-results/
 .playwright-mcp/
 
-# Full-resolution photo backups (kept locally, not in repo)
+# Full-resolution media backups (kept locally, not in repo)
 assets/photos/**/.orig-full/
+assets/video/.orig-full/
