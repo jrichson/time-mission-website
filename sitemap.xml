@@ -15,6 +15,9 @@
   <url><loc>https://timemission.com/lincoln.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://timemission.com/manassas.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://timemission.com/antwerp.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://timemission.com/orland-park.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://timemission.com/dallas.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://timemission.com/brussels.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://timemission.com/privacy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://timemission.com/terms.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://timemission.com/code-of-conduct.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>

@@ -30,7 +30,10 @@
         'lincoln':        { shortName: 'Lincoln',        bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/giftcards' },
         'houston':        { shortName: 'Houston',        bookingUrl: '',                                                                              giftCardUrl: '' },
         'manassas':       { shortName: 'Manassas',       bookingUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products', giftCardUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/giftcards' },
-        'antwerp':        { shortName: 'Antwerp',        bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Gift%20Card' }
+        'antwerp':        { shortName: 'Antwerp',        bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Gift%20Card' },
+        'orland-park':    { shortName: 'Orland Park',    bookingUrl: '',                                                                              giftCardUrl: '' },
+        'dallas':         { shortName: 'Dallas',         bookingUrl: '',                                                                              giftCardUrl: '' },
+        'brussels':       { shortName: 'Brussels',       bookingUrl: '',                                                                              giftCardUrl: '' }
     };
 
     // Resolve data path relative to site root
@@ -90,7 +93,10 @@
         async load() {
             try {
                 const url = getDataUrl();
-                const res = await fetch(url);
+                // Append version-bump so CDN/browser cache doesn't serve stale data.
+                // Update this string whenever data/locations.json changes.
+                const versioned = url + (url.includes('?') ? '&' : '?') + 'v=8';
+                const res = await fetch(versioned);
                 if (!res.ok) throw new Error('Failed to load locations.json');
                 const data = await res.json();
                 TM.locations = data.locations || [];

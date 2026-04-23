@@ -180,20 +180,8 @@
             color: var(--cyan);
         }
 
-        .loc-row.is-coming-soon {
-            cursor: default;
-        }
-
-        .loc-row.is-coming-soon:hover {
-            background: transparent;
-        }
-
         .loc-row.is-coming-soon .loc-name {
             color: var(--white-soft);
-        }
-
-        .loc-row.is-coming-soon .loc-arrow {
-            display: none;
         }
 
         /* Ticket Popup Panel */
@@ -484,12 +472,13 @@
                         <a href="#">RI - Lincoln</a>
                         <a href="#">TX - Houston</a>
                         <a href="#">VA - Manassas</a>
-                        <a href="#" class="location-coming-soon">IL - Orland Park <span class="coming-soon-tag">Coming Soon</span></a>
-                        <a href="#" class="location-coming-soon">TX - Dallas <span class="coming-soon-tag">Coming Soon</span></a>
+                        <a href="../orland-park.html" class="location-coming-soon">IL - Orland Park <span class="coming-soon-tag">Coming Soon</span></a>
+                        <a href="../dallas.html" class="location-coming-soon">TX - Dallas <span class="coming-soon-tag">Coming Soon</span></a>
                     </div>
                     <div class="location-group">
                         <div class="location-group-title">Europe</div>
                         <a href="#">BE - Antwerp</a>
+                        <a href="../brussels.html" class="location-coming-soon">BE - Brussels <span class="coming-soon-tag">Coming Soon</span></a>
                     </div>
                 </div>
             </button>
@@ -524,13 +513,16 @@
                     </svg>
                 </a>
 
-                <span class="loc-row is-coming-soon reveal" aria-disabled="true">
+                <a href="../orland-park.html" class="loc-row is-coming-soon reveal">
                     <span class="loc-state">IL</span>
                     <div class="loc-body">
                         <div class="loc-name">Orland Park <span class="loc-coming-soon-tag">Coming Soon</span></div>
                         <div class="loc-address">Orland Park, IL</div>
                     </div>
-                </span>
+                    <svg class="loc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
 
                 <a href="../west-nyack.html" class="loc-row reveal">
                     <span class="loc-state">NY</span>
@@ -565,13 +557,16 @@
                     </svg>
                 </a>
 
-                <span class="loc-row is-coming-soon reveal" aria-disabled="true">
+                <a href="../dallas.html" class="loc-row is-coming-soon reveal">
                     <span class="loc-state">TX</span>
                     <div class="loc-body">
                         <div class="loc-name">Dallas <span class="loc-coming-soon-tag">Coming Soon</span></div>
                         <div class="loc-address">Dallas, TX</div>
                     </div>
-                </span>
+                    <svg class="loc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
 
                 <a href="../houston.html" class="loc-row reveal">
                     <span class="loc-state">TX</span>
@@ -605,6 +600,17 @@
                     <div class="loc-body">
                         <div class="loc-name">Antwerp</div>
                         <div class="loc-address">Experience Factory, Michiganstraat 1, 2030 Antwerp, Belgium</div>
+                    </div>
+                    <svg class="loc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+
+                <a href="../brussels.html" class="loc-row is-coming-soon reveal">
+                    <span class="loc-state">BE</span>
+                    <div class="loc-body">
+                        <div class="loc-name">Brussels <span class="loc-coming-soon-tag">Coming Soon</span></div>
+                        <div class="loc-address">Brussels, Belgium</div>
                     </div>
                     <svg class="loc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -684,8 +690,8 @@
                             <a href="../lincoln.html">Lincoln</a>
                             <a href="../houston.html">Houston</a>
                             <a href="../manassas.html">Manassas</a>
-                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Orland Park <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
-                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Dallas <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                            <a href="../orland-park.html" class="coming-soon" style="opacity:0.7;display:inline-flex;align-items:center;gap:0.4rem;">Orland Park <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                            <a href="../dallas.html" class="coming-soon" style="opacity:0.7;display:inline-flex;align-items:center;gap:0.4rem;">Dallas <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
                         </div>
                     </div>
                     <div class="footer-location-group">
@@ -695,7 +701,7 @@
                         </button>
                         <div class="footer-location-list">
                             <a href="../antwerp.html">Antwerp</a>
-                            <a href="#" class="coming-soon" style="pointer-events:none;opacity:0.55;display:inline-flex;align-items:center;gap:0.4rem;">Brussels <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                            <a href="../brussels.html" class="coming-soon" style="opacity:0.7;display:inline-flex;align-items:center;gap:0.4rem;">Brussels <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
                         </div>
                     </div>
                 </div>
@@ -824,7 +830,7 @@
         });
     });
     </script>
-    <script src="../js/locations.js?v=7"></script>
+    <script src="../js/locations.js?v=8"></script>
     <script src="../js/ticket-panel.js?v=4"></script>
 </body>
 </html>

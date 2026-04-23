@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Time Mission – 25+ Interactive Mission Rooms</title>
+    <title>Time Mission Brussels – Coming Soon to Belgium</title>
     <!-- SEO META -->
-    <meta name="description" content="Step into the mission. Teams of 2–5 compete through 25+ immersive challenges at Time Mission — test your speed, strength, skill, and smarts.">
-    <link rel="canonical" href="https://timemission.com/">
+    <meta name="description" content="Time Mission Brussels — the next-generation immersive gaming experience. Coming soon to Belgium. Sign up for exclusive offers and early access.">
+    <link rel="canonical" href="https://timemission.com/brussels.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Time Mission">
-    <meta property="og:title" content="Time Mission – 25+ Interactive Mission Rooms">
-    <meta property="og:description" content="Step into the mission. Teams of 2–5 compete through 25+ immersive challenges at Time Mission — test your speed, strength, skill, and smarts.">
-    <meta property="og:url" content="https://timemission.com/">
+    <meta property="og:title" content="Time Mission Brussels – Coming Soon to Belgium">
+    <meta property="og:description" content="Time Mission Brussels — the next-generation immersive gaming experience. Coming soon to Belgium. Sign up for exclusive offers and early access.">
+    <meta property="og:url" content="https://timemission.com/brussels.html">
     <meta property="og:image" content="https://timemission.com/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Time Mission – 25+ Interactive Mission Rooms">
-    <meta name="twitter:description" content="Step into the mission. Teams of 2–5 compete through 25+ immersive challenges at Time Mission — test your speed, strength, skill, and smarts.">
+    <meta name="twitter:title" content="Time Mission Brussels – Coming Soon to Belgium">
+    <meta name="twitter:description" content="Time Mission Brussels — the next-generation immersive gaming experience. Coming soon to Belgium. Sign up for exclusive offers and early access.">
     <meta name="twitter:image" content="https://timemission.com/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg">
         <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -488,7 +488,7 @@
             text-align: center;
         }
 
-        /* "Learn About Time Mission" — desktop shows inside welcome, mobile shows after stats */
+        /* "Learn About Time Mission" — desktop in welcome, mobile after stats */
         .welcome-learn-mobile {
             display: none;
             margin: 2rem auto 0;
@@ -854,8 +854,9 @@
 
         .stat-number {
             font-family: var(--tech);
+            font-weight: 400;
+            font-size: 3rem;
             font-weight: 700;
-            font-size: clamp(2.25rem, 7vw, 3rem);
             color: var(--white);
             line-height: 1;
             margin-bottom: 0.5rem;
@@ -1024,13 +1025,6 @@
             padding: 2rem;
         }
 
-        .experience-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-bottom: 0.75rem;
-        }
-
         .experience-badge {
             display: inline-flex;
             align-items: center;
@@ -1043,9 +1037,9 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--black);
+            margin-bottom: 0.75rem;
             width: fit-content;
         }
-
         .experience-badge svg { width: 12px; height: 12px; }
         .experience-badge.mental   { background: var(--cyan); }
         .experience-badge.physical { background: var(--magenta); }
@@ -1593,29 +1587,21 @@
         }
 
         .testimonials-scroll {
-            position: relative;
-            overflow: hidden;
-            padding: 1rem 0;
-            touch-action: pan-y pinch-zoom;
-            cursor: grab;
-        }
-
-        .testimonials-scroll.grabbing {
-            cursor: grabbing;
-        }
-
-        .testimonials-track {
             display: flex;
-            transition: transform 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
-            will-change: transform;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 1rem 0;
         }
 
-        .testimonials-track.no-transition {
-            transition: none;
+        .testimonials-scroll::-webkit-scrollbar {
+            display: none;
         }
 
         .testimonial-card {
             flex: 0 0 100%;
+            scroll-snap-align: center;
             background: transparent;
             border: none;
             padding: 1.5rem 3rem;
@@ -1953,12 +1939,11 @@
             background: var(--gradient-primary);
             color: var(--white);
             text-decoration: none;
-            font-family: var(--display);
+            font-family: var(--tech);
             font-weight: 400;
-            font-size: 1.3rem;
-            letter-spacing: 0.06em;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
             border-radius: 100px;
-            white-space: nowrap;
             transition: all 0.3s ease;
             text-transform: uppercase;
             box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
@@ -2448,12 +2433,6 @@
                 max-width: 600px;
             }
 
-            /* Reorder so animated cards (Minutes + Points) are diagonal, not side-by-side */
-            .stat-card:nth-child(1) { order: 2; --glow-color: var(--cyan); --glow-color-alpha: rgba(0, 229, 255, 0.3); }
-            .stat-card:nth-child(2) { order: 1; --glow-color: var(--orange); --glow-color-alpha: rgba(255, 107, 44, 0.3); }
-            .stat-card:nth-child(3) { order: 3; }
-            .stat-card:nth-child(4) { order: 4; }
-
             .stat-card {
                 aspect-ratio: auto;
             }
@@ -2472,10 +2451,6 @@
 
         @media (max-width: 768px) {
             /* Nav responsive rules provided by css/nav.css */
-
-            /* Tighter scroll-margin on mobile so sections snap closer to nav */
-            .welcome { scroll-margin-top: 60px; padding-top: 3rem; }
-            .experiences { scroll-margin-top: 60px; }
 
             .hero-content {
                 padding: 0 1.5rem;
@@ -2804,7 +2779,7 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}</script>
     <!-- JSON-LD -->
 </head>
-<body>
+<body data-location="houston">
     <!-- Game Promo Popup -->
     <div class="game-popup-overlay" id="gamePopup">
         <div class="game-popup">
@@ -2851,14 +2826,14 @@
     <!-- Announcement Ticker -->
     <div class="ticker-bar">
         <div class="ticker-track">
-            <span class="ticker-item">NEW LOCATIONS COMING SOON!</span>
-            <span class="ticker-item">NEW LOCATIONS COMING SOON!</span>
-            <span class="ticker-item">NEW LOCATIONS COMING SOON!</span>
-            <span class="ticker-item">NEW LOCATIONS COMING SOON!</span>
-            <span class="ticker-item">NEW LOCATIONS COMING SOON!</span>
-            <span class="ticker-item">NEW LOCATIONS COMING SOON!</span>
-            <span class="ticker-item">NEW LOCATIONS COMING SOON!</span>
-            <span class="ticker-item">NEW LOCATIONS COMING SOON!</span>
+            <span class="ticker-item">COMING SOON TIME MISSION BRUSSELS</span>
+            <span class="ticker-item">COMING SOON TIME MISSION BRUSSELS</span>
+            <span class="ticker-item">COMING SOON TIME MISSION BRUSSELS</span>
+            <span class="ticker-item">COMING SOON TIME MISSION BRUSSELS</span>
+            <span class="ticker-item">COMING SOON TIME MISSION BRUSSELS</span>
+            <span class="ticker-item">COMING SOON TIME MISSION BRUSSELS</span>
+            <span class="ticker-item">COMING SOON TIME MISSION BRUSSELS</span>
+            <span class="ticker-item">COMING SOON TIME MISSION BRUSSELS</span>
         </div>
     </div>
 
@@ -2867,7 +2842,7 @@
         <ul class="mobile-menu-links">
             <li><a href="#about">About</a></li>
             <li><a href="#experiences">Experiences</a></li>
-            <li><a href="#groups">Groups & Events</a></li>
+            <li><a href="groups.html">Groups & Events</a></li>
             <li><a href="gift-cards.html">Gift Cards</a></li>
             <li><a href="#faq">FAQ</a></li>
             <li><a href="contact.html">Contact</a></li>
@@ -2884,7 +2859,7 @@
             </a>
         </div>
         <div class="mobile-menu-cta">
-            <a href="#" class="btn-tickets">Book Now</a>
+            <a href="#newsletter" class="btn-primary btn-signup">Sign Up For Exclusive Offers</a>
         </div>
     </div>
 
@@ -2898,7 +2873,7 @@
                     <span></span>
                 </div>
             </button>
-            <a href="index.html" class="nav-logo">
+            <a href="brussels.html" class="nav-logo">
                 <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
             </a>
         </div>
@@ -2918,19 +2893,19 @@
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                     <circle cx="12" cy="10" r="3"/>
                 </svg>
-                <span id="locationText">Select Location</span>
+                <span id="locationText">Brussels</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
                     <polyline points="6,9 12,15 18,9"/>
                 </svg>
             </button>
-            <a href="#" class="btn-tickets">Tickets</a>
+            <a href="#newsletter" class="btn-primary btn-signup">Sign Up</a>
         </div>
     </nav>
 
     <!-- Full-screen Location Overlay -->
     <div class="location-dropdown" id="locationDropdown">
         <div class="location-dropdown-header">
-            <a href="index.html" class="location-dropdown-logo">
+            <a href="brussels.html" class="location-dropdown-logo">
                 <img src="assets/logo/TM_Logo_White.svg" alt="Time Mission">
             </a>
             <button class="location-dropdown-close" aria-label="Close">&times;</button>
@@ -3006,7 +2981,7 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <div class="hero-eyebrow">
-                <span class="tagline-text" id="taglineText">Social Gaming Adventure</span>
+                <span class="tagline-text no-cursor" id="taglineText">Time Mission Brussels</span>
             </div>
             <h1 class="hero-title">
                 <span class="line-1">STEP INTO THE</span>
@@ -3014,8 +2989,8 @@
             </h1>
             <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive challenges. Test your speed, strength, skill, and&nbsp;smarts.</p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary btn-tickets">
-                    Book Now
+                <a href="#newsletter" class="btn-primary btn-signup">
+                    Sign Up For Exclusive Offers
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
@@ -3096,7 +3071,7 @@
                 <div class="stat-label">Collect Points!</div>
             </div>
         </div>
-        <a href="about.html" class="btn-secondary welcome-learn-mobile">Learn About Time Mission</a>
+    <a href="about.html" class="btn-secondary welcome-learn-mobile">Learn About Time Mission</a>
     </section>
 
     <!-- Experiences Section -->
@@ -3111,7 +3086,7 @@
             <div class="experience-card">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Glitch-Matrix.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span></div>
+                    <span class="experience-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span>
                     <h3 class="experience-title">GLITCH MATRIX</h3>
                     <p class="experience-desc">Navigate a fractured digital world where reality bends and patterns hold the key.</p>
                     <div class="experience-tags">
@@ -3124,7 +3099,7 @@
             <div class="experience-card">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Big-Bang.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span><span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
                     <h3 class="experience-title">BIG BANG</h3>
                     <p class="experience-desc">Witness the birth of the universe and harness cosmic energy.</p>
                     <div class="experience-tags">
@@ -3137,7 +3112,7 @@
             <div class="experience-card">
                 <picture><source srcset="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span><span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span></div>
+                    <span class="experience-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span>
                     <h3 class="experience-title">MAGMA MAYHEM</h3>
                     <p class="experience-desc">The floor is lava—quick feet and faster reflexes are your only salvation.</p>
                     <div class="experience-tags">
@@ -3150,7 +3125,7 @@
             <div class="experience-card">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Server_Heist5.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
                     <h3 class="experience-title">SERVER HEIST</h3>
                     <p class="experience-desc">Infiltrate high-security systems in this high-stakes digital heist.</p>
                     <div class="experience-tags">
@@ -3163,7 +3138,7 @@
             <div class="experience-card">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Jungle-Temple.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span></div>
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
                     <h3 class="experience-title">JUNGLE TEMPLE</h3>
                     <p class="experience-desc">Brave ancient traps and decode hieroglyphs in this lost temple.</p>
                     <div class="experience-tags">
@@ -3176,7 +3151,7 @@
             <div class="experience-card">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Pirates_Attack.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" width="1920" height="1440" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
                     <h3 class="experience-title">PIRATES ATTACK</h3>
                     <p class="experience-desc">Defend your vessel from marauders. Aim true and work as a crew.</p>
                     <div class="experience-tags">
@@ -3190,7 +3165,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Glitch-Matrix.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span></div>
+                    <span class="experience-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span>
                     <h3 class="experience-title">GLITCH MATRIX</h3>
                     <p class="experience-desc">Navigate a fractured digital world where reality bends and patterns hold the key.</p>
                     <div class="experience-tags">
@@ -3203,7 +3178,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Big-Bang.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span><span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
                     <h3 class="experience-title">BIG BANG</h3>
                     <p class="experience-desc">Witness the birth of the universe and harness cosmic energy.</p>
                     <div class="experience-tags">
@@ -3216,7 +3191,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span><span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span></div>
+                    <span class="experience-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span>
                     <h3 class="experience-title">MAGMA MAYHEM</h3>
                     <p class="experience-desc">The floor is lava—quick feet and faster reflexes are your only salvation.</p>
                     <div class="experience-tags">
@@ -3229,7 +3204,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Server_Heist5.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
                     <h3 class="experience-title">SERVER HEIST</h3>
                     <p class="experience-desc">Infiltrate high-security systems in this high-stakes digital heist.</p>
                     <div class="experience-tags">
@@ -3242,7 +3217,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Jungle-Temple.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span></div>
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
                     <h3 class="experience-title">JUNGLE TEMPLE</h3>
                     <p class="experience-desc">Brave ancient traps and decode hieroglyphs in this lost temple.</p>
                     <div class="experience-tags">
@@ -3255,7 +3230,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Pirates_Attack.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" width="1920" height="1440" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <div class="experience-badges"><span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
                     <h3 class="experience-title">PIRATES ATTACK</h3>
                     <p class="experience-desc">Defend your vessel from marauders. Aim true and work as a crew.</p>
                     <div class="experience-tags">
@@ -3328,34 +3303,32 @@
     <!-- Testimonials -->
     <section class="testimonials" id="reviews">
         <div class="testimonials-scroll">
-          <div class="testimonials-track">
-            <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
-                <p class="testimonial-text">"This was the most fun my family has had in years! The challenges were exciting for both kids and adults. We're already planning our next visit."</p>
-                <div class="testimonial-author">
-                    <span class="author-name">Sarah M.</span>
-                    <span class="author-location">— Philadelphia</span>
-                </div>
-            </div>
-
-            <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
-                <p class="testimonial-text">"Perfect for team building! Our company had a blast competing against each other. The immersive environments and variety of challenges kept everyone engaged."</p>
-                <div class="testimonial-author">
-                    <span class="author-name">Mike R.</span>
-                    <span class="author-location">— Mount Prospect</span>
-                </div>
-            </div>
-
             <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
                 <p class="testimonial-text">"My son's birthday party was absolutely epic! The staff was amazing and all the kids had an incredible time. Highly recommend for any celebration."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Jennifer L.</span>
-                    <span class="author-location">— Manassas</span>
+                    <span class="author-location">— Houston</span>
                 </div>
             </div>
-          </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"We brought our youth group of 20 and everyone was completely engaged the entire time. It's rare to find something that works for all age groups this well."</p>
+                <div class="testimonial-author">
+                    <span class="author-name">Marcus T.</span>
+                    <span class="author-location">— Houston</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"Way more fun than we expected. The missions are creative and the whole vibe is electric. Already told all our friends they need to check it out."</p>
+                <div class="testimonial-author">
+                    <span class="author-name">Daniela R.</span>
+                    <span class="author-location">— Houston</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -3411,10 +3384,10 @@
             <picture><source srcset="assets/photos/experiences/ready-to-play.webp" type="image/webp"><img src="assets/photos/experiences/ready-to-play.jpg" alt="Time Mission venue" width="1920" height="1280" loading="lazy" decoding="async"></picture>
         </div>
         <div class="cta-content reveal">
-            <h2 class="cta-title">READY TO PLAY?</h2>
-            <p class="cta-text">Book your adventure today and discover why Time Mission is the ultimate social gaming experience.</p>
-            <a href="#" class="btn-primary btn-tickets">
-                Book Your Mission
+            <h2 class="cta-title">BE FIRST TO PLAY</h2>
+            <p class="cta-text">Time Mission Brussels is opening soon. Join our list for exclusive offers, grand-opening updates, and early access.</p>
+            <a href="#newsletter" class="btn-primary btn-signup">
+                Sign Up For Exclusive Offers
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -3456,7 +3429,7 @@
     </section>
 
     <!-- Newsletter -->
-    <section class="newsletter-section">
+    <section class="newsletter-section" id="newsletter">
         <div class="newsletter-inner">
             <h2>DON'T MISS A THING</h2>
             <p>Sign up for sneak peeks and early access to new missions — plus special events, ticket drops, and&nbsp;more.</p>
@@ -3511,8 +3484,8 @@
             </div>
 
             <div class="footer-column footer-locations-column">
-                <h3 class="footer-locations-title">LOCATIONS</h3>
-                <div class="footer-locations-dropdown">
+                <h3 class="footer-locations-title">TIME MISSION BRUSSELS</h3>
+                <div class="footer-locations-dropdown" style="display: none;">
                     <div class="footer-location-group">
                         <button class="footer-location-toggle">
                             United States
@@ -3540,12 +3513,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="footer-location-info" style="display: none;">
-                    <h5 class="footer-loc-name"></h5>
-                    <p class="footer-loc-address"></p>
+                <div class="footer-location-info">
+                                        <p class="footer-loc-address">Brussels, Belgium</p>
                     <a class="footer-loc-phone" href="tel:"></a>
                     <div class="footer-loc-hours"></div>
-                    <a class="footer-loc-map" href="#" target="_blank" rel="noopener">Get Directions →</a>
                     <a class="footer-loc-change" href="#">Change Location</a>
                 </div>
             </div>
@@ -3640,16 +3611,16 @@
         // ==========================================
         const taglines = [
             "Social Gaming Adventure",
-            "Better Than Your Ex's Personality",
-            "Date Night, Leveled Up",
             "Family Game Night on Steroids",
+            "Birthday Parties, Leveled Up",
             "Where Couch Potatoes Become Heroes",
             "Touch Grass... Indoors",
             "Corporate Team Building, But Fun",
-            "Cheaper Than Therapy",
-            "Your New Favorite Addiction",
-            "Making Memories (& Enemies)",
-            "Swipe Right on Adventure"
+            "Making Memories Together",
+            "Built For Every Age",
+            "Your New Favorite Weekend",
+            "No Screens. Just Fun.",
+            "Team Up. Beat The Clock."
         ];
 
         let currentTaglineIndex = 0;
@@ -3711,8 +3682,11 @@
             setEyebrowToLocation(city);
         };
 
-        // Initialize — index page always uses normal tagline rotation
-        setTimeout(startRotation, 3000);
+        // Initialize — location pages always show location name first
+        taglineElement.textContent = 'Time Mission Brussels';
+        taglineElement.classList.add('no-cursor');
+        // Hold location name for 3.5s, then start normal rotation
+        setTimeout(startRotation, 3500);
 
         // ==========================================
         // MINUTES COUNTER — fades through 60, 90, 120
@@ -3941,43 +3915,16 @@
                 }, { passive: false });
             }
 
-            // Prev/Next buttons — smooth slide with seamless wrap.
-            // Strategy: always animate in the requested direction toward an UNWRAPPED
-            // target (which may exceed [0, halfW)). Because we have a duplicate set
-            // of cards, positions like halfW look identical to 0, so crossing the
-            // boundary is visually seamless. Once the transition finishes, we quietly
-            // normalize scrollPos back into [0, halfW) so future arithmetic stays clean.
+            // Prev/Next buttons — smooth slide
             function smoothSlide(delta) {
                 const gap = parseFloat(getComputedStyle(scrollEl).gap) || 24;
                 const cw = (originalCards[0] ? originalCards[0].offsetWidth : 350) + gap;
-                const halfW = getHalfWidth();
-
-                // If going backward from near 0, first jump forward by halfW so we have
-                // room to animate LEFT to 0 visually.
-                if (delta < 0 && scrollPos - cw < 0) {
-                    scrollEl.style.transition = 'none';
-                    scrollPos += halfW;
-                    applyPos();
-                    void scrollEl.offsetWidth;
-                }
-
-                const target = scrollPos + delta * cw;
-
                 scrollEl.style.transition = 'transform 0.4s ease';
-                scrollPos = target;
+                scrollPos = wrapPos(scrollPos + delta * cw);
                 applyPos();
-
                 scrollEl.addEventListener('transitionend', function handler() {
-                    scrollEl.removeEventListener('transitionend', handler);
-                    // Silently normalize into [0, halfW) — no transition, no visible change
-                    const wrapped = wrapPos(scrollPos);
-                    if (wrapped !== scrollPos) {
-                        scrollEl.style.transition = 'none';
-                        scrollPos = wrapped;
-                        applyPos();
-                        void scrollEl.offsetWidth;
-                    }
                     scrollEl.style.transition = '';
+                    scrollEl.removeEventListener('transitionend', handler);
                 }, { once: true });
             }
 
@@ -4050,7 +3997,36 @@
             });
         });
 
-        // TESTIMONIALS — handled by carousel script at bottom of page
+        // ==========================================
+        // TESTIMONIALS AUTO-SCROLL
+        // ==========================================
+        (function() {
+            const scroll = document.querySelector('.testimonials-scroll');
+            if (!scroll) return;
+            const cards = scroll.querySelectorAll('.testimonial-card');
+            if (cards.length < 2) return;
+            let current = 0;
+            let timer;
+
+            function goTo(i) {
+                current = i % cards.length;
+                scroll.scrollTo({ left: scroll.offsetWidth * current, behavior: 'smooth' });
+            }
+
+            function startAuto() {
+                timer = setInterval(() => goTo(current + 1), 4000);
+            }
+
+            // Pause on interaction, resume after
+            scroll.addEventListener('touchstart', () => clearInterval(timer), { passive: true });
+            scroll.addEventListener('touchend', () => {
+                // Sync current index to nearest card after swipe
+                current = Math.round(scroll.scrollLeft / scroll.offsetWidth);
+                startAuto();
+            }, { passive: true });
+
+            startAuto();
+        })();
 
         // ==========================================
         // PRESS TICKER — JS-driven seamless loop
@@ -4195,161 +4171,36 @@
             }
         });
     </script>
-    <script>
-    // Testimonial carousel — transform-based infinite loop with swipe support
-    (function () {
-        var container = document.querySelector('.testimonials-scroll');
-        var track = document.querySelector('.testimonials-track');
-        if (!container || !track) return;
-        var cards = track.querySelectorAll('.testimonial-card');
-        var count = cards.length;
-        if (count < 2) return;
-
-        var current = 0;
-        var autoTimer = null;
-        var resumeTimer = null;
-        var offset = count; // DOM offset after prepending clones
-        var ANIM_MS = 450; // must match CSS transition duration
-
-        // Clone cards: prepend last→first, append first→last
-        var i, clone;
-        for (i = 0; i < count; i++) {
-            clone = cards[i].cloneNode(true);
-            clone.setAttribute('aria-hidden', 'true');
-            track.appendChild(clone);
-        }
-        for (i = count - 1; i >= 0; i--) {
-            clone = cards[i].cloneNode(true);
-            clone.setAttribute('aria-hidden', 'true');
-            track.insertBefore(clone, track.firstChild);
-        }
-
-        function getWidth() { return container.offsetWidth; }
-
-        function setTransform(domIndex, animate) {
-            if (!animate) {
-                track.classList.add('no-transition');
-            } else {
-                track.classList.remove('no-transition');
-            }
-            track.style.transform = 'translateX(-' + (domIndex * getWidth()) + 'px)';
-            if (!animate) void track.offsetHeight; // force reflow for instant jump
-        }
-
-        // Animate to a logical index, then teleport if in clone zone
-        function slideTo(index, animate) {
-            current = index;
-            setTransform(offset + index, animate !== false);
-
-            // If we landed in clone zone, schedule teleport after animation
-            if (animate !== false && (index >= count || index < 0)) {
-                setTimeout(function () {
-                    var real = index >= count ? index - count : index + count;
-                    current = real;
-                    setTransform(offset + real, false);
-                }, ANIM_MS + 50);
-            }
-        }
-
-        function jumpTo(index) {
-            current = index;
-            setTransform(offset + index, false);
-        }
-
-        function advance() { slideTo(current + 1, true); }
-        function retreat() { slideTo(current - 1, true); }
-
-        // Auto-play
-        function startAuto() {
-            stopAuto();
-            autoTimer = setInterval(advance, 5000);
-        }
-        function stopAuto() {
-            if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
-        }
-        function pauseAndResume() {
-            stopAuto();
-            if (resumeTimer) clearTimeout(resumeTimer);
-            resumeTimer = setTimeout(startAuto, 8000);
-        }
-
-        // Swipe / drag support
-        var startX = 0, startY = 0, dragging = false, dragDelta = 0;
-        var dragStartTime = 0, isHorizontal = null;
-
-        function onPointerDown(e) {
-            var touch = e.touches ? e.touches[0] : e;
-            startX = touch.clientX;
-            startY = touch.clientY;
-            dragging = true;
-            dragDelta = 0;
-            dragStartTime = Date.now();
-            isHorizontal = null;
-            track.classList.add('no-transition');
-            container.classList.add('grabbing');
-            pauseAndResume();
-        }
-
-        function onPointerMove(e) {
-            if (!dragging) return;
-            var touch = e.touches ? e.touches[0] : e;
-            var dx = touch.clientX - startX;
-            var dy = touch.clientY - startY;
-
-            if (isHorizontal === null && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
-                isHorizontal = Math.abs(dx) > Math.abs(dy);
-            }
-            if (!isHorizontal) return;
-
-            if (e.cancelable) e.preventDefault();
-            dragDelta = dx;
-            var w = getWidth();
-            var basePx = (offset + current) * w;
-            track.style.transform = 'translateX(' + (-(basePx - dragDelta)) + 'px)';
-        }
-
-        function onPointerUp() {
-            if (!dragging) return;
-            dragging = false;
-            container.classList.remove('grabbing');
-            if (!isHorizontal) return;
-
-            var w = getWidth();
-            var elapsed = Date.now() - dragStartTime;
-            var velocity = Math.abs(dragDelta) / Math.max(elapsed, 1);
-
-            if (Math.abs(dragDelta) > w * 0.25 || velocity > 0.4) {
-                if (dragDelta > 0) { retreat(); } else { advance(); }
-            } else {
-                slideTo(current, true);
-            }
-            dragDelta = 0;
-        }
-
-        // Touch events
-        container.addEventListener('touchstart', onPointerDown, { passive: true });
-        container.addEventListener('touchmove', onPointerMove, { passive: false });
-        container.addEventListener('touchend', onPointerUp);
-        container.addEventListener('touchcancel', onPointerUp);
-
-        // Mouse drag
-        container.addEventListener('mousedown', onPointerDown);
-        window.addEventListener('mousemove', onPointerMove);
-        window.addEventListener('mouseup', onPointerUp);
-
-        // Pause on wheel
-        container.addEventListener('wheel', pauseAndResume, { passive: true });
-
-        // Recalculate on resize
-        window.addEventListener('resize', function () { jumpTo(current); });
-
-        // Init
-        jumpTo(0);
-        startAuto();
-    })();
-    </script>
     <script defer src="js/nav.js?v=4"></script>
     <script src="js/locations.js?v=8"></script>
     <script src="js/ticket-panel.js?v=4"></script>
+    <script>
+    (function() {
+        var id = 'brussels';
+        var name = 'Brussels';
+        // Set both localStorage keys (tm_location for locations.js, timeMissionLocation for nav.js)
+        try {
+            localStorage.setItem('tm_location', id);
+            localStorage.setItem('timeMissionLocation', name);
+        } catch(e) {}
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set nav text
+            var el = document.getElementById('locationText');
+            if (el) el.textContent = name;
+            // Highlight this location in the dropdown
+            document.querySelectorAll('[data-city]').forEach(function(a) {
+                if (a.dataset.city === name) {
+                    a.classList.add('active');
+                    a.style.background = 'rgba(255, 107, 44, 0.1)';
+                    a.style.color = '#fff';
+                }
+            });
+            // Enhance with full data when TM loads
+            if (window.TM && TM.ready) {
+                TM.ready.then(function() { TM.select(id); });
+            }
+        });
+    })();
+    </script>
 </body>
 </html>

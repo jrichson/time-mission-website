@@ -535,11 +535,10 @@
     opacity: 0.8;
 }
 
-/* Coming Soon locations — visually de-emphasized, not clickable */
+/* Coming Soon locations — visually de-emphasized, link to sign-up landing page */
 .location-dropdown a.location-coming-soon {
     color: var(--gray, #999);
-    cursor: default;
-    pointer-events: none;
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;

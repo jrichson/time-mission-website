@@ -194,7 +194,8 @@
             hours: 'Coming Soon',
             bookUrl: '',
             pageUrl: 'houston.html',
-            mapQuery: 'Marq+E+Entertainment+District+Houston+TX'
+            mapQuery: 'Marq+E+Entertainment+District+Houston+TX',
+            comingSoon: true
         },
         'Manassas': {
             name: 'VA – Manassas',
@@ -213,6 +214,36 @@
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
             pageUrl: 'antwerp.html',
             mapQuery: 'Michiganstraat+1+Antwerp+Belgium'
+        },
+        'Orland Park': {
+            name: 'IL – Orland Park',
+            address: 'Orland Park, IL',
+            phone: '',
+            hours: 'Coming Soon',
+            bookUrl: '',
+            pageUrl: 'orland-park.html',
+            mapQuery: 'Orland+Park+IL',
+            comingSoon: true
+        },
+        'Dallas': {
+            name: 'TX – Dallas',
+            address: 'Dallas, TX',
+            phone: '',
+            hours: 'Coming Soon',
+            bookUrl: '',
+            pageUrl: 'dallas.html',
+            mapQuery: 'Dallas+TX',
+            comingSoon: true
+        },
+        'Brussels': {
+            name: 'BE – Brussels',
+            address: 'Brussels, Belgium',
+            phone: '',
+            hours: 'Coming Soon',
+            bookUrl: '',
+            pageUrl: 'brussels.html',
+            mapQuery: 'Brussels+Belgium',
+            comingSoon: true
         }
     };
 
@@ -232,7 +263,14 @@
         addrEl.href = 'https://www.google.com/maps/dir/?api=1&destination=' + data.mapQuery;
         infoPanel.querySelector('.location-info-phone').textContent = data.phone;
         infoPanel.querySelector('.location-info-hours').innerHTML = data.hours.replace(/\n/g, '<br>');
-        infoPanel.querySelector('.location-info-book').href = data.pageUrl + '?book=1';
+        var bookBtn = infoPanel.querySelector('.location-info-book');
+        if (data.comingSoon) {
+            bookBtn.href = data.pageUrl;
+            bookBtn.textContent = 'Sign Up';
+        } else {
+            bookBtn.href = data.pageUrl + '?book=1';
+            bookBtn.textContent = 'Book Now';
+        }
 
         // Show map embed
         if (mapEl && data.mapQuery) {
