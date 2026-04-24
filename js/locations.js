@@ -209,7 +209,7 @@
 
             // Nav logo — route home to the selected location's page
             if (loc && loc.slug) {
-                const inSubdir = window.location.pathname.includes('/locations/');
+                const inSubdir = window.location.pathname.includes('/locations/') || window.location.pathname.includes('/groups/');
                 const homePath = (inSubdir ? '../' : '') + loc.slug + '.html';
                 document.querySelectorAll('.nav-logo, .location-dropdown-logo').forEach(el => {
                     el.href = homePath;

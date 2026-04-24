@@ -16,7 +16,7 @@
             try { slug = localStorage.getItem('tm_location') || ''; } catch (err) {}
             if (!slug) return; // no location — let the default index.html link work
             e.preventDefault();
-            const inSubdir = window.location.pathname.includes('/locations/');
+            const inSubdir = window.location.pathname.includes('/locations/') || window.location.pathname.includes('/groups/');
             window.location.href = (inSubdir ? '../' : '') + slug + '.html';
         });
     });
