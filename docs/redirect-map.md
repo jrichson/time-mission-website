@@ -28,6 +28,10 @@ If using Netlify, drop this into a file named `_redirects` at the site root:
 /privacy-policy/             /privacy.html                   301
 /terms-and-conditions        /terms.html                     301
 
+# Page rename (2026-04-24): experiences.html → missions.html
+/experiences.html            /missions.html                  301
+/experiences                 /missions.html                  301
+
 # Location slug migration
 /mountprospect               /mount-prospect.html            301
 /providence                  /lincoln.html                   301
@@ -59,7 +63,9 @@ If using Netlify, drop this into a file named `_redirects` at the site root:
     { "source": "/licensing",              "destination": "/licensing.html",       "permanent": true },
     { "source": "/privacy-policy",         "destination": "/privacy.html",         "permanent": true },
     { "source": "/terms-and-conditions",   "destination": "/terms.html",           "permanent": true },
-    { "source": "/mountprospect",          "destination": "/mount-prospect.html",  "permanent": true }
+    { "source": "/mountprospect",          "destination": "/mount-prospect.html",  "permanent": true },
+    { "source": "/experiences.html",       "destination": "/missions.html",        "permanent": true },
+    { "source": "/experiences",            "destination": "/missions.html",        "permanent": true }
   ]
 }
 ```

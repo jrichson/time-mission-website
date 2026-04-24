@@ -855,6 +855,165 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Ticket Popup Panel */
+        .ticket-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 9998;
+        }
+
+        .ticket-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ticket-panel {
+            width: 360px;
+            position: fixed;
+            height: 100%;
+            background: linear-gradient(200deg, var(--dark) 0%, var(--black) 50%);
+            right: 0;
+            top: 0;
+            visibility: hidden;
+            transform: translateX(100%);
+            transition: transform 0.4s ease, visibility 0.4s ease;
+            border-left: 1px solid rgba(255, 107, 44, 0.3);
+            padding: 0;
+            z-index: 9999;
+            overflow-y: auto;
+        }
+
+        .ticket-panel.active {
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .ticket-panel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--dark);
+            z-index: 1;
+        }
+
+        .ticket-panel-header h3 {
+            font-family: var(--display);
+            font-size: 1.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .ticket-panel-close {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ticket-panel-close:hover {
+            background: rgba(255, 107, 44, 0.2);
+            border-color: rgba(255, 107, 44, 0.4);
+            color: var(--white);
+        }
+
+        .ticket-panel-close svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .ticket-panel-content {
+            padding: 2rem 1.5rem;
+        }
+
+        .ticket-panel-content p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .ticket-location-select {
+            margin-bottom: 2rem;
+        }
+
+        .ticket-location-select label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--white-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .ticket-location-select select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 1rem;
+            font-family: var(--body);
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            transition: all 0.3s ease;
+        }
+
+        .ticket-location-select select:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        .ticket-location-select select option {
+            background: var(--dark);
+            color: var(--white);
+        }
+
+        .btn-ticket-book {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            text-decoration: none;
+            font-family: var(--tech);
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
+        }
+
+        .btn-ticket-book:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(239, 75, 35, 0.5);
+        }
+
+        .btn-ticket-book svg {
+            width: 18px;
+            height: 18px;
+        }
     </style>
     <!-- JSON-LD -->
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}</script>
@@ -879,7 +1038,7 @@
     <div class="mobile-menu" id="mobileMenu">
         <ul class="mobile-menu-links">
             <li><a href="index.html">Home</a></li>
-            <li><a href="experiences.html">Experiences</a></li>
+            <li><a href="missions.html">Missions</a></li>
             <li><a href="groups.html">Groups & Events</a></li>
             <li><a href="gift-cards.html">Gift Cards</a></li>
             <li><a href="groups.html">Groups</a></li>
@@ -919,7 +1078,7 @@
         <div class="nav-center">
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="index.html#experiences">Visit</a></li>
+                <li><a href="index.html#experiences">Missions</a></li>
                 <li><a href="groups.html">Groups</a></li>
                 <li><a href="faq.html">FAQ</a></li>
             </ul>
@@ -936,7 +1095,7 @@
                     <polyline points="6,9 12,15 18,9"/>
                 </svg>
             </button>
-            <a href="#" class="btn-tickets">Tickets</a>
+            <a href="#" class="btn-tickets">Book Now</a>
         </div>
     </nav>
 
@@ -1201,7 +1360,7 @@
                     <li><a href="about.html">About</a></li>
                     <li><a href="faq.html">FAQ</a></li>
                     <li><a href="groups.html">Groups</a></li>
-                    <li><a href="experiences.html">The Missions</a></li>
+                    <li><a href="missions.html">The Missions</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
                     <li><a href="gift-cards.html">Gift Cards</a></li>
                     <li><a href="licensing.html">Licensing</a></li>
@@ -1347,7 +1506,7 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
-    <script src="js/locations.js?v=8"></script>
+    <script src="js/locations.js?v=9"></script>
     <script src="js/ticket-panel.js?v=4"></script>
     <script>
     // What-Is photo carousel

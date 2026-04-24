@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Private Events &amp; Venue Buyouts | Time Mission</title>
+    <!-- SEO META -->
+    <meta name="description" content="Buy out a Time Mission location for your private event. Full-venue access, 25+ interactive missions, custom configurations, and scalable capacity for milestone celebrations.">
+    <link rel="canonical" href="https://timemission.com/groups/private-events">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Time Mission">
+    <meta property="og:title" content="Private Events &amp; Venue Buyouts | Time Mission">
+    <meta property="og:description" content="Buy out a Time Mission location for your private event. Full-venue access, 25+ interactive missions, custom configurations, and scalable capacity for milestone celebrations.">
+    <meta property="og:url" content="https://timemission.com/groups/private-events">
+    <meta property="og:image" content="https://timemission.com/assets/photos/venue/_Time-Mission_0024.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Private Events &amp; Venue Buyouts | Time Mission">
+    <meta name="twitter:description" content="Buy out a Time Mission location for your private event. Full-venue access, 25+ interactive missions, custom configurations, and scalable capacity for milestone celebrations.">
+    <meta name="twitter:image" content="https://timemission.com/assets/photos/venue/_Time-Mission_0024.jpg">
+    <link rel="icon" type="image/png" href="../assets/logo/TM_Favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/nav.css?v=17">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/footer.css?v=2">
+    <link rel="stylesheet" href="../css/newsletter.css">
+    <link rel="stylesheet" href="../css/faq.css?v=3">
+    <style>
+        /* ==========================================
+           EVENT TYPE PAGE TEMPLATE
+           Reusable across: birthdays, corporate, field-trips,
+           bachelor-ette, private-events, holidays.
+           ========================================== */
+
+        /* ----- HERO (matches groups.html pattern) ----- */
+        .hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10rem 2rem 4rem;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            /* Gradient fades into var(--black) at the bottom to match the first section's background */
+            background: linear-gradient(180deg, rgba(13, 13, 13, 0.4) 0%, rgba(13, 13, 13, 0.55) 55%, var(--black) 100%);
+            z-index: 1;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 40%;
+            opacity: 0.55;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero-title {
+            font-family: var(--display);
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            line-height: 1;
+            letter-spacing: 0.02em;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-family: var(--body);
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-cta .btn-primary,
+        .hero-cta .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            font-family: var(--tech);
+            font-size: 0.85rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .hero-cta .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
+        }
+
+        .hero-cta .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+        }
+
+        .hero-cta .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-cta .btn-secondary:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .hero { min-height: 60vh; padding: 8rem 1.5rem 3rem; }
+            .hero-title { font-size: clamp(2.5rem, 12vw, 4rem); }
+            .hero-cta { gap: 0.75rem; }
+            .hero-cta .btn-primary,
+            .hero-cta .btn-secondary {
+                padding: 0.85rem 1.25rem;
+                font-size: 0.75rem;
+                white-space: nowrap;
+            }
+        }
+
+        /* ----- SHARED: grid texture on dark sections (matches rest of site) ----- */
+        .event-page-section,
+        .event-page-faq,
+        .event-page-cta {
+            position: relative;
+        }
+
+        .event-page-section::before,
+        .event-page-faq::before,
+        .event-page-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 80px 80px;
+            background-attachment: fixed;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ----- SECTION BASE ----- */
+        .event-page-section {
+            padding: 5rem 2rem;
+            background: var(--black);
+        }
+
+        .event-page-section.alt-bg {
+            background: var(--dark);
+        }
+
+        .event-page-section-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .event-page-section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 3rem;
+        }
+
+        .event-page-section-header .section-badge {
+            margin-bottom: 1.25rem;
+        }
+
+        .event-page-section-header h2 {
+            font-family: var(--display);
+            font-size: clamp(2.25rem, 5vw, 3.75rem);
+            line-height: 1.05;
+            letter-spacing: 0.01em;
+            color: var(--white);
+            margin: 0 0 1.25rem;
+        }
+
+        .event-page-section-header h2 .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .event-page-section-header p {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.75;
+        }
+
+        /* ----- 3-UP FEATURE GRID (cards with icon + title + copy) ----- */
+        .event-page-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .event-page-feature-card {
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem 1.75rem;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .event-page-section.alt-bg .event-page-feature-card {
+            background: var(--black);
+        }
+
+        .event-page-feature-card:hover {
+            border-color: rgba(255, 107, 44, 0.35);
+            transform: translateY(-4px);
+        }
+
+        .event-page-feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: rgba(255, 107, 44, 0.12);
+            color: var(--orange);
+            margin-bottom: 1.25rem;
+        }
+
+        .event-page-feature-icon svg {
+            width: 26px;
+            height: 26px;
+            stroke-width: 1.75;
+        }
+
+        .event-page-feature-card h3 {
+            font-family: var(--display);
+            font-size: 1.35rem;
+            letter-spacing: 0.02em;
+            margin: 0 0 0.6rem;
+            color: var(--white);
+        }
+
+        .event-page-feature-card p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        .event-page-step-number {
+            font-family: var(--tech);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: var(--orange);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        /* ----- 2-UP SPLIT (image + content) ----- */
+        .event-page-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .event-page-split-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 5 / 4;
+        }
+
+        .event-page-split-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .event-page-split-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            pointer-events: none;
+        }
+
+        .event-page-split-copy .section-badge {
+            margin-bottom: 1.25rem;
+        }
+
+        .event-page-split-copy h2 {
+            font-family: var(--display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.05;
+            margin: 0 0 1rem;
+            color: var(--white);
+        }
+
+        .event-page-split-copy h2 .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .event-page-split-copy p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.75;
+            margin: 0 0 1.5rem;
+        }
+
+        .event-page-includes {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .event-page-includes li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .event-page-includes li::before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            margin-top: 3px;
+            border-radius: 50%;
+            background: var(--orange);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+            background-size: 12px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* ----- FAQ ----- */
+        .event-page-faq {
+            padding: 5rem 2rem;
+            background: var(--black);
+        }
+
+        .event-page-faq-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        /* ----- Bottom CTA + cross-sell ----- */
+        .event-page-cta {
+            padding: 5rem 2rem 4rem;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--black) 100%);
+            text-align: center;
+        }
+
+        .event-page-cta-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .event-page-cta-inner h2 {
+            font-family: var(--display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            letter-spacing: 0.02em;
+            color: var(--white);
+            margin: 0 0 1rem;
+        }
+
+        .event-page-cta-inner h2 .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .event-page-cta-subtitle {
+            max-width: 560px;
+            margin: 0 auto 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+        }
+
+        .event-page-cta-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3.5rem;
+        }
+
+        .event-page-cta-buttons .btn-primary,
+        .event-page-cta-buttons .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            font-family: var(--tech);
+            font-size: 0.85rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .event-page-cta-buttons .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
+        }
+
+        .event-page-cta-buttons .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+        }
+
+        .event-page-cta-buttons .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .event-page-cta-buttons .btn-secondary:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        .event-page-cross-sell-title {
+            font-family: var(--tech);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 1.5rem;
+        }
+
+        .event-page-cross-sell-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1rem;
+        }
+
+        .event-page-cross-sell-grid a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 1.25rem 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .event-page-cross-sell-grid a:hover {
+            border-color: var(--orange);
+            background: rgba(255, 107, 44, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .event-page-cross-sell-grid a.is-current {
+            border-color: var(--orange);
+            background: rgba(255, 107, 44, 0.1);
+            pointer-events: none;
+        }
+
+        .event-page-cross-sell-grid svg {
+            width: 26px;
+            height: 26px;
+            color: var(--orange);
+            stroke-width: 1.5;
+        }
+
+        .event-page-cross-sell-grid span {
+            font-family: var(--tech);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .event-page-feature-grid,
+            .event-page-split {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .event-page-cross-sell-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .event-page-section,
+            .event-page-faq,
+            .event-page-cta {
+                padding-left: 1.25rem;
+                padding-right: 1.25rem;
+            }
+
+            .event-page-cross-sell-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .event-page-cta-buttons .btn-primary,
+            .event-page-cta-buttons .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Ticket Popup Panel */
+        .ticket-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 9998;
+        }
+
+        .ticket-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ticket-panel {
+            width: 360px;
+            position: fixed;
+            height: 100%;
+            background: linear-gradient(200deg, var(--dark) 0%, var(--black) 50%);
+            right: 0;
+            top: 0;
+            visibility: hidden;
+            transform: translateX(100%);
+            transition: transform 0.4s ease, visibility 0.4s ease;
+            border-left: 1px solid rgba(255, 107, 44, 0.3);
+            padding: 0;
+            z-index: 9999;
+            overflow-y: auto;
+        }
+
+        .ticket-panel.active {
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .ticket-panel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--dark);
+            z-index: 1;
+        }
+
+        .ticket-panel-header h3 {
+            font-family: var(--display);
+            font-size: 1.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .ticket-panel-close {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ticket-panel-close:hover {
+            background: rgba(255, 107, 44, 0.2);
+            border-color: rgba(255, 107, 44, 0.4);
+            color: var(--white);
+        }
+
+        .ticket-panel-close svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .ticket-panel-content {
+            padding: 2rem 1.5rem;
+        }
+
+        .ticket-panel-content p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .ticket-location-select {
+            margin-bottom: 2rem;
+        }
+
+        .ticket-location-select label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--white-soft);
+            margin-bottom: 0.5rem;
+        }
+
+        .ticket-location-select select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 1rem;
+            font-family: var(--body);
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            transition: all 0.3s ease;
+        }
+
+        .ticket-location-select select:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        .ticket-location-select select option {
+            background: var(--dark);
+            color: var(--white);
+        }
+
+        .btn-ticket-book {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            text-decoration: none;
+            font-family: var(--tech);
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
+        }
+
+        .btn-ticket-book:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(239, 75, 35, 0.5);
+        }
+
+        .btn-ticket-book svg {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+</head>
+<body class="has-noise">
+    <!-- Announcement Ticker -->
+    <div class="ticker-bar">
+        <div class="ticker-track">
+            <span class="ticker-item">PRIVATE EVENTS &amp; VENUE BUYOUTS</span>
+            <span class="ticker-item">PRIVATE EVENTS &amp; VENUE BUYOUTS</span>
+            <span class="ticker-item">PRIVATE EVENTS &amp; VENUE BUYOUTS</span>
+            <span class="ticker-item">PRIVATE EVENTS &amp; VENUE BUYOUTS</span>
+            <span class="ticker-item">PRIVATE EVENTS &amp; VENUE BUYOUTS</span>
+            <span class="ticker-item">PRIVATE EVENTS &amp; VENUE BUYOUTS</span>
+            <span class="ticker-item">PRIVATE EVENTS &amp; VENUE BUYOUTS</span>
+            <span class="ticker-item">PRIVATE EVENTS &amp; VENUE BUYOUTS</span>
+        </div>
+    </div>
+
+    <!-- Full-Screen Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-menu-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="missions.html">Missions</a></li>
+            <li><a href="../groups.html">Groups &amp; Events</a></li>
+            <li><a href="../gift-cards.html">Gift Cards</a></li>
+            <li><a href="../faq.html">FAQ</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+        </ul>
+        <div class="mobile-menu-cta">
+            <a href="#" class="btn-tickets">Book Now</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-left">
+            <button class="nav-menu-btn" aria-label="Open menu">
+                <div class="hamburger"><span></span><span></span><span></span></div>
+            </button>
+            <a href="../index.html" class="nav-logo">
+                <img src="../assets/logo/TM_Logo_White.svg" alt="Time Mission">
+            </a>
+        </div>
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../index.html#about">About</a></li>
+                <li><a href="../groups.html">Groups</a></li>
+                <li><a href="../faq.html">FAQ</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <button class="location-btn" id="locationBtn" aria-label="Change location">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span id="locationText">Select Location</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
+                    <polyline points="6,9 12,15 18,9"/>
+                </svg>
+            </button>
+            <a href="#" class="btn-tickets">Book Now</a>
+        </div>
+    </nav>
+
+    <!-- HERO (groups.html-style: photo bg + centered copy) -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="../assets/photos/venue/_Time-Mission_0024.jpg" alt="Time Mission venue set up for a private event" width="1920" height="1280">
+        </div>
+        <div class="hero-content">
+            <div class="section-badge">Groups &amp; Parties</div>
+            <h1 class="hero-title">
+                PRIVATE <span class="highlight">EVENTS</span>
+            </h1>
+            <p class="hero-subtitle">Buy out the floor. Full-venue access, custom configurations, and 25+ missions — perfect for milestones, product launches, and gatherings worth remembering.</p>
+            <div class="hero-cta">
+                <a href="#" class="btn-primary btn-tickets">
+                    Group Tickets
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="../contact.html?type=private-event" class="btn-secondary">Inquire Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1 — Why Time Mission (3 feature cards) -->
+    <section class="event-page-section">
+        <div class="event-page-section-inner">
+            <div class="event-page-section-header">
+                <div class="section-badge">Why Time Mission</div>
+                <h2>A private event that beats <span class="highlight">anything&nbsp;else</span>.</h2>
+                <p>When you want the whole place to yourself. Time Mission offers full-venue buyouts for milestone birthdays, product launches, wedding-weekend activities, and anything else that deserves its own space.</p>
+            </div>
+            <div class="event-page-feature-grid">
+                <div class="event-page-feature-card reveal">
+                    <div class="event-page-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9"/></svg>
+                    </div>
+                    <h3>Full Venue Access</h3>
+                    <p>All 25+ missions, the whole floor, no waiting. Exclusively yours for the entire session.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <div class="event-page-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3>Custom Configurations</h3>
+                    <p>Branded signage, reserved floor time, extended sessions, custom schedules — we'll build the event around you.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <div class="event-page-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                    <h3>Scalable Capacity</h3>
+                    <p>From 50-person celebrations to 300+ activations. We'll match staffing and schedule to the size of your crew.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2 — What to Expect (image + list) -->
+    <section class="event-page-section alt-bg">
+        <div class="event-page-section-inner">
+            <div class="event-page-split">
+                <div class="event-page-split-image reveal">
+                    <picture>
+                        <source srcset="../assets/photos/venue/_Time-Mission_0024.jpg" type="image/jpeg">
+                        <img src="../assets/photos/venue/_Time-Mission_0024.jpg" alt="Time Mission venue set up for a private event" width="1400" height="1120" loading="lazy" decoding="async">
+                    </picture>
+                </div>
+                <div class="event-page-split-copy reveal">
+                    <div class="section-badge">What to Expect</div>
+                    <h2>A Venue Built Around Your <span class="highlight">Event</span></h2>
+                    <!-- TODO: confirm final pricing + add-on details per location -->
+                    <p>Custom pricing based on size, duration, and location. Everything a milestone event needs — plus a venue that feels built for exactly this moment.</p>
+                    <ul class="event-page-includes">
+                        <li>Full-floor buyout — all 25+ missions exclusively yours</li>
+                        <li>Extended session times available for larger groups</li>
+                        <li>Custom branding and signage options</li>
+                        <li>Dedicated event staffing scaled to your headcount</li>
+                        <li>Custom food, drink, and catering packages available by location</li>
+                        <li>AV, entertainment, and activation add-ons by arrangement</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3 — How it works (3-step feature cards) -->
+    <section class="event-page-section">
+        <div class="event-page-section-inner">
+            <div class="event-page-section-header">
+                <div class="section-badge">How it works</div>
+                <h2>Three steps. <span class="highlight">That's it.</span></h2>
+            </div>
+            <div class="event-page-feature-grid">
+                <div class="event-page-feature-card reveal">
+                    <span class="event-page-step-number">Step 01</span>
+                    <h3>Pick a Date</h3>
+                    <p>Tell us the location, date, and headcount. We'll confirm availability and hold your session within one business day.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <span class="event-page-step-number">Step 02</span>
+                    <h3>Build The Event</h3>
+                    <p>Walk through venue options, formats, branding, and add-ons with our team. We'll map it to your event's shape.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <span class="event-page-step-number">Step 03</span>
+                    <h3>Take Over &amp; Celebrate</h3>
+                    <p>Show up, take the whole floor, and let your crew experience Time Mission exclusively.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="event-page-faq">
+        <div class="event-page-faq-inner">
+            <div class="event-page-section-header">
+                <div class="section-badge">Got Questions?</div>
+                <h2>Frequently Asked</h2>
+            </div>
+            <div class="faq-section">
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>What's the minimum headcount for a buyout?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Varies by location, but most buyouts start around 40–60 guests. Send us your size and we'll confirm what works at your chosen venue.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>How is buyout pricing structured?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Custom pricing based on venue, date, duration, and headcount. Request a quote and we'll send a detailed proposal.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>Can we add custom branding or signage?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Yes — most buyouts include options for branded signage, custom welcome experiences, and sometimes mission personalization. Let us know what you have in mind.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>Is catering available?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Catering and bar options vary by location. Some venues have full in-house packages, others work with outside caterers. We'll walk you through what's available when you book.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>What hours are buyouts available?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Most locations can accommodate buyouts during standard operating hours plus extended or after-hours slots. Extended hours may carry additional cost.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>Do you handle AV, entertainment, or activations?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">We can coordinate AV basics in-house and work with outside vendors for larger activations, entertainment, and custom experiences. Let's talk through what the event needs.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA + Cross-sell to other event types -->
+    <section class="event-page-cta">
+        <div class="event-page-cta-inner">
+            <h2>Ready to take over the <span class="highlight">venue?</span></h2>
+            <p class="event-page-cta-subtitle">Tell us your headcount, date, and event type — we'll build a buyout plan around it.</p>
+            <div class="event-page-cta-buttons">
+                <a href="#" class="btn-primary btn-tickets">
+                    Group Tickets
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="../contact.html?type=private-event" class="btn-secondary">Inquire Now</a>
+            </div>
+
+            <div class="event-page-cross-sell-title">Other event types</div>
+            <div class="event-page-cross-sell-grid">
+                <a href="groups/birthdays.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16h16"/><path d="M2 21h20"/><path d="M8 7V5a1 1 0 0 1 2 0v2"/><path d="M14 7V5a1 1 0 0 1 2 0v2"/></svg>
+                    <span>Birthdays</span>
+                </a>
+                <a href="groups/corporate.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8"/><path d="M9 2l-1 6a4 4 0 0 0 8 0l-1-6"/><path d="M12 12v8"/><path d="M8 22h8"/></svg>
+                    <span>Corporate</span>
+                </a>
+                <a href="field-trips.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span>Field Trips</span>
+                </a>
+                <a href="bachelor-ette.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0L12 5.35l-.77-.77a5.41 5.41 0 1 0-7.65 7.65l8.42 8.42 8.42-8.42a5.41 5.41 0 0 0 0-7.65z"/></svg>
+                    <span>Bachelor/ette</span>
+                </a>
+                <a href="private-events.html" class="is-current">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16.5l-6.5-6.5-4.4 9.6a1 1 0 0 0 1.3 1.3l9.6-4.4z"/><path d="M18 13l2-.5"/><path d="M15 9l-1 1"/></svg>
+                    <span>Private Events</span>
+                </a>
+                <a href="holidays.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+                    <span>Holidays</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <h2>DON'T MISS A THING</h2>
+            <p>Sign up for sneak peeks and early access to new missions — plus special events, ticket drops, and&nbsp;more.</p>
+            <form class="newsletter-form">
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name">
+                <input type="email" placeholder="Email" class="full-width" required>
+            </form>
+            <label class="newsletter-consent">
+                <input type="checkbox" required>
+                <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+            </label>
+            <button type="submit" class="btn-subscribe">Sign Up</button>
+            <p class="newsletter-legal">
+                By signing up, you agree to our
+                <a href="../terms.html">Terms of Service</a> and
+                <a href="../privacy.html">Privacy Policy</a>.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="../assets/logo/TM_Logo_White.svg" alt="Time Mission">
+                <p>A social gaming adventure where teams compete through immersive challenges across time and space.</p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.51a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 10.86 4.34A6.28 6.28 0 0 0 15.86 15V8.74a8.18 8.18 0 0 0 4.14 1.15V6.69h-.41z"/></svg>
+                    </a>
+                    <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3 class="footer-title">EXPERIENCE</h3>
+                <ul class="footer-links">
+                    <li><a href="../about.html">About</a></li>
+                    <li><a href="../faq.html">FAQ</a></li>
+                    <li><a href="../groups.html">Groups</a></li>
+                    <li><a href="missions.html">The Missions</a></li>
+                    <li><a href="../contact.html">Contact Us</a></li>
+                    <li><a href="../gift-cards.html">Gift Cards</a></li>
+                    <li><a href="../licensing.html">Licensing</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column footer-locations-column">
+                <h3 class="footer-locations-title">LOCATIONS</h3>
+                <div class="footer-locations-dropdown">
+                    <div class="footer-location-group">
+                        <button class="footer-location-toggle">
+                            United States
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="footer-location-list">
+                            <a href="../mount-prospect.html">Mount Prospect</a>
+                            <a href="../philadelphia.html">Philadelphia</a>
+                            <a href="../west-nyack.html">West Nyack</a>
+                            <a href="../lincoln.html">Lincoln</a>
+                            <a href="../houston.html">Houston</a>
+                            <a href="../manassas.html">Manassas</a>
+                            <a href="../orland-park.html" class="coming-soon" style="opacity:0.7;display:inline-flex;align-items:center;gap:0.4rem;">Orland Park <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                            <a href="../dallas.html" class="coming-soon" style="opacity:0.7;display:inline-flex;align-items:center;gap:0.4rem;">Dallas <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                        </div>
+                    </div>
+                    <div class="footer-location-group">
+                        <button class="footer-location-toggle">
+                            Europe
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="footer-location-list">
+                            <a href="../antwerp.html">Antwerp</a>
+                            <a href="../brussels.html" class="coming-soon" style="opacity:0.7;display:inline-flex;align-items:center;gap:0.4rem;">Brussels <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-location-info" style="display: none;">
+                    <h5 class="footer-loc-name"></h5>
+                    <p class="footer-loc-address"></p>
+                    <a class="footer-loc-phone" href="tel:"></a>
+                    <div class="footer-loc-hours"></div>
+                    <a class="footer-loc-map" href="#" target="_blank" rel="noopener">Get Directions →</a>
+                    <a class="footer-loc-change" href="#">Change Location</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="footer-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="../terms.html">Terms</a>
+                <a href="../privacy.html">Privacy</a>
+                <a href="../cookies.html">Cookies</a>
+                <a href="../code-of-conduct.html">Code of Conduct</a>
+                <a href="../accessibility.html">Accessibility</a>
+                <a href="../licensing.html">Licensing</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Full-screen Location Overlay -->
+    <div class="location-dropdown" id="locationDropdown">
+        <div class="location-dropdown-header">
+            <a href="../index.html" class="location-dropdown-logo">
+                <img src="../assets/logo/TM_Logo_White.svg" alt="Time Mission">
+            </a>
+            <button class="location-dropdown-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="location-dropdown-title">Select Your Location</div>
+        <div class="location-overlay-body">
+            <div class="location-overlay-left">
+                <div class="location-group">
+                    <div class="location-group-title">United States</div>
+                    <a href="../mount-prospect.html" data-city="Mount Prospect">IL - Mount Prospect</a>
+                    <a href="../philadelphia.html" data-city="Philadelphia">PA - Philadelphia</a>
+                    <a href="../west-nyack.html" data-city="West Nyack">NY - West Nyack</a>
+                    <a href="../lincoln.html" data-city="Lincoln">RI - Lincoln</a>
+                    <a href="../houston.html" data-city="Houston">TX - Houston</a>
+                    <a href="../manassas.html" data-city="Manassas">VA - Manassas</a>
+                    <a href="../orland-park.html" data-city="Orland Park" class="location-coming-soon">IL - Orland Park <span class="coming-soon-tag">Coming Soon</span></a>
+                    <a href="../dallas.html" data-city="Dallas" class="location-coming-soon">TX - Dallas <span class="coming-soon-tag">Coming Soon</span></a>
+                </div>
+                <div class="location-group">
+                    <div class="location-group-title">Europe</div>
+                    <a href="../antwerp.html" data-city="Antwerp">BE - Antwerp</a>
+                    <a href="../brussels.html" data-city="Brussels" class="location-coming-soon">BE - Brussels <span class="coming-soon-tag">Coming Soon</span></a>
+                </div>
+            </div>
+            <div class="location-overlay-divider"></div>
+            <div class="location-overlay-right" id="locationInfo">
+                <div class="location-map" id="locationMap"></div>
+                <div class="location-info-content">
+                    <div class="location-info-empty">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <p>Select a location to view details</p>
+                    </div>
+                    <div class="location-info-details" style="display:none;">
+                        <h3 class="location-info-name"></h3>
+                        <a href="#" class="location-info-address" target="_blank" rel="noopener"></a>
+                        <div class="location-info-phone"></div>
+                        <div class="location-info-section">
+                            <h3>Hours</h3>
+                            <div class="location-info-hours"></div>
+                        </div>
+                        <div class="location-info-actions">
+                            <a href="#" class="location-info-book">Book Now</a>
+                            <a href="../contact.html" class="location-info-contact">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="location-overlay-footer">
+            <div class="location-overlay-social">
+                <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.51a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 10.86 4.34A6.28 6.28 0 0 0 15.86 15V8.74a8.18 8.18 0 0 0 4.14 1.15V6.69h-.41z"/></svg>
+                </a>
+                <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"/></svg>
+                </a>
+            </div>
+            <p class="location-overlay-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- Ticket Popup Panel -->
+    <div class="ticket-overlay" id="ticketOverlay"></div>
+    <div class="ticket-panel" id="ticketPanel">
+        <div class="ticket-panel-header">
+            <h3>Book Your Mission</h3>
+            <button class="ticket-panel-close" id="ticketClose">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="ticket-panel-content">
+            <p>Select your location and we'll take you to our booking system to choose your date and time.</p>
+            <div class="ticket-location-select">
+                <label for="ticketLocation">Choose Location</label>
+                <select id="ticketLocation">
+                    <option value="philadelphia">Philadelphia</option>
+                    <option value="mount-prospect">Mount Prospect</option>
+                    <option value="west-nyack">West Nyack</option>
+                    <option value="lincoln">Lincoln</option>
+                    <option value="houston">Houston</option>
+                    <option value="manassas">Manassas</option>
+                    <option value="antwerp">Antwerp (Belgium)</option>
+                    <option value="orland-park" disabled>Orland Park — Coming Soon</option>
+                    <option value="dallas" disabled>Dallas — Coming Soon</option>
+                    <option value="brussels" disabled>Brussels — Coming Soon</option>
+                </select>
+            </div>
+            <a href="#" class="btn-ticket-book" id="ticketBookBtn" target="_blank">
+                Continue to Booking
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Reveal on scroll
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(faq => faq.classList.remove('active'));
+                if (!isActive) item.classList.add('active');
+            });
+        });
+
+        // Footer locations dropdown toggle
+        document.querySelectorAll('.footer-location-toggle').forEach(btn => {
+            btn.addEventListener('click', () => btn.parentElement.classList.toggle('open'));
+        });
+    </script>
+    <script defer src="../js/nav.js?v=4"></script>
+    <script src="../js/locations.js?v=9"></script>
+    <script src="../js/ticket-panel.js?v=4"></script>
+</body>
+</html>

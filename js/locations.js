@@ -19,21 +19,22 @@
 
     const STORAGE_KEY = 'tm_location';
 
-    // Minimal fallback used when locations.json can't load
+    // Full fallback used when locations.json can't load
     // (e.g. file:// protocol blocks fetch, offline, transient network error).
-    // Keeps the nav/active-state/Tickets button working without the full JSON.
+    // Mirrors data/locations.json so the nav, Tickets/Buy-Gift-Card buttons,
+    // AND the footer location info panel render identically without the JSON.
     // KEEP IN SYNC with data/locations.json.
     const FALLBACK = {
-        'mount-prospect': { shortName: 'Mount Prospect', bookingUrl: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products', giftCardUrl: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/giftcards' },
-        'philadelphia':   { shortName: 'Philadelphia',   bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/giftcards' },
-        'west-nyack':     { shortName: 'West Nyack',     bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/giftcards' },
-        'lincoln':        { shortName: 'Lincoln',        bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/giftcards' },
-        'houston':        { shortName: 'Houston',        bookingUrl: '',                                                                              giftCardUrl: '' },
-        'manassas':       { shortName: 'Manassas',       bookingUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products', giftCardUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/giftcards' },
-        'antwerp':        { shortName: 'Antwerp',        bookingUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',                giftCardUrl: 'mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Gift%20Card' },
-        'orland-park':    { shortName: 'Orland Park',    bookingUrl: '',                                                                              giftCardUrl: '' },
-        'dallas':         { shortName: 'Dallas',         bookingUrl: '',                                                                              giftCardUrl: '' },
-        'brussels':       { shortName: 'Brussels',       bookingUrl: '',                                                                              giftCardUrl: '' }
+        'mount-prospect': {"name":"Time Mission Mount Prospect","shortName":"Mount Prospect","address":{"line1":"132 Randhurst Village Drive","city":"Mount Prospect","state":"IL","zip":"60056","country":"United States"},"contact":{"phone":"(847) 250-9560","email":"mtprospect@timemission.com"},"hours":{"mon":{"label":"12pm - 9pm"},"tue":{"label":"12pm - 9pm"},"wed":{"label":"12pm - 9pm"},"thu":{"label":"12pm - 9pm"},"fri":{"label":"12pm - Midnight"},"sat":{"label":"10am - Midnight"},"sun":{"label":"10am - 8pm"}},"mapUrl":"https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056","bookingUrl":"https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products","giftCardUrl":"https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/giftcards"},
+        'philadelphia':   {"name":"Time Mission Philadelphia","shortName":"Philadelphia","address":{"line1":"1530 Chestnut Street","city":"Philadelphia","state":"PA","zip":"19102","country":"United States"},"contact":{"phone":"(267) 710-1240","email":"philly@timemission.com"},"hours":{"mon":{"label":"12pm - 10pm"},"tue":{"label":"12pm - 10pm"},"wed":{"label":"12pm - 10pm"},"thu":{"label":"12pm - 10pm"},"fri":{"label":"12pm - 11pm"},"sat":{"label":"10am - 11pm"},"sun":{"label":"10am - 10pm"}},"mapUrl":"https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102","bookingUrl":"https://tickets.timemission.com/onlinecheckout/en-us/products","giftCardUrl":"https://tickets.timemission.com/onlinecheckout/en-us/giftcards"},
+        'west-nyack':     {"name":"Time Mission Palisades","shortName":"West Nyack","address":{"line1":"3532 Palisades Center Dr","line2":"Level 3","city":"West Nyack","state":"NY","zip":"10994","country":"United States"},"contact":{"phone":"(845) 328-4528","email":"palisades@timemission.com"},"hours":{"mon":{"label":"12pm - 9pm"},"tue":{"label":"12pm - 9pm"},"wed":{"label":"12pm - 9pm"},"thu":{"label":"12pm - 9pm"},"fri":{"label":"12pm - 11pm"},"sat":{"label":"10am - 11pm"},"sun":{"label":"10am - 8pm"}},"mapUrl":"https://maps.google.com/?q=3532+Palisades+Center+Dr+West+Nyack+NY+10994","bookingUrl":"https://tickets.timemission.com/onlinecheckout/en-us/products","giftCardUrl":"https://tickets.timemission.com/onlinecheckout/en-us/giftcards"},
+        'lincoln':        {"name":"Time Mission Providence","shortName":"Lincoln","address":{"line1":"100 Higginson Ave","city":"Lincoln","state":"RI","zip":"02865","country":"United States"},"contact":{"phone":"(401) 721-5554","email":"info@r1indoorkarting.com"},"hours":{"mon":{"label":"12pm - 11pm"},"tue":{"label":"12pm - 11pm"},"wed":{"label":"12pm - 11pm"},"thu":{"label":"12pm - 11pm"},"fri":{"label":"12pm - Midnight"},"sat":{"label":"9am - Midnight"},"sun":{"label":"9am - 11pm"}},"mapUrl":"https://maps.google.com/?q=100+Higginson+Ave+Lincoln+RI+02865","bookingUrl":"https://tickets.timemission.com/onlinecheckout/en-us/products","giftCardUrl":"https://tickets.timemission.com/onlinecheckout/en-us/giftcards"},
+        'manassas':       {"name":"Time Mission Manassas","shortName":"Manassas","address":{"line1":"8300 Sudley Rd","line2":"Unit A2","city":"Manassas","state":"VA","zip":"20109","country":"United States"},"contact":{"phone":"(571) 732-1050","email":"manassas@timemission.com"},"hours":{"mon":{"label":"12pm - 9pm"},"tue":{"label":"12pm - 9pm"},"wed":{"label":"12pm - 9pm"},"thu":{"label":"12pm - 9pm"},"fri":{"label":"12pm - Midnight"},"sat":{"label":"10am - Midnight"},"sun":{"label":"10am - 8pm"}},"mapUrl":"https://maps.google.com/?q=8300+Sudley+Rd+Manassas+VA+20109","bookingUrl":"https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products","giftCardUrl":"https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/giftcards"},
+        'antwerp':        {"name":"Experience Factory Antwerp","shortName":"Antwerp","address":{"line1":"Michiganstraat 1","city":"Antwerp","zip":"2030","country":"Belgium"},"contact":{"phone":"+32 3 301 03 03","email":"info@experience-factory.com"},"hours":{"mon":{"label":"2pm - 11pm"},"tue":{"label":"2pm - 11pm"},"wed":{"label":"2pm - 11pm"},"thu":{"label":"2pm - 11pm"},"fri":{"label":"2pm - 11pm"},"sat":{"label":"11am - 11pm"},"sun":{"label":"11am - 11pm"}},"mapUrl":"https://maps.google.com/?q=Michiganstraat+1+Antwerp+2030+Belgium","bookingUrl":"https://tickets.timemission.com/onlinecheckout/en-us/products","giftCardUrl":"mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Gift%20Card"},
+        'houston':        { shortName: 'Houston',     bookingUrl: '', giftCardUrl: '' },
+        'orland-park':    { shortName: 'Orland Park', bookingUrl: '', giftCardUrl: '' },
+        'dallas':         { shortName: 'Dallas',      bookingUrl: '', giftCardUrl: '' },
+        'brussels':       { shortName: 'Brussels',    bookingUrl: '', giftCardUrl: '' }
     };
 
     // Resolve data path relative to site root
@@ -408,11 +409,20 @@
             });
         });
 
-        // Wire up "Change Location" link in footer info panel
+        // Wire up "Change Location" link in footer info panel — opens the
+        // full-screen location picker overlay so the user can select a new one.
         document.querySelectorAll('.footer-loc-change').forEach(el => {
             el.addEventListener('click', (e) => {
                 e.preventDefault();
-                TM.clear();
+                const overlay = document.getElementById('locationDropdown');
+                const navEl = document.getElementById('nav');
+                if (!overlay) return;
+                overlay.classList.add('open');
+                if (navEl) navEl.classList.add('location-open');
+                // Defer scroll lock so it doesn't interrupt the overlay's fade-in
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                    document.body.style.overflow = 'hidden';
+                }));
             });
         });
     }

@@ -819,6 +819,7 @@
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    white-space: nowrap;
     box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
 }
 

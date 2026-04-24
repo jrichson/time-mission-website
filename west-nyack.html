@@ -1252,10 +1252,71 @@
             margin-top: 1.25rem;
         }
 
+
         .btn-start-planning:hover {
             border-color: var(--orange);
             color: var(--orange);
             transform: translateY(-2px);
+        }
+
+        .groups-cta-buttons {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.25rem;
+        }
+
+        .groups-cta-buttons .btn-start-planning,
+        .groups-cta-buttons .btn-group-tickets {
+            margin-top: 0;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .groups-cta-buttons {
+                gap: 0.5rem;
+            }
+            .groups-cta-buttons .btn-start-planning,
+            .groups-cta-buttons .btn-group-tickets {
+                flex: 1 1 0;
+                min-width: 0;
+                justify-content: center;
+                padding: 0.75rem 0.75rem;
+                font-size: 0.7rem;
+                letter-spacing: 0.05em;
+            }
+            .groups-cta-buttons .btn-start-planning svg,
+            .groups-cta-buttons .btn-group-tickets svg {
+                width: 14px;
+                height: 14px;
+                flex-shrink: 0;
+            }
+        }
+
+        .btn-group-tickets {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.85rem 2rem;
+            text-decoration: none;
+            font-family: var(--tech);
+            font-size: 0.85rem;
+            font-weight: 400;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
+        }
+
+        .btn-group-tickets:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
         }
 
         @media (max-width: 768px) {
@@ -2842,7 +2903,7 @@
     <div class="mobile-menu" id="mobileMenu">
         <ul class="mobile-menu-links">
             <li><a href="#about">About</a></li>
-            <li><a href="#experiences">Experiences</a></li>
+            <li><a href="#experiences">Missions</a></li>
             <li><a href="groups.html">Groups & Events</a></li>
             <li><a href="gift-cards.html">Gift Cards</a></li>
             <li><a href="#faq">FAQ</a></li>
@@ -2882,7 +2943,7 @@
         <div class="nav-center">
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
-                <li><a href="#experiences">Visit</a></li>
+                <li><a href="#experiences">Missions</a></li>
                 <li><a href="#groups">Groups</a></li>
                 <li><a href="#faq">FAQ</a></li>
             </ul>
@@ -2899,7 +2960,7 @@
                     <polyline points="6,9 12,15 18,9"/>
                 </svg>
             </button>
-            <a href="#" class="btn-tickets">Tickets</a>
+            <a href="#" class="btn-tickets">Book Now</a>
         </div>
     </nav>
 
@@ -3248,7 +3309,7 @@
                     <path d="M19 12H5M12 19l-7-7 7-7"/>
                 </svg>
             </button>
-            <a href="experiences.html" class="btn-secondary">View All</a>
+            <a href="missions.html" class="btn-secondary">View All</a>
             <button class="nav-arrow" id="nextBtn" aria-label="Next experience">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -3256,7 +3317,7 @@
             </button>
         </div>
         <div class="experiences-nav-mobile">
-            <a href="experiences.html" class="btn-secondary">View All Missions</a>
+            <a href="missions.html" class="btn-secondary">View All Missions</a>
         </div>
     </section>
 
@@ -3270,34 +3331,39 @@
             <h2 class="section-title">CELEBRATE AT TIME&nbsp;MISSION</h2>
             <p class="welcome-text">Birthdays, team outings, or just a crew ready to compete. We handle the setup so you can focus on the&nbsp;fun.</p>
             <div class="groups-event-types">
-                <a href="groups.html" class="groups-event-type">
+                <a href="groups/birthdays.html" class="groups-event-type">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16h16"/><path d="M2 21h20"/><path d="M8 7V5a1 1 0 0 1 2 0v2"/><path d="M14 7V5a1 1 0 0 1 2 0v2"/><path d="M7 11V7"/><path d="M12 11V7"/><path d="M17 11V7"/></svg>
                     <span>Birthdays</span>
                 </a>
-                <a href="groups.html" class="groups-event-type">
+                <a href="groups/corporate.html" class="groups-event-type">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2h8"/><path d="M9 2l-1 6a4 4 0 0 0 8 0l-1-6"/><path d="M12 12v8"/><path d="M8 22h8"/><circle cx="12" cy="5" r="0.5" fill="currentColor"/></svg>
                     <span>Corporate</span>
                 </a>
-                <a href="groups.html" class="groups-event-type">
+                <a href="groups/field-trips.html" class="groups-event-type">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
                     <span>Field Trips</span>
                 </a>
-                <a href="groups.html" class="groups-event-type">
+                <a href="groups/bachelor-ette.html" class="groups-event-type">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0L12 5.35l-.77-.77a5.41 5.41 0 1 0-7.65 7.65l8.42 8.42 8.42-8.42a5.41 5.41 0 0 0 0-7.65z"/></svg>
                     <span>Bachelor/ette</span>
                 </a>
-                <a href="groups.html" class="groups-event-type">
+                <a href="groups/private-events.html" class="groups-event-type">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2"/><path d="M5 4v2"/><path d="M11.5 4l-.5 2"/><path d="M18 5h2"/><path d="M19 4v2"/><path d="M15 9l-1 1"/><path d="M18 13l2-.5"/><path d="M18 19h2"/><path d="M19 18v2"/><path d="M14 16.5l-6.5-6.5-4.4 9.6a1 1 0 0 0 1.3 1.3l9.6-4.4z"/></svg>
                     <span>Private Events</span>
                 </a>
-                <a href="groups.html" class="groups-event-type">
+                <a href="groups/holidays.html" class="groups-event-type">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
                     <span>Holidays</span>
                 </a>
             </div>
-            <a href="groups.html" class="btn-start-planning">Start Planning
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
+            <div class="groups-cta-buttons">
+                <a href="#" class="btn-group-tickets btn-tickets">Group Tickets
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="groups.html" class="btn-start-planning">Learn More
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -3496,7 +3562,7 @@
                     <li><a href="about.html">About</a></li>
                     <li><a href="groups.html">Groups</a></li>
                     <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="experiences.html">The Missions</a></li>
+                    <li><a href="missions.html">The Missions</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
                     <li><a href="gift-cards.html">Gift Cards</a></li>
                     <li><a href="licensing.html">Licensing</a></li>
@@ -3982,7 +4048,7 @@
 
             card.addEventListener('click', () => {
                 if (isHovering && !wasDragged) {
-                    window.location.href = 'experiences.html';
+                    window.location.href = 'missions.html';
                 }
             });
         });
@@ -4193,7 +4259,7 @@
         });
     </script>
     <script defer src="js/nav.js?v=4"></script>
-    <script src="js/locations.js?v=8"></script>
+    <script src="js/locations.js?v=9"></script>
     <script src="js/ticket-panel.js?v=4"></script>
     <script>
     (function() {
