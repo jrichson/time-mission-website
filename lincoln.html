@@ -1194,13 +1194,15 @@
             transition: all 0.3s ease;
         }
 
-        .groups-event-type:hover {
-            transform: translateY(-2px);
-        }
+        @media (hover: hover) and (pointer: fine) {
+            .groups-event-type:hover {
+                transform: translateY(-2px);
+            }
 
-        .groups-event-type:hover svg,
-        .groups-event-type:hover span {
-            color: var(--orange);
+            .groups-event-type:hover svg,
+            .groups-event-type:hover span {
+                color: var(--orange);
+            }
         }
 
         .groups-event-type svg {
@@ -4270,6 +4272,7 @@
     </script>
     <script defer src="js/nav.js?v=4"></script>
     <script src="js/locations.js?v=9"></script>
+    <script src="js/roller-checkout.js?v=1"></script>
     <script src="js/ticket-panel.js?v=4"></script>
     <script>
     (function() {

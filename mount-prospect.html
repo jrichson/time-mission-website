@@ -1194,13 +1194,15 @@
             transition: all 0.3s ease;
         }
 
-        .groups-event-type:hover {
-            transform: translateY(-2px);
-        }
+        @media (hover: hover) and (pointer: fine) {
+            .groups-event-type:hover {
+                transform: translateY(-2px);
+            }
 
-        .groups-event-type:hover svg,
-        .groups-event-type:hover span {
-            color: var(--orange);
+            .groups-event-type:hover svg,
+            .groups-event-type:hover span {
+                color: var(--orange);
+            }
         }
 
         .groups-event-type svg {
@@ -2841,8 +2843,6 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}</script>
         <script type="application/ld+json">{"@context":"https://schema.org","@type":"EntertainmentBusiness","name":"Time Mission Mount Prospect","url":"https://timemission.com/mount-prospect.html","image":"https://timemission.com/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg","address":{"@type":"PostalAddress","streetAddress":"132 Randhurst Village Drive","addressLocality":"Mount Prospect","addressRegion":"IL","postalCode":"60056","addressCountry":"US"},"telephone":"(847) 250-9560","email":"mtprospect@timemission.com","openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":"Monday","opens":"12:00","closes":"21:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Tuesday","opens":"12:00","closes":"21:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Wednesday","opens":"12:00","closes":"21:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Thursday","opens":"12:00","closes":"21:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Friday","opens":"12:00","closes":"00:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"10:00","closes":"00:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Sunday","opens":"10:00","closes":"20:00"}]}</script>
     <!-- JSON-LD -->
-    <!-- Roller Checkout Overlay -->
-    <script id="roller-checkout" src="https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js" data-checkout="https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/home"></script>
 </head>
 <body data-location="mount-prospect">
     <!-- Game Promo Popup -->
@@ -4262,27 +4262,8 @@
     </script>
     <script defer src="js/nav.js?v=4"></script>
     <script src="js/locations.js?v=9"></script>
+    <script src="js/roller-checkout.js?v=1"></script>
     <script src="js/ticket-panel.js?v=4"></script>
-    <script>
-    // Route Book Now clicks through the Roller checkout overlay.
-    // Capture phase so we preempt ticket-panel.js's bubble-phase handler.
-    // Excluded: #ticketBookBtn (multi-location selector in the slide-out panel)
-    // and .location-info-book when a non-Mount Prospect location is selected.
-    document.addEventListener('click', function (e) {
-        var btn = e.target.closest('.btn-tickets, .btn-group-tickets, .location-info-book');
-        if (!btn || btn.id === 'ticketBookBtn') return;
-        if (btn.classList.contains('location-info-book')) {
-            var href = (btn.getAttribute('href') || '').toLowerCase();
-            var isHere = href.indexOf('mount-prospect.html') !== -1 || href === '#' || href === '';
-            if (!isHere) return;
-        }
-        if (window.RollerCheckout && typeof window.RollerCheckout.show === 'function') {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            window.RollerCheckout.show();
-        }
-    }, true);
-    </script>
     <script>
     (function() {
         var id = 'mount-prospect';
