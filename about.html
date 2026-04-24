@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="css/ticket-panel.css">
     <link rel="stylesheet" href="css/newsletter.css">
     <style>
-        /* Subtle grid texture — matches homepage */
+        /* Subtle grid texture, matches homepage */
         .what-is,
         .steps,
         .about-cta {
@@ -127,7 +127,7 @@
             margin-bottom: 1.5rem;
         }
 
-        /* What Is Section — two-column split */
+        /* What Is Section, two-column split */
         .what-is {
             padding: 5rem 2rem;
             background: var(--dark);
@@ -254,7 +254,7 @@
             }
         }
 
-        /* Steps Section — Horizontal Timeline */
+        /* Steps Section, Horizontal Timeline */
         .steps {
             padding: 5rem 2rem 4rem;
             background: var(--dark);
@@ -293,7 +293,7 @@
             z-index: 0;
         }
 
-        /* Animated line — synced with circle activations */
+        /* Animated line, synced with circle activations */
         .timeline::after {
             content: '';
             position: absolute;
@@ -340,7 +340,7 @@
             padding: 0 1rem;
         }
 
-        /* Numbered circle node — visible by default, glow animates */
+        /* Numbered circle node, visible by default, glow animates */
         .step-node {
             width: 64px;
             height: 64px;
@@ -365,7 +365,7 @@
          * Hold fully lit for 3s, then reset
          */
 
-        /* Node glow animation — looping, circles stay visible, only glow pulses */
+        /* Node glow animation, looping, circles stay visible, only glow pulses */
         .timeline.visible .timeline-step:nth-child(1) .step-node {
             animation: nodeGlow1 10s ease infinite;
             animation-delay: 0.4s;
@@ -383,7 +383,7 @@
             animation-delay: 0.4s;
         }
 
-        /* Text — fades in once and stays */
+        /* Text, fades in once and stays */
         .timeline.visible .timeline-step:nth-child(1) .step-title,
         .timeline.visible .timeline-step:nth-child(1) .step-desc {
             animation: fadeUp 0.5s ease forwards;
@@ -417,7 +417,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Glow-only keyframes — border brightens, shadow pulses, scale bumps slightly */
+        /* Glow-only keyframes, border brightens, shadow pulses, scale bumps slightly */
         @keyframes nodeGlow1 {
             0%   { border-color: rgba(255,107,44,0.4); box-shadow: none; transform: scale(1); }
             2%   { border-color: var(--orange); box-shadow: 0 0 40px rgba(255,107,44,0.5); transform: scale(1.12); }
@@ -454,7 +454,7 @@
             100% { border-color: rgba(255,107,44,0.4); box-shadow: none; transform: scale(1); }
         }
 
-        /* Hover — solid background, no see-through */
+        /* Hover, solid background, no see-through */
         .timeline-step:hover .step-node {
             background: var(--dark);
             border-color: var(--orange);
@@ -499,7 +499,7 @@
             max-width: 220px;
         }
 
-        /* Mobile — vertical timeline with connecting line */
+        /* Mobile, vertical timeline with connecting line */
         @media (max-width: 768px) {
             .steps {
                 padding: 3rem 1.5rem 2.5rem;
@@ -608,7 +608,7 @@
                 padding-top: 0.2rem;
             }
 
-            /* Text always visible on mobile — no fade-in delay */
+            /* Text always visible on mobile, no fade-in delay */
             .timeline.visible .timeline-step .step-title,
             .timeline.visible .timeline-step .step-desc {
                 animation: none;
@@ -627,7 +627,7 @@
             }
         }
 
-        /* Before You Arrive — photo + overlapping card (matches homepage Groups CTA) */
+        /* Before You Arrive, photo + overlapping card (matches homepage Groups CTA) */
         .before-arrive {
             position: relative;
             background: var(--dark);
@@ -1173,9 +1173,9 @@
             <picture><source srcset="assets/photos/venue/_Time-Mission_0078.webp" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0078.jpg" alt="Time Mission venue" loading="eager" fetchpriority="high" decoding="async"></picture>
         </div>
         <div class="about-hero-content reveal">
-            <div class="section-badge">HOW IT WORKS</div>
+            <div class="section-badge">OUR STORY</div>
             <h1>THE GAME IS <span class="highlight">REAL</span></h1>
-            <p>A real-life gaming experience where every room is a new challenge. Grab your team, pick your missions, race the clock, and play as many as you&nbsp;want.</p>
+            <p>Part escape room, part video game, all real. Teams of 2-5 compete through 25+ immersive missions. Grab your crew, race the clock, and play as many as you&nbsp;can.</p>
         </div>
     </section>
 
@@ -1183,11 +1183,11 @@
     <section class="what-is">
         <div class="what-is-inner">
             <div class="what-is-content reveal">
-                <div class="section-badge">THE EXPERIENCE</div>
+                <div class="section-badge">OUR GAME</div>
                 <h2 class="section-title">WHAT IS TIME MISSION?</h2>
-                <p class="what-is-text">Time Mission is an immersive social gaming experience where teams of 2-5 compete through 25+ interactive challenge rooms. Every room is a different game — from brain-bending puzzles to full-body physical challenges. No headsets, no controllers, no sitting around. You <em>are</em> the&nbsp;game.</p>
-                <p class="what-is-text">Choose your session length, pick your missions, and play as many rooms as you can. Each challenge lasts just a few minutes, so you can keep moving, keep competing, and keep the energy&nbsp;high.</p>
-                <p class="what-is-text">Whether it's a birthday, a date night, a team outing, or just a crew that wants to see who's really the best — Time Mission is where you come to&nbsp;play.</p>
+                <p class="what-is-text">Time Mission is an immersive social gaming venue where teams of 2-5 compete through 25+ missions. Every mission is a different game, from brain-bending puzzles to full-body physical challenges. No headsets, no controllers, no sitting around. You <em>are</em> the&nbsp;game.</p>
+                <p class="what-is-text">Choose your session length, pick your missions, and play as many as you can. Each one lasts just a few minutes, so you keep moving, keep competing, and keep the energy&nbsp;high.</p>
+                <p class="what-is-text">Birthdays, team outings, field trips, bachelorette blowouts, or a crew out to settle who's really the best. Time Mission is built for every team, every&nbsp;occasion.</p>
             </div>
             <div class="what-is-photo reveal" id="whatIsCarousel">
                 <div class="what-is-carousel">
@@ -1246,14 +1246,14 @@
         </div>
     </section>
 
-    <!-- Before You Arrive — photo + overlapping card -->
+    <!-- Before You Arrive, photo + overlapping card -->
     <section class="before-arrive">
         <div class="before-arrive-photo">
             <picture><source srcset="assets/photos/TM-Groups.webp" type="image/webp"><img src="assets/photos/TM-Groups.jpg" alt="Players at Time Mission" loading="lazy" decoding="async"></picture>
         </div>
         <div class="before-arrive-card">
             <div class="before-arrive-header reveal">
-                <div class="section-badge">PLAN YOUR VISIT</div>
+                <div class="section-badge">PLAN YOUR MISSION</div>
                 <h2 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">BEFORE YOU ARRIVE</h2>
             </div>
             <div class="checklist-grid">
@@ -1290,7 +1290,7 @@
                 </div>
                 <div class="checklist-content">
                     <h3>BRING YOUR CREW</h3>
-                    <p>Teams of 2-5 players per challenge. The more people, the more fun — and the more rooms you can&nbsp;conquer.</p>
+                    <p>Teams of 2-5 players per challenge. The more people, the more fun, and the more rooms you can&nbsp;conquer.</p>
                 </div>
             </div>
             </div>
@@ -1316,7 +1316,7 @@
     <section class="newsletter-section">
         <div class="newsletter-inner">
             <h2>DON'T MISS A THING</h2>
-            <p>Sign up for sneak peeks and early access to new missions — plus special events, ticket drops, and&nbsp;more.</p>
+            <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
             <form class="newsletter-form">
                 <input type="text" placeholder="First Name" required>
                 <input type="text" placeholder="Last Name">
@@ -1445,9 +1445,9 @@
                     <option value="houston">Houston</option>
                     <option value="manassas">Manassas</option>
                     <option value="antwerp">Antwerp (Belgium)</option>
-                    <option value="orland-park" disabled>Orland Park — Coming Soon</option>
-                    <option value="dallas" disabled>Dallas — Coming Soon</option>
-                    <option value="brussels" disabled>Brussels — Coming Soon</option>
+                    <option value="orland-park" disabled>Orland Park, Coming Soon</option>
+                    <option value="dallas" disabled>Dallas, Coming Soon</option>
+                    <option value="brussels" disabled>Brussels, Coming Soon</option>
                 </select>
             </div>
             <a href="#" class="btn-ticket-book" id="ticketBookBtn" target="_blank">

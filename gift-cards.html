@@ -91,7 +91,7 @@
             height: 100%;
         }
 
-        /* Dynamic location text overlaid on the card's white bar — centered. */
+        /* Dynamic location text overlaid on the card's white bar, centered. */
         .gift-card-location-overlay {
             position: absolute;
             left: 50%;
@@ -127,7 +127,7 @@
             }
         }
 
-        /* Full-opacity animated gradient inside the card's rounded shape —
+        /* Full-opacity animated gradient inside the card's rounded shape , 
            same palette + motion as the MISSION text on the homepage hero. */
         .gift-card-mockup::before {
             content: '';
@@ -222,7 +222,7 @@
         }
 
         /* Gift Card FAQ */
-        /* Gift Card FAQ — uses shared css/faq.css + same section-header
+        /* Gift Card FAQ, uses shared css/faq.css + same section-header
            pattern as the FAQ on groups.html / index.html for consistency. */
         .faq-section.gift-faq {
             padding: 2rem 2rem 6rem;
@@ -677,7 +677,7 @@
     <section class="newsletter-section">
         <div class="newsletter-inner">
             <h2>DON'T MISS A THING</h2>
-            <p>Sign up for sneak peeks and early access to new missions — plus special events, ticket drops, and&nbsp;more.</p>
+            <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
             <form class="newsletter-form">
                 <input type="text" placeholder="First Name" required>
                 <input type="text" placeholder="Last Name">
@@ -808,9 +808,9 @@
                     <option value="houston">Houston</option>
                     <option value="manassas">Manassas</option>
                     <option value="antwerp">Antwerp (Belgium)</option>
-                    <option value="orland-park" disabled>Orland Park — Coming Soon</option>
-                    <option value="dallas" disabled>Dallas — Coming Soon</option>
-                    <option value="brussels" disabled>Brussels — Coming Soon</option>
+                    <option value="orland-park" disabled>Orland Park, Coming Soon</option>
+                    <option value="dallas" disabled>Dallas, Coming Soon</option>
+                    <option value="brussels" disabled>Brussels, Coming Soon</option>
                 </select>
             </div>
 
@@ -893,7 +893,7 @@
     <script src="js/locations.js?v=9"></script>
     <script src="js/ticket-panel.js?v=4"></script>
     <script>
-    // Gift-card Buy CTAs — route to the selected location's gift card checkout.
+    // Gift-card Buy CTAs, route to the selected location's gift card checkout.
     // If no location is selected, open the location overlay so the user can pick one.
     (function () {
         var btns = Array.prototype.slice.call(document.querySelectorAll('.btn-gift-card, [data-gift="1"]'));
@@ -924,7 +924,7 @@
             // button) when no gift-card URL exists for this location.
             var url = loc.giftCardUrl || loc.bookingUrl || '';
             if (!url) {
-                if (hint) hint.textContent = 'Gift cards for ' + (loc.shortName || loc.name) + ' are coming soon — contact us to arrange one.';
+                if (hint) hint.textContent = 'Gift cards for ' + (loc.shortName || loc.name) + ' are coming soon, contact us to arrange one.';
                 setAll('contact.html?subject=gift-card');
                 return true;
             }
@@ -1004,7 +1004,7 @@
         document.addEventListener('tm:location-changed', sync);
     })();
 
-    // FAQ accordion — same pattern as faq.html
+    // FAQ accordion, same pattern as faq.html
     document.querySelectorAll('.faq-section .faq-question').forEach(question => {
         question.addEventListener('click', () => {
             const item = question.parentElement;

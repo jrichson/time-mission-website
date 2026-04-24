@@ -64,7 +64,7 @@
         }
 
         /* ==========================================
-           HERO SECTION — matches about page style
+           HERO SECTION, matches about page style
            ========================================== */
         .hero {
             position: relative;
@@ -258,7 +258,7 @@
             transform: scale(1.08);
         }
 
-        /* Expanded state — shows full description */
+        /* Expanded state, shows full description */
         .portal-card.expanded {
             aspect-ratio: auto;
         }
@@ -400,7 +400,7 @@
             transform: translateX(4px);
         }
 
-        /* Featured card — first item spans 2 columns */
+        /* Featured card, first item spans 2 columns */
         .portal-card.featured {
             grid-column: span 2;
             aspect-ratio: 16/9;
@@ -445,6 +445,18 @@
             }
             .portal-card.featured .portal-title {
                 font-size: 2rem;
+            }
+            .filter-section {
+                position: static;
+                top: auto;
+                background: transparent;
+                backdrop-filter: none;
+                border-bottom-color: transparent;
+            }
+            .filter-section.stuck {
+                background: transparent;
+                backdrop-filter: none;
+                border-bottom-color: transparent;
             }
             .filter-tabs {
                 display: grid;
@@ -1040,7 +1052,7 @@
             </div>
         </div>
         <div class="portals-grid">
-            <!-- 1. GLITCH MATRIX — has photo -->
+            <!-- 1. GLITCH MATRIX, has photo -->
             <article class="portal-card reveal" data-category="mental speed">
                 <picture><source srcset="assets/photos/experiences/Time-Mission_Glitch-Matrix.webp" type="image/webp"><img src="assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="portal-overlay">
@@ -1647,7 +1659,7 @@
     <section class="newsletter-section">
         <div class="newsletter-inner">
             <h2>DON'T MISS A THING</h2>
-            <p>Sign up for sneak peeks and early access to new missions — plus special events, ticket drops, and&nbsp;more.</p>
+            <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
             <form class="newsletter-form">
                 <input type="text" placeholder="First Name" required>
                 <input type="text" placeholder="Last Name">
@@ -1777,9 +1789,9 @@
                     <option value="houston">Houston</option>
                     <option value="manassas">Manassas</option>
                     <option value="antwerp">Antwerp (Belgium)</option>
-                    <option value="orland-park" disabled>Orland Park — Coming Soon</option>
-                    <option value="dallas" disabled>Dallas — Coming Soon</option>
-                    <option value="brussels" disabled>Brussels — Coming Soon</option>
+                    <option value="orland-park" disabled>Orland Park, Coming Soon</option>
+                    <option value="dallas" disabled>Dallas, Coming Soon</option>
+                    <option value="brussels" disabled>Brussels, Coming Soon</option>
                 </select>
             </div>
 
@@ -1877,7 +1889,7 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Sticky filter section detection — toggle .stuck when filter hits its sticky position
+        // Sticky filter section detection, toggle .stuck when filter hits its sticky position
         const filterSection = document.querySelector('.filter-section');
         if (filterSection) {
             window.addEventListener('scroll', () => {
