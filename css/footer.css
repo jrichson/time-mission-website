@@ -16,7 +16,7 @@ html {
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.2fr 1fr 1.5fr;
+    grid-template-columns: 1.2fr 1fr 1fr 1.5fr;
     gap: 2.5rem;
     max-width: 1200px;
     margin: 0 auto 2.5rem;
