@@ -17,3 +17,13 @@ Immutable rollback pointer: annotated git tag **`pre-astro-migration-baseline`**
 ## Prerequisites resolved during capture
 
 Playwright browsers were not initially installed locally (`npx playwright install chromium` was required) before smoke tests could run. Document here so CI/agents repeat that prerequisite after fresh installs.
+
+## Phase 1 gate
+
+Full Phase 1 verification (legacy checks + Astro build + dist manifest):
+
+```bash
+npm run verify:phase1
+```
+
+This runs `npm run verify`, then `npm run build:astro`, then `npm run check:astro-dist`.

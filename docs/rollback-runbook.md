@@ -27,7 +27,16 @@ Roll back or halt migration when any of the following are observed (keywords per
 3. Deploy the **static site root** (legacy HTML/CSS/JS) using your existing pipeline — same layout as pre-migration repo root output.
 4. Smoke-check homepage, one location page, booking CTA, contact form, and redirects on preview before promoting.
 
-Detailed Cloudflare Pages dashboard steps: **TODO** — finalize during Phase 8 rehearsal.
+## Cloudflare Pages (outline)
+
+High-level deploy procedure for rollback (dashboard specifics rehearsed in Phase 8):
+
+- Attach production or preview deploy to the artifact built from the rollback git ref (tag tarball or branch checkout), matching legacy static root layout.
+- Verify hostname/DNS expectations before promoting (no accidental cutover to wrong project).
+- Optionally purge CDN cache after rollback if stale assets are observed.
+- Confirm `_headers` and `_redirects` are served from the deployed site root (CSP/HSTS and routing contract).
+
+Detailed Cloudflare Pages dashboard click-path: **TODO** — rehearse in Phase 8 before production cutover.
 
 ## Phase 8 rehearsal
 

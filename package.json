@@ -1,0 +1,43 @@
+{
+  "name": "time-mission-website",
+  "version": "1.0.0",
+  "description": "Static marketing website for Time Mission.",
+  "private": true,
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "check:locations": "node scripts/check-location-contracts.js",
+    "check:sitemap": "node scripts/check-sitemap.js",
+    "check:components": "node scripts/check-components.js",
+    "check:booking": "node scripts/check-booking-architecture.js",
+    "check:a11y": "node scripts/check-accessibility-baseline.js",
+    "check:links": "node scripts/check-internal-links.js",
+    "check": "npm run check:locations && npm run check:sitemap && npm run check:components && npm run check:booking && npm run check:a11y && npm run check:links",
+    "test:smoke": "playwright test",
+    "test": "npm run test:smoke",
+    "verify": "npm run check && npm run test:smoke",
+    "build:astro": "node scripts/sync-static-to-public.mjs && astro build",
+    "preview:astro": "astro preview",
+    "check:astro-dist": "node scripts/check-astro-dist-manifest.js",
+    "verify:phase1": "npm run verify && npm run build:astro && npm run check:astro-dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrichson/time-mission-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jrichson/time-mission-website/issues"
+  },
+  "homepage": "https://github.com/jrichson/time-mission-website#readme",
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.59.1",
+    "astro": "^6.1.10",
+    "typescript": "^5.9.3"
+  }
+}

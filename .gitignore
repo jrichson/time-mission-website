@@ -20,6 +20,11 @@ _archive/
 
 # Build artifacts
 *.log
+dist/
+public/
+
+# Astro local tooling
+.astro/
 
 # Test artifacts
 test-results/
@@ -28,3 +33,4 @@ test-results/
 # Full-resolution media backups (kept locally, not in repo)
 assets/photos/**/.orig-full/
 assets/video/.orig-full/
+.gitnexus
