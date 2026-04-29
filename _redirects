@@ -1,31 +1,57 @@
-# Netlify / Cloudflare Pages _redirects file
-# Preserves SEO and prevents 404s from the old site's URLs.
-# See docs/redirect-map.md for reasoning and alternate host formats.
+# Netlify / Cloudflare Pages _redirects
+# Phase 02 — legacy sources and aliases redirect to clean canonical paths
+# See docs/redirect-map.md for Cloudflare vs Netlify behavior and verification.
 
-# Old event-type landing pages -> consolidated groups page
-/adult-birthday-parties      /groups.html#birthday           301
-/kids-birthday-party         /groups.html#birthday           301
-/bachelorette-party          /groups.html#private            301
-/date-night-ideas            /groups.html#private            301
-/corporate-events            /groups.html#corporate          301
-/team-building               /groups.html#corporate          301
-/school-field-trips          /groups.html#private            301
-/youth-group-camp            /groups.html#private            301
-/family-gathering            /groups.html#private            301
-/bus-tour                    /groups.html                    301
+/index.html / 301
+/about.html /about 301
+/missions.html /missions 301
+/experiences.html /missions 301
+/groups.html /groups 301
+/groups/bachelor-ette.html /groups/bachelor-ette 301
+/groups/birthdays.html /groups/birthdays 301
+/groups/corporate.html /groups/corporate 301
+/groups/field-trips.html /groups/field-trips 301
+/groups/holidays.html /groups/holidays 301
+/groups/private-events.html /groups/private-events 301
+/gift-cards.html /gift-cards 301
+/faq.html /faq 301
+/contact.html /contact 301
+/contact-thank-you.html /contact-thank-you 301
+/locations/index.html /locations 301
+/philadelphia.html /philadelphia 301
+/houston.html /houston 301
+/mount-prospect.html /mount-prospect 301
+/west-nyack.html /west-nyack 301
+/lincoln.html /lincoln 301
+/manassas.html /manassas 301
+/antwerp.html /antwerp 301
+/orland-park.html /orland-park 301
+/dallas.html /dallas 301
+/brussels.html /brussels 301
+/privacy.html /privacy 301
+/terms.html /terms 301
+/code-of-conduct.html /code-of-conduct 301
+/cookies.html /cookies 301
+/accessibility.html /accessibility 301
+/licensing.html /licensing 301
+/waiver.html /waiver 301
 
-# Renamed policy pages
-/house-rules                 /code-of-conduct.html           301
-/licensing                   /licensing.html                 301
-/privacy-policy              /privacy.html                   301
-/privacy-policy/             /privacy.html                   301
-/terms-and-conditions        /terms.html                     301
-
-# Location slug migration
-/mountprospect               /mount-prospect.html            301
-/providence                  /lincoln.html                   301
-
-# Coming-soon placeholder cities — route to hub until they have pages
-/orland-park                 /locations/                     302
-/dallas                      /locations/                     302
-/brussels                    /locations/                     302
+# Marketing shortcuts
+/adult-birthday-parties /groups#birthday 301
+/kids-birthday-party /groups#birthday 301
+/bachelorette-party /groups#private 301
+/date-night-ideas /groups#private 301
+/corporate-events /groups#corporate 301
+/team-building /groups#corporate 301
+/school-field-trips /groups#private 301
+/youth-group-camp /groups#private 301
+/family-gathering /groups#private 301
+/bus-tour /groups 301
+/house-rules /code-of-conduct 301
+/privacy-policy /privacy 301
+/privacy-policy/ /privacy 301
+/terms-and-conditions /terms 301
+/mountprospect /mount-prospect 301
+/providence /lincoln 301
+/experiences /missions 301
+/locations/ /locations 301

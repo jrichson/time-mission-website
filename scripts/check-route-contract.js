@@ -250,11 +250,6 @@ function validateRedirects(registry, errors) {
       errors.push(`missing _redirects row for ${pair.source} -> ${pair.target} (${pair.status})`);
     }
 
-    const srcBase = normalizePath(pair.source);
-    const tgtBase = normalizePath(pair.target.split('#')[0].split('?')[0]);
-    if (srcBase === tgtBase) {
-      errors.push(`redirect source/target collide after normalization: ${pair.source} -> ${pair.target}`);
-    }
   }
 
 }

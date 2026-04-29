@@ -46,7 +46,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 9 plans
 Plans:
 - [x] 02-01-PLAN.md — Create route registry, route contract validator, and npm route-check scripts.
-- [ ] 02-02-PLAN.md — Retarget redirects, sitemap, sitemap validation, and redirect documentation to clean URLs.
+- [x] 02-02-PLAN.md — Retarget redirects, sitemap, sitemap validation, and redirect documentation to clean URLs.
 - [ ] 02-03-PLAN.md — Sweep core top-level page metadata and first-party links to clean routes.
 - [ ] 02-04-PLAN.md — Sweep location pages and locations index URL surfaces.
 - [ ] 02-05-PLAN.md — Sweep group page metadata and first-party links to clean routes.
