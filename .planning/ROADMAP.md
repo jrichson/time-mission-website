@@ -43,7 +43,22 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Visitor using any legacy `.html` URL lands directly on the matching clean canonical URL without a redirect loop.
   3. Search engines and analytics see canonical URLs, internal links, sitemap URLs, schema URLs, and page paths that agree.
   4. Site operator gets a failing validation result when a clean route, legacy redirect, canonical, sitemap entry, or internal link drifts from the route registry.
-**Plans**: TBD
+**Plans**: 9 plans
+Plans:
+- [ ] 02-01-PLAN.md — Create route registry, route contract validator, and npm route-check scripts.
+- [ ] 02-02-PLAN.md — Retarget redirects, sitemap, sitemap validation, and redirect documentation to clean URLs.
+- [ ] 02-03-PLAN.md — Sweep core top-level page metadata and first-party links to clean routes.
+- [ ] 02-04-PLAN.md — Sweep location pages and locations index URL surfaces.
+- [ ] 02-05-PLAN.md — Sweep group page metadata and first-party links to clean routes.
+- [ ] 02-06-PLAN.md — Sweep legal and utility page metadata and first-party links to clean routes.
+- [ ] 02-07-PLAN.md — Clean first-party location data URL values.
+- [ ] 02-08-PLAN.md — Clean runtime route helpers and route-sensitive smoke expectations.
+- [ ] 02-09-PLAN.md — Validate registered pages in Astro built output and run the Phase 02 gate.
+Wave summary:
+- Wave 1: 02-01 registry and standalone route checker.
+- Wave 2: 02-02 redirects/sitemap/docs, 02-03 core pages, 02-04 location HTML, 02-05 group pages, 02-06 legal/utility pages.
+- Wave 3: 02-07 location data after 02-04, and 02-08 shared runtime/tests after 02-03.
+- Wave 4: 02-09 final global check wiring, built-output validation, and Phase 02 gate.
 
 ### Phase 3: Validated Data Foundation
 **Goal**: Location and business facts are validated once and reused by pages, routes, SEO/schema, booking, navigation, and analytics labels.
@@ -178,7 +193,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Static Baseline & Rollback Guardrails | 3/3 | Complete | 2026-04-29 |
-| 2. Route Registry & Clean URL Contract | 0/TBD | Not started | - |
+| 2. Route Registry & Clean URL Contract | 0/9 | Not started | - |
 | 3. Validated Data Foundation | 0/TBD | Not started | - |
 | 4. Shared Components & Template Parity | 0/TBD | Not started | - |
 | 5. Booking & CTA Flow | 0/TBD | Not started | - |

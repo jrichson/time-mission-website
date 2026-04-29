@@ -335,22 +335,16 @@ Cloudflare Pages `_redirects` rows are `[source] [destination] [code?]`; status 
 | A3 | A single route-contract script should own cross-surface drift detection. | Architecture Patterns | If checks stay split, planner must ensure all surfaces still share one parser/registry. |
 | A4 | Cloudflare is the primary redirect behavior target. | Common Pitfalls | If production host is Netlify/Vercel, redirect semantics and preview verification steps change. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should `_redirects` be generated or validated-only in Phase 2?**
-   - What we know: Context permits either, and validation-only is lower-risk with the current curated `_redirects` file. [VERIFIED: D-01, `_redirects`]
-   - What's unclear: Whether the team wants generated files immediately or prefers one validation phase first. [ASSUMED]
-   - Recommendation: Start validation-only, then add generation when all rows are registry-covered. [ASSUMED]
+   - RESOLVED: Phase 2 uses validation-only for `_redirects`. `src/data/routes.json` is the machine-readable source of truth, while `_redirects` remains hand-authored but must exactly match registry legacy sources and aliases through `scripts/check-route-contract.js`. This honors D-01 and D-04 while reducing blast radius around existing curated redirect rows.
 
 2. **Should clean redirects be explicitly listed even though Cloudflare auto-normalizes `.html`?**
-   - What we know: Cloudflare redirects `.html` to extensionless automatically. [CITED: https://developers.cloudflare.com/pages/configuration/serving-pages/]
-   - What's unclear: Whether explicit rows are operationally necessary on Cloudflare. [ASSUMED]
-   - Recommendation: Keep explicit rows because ROUTE-02 and ROUTE-04 require auditable direct mappings. [VERIFIED: ROUTE-02, ROUTE-04]
+   - RESOLVED: Legacy `.html` sources are explicitly listed and validated because ROUTE-02 and ROUTE-04 require auditable direct mappings. Clean canonical paths must not redirect to themselves; for example, the legacy waiver HTML source maps to the clean waiver path, and the clean waiver path itself has no redirect row.
 
 3. **How far should Phase 2 rewrite source HTML content?**
-   - What we know: Context requires a full-repo sweep for first-party navigation links, and current pages contain many `.html` canonicals, `og:url`, schema URLs, and links. [VERIFIED: D-06, rg results]
-   - What's unclear: Whether all root HTML pages are considered “migrated” in Phase 2 or only Astro output surfaces. [ASSUMED]
-   - Recommendation: Treat the current static public pages plus `src/pages` as the route surface for Phase 2, excluding generated/public copies and asset demos. [ASSUMED]
+   - RESOLVED: Phase 2 rewrites current public source pages and shared route-generating runtime/test files, excluding generated output and asset/demo HTML. To keep execution safe, the sweep is split by scope: core top-level pages, legal/utility pages, location HTML, location data, group pages, and runtime/test route helpers.
 
 ## Environment Availability
 
