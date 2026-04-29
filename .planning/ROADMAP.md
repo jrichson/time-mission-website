@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Site operator can run the Astro build and see static output suitable for Cloudflare Pages-style hosting.
   3. Site operator can still deploy the old static site while Astro launch validation is incomplete.
   4. Site operator can identify documented rollback steps and failure triggers before any cutover decision.
-**Plans**: TBD
+**Plans**: 3 (`01-PLAN.md` rollback/baseline, `02-PLAN.md` Astro skeleton, `03-PLAN.md` dist manifest + gate)
 
 ### Phase 2: Route Registry & Clean URL Contract
 **Goal**: Users, crawlers, analytics, sitemap, schema, navigation, and redirects all observe one clean no-trailing-slash URL contract.
@@ -177,7 +177,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Static Baseline & Rollback Guardrails | 0/TBD | Not started | - |
+| 1. Static Baseline & Rollback Guardrails | 3/3 planned | Ready to execute | - |
 | 2. Route Registry & Clean URL Contract | 0/TBD | Not started | - |
 | 3. Validated Data Foundation | 0/TBD | Not started | - |
 | 4. Shared Components & Template Parity | 0/TBD | Not started | - |
