@@ -1,0 +1,418 @@
+{
+  "baseUrl": "https://timemission.com",
+  "routes": [
+    {
+      "id": "home",
+      "canonicalPath": "/",
+      "legacySources": [
+        "/index.html"
+      ],
+      "outputFile": "index.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "about",
+      "canonicalPath": "/about",
+      "legacySources": [
+        "/about.html"
+      ],
+      "outputFile": "about.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "missions",
+      "canonicalPath": "/missions",
+      "legacySources": [
+        "/missions.html",
+        "/experiences.html"
+      ],
+      "outputFile": "missions.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "groups",
+      "canonicalPath": "/groups",
+      "legacySources": [
+        "/groups.html"
+      ],
+      "outputFile": "groups.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "groups-bachelor-ette",
+      "canonicalPath": "/groups/bachelor-ette",
+      "legacySources": [
+        "/groups/bachelor-ette.html"
+      ],
+      "outputFile": "groups/bachelor-ette.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "groups-birthdays",
+      "canonicalPath": "/groups/birthdays",
+      "legacySources": [
+        "/groups/birthdays.html"
+      ],
+      "outputFile": "groups/birthdays.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "groups-corporate",
+      "canonicalPath": "/groups/corporate",
+      "legacySources": [
+        "/groups/corporate.html"
+      ],
+      "outputFile": "groups/corporate.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "groups-field-trips",
+      "canonicalPath": "/groups/field-trips",
+      "legacySources": [
+        "/groups/field-trips.html"
+      ],
+      "outputFile": "groups/field-trips.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "groups-holidays",
+      "canonicalPath": "/groups/holidays",
+      "legacySources": [
+        "/groups/holidays.html"
+      ],
+      "outputFile": "groups/holidays.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "groups-private-events",
+      "canonicalPath": "/groups/private-events",
+      "legacySources": [
+        "/groups/private-events.html"
+      ],
+      "outputFile": "groups/private-events.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "gift-cards",
+      "canonicalPath": "/gift-cards",
+      "legacySources": [
+        "/gift-cards.html"
+      ],
+      "outputFile": "gift-cards.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "faq",
+      "canonicalPath": "/faq",
+      "legacySources": [
+        "/faq.html"
+      ],
+      "outputFile": "faq.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "contact",
+      "canonicalPath": "/contact",
+      "legacySources": [
+        "/contact.html"
+      ],
+      "outputFile": "contact.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "contact-thank-you",
+      "canonicalPath": "/contact-thank-you",
+      "legacySources": [
+        "/contact-thank-you.html"
+      ],
+      "outputFile": "contact-thank-you.html",
+      "sitemap": false,
+      "status": 301
+    },
+    {
+      "id": "locations",
+      "canonicalPath": "/locations",
+      "legacySources": [
+        "/locations/index.html"
+      ],
+      "outputFile": "locations.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "philadelphia",
+      "canonicalPath": "/philadelphia",
+      "legacySources": [
+        "/philadelphia.html"
+      ],
+      "outputFile": "philadelphia.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "houston",
+      "canonicalPath": "/houston",
+      "legacySources": [
+        "/houston.html"
+      ],
+      "outputFile": "houston.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "mount-prospect",
+      "canonicalPath": "/mount-prospect",
+      "legacySources": [
+        "/mount-prospect.html"
+      ],
+      "outputFile": "mount-prospect.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "west-nyack",
+      "canonicalPath": "/west-nyack",
+      "legacySources": [
+        "/west-nyack.html"
+      ],
+      "outputFile": "west-nyack.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "lincoln",
+      "canonicalPath": "/lincoln",
+      "legacySources": [
+        "/lincoln.html"
+      ],
+      "outputFile": "lincoln.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "manassas",
+      "canonicalPath": "/manassas",
+      "legacySources": [
+        "/manassas.html"
+      ],
+      "outputFile": "manassas.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "antwerp",
+      "canonicalPath": "/antwerp",
+      "legacySources": [
+        "/antwerp.html"
+      ],
+      "outputFile": "antwerp.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "orland-park",
+      "canonicalPath": "/orland-park",
+      "legacySources": [
+        "/orland-park.html"
+      ],
+      "outputFile": "orland-park.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "dallas",
+      "canonicalPath": "/dallas",
+      "legacySources": [
+        "/dallas.html"
+      ],
+      "outputFile": "dallas.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "brussels",
+      "canonicalPath": "/brussels",
+      "legacySources": [
+        "/brussels.html"
+      ],
+      "outputFile": "brussels.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "privacy",
+      "canonicalPath": "/privacy",
+      "legacySources": [
+        "/privacy.html"
+      ],
+      "outputFile": "privacy.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "terms",
+      "canonicalPath": "/terms",
+      "legacySources": [
+        "/terms.html"
+      ],
+      "outputFile": "terms.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "code-of-conduct",
+      "canonicalPath": "/code-of-conduct",
+      "legacySources": [
+        "/code-of-conduct.html"
+      ],
+      "outputFile": "code-of-conduct.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "cookies",
+      "canonicalPath": "/cookies",
+      "legacySources": [
+        "/cookies.html"
+      ],
+      "outputFile": "cookies.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "accessibility",
+      "canonicalPath": "/accessibility",
+      "legacySources": [
+        "/accessibility.html"
+      ],
+      "outputFile": "accessibility.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "licensing",
+      "canonicalPath": "/licensing",
+      "legacySources": [
+        "/licensing.html"
+      ],
+      "outputFile": "licensing.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "waiver",
+      "canonicalPath": "/waiver",
+      "legacySources": [
+        "/waiver.html"
+      ],
+      "outputFile": "waiver.html",
+      "sitemap": true,
+      "status": 301
+    }
+  ],
+  "aliases": [
+    {
+      "source": "/adult-birthday-parties",
+      "target": "/groups#birthday",
+      "status": 301
+    },
+    {
+      "source": "/kids-birthday-party",
+      "target": "/groups#birthday",
+      "status": 301
+    },
+    {
+      "source": "/bachelorette-party",
+      "target": "/groups#private",
+      "status": 301
+    },
+    {
+      "source": "/date-night-ideas",
+      "target": "/groups#private",
+      "status": 301
+    },
+    {
+      "source": "/corporate-events",
+      "target": "/groups#corporate",
+      "status": 301
+    },
+    {
+      "source": "/team-building",
+      "target": "/groups#corporate",
+      "status": 301
+    },
+    {
+      "source": "/school-field-trips",
+      "target": "/groups#private",
+      "status": 301
+    },
+    {
+      "source": "/youth-group-camp",
+      "target": "/groups#private",
+      "status": 301
+    },
+    {
+      "source": "/family-gathering",
+      "target": "/groups#private",
+      "status": 301
+    },
+    {
+      "source": "/bus-tour",
+      "target": "/groups",
+      "status": 301
+    },
+    {
+      "source": "/house-rules",
+      "target": "/code-of-conduct",
+      "status": 301
+    },
+    {
+      "source": "/privacy-policy",
+      "target": "/privacy",
+      "status": 301
+    },
+    {
+      "source": "/privacy-policy/",
+      "target": "/privacy",
+      "status": 301
+    },
+    {
+      "source": "/terms-and-conditions",
+      "target": "/terms",
+      "status": 301
+    },
+    {
+      "source": "/mountprospect",
+      "target": "/mount-prospect",
+      "status": 301
+    },
+    {
+      "source": "/providence",
+      "target": "/lincoln",
+      "status": 301
+    },
+    {
+      "source": "/experiences",
+      "target": "/missions",
+      "status": 301
+    },
+    {
+      "source": "/locations/",
+      "target": "/locations",
+      "status": 301
+    }
+  ]
+}

@@ -13,6 +13,7 @@
     "check:booking": "node scripts/check-booking-architecture.js",
     "check:a11y": "node scripts/check-accessibility-baseline.js",
     "check:links": "node scripts/check-internal-links.js",
+    "check:routes": "node scripts/check-route-contract.js",
     "check": "npm run check:locations && npm run check:sitemap && npm run check:components && npm run check:booking && npm run check:a11y && npm run check:links",
     "test:smoke": "playwright test",
     "test": "npm run test:smoke",

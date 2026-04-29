@@ -45,7 +45,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Site operator gets a failing validation result when a clean route, legacy redirect, canonical, sitemap entry, or internal link drifts from the route registry.
 **Plans**: 9 plans
 Plans:
-- [ ] 02-01-PLAN.md — Create route registry, route contract validator, and npm route-check scripts.
+- [x] 02-01-PLAN.md — Create route registry, route contract validator, and npm route-check scripts.
 - [ ] 02-02-PLAN.md — Retarget redirects, sitemap, sitemap validation, and redirect documentation to clean URLs.
 - [ ] 02-03-PLAN.md — Sweep core top-level page metadata and first-party links to clean routes.
 - [ ] 02-04-PLAN.md — Sweep location pages and locations index URL surfaces.
