@@ -12,7 +12,7 @@ This roadmap migrates the existing Time Mission static website to Astro without 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Static Baseline & Rollback Guardrails** - Astro can emit deployable static output while current assets, host files, and old-site rollback remain protected.
+- [x] **Phase 1: Static Baseline & Rollback Guardrails** (2026-04-29) - Astro can emit deployable static output while current assets, host files, and old-site rollback remain protected.
 - [ ] **Phase 2: Route Registry & Clean URL Contract** - Clean extensionless URLs, legacy redirects, and route-derived public references are enforced from one contract.
 - [ ] **Phase 3: Validated Data Foundation** - Durable business facts move into validated Astro-consumable data modules before page scaling.
 - [ ] **Phase 4: Shared Components & Template Parity** - Shared Astro components and representative templates preserve the current visual and behavior contract.
@@ -177,7 +177,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Static Baseline & Rollback Guardrails | 3/3 planned | Ready to execute | - |
+| 1. Static Baseline & Rollback Guardrails | 3/3 | Complete | 2026-04-29 |
 | 2. Route Registry & Clean URL Contract | 0/TBD | Not started | - |
 | 3. Validated Data Foundation | 0/TBD | Not started | - |
 | 4. Shared Components & Template Parity | 0/TBD | Not started | - |
