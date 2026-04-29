@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-29)
 
 **Core value:** The migrated site must preserve the existing customer-facing experience and conversion paths while making the site easier to maintain, measure, optimize, and scale.
-**Current focus:** Phase 02 — route-registry-clean-url-contract
+**Current focus:** Phase 04 — shared-components-template-parity
 
 ## Current Position
 
-Phase: 02 (route-registry-clean-url-contract) — EXECUTING
-Plan: 1 of 9
-Status: Ready to execute
-Last activity: 2026-04-29 -- Phase 3 planning complete
+Phase: 04 (shared-components-template-parity) — PLANNING READY
+Plan: Phase 4 discussion complete; awaiting plan-phase
+Status: Context gathered (`04-CONTEXT.md`)
+Last activity: 2026-04-29 -- Phase 4 discuss-phase (--auto)
 
 Progress: [██░░░░░░░░] 12%
 
