@@ -4,6 +4,22 @@
 // ==========================================
 
 (function() {
+    function normalizeLocation(value) {
+        return (value || '').toLowerCase().trim().replace(/\s+/g, '-');
+    }
+
+    function getLocationContext() {
+        if (window.LocationContext) return window.LocationContext;
+        if (!window.TM) return null;
+        return {
+            ready: window.TM.ready,
+            getCurrent: function() { return window.TM.current || null; },
+            select: function(slug) {
+                if (typeof window.TM.select === 'function') window.TM.select(slug);
+            }
+        };
+    }
+
     const menuBtn = document.querySelector('.nav-menu-btn');
     const mobileMenu = document.getElementById('mobileMenu');
     const navEl = document.getElementById('nav');
@@ -12,8 +28,12 @@
     // (reads localStorage synchronously so it works before locations.json finishes loading)
     document.querySelectorAll('.nav-logo, .location-dropdown-logo').forEach(logo => {
         logo.addEventListener('click', function (e) {
-            let slug = '';
-            try { slug = localStorage.getItem('tm_location') || ''; } catch (err) {}
+            const context = getLocationContext();
+            const current = context && typeof context.getCurrent === 'function' ? context.getCurrent() : null;
+            let slug = (current && (current.slug || current.id)) || '';
+            if (!slug) {
+                try { slug = localStorage.getItem('tm_location') || ''; } catch (err) {}
+            }
             if (!slug) return; // no location — let the default index.html link work
             e.preventDefault();
             const inSubdir = window.location.pathname.includes('/locations/') || window.location.pathname.includes('/groups/');
@@ -46,14 +66,18 @@
     }
 
     // Helper to sync all location displays + localStorage
-    function syncAllLocations(city) {
+    function syncAllLocations(city, slug) {
+        const normalized = normalizeLocation(slug || city);
         const mainLocText = document.getElementById('locationText');
         if (mainLocText) mainLocText.textContent = city;
-        // Write both storage keys so every consumer agrees:
-        //   timeMissionLocation (city display name) — nav.js, ticket-panel.js
-        //   tm_location (slug)                     — nav.js logo routing, locations.js
-        localStorage.setItem('timeMissionLocation', city);
-        localStorage.setItem('tm_location', city.toLowerCase().replace(/\s+/g, '-'));
+        try {
+            localStorage.setItem('tm_location', normalized);
+            localStorage.setItem('timeMissionLocation', city);
+        } catch (err) {}
+        const context = getLocationContext();
+        if (context && typeof context.select === 'function') {
+            context.select(normalized);
+        }
         // Update hero eyebrow on mobile (function exposed by index.html)
         if (window.updateEyebrowLocation) window.updateEyebrowLocation(city);
     }
@@ -117,18 +141,19 @@
         locationLinks.forEach(link => {
             // Show info panel on hover (desktop) and click
             link.addEventListener('mouseenter', () => {
-                const cityName = link.dataset.city;
-                if (cityName) showLocationInfo(cityName);
+                const slug = getLocationSlug(link);
+                if (slug) showLocationInfo(slug);
             });
 
             link.addEventListener('click', (e) => {
                 const cityName = link.dataset.city;
+                const slug = getLocationSlug(link);
                 if (cityName) {
-                    syncAllLocations(cityName);
-                    showLocationInfo(cityName);
+                    syncAllLocations(cityName, slug);
+                    showLocationInfo(slug || cityName);
                 }
 
-                const hrefPath = (link.getAttribute('href') || '').replace(/^\//, '').replace(/\.html$/, '');
+                const hrefPath = slug;
                 if (hrefPath && window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
                     window.TMAnalytics.track('location_select', {
                         location_slug: hrefPath,
@@ -149,153 +174,79 @@
 
         // Load saved location on page load (only on location pages, not index)
         const isIndexPage = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname.endsWith('/index.htm');
-        const savedLocation = localStorage.getItem('timeMissionLocation');
-        if (savedLocation && !isIndexPage) {
-            syncAllLocations(savedLocation);
+        const context = getLocationContext();
+        if (context && context.ready && typeof context.ready.then === 'function') {
+            context.ready.then(function () {
+                if (isIndexPage) return;
+                const current = typeof context.getCurrent === 'function' ? context.getCurrent() : null;
+                if (current && current.shortName) {
+                    syncAllLocations(current.shortName, current.slug || current.id);
+                }
+            });
         }
     }
 
-    // Location data for info panel.
-    // KEEP IN SYNC WITH data/locations.json — long-term source of truth will feed this
-    // at runtime. Verified against live timemission.com on 2026-04-22.
-    const locationData = {
-        'Mount Prospect': {
-            name: 'IL – Mount Prospect',
-            address: '132 Randhurst Village Drive\nMount Prospect, IL 60056',
-            phone: '(847) 250-9560',
-            hours: 'Mon - Thurs: 12pm - 9pm\nFri: 12pm - Midnight\nSat: 10am - Midnight\nSun: 10am - 8pm',
-            bookUrl: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
-            pageUrl: '/mount-prospect',
-            mapQuery: '132+Randhurst+Village+Drive+Mount+Prospect+IL+60056'
-        },
-        'Philadelphia': {
-            name: 'PA – Philadelphia',
-            address: '1530 Chestnut Street\nPhiladelphia, PA 19102',
-            phone: '(267) 710-1240',
-            hours: 'Mon - Thurs: 12pm - 10pm\nFri: 12pm - 11pm\nSat: 10am - 11pm\nSun: 10am - 10pm',
-            bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-            pageUrl: '/philadelphia',
-            mapQuery: '1530+Chestnut+Street+Philadelphia+PA+19102'
-        },
-        'West Nyack': {
-            name: 'NY – West Nyack',
-            address: '3532 Palisades Center Dr, Level 3\nWest Nyack, NY 10994',
-            phone: '(845) 328-4528',
-            hours: 'Mon - Thurs: 12pm - 9pm\nFri: 12pm - 11pm\nSat: 10am - 11pm\nSun: 10am - 8pm',
-            bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-            pageUrl: '/west-nyack',
-            mapQuery: '3532+Palisades+Center+Dr+West+Nyack+NY+10994'
-        },
-        'Lincoln': {
-            name: 'RI – Lincoln',
-            address: 'R1 Indoor Karting, 100 Higginson Ave\nLincoln, RI 02865',
-            phone: '(401) 721-5554',
-            hours: 'Mon - Thurs: 12pm - 11pm\nFri: 12pm - Midnight\nSat: 9am - Midnight\nSun: 9am - 11pm',
-            bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-            pageUrl: '/lincoln',
-            mapQuery: '100+Higginson+Ave+Lincoln+RI+02865'
-        },
-        'Houston': {
-            name: 'TX – Houston (Marq\'E)',
-            address: "Marq'E Entertainment District\nHouston, TX",
-            phone: '',
-            hours: 'Coming Soon',
-            bookUrl: '',
-            pageUrl: '/houston',
-            mapQuery: 'Marq+E+Entertainment+District+Houston+TX',
-            comingSoon: true
-        },
-        'Manassas': {
-            name: 'VA – Manassas',
-            address: 'Manassas Mall, 8300 Sudley Rd, Unit A2\nManassas, VA 20109',
-            phone: '(571) 732-1050',
-            hours: 'Mon - Thurs: 12pm - 9pm\nFri: 12pm - Midnight\nSat: 10am - Midnight\nSun: 10am - 8pm',
-            bookUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-            pageUrl: '/manassas',
-            mapQuery: '8300+Sudley+Rd+Manassas+VA+20109'
-        },
-        'Antwerp': {
-            name: 'Belgium – Antwerp',
-            address: 'Experience Factory, Michiganstraat 1\n2030 Antwerp, Belgium',
-            phone: '+32 3 301 03 03',
-            hours: 'Mon - Fri: 2pm - 11pm\nSat - Sun: 11am - 11pm',
-            bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-            pageUrl: '/antwerp',
-            mapQuery: 'Michiganstraat+1+Antwerp+Belgium'
-        },
-        'Orland Park': {
-            name: 'IL – Orland Park',
-            address: 'Orland Park, IL',
-            phone: '',
-            hours: 'Coming Soon',
-            bookUrl: '',
-            pageUrl: '/orland-park',
-            mapQuery: 'Orland+Park+IL',
-            comingSoon: true
-        },
-        'Dallas': {
-            name: 'TX – Dallas',
-            address: 'Dallas, TX',
-            phone: '',
-            hours: 'Coming Soon',
-            bookUrl: '',
-            pageUrl: '/dallas',
-            mapQuery: 'Dallas+TX',
-            comingSoon: true
-        },
-        'Brussels': {
-            name: 'BE – Brussels',
-            address: 'Brussels, Belgium',
-            phone: '',
-            hours: 'Coming Soon',
-            bookUrl: '',
-            pageUrl: '/brussels',
-            mapQuery: 'Brussels+Belgium',
-            comingSoon: true
+    function getLocationSlug(link) {
+        return (link.getAttribute('href') || '').replace(/^\//, '').replace(/\.html$/, '');
+    }
+
+    function setMultilineText(el, value) {
+        if (!el) return;
+        el.textContent = String(value || '');
+        el.style.whiteSpace = 'pre-line';
+    }
+
+    function renderMapEmbed(target, embedUrl) {
+        if (!target) return;
+        target.textContent = '';
+        if (!embedUrl) {
+            target.style.display = 'none';
+            return;
         }
-    };
+        const iframe = document.createElement('iframe');
+        iframe.src = embedUrl;
+        iframe.loading = 'lazy';
+        iframe.referrerPolicy = 'no-referrer-when-downgrade';
+        iframe.title = 'Map';
+        target.appendChild(iframe);
+        target.style.display = 'block';
+    }
 
     // Show location info in overlay panel
-    function showLocationInfo(cityName) {
+    function showLocationInfo(locationRef) {
         const infoPanel = document.getElementById('locationInfo');
         if (!infoPanel) return;
         const empty = infoPanel.querySelector('.location-info-empty');
         const details = infoPanel.querySelector('.location-info-details');
         const mapEl = document.getElementById('locationMap');
-        const data = locationData[cityName];
-        if (!data || !details) return;
+        const context = getLocationContext();
+        if (!context || typeof context.getInfoPanelView !== 'function' || !details) return;
+
+        const data = context.getInfoPanelView(locationRef);
+        if (!data) return;
 
         infoPanel.querySelector('.location-info-name').textContent = data.name;
         const addrEl = infoPanel.querySelector('.location-info-address');
-        addrEl.innerHTML = data.address.replace(/\n/g, '<br>');
-        addrEl.href = 'https://www.google.com/maps/dir/?api=1&destination=' + data.mapQuery;
+        setMultilineText(addrEl, data.addressText);
+        addrEl.href = data.mapDirectionsUrl || '#';
         infoPanel.querySelector('.location-info-phone').textContent = data.phone;
-        infoPanel.querySelector('.location-info-hours').innerHTML = data.hours.replace(/\n/g, '<br>');
+        setMultilineText(infoPanel.querySelector('.location-info-hours'), data.hoursText);
         var bookBtn = infoPanel.querySelector('.location-info-book');
-        if (data.comingSoon) {
-            bookBtn.href = data.pageUrl;
-            bookBtn.textContent = 'Sign Up';
-        } else {
-            bookBtn.href = data.pageUrl + '?book=1';
-            bookBtn.textContent = 'Book Now';
-        }
+        bookBtn.href = data.bookUrl || data.pageUrl || '#';
+        bookBtn.textContent = data.bookLabel || 'Book Now';
 
-        // Show map embed
-        if (mapEl && data.mapQuery) {
-            mapEl.innerHTML = '<iframe src="https://www.google.com/maps?q=' + data.mapQuery + '&output=embed&z=12" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map"></iframe>';
-            mapEl.style.display = 'block';
-        }
+        renderMapEmbed(mapEl, data.mapEmbedUrl);
 
         if (empty) empty.style.display = 'none';
         details.style.display = 'block';
     }
 
     // Show info for saved location on load
-    const savedLoc = localStorage.getItem('timeMissionLocation');
-    if (savedLoc) showLocationInfo(savedLoc);
-
-    // Update booking URLs based on selected location
-    const bookingUrls = locationData;
-    const bookingButtons = document.querySelectorAll('.btn-tickets, .btn-primary[href*="roller"], .btn-nav[href*="roller"]');
-    // URL updating will be handled when location-specific URLs are ready
+    const contextForInfo = getLocationContext();
+    if (contextForInfo && contextForInfo.ready && typeof contextForInfo.ready.then === 'function') {
+        contextForInfo.ready.then(function () {
+            const current = typeof contextForInfo.getCurrent === 'function' ? contextForInfo.getCurrent() : null;
+            if (current && (current.id || current.slug)) showLocationInfo(current.id || current.slug);
+        });
+    }
 })();

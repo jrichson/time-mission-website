@@ -62,13 +62,26 @@
     }
 
     function syncLocationOptions() {
-        if (!window.TM || !Array.isArray(window.TM.locations) || !ticketLocationSelect) return;
+        if (!ticketLocationSelect) return;
+        var context = getLocationContext();
+        var options = [];
+        if (context && typeof context.listTicketOptions === 'function') {
+            options = context.listTicketOptions();
+        } else if (window.TM && Array.isArray(window.TM.locations)) {
+            options = window.TM.locations.map(function (loc) {
+                return {
+                    value: loc.id,
+                    label: loc.shortName + (loc.status === 'coming-soon' ? ' (Coming Soon)' : ''),
+                };
+            });
+        }
+        if (!options.length) return;
         var currentValue = ticketLocationSelect.value;
         ticketLocationSelect.textContent = '';
-        window.TM.locations.forEach(function (loc) {
+        options.forEach(function (entry) {
             var option = document.createElement('option');
-            option.value = loc.id;
-            option.textContent = loc.shortName + (loc.status === 'coming-soon' ? ' (Coming Soon)' : '');
+            option.value = entry.value;
+            option.textContent = entry.label;
             ticketLocationSelect.appendChild(option);
         });
         if (currentValue) ticketLocationSelect.value = currentValue;
