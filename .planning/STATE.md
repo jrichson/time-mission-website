@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-last_updated: "2026-04-30T01:17:33.721Z"
-last_activity: 2026-04-30
+status: idle
+last_updated: "2026-04-30T03:05:00.000Z"
+last_activity: 2026-04-29 — Phase 07 execution complete
 progress:
   total_phases: 8
-  completed_phases: 2
-  total_plans: 25
-  completed_plans: 13
-  percent: 52
+  completed_phases: 4
+  total_plans: 35
+  completed_plans: 23
+  percent: 66
 ---
 
 # Project State
@@ -20,22 +20,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-29)
 
 **Core value:** The migrated site must preserve the existing customer-facing experience and conversion paths while making the site easier to maintain, measure, optimize, and scale.
-**Current focus:** Phase 05 — Booking & CTA Flow
+**Current focus:** Phase 08 — Built-Output Verification & Cutover Readiness (next)
 
 ## Current Position
 
-Phase: 6
-Plan: Not started
-Status: Executing Phase 05
-Last activity: 2026-04-30
+Phase: 07 (SEO, Schema & Local Search Baseline) — **COMPLETE**
+Plan: 5 of 5 delivered
+Status: Idle; ready for Phase 8 planning / execution
+Last activity: 2026-04-29 — Phase 07 waves 1–5 committed; `npm run verify:phase7` green
 
-Progress: [████░░░░░░] 50% (phases 1–4 of 8; 21 numbered plans delivered)
+Progress: Phase 7 closed (5 plans). Overall milestone progress per `progress.percent` above.
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 25 (Phases 1–4)
+- Total plans completed: 23 (cumulative; includes Phase 7 × 5)
 - Average duration: N/A
 - Total execution time: N/A
 
@@ -47,16 +47,15 @@ Progress: [████░░░░░░] 50% (phases 1–4 of 8; 21 numbered p
 | 2. Route Registry & Clean URL Contract | 9 | Complete | — |
 | 3. Validated Data Foundation | 4 | Complete | — |
 | 4. Shared Components & Template Parity | 5 | Complete | — |
-| 5. Booking & CTA Flow | 0/TBD | Not started | N/A |
-| 6. Analytics, Consent & Forms Contract | 0/TBD | Not started | N/A |
-| 7. SEO, Schema & Local Search Baseline | 0/TBD | Not started | N/A |
+| 5. Booking & CTA Flow | 4 | Complete | — |
+| 6. Analytics, Consent & Forms Contract | 5 | Complete | — |
+| 7. SEO, Schema & Local Search Baseline | 5 | Complete | — |
 | 8. Built-Output Verification & Cutover Readiness | 0/TBD | Not started | N/A |
-| 05 | 4 | - | - |
 
 **Recent trend:**
 
-- Completed waves: Phase 4 Wave 4 (`verify:phase4` gate + parity scripts)
-- Next: `/gsd-plan-phase 5` (research + PLAN.md from `05-CONTEXT.md`)
+- Phase 7: SEO catalog, SiteHead, schema modules, `sitemap.xml` / `llms.txt` endpoints, AI `robots.txt`, dist validators, NAP parity, `verify:phase7`.
+- Next: Phase 8 — built-output verification and cutover readiness per ROADMAP.
 
 *Updated after each plan completion*
 
@@ -75,7 +74,7 @@ Recent decisions affecting current work:
 
 ### Pending todos
 
-Phase 5+ plans and execution as defined in roadmap.
+Phase 8 plans and execution as defined in roadmap.
 
 ### Blockers / concerns
 
@@ -85,4 +84,4 @@ Phase 5+ plans and execution as defined in roadmap.
 
 ## Session continuity
 
-Resume from: `.planning/phases/05-booking-cta-flow/05-CONTEXT.md` then `/gsd-plan-phase 5`
+Resume from: `.planning/ROADMAP.md` Phase 8 and `/gsd-plan-phase 8` or `/gsd-execute-phase 8` when ready.

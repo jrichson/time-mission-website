@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Shared Components & Template Parity** (2026-04-29) - Shared Astro components and representative templates preserve the current visual and behavior contract.
 - [x] **Phase 5: Booking & CTA Flow** (2026-04-29) - Open-location, coming-soon, gift card, and ROLLER checkout intent paths work through validated destinations.
 - [x] **Phase 6: Analytics, Consent & Forms Contract** - GTM, consent-aware event tracking, dedupe-ready payloads, and provider-flexible forms are launch-ready.
-- [ ] **Phase 7: SEO, Schema & Local Search Baseline** - Metadata, sitemap, structured data, local SEO, and AI-search readiness are generated from route/data truth.
+- [x] **Phase 7: SEO, Schema & Local Search Baseline** - Metadata, sitemap, structured data, local SEO, and AI-search readiness are generated from route/data truth.
 - [ ] **Phase 8: Built-Output Verification & Cutover Readiness** - The Astro `dist/` output, preview deployment, smoke flows, visual parity, and rollback plan pass launch gates.
 
 ## Phase Details
@@ -151,7 +151,19 @@ Wave summary:
   3. Search engines can parse valid Organization/WebSite, BreadcrumbList, FAQPage, and eligible LocalBusiness/location JSON-LD.
   4. Visitor and crawler-visible location facts agree for NAP, map links, hours where applicable, open vs coming-soon status, canonicals, and location FAQ/schema coverage where content exists.
   5. AI-search and GEO readiness are reviewed through answer-first content opportunities, AI crawler policy, and optional `llms.txt`.
-**Plans**: TBD
+**Plans**: 5 plans
+Plans:
+- [x] 07-01-PLAN.md — SEO catalog scaffolding (seo-routes/seo-robots/seo-organization JSON, src/lib/seo helpers, check-seo-catalog/check-seo-robots) (SEO-01)
+- [x] 07-02-PLAN.md — SiteHead refactor + page meta migration + check-seo-output (SEO-01)
+- [x] 07-03-PLAN.md — JSON-LD helpers + page ld migration + check-schema-output + docs/schema-coverage-matrix.md (SEO-03, SEO-04)
+- [x] 07-04-PLAN.md — sitemap.xml.ts + llms.txt.ts endpoints + robots.txt AI rules + check-sitemap-output/check-robots-ai/check-llms-txt (SEO-02, SEO-06)
+- [x] 07-05-PLAN.md — check-nap-parity + docs/geo-answer-first-review.md + verify:phase7 gate + ROADMAP/STATE bookkeeping (SEO-05, SEO-06)
+Wave summary:
+- Wave 1: 07-01 (catalog scaffolding + validators)
+- Wave 2: 07-02 (SiteHead refactor + meta migration on Astro pages)
+- Wave 3: 07-03 (JSON-LD helpers + ld literal migration; depends on Wave 2 page edits)
+- Wave 4: 07-04 (sitemap/robots/llms.txt + dist validators; depends on Wave 1)
+- Wave 5: 07-05 (NAP parity + GEO doc + verify:phase7 gate; depends on Waves 1–4)
 **UI hint**: yes
 
 ### Phase 8: Built-Output Verification & Cutover Readiness
@@ -229,5 +241,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 4. Shared Components & Template Parity | 5/5 | Complete | 2026-04-29 |
 | 5. Booking & CTA Flow | 4/4 | Complete | 2026-04-29 |
 | 6. Analytics, Consent & Forms Contract | 0/TBD | Not started | - |
-| 7. SEO, Schema & Local Search Baseline | 0/TBD | Not started | - |
+| 7. SEO, Schema & Local Search Baseline | 5/5 | Complete | 2026-04-29 |
 | 8. Built-Output Verification & Cutover Readiness | 0/TBD | Not started | - |

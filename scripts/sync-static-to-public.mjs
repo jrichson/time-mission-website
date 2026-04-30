@@ -14,11 +14,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const publicDir = path.join(root, 'public');
 
+// sitemap.xml is now emitted by src/pages/sitemap.xml.ts at build time (Phase 7 D-04).
+// llms.txt is emitted by src/pages/llms.txt.ts.
+// Do NOT add either back to mandatoryFiles — that would shadow the Astro endpoints.
 const mandatoryFiles = [
   '_headers',
   '_redirects',
   'robots.txt',
-  'sitemap.xml',
   '404.html',
 ];
 
@@ -48,6 +50,12 @@ for (const f of mandatoryFiles) {
   const src = path.join(root, f);
   const dest = path.join(publicDir, f);
   fs.copyFileSync(src, dest);
+}
+
+// Remove stale copy so src/pages/sitemap.xml.ts is not shadowed (legacy sync used to copy root sitemap).
+const stalePublicSitemap = path.join(publicDir, 'sitemap.xml');
+if (fs.existsSync(stalePublicSitemap)) {
+  fs.unlinkSync(stalePublicSitemap);
 }
 
 for (const d of mandatoryDirs) {
