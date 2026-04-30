@@ -1,0 +1,31 @@
+{
+  "columns": [
+    {
+      "title": "EXPERIENCE",
+      "links": [
+        { "label": "About", "href": "/about" },
+        { "label": "The Missions", "href": "/missions" },
+        { "label": "Groups", "href": "/groups" },
+        { "label": "Gift Cards", "href": "/gift-cards" },
+        { "label": "FAQ", "href": "/faq" }
+      ]
+    },
+    {
+      "title": "INFO",
+      "links": [
+        { "label": "Contact Us", "href": "/contact" },
+        { "label": "Waiver", "href": "/waiver" },
+        { "label": "Licensing", "href": "/licensing" }
+      ]
+    },
+    {
+      "title": "LOCATIONS",
+      "links": [
+        { "label": "All Locations", "href": "/locations" },
+        { "label": "Mount Prospect", "href": "/mount-prospect" },
+        { "label": "Philadelphia", "href": "/philadelphia" },
+        { "label": "Antwerp", "href": "/antwerp" }
+      ]
+    }
+  ]
+}

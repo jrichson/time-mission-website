@@ -38,6 +38,38 @@ body {
     overflow-x: clip;
 }
 
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.skip-link {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 20000;
+    transform: translateY(-150%);
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--orange);
+    border-radius: 999px;
+    background: var(--black);
+    color: var(--white);
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
 /* Noise texture overlay — used on all sub-pages */
 body.has-noise::before {
     content: '';

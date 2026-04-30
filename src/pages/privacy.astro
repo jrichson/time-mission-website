@@ -1,0 +1,28 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import privacyCss from '../partials/privacy-inline.raw.css.txt?raw';
+import privacyMain from '../partials/privacy-main.frag.txt?raw';
+import privacyAfter from '../partials/privacy-after.frag.txt?raw';
+
+const ld =
+    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+---
+
+<SiteLayout
+    title="Privacy Policy | Time Mission"
+    description="Time Mission privacy policy, what data we collect, how we use it, and your rights."
+    canonicalPath="/privacy"
+    bodyClass="has-noise"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/footer.css?v=2" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={privacyCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={privacyMain} />
+    <Fragment slot="after-site-scripts" set:html={privacyAfter} />
+</SiteLayout>

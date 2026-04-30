@@ -41,6 +41,18 @@ mustFile('css/base.css');
 mustFile('js/locations.js');
 mustDirHasFiles('assets/fonts');
 
+mustFile('about.html');
+mustFile('index.html');
+mustFile('faq.html');
+mustFile('contact.html');
+mustFile('privacy.html');
+mustFile('houston.html');
+mustFile('missions.html');
+mustFile('groups/corporate.html');
+mustFile('locations.html');
+mustFile('philadelphia.html');
+mustFile('contact-thank-you.html');
+
 if (errors.length) {
   console.error('Astro dist manifest check failed:');
   for (const err of errors) console.error(`- ${err}`);

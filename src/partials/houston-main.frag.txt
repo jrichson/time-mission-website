@@ -1,0 +1,482 @@
+<!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-video-container">
+            <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline poster="/assets/video/hero-poster.jpg" preload="metadata">
+                <source src="/assets/video/hero-bg-mobile.mp4" media="(max-width: 768px)" type="video/mp4">
+                <source src="/assets/video/hero-bg-web.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-eyebrow">
+                <span class="tagline-text no-cursor" id="taglineText">Time Mission Houston</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="line-1">STEP INTO THE</span>
+                <span class="line-2" role="img" aria-label="MISSION"></span>
+            </h1>
+            <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive missions. Test your speed, strength, skill, and&nbsp;smarts.</p>
+            <div class="hero-cta">
+                <a href="#" class="btn-primary btn-tickets">
+                    Book Now
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#experiences" class="btn-secondary">See Missions</a>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <span class="scroll-label">Scroll</span>
+            <span class="swipe-label">Swipe</span>
+            <div class="scroll-indicator"></div>
+            <div class="swipe-indicator">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M8 15l4 4 4-4"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Welcome Section -->
+    <section class="welcome" id="about">
+        <div class="welcome-content reveal">
+            <div class="section-badge">ABOUT US</div>
+            <h2 class="section-title" style="white-space: nowrap;">WHAT IS TIME MISSION?</h2>
+            <p class="welcome-text">
+                Step into a real-life video game where behind every door is a new surprise. One ticket unlocks every mission, so race the clock to play them all or run your favorites over and over. Built for every age 6+ and every skill level. Game&nbsp;on!
+            </p>
+            <a href="/about" class="btn-secondary welcome-learn-desktop" style="margin-top: 1.5rem;">Learn About Time Mission</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <path d="M3 9h18M9 21V9"/>
+                    </svg>
+                </div>
+                <div class="stat-number">25+</div>
+                <div class="stat-label">Mission Rooms</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                </div>
+                <div class="stat-number stat-minutes">
+                    <span class="minutes-counter" id="minutesCounter">60</span>
+                </div>
+                <div class="stat-label">Minutes of Play</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="stat-number">2<span style="font-size: 0.5em; vertical-align: middle;">-</span>5</div>
+                <div class="stat-label">Players Per Team</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </div>
+                <div class="stat-number stat-points-wrap" id="pointsWrap">
+                    <span class="points-counter" id="pointsCounter">0</span>
+                </div>
+                <div class="stat-label">Collect Points!</div>
+            </div>
+        </div>
+    <a href="/about" class="btn-secondary welcome-learn-mobile">Learn About Time Mission</a>
+    </section>
+
+    <!-- Experiences Section -->
+    <section class="experiences" id="experiences">
+        <div class="experiences-header reveal">
+            <div class="section-badge">THE MISSIONS</div>
+            <h2 class="section-title">Unlimited Ways to Play</h2>
+            <p class="welcome-text" style="max-width: 700px; margin: 0 auto;">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
+        </div>
+
+        <div class="experiences-scroll" id="experiencesScroll">
+            <div class="experience-card">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span>
+                    <h3 class="experience-title">GLITCH MATRIX</h3>
+                    <p class="experience-desc">Navigate a fractured digital world where reality bends and patterns hold the key.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Mental</span>
+                        <span class="exp-tag">Pattern</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Big-Bang.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
+                    <h3 class="experience-title">BIG BANG</h3>
+                    <p class="experience-desc">Witness the birth of the universe and harness cosmic energy.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Physical</span>
+                        <span class="exp-tag">Coordination</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span>
+                    <h3 class="experience-title">MAGMA MAYHEM</h3>
+                    <p class="experience-desc">The floor is lava, quick feet and faster reflexes are your only salvation.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Speed</span>
+                        <span class="exp-tag">Agility</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Server_Heist5.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
+                    <h3 class="experience-title">SERVER HEIST</h3>
+                    <p class="experience-desc">Infiltrate high-security systems in this high-stakes digital heist.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Skill</span>
+                        <span class="exp-tag">Precision</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Jungle-Temple.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
+                    <h3 class="experience-title">JUNGLE TEMPLE</h3>
+                    <p class="experience-desc">Brave ancient traps and decode hieroglyphs in this lost temple.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Physical</span>
+                        <span class="exp-tag">Adventure</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Pirates_Attack.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" width="1920" height="1440" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
+                    <h3 class="experience-title">PIRATES ATTACK</h3>
+                    <p class="experience-desc">Defend your vessel from marauders. Aim true and work as a crew.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Skill</span>
+                        <span class="exp-tag">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Duplicate cards for seamless infinite scroll -->
+            <div class="experience-card" aria-hidden="true">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span>
+                    <h3 class="experience-title">GLITCH MATRIX</h3>
+                    <p class="experience-desc">Navigate a fractured digital world where reality bends and patterns hold the key.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Mental</span>
+                        <span class="exp-tag">Pattern</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card" aria-hidden="true">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Big-Bang.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
+                    <h3 class="experience-title">BIG BANG</h3>
+                    <p class="experience-desc">Witness the birth of the universe and harness cosmic energy.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Physical</span>
+                        <span class="exp-tag">Coordination</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card" aria-hidden="true">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span>
+                    <h3 class="experience-title">MAGMA MAYHEM</h3>
+                    <p class="experience-desc">The floor is lava, quick feet and faster reflexes are your only salvation.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Speed</span>
+                        <span class="exp-tag">Agility</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card" aria-hidden="true">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Server_Heist5.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
+                    <h3 class="experience-title">SERVER HEIST</h3>
+                    <p class="experience-desc">Infiltrate high-security systems in this high-stakes digital heist.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Skill</span>
+                        <span class="exp-tag">Precision</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card" aria-hidden="true">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Jungle-Temple.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
+                    <h3 class="experience-title">JUNGLE TEMPLE</h3>
+                    <p class="experience-desc">Brave ancient traps and decode hieroglyphs in this lost temple.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Physical</span>
+                        <span class="exp-tag">Adventure</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-card" aria-hidden="true">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Pirates_Attack.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" width="1920" height="1440" loading="lazy" decoding="async"></picture>
+                <div class="experience-overlay">
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
+                    <h3 class="experience-title">PIRATES ATTACK</h3>
+                    <p class="experience-desc">Defend your vessel from marauders. Aim true and work as a crew.</p>
+                    <div class="experience-tags">
+                        <span class="exp-tag">Skill</span>
+                        <span class="exp-tag">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="experiences-nav">
+            <button class="nav-arrow" id="prevBtn" aria-label="Previous experience">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <a href="/missions" class="btn-secondary">View All</a>
+            <button class="nav-arrow" id="nextBtn" aria-label="Next experience">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+        </div>
+        <div class="experiences-nav-mobile">
+            <a href="/missions" class="btn-secondary">View All Missions</a>
+        </div>
+    </section>
+
+    <!-- Groups & Parties CTA -->
+    <section class="groups-cta" id="groups" style="scroll-margin-top: 120px;">
+        <div class="groups-cta-photo">
+            <picture><source srcset="/assets/photos/TM-Groups.webp" type="image/webp"><img src="/assets/photos/TM-Groups.jpg" alt="Group playing at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+        </div>
+        <div class="groups-cta-card reveal">
+            <div class="section-badge">GROUPS & PARTIES</div>
+            <h2 class="section-title">CELEBRATE AT TIME&nbsp;MISSION</h2>
+            <p class="welcome-text">Birthdays, team outings, or just a crew ready to compete. We handle the setup so you can focus on the&nbsp;fun.</p>
+            <div class="groups-event-types">
+                <a href="/groups/birthdays" class="groups-event-type">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16h16"/><path d="M2 21h20"/><path d="M8 7V5a1 1 0 0 1 2 0v2"/><path d="M14 7V5a1 1 0 0 1 2 0v2"/><path d="M7 11V7"/><path d="M12 11V7"/><path d="M17 11V7"/></svg>
+                    <span>Birthdays</span>
+                </a>
+                <a href="/groups/corporate" class="groups-event-type">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2h8"/><path d="M9 2l-1 6a4 4 0 0 0 8 0l-1-6"/><path d="M12 12v8"/><path d="M8 22h8"/><circle cx="12" cy="5" r="0.5" fill="currentColor"/></svg>
+                    <span>Corporate</span>
+                </a>
+                <a href="/groups/field-trips" class="groups-event-type">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span>Field Trips</span>
+                </a>
+                <a href="/groups/bachelor-ette" class="groups-event-type">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0L12 5.35l-.77-.77a5.41 5.41 0 1 0-7.65 7.65l8.42 8.42 8.42-8.42a5.41 5.41 0 0 0 0-7.65z"/></svg>
+                    <span>Bachelor/ette</span>
+                </a>
+                <a href="/groups/private-events" class="groups-event-type">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2"/><path d="M5 4v2"/><path d="M11.5 4l-.5 2"/><path d="M18 5h2"/><path d="M19 4v2"/><path d="M15 9l-1 1"/><path d="M18 13l2-.5"/><path d="M18 19h2"/><path d="M19 18v2"/><path d="M14 16.5l-6.5-6.5-4.4 9.6a1 1 0 0 0 1.3 1.3l9.6-4.4z"/></svg>
+                    <span>Private Events</span>
+                </a>
+                <a href="/groups/holidays" class="groups-event-type">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+                    <span>Holidays</span>
+                </a>
+            </div>
+            <a href="/groups" class="btn-start-planning">Start Planning
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="reviews">
+        <div class="testimonials-scroll">
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"My son's birthday party was absolutely epic! The staff was amazing and all the kids had an incredible time. Highly recommend for any celebration."</p>
+                <div class="testimonial-author">
+                    <span class="author-name">Jennifer L.</span>
+                    <span class="author-location">Houston</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"We brought our youth group of 20 and everyone was completely engaged the entire time. It's rare to find something that works for all age groups this well."</p>
+                <div class="testimonial-author">
+                    <span class="author-name">Marcus T.</span>
+                    <span class="author-location">Houston</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"Way more fun than we expected. The missions are creative and the whole vibe is electric. Already told all our friends they need to check it out."</p>
+                <div class="testimonial-author">
+                    <span class="author-name">Daniela R.</span>
+                    <span class="author-location">Houston</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mini FAQ -->
+    <section class="mini-faq" id="faq" style="scroll-margin-top: 100px;">
+        <div class="mini-faq-header reveal">
+            <div class="section-badge">GOT QUESTIONS?</div>
+            <h2 class="section-title">FREQUENTLY ASKED</h2>
+        </div>
+
+        <div class="mini-faq-grid">
+            <div class="mini-faq-item">
+                <button class="mini-faq-q">
+                    How long is a session?
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+                <div class="mini-faq-a">
+                    <p>Sessions are available in 60, 90, or 120 minute options. Choose the length that works best for your group, more time means more missions to conquer.</p>
+                </div>
+            </div>
+
+            <div class="mini-faq-item">
+                <button class="mini-faq-q">
+                    What ages can play?
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+                <div class="mini-faq-a">
+                    <p>The minimum age to enter Time Mission is 6 years old. Ages 6-13 must be accompanied by an adult. Ages 14+ can play on their own.</p>
+                </div>
+            </div>
+
+            <div class="mini-faq-item">
+                <button class="mini-faq-q">
+                    Do I need to book in advance?
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+                <div class="mini-faq-a">
+                    <p>We recommend booking online to guarantee your spot, especially on weekends. Walk-ins are welcome based on availability.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-faq-cta">
+            <a href="/faq" class="btn-see-all-faq">See All FAQs
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section final-cta">
+        <div class="cta-photo">
+            <picture><source srcset="/assets/photos/experiences/ready-to-play.webp" type="image/webp"><img src="/assets/photos/experiences/ready-to-play.jpg" alt="Time Mission venue" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+        </div>
+        <div class="cta-content reveal">
+            <h2 class="cta-title">READY TO PLAY?</h2>
+            <p class="cta-text">Book your adventure today and discover why Time Mission is the ultimate social gaming experience.</p>
+            <a href="#" class="btn-primary btn-tickets">
+                Book Your Adventure
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- UGC Photo Grid -->
+    <section class="ugc-grid">
+        <div class="ugc-grid-header reveal">
+            <div class="section-badge">LET'S CONNECT</div>
+            <h2 class="section-title">FOLLOW THE MISSION</h2>
+            <div class="ugc-socials">
+                <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="https://www.tiktok.com/@timemissionhq" target="_blank" rel="noopener" aria-label="TikTok">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.51a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3a6.34 6.34 0 0 0 10.86 4.34A6.28 6.28 0 0 0 15.86 15V8.74a8.18 8.18 0 0 0 4.14 1.15V6.69h-.41z"/></svg>
+                </a>
+                <a href="https://www.facebook.com/TimeMissionHQ/" target="_blank" rel="noopener" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"/></svg>
+                </a>
+            </div>
+        </div>
+        <div class="ugc-photos">
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-01.webp" type="image/webp"><img src="/assets/photos/instagram/ig-01.jpg" alt="Time Mission Instagram post 01" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-02.webp" type="image/webp"><img src="/assets/photos/instagram/ig-02.jpg" alt="Time Mission Instagram post 02" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-03.webp" type="image/webp"><img src="/assets/photos/instagram/ig-03.jpg" alt="Time Mission Instagram post 03" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-04.webp" type="image/webp"><img src="/assets/photos/instagram/ig-04.jpg" alt="Time Mission Instagram post 04" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-05.webp" type="image/webp"><img src="/assets/photos/instagram/ig-05.jpg" alt="Time Mission Instagram post 05" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-06.webp" type="image/webp"><img src="/assets/photos/instagram/ig-06.jpg" alt="Time Mission Instagram post 06" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-07.webp" type="image/webp"><img src="/assets/photos/instagram/ig-07.jpg" alt="Time Mission Instagram post 07" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-08.webp" type="image/webp"><img src="/assets/photos/instagram/ig-08.jpg" alt="Time Mission Instagram post 08" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-09.webp" type="image/webp"><img src="/assets/photos/instagram/ig-09.jpg" alt="Time Mission Instagram post 09" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-10.webp" type="image/webp"><img src="/assets/photos/instagram/ig-10.jpg" alt="Time Mission Instagram post 10" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-11.webp" type="image/webp"><img src="/assets/photos/instagram/ig-11.jpg" alt="Time Mission Instagram post 11" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+            <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="View on Instagram"><picture><source srcset="/assets/photos/instagram/ig-12.webp" type="image/webp"><img src="/assets/photos/instagram/ig-12.jpg" alt="Time Mission Instagram post 12" width="680" height="906" loading="lazy" decoding="async"></picture></a>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <h2>DON'T MISS A THING</h2>
+            <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
+            <form class="newsletter-form">
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name">
+                <input type="email" placeholder="Email" class="full-width" required>
+            </form>
+            <label class="newsletter-consent">
+                <input type="checkbox" required>
+                <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+            </label>
+            <button type="submit" class="btn-subscribe">Sign Up</button>
+            <p class="newsletter-legal">
+                By signing up, you agree to our
+                <a href="/terms">Terms of Service</a> and
+                <a href="/privacy">Privacy Policy</a>.
+            </p>
+        </div>
+    </section>
+
+    

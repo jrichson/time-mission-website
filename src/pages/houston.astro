@@ -1,0 +1,35 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { allLocations } from '../data/locations';
+import houstonCss from '../partials/houston-inline.raw.css.txt?raw';
+import houstonMain from '../partials/houston-main.frag.txt?raw';
+import houstonAfter from '../partials/houston-after.frag.txt?raw';
+
+const houston = allLocations.find((l) => l.slug === 'houston');
+if (!houston) throw new Error('houston missing from src/data/locations');
+
+const ld =
+    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+---
+
+<SiteLayout
+    title="Time Mission Houston – 25+ Interactive Mission Rooms"
+    description="Time Mission Houston, the next-generation immersive gaming experience. Coming soon. Reserve your mission."
+    canonicalPath="/houston"
+    bodyDataLocation={houston.slug}
+>
+    <Fragment slot="head-extra">
+        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" />
+        <link rel="stylesheet" href="/css/footer.css?v=2" />
+        <link rel="stylesheet" href="/css/newsletter.css" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={houstonCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={houstonMain} />
+    <Fragment slot="after-site-scripts" set:html={houstonAfter} />
+</SiteLayout>

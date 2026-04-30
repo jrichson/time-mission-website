@@ -1,0 +1,87 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Faq from '../components/Faq.astro';
+import faqs from '../data/site/faqs.json';
+import faqFooter from '../partials/faq-footer.frag.txt?raw';
+import faqCss from '../partials/faq-inline.raw.css.txt?raw';
+import faqAfter from '../partials/faq-after.frag.txt?raw';
+
+const ld =
+    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+---
+
+<SiteLayout
+    title="FAQ | Time Mission"
+    description="Everything you need to know before your first Time Mission, age limits, pricing, what to wear, how teams work, and more."
+    canonicalPath="/faq"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/footer.css?v=2" />
+        <link rel="stylesheet" href="/css/newsletter.css" />
+        <link rel="stylesheet" href="/css/faq.css?v=3" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={faqCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <Fragment slot="footer" set:html={faqFooter} />
+
+    <main class="faq-main">
+        <section class="page-header">
+            <div class="reveal">
+                <div class="section-badge">Got Questions?</div>
+                <h1 class="section-title">FREQUENTLY ASKED QUESTIONS</h1>
+                <p class="page-subtitle">
+                    Everything you need to know before your Time Mission adventure. Can't find what you're looking for?
+                    Contact us directly.
+                </p>
+            </div>
+        </section>
+        {
+            faqs.sections.map((section) => (
+                <section class="faq-section" id={section.id}>
+                    <Faq heading={section.heading} items={section.items} />
+                </section>
+            ))
+        }
+
+        <section class="cta-section">
+            <div class="cta-content reveal">
+                <h2 class="cta-title">STILL HAVE QUESTIONS?</h2>
+                <p class="cta-text">Can't find what you're looking for? We're happy to help.</p>
+                <a href="mailto:info@lolcommandcenter.com" class="btn-primary">
+                    Contact Us
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <section class="newsletter-section">
+            <div class="newsletter-inner">
+                <h2>DON'T MISS A THING</h2>
+                <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
+                <form class="newsletter-form">
+                    <input type="text" placeholder="First Name" required />
+                    <input type="text" placeholder="Last Name" />
+                    <input type="email" placeholder="Email" class="full-width" required />
+                </form>
+                <label class="newsletter-consent">
+                    <input type="checkbox" required />
+                    <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+                </label>
+                <button type="submit" class="btn-subscribe">Sign Up</button>
+                <p class="newsletter-legal">
+                    By signing up, you agree to our
+                    <a href="/terms">Terms of Service</a> and
+                    <a href="/privacy">Privacy Policy</a>.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <Fragment slot="after-site-scripts" set:html={faqAfter} />
+</SiteLayout>

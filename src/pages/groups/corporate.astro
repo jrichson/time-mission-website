@@ -1,0 +1,32 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import corporateCss from '../../partials/corporate-inline.raw.css.txt?raw';
+import corporateMain from '../../partials/corporate-main.frag.txt?raw';
+import corporateAfter from '../../partials/corporate-after.frag.txt?raw';
+
+const ld =
+    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+---
+
+<SiteLayout
+    title="Corporate Events & Team Outings | Time Mission"
+    description="Team outings, offsites, and corporate events at Time Mission. 25+ interactive missions, head-to-head scoring, and a session your team will actually show up for."
+    canonicalPath="/groups/corporate"
+    ogImage="https://timemission.com/assets/photos/groups/corporate-events.jpg"
+    twitterImage="https://timemission.com/assets/photos/groups/corporate-events.jpg"
+    bodyClass="has-noise"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/footer.css?v=2" />
+        <link rel="stylesheet" href="/css/newsletter.css" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={corporateCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={corporateMain} />
+    <Fragment slot="after-site-scripts" set:html={corporateAfter} />
+</SiteLayout>

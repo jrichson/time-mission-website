@@ -1,0 +1,19 @@
+{
+  "primary": [
+    { "label": "About", "href": "/about" },
+    { "label": "Missions", "href": "/missions" },
+    { "label": "Groups", "href": "/groups" },
+    { "label": "FAQ", "href": "/faq" },
+    { "label": "Gift Cards", "href": "/gift-cards" },
+    { "label": "Locations", "href": "/locations" },
+    { "label": "Contact", "href": "/contact" }
+  ],
+  "groups": [
+    { "label": "Birthdays", "href": "/groups/birthdays" },
+    { "label": "Corporate", "href": "/groups/corporate" },
+    { "label": "Field Trips", "href": "/groups/field-trips" },
+    { "label": "Bachelor / Bachelorette", "href": "/groups/bachelor-ette" },
+    { "label": "Private Events", "href": "/groups/private-events" },
+    { "label": "Holidays", "href": "/groups/holidays" }
+  ]
+}

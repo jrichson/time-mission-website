@@ -325,6 +325,12 @@ const EXTERNAL_SCHEME = /^(https?:|mailto:|tel:|sms:|javascript:)/i;
 function validateUrlSurfaceAgainstRegistry(registry, fileRel, rawUrl, errors, label) {
   if (!rawUrl || EXTERNAL_SCHEME.test(rawUrl) || rawUrl.startsWith('//')) return;
   let pathname = rawUrl.split('#')[0].split('?')[0];
+  if (
+    (pathname.startsWith('../') || pathname.startsWith('./')) &&
+    !pathname.endsWith('.html')
+  ) {
+    return;
+  }
   if (pathname.startsWith('https://timemission.com')) {
     pathname = pathname.slice('https://timemission.com'.length);
   } else if (pathname.startsWith('http://timemission.com')) {
@@ -335,6 +341,8 @@ function validateUrlSurfaceAgainstRegistry(registry, fileRel, rawUrl, errors, la
 
   const normalized = normalizePath(pathname);
   if (!normalized || normalized === '/') return;
+
+  if (/^\/(assets|css|js|fonts)(\/|$)/.test(normalized)) return;
 
   if (normalized.endsWith('.html')) {
     errors.push(`${fileRel}: ${label} still references legacy "${rawUrl}"`);

@@ -1,0 +1,31 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import aboutCss from '../partials/about-inline.raw.css.txt?raw';
+import aboutMain from '../partials/about-main.frag.txt?raw';
+import aboutFooter from '../partials/about-footer.frag.txt?raw';
+import aboutTail from '../partials/about-inline-scripts.frag.txt?raw';
+
+const ld =
+    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+---
+
+<SiteLayout
+    title="About | Time Mission"
+    description="Time Mission is the next generation of immersive gaming. Built for groups, powered by real-time scoring, inspired by escape rooms and video games."
+    canonicalPath="/about"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/footer.css?v=2" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+        <link rel="stylesheet" href="/css/newsletter.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={aboutCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={aboutMain} />
+    <Fragment slot="footer" set:html={aboutFooter} />
+    <Fragment slot="after-site-scripts" set:html={aboutTail} />
+</SiteLayout>

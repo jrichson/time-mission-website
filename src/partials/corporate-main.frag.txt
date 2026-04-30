@@ -1,0 +1,248 @@
+<!-- HERO (groups.html-style: photo bg + centered copy) -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="/assets/photos/groups/corporate-events.jpg" alt="Corporate team event at Time Mission" width="1920" height="1280">
+        </div>
+        <div class="hero-content">
+            <div class="section-badge">Groups &amp; Parties</div>
+            <h1 class="hero-title">
+                CORPORATE <span class="highlight">EVENTS</span>
+            </h1>
+            <p class="hero-subtitle">Get the team out of the conference room. Head-to-head missions, real-time scoring, and a session that turns team-building into something people actually want to show up for.</p>
+            <div class="hero-cta">
+                <a href="#" class="btn-primary btn-tickets">
+                    Book Now
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="/contact?type=corporate" class="btn-secondary">Inquire Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1, Why Time Mission (3 feature cards) -->
+    <section class="event-page-section">
+        <div class="event-page-section-inner">
+            <div class="event-page-section-header">
+                <div class="section-badge">Why Time Mission</div>
+                <h2>A team outing that beats <span class="highlight">anything&nbsp;else</span></h2>
+                <p>Skip the trust falls. Whether it's a small offsite or a 100+ company blowout, Time Mission puts the whole crew inside 25+ interactive mission rooms where collaboration and competition actually matter.</p>
+            </div>
+            <div class="event-page-feature-grid">
+                <div class="event-page-feature-card reveal">
+                    <div class="event-page-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9"/></svg>
+                    </div>
+                    <h3>25+ Mission Rooms</h3>
+                    <p>Physical, strategic, and problem-solving. Teams rotate through challenges that force real collaboration, and real laughs.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <div class="event-page-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3>Built For Teams</h3>
+                    <p>Split into squads, compete on the live leaderboard, and watch the quiet analyst turn into your MVP.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <div class="event-page-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                    <h3>Better Than Trust Falls</h3>
+                    <p>Real scores, real bragging rights, real photos to share in #team-random. The kind of offsite people remember.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2, What to Expect (image + list) -->
+    <section class="event-page-section alt-bg">
+        <div class="event-page-section-inner">
+            <div class="event-page-split">
+                <div class="event-page-split-image reveal">
+                    <picture>
+                        <source srcset="/assets/photos/TM-Groups.webp" type="image/webp">
+                        <img src="/assets/photos/TM-Groups.jpg" alt="Team playing together at Time Mission" width="1400" height="1120" loading="lazy" decoding="async">
+                    </picture>
+                </div>
+                <div class="event-page-split-copy reveal">
+                    <div class="section-badge">What to Expect</div>
+                    <h2>A Session Built For Your <span class="highlight">Team</span></h2>
+                    <!-- TODO: confirm final pricing + add-on details per location -->
+                    <p>Starting at a flat per-person rate, pricing varies by location and group size. Everything a team needs to compete, score, and head back to the office with something to talk about.</p>
+                    <ul class="event-page-includes">
+                        <li>Reserved session time for your whole team</li>
+                        <li>Full access to all 25+ interactive missions</li>
+                        <li>Team-based head-to-head scoring with live leaderboard</li>
+                        <li>Group rate pricing for teams of 10 or more</li>
+                        <li>Full-venue buyout available at most locations</li>
+                        <li>Add-on options like food, drinks, and branded extras vary by location</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3, How it works (3-step feature cards) -->
+    <section class="event-page-section">
+        <div class="event-page-section-inner">
+            <div class="event-page-section-header">
+                <div class="section-badge">How it works</div>
+                <h2>Three steps. <span class="highlight">That's it.</span></h2>
+            </div>
+            <div class="event-page-feature-grid">
+                <div class="event-page-feature-card reveal">
+                    <span class="event-page-step-number">Step 01</span>
+                    <h3>Pick a Date</h3>
+                    <p>Tell us the location, date, and headcount. We'll confirm availability and hold your session within one business day.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <span class="event-page-step-number">Step 02</span>
+                    <h3>Plan Your Format</h3>
+                    <p>Break into squads, full-venue buyout, or custom schedule, we'll tailor the session to your team size and goals.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <span class="event-page-step-number">Step 03</span>
+                    <h3>Show Up &amp; Compete</h3>
+                    <p>Arrive, split into teams, and let the leaderboard do the work. Everyone plays, everyone scores.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="event-page-faq">
+        <div class="event-page-faq-inner">
+            <div class="event-page-section-header">
+                <div class="section-badge">Got Questions?</div>
+                <h2>Frequently Asked</h2>
+            </div>
+            <div class="faq-section">
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>How big a team can you host?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">From 8-person team offsites up to 300+ full-venue buyouts, depending on the location. Send us your headcount and we'll confirm what's possible at your chosen venue.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>Can we buy out the whole venue?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Yes, most locations offer full-venue buyouts. Pricing and availability vary by location. Request a quote and we'll walk you through buyout options.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>Is food and drink available?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Varies by location. Some venues have full concessions and catering packages; others are BYO-friendly. We'll confirm what's available at your selected location when you book.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>Can we brand the space or add custom signage?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Custom branding, signage, and event personalization options depend on the location and event size. Full-venue buyouts generally have the most flexibility, let us know what you have in mind.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>How far in advance should we book?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Three to four weeks is typical for weekday team events. For peak corporate season (Q4, end-of-summer) we recommend six to eight weeks out.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>Can we combine this with dinner or drinks nearby?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Absolutely, most of our venues are near restaurants and bars. We can suggest partners near your selected location when you book.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA + Cross-sell to other event types -->
+    <section class="event-page-cta">
+        <div class="event-page-cta-inner">
+            <h2>Ready to <span class="highlight">level up</span> the next offsite?</h2>
+            <p class="event-page-cta-subtitle">Tell us the date, headcount, and goals, we'll build a session around it.</p>
+            <div class="event-page-cta-buttons">
+                <a href="#" class="btn-primary btn-tickets">
+                    Book Now
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="/contact?type=corporate" class="btn-secondary">Inquire Now</a>
+            </div>
+
+            <div class="event-page-cross-sell-title">Other event types</div>
+            <div class="event-page-cross-sell-grid">
+                <a href="/groups/birthdays">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16h16"/><path d="M2 21h20"/><path d="M8 7V5a1 1 0 0 1 2 0v2"/><path d="M14 7V5a1 1 0 0 1 2 0v2"/></svg>
+                    <span>Birthdays</span>
+                </a>
+                <a href="/groups/corporate" class="is-current">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8"/><path d="M9 2l-1 6a4 4 0 0 0 8 0l-1-6"/><path d="M12 12v8"/><path d="M8 22h8"/></svg>
+                    <span>Corporate</span>
+                </a>
+                <a href="/groups/field-trips">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span>Field Trips</span>
+                </a>
+                <a href="/groups/bachelor-ette">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0L12 5.35l-.77-.77a5.41 5.41 0 1 0-7.65 7.65l8.42 8.42 8.42-8.42a5.41 5.41 0 0 0 0-7.65z"/></svg>
+                    <span>Bachelor/ette</span>
+                </a>
+                <a href="/groups/private-events">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16.5l-6.5-6.5-4.4 9.6a1 1 0 0 0 1.3 1.3l9.6-4.4z"/><path d="M18 13l2-.5"/><path d="M15 9l-1 1"/></svg>
+                    <span>Private Events</span>
+                </a>
+                <a href="/groups/holidays">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+                    <span>Holidays</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <h2>DON'T MISS A THING</h2>
+            <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
+            <form class="newsletter-form">
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name">
+                <input type="email" placeholder="Email" class="full-width" required>
+            </form>
+            <label class="newsletter-consent">
+                <input type="checkbox" required>
+                <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+            </label>
+            <button type="submit" class="btn-subscribe">Sign Up</button>
+            <p class="newsletter-legal">
+                By signing up, you agree to our
+                <a href="/terms">Terms of Service</a> and
+                <a href="/privacy">Privacy Policy</a>.
+            </p>
+        </div>
+    </section>
+
+    

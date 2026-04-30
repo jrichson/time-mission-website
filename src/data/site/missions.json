@@ -1,0 +1,28 @@
+{
+  "missions": [
+    {
+      "id": "glitch-matrix",
+      "title": "GLITCH MATRIX",
+      "tagline": "Navigate a dangerous virtual world full of glitches and digital traps.",
+      "order": 1
+    },
+    {
+      "id": "big-bang",
+      "title": "BIG BANG",
+      "tagline": "You are transported to the birth of the universe. Throw to create galaxies.",
+      "order": 2
+    },
+    {
+      "id": "magma-mayhem",
+      "title": "MAGMA MAYHEM",
+      "tagline": "A digital volcano on the brink of eruption—collect samples and outrun the lava.",
+      "order": 3
+    },
+    {
+      "id": "persian-palace",
+      "title": "PERSIAN PALACE",
+      "tagline": "Uncover the secrets within the palace walls as mystics seeking knowledge.",
+      "order": 4
+    }
+  ]
+}

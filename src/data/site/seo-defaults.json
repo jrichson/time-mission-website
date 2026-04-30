@@ -1,0 +1,8 @@
+{
+  "siteName": "Time Mission",
+  "defaultTitleTemplate": "{{pageTitle}} | {{siteName}}",
+  "defaultDescription": "Step into the mission. Teams of 2–5 compete through 25+ immersive missions at Time Mission, test your speed, strength, skill, and smarts.",
+  "ogType": "website",
+  "twitterCard": "summary_large_image",
+  "locale": "en_US"
+}

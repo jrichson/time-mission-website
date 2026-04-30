@@ -1,0 +1,48 @@
+{
+  "sections": [
+    {
+      "id": "general",
+      "heading": "General",
+      "items": [
+        {
+          "q": "How long is a session?",
+          "a": "Sessions come in 60, 90, or 120 minutes. More time = more portals to conquer. Pick your adventure."
+        },
+        {
+          "q": "What ages can play?",
+          "a": "Ages 6 and up! Kids 6–13 need an adult in the group. Ages 14+ can play on their own."
+        },
+        {
+          "q": "Do I need to book in advance?",
+          "a": "We recommend it, especially on weekends. Walk-ins are welcome based on availability, but booking online guarantees your spot."
+        },
+        {
+          "q": "What are portals?",
+          "a": "Portals are individual challenge rooms, each with a unique puzzle or mission to solve. Every portal takes 1–5 minutes, and you can play them in any order or replay your favorites."
+        }
+      ]
+    },
+    {
+      "id": "gameplay",
+      "heading": "Gameplay",
+      "items": [
+        {
+          "q": "How many portals are there?",
+          "a": "25–30 depending on your Time Mission location. Most groups tackle 15–20 portals in a 90-minute session."
+        },
+        {
+          "q": "How physical is it?",
+          "a": "It's a mix. Some portals are brain teasers, others get you moving (throwing balls, dodging lasers, pressing buttons). Your team picks which portals to play, so you control the intensity. Meters outside each room show what skills you'll need before you walk in."
+        },
+        {
+          "q": "How many people can play together?",
+          "a": "Teams are up to 5 players. Bigger crew? Book multiple teams and compete for the highest score."
+        },
+        {
+          "q": "What's the dress code?",
+          "a": "Closed-toe shoes required (no sandals). Sneakers and flexible clothing are your best bet since about half the portals get physical."
+        }
+      ]
+    }
+  ]
+}

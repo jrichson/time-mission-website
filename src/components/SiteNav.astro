@@ -1,0 +1,58 @@
+---
+const tickerMessages = [
+    'NEW LOCATIONS COMING SOON!',
+    'NEW LOCATIONS COMING SOON!',
+    'NEW LOCATIONS COMING SOON!',
+    'NEW LOCATIONS COMING SOON!',
+    'NEW LOCATIONS COMING SOON!',
+    'NEW LOCATIONS COMING SOON!',
+    'NEW LOCATIONS COMING SOON!',
+    'NEW LOCATIONS COMING SOON!',
+];
+---
+
+<!-- Announcement Ticker -->
+<div class="ticker-bar">
+    <div class="ticker-track">
+        {tickerMessages.map((m) => <span class="ticker-item">{m}</span>)}
+    </div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+    <div class="nav-left">
+        <button class="nav-menu-btn" aria-label="Open menu">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <a href="/" class="nav-logo">
+            <img src="/assets/logo/TM_Logo_White.svg" alt="Time Mission" />
+        </a>
+    </div>
+
+    <div class="nav-center">
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#experiences">Missions</a></li>
+            <li><a href="#groups">Groups</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+    </div>
+
+    <div class="nav-right">
+        <button class="location-btn" id="locationBtn" aria-label="Change location">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span id="locationText">Select Location</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
+                <polyline points="6,9 12,15 18,9"></polyline>
+            </svg>
+        </button>
+        <a href="#" class="btn-tickets">Book Now</a>
+    </div>
+</nav>

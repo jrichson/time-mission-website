@@ -17,7 +17,7 @@
             if (!slug) return; // no location — let the default index.html link work
             e.preventDefault();
             const inSubdir = window.location.pathname.includes('/locations/') || window.location.pathname.includes('/groups/');
-            window.location.href = (inSubdir ? '../' : '') + slug + '.html';
+            window.location.href = (inSubdir ? '../' : '/') + slug;
         });
     });
 
@@ -157,7 +157,7 @@
             phone: '(847) 250-9560',
             hours: 'Mon - Thurs: 12pm - 9pm\nFri: 12pm - Midnight\nSat: 10am - Midnight\nSun: 10am - 8pm',
             bookUrl: 'https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products',
-            pageUrl: 'mount-prospect.html',
+            pageUrl: '/mount-prospect',
             mapQuery: '132+Randhurst+Village+Drive+Mount+Prospect+IL+60056'
         },
         'Philadelphia': {
@@ -166,7 +166,7 @@
             phone: '(267) 710-1240',
             hours: 'Mon - Thurs: 12pm - 10pm\nFri: 12pm - 11pm\nSat: 10am - 11pm\nSun: 10am - 10pm',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-            pageUrl: 'philadelphia.html',
+            pageUrl: '/philadelphia',
             mapQuery: '1530+Chestnut+Street+Philadelphia+PA+19102'
         },
         'West Nyack': {
@@ -175,7 +175,7 @@
             phone: '(845) 328-4528',
             hours: 'Mon - Thurs: 12pm - 9pm\nFri: 12pm - 11pm\nSat: 10am - 11pm\nSun: 10am - 8pm',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-            pageUrl: 'west-nyack.html',
+            pageUrl: '/west-nyack',
             mapQuery: '3532+Palisades+Center+Dr+West+Nyack+NY+10994'
         },
         'Lincoln': {
@@ -184,7 +184,7 @@
             phone: '(401) 721-5554',
             hours: 'Mon - Thurs: 12pm - 11pm\nFri: 12pm - Midnight\nSat: 9am - Midnight\nSun: 9am - 11pm',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-            pageUrl: 'lincoln.html',
+            pageUrl: '/lincoln',
             mapQuery: '100+Higginson+Ave+Lincoln+RI+02865'
         },
         'Houston': {
@@ -193,7 +193,7 @@
             phone: '',
             hours: 'Coming Soon',
             bookUrl: '',
-            pageUrl: 'houston.html',
+            pageUrl: '/houston',
             mapQuery: 'Marq+E+Entertainment+District+Houston+TX',
             comingSoon: true
         },
@@ -203,7 +203,7 @@
             phone: '(571) 732-1050',
             hours: 'Mon - Thurs: 12pm - 9pm\nFri: 12pm - Midnight\nSat: 10am - Midnight\nSun: 10am - 8pm',
             bookUrl: 'https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products',
-            pageUrl: 'manassas.html',
+            pageUrl: '/manassas',
             mapQuery: '8300+Sudley+Rd+Manassas+VA+20109'
         },
         'Antwerp': {
@@ -212,7 +212,7 @@
             phone: '+32 3 301 03 03',
             hours: 'Mon - Fri: 2pm - 11pm\nSat - Sun: 11am - 11pm',
             bookUrl: 'https://tickets.timemission.com/onlinecheckout/en-us/products',
-            pageUrl: 'antwerp.html',
+            pageUrl: '/antwerp',
             mapQuery: 'Michiganstraat+1+Antwerp+Belgium'
         },
         'Orland Park': {
@@ -221,7 +221,7 @@
             phone: '',
             hours: 'Coming Soon',
             bookUrl: '',
-            pageUrl: 'orland-park.html',
+            pageUrl: '/orland-park',
             mapQuery: 'Orland+Park+IL',
             comingSoon: true
         },
@@ -231,7 +231,7 @@
             phone: '',
             hours: 'Coming Soon',
             bookUrl: '',
-            pageUrl: 'dallas.html',
+            pageUrl: '/dallas',
             mapQuery: 'Dallas+TX',
             comingSoon: true
         },
@@ -241,7 +241,7 @@
             phone: '',
             hours: 'Coming Soon',
             bookUrl: '',
-            pageUrl: 'brussels.html',
+            pageUrl: '/brussels',
             mapQuery: 'Brussels+Belgium',
             comingSoon: true
         }

@@ -1,0 +1,67 @@
+---
+---
+
+<!-- Ticket Popup Panel -->
+<div class="ticket-overlay" id="ticketOverlay"></div>
+<div class="ticket-panel" id="ticketPanel">
+    <div class="ticket-panel-header">
+        <h3>Book Your Adventure</h3>
+        <button class="ticket-panel-close" id="ticketClose" aria-label="Close ticket panel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+    <div class="ticket-panel-content">
+        <p>Select your location and we'll take you to our booking system to choose your date and time.</p>
+
+        <div class="ticket-location-select">
+            <label for="ticketLocation">Choose Location</label>
+            <select id="ticketLocation">
+                <option value="philadelphia">Philadelphia</option>
+                <option value="mount-prospect">Mount Prospect</option>
+                <option value="west-nyack">West Nyack</option>
+                <option value="lincoln">Lincoln</option>
+                <option value="houston">Houston (Marq'E)</option>
+                <option value="manassas">Manassas</option>
+                <option value="antwerp">Antwerp (Belgium)</option>
+            </select>
+        </div>
+
+        <a href="#" class="btn-ticket-book" id="ticketBookBtn" target="_blank">
+            Continue to Booking
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+        </a>
+
+        <div class="ticket-panel-info">
+            <h4>QUICK INFO</h4>
+            <div class="ticket-info-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+                <span>Sessions last approximately 60-120 minutes</span>
+            </div>
+            <div class="ticket-info-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Teams of 2-5 players per mission</span>
+            </div>
+            <div class="ticket-info-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Advance booking recommended</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,176 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import locationsCss from '../partials/locations-inline.raw.css.txt?raw';
+import { allLocations } from '../data/locations';
+import type { LocationRecord } from '../data/locations';
+
+const US_ORDER = [
+    'mount-prospect',
+    'orland-park',
+    'west-nyack',
+    'philadelphia',
+    'lincoln',
+    'dallas',
+    'houston',
+    'manassas',
+];
+const EU_ORDER = ['antwerp', 'brussels'];
+
+function orderLocs(region: string, slugOrder: string[]) {
+    const pool = allLocations.filter((l) => l.region === region);
+    return slugOrder.map((s) => pool.find((l) => l.slug === s)).filter(Boolean) as LocationRecord[];
+}
+
+const usLocs = orderLocs('us', US_ORDER);
+const euLocs = orderLocs('europe', EU_ORDER);
+
+function formatAddress(loc: LocationRecord) {
+    const a = loc.address;
+    const line = [a.line1, [a.city, a.state].filter(Boolean).join(', '), a.zip].filter(Boolean);
+    return line.join(', ');
+}
+
+function stateBadge(loc: LocationRecord) {
+    if (loc.address.state && loc.address.state.trim()) return loc.address.state;
+    if (loc.region === 'europe') return 'BE';
+    return '--';
+}
+
+const ld =
+    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+---
+
+<SiteLayout
+    title="Locations | Time Mission"
+    description="Find a Time Mission near you, locations in Philadelphia, Mount Prospect, Houston, West Nyack, Lincoln, Manassas, and Antwerp."
+    bodyClass="has-noise"
+    bodyClass="has-noise"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/footer.css?v=2" />
+        <link rel="stylesheet" href="/css/newsletter.css" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={locationsCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+
+    <main class="locations-page-main">
+        <section class="hero">
+            <div class="hero-content reveal">
+                <div class="section-badge">Find Us</div>
+                <h1 class="hero-title">OUR <span>LOCATIONS</span></h1>
+                <p class="hero-subtitle">
+                    Time Mission is expanding across the globe. Find a location near you and start your adventure.
+                </p>
+            </div>
+        </section>
+
+        <section class="locations-grid">
+            <div class="locations-list">
+                <div class="loc-group">
+                    <div class="loc-group-title">United States</div>
+                    {
+                        usLocs.map((loc) => (
+                            <a
+                                href={`/${loc.slug}`}
+                                class:list={[
+                                    'loc-row',
+                                    'reveal',
+                                    { 'is-coming-soon': loc.status === 'coming-soon' },
+                                ]}
+                            >
+                                <span class="loc-state">{stateBadge(loc)}</span>
+                                <div class="loc-body">
+                                    <div class="loc-name">
+                                        {loc.shortName}
+                                        {loc.status === 'coming-soon' ? (
+                                            <span class="loc-coming-soon-tag">Coming Soon</span>
+                                        ) : null}
+                                    </div>
+                                    <div class="loc-address">{formatAddress(loc)}</div>
+                                </div>
+                                <svg
+                                    class="loc-arrow"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        ))
+                    }
+                </div>
+
+                <div class="loc-group">
+                    <div class="loc-group-title">Europe</div>
+                    {
+                        euLocs.map((loc) => (
+                            <a
+                                href={`/${loc.slug}`}
+                                class:list={[
+                                    'loc-row',
+                                    'reveal',
+                                    { 'is-coming-soon': loc.status === 'coming-soon' },
+                                ]}
+                            >
+                                <span class="loc-state">{stateBadge(loc)}</span>
+                                <div class="loc-body">
+                                    <div class="loc-name">
+                                        {loc.shortName}
+                                        {loc.status === 'coming-soon' ? (
+                                            <span class="loc-coming-soon-tag">Coming Soon</span>
+                                        ) : null}
+                                    </div>
+                                    <div class="loc-address">{formatAddress(loc)}</div>
+                                </div>
+                                <svg
+                                    class="loc-arrow"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="newsletter-section">
+            <div class="newsletter-inner">
+                <h2>DON'T MISS A THING</h2>
+                <p>
+                    Sign up for sneak peeks and early access to new missions, plus special events, ticket drops,
+                    and&nbsp;more.
+                </p>
+                <form class="newsletter-form">
+                    <input type="text" placeholder="First Name" required />
+                    <input type="text" placeholder="Last Name" />
+                    <input type="email" placeholder="Email" class="full-width" required />
+                </form>
+                <label class="newsletter-consent">
+                    <input type="checkbox" required />
+                    <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+                </label>
+                <button type="submit" class="btn-subscribe">Sign Up</button>
+                <p class="newsletter-legal">
+                    By signing up, you agree to our
+                    <a href="/terms">Terms of Service</a>
+                    and
+                    <a href="/privacy">Privacy Policy</a>.
+                </p>
+            </div>
+        </section>
+    </main>
+</SiteLayout>

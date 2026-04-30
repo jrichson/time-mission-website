@@ -5,6 +5,30 @@ const root = path.resolve(__dirname, '..');
 const errors = [];
 const ignoredSchemes = /^(https?:|mailto:|tel:|sms:|javascript:)/i;
 
+const routesPath = path.join(root, 'src', 'data', 'routes.json');
+const canonicalToOutput = new Map();
+if (fs.existsSync(routesPath)) {
+  try {
+    const routesData = JSON.parse(fs.readFileSync(routesPath, 'utf8'));
+    for (const route of routesData.routes || []) {
+      let cp = route.canonicalPath || '';
+      if (!cp.startsWith('/')) cp = `/${cp}`;
+      const norm = cp.replace(/\/+$/, '') || '/';
+      canonicalToOutput.set(norm, route.outputFile.replace(/^\//, ''));
+    }
+  } catch (err) {
+    errors.push(`Failed to parse routes.json: ${err.message}`);
+  }
+}
+
+function resolveAbsoluteSiteHref(cleanHref) {
+  let key = cleanHref.replace(/\/+$/, '') || '/';
+  if (!key.startsWith('/')) key = `/${key}`;
+  const rel = canonicalToOutput.get(key);
+  if (!rel) return null;
+  return path.join(root, rel);
+}
+
 function walk(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
@@ -44,6 +68,15 @@ for (const filePath of pages) {
 
     const clean = stripQueryAndHash(raw);
     if (!clean || clean === '/') continue;
+
+    if (clean.startsWith('/')) {
+      const resolved = resolveAbsoluteSiteHref(clean);
+      const exists = resolved && fs.existsSync(resolved);
+      if (!exists) {
+        errors.push(`${relative} references missing internal asset/page: ${raw}`);
+      }
+      continue;
+    }
 
     const target = path.resolve(path.dirname(filePath), clean);
     const exists = fs.existsSync(target) || fs.existsSync(path.join(target, 'index.html'));

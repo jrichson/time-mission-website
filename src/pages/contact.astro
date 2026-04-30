@@ -1,0 +1,30 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import contactCss from '../partials/contact-inline.raw.css.txt?raw';
+import contactMain from '../partials/contact-main.frag.txt?raw';
+import contactAfter from '../partials/contact-after.frag.txt?raw';
+
+const ld =
+    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+---
+
+<SiteLayout
+    title="Contact Us | Time Mission"
+    description="Contact Time Mission for questions, group bookings, or media inquiries. We respond within one business day."
+    canonicalPath="/contact"
+    bodyClass="has-noise"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/footer.css?v=2" />
+        <link rel="stylesheet" href="/css/newsletter.css" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={contactCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={contactMain} />
+    <Fragment slot="after-site-scripts" set:html={contactAfter} />
+</SiteLayout>

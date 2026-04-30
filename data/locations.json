@@ -57,11 +57,19 @@
         }
       },
       "bookingUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products",
+      "rollerCheckoutUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/home",
       "navLabel": "IL - Mount Prospect",
       "mapUrl": "https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056",
       "faqs": [],
       "ticker": "ORLAND PARK, IL OPENING SOON!",
-      "giftCardUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/giftcards"
+      "giftCardUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/giftcards",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "philadelphia",
@@ -120,11 +128,19 @@
         }
       },
       "bookingUrl": "https://tickets.timemission.com/onlinecheckout/en-us/products",
+      "rollerCheckoutUrl": "https://tickets.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
       "navLabel": "PA - Philadelphia",
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
       "faqs": [],
       "ticker": "SPRING BREAK AT TIME MISSION PHILADELPHIA",
-      "giftCardUrl": "https://tickets.timemission.com/onlinecheckout/en-us/giftcards"
+      "giftCardUrl": "https://tickets.timemission.com/onlinecheckout/en-us/giftcards",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "west-nyack",
@@ -183,12 +199,19 @@
           "label": "10am - 8pm"
         }
       },
-      "bookingUrl": "",
+      "bookingUrl": "https://tickets.timemission.com/onlinecheckout/en-us/products",
       "navLabel": "NY - West Nyack",
       "mapUrl": "https://maps.google.com/?q=3532+Palisades+Center+Dr+West+Nyack+NY+10994",
       "faqs": [],
       "ticker": "SPRING BREAK AT TIME MISSION WEST NYACK",
-      "giftCardUrl": "https://tickets.timemission.com/onlinecheckout/en-us/giftcards"
+      "giftCardUrl": "https://tickets.timemission.com/onlinecheckout/en-us/giftcards",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "lincoln",
@@ -246,12 +269,19 @@
           "label": "9am - 11pm"
         }
       },
-      "bookingUrl": "",
+      "bookingUrl": "https://tickets.timemission.com/onlinecheckout/en-us/products",
       "navLabel": "RI - Lincoln",
       "mapUrl": "https://maps.google.com/?q=100+Higginson+Ave+Lincoln+RI+02865",
       "faqs": [],
       "ticker": "SPRING BREAK AT TIME MISSION LINCOLN",
-      "giftCardUrl": "https://tickets.timemission.com/onlinecheckout/en-us/giftcards"
+      "giftCardUrl": "https://tickets.timemission.com/onlinecheckout/en-us/giftcards",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "manassas",
@@ -311,11 +341,19 @@
         }
       },
       "bookingUrl": "https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products",
+      "rollerCheckoutUrl": "https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/home",
       "navLabel": "VA - Manassas",
       "mapUrl": "https://maps.google.com/?q=8300+Sudley+Rd+Manassas+VA+20109",
       "faqs": [],
       "ticker": "SPRING BREAK AT TIME MISSION MANASSAS",
-      "giftCardUrl": "https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/giftcards"
+      "giftCardUrl": "https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/giftcards",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "houston",
@@ -341,8 +379,15 @@
       "navLabel": "TX - Houston",
       "mapUrl": "",
       "faqs": [],
-      "ticker": "COMING SOON \u2014 TIME MISSION HOUSTON",
-      "giftCardUrl": "houston.html"
+      "ticker": "COMING SOON — TIME MISSION HOUSTON",
+      "giftCardUrl": "/houston",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": false
     },
     {
       "id": "antwerp",
@@ -400,12 +445,19 @@
           "label": "11am - 11pm"
         }
       },
-      "bookingUrl": "",
+      "bookingUrl": "mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Booking%20Request",
       "navLabel": "Belgium - Antwerp",
       "mapUrl": "https://maps.google.com/?q=Michiganstraat+1+Antwerp+2030+Belgium",
       "faqs": [],
       "ticker": "SPRING BREAK AT TIME MISSION ANTWERP",
-      "giftCardUrl": "mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Gift%20Card"
+      "giftCardUrl": "mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Gift%20Card",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "orland-park",
@@ -432,7 +484,14 @@
       "mapUrl": "https://maps.google.com/?q=66+Orland+Park+IL+60462",
       "faqs": [],
       "ticker": "COMING SOON TIME MISSION ORLAND PARK",
-      "giftCardUrl": ""
+      "giftCardUrl": "",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": false
     },
     {
       "id": "brussels",
@@ -443,7 +502,7 @@
       "region": "europe",
       "status": "coming-soon",
       "address": {
-        "line1": "Av. Imp\u00e9ratrice Charlotte",
+        "line1": "Av. Impératrice Charlotte",
         "city": "Bruxelles",
         "state": "",
         "zip": "1020",
@@ -459,7 +518,14 @@
       "mapUrl": "https://maps.google.com/?q=Av.+Imp%C3%A9ratrice+Charlotte+1020+Bruxelles+Belgium",
       "faqs": [],
       "ticker": "COMING SOON TIME MISSION BRUSSELS",
-      "giftCardUrl": ""
+      "giftCardUrl": "",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": false
     },
     {
       "id": "dallas",
@@ -486,7 +552,14 @@
       "mapUrl": "https://maps.google.com/?q=Dallas+TX",
       "faqs": [],
       "ticker": "COMING SOON TIME MISSION DALLAS",
-      "giftCardUrl": ""
+      "giftCardUrl": "",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": false
     }
   ]
 }

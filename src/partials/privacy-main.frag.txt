@@ -1,0 +1,61 @@
+<!-- Page Header -->
+    <section class="page-header">
+        <div class="reveal">
+            <h1 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">PRIVACY POLICY</h1>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="legal-page">
+        <p>Time Mission Corp. ("Time Mission Corp.," "we," "us," or "our") is committed to protecting your privacy. This policy covers the limited data we may collect for brand-wide purposes (such as cookies, analytics, or advertising) and clarifies that while we store certain participant data on behalf of the Operators, the Operators own the data related to bookings, gameplay, and other on-site activities.</p>
+
+        <h2>Operator-Specific Privacy Policies</h2>
+        <ul class="legal-contacts">
+            <li><strong>Time Mission Providence (at R1 Indoor Karting):</strong> <a href="mailto:info@r1indoorkarting.com">info@r1indoorkarting.com</a></li>
+            <li><strong>Time Mission Palisades (West Nyack):</strong> <a href="mailto:palisades@timemission.com">palisades@timemission.com</a></li>
+            <li><strong>Time Mission Manassas:</strong> <a href="mailto:manassas@timemission.com">manassas@timemission.com</a></li>
+            <li><strong>Time Mission Philadelphia:</strong> <a href="mailto:philly@timemission.com">philly@timemission.com</a></li>
+            <li><strong>Time Mission Mount Prospect:</strong> <a href="mailto:mtprospect@timemission.com">mtprospect@timemission.com</a></li>
+            <li><strong>Time Mission Antwerp (at Experience Factory):</strong> <a href="mailto:info@experience-factory.com">info@experience-factory.com</a></li>
+        </ul>
+        <p>If you have questions about location-specific data practices, please contact the relevant operator. If you have questions about Time Mission Corp.'s corporate-level data handling, email <a href="mailto:info@timemission.com">info@timemission.com</a>.</p>
+
+        <h2>Data We Collect</h2>
+        <p>We may collect a limited amount of personal data when you engage with our corporate website or brand-wide services, including:</p>
+        <p><strong>Cookies &amp; Similar Technologies</strong> for analytics, performance, and marketing optimization.</p>
+        <p><strong>Contact Information</strong> (e.g., email, phone number) if you sign up for newsletters or promotions, which may be hashed (e.g., using SHA-256) and shared with advertising platforms (like Google Ads) to measure effectiveness.</p>
+        <p><strong>Inquiries &amp; Communications</strong> (e.g., emails) to address your questions or requests.</p>
+
+        <h2>Data from Time Mission Locations</h2>
+        <p>Most participant data (e.g., bookings, gameplay, waivers) is collected by and owned by the individual Operator. Time Mission Corp. may store and process that data on behalf of the Operator, but does not independently own it.</p>
+
+        <h2>Use of Data</h2>
+        <p>We use the data we collect to:</p>
+        <p><strong>Operate &amp; Improve</strong> our corporate website and brand-wide operations.</p>
+        <p><strong>Conduct Advertising &amp; Marketing</strong>, using hashed data to measure campaign performance.</p>
+        <p><strong>Respond</strong> to your communications or requests.</p>
+
+        <h2>Data Security</h2>
+        <p>We take reasonable measures (e.g., encryption, secure servers) to protect all data we handle, including data we store on behalf of Operators. However, the Operators remain the owners of that data. Any further questions about how a specific Time Mission location safeguards your information should be directed to that location's operator.</p>
+
+        <h2>Your Rights &amp; Choices</h2>
+        <p><strong>Cookies/Tracking:</strong> Most browsers let you limit or refuse cookies, which may affect site functionality.</p>
+        <p><strong>Opt Out of Emails:</strong> You can unsubscribe from our brand-wide emails at any time via the link in each email or by contacting us.</p>
+        <p><strong>Location-Specific Data:</strong> For booking or gameplay information, contact the Operator directly, as they are the data owners and determine how that data is handled.</p>
+
+        <h2>Children's Privacy</h2>
+        <p>Children under 18 may only participate in Time Mission with legal guardian consent. Each location may have additional policies regarding minors. If you have concerns about a minor's data, contact the relevant Operator or Time Mission Corp. directly if stored on our servers.</p>
+
+        <h2>Third-Party Service Providers</h2>
+        <p>We may engage providers for website hosting &amp; analytics, email/newsletter distribution, and advertising platforms (e.g., Google Ads). These parties only receive the data necessary to perform services and cannot use it for other purposes.</p>
+
+        <h2>Updates to This Policy</h2>
+        <p>We may update this policy periodically to reflect changes in our practices or for regulatory reasons. The "Last Updated" date below shows the most recent update. Please review this policy occasionally.</p>
+
+        <h2>Contact Us</h2>
+        <p>If you have questions about Time Mission Corp.'s data practices at the corporate level, please email us at <a href="mailto:info@timemission.com">info@timemission.com</a>. For location-specific data concerns (including access, correction, or deletion requests), please reach out to the Operator directly.</p>
+
+        <p class="legal-updated">Last Updated: April 2026</p>
+    </section>
+
+    

@@ -1,0 +1,41 @@
+{
+  "items": [
+    {
+      "id": "birthdays",
+      "title": "Birthdays",
+      "blurb": "Celebrate with competitive missions and private space for cake and gifts. Great for kids, teens, and adults.",
+      "canonicalPath": "/groups/birthdays",
+      "badge": "Popular"
+    },
+    {
+      "id": "corporate",
+      "title": "Corporate & Team Building",
+      "blurb": "Two ways to book: group tickets for casual team outings or full buyouts with catering and custom run-of-show.",
+      "canonicalPath": "/groups/corporate"
+    },
+    {
+      "id": "field-trips",
+      "title": "Field Trips & Camps",
+      "blurb": "Structured play for schools, camps, and youth groups with optional educational framing.",
+      "canonicalPath": "/groups/field-trips"
+    },
+    {
+      "id": "bachelor-ette",
+      "title": "Bachelor / Bachelorette",
+      "blurb": "High-energy missions and photo-worthy moments before the big day.",
+      "canonicalPath": "/groups/bachelor-ette"
+    },
+    {
+      "id": "private-events",
+      "title": "Private Events",
+      "blurb": "Full-venue experiences for larger groups, fundraisers, and custom programming.",
+      "canonicalPath": "/groups/private-events"
+    },
+    {
+      "id": "holidays",
+      "title": "Holidays",
+      "blurb": "Seasonal packages and peak-date booking for holidays and school breaks.",
+      "canonicalPath": "/groups/holidays"
+    }
+  ]
+}

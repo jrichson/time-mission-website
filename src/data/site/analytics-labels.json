@@ -1,0 +1,19 @@
+{
+  "eventNames": {
+    "cta_click": "CTA_CLICK",
+    "booking_click": "BOOKING_CLICK",
+    "gift_card_click": "GIFT_CARD_CLICK",
+    "location_select": "LOCATION_SELECT",
+    "ticket_panel_open": "TICKET_PANEL_OPEN",
+    "ticket_panel_close": "TICKET_PANEL_CLOSE",
+    "mission_card_click": "MISSION_CARD_CLICK",
+    "contact_submit": "CONTACT_SUBMIT"
+  },
+  "parameters": {
+    "page_path": "PAGE_PATH",
+    "cta_id": "CTA_ID",
+    "location_slug": "LOCATION_SLUG",
+    "destination_url": "DESTINATION_URL",
+    "event_id": "EVENT_ID"
+  }
+}

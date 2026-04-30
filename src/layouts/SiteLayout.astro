@@ -1,0 +1,53 @@
+---
+import SiteHead from '../components/SiteHead.astro';
+import SiteNav from '../components/SiteNav.astro';
+import MobileMenu from '../components/MobileMenu.astro';
+import LocationOverlay from '../components/LocationOverlay.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import TicketPanel from '../components/TicketPanel.astro';
+import SiteScripts from '../components/SiteScripts.astro';
+
+interface Props {
+    title: string;
+    description: string;
+    canonicalPath: string;
+    ogImage?: string;
+    twitterImage?: string;
+    bodyDataLocation?: string;
+    bodyClass?: string;
+}
+
+const { title, description, canonicalPath, ogImage, twitterImage, bodyDataLocation, bodyClass } =
+    Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <SiteHead
+            title={title}
+            description={description}
+            canonicalPath={canonicalPath}
+            ogImage={ogImage}
+            twitterImage={twitterImage}
+        />
+        <slot name="head-extra" />
+        <slot name="page-style" />
+        <slot name="json-ld" />
+    </head>
+    <body class={bodyClass} data-location={bodyDataLocation}>
+        <slot name="pre-nav" />
+        <slot name="nav">
+            <MobileMenu />
+            <SiteNav />
+            <LocationOverlay />
+        </slot>
+        <slot />
+        <slot name="footer">
+            <SiteFooter />
+        </slot>
+        <TicketPanel />
+        <SiteScripts />
+        <slot name="after-site-scripts" />
+    </body>
+</html>

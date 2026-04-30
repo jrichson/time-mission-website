@@ -1,0 +1,39 @@
+---
+import footer from '../data/site/footer.json';
+
+const year = new Date().getFullYear();
+---
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-columns">
+            {
+                footer.columns.map((col) => (
+                    <div class="footer-column">
+                        <h3 class="footer-title">{col.title}</h3>
+                        <ul class="footer-links">
+                            {col.links.map((link) => (
+                                <li>
+                                    <a href={link.href}>{link.label}</a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
+        </div>
+
+        <div class="footer-bottom">
+            <a href="/" class="footer-logo">
+                <img src="/assets/logo/TM_Logo_White.svg" alt="Time Mission" />
+            </a>
+            <p class="footer-copyright">&copy; {year} Time Mission. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+                <a href="/cookies">Cookies</a>
+            </div>
+        </div>
+    </div>
+</footer>

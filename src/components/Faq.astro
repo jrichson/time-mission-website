@@ -1,0 +1,34 @@
+---
+interface FaqItem {
+    q: string;
+    a: string;
+}
+interface Props {
+    items: FaqItem[];
+    heading?: string;
+    startExpanded?: number;
+}
+const { items, heading, startExpanded } = Astro.props;
+const openIndex = startExpanded ?? -1;
+---
+
+{heading ? <h3 class="faq-heading">{heading}</h3> : null}
+<div class="faq-list">
+    {
+        items.map((item, i) => (
+            <div class:list={['faq-item', { active: i === openIndex }]}>
+                <button class="faq-question" role="button" aria-expanded={i === openIndex ? 'true' : 'false'} type="button">
+                    <span>{item.q}</span>
+                    <span class="faq-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"></path>
+                        </svg>
+                    </span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">{item.a}</div>
+                </div>
+            </div>
+        ))
+    }
+</div>

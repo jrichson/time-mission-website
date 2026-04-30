@@ -1,0 +1,167 @@
+    <!-- Hero -->
+    <section class="about-hero">
+        <div class="about-hero-bg">
+            <picture><source srcset="/assets/photos/venue/_Time-Mission_0078.webp" type="image/webp"><img src="/assets/photos/venue/_Time-Mission_0078.jpg" alt="Time Mission venue" loading="eager" fetchpriority="high" decoding="async"></picture>
+        </div>
+        <div class="about-hero-content reveal">
+            <div class="section-badge">OUR STORY</div>
+            <h1>THE GAME IS <span class="highlight">REAL</span></h1>
+            <p>Part escape room, part video game, all real. Teams of 2-5 compete through 25+ immersive missions. Grab your crew, race the clock, and play as many as you&nbsp;can.</p>
+        </div>
+    </section>
+
+    <!-- What Is Time Mission -->
+    <section class="what-is">
+        <div class="what-is-inner">
+            <div class="what-is-content reveal">
+                <div class="section-badge">OUR GAME</div>
+                <h2 class="section-title">WHAT IS TIME MISSION?</h2>
+                <p class="what-is-text">Time Mission is an immersive social gaming venue where teams of 2-5 compete through 25+ missions. Every mission is a different game, from brain-bending puzzles to full-body physical challenges. No headsets, no controllers, no sitting around. You <em>are</em> the&nbsp;game.</p>
+                <p class="what-is-text">Choose your session length, pick your missions, and play as many as you can. Each one lasts just a few minutes, so you keep moving, keep competing, and keep the energy&nbsp;high.</p>
+                <p class="what-is-text">Birthdays, team outings, field trips, bachelorette blowouts, or a crew out to settle who's really the best. Time Mission is built for every team, every&nbsp;occasion.</p>
+            </div>
+            <div class="what-is-photo reveal" id="whatIsCarousel">
+                <div class="what-is-carousel">
+                    <picture><source srcset="/assets/photos/experiences/_Time-Mission_0321.webp" type="image/webp"><img src="/assets/photos/experiences/_Time-Mission_0321.jpg" alt="Players in a Time Mission challenge room" loading="lazy" decoding="async"></picture>
+                    <picture><source srcset="/assets/photos/experiences/_Time-Mission_0230.webp" type="image/webp"><img src="/assets/photos/experiences/_Time-Mission_0230.jpg" alt="Team competing in Time Mission" loading="lazy" decoding="async"></picture>
+                    <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix experience" loading="lazy" decoding="async"></picture>
+                    <picture><source srcset="/assets/photos/experiences/_Time-Mission_0450.webp" type="image/webp"><img src="/assets/photos/experiences/_Time-Mission_0450.jpg" alt="Players having fun at Time Mission" loading="lazy" decoding="async"></picture>
+                    <picture><source srcset="/assets/photos/experiences/Time-Mission_Big-Bang.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang experience" loading="lazy" decoding="async"></picture>
+                </div>
+                <div class="carousel-dots">
+                    <button class="carousel-dot active" aria-label="Slide 1"></button>
+                    <button class="carousel-dot" aria-label="Slide 2"></button>
+                    <button class="carousel-dot" aria-label="Slide 3"></button>
+                    <button class="carousel-dot" aria-label="Slide 4"></button>
+                    <button class="carousel-dot" aria-label="Slide 5"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Steps -->
+    <section class="steps">
+        <div class="steps-header reveal">
+            <div class="section-badge">GET STARTED</div>
+            <h2 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">HOW IT WORKS</h2>
+        </div>
+        <div class="timeline reveal">
+            <div class="timeline-step">
+                <div class="step-node"><span>01</span></div>
+                <div class="step-text">
+                    <h3 class="step-title">BOOK YOUR SESSION</h3>
+                    <p class="step-desc">Pick your group size, choose how long you want to play, and reserve your spot&nbsp;online.</p>
+                </div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-node"><span>02</span></div>
+                <div class="step-text">
+                    <h3 class="step-title">CHECK IN</h3>
+                    <p class="step-desc">Arrive at your location, check in at the front desk, and get your wristbands. You're almost on the&nbsp;clock.</p>
+                </div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-node"><span>03</span></div>
+                <div class="step-text">
+                    <h3 class="step-title">MISSION BRIEFING</h3>
+                    <p class="step-desc">Watch the briefing, learn how the challenges work, and get ready to hit the&nbsp;floor.</p>
+                </div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-node"><span>04</span></div>
+                <div class="step-text">
+                    <h3 class="step-title">PLAY</h3>
+                    <p class="step-desc">Pick your missions, race the clock, and play as many rooms as you can. Every door is a new&nbsp;challenge.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Before You Arrive, photo + overlapping card -->
+    <section class="before-arrive">
+        <div class="before-arrive-photo">
+            <picture><source srcset="/assets/photos/TM-Groups.webp" type="image/webp"><img src="/assets/photos/TM-Groups.jpg" alt="Players at Time Mission" loading="lazy" decoding="async"></picture>
+        </div>
+        <div class="before-arrive-card">
+            <div class="before-arrive-header reveal">
+                <div class="section-badge">PLAN YOUR MISSION</div>
+                <h2 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">BEFORE YOU ARRIVE</h2>
+            </div>
+            <div class="checklist-grid">
+            <div class="checklist-item reveal">
+                <div class="checklist-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <div class="checklist-content">
+                    <h3>BOOK IN ADVANCE</h3>
+                    <p>We recommend booking ahead to guarantee your spot. Walk-ins are welcome but subject to&nbsp;availability.</p>
+                </div>
+            </div>
+            <div class="checklist-item reveal">
+                <div class="checklist-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                </div>
+                <div class="checklist-content">
+                    <h3>DRESS TO PLAY</h3>
+                    <p>Wear comfortable clothes you can run, jump, and crawl in. Closed-toe shoes with flat soles&nbsp;required.</p>
+                </div>
+            </div>
+            <div class="checklist-item reveal">
+                <div class="checklist-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="checklist-content">
+                    <h3>ARRIVE EARLY</h3>
+                    <p>Show up 10-15 minutes before your session to check in and get briefed. Don't miss a single&nbsp;second.</p>
+                </div>
+            </div>
+            <div class="checklist-item reveal">
+                <div class="checklist-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="checklist-content">
+                    <h3>BRING YOUR CREW</h3>
+                    <p>Teams of 2-5 players per challenge. The more people, the more fun, and the more rooms you can&nbsp;conquer.</p>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="about-cta">
+        <div class="about-cta-inner reveal">
+            <div class="section-badge">READY?</div>
+            <h2 class="section-title">BOOK YOUR ADVENTURE</h2>
+            <p>Gather your team, pick your location, and step into the ultimate social gaming&nbsp;experience.</p>
+            <a href="#" class="btn-primary btn-book-now">
+                Book Now
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <h2>DON'T MISS A THING</h2>
+            <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
+            <form class="newsletter-form">
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name">
+                <input type="email" placeholder="Email" class="full-width" required>
+            </form>
+            <label class="newsletter-consent">
+                <input type="checkbox" required>
+                <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+            </label>
+            <button type="submit" class="btn-subscribe">Sign Up</button>
+            <p class="newsletter-legal">
+                By signing up, you agree to our
+                <a href="/terms">Terms of Service</a> and
+                <a href="/privacy">Privacy Policy</a>.
+            </p>
+        </div>
+    </section>

@@ -15,23 +15,19 @@ cd "$(dirname "$0")"
 
 TICKET_PANEL="components/ticket-panel.html"
 
-# All pages that include the ticket panel
-PAGES=(
-    index.html
-    about.html
-    experiences.html
-    faq.html
-    contact.html
-    groups.html
-    gift-cards.html
-    mount-prospect.html
-    philadelphia.html
-    manassas.html
-    west-nyack.html
-    lincoln.html
-    houston.html
-    antwerp.html
-    locations/index.html
+# All runtime pages that include the ticket panel. Discover pages instead of
+# keeping a fixed list, so new pages do not silently drift from the partial.
+PAGES=()
+while IFS= read -r page; do
+    PAGES+=("${page#./}")
+done < <(
+    find . -name '*.html' \
+        -not -path './assets/*' \
+        -not -path './ads/*' \
+        -not -path './components/*' \
+        -not -path './node_modules/*' \
+        -not -name '404.html' \
+        | sort
 )
 
 # If a specific file is passed, only process that one
@@ -43,7 +39,6 @@ sync_ticket_panel() {
     local page="$1"
     local partial="$TICKET_PANEL"
 
-    # For pages in subdirectories, no adjustment needed since partial is HTML content
     if [ ! -f "$page" ]; then
         echo "  SKIP $page (not found)"
         return
