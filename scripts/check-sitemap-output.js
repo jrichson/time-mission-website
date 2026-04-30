@@ -1,11 +1,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { loadRouteRegistry, compileRouteContract, verifySitemapXml } = require('./lib/route-artifacts');
-const { printCheckErrors } = require('./lib/validation-core');
+const { runCheck } = require('./lib/validation-core');
 
 const root = path.resolve(__dirname, '..');
-const errors = [];
-
 const registry = loadRouteRegistry(root);
 const contract = compileRouteContract(registry);
 
@@ -17,15 +15,16 @@ if (!fs.existsSync(distPath)) {
 }
 
 const xml = fs.readFileSync(distPath, 'utf8');
-errors.push(...verifySitemapXml(xml, contract, {
-    requireXmlHeader: true,
-    requireXmlns: true,
-    requireBaseUrl: true,
-}).errors);
-
-if (errors.length) {
-    printCheckErrors('Sitemap output check', errors);
-    process.exit(1);
-}
-
-console.log(`Sitemap output check passed for ${contract.sitemapUrls.length} URLs.`);
+runCheck({
+    title: 'Sitemap output check',
+    run(errors) {
+        errors.push(...verifySitemapXml(xml, contract, {
+            requireXmlHeader: true,
+            requireXmlns: true,
+            requireBaseUrl: true,
+        }).errors);
+    },
+    onSuccess() {
+        return `Sitemap output check passed for ${contract.sitemapUrls.length} URLs.`;
+    },
+});
