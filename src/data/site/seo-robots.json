@@ -1,0 +1,7 @@
+{
+  "rules": [
+    { "match": "exact", "path": "/contact-thank-you", "robots": "noindex,follow" },
+    { "match": "exact", "path": "/waiver", "robots": "noindex,follow" },
+    { "match": "default", "robots": "index,follow" }
+  ]
+}

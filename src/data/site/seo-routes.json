@@ -1,0 +1,194 @@
+{
+  "/": {
+    "title": "Time Mission – 25+ Interactive Mission Rooms",
+    "description": "Step into the mission. Teams of 2–5 compete through 25+ immersive missions at Time Mission, test your speed, strength, skill, and smarts.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/about": {
+    "title": "About | Time Mission",
+    "description": "Time Mission is the next generation of immersive gaming. Built for groups, powered by real-time scoring, inspired by escape rooms and video games.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/missions": {
+    "title": "Missions | Time Mission",
+    "description": "Explore 25+ action-packed challenge rooms at Time Mission. From speed to strategy, each mission tests something different.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/groups": {
+    "title": "Groups & Events | Time Mission",
+    "description": "Birthday parties, corporate team-building, and private events at Time Mission. Two ways to book: group tickets or full custom events.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/groups/bachelor-ette": {
+    "title": "Bachelor & Bachelorette Parties | Time Mission",
+    "description": "Bachelor and bachelorette parties at Time Mission. 25+ head-to-head missions, team chaos, and a night that beats a bar crawl, crews welcome.",
+    "ogImage": "/assets/photos/groups/bachelor-bachelorette.jpg",
+    "twitterImage": "/assets/photos/groups/bachelor-bachelorette.jpg"
+  },
+  "/groups/birthdays": {
+    "title": "Birthday Parties | Time Mission",
+    "description": "Host an unforgettable birthday party at Time Mission. Private missions, party hosts, and space for cake, we handle the setup so you can just show up and celebrate.",
+    "ogImage": "/assets/photos/TM-Groups.jpg",
+    "twitterImage": "/assets/photos/TM-Groups.jpg"
+  },
+  "/groups/corporate": {
+    "title": "Corporate Events & Team Outings | Time Mission",
+    "description": "Team outings, offsites, and corporate events at Time Mission. 25+ interactive missions, head-to-head scoring, and a session your team will actually show up for.",
+    "ogImage": "/assets/photos/groups/corporate-events.jpg",
+    "twitterImage": "/assets/photos/groups/corporate-events.jpg"
+  },
+  "/groups/field-trips": {
+    "title": "Field Trips &amp; School Groups | Time Mission",
+    "description": "Book a Time Mission field trip. 25+ interactive missions that turn physics, problem-solving, and teamwork into an adventure. Weekday group rates, ages 6+.",
+    "ogImage": "/assets/photos/groups/field-trips.jpg",
+    "twitterImage": "/assets/photos/groups/field-trips.jpg"
+  },
+  "/groups/holidays": {
+    "title": "Holiday Parties at Time Mission",
+    "description": "Skip the banquet hall. Host your holiday party at Time Mission, 25+ interactive missions, group scoring, and a session people actually look forward to.",
+    "ogImage": "/assets/photos/groups/holiday-parties.jpg",
+    "twitterImage": "/assets/photos/groups/holiday-parties.jpg"
+  },
+  "/groups/private-events": {
+    "title": "Private Events &amp; Venue Buyouts | Time Mission",
+    "description": "Buy out a Time Mission location for your private event. Full-venue access, 25+ interactive missions, custom configurations, and scalable capacity for milestone celebrations.",
+    "ogImage": "/assets/photos/venue/_Time-Mission_0024.jpg",
+    "twitterImage": "/assets/photos/venue/_Time-Mission_0024.jpg"
+  },
+  "/gift-cards": {
+    "title": "Gift Cards | Time Mission",
+    "description": "Give the gift of the mission. Time Mission gift cards work at every location and never expire.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/faq": {
+    "title": "FAQ | Time Mission",
+    "description": "Everything you need to know before your first Time Mission, age limits, pricing, what to wear, how teams work, and more.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/contact": {
+    "title": "Contact Us | Time Mission",
+    "description": "Contact Time Mission for questions, group bookings, or media inquiries. We respond within one business day.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/contact-thank-you": {
+    "title": "Message Sent | Time Mission",
+    "description": "Thanks for contacting Time Mission. We received your message and will respond soon.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/locations": {
+    "title": "Locations | Time Mission",
+    "description": "Find a Time Mission near you, locations in Philadelphia, Mount Prospect, Houston, West Nyack, Lincoln, Manassas, and Antwerp.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/philadelphia": {
+    "title": "Time Mission Philadelphia – 25+ Interactive Mission Rooms",
+    "description": "Teams of 2–5 compete through 25+ immersive missions. Time Mission Philadelphia, book your adventure today.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/houston": {
+    "title": "Time Mission Houston – 25+ Interactive Mission Rooms",
+    "description": "Time Mission Houston, the next-generation immersive gaming experience. Coming soon. Reserve your mission.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/mount-prospect": {
+    "title": "Time Mission Mount Prospect – 25+ Interactive Mission Rooms",
+    "description": "Time Mission Mount Prospect, 25+ challenge rooms for groups of 2–5. Book your mission today.",
+    "ogImage": "/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg"
+  },
+  "/west-nyack": {
+    "title": "Time Mission West Nyack – 25+ Interactive Mission Rooms",
+    "description": "Time Mission West Nyack at Palisades Center, 25+ immersive challenges for teams of 2–5. Book your mission today.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/lincoln": {
+    "title": "Time Mission Lincoln – 25+ Interactive Mission Rooms",
+    "description": "Time Mission Lincoln, 25+ immersive challenge rooms for groups of 2–5. Book your mission today.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/manassas": {
+    "title": "Time Mission Manassas – 25+ Interactive Mission Rooms",
+    "description": "Time Mission Manassas, 25+ immersive challenge rooms for groups of 2–5. Book your mission today.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/antwerp": {
+    "title": "Time Mission Antwerp – 25+ Interactive Mission Rooms",
+    "description": "Time Mission Antwerp, 25+ immersive challenge rooms for groups of 2–5. Réserve ta mission.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/orland-park": {
+    "title": "Time Mission Orland Park – Coming Soon to the Chicago Area",
+    "description": "Time Mission Orland Park, the next-generation immersive gaming experience. Coming soon to Illinois. Sign up for exclusive offers and early access.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/dallas": {
+    "title": "Time Mission Dallas – Coming Soon to Texas",
+    "description": "Time Mission Dallas, the next-generation immersive gaming experience. Coming soon to Texas. Sign up for exclusive offers and early access.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/brussels": {
+    "title": "Time Mission Brussels – Coming Soon to Belgium",
+    "description": "Time Mission Brussels, the next-generation immersive gaming experience. Coming soon to Belgium. Sign up for exclusive offers and early access.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/privacy": {
+    "title": "Privacy Policy | Time Mission",
+    "description": "Time Mission privacy policy, what data we collect, how we use it, and your rights.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/terms": {
+    "title": "Terms and Conditions | Time Mission",
+    "description": "Time Mission terms and conditions for booking, participation, and use of our venues.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/code-of-conduct": {
+    "title": "Code of Conduct | Time Mission",
+    "description": "Time Mission code of conduct, how we keep every mission safe, fair, and fun for all players.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/cookies": {
+    "title": "Cookie Policy | Time Mission",
+    "description": "Time Mission cookie policy, the categories of cookies we use, what each does, and how to control them in your browser.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/accessibility": {
+    "title": "Accessibility Statement | Time Mission",
+    "description": "Time Mission's commitment to digital accessibility, our conformance target, known limitations, and how to request assistance or report an issue.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/licensing": {
+    "title": "Licensing & Franchise | Time Mission",
+    "description": "Bring Time Mission to your market. Corporate offices in Cranston, RI and Nuenen, Netherlands. Download the brochure or contact us for licensing and franchise opportunities.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/waiver": {
+    "title": "Waiver | Time Mission",
+    "description": "Review Time Mission waiver guidance before your visit.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  }
+}

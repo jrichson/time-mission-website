@@ -319,7 +319,7 @@
         "/waiver.html"
       ],
       "outputFile": "waiver.html",
-      "sitemap": true,
+      "sitemap": false,
       "status": 301
     }
   ],
