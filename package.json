@@ -33,8 +33,7 @@
     "verify:sources": "npm run check",
     "test:smoke": "playwright test",
     "test": "npm run test:smoke",
-    "verify:phase7": "npm run check && npm run build:astro && npm run check:routes -- --dist && npm run check:astro-dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity && npm run check:seo-output && npm run check:schema-output && npm run check:sitemap-output && npm run check:robots-ai && npm run check:llms-txt && npm run check:nap-parity && npm run test:smoke",
-    "verify": "npm run verify:phase7",
+    "verify": "npm run check && npm run build:astro && npm run check:routes -- --dist && npm run check:astro-dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity && npm run check:seo-output && npm run check:schema-output && npm run check:sitemap-output && npm run check:robots-ai && npm run check:llms-txt && npm run check:nap-parity && npm run test:smoke",
     "verify:phase8": "npm run verify",
     "build:astro": "node scripts/sync-static-to-public.mjs && astro build",
     "preview:astro": "astro preview",
@@ -46,7 +45,7 @@
     "verify:phase4": "npm run check && npm run build:astro && npm run check:astro-dist && npm run check:routes -- --dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity",
     "verify:phase5": "npm run check && npm run build:astro && npm run check:routes -- --dist && npm run check:astro-dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity && npm run test:smoke",
     "verify:phase6": "npm run check && npm run build:astro && npm run check:routes -- --dist && npm run check:astro-dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity && npm run test:smoke",
-    "verify:phase7": "npm run check && npm run build:astro && npm run check:routes -- --dist && npm run check:astro-dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity && npm run check:seo-output && npm run check:schema-output && npm run check:sitemap-output && npm run check:robots-ai && npm run check:llms-txt && npm run check:nap-parity && npm run test:smoke"
+    "verify:phase7": "npm run verify"
   },
   "repository": {
     "type": "git",

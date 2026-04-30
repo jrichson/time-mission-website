@@ -26,7 +26,7 @@ Order is fixed in `package.json` and must not be reordered casually: dist valida
 
 ## Aliases
 
-- **`verify:phase7`** — Frozen Phase 7 script chain (build + dist SEO/schema/NAP + smoke). **`verify`** currently delegates here so the Phase 7 gate stays explicit in one place.
+- **`verify:phase7`** — Compatibility alias to **`verify`** (historical Phase 7 gate name retained for operator familiarity).
 - **`verify:phase8`** — Same as **`verify`** (milestone bookkeeping; see Phase 8 plans).
 - **`verify:sources`** — `check` only; not sufficient for launch.
 
