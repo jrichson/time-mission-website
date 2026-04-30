@@ -6,6 +6,7 @@ const errors = [];
 
 const ticketPanel = fs.readFileSync(path.join(root, 'js', 'ticket-panel.js'), 'utf8');
 const rollerCheckout = fs.readFileSync(path.join(root, 'js', 'roller-checkout.js'), 'utf8');
+const bookingController = fs.readFileSync(path.join(root, 'js', 'booking-controller.js'), 'utf8');
 
 if (/var\s+bookingUrls\s*=|const\s+bookingUrls\s*=|let\s+bookingUrls\s*=/.test(ticketPanel)) {
   errors.push('js/ticket-panel.js must not define a bookingUrls map; use data/locations.json via window.TM');
@@ -23,12 +24,40 @@ if (!ticketPanel.includes('window.TM.ready')) {
   errors.push('js/ticket-panel.js should wait for window.TM.ready before hydrating location-driven options');
 }
 
-if (!ticketPanel.includes('resolveOpenCheckoutUrl')) {
-  errors.push('js/ticket-panel.js must define resolveOpenCheckoutUrl for Phase 5 checkout precedence');
+if (!ticketPanel.includes('window.TMBooking') && !ticketPanel.includes('getTMBooking')) {
+  errors.push('js/ticket-panel.js must use TMBooking gateway for booking decisions');
 }
 
-if (!ticketPanel.match(/function resolveOpenCheckoutUrl[\s\S]*?rollerCheckoutUrl[\s\S]*?bookingUrl/)) {
-  errors.push('resolveOpenCheckoutUrl must test rollerCheckoutUrl before bookingUrl');
+if (!bookingController.includes('window.TMBooking')) {
+  errors.push('js/booking-controller.js must expose window.TMBooking gateway');
+}
+
+if (!bookingController.includes('getDestination')) {
+  errors.push('window.TMBooking must provide getDestination');
+}
+
+if (!bookingController.includes('navigate')) {
+  errors.push('window.TMBooking must provide navigate');
+}
+
+if (!ticketPanel.includes('[data-tm-booking-trigger]')) {
+  errors.push('js/ticket-panel.js must bind booking handlers via explicit [data-tm-booking-trigger] selectors');
+}
+
+if (
+  ticketPanel.includes('.btn-tickets, .btn-book-now')
+  || ticketPanel.includes('btn-primary[href*="roller"]')
+  || ticketPanel.includes('btn-primary[href*="tickets.timemission"]')
+) {
+  errors.push('js/ticket-panel.js must not use heuristic booking selectors; use [data-tm-booking-trigger]');
+}
+
+if (
+  bookingController.includes('.btn-tickets, .btn-book-now')
+  || bookingController.includes('btn-primary[href*="roller"]')
+  || bookingController.includes('btn-primary[href*="tickets.timemission"]')
+) {
+  errors.push('js/booking-controller.js must not use heuristic booking selectors; use [data-tm-booking-trigger]');
 }
 
 // BOOK-03: roller-checkout.js is a loadable no-op stub; iframe CDN must not ship by default.

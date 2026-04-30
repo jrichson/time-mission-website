@@ -1,8 +1,6 @@
 // ==========================================
 // TICKET POPUP PANEL — Shared across all pages
-// Single source of truth for booking logic
-// On index: Book Now opens ticket panel, Continue routes through location page
-// On location pages: Book Now navigates directly to booking
+// Ticket panel UI + TMBooking integration
 // Supports ?book=1 auto-redirect from ticket panel flow
 // ==========================================
 (function () {
@@ -13,6 +11,29 @@
     var ticketClose = document.getElementById('ticketClose');
     var ticketLocationSelect = document.getElementById('ticketLocation');
     var ticketBookBtn = document.getElementById('ticketBookBtn');
+    var pageLocation = document.body.dataset.location || '';
+
+    function getLocationContext() {
+        if (window.LocationContext) return window.LocationContext;
+        if (!window.TM) return null;
+        return {
+            ready: window.TM.ready,
+            get: typeof window.TM.get === 'function' ? window.TM.get.bind(window.TM) : function () { return null; },
+            getCurrent: function () { return window.TM.current || null; },
+            resolveBookingUrl: function (kind, id) {
+                var loc = id && typeof window.TM.get === 'function' ? window.TM.get(id) : window.TM.current;
+                if (!loc) return '';
+                if (kind === 'gift-cards' || kind === 'giftcards') return loc.giftCardUrl || '';
+                if (loc.status === 'coming-soon') return '/' + (loc.slug || loc.id || '');
+                return loc.rollerCheckoutUrl || loc.bookingUrl || '';
+            }
+        };
+    }
+
+    function getTMBooking() {
+        if (window.TMBooking) return window.TMBooking;
+        return null;
+    }
 
     function tmTrack(key, payload) {
         if (window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
@@ -24,35 +45,20 @@
         return (value || '').toLowerCase().trim().replace(/\s+/g, '-');
     }
 
-    function getLocation(id) {
-        var normalized = normalizeLocation(id);
-        if (window.TM && typeof window.TM.get === 'function') {
-            return window.TM.get(normalized);
-        }
-        return null;
-    }
-
-    function getLocationPage(id) {
-        var loc = getLocation(id);
-        var slug = (loc && loc.slug) || normalizeLocation(id);
-        return '/' + slug;
-    }
-
-    // Phase 5 BOOK-01 / D-03: rollerCheckoutUrl precedes bookingUrl for open venues.
-    function resolveOpenCheckoutUrl(loc) {
-        if (!loc) return '';
-        if (loc.status === 'coming-soon') return '';
-        var roller = (loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
-        if (roller !== '') return roller;
-        var book = (loc.bookingUrl && String(loc.bookingUrl).trim()) || '';
-        return book;
-    }
-
     function getBookingUrl(id) {
-        var loc = getLocation(id);
-        if (!loc) return '';
-        if (loc.status === 'coming-soon') return getLocationPage(loc.id);
-        return resolveOpenCheckoutUrl(loc);
+        var booking = getTMBooking();
+        if (booking && typeof booking.getDestination === 'function') {
+            return booking.getDestination({
+                kind: 'tickets',
+                locationId: id,
+                pageLocationSlug: pageLocation,
+                preferLocationPageFlow: !pageLocation,
+            });
+        }
+
+        var context = getLocationContext();
+        if (!context || typeof context.resolveBookingUrl !== 'function') return '';
+        return context.resolveBookingUrl('tickets', id);
     }
 
     function syncLocationOptions() {
@@ -68,34 +74,25 @@
         if (currentValue) ticketLocationSelect.value = currentValue;
     }
 
-    // Detect if this is a location page (body has data-location attribute)
-    var pageLocation = document.body.dataset.location || '';
-
     // --- Auto-redirect: location pages with ?book=1 go straight to booking ---
     function scheduleAutoRedirect() {
-        // Clean the URL so the back button doesn't trigger redirect again
-        if (history.replaceState) {
-            history.replaceState(null, '', window.location.pathname);
-        }
         var autoUrl = getBookingUrl(pageLocation);
-        if (autoUrl) {
-            // Wait for page to fully load so the history entry is established,
-            // then redirect — back button will return to this location page
-            window.addEventListener('load', function () {
-                setTimeout(function () {
-                    if (/^https?:\/\//i.test(autoUrl)) {
-                        tmTrack('checkout_start', {
-                            destination_url:
-                                (window.TMAnalytics && window.TMAnalytics.safeDestination
-                                    ? window.TMAnalytics.safeDestination(autoUrl)
-                                    : autoUrl) || autoUrl,
-                            location_slug: pageLocation,
-                            cta_id: 'book_param_auto',
-                        });
-                    }
-                    window.location.href = autoUrl;
-                }, 300);
+        var booking = getTMBooking();
+        if (autoUrl && booking && typeof booking.navigate === 'function') {
+            booking.navigate({
+                source: 'book_param_auto',
+                ctaId: 'book_param_auto',
+                href: autoUrl,
+                locationId: pageLocation,
+                cleanBookParam: true,
+                deferUntilLoad: true,
             });
+            return;
+        }
+
+        if (autoUrl) {
+            if (history.replaceState) history.replaceState(null, '', window.location.pathname);
+            window.location.href = autoUrl;
         }
     }
 
@@ -113,28 +110,21 @@
     function syncBookingBtn() {
         if (!ticketBookBtn) return;
         var selected = ticketLocationSelect.value;
-        var page = getLocationPage(selected);
-        // On index/non-location pages: route through location page
-        // On location pages: go directly to booking
-        if (!pageLocation && page) {
-            ticketBookBtn.href = page + '?book=1';
-        } else {
-            var url = getBookingUrl(selected);
-            ticketBookBtn.href = url || '#';
-        }
+        var url = getBookingUrl(selected);
+        ticketBookBtn.href = url || '#';
     }
 
     // Open ticket panel
     function openTicketPanel(e) {
-        // On location pages, if the clicked button has a real booking URL, navigate directly
-        if (pageLocation && e && e.currentTarget && e.currentTarget.href && !e.currentTarget.href.endsWith('#')) {
-            return; // Let the link navigate normally
-        }
         if (e) e.preventDefault();
 
         // Pre-select saved location if available
         var saved = '';
-        try { saved = localStorage.getItem('tm_location') || localStorage.getItem('timeMissionLocation') || ''; } catch (err) {}
+        var context = getLocationContext();
+        var current = context && typeof context.getCurrent === 'function' ? context.getCurrent() : null;
+        if (current && (current.id || current.slug)) {
+            saved = current.id || current.slug;
+        }
         if (saved && ticketLocationSelect) {
             ticketLocationSelect.value = normalizeLocation(saved);
         }
@@ -160,56 +150,19 @@
 
     // A URL is "direct" if it's an http(s) booking URL or a mailto/tel scheme —
     // in any of those cases we navigate straight there instead of opening the panel.
-    function isDirectBookingUrl(href) {
-        if (!href || href === '#') return false;
-        return /^(https?:|mailto:|tel:)/i.test(href);
+    // TMBooking owns this policy and invokes openTicketPanel only when needed.
+    var booking = getTMBooking();
+    if (booking && typeof booking.attach === 'function') {
+        booking.attach(document, {
+            selector: '[data-tm-booking-trigger]',
+            pageLocationSlug: pageLocation,
+            openPanel: openTicketPanel,
+        });
+    } else {
+        document.querySelectorAll('[data-tm-booking-trigger]').forEach(function (button) {
+            button.addEventListener('click', openTicketPanel);
+        });
     }
-
-    // Unified handler: if button has a direct URL, navigate; otherwise open the
-    // ticket panel so the user can pick a location.
-    function bookOrOpenPanel(e) {
-        var btn = e.currentTarget;
-        var href = btn.getAttribute('href');
-        if (isDirectBookingUrl(href)) {
-            e.preventDefault();
-            tmTrack('booking_click', {
-                cta_id: (btn.className && String(btn.className).split(' ')[0]) || 'booking_hero',
-                destination_url:
-                    window.TMAnalytics && window.TMAnalytics.safeDestination
-                        ? window.TMAnalytics.safeDestination(href) || ''
-                        : '',
-                location_slug: pageLocation || '',
-            });
-            if (/^(mailto:|tel:)/i.test(href)) {
-                window.location.href = href;
-            } else {
-                if (/^https?:\/\//i.test(href)) {
-                    tmTrack('checkout_start', {
-                        destination_url:
-                            (window.TMAnalytics && window.TMAnalytics.safeDestination
-                                ? window.TMAnalytics.safeDestination(href)
-                                : '') || '',
-                        location_slug: pageLocation || '',
-                        cta_id: 'direct_booking',
-                    });
-                }
-                // D-01: same-tab default for external checkout (Phase 5).
-                window.location.assign(href);
-            }
-            return;
-        }
-        // No location — open ticket panel to choose
-        openTicketPanel(e);
-    }
-
-    // Attach to all booking buttons site-wide
-    var bookingButtons = document.querySelectorAll(
-        '.btn-tickets, .btn-book-now, ' +
-        '.btn-primary[href*="roller"], .btn-nav[href*="roller"], .btn-primary[href*="tickets.timemission"]'
-    );
-    bookingButtons.forEach(function (btn) {
-        btn.addEventListener('click', bookOrOpenPanel);
-    });
 
     // Close handlers
     if (ticketClose) ticketClose.addEventListener('click', closeTicketPanel);
@@ -229,8 +182,9 @@
         });
     });
 
-    if (window.TM && window.TM.ready) {
-        window.TM.ready.then(function () {
+    var locationContext = getLocationContext();
+    if (locationContext && locationContext.ready && typeof locationContext.ready.then === 'function') {
+        locationContext.ready.then(function () {
             syncLocationOptions();
             syncBookingBtn();
         });
@@ -243,25 +197,23 @@
             e.preventDefault();
             var url = ticketBookBtn.getAttribute('href');
             if (url && url !== '#') {
-                tmTrack('booking_click', {
-                    cta_id: 'ticket_panel_continue',
-                    location_slug: ticketLocationSelect ? ticketLocationSelect.value : '',
-                    destination_url:
-                        window.TMAnalytics && window.TMAnalytics.safeDestination
-                            ? window.TMAnalytics.safeDestination(url) || url.split('?')[0]
-                            : url.split('?')[0],
-                });
-                if (/^https?:\/\//i.test(url)) {
-                    tmTrack('checkout_start', {
-                        destination_url:
-                            (window.TMAnalytics && window.TMAnalytics.safeDestination
-                                ? window.TMAnalytics.safeDestination(url)
-                                : '') || '',
-                        location_slug: ticketLocationSelect ? ticketLocationSelect.value : '',
-                        cta_id: 'ticket_panel_continue',
+                var bookingGateway = getTMBooking();
+                if (bookingGateway && typeof bookingGateway.navigate === 'function') {
+                    bookingGateway.navigate({
+                        source: 'ticket_panel_continue',
+                        ctaId: 'ticket_panel_continue',
+                        href: url,
+                        locationId: ticketLocationSelect ? ticketLocationSelect.value : '',
+                        event: e,
                     });
+                } else {
+                    tmTrack('booking_click', {
+                        cta_id: 'ticket_panel_continue',
+                        location_slug: ticketLocationSelect ? ticketLocationSelect.value : '',
+                        destination_url: url.split('?')[0],
+                    });
+                    window.location.href = url;
                 }
-                window.location.href = url;
             }
         });
     }
