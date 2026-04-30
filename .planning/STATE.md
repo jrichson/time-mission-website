@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 4 complete; next Phase 5
+stopped_at: Phase 5 context gathered; next plan-phase
 last_updated: "2026-04-29"
-last_activity: 2026-04-29 -- Phases 1–4 complete; Phase 5 not started
+last_activity: 2026-04-29 -- Phase 5 discuss-phase complete; 05-CONTEXT.md ready for planning
 progress:
   total_phases: 8
   completed_phases: 4
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-04-29)
 
 ## Current Position
 
-Phase: 05 (Booking & CTA Flow) — PLANNED — not started  
+Phase: 05 (Booking & CTA Flow) — CONTEXT READY — planning next  
 Plan: TBD (`ROADMAP.md`)  
-Status: Ready when Phase 5 plans are authored  
-Last activity: 2026-04-29 -- Roadmap updated: Phases 1–4 marked complete  
+Status: `.planning/phases/05-booking-cta-flow/05-CONTEXT.md` captured  
+Last activity: 2026-04-29 -- Phase 5 discuss-phase completed  
 
 Progress: [████░░░░░░] 50% (phases 1–4 of 8; 21 numbered plans delivered)
 
@@ -56,7 +56,7 @@ Progress: [████░░░░░░] 50% (phases 1–4 of 8; 21 numbered p
 **Recent trend:**
 
 - Completed waves: Phase 4 Wave 4 (`verify:phase4` gate + parity scripts)
-- Next: Phase 5 plans (TBD in `ROADMAP.md`)
+- Next: `/gsd-plan-phase 5` (research + PLAN.md from `05-CONTEXT.md`)
 
 *Updated after each plan completion*
 
@@ -85,4 +85,4 @@ Phase 5+ plans and execution as defined in roadmap.
 
 ## Session continuity
 
-Resume from: `.planning/ROADMAP.md` — Phase 5: Booking & CTA Flow
+Resume from: `.planning/phases/05-booking-cta-flow/05-CONTEXT.md` then `/gsd-plan-phase 5`
