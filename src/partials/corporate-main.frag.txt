@@ -10,7 +10,7 @@
             </h1>
             <p class="hero-subtitle">Get the team out of the conference room. Head-to-head missions, real-time scoring, and a session that turns team-building into something people actually want to show up for.</p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary btn-tickets">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
@@ -185,7 +185,7 @@
             <h2>Ready to <span class="highlight">level up</span> the next offsite?</h2>
             <p class="event-page-cta-subtitle">Tell us the date, headcount, and goals, we'll build a session around it.</p>
             <div class="event-page-cta-buttons">
-                <a href="#" class="btn-primary btn-tickets">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>

@@ -17,7 +17,7 @@
             </h1>
             <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive missions. Test your speed, strength, skill, and&nbsp;smarts.</p>
             <div class="hero-cta">
-                <a href="https://tickets.timemission.com/onlinecheckout/en-us/products" class="btn-primary btn-tickets">
+                <a href="https://tickets.timemission.com/onlinecheckout/en-us/products" class="btn-primary btn-tickets" data-tm-booking-trigger>
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -323,7 +323,7 @@
                 </a>
             </div>
             <div class="groups-cta-buttons">
-                <a href="#" class="btn-group-tickets btn-tickets">Book Now
+                <a href="#" class="btn-group-tickets btn-tickets" data-tm-booking-trigger>Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
                 <a href="/groups" class="btn-start-planning">Learn More
@@ -438,7 +438,7 @@
         <div class="cta-content reveal">
             <h2 class="cta-title">READY TO PLAY?</h2>
             <p class="cta-text">Book your adventure today and discover why Time Mission is the ultimate social gaming experience.</p>
-            <a href="https://tickets.timemission.com/onlinecheckout/en-us/products" class="btn-primary btn-tickets">
+            <a href="https://tickets.timemission.com/onlinecheckout/en-us/products" class="btn-primary btn-tickets" data-tm-booking-trigger>
                 Book Your Adventure
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                     <path d="M5 12h14M12 5l7 7-7 7"/>

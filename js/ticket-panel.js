@@ -48,17 +48,35 @@
     function getBookingUrl(id) {
         var booking = getTMBooking();
         if (booking && typeof booking.getDestination === 'function') {
-            return booking.getDestination({
+            var resolved = booking.getDestination({
                 kind: 'tickets',
                 locationId: id,
                 pageLocationSlug: pageLocation,
                 preferLocationPageFlow: !pageLocation,
             });
+            if (!pageLocation && resolved && /^\//.test(resolved) && resolved.indexOf('?') === -1) {
+                var contextFromBooking = getLocationContext();
+                var locFromBooking = contextFromBooking && typeof contextFromBooking.get === 'function'
+                    ? contextFromBooking.get(id)
+                    : null;
+                if (locFromBooking && locFromBooking.status === 'coming-soon') {
+                    return resolved + '?book=1';
+                }
+            }
+            return resolved;
         }
 
         var context = getLocationContext();
         if (!context || typeof context.resolveBookingUrl !== 'function') return '';
-        return context.resolveBookingUrl('tickets', id);
+        var fallbackResolved = context.resolveBookingUrl('tickets', id);
+        if (!pageLocation) {
+            var fallbackLoc = typeof context.get === 'function' ? context.get(id) : null;
+            var fallbackSlug = fallbackLoc && (fallbackLoc.slug || fallbackLoc.id);
+            if (fallbackSlug) {
+                return '/' + fallbackSlug + '?book=1';
+            }
+        }
+        return fallbackResolved;
     }
 
     function syncLocationOptions() {

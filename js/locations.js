@@ -48,27 +48,11 @@
         return prefix + 'data/locations.json';
     }
 
-    /** Format hours object into readable strings */
-    function formatHoursTable(hours) {
-        if (!hours) return '';
-        const dayLabels = {
-            mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday',
-            thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday'
-        };
-        const dayOrder = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-        let rows = '';
-        for (const day of dayOrder) {
-            if (hours[day]) {
-                rows += '<div class="footer-hours-row"><span>' + dayLabels[day] + '</span><span>' + hours[day].label + '</span></div>';
-            }
-        }
-        return rows;
-    }
-
-    /** Build full address string */
-    function formatAddress(addr) {
-        if (!addr) return '';
-        let parts = [];
+    function renderAddressLines(container, addr) {
+        if (!container) return;
+        container.textContent = '';
+        if (!addr) return;
+        const parts = [];
         if (addr.line1) parts.push(addr.line1);
         if (addr.line2) parts.push(addr.line2);
         let cityLine = '';
@@ -76,7 +60,33 @@
         if (addr.state) cityLine += ', ' + addr.state;
         if (addr.zip) cityLine += ' ' + addr.zip;
         if (cityLine) parts.push(cityLine);
-        return parts.join('<br>');
+        parts.forEach((part, idx) => {
+            container.appendChild(document.createTextNode(part));
+            if (idx < parts.length - 1) container.appendChild(document.createElement('br'));
+        });
+    }
+
+    function renderHoursTable(container, hours) {
+        if (!container) return;
+        container.textContent = '';
+        if (!hours) return;
+        const dayLabels = {
+            mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday',
+            thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday'
+        };
+        const dayOrder = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+        for (const day of dayOrder) {
+            if (!hours[day] || !hours[day].label) continue;
+            const row = document.createElement('div');
+            row.className = 'footer-hours-row';
+            const dayEl = document.createElement('span');
+            dayEl.textContent = dayLabels[day];
+            const timeEl = document.createElement('span');
+            timeEl.textContent = hours[day].label;
+            row.appendChild(dayEl);
+            row.appendChild(timeEl);
+            container.appendChild(row);
+        }
     }
 
     function normalizeLocationId(value) {
@@ -438,12 +448,12 @@
                 const changeEl = infoPanel.querySelector('.footer-loc-change');
 
                 if (nameEl) nameEl.textContent = loc.name || loc.shortName || '';
-                if (addrEl) addrEl.innerHTML = formatAddress(loc.address);
+                if (addrEl) renderAddressLines(addrEl, loc.address);
                 if (phoneEl && loc.contact && loc.contact.phone) {
                     phoneEl.textContent = loc.contact.phone;
                     phoneEl.href = 'tel:' + loc.contact.phone.replace(/[^\d+]/g, '');
                 }
-                if (hoursEl) hoursEl.innerHTML = formatHoursTable(loc.hours);
+                if (hoursEl) renderHoursTable(hoursEl, loc.hours);
                 if (mapEl) {
                     mapEl.href = loc.mapUrl || '#';
                     mapEl.style.display = loc.mapUrl ? '' : 'none';
