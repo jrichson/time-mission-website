@@ -14,6 +14,12 @@
     var ticketLocationSelect = document.getElementById('ticketLocation');
     var ticketBookBtn = document.getElementById('ticketBookBtn');
 
+    function tmTrack(key, payload) {
+        if (window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
+            window.TMAnalytics.track(key, payload);
+        }
+    }
+
     function normalizeLocation(value) {
         return (value || '').toLowerCase().trim().replace(/\s+/g, '-');
     }
@@ -76,7 +82,19 @@
             // Wait for page to fully load so the history entry is established,
             // then redirect — back button will return to this location page
             window.addEventListener('load', function () {
-                setTimeout(function () { window.location.href = autoUrl; }, 300);
+                setTimeout(function () {
+                    if (/^https?:\/\//i.test(autoUrl)) {
+                        tmTrack('checkout_start', {
+                            destination_url:
+                                (window.TMAnalytics && window.TMAnalytics.safeDestination
+                                    ? window.TMAnalytics.safeDestination(autoUrl)
+                                    : autoUrl) || autoUrl,
+                            location_slug: pageLocation,
+                            cta_id: 'book_param_auto',
+                        });
+                    }
+                    window.location.href = autoUrl;
+                }, 300);
             });
         }
     }
@@ -125,6 +143,9 @@
         ticketPanel.classList.add('active');
         ticketOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
+        tmTrack('ticket_panel_open', {
+            location_slug: ticketLocationSelect ? ticketLocationSelect.value : '',
+        });
     }
 
     // Close ticket panel
@@ -132,6 +153,9 @@
         ticketPanel.classList.remove('active');
         ticketOverlay.classList.remove('active');
         document.body.style.overflow = '';
+        tmTrack('ticket_panel_close', {
+            location_slug: ticketLocationSelect ? ticketLocationSelect.value : '',
+        });
     }
 
     // A URL is "direct" if it's an http(s) booking URL or a mailto/tel scheme —
@@ -148,9 +172,27 @@
         var href = btn.getAttribute('href');
         if (isDirectBookingUrl(href)) {
             e.preventDefault();
+            tmTrack('booking_click', {
+                cta_id: (btn.className && String(btn.className).split(' ')[0]) || 'booking_hero',
+                destination_url:
+                    window.TMAnalytics && window.TMAnalytics.safeDestination
+                        ? window.TMAnalytics.safeDestination(href) || ''
+                        : '',
+                location_slug: pageLocation || '',
+            });
             if (/^(mailto:|tel:)/i.test(href)) {
                 window.location.href = href;
             } else {
+                if (/^https?:\/\//i.test(href)) {
+                    tmTrack('checkout_start', {
+                        destination_url:
+                            (window.TMAnalytics && window.TMAnalytics.safeDestination
+                                ? window.TMAnalytics.safeDestination(href)
+                                : '') || '',
+                        location_slug: pageLocation || '',
+                        cta_id: 'direct_booking',
+                    });
+                }
                 // D-01: same-tab default for external checkout (Phase 5).
                 window.location.assign(href);
             }
@@ -179,7 +221,13 @@
     });
 
     // Update booking URL when location changes
-    ticketLocationSelect.addEventListener('change', syncBookingBtn);
+    ticketLocationSelect.addEventListener('change', function () {
+        syncBookingBtn();
+        tmTrack('location_select', {
+            location_slug: ticketLocationSelect.value,
+            cta_id: 'ticket_panel_dropdown',
+        });
+    });
 
     if (window.TM && window.TM.ready) {
         window.TM.ready.then(function () {
@@ -195,6 +243,24 @@
             e.preventDefault();
             var url = ticketBookBtn.getAttribute('href');
             if (url && url !== '#') {
+                tmTrack('booking_click', {
+                    cta_id: 'ticket_panel_continue',
+                    location_slug: ticketLocationSelect ? ticketLocationSelect.value : '',
+                    destination_url:
+                        window.TMAnalytics && window.TMAnalytics.safeDestination
+                            ? window.TMAnalytics.safeDestination(url) || url.split('?')[0]
+                            : url.split('?')[0],
+                });
+                if (/^https?:\/\//i.test(url)) {
+                    tmTrack('checkout_start', {
+                        destination_url:
+                            (window.TMAnalytics && window.TMAnalytics.safeDestination
+                                ? window.TMAnalytics.safeDestination(url)
+                                : '') || '',
+                        location_slug: ticketLocationSelect ? ticketLocationSelect.value : '',
+                        cta_id: 'ticket_panel_continue',
+                    });
+                }
                 window.location.href = url;
             }
         });

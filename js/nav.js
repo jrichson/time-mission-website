@@ -128,6 +128,14 @@
                     showLocationInfo(cityName);
                 }
 
+                const hrefPath = (link.getAttribute('href') || '').replace(/^\//, '').replace(/\.html$/, '');
+                if (hrefPath && window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
+                    window.TMAnalytics.track('location_select', {
+                        location_slug: hrefPath,
+                        cta_id: 'nav_location_overlay',
+                    });
+                }
+
                 // Desktop: save location and navigate to location page
                 if (!window.matchMedia('(max-width: 768px)').matches) {
                     // Let the default href navigation happen

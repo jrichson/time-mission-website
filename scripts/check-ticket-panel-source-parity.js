@@ -13,7 +13,7 @@ function extractPanel(html) {
   const m = html.indexOf(marker);
   if (m < 0) return null;
   const tail = html.slice(m);
-  const endEarly = tail.indexOf('<script defer src="/js/nav.js');
+  const endEarly = tail.search(/<script\b/i);
   if (endEarly !== -1) return tail.slice(0, endEarly);
   return null;
 }

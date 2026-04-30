@@ -1,4 +1,6 @@
 ---
+import analyticsLabels from '../data/site/analytics-labels.json';
+
 interface Props {
     title: string;
     description: string;
@@ -7,6 +9,7 @@ interface Props {
     twitterImage?: string;
 }
 const { title, description, canonicalPath, ogImage, twitterImage } = Astro.props;
+const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || '').trim();
 const baseUrl = 'https://timemission.com';
 const canonicalUrl =
     canonicalPath === '/' ? `${baseUrl}/` : `${baseUrl}${canonicalPath}`;
@@ -31,6 +34,48 @@ const tw = twitterImage ?? og;
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={tw} />
 <link rel="icon" type="image/png" href="/assets/logo/TM_Favicon.png" />
+<script is:inline define:vars={{ analyticsLabels }}>window.__TM_ANALYTICS_LABELS__ = analyticsLabels;</script>
+<script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    window.gtag = gtag;
+    gtag('consent', 'default', {
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        functionality_storage: 'granted',
+        security_storage: 'granted',
+        wait_for_update: 500,
+    });
+</script>
+{gtmContainerId ? (
+    <>
+        <script is:inline define:vars={{ gtmContainerId }}>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', gtmContainerId);
+        </script>
+        <noscript>
+            <iframe
+                src={`https://www.googletagmanager.com/ns.html?id=${gtmContainerId}`}
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"
+                title=""
+            />
+        </noscript>
+    </>
+) : null}
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preload" as="font" href="/assets/fonts/MonumentExtended-Regular.otf" type="font/otf" crossorigin />

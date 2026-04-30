@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Validated Data Foundation** (2026-04-29) - Durable business facts move into validated Astro-consumable data modules before page scaling.
 - [x] **Phase 4: Shared Components & Template Parity** (2026-04-29) - Shared Astro components and representative templates preserve the current visual and behavior contract.
 - [x] **Phase 5: Booking & CTA Flow** (2026-04-29) - Open-location, coming-soon, gift card, and ROLLER checkout intent paths work through validated destinations.
-- [ ] **Phase 6: Analytics, Consent & Forms Contract** - GTM, consent-aware event tracking, dedupe-ready payloads, and provider-flexible forms are launch-ready.
+- [x] **Phase 6: Analytics, Consent & Forms Contract** - GTM, consent-aware event tracking, dedupe-ready payloads, and provider-flexible forms are launch-ready.
 - [ ] **Phase 7: SEO, Schema & Local Search Baseline** - Metadata, sitemap, structured data, local SEO, and AI-search readiness are generated from route/data truth.
 - [ ] **Phase 8: Built-Output Verification & Cutover Readiness** - The Astro `dist/` output, preview deployment, smoke flows, visual parity, and rollback plan pass launch gates.
 

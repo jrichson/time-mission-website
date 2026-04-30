@@ -20,7 +20,8 @@
     "check:ticket-panel-parity": "node scripts/check-ticket-panel-parity.js",
     "check:ticket-panel-source-parity": "node scripts/check-ticket-panel-source-parity.js",
     "check:component-usage": "node scripts/check-component-usage.js",
-    "check": "npm run check:locations && npm run check:sitemap && npm run check:components && npm run check:booking && npm run check:a11y && npm run check:links && npm run check:routes && npm run check:site-data && npm run check:location-routes && npm run check:fallback && npm run check:component-usage",
+    "check:analytics": "node scripts/check-analytics-contract.js",
+    "check": "npm run check:locations && npm run check:sitemap && npm run check:components && npm run check:booking && npm run check:a11y && npm run check:links && npm run check:routes && npm run check:site-data && npm run check:location-routes && npm run check:fallback && npm run check:component-usage && npm run check:analytics",
     "test:smoke": "playwright test",
     "test": "npm run test:smoke",
     "verify": "npm run check && npm run test:smoke",
@@ -31,7 +32,8 @@
     "verify:phase2": "npm run check && npm run build:astro && npm run check:astro-dist && npm run check:routes -- --dist",
     "verify:phase3": "npm run check && npm run build:astro && npm run check:astro-dist && npm run check:routes -- --dist",
     "verify:phase4": "npm run check && npm run build:astro && npm run check:astro-dist && npm run check:routes -- --dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity",
-    "verify:phase5": "npm run check && npm run build:astro && npm run check:routes -- --dist && npm run check:astro-dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity && npm run test:smoke"
+    "verify:phase5": "npm run check && npm run build:astro && npm run check:routes -- --dist && npm run check:astro-dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity && npm run test:smoke",
+    "verify:phase6": "npm run check && npm run build:astro && npm run check:routes -- --dist && npm run check:astro-dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity && npm run test:smoke"
   },
   "repository": {
     "type": "git",

@@ -91,3 +91,15 @@ test('contact form uses configured submission endpoint', async ({ page }) => {
   await expect(form).toHaveAttribute('method', /post/i);
   await expect(form).toHaveAttribute('action', /\/contact-thank-you|formspree|netlify/i);
 });
+
+test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer (Phase 6)', async ({ page }) => {
+  await page.goto('/contact.html');
+  await page.locator('form.contact-form input#name').click();
+  const found = await page.evaluate(() => {
+    return (
+      Array.isArray(window.dataLayer) &&
+      window.dataLayer.some((entry) => entry && entry.event_name === 'CONTACT_FORM_FOCUS')
+    );
+  });
+  expect(found).toBe(true);
+});

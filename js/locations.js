@@ -138,6 +138,12 @@
             } catch (e) { /* localStorage unavailable */ }
             TM.updateDOM();
             document.dispatchEvent(new CustomEvent('tm:location-changed', { detail: loc }));
+            if (window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
+                window.TMAnalytics.track('location_select', {
+                    location_slug: loc.slug || loc.id,
+                    region: loc.region || '',
+                });
+            }
         },
 
         /** Clear selected location */

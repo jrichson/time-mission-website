@@ -51,9 +51,17 @@ for (const f of mandatoryFiles) {
 }
 
 for (const d of mandatoryDirs) {
-  const src = path.join(root, d);
-  const dest = path.join(publicDir, d);
-  fs.cpSync(src, dest, { recursive: true });
+    const src = path.join(root, d);
+    const dest = path.join(publicDir, d);
+    fs.cpSync(src, dest, { recursive: true });
+}
+
+const analyticsLabelsSrc = path.join(root, 'src', 'data', 'site', 'analytics-labels.json');
+const analyticsLabelsPublic = path.join(publicDir, 'data', 'analytics-labels.json');
+if (fs.existsSync(analyticsLabelsSrc)) {
+    fs.mkdirSync(path.dirname(analyticsLabelsPublic), { recursive: true });
+    fs.copyFileSync(analyticsLabelsSrc, analyticsLabelsPublic);
+    fs.copyFileSync(analyticsLabelsSrc, path.join(root, 'data', 'analytics-labels.json'));
 }
 
 const routesPath = path.join(root, 'src', 'data', 'routes.json');
@@ -62,15 +70,16 @@ const routes = routesJson.routes || [];
 
 /** Routes whose HTML is produced by Astro `src/pages/*.astro` (Phase 4+). Skip copying legacy stubs into `public/`. */
 const ASTRO_RENDERED_OUTPUT_FILES = new Set([
-  'index.html',
-  'about.html',
-  'faq.html',
-  'contact.html',
-  'privacy.html',
-  'locations.html',
-  'groups/corporate.html',
-  'philadelphia.html',
-  'houston.html',
+    'index.html',
+    'about.html',
+    'faq.html',
+    'contact.html',
+    'contact-thank-you.html',
+    'privacy.html',
+    'locations.html',
+    'groups/corporate.html',
+    'philadelphia.html',
+    'houston.html',
 ]);
 
 /** Remove stale `public/` HTML from prior syncs so Astro output is not shadowed */

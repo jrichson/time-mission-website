@@ -24,8 +24,12 @@ if (!pageFiles.length) errors.push('no src/pages/**/*.astro files found');
 
 const importLayoutRe = /import\s+SiteLayout\s+from\s+['"][^'"]+SiteLayout\.astro['"]/;
 
+/** Pages that intentionally omit SiteLayout (parity with legacy minimal HTML). */
+const standalonePages = new Set([path.join('src', 'pages', 'contact-thank-you.astro')]);
+
 for (const file of pageFiles) {
   const rel = path.relative(root, file);
+  if (standalonePages.has(rel)) continue;
   const text = fs.readFileSync(file, 'utf8');
   if (!importLayoutRe.test(text)) {
     errors.push(`${rel}: missing \`import SiteLayout from "...SiteLayout.astro"\``);
