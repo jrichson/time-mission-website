@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 4 context gathered
-last_updated: "2026-04-29T22:06:28.526Z"
-last_activity: 2026-04-29 -- Phase 3 planning complete
+stopped_at: Phase 4 complete; next Phase 5
+last_updated: "2026-04-29"
+last_activity: 2026-04-29 -- Phases 1–4 complete; Phase 5 not started
 progress:
   total_phases: 8
-  completed_phases: 1
-  total_plans: 16
-  completed_plans: 6
-  percent: 38
+  completed_phases: 4
+  total_plans: 21
+  completed_plans: 21
+  percent: 50
 ---
 
 # Project State
@@ -21,42 +21,42 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-29)
 
 **Core value:** The migrated site must preserve the existing customer-facing experience and conversion paths while making the site easier to maintain, measure, optimize, and scale.
-**Current focus:** Phase 04 — shared-components-template-parity
+**Current focus:** Phase 05 — Booking & CTA Flow
 
 ## Current Position
 
-Phase: 04 (shared-components-template-parity) — PLANNING READY
-Plan: Phase 4 discussion complete; awaiting plan-phase
-Status: Context gathered (`04-CONTEXT.md`)
-Last activity: 2026-04-29 -- Phase 4 discuss-phase (--auto)
+Phase: 05 (Booking & CTA Flow) — PLANNED — not started  
+Plan: TBD (`ROADMAP.md`)  
+Status: Ready when Phase 5 plans are authored  
+Last activity: 2026-04-29 -- Roadmap updated: Phases 1–4 marked complete  
 
-Progress: [██░░░░░░░░] 12%
+Progress: [████░░░░░░] 50% (phases 1–4 of 8; 21 numbered plans delivered)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 3
+- Total plans completed: 21 (Phases 1–4)
 - Average duration: N/A
-- Total execution time: 0.0 hours
+- Total execution time: N/A
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Static Baseline & Rollback Guardrails | 3 | - | - |
-| 2. Route Registry & Clean URL Contract | 0 | TBD | N/A |
-| 3. Validated Data Foundation | 0 | TBD | N/A |
-| 4. Shared Components & Template Parity | 0 | TBD | N/A |
-| 5. Booking & CTA Flow | 0 | TBD | N/A |
-| 6. Analytics, Consent & Forms Contract | 0 | TBD | N/A |
-| 7. SEO, Schema & Local Search Baseline | 0 | TBD | N/A |
-| 8. Built-Output Verification & Cutover Readiness | 0 | TBD | N/A |
+| 1. Static Baseline & Rollback Guardrails | 3 | Complete | — |
+| 2. Route Registry & Clean URL Contract | 9 | Complete | — |
+| 3. Validated Data Foundation | 4 | Complete | — |
+| 4. Shared Components & Template Parity | 5 | Complete | — |
+| 5. Booking & CTA Flow | 0/TBD | Not started | N/A |
+| 6. Analytics, Consent & Forms Contract | 0/TBD | Not started | N/A |
+| 7. SEO, Schema & Local Search Baseline | 0/TBD | Not started | N/A |
+| 8. Built-Output Verification & Cutover Readiness | 0/TBD | Not started | N/A |
 
-**Recent Trend:**
+**Recent trend:**
 
-- Last 5 plans: 01-PLAN, 02-PLAN, 03-PLAN (Phase 1)
-- Trend: N/A
+- Completed waves: Phase 4 Wave 4 (`verify:phase4` gate + parity scripts)
+- Next: Phase 5 plans (TBD in `ROADMAP.md`)
 
 *Updated after each plan completion*
 
@@ -73,18 +73,16 @@ Recent decisions affecting current work:
 - ROLLER remains checkout; outbound booking intent is required, purchase validation depends on available ROLLER/GTM access.
 - Old static site must remain deployable until Astro launch is verified.
 
-### Pending Todos
+### Pending todos
 
-None yet.
+Phase 5+ plans and execution as defined in roadmap.
 
-### Blockers/Concerns
+### Blockers / concerns
 
 - ROLLER purchase validation depends on Venue Manager or playground access.
 - Consent/CMP implementation details and form backend/provider remain open planning decisions.
 - Cloudflare preview and rollback assumptions must be validated against the real hosting setup before cutover.
 
-## Session Continuity
+## Session continuity
 
-Last session: 2026-04-29T22:06:28.522Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-shared-components-template-parity/04-CONTEXT.md
+Resume from: `.planning/ROADMAP.md` — Phase 5: Booking & CTA Flow
