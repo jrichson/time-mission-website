@@ -86,6 +86,36 @@ test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer (Phase 6)', asyn
   expect(found).toBe(true);
 });
 
+test('startup tagging config exposes consent profile by route type', async ({ page }) => {
+  await page.goto('/houston');
+  await page.waitForFunction(() => Array.isArray(window.dataLayer) && window.dataLayer.length > 0);
+  const usProfile = await page.evaluate(() => {
+    return window.dataLayer.find((entry) => entry && entry.event === 'tm_tagging_config')?.consent_profile || '';
+  });
+  expect(usProfile).toBe('us_open');
+
+  await page.goto('/faq');
+  await page.waitForFunction(() => Array.isArray(window.dataLayer) && window.dataLayer.length > 0);
+  const globalProfile = await page.evaluate(() => {
+    return window.dataLayer.find((entry) => entry && entry.event === 'tm_tagging_config')?.consent_profile || '';
+  });
+  expect(globalProfile).toBe('global_strict');
+});
+
+test('strict profiles do not persist paid attribution before consent grant', async ({ page }) => {
+  await page.goto('/faq?utm_source=google&utm_campaign=spring');
+  await page.waitForFunction(() => typeof window.TMConsent === 'object');
+  const raw = await page.evaluate(() => localStorage.getItem('tm_attribution_v1'));
+  expect(raw).toBeNull();
+
+  await page.evaluate(() => {
+    window.TMConsent.update({ ad_storage: 'granted' });
+  });
+  await page.waitForTimeout(50);
+  const afterGrant = await page.evaluate(() => localStorage.getItem('tm_attribution_v1'));
+  expect(afterGrant).not.toBeNull();
+});
+
 test('legacy .html URLs are served or redirected (preview vs production redirects)', async ({ request }) => {
   // Cloudflare `_redirects` maps `/faq.html` -> `/faq` (301). `astro preview` may serve
   // the built HTML at `/faq.html` with 200. Either behavior keeps legacy links working.

@@ -1,6 +1,25 @@
 <script is:inline>
 
         // ==========================================
+        // ADAPTIVE HERO VIDEO LOADING
+        // Reduces network cost on constrained devices/connections.
+        // ==========================================
+        const heroVideoEl = document.getElementById('heroVideo');
+        if (heroVideoEl) {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const saveData = !!(conn && conn.saveData);
+            const slowNetwork = !!(conn && /(^|[^a-z])(slow-2g|2g|3g)($|[^a-z])/i.test(conn.effectiveType || ''));
+
+            if (prefersReducedMotion || saveData || slowNetwork) {
+                heroVideoEl.removeAttribute('autoplay');
+                heroVideoEl.removeAttribute('loop');
+                heroVideoEl.preload = 'none';
+                heroVideoEl.pause();
+            }
+        }
+
+        // ==========================================
         // ROTATING TYPEWRITER TAGLINES
         // Changes every 4 seconds with delete/retype effect
         // ==========================================

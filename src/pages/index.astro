@@ -13,11 +13,11 @@ const ld = serializeGraph(buildHomeGraph());
     canonicalPath="/"
 >
     <Fragment slot="head-extra">
-        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" />
-        <link rel="preload" as="font" href="/assets/fonts/MonumentExtended-Regular.otf" type="font/otf" crossorigin />
-        <link rel="preload" as="font" href="/assets/fonts/MonumentExtended-Ultrabold.otf" type="font/otf" crossorigin />
-        <link rel="stylesheet" href="/css/footer.css?v=2" />
-        <link rel="stylesheet" href="/css/ticket-panel.css" />
+        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" fetchpriority="high" />
+        <link rel="preload" as="style" href="/css/footer.css?v=2" onload="this.onload=null;this.rel='stylesheet'" />
+        <link rel="preload" as="style" href="/css/ticket-panel.css" onload="this.onload=null;this.rel='stylesheet'" />
+        <noscript><link rel="stylesheet" href="/css/footer.css?v=2" /></noscript>
+        <noscript><link rel="stylesheet" href="/css/ticket-panel.css" /></noscript>
     </Fragment>
     <Fragment slot="page-style">
         <style is:global set:html={indexCss}></style>

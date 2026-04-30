@@ -1,6 +1,7 @@
 ---
 import analyticsLabels from '../data/site/analytics-labels.json';
 import { getSeoForRoute } from '../lib/seo/catalog';
+import locationsData from '../../data/locations.json';
 
 interface Props {
     canonicalPath: string;
@@ -29,6 +30,49 @@ const tw = twOverride ?? seo.twitterImage;
 const robotsValue = robotsOverride ?? seo.robots;
 
 const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || '').trim();
+const sgtmContainerUrl = String(import.meta.env.PUBLIC_SGTM_CONTAINER_URL || '').trim().replace(/\/+$/, '');
+const sgtmCollectPath = String(import.meta.env.PUBLIC_SGTM_COLLECT_PATH || '/g/collect').trim();
+
+type ConsentProfile = 'eu_strict' | 'us_open' | 'global_strict';
+type ConsentDefaults = {
+    ad_storage: 'granted' | 'denied';
+    analytics_storage: 'granted' | 'denied';
+    ad_user_data: 'granted' | 'denied';
+    ad_personalization: 'granted' | 'denied';
+    functionality_storage: 'granted';
+    security_storage: 'granted';
+    wait_for_update: number;
+};
+
+const locationEntries = ((locationsData as { locations?: Array<{ slug?: string; region?: string }> }).locations || []);
+const pathRegionMap = new Map<string, string>();
+for (const entry of locationEntries) {
+    if (!entry?.slug || !entry?.region) continue;
+    pathRegionMap.set(`/${entry.slug}`, String(entry.region));
+}
+const currentRegion = pathRegionMap.get(canonicalPath) || '';
+const consentProfile: ConsentProfile =
+    currentRegion === 'europe' ? 'eu_strict' : currentRegion === 'us' ? 'us_open' : 'global_strict';
+const consentDefaults: ConsentDefaults =
+    consentProfile === 'us_open'
+        ? {
+              ad_storage: 'granted',
+              analytics_storage: 'granted',
+              ad_user_data: 'granted',
+              ad_personalization: 'granted',
+              functionality_storage: 'granted',
+              security_storage: 'granted',
+              wait_for_update: 500,
+          }
+        : {
+              ad_storage: 'denied',
+              analytics_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied',
+              functionality_storage: 'granted',
+              security_storage: 'granted',
+              wait_for_update: 500,
+          };
 ---
 
 <meta charset="UTF-8" />
@@ -50,20 +94,29 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || '').tri
 <meta name="twitter:image" content={tw} />
 <link rel="icon" type="image/png" href="/assets/logo/TM_Favicon.png" />
 <script is:inline define:vars={{ analyticsLabels }}>window.__TM_ANALYTICS_LABELS__ = analyticsLabels;</script>
-<script is:inline>
+<script is:inline define:vars={{ gtmContainerId, sgtmContainerUrl, sgtmCollectPath, consentDefaults, consentProfile }}>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
         dataLayer.push(arguments);
     }
     window.gtag = gtag;
-    gtag('consent', 'default', {
-        ad_storage: 'denied',
-        analytics_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        functionality_storage: 'granted',
-        security_storage: 'granted',
-        wait_for_update: 500,
+    window.__TM_CONSENT_STATE__ = Object.assign({}, consentDefaults);
+    gtag('consent', 'default', consentDefaults);
+    // Optional server-side GTM metadata for container-side routing decisions.
+    window.__TM_TAGGING_CONFIG__ = {
+        web_container_id: gtmContainerId || '',
+        sgtm_container_url: sgtmContainerUrl || '',
+        sgtm_collect_path: sgtmCollectPath || '/g/collect',
+        mode: sgtmContainerUrl ? 'web_and_sgtm' : 'web_only',
+        consent_profile: consentProfile,
+    };
+    dataLayer.push({
+        event: 'tm_tagging_config',
+        tagging_mode: window.__TM_TAGGING_CONFIG__.mode,
+        tagging_server_url: window.__TM_TAGGING_CONFIG__.sgtm_container_url,
+        tagging_server_collect_path: window.__TM_TAGGING_CONFIG__.sgtm_collect_path,
+        web_gtm_container_id: window.__TM_TAGGING_CONFIG__.web_container_id,
+        consent_profile: window.__TM_TAGGING_CONFIG__.consent_profile,
     });
 </script>
 {gtmContainerId ? (
@@ -86,7 +139,8 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || '').tri
                 height="0"
                 width="0"
                 style="display:none;visibility:hidden"
-                title=""
+                aria-hidden="true"
+                tabindex="-1"
             />
         </noscript>
     </>
@@ -96,9 +150,17 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || '').tri
 <link rel="preload" as="font" href="/assets/fonts/MonumentExtended-Regular.otf" type="font/otf" crossorigin />
 <link rel="preload" as="font" href="/assets/fonts/MonumentExtended-Ultrabold.otf" type="font/otf" crossorigin />
 <link
+    rel="preload"
+    as="style"
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet"
+    onload="this.onload=null;this.rel='stylesheet'"
 />
+<noscript>
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap"
+    />
+</noscript>
 <link rel="stylesheet" href="/css/variables.css" />
 <link rel="stylesheet" href="/css/base.css" />
 <link rel="stylesheet" href="/css/nav.css?v=17" />
