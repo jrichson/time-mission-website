@@ -23,8 +23,25 @@ if (!ticketPanel.includes('window.TM.ready')) {
   errors.push('js/ticket-panel.js should wait for window.TM.ready before hydrating location-driven options');
 }
 
-if (!rollerCheckout.includes('loc.rollerCheckoutUrl')) {
-  errors.push('js/roller-checkout.js should resolve Roller URLs from location.rollerCheckoutUrl');
+if (!ticketPanel.includes('resolveOpenCheckoutUrl')) {
+  errors.push('js/ticket-panel.js must define resolveOpenCheckoutUrl for Phase 5 checkout precedence');
+}
+
+if (!ticketPanel.match(/function resolveOpenCheckoutUrl[\s\S]*?rollerCheckoutUrl[\s\S]*?bookingUrl/)) {
+  errors.push('resolveOpenCheckoutUrl must test rollerCheckoutUrl before bookingUrl');
+}
+
+// BOOK-03: roller-checkout.js is a loadable no-op stub; iframe CDN must not ship by default.
+if (rollerCheckout.includes('checkout_iframe.js')) {
+  errors.push('js/roller-checkout.js must not load Roller iframe CDN (BOOK-03)');
+}
+
+if (rollerCheckout.includes('RollerCheckout')) {
+  errors.push('js/roller-checkout.js must not reference RollerCheckout (BOOK-03)');
+}
+
+if (rollerCheckout.includes('cdn.rollerdigital.com')) {
+  errors.push('js/roller-checkout.js must not reference cdn.rollerdigital.com (BOOK-03)');
 }
 
 if (errors.length) {

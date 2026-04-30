@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Route Registry & Clean URL Contract** (2026-04-29) - Clean extensionless URLs, legacy redirects, and route-derived public references are enforced from one contract.
 - [x] **Phase 3: Validated Data Foundation** (2026-04-29) - Durable business facts move into validated Astro-consumable data modules before page scaling.
 - [x] **Phase 4: Shared Components & Template Parity** (2026-04-29) - Shared Astro components and representative templates preserve the current visual and behavior contract.
-- [ ] **Phase 5: Booking & CTA Flow** - Open-location, coming-soon, gift card, and ROLLER checkout intent paths work through validated destinations. *(4 plans: 05-01–05-04 — ready to execute)*
+- [x] **Phase 5: Booking & CTA Flow** (2026-04-29) - Open-location, coming-soon, gift card, and ROLLER checkout intent paths work through validated destinations.
 - [ ] **Phase 6: Analytics, Consent & Forms Contract** - GTM, consent-aware event tracking, dedupe-ready payloads, and provider-flexible forms are launch-ready.
 - [ ] **Phase 7: SEO, Schema & Local Search Baseline** - Metadata, sitemap, structured data, local SEO, and AI-search readiness are generated from route/data truth.
 - [ ] **Phase 8: Built-Output Verification & Cutover Readiness** - The Astro `dist/` output, preview deployment, smoke flows, visual parity, and rollback plan pass launch gates.
@@ -221,7 +221,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 2. Route Registry & Clean URL Contract | 9/9 | Complete | 2026-04-29 |
 | 3. Validated Data Foundation | 4/4 | Complete | 2026-04-29 |
 | 4. Shared Components & Template Parity | 5/5 | Complete | 2026-04-29 |
-| 5. Booking & CTA Flow | 0/4 | Planned | - |
+| 5. Booking & CTA Flow | 4/4 | Complete | 2026-04-29 |
 | 6. Analytics, Consent & Forms Contract | 0/TBD | Not started | - |
 | 7. SEO, Schema & Local Search Baseline | 0/TBD | Not started | - |
 | 8. Built-Output Verification & Cutover Readiness | 0/TBD | Not started | - |
