@@ -79,6 +79,100 @@
         return parts.join('<br>');
     }
 
+    function normalizeLocationId(value) {
+        return String(value || '').toLowerCase().trim().replace(/\s+/g, '-');
+    }
+
+    function resolveLocationRef(id) {
+        if (!id) return TM.current;
+        const normalized = normalizeLocationId(id);
+        if (typeof TM.get === 'function') {
+            const exact = TM.get(normalized);
+            if (exact) return exact;
+        }
+        return TM.locations.find((loc) => {
+            return normalizeLocationId(loc.id) === normalized
+                || normalizeLocationId(loc.slug) === normalized
+                || normalizeLocationId(loc.shortName) === normalized
+                || normalizeLocationId(loc.name) === normalized;
+        }) || null;
+    }
+
+    function getMapQuery(loc) {
+        if (loc && loc.address) {
+            const parts = [];
+            if (loc.address.line1) parts.push(loc.address.line1);
+            if (loc.address.line2) parts.push(loc.address.line2);
+            if (loc.address.city) parts.push(loc.address.city);
+            if (loc.address.state) parts.push(loc.address.state);
+            if (loc.address.zip) parts.push(loc.address.zip);
+            if (loc.address.country) parts.push(loc.address.country);
+            if (parts.length) return encodeURIComponent(parts.join(' '));
+        }
+        if (loc && loc.mapUrl) {
+            const match = String(loc.mapUrl).match(/[?&]q=([^&]+)/i);
+            if (match && match[1]) return match[1];
+        }
+        return '';
+    }
+
+    function getInfoPanelView(id) {
+        const loc = resolveLocationRef(id);
+        if (!loc) return null;
+        const slug = loc.slug || loc.id || normalizeLocationId(id);
+        const mapQuery = getMapQuery(loc);
+        const pageUrl = slug ? '/' + slug : '/';
+        const comingSoon = loc.status === 'coming-soon';
+        const addressText = (function () {
+            if (!loc.address) return '';
+            const parts = [];
+            if (loc.address.line1) parts.push(loc.address.line1);
+            if (loc.address.line2) parts.push(loc.address.line2);
+            let cityLine = '';
+            if (loc.address.city) cityLine += loc.address.city;
+            if (loc.address.state) cityLine += (cityLine ? ', ' : '') + loc.address.state;
+            if (loc.address.zip) cityLine += (cityLine ? ' ' : '') + loc.address.zip;
+            if (cityLine) parts.push(cityLine);
+            return parts.join('\n');
+        })();
+        const hoursText = (function () {
+            if (!loc.hours) return comingSoon ? 'Coming Soon' : '';
+            const labels = { mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun' };
+            const order = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+            const lines = [];
+            order.forEach((day) => {
+                if (loc.hours[day] && loc.hours[day].label) {
+                    lines.push(labels[day] + ': ' + loc.hours[day].label);
+                }
+            });
+            return lines.join('\n');
+        })();
+        return {
+            name: loc.shortName || loc.name || '',
+            addressText: addressText,
+            phone: (loc.contact && loc.contact.phone) || '',
+            hoursText: hoursText,
+            pageUrl: pageUrl,
+            bookUrl: comingSoon ? pageUrl : pageUrl + '?book=1',
+            bookLabel: comingSoon ? 'Sign Up' : 'Book Now',
+            mapQuery: mapQuery,
+            mapDirectionsUrl: mapQuery ? 'https://www.google.com/maps/dir/?api=1&destination=' + mapQuery : '',
+            mapEmbedUrl: mapQuery ? 'https://www.google.com/maps?q=' + mapQuery + '&output=embed&z=12' : '',
+            comingSoon: comingSoon,
+        };
+    }
+
+    function listTicketOptions() {
+        const source = TM.locations.length ? TM.locations : Object.keys(FALLBACK).map((id) => {
+            return Object.assign({ id: id, slug: id }, FALLBACK[id]);
+        });
+        return source.map((loc) => ({
+            value: loc.id,
+            label: (loc.shortName || loc.name || loc.id) + (loc.status === 'coming-soon' ? ' (Coming Soon)' : ''),
+            status: loc.status || 'open',
+        }));
+    }
+
     let _readyResolve;
     const _readyPromise = new Promise(resolve => { _readyResolve = resolve; });
 
@@ -128,6 +222,7 @@
             // If data hasn't loaded yet, queue the selection
             if (TM.locations.length === 0) {
                 TM._pendingSelect = id;
+                try { localStorage.setItem(STORAGE_KEY, id); } catch (e) {}
                 return;
             }
             const loc = TM.get(id);
@@ -434,6 +529,60 @@
     }
 
     // Expose globally
+    const CHANGE_EVENT = 'tm:location-changed';
+    const LocationContext = {
+        ready: TM.ready,
+        async init() {
+            await TM.ready;
+        },
+        getCurrent() {
+            return TM.current;
+        },
+        getAll() {
+            return Array.isArray(TM.locations) ? TM.locations.slice() : [];
+        },
+        get(id) {
+            return typeof TM.get === 'function' ? TM.get(id) : null;
+        },
+        listTicketOptions() {
+            return listTicketOptions();
+        },
+        getInfoPanelView(id) {
+            return getInfoPanelView(id);
+        },
+        select(id) {
+            if (typeof TM.select === 'function') TM.select(id);
+        },
+        clear() {
+            if (typeof TM.clear === 'function') TM.clear();
+        },
+        resolveBookingUrl(kind, id) {
+            const loc = id ? (typeof TM.get === 'function' ? TM.get(id) : null) : TM.current;
+            if (!loc) return '';
+            const bookingKind = String(kind || 'tickets').toLowerCase();
+            if (bookingKind === 'gift-cards' || bookingKind === 'giftcards') {
+                return loc.giftCardUrl || '';
+            }
+            if (bookingKind === 'groups') {
+                return loc.groupsUrl || '';
+            }
+            if (loc.status === 'coming-soon') {
+                return '/' + (loc.slug || loc.id || '');
+            }
+            return loc.rollerCheckoutUrl || loc.bookingUrl || '';
+        },
+        subscribe(listener) {
+            if (typeof listener !== 'function') return function () {};
+            const handler = function (event) {
+                listener(event.detail || null);
+            };
+            document.addEventListener(CHANGE_EVENT, handler);
+            return function unsubscribe() {
+                document.removeEventListener(CHANGE_EVENT, handler);
+            };
+        }
+    };
+    window.LocationContext = LocationContext;
     window.TM = TM;
 
     if (document.readyState === 'loading') {
