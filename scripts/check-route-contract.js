@@ -2,6 +2,12 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const {
+  loadRouteRegistry,
+  compileRouteContract,
+  verifySitemapXml,
+} = require('./lib/route-artifacts');
+const { normalizeCanonicalPath } = require('./lib/validation-core');
 
 const root = path.resolve(__dirname, '..');
 
@@ -96,22 +102,11 @@ function parseArgs(argv) {
 }
 
 function readRegistry() {
-  const registryPath = path.join(root, 'src/data/routes.json');
-  const raw = fs.readFileSync(registryPath, 'utf8');
-  return JSON.parse(raw);
+  return loadRouteRegistry(root);
 }
 
 function normalizePath(p) {
-  if (!p || typeof p !== 'string') return '';
-  let s = stripQueryAndHash(p.trim());
-  if (s.startsWith('https://timemission.com')) {
-    s = s.slice('https://timemission.com'.length);
-  } else if (s.startsWith('http://timemission.com')) {
-    s = s.slice('http://timemission.com'.length);
-  }
-  if (!s.startsWith('/')) s = `/${s}`;
-  if (s.length > 1 && s.endsWith('/')) s = s.slice(0, -1);
-  return s;
+  return normalizeCanonicalPath(p);
 }
 
 function stripQueryAndHash(value) {
@@ -261,34 +256,11 @@ function validateSitemap(registry, errors) {
     return;
   }
   const xml = fs.readFileSync(sitemapPath, 'utf8');
-  const locRe = /<loc>([^<]+)<\/loc>/g;
-  const locs = [...xml.matchAll(locRe)].map((m) => m[1]);
-
-  if (locs.some((u) => u.includes('.html'))) {
-    errors.push('sitemap.xml contains .html URLs');
-  }
-
-  const expected = new Set();
-  for (const route of registry.routes) {
-    if (!route.sitemap) continue;
-    const url =
-      route.canonicalPath === '/'
-        ? `${registry.baseUrl}/`
-        : `${registry.baseUrl}${route.canonicalPath}`;
-    expected.add(url);
-  }
-
-  for (const url of locs) {
-    if (!expected.has(url)) {
-      errors.push(`unexpected or unknown sitemap loc ${url}`);
-    }
-  }
-
-  for (const url of expected) {
-    if (!locs.includes(url)) {
-      errors.push(`missing sitemap loc ${url}`);
-    }
-  }
+  const contract = compileRouteContract(registry);
+  const result = verifySitemapXml(xml, contract);
+  result.errors.forEach((error) => {
+    errors.push(error.replace(/^Sitemap\s/, 'sitemap '));
+  });
 }
 
 function resolveScopeFiles(scope) {
