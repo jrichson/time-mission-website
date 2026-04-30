@@ -240,6 +240,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 3. Validated Data Foundation | 4/4 | Complete | 2026-04-29 |
 | 4. Shared Components & Template Parity | 5/5 | Complete | 2026-04-29 |
 | 5. Booking & CTA Flow | 4/4 | Complete | 2026-04-29 |
-| 6. Analytics, Consent & Forms Contract | 0/TBD | Not started | - |
+| 6. Analytics, Consent & Forms Contract | 5/5 | Complete | 2026-04-29 |
 | 7. SEO, Schema & Local Search Baseline | 5/5 | Complete | 2026-04-29 |
 | 8. Built-Output Verification & Cutover Readiness | 0/TBD | Not started | - |
