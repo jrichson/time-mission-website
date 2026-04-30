@@ -8,28 +8,38 @@ import TicketPanel from '../components/TicketPanel.astro';
 import SiteScripts from '../components/SiteScripts.astro';
 
 interface Props {
-    title: string;
-    description: string;
     canonicalPath: string;
+    title?: string;
+    description?: string;
     ogImage?: string;
     twitterImage?: string;
+    robots?: string;
     bodyDataLocation?: string;
     bodyClass?: string;
 }
 
-const { title, description, canonicalPath, ogImage, twitterImage, bodyDataLocation, bodyClass } =
-    Astro.props;
+const {
+    title,
+    description,
+    canonicalPath,
+    ogImage,
+    twitterImage,
+    robots,
+    bodyDataLocation,
+    bodyClass,
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <SiteHead
+            canonicalPath={canonicalPath}
             title={title}
             description={description}
-            canonicalPath={canonicalPath}
             ogImage={ogImage}
             twitterImage={twitterImage}
+            robots={robots}
         />
         <slot name="head-extra" />
         <slot name="page-style" />
