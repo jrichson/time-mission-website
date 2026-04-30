@@ -19,20 +19,17 @@ Then open `http://127.0.0.1:4173`.
 
 ## Verification
 
-`npm run verify` runs:
+**Launch gate:** `npm run verify` builds Astro (`npm run build:astro`), runs the full static check suite (`npm run check`), validates **built** output (routes, dist manifest, SEO/schema/sitemap/robots/llms/NAP parity, ticket-panel parity), then runs Playwright smoke tests. See [docs/verification-pipeline.md](docs/verification-pipeline.md) for the ordered steps and **VER-01 / VER-02** mapping.
 
-- Location data contract checks for `data/locations.json`.
-- Sitemap coverage checks for runtime pages.
-- Ticket panel component drift checks.
-- Booking architecture checks to keep booking URLs centralized in location data.
-- Accessibility baseline checks for shared skip-link/dialog enhancements.
-- Internal link checks for local pages and assets.
-- Playwright smoke tests for booking, location selection, FAQ controls, and contact form setup.
-
-Run targeted checks with:
+Quick **source-only** iteration (no build, no dist validators):
 
 ```bash
-npm run check
+npm run verify:sources
+```
+
+Run smoke tests alone (expects you to have built and to match your Playwright `webServer` config):
+
+```bash
 npm run test:smoke
 ```
 

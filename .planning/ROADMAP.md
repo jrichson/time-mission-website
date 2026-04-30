@@ -176,7 +176,21 @@ Wave summary:
   3. Visitor-critical flows pass Playwright coverage for homepage loading, location persistence, booking flow, outbound booking interception, FAQ keyboard behavior, contact form behavior, and clean URL/legacy redirect behavior.
   4. Site operator can review visual regression or screenshot comparison for representative templates before cutover.
   5. Cloudflare preview validation covers headers, redirects, clean URLs, legacy redirects, sitemap, robots, 404, schema, assets, analytics debug behavior, ROLLER links, and rollback triggers.
-**Plans**: TBD
+**Plans**: 5 (`08-01-PLAN.md` canonical verify + pipeline doc, `08-02-PLAN.md` Playwright against built preview + clean URLs, `08-03-PLAN.md` visual snapshots, `08-04-PLAN.md` Cloudflare preview checklist, `08-05-PLAN.md` rollback VER-06 alignment + roadmap/state + `verify:phase8`)
+
+Plans:
+- [x] 08-01-PLAN.md — **`npm run verify` = build + full dist validator chain** + `docs/verification-pipeline.md` (VER-01, VER-02)
+- [ ] 08-02-PLAN.md — Playwright **`astro preview` / dist** server + smoke URLs aligned to canonical routes + legacy coverage (VER-03)
+- [ ] 08-03-PLAN.md — Representative **screenshot baselines** via Playwright (VER-04)
+- [ ] 08-04-PLAN.md — **`docs/cloudflare-preview-validation.md`** + rollback-runbook cross-links (VER-05)
+- [ ] 08-05-PLAN.md — **VER-06 rollback triggers** explicit + `.planning/ROADMAP.md` / `STATE.md` + `verify:phase8` alias
+
+Wave summary:
+- Wave 1: 08-01 — Canonical verify semantics (fixes VER-01 gap vs legacy `verify`)
+- Wave 2: 08-02 — Smoke tests target shipped output (VER-03)
+- Wave 3: 08-03 — Visual regression baselines (VER-04)
+- Wave 4: 08-04 — Operator Cloudflare rehearsal checklist (VER-05)
+- Wave 5: 08-05 — Rollback trigger alignment + milestone bookkeeping (VER-06)
 
 ## Coverage
 
@@ -242,4 +256,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 5. Booking & CTA Flow | 4/4 | Complete | 2026-04-29 |
 | 6. Analytics, Consent & Forms Contract | 5/5 | Complete | 2026-04-29 |
 | 7. SEO, Schema & Local Search Baseline | 5/5 | Complete | 2026-04-29 |
-| 8. Built-Output Verification & Cutover Readiness | 0/TBD | Not started | - |
+| 8. Built-Output Verification & Cutover Readiness | 0/5 | Planned | - |
