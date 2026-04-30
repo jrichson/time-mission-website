@@ -3,9 +3,15 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import corporateCss from '../../partials/corporate-inline.raw.css.txt?raw';
 import corporateMain from '../../partials/corporate-main.frag.txt?raw';
 import corporateAfter from '../../partials/corporate-after.frag.txt?raw';
+import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
 
-const ld =
-    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+const ld = serializeGraph(
+    buildSimpleGraph([
+        { label: 'Home', href: '/' },
+        { label: 'Groups', href: '/groups' },
+        { label: 'Corporate Events', href: '/groups/corporate' },
+    ]),
+);
 ---
 
 <SiteLayout

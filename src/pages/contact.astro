@@ -3,9 +3,14 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import contactCss from '../partials/contact-inline.raw.css.txt?raw';
 import contactMain from '../partials/contact-main.frag.txt?raw';
 import contactAfter from '../partials/contact-after.frag.txt?raw';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 
-const ld =
-    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+const ld = serializeGraph(
+    buildSimpleGraph([
+        { label: 'Home', href: '/' },
+        { label: 'Contact', href: '/contact' },
+    ]),
+);
 ---
 
 <SiteLayout

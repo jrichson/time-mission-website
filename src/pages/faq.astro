@@ -5,9 +5,9 @@ import faqs from '../data/site/faqs.json';
 import faqFooter from '../partials/faq-footer.frag.txt?raw';
 import faqCss from '../partials/faq-inline.raw.css.txt?raw';
 import faqAfter from '../partials/faq-after.frag.txt?raw';
+import { buildFaqGraph, serializeGraph } from '../lib/schema/graph';
 
-const ld =
-    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+const ld = serializeGraph(buildFaqGraph());
 ---
 
 <SiteLayout

@@ -4,9 +4,9 @@ import aboutCss from '../partials/about-inline.raw.css.txt?raw';
 import aboutMain from '../partials/about-main.frag.txt?raw';
 import aboutFooter from '../partials/about-footer.frag.txt?raw';
 import aboutTail from '../partials/about-inline-scripts.frag.txt?raw';
+import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 
-const ld =
-    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+const ld = serializeGraph(buildHomeGraph());
 ---
 
 <SiteLayout

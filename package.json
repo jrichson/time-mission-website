@@ -24,6 +24,7 @@
     "check:seo-catalog": "node scripts/check-seo-catalog.js",
     "check:seo-robots": "node scripts/check-seo-robots.js",
     "check:seo-output": "node scripts/check-seo-output.js",
+    "check:schema-output": "node scripts/check-schema-output.js",
     "check": "npm run check:locations && npm run check:sitemap && npm run check:components && npm run check:booking && npm run check:a11y && npm run check:links && npm run check:routes && npm run check:site-data && npm run check:location-routes && npm run check:fallback && npm run check:component-usage && npm run check:analytics && npm run check:seo-catalog && npm run check:seo-robots",
     "test:smoke": "playwright test",
     "test": "npm run test:smoke",

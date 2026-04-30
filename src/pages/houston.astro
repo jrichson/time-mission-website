@@ -4,12 +4,18 @@ import { allLocations } from '../data/locations';
 import houstonCss from '../partials/houston-inline.raw.css.txt?raw';
 import houstonMain from '../partials/houston-main.frag.txt?raw';
 import houstonAfter from '../partials/houston-after.frag.txt?raw';
+import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
 
 const houston = allLocations.find((l) => l.slug === 'houston');
 if (!houston) throw new Error('houston missing from src/data/locations');
 
-const ld =
-    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+const ld = serializeGraph(
+    buildLocationGraph('houston', '/houston', [
+        { label: 'Home', href: '/' },
+        { label: 'Locations', href: '/locations' },
+        { label: houston.shortName, href: '/houston' },
+    ]),
+);
 ---
 
 <SiteLayout

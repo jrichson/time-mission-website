@@ -3,6 +3,7 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import locationsCss from '../partials/locations-inline.raw.css.txt?raw';
 import { allLocations } from '../data/locations';
 import type { LocationRecord } from '../data/locations';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 
 const US_ORDER = [
     'mount-prospect',
@@ -36,8 +37,12 @@ function stateBadge(loc: LocationRecord) {
     return '--';
 }
 
-const ld =
-    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+const ld = serializeGraph(
+    buildSimpleGraph([
+        { label: 'Home', href: '/' },
+        { label: 'Locations', href: '/locations' },
+    ]),
+);
 ---
 
 <SiteLayout

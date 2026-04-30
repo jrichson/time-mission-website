@@ -4,9 +4,9 @@ import indexCss from '../partials/index-inline.raw.css.txt?raw';
 import indexMain from '../partials/index-main.frag.txt?raw';
 import indexPrenav from '../partials/index-prenav.frag.txt?raw';
 import indexAfter from '../partials/index-after.frag.txt?raw';
+import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 
-const ld =
-    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+const ld = serializeGraph(buildHomeGraph());
 ---
 
 <SiteLayout

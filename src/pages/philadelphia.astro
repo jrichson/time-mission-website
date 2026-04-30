@@ -4,12 +4,18 @@ import { allLocations } from '../data/locations';
 import phillyCss from '../partials/philadelphia-inline.raw.css.txt?raw';
 import phillyMain from '../partials/philadelphia-main.frag.txt?raw';
 import phillyAfter from '../partials/philadelphia-after.frag.txt?raw';
+import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
 
 const philly = allLocations.find((l) => l.slug === 'philadelphia');
 if (!philly) throw new Error('philadelphia missing from src/data/locations');
 
-const ld =
-    '{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}';
+const ld = serializeGraph(
+    buildLocationGraph('philadelphia', '/philadelphia', [
+        { label: 'Home', href: '/' },
+        { label: 'Locations', href: '/locations' },
+        { label: philly.shortName, href: '/philadelphia' },
+    ]),
+);
 ---
 
 <SiteLayout
