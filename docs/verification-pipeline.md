@@ -22,7 +22,7 @@ Order is fixed in `package.json` and must not be reordered casually: dist valida
 | 10 | `check:robots-ai` | `robots.txt` AI crawler rules | VER-02 |
 | 11 | `check:llms-txt` | `llms.txt` output | VER-02 |
 | 12 | `check:nap-parity` | NAP / schema vs location data | VER-02 |
-| 13 | `test:smoke` | Playwright smoke flows | VER-02 (behavior) |
+| 13 | `test:smoke` | Playwright: smoke flows (`site.spec.js`) + visual baselines (`visual.spec.js`, **VER-04**) | VER-02, VER-04 |
 
 ## Aliases
 
@@ -33,3 +33,20 @@ Order is fixed in `package.json` and must not be reordered casually: dist valida
 ## Single build owner
 
 `npm run verify` runs **`build:astro` once** per invocation. Downstream steps (dist checks, Playwright) consume that **`dist/`**; avoid duplicating `build:astro` in the same pipeline without a documented reason.
+
+## Visual regression (VER-04)
+
+Playwright **`tests/smoke/visual.spec.js`** compares the viewport to committed PNG baselines under `tests/smoke/visual.spec.js-snapshots/`. Tests use the same **`astro preview`** server as `site.spec.js` (built `dist/` on `127.0.0.1:4173`).
+
+After an **intentional** template or design change, refresh baselines in the same PR:
+
+```bash
+npm run build:astro
+npx playwright test tests/smoke/visual.spec.js --update-snapshots
+```
+
+**CI / OS:** Snapshot file names include the platform (for example `*-chromium-darwin.png`). Linux CI needs matching `*-chromium-linux.png` files—generate once on that runner (or use a pinned Playwright Docker image) and commit.
+
+## `verify:phase8`
+
+**`npm run verify:phase8`** is an alias for **`npm run verify`** (Phase 8 milestone bookkeeping).

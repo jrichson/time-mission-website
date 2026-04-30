@@ -28,15 +28,6 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
 });
 
 test('open location ?book=1 navigates to https checkout', async ({ page }) => {
-  await page.route('**/*', (route) => {
-    const u = new URL(route.request().url());
-    if (u.pathname === '/philadelphia') {
-      u.pathname = '/philadelphia.html';
-      return route.continue({ url: u.toString() });
-    }
-    return route.continue();
-  });
-
   // BOOK-04: assert outbound navigation targets https checkout — do not require
   // third-party page load (TLS / corporate proxies may yield chrome-error).
   const checkoutNav = page.waitForRequest(
@@ -54,27 +45,18 @@ test('open location ?book=1 navigates to https checkout', async ({ page }) => {
 });
 
 test('location selection persists canonical slug', async ({ page }) => {
-  await page.route('**/*', (route) => {
-    const u = new URL(route.request().url());
-    if (u.pathname === '/philadelphia') {
-      u.pathname = '/philadelphia.html';
-      return route.continue({ url: u.toString() });
-    }
-    return route.continue();
-  });
-
   await page.goto('/');
 
   await page.locator('#locationBtn').click();
   await page.locator('#locationDropdown a[data-city="Philadelphia"]').click();
 
-  await page.waitForURL(/\/philadelphia(?:\.html)?$/);
+  await page.waitForURL(/\/philadelphia$/);
   await expect(page.locator('#locationText')).toContainText('Philadelphia');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
 });
 
 test('faq accordion exposes keyboard accessible controls', async ({ page }) => {
-  await page.goto('/faq.html');
+  await page.goto('/faq');
 
   const firstQuestion = page.locator('.faq-question').first();
   await expect(firstQuestion).toHaveAttribute('role', 'button');
@@ -85,7 +67,7 @@ test('faq accordion exposes keyboard accessible controls', async ({ page }) => {
 });
 
 test('contact form uses configured submission endpoint', async ({ page }) => {
-  await page.goto('/contact.html');
+  await page.goto('/contact');
 
   const form = page.locator('form.contact-form');
   await expect(form).toHaveAttribute('method', /post/i);
@@ -93,7 +75,7 @@ test('contact form uses configured submission endpoint', async ({ page }) => {
 });
 
 test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer (Phase 6)', async ({ page }) => {
-  await page.goto('/contact.html');
+  await page.goto('/contact');
   await page.locator('form.contact-form input#name').click();
   const found = await page.evaluate(() => {
     return (
@@ -102,4 +84,11 @@ test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer (Phase 6)', asyn
     );
   });
   expect(found).toBe(true);
+});
+
+test('legacy .html URLs are served or redirected (preview vs production redirects)', async ({ request }) => {
+  // Cloudflare `_redirects` maps `/faq.html` -> `/faq` (301). `astro preview` may serve
+  // the built HTML at `/faq.html` with 200. Either behavior keeps legacy links working.
+  const res = await request.get('/faq.html');
+  expect(res.status()).toBeLessThan(400);
 });

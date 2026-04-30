@@ -38,6 +38,7 @@
     "verify:phase8": "npm run verify",
     "build:astro": "node scripts/sync-static-to-public.mjs && astro build",
     "preview:astro": "astro preview",
+    "preview:test": "astro preview --host 127.0.0.1 --port 4173",
     "check:astro-dist": "node scripts/check-astro-dist-manifest.js",
     "verify:phase1": "npm run verify && npm run build:astro && npm run check:astro-dist",
     "verify:phase2": "npm run check && npm run build:astro && npm run check:astro-dist && npm run check:routes -- --dist",

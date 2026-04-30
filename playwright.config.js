@@ -10,10 +10,12 @@ module.exports = defineConfig({
     baseURL: 'http://127.0.0.1:4173',
     trace: 'retain-on-failure',
   },
+  // Serves `dist/` via Astro after `npm run build:astro` (VER-03). `npm run verify` builds before tests.
   webServer: {
-    command: 'python3 -m http.server 4173',
+    command: 'npm run preview:test',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
   },
   projects: [
     {

@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-last_updated: "2026-04-30T06:33:31.177Z"
-last_activity: 2026-04-30 -- Phase 08 execution started
+status: idle
+last_updated: "2026-04-30T06:45:00.000Z"
+last_activity: 2026-04-30 — Phase 08 complete (5/5 plans); `npm run verify` is launch gate
 progress:
   total_phases: 8
-  completed_phases: 4
+  completed_phases: 8
   total_plans: 40
-  completed_plans: 23
-  percent: 57
+  completed_plans: 40
+  percent: 100
 ---
 
 # Project State
@@ -20,22 +20,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-29)
 
 **Core value:** The migrated site must preserve the existing customer-facing experience and conversion paths while making the site easier to maintain, measure, optimize, and scale.
-**Current focus:** Phase 08 — Built-Output Verification & Cutover Readiness
+**Current focus:** **v1.0 milestone roadmap complete** — cutover decision, Cloudflare preview rehearsal, and production deploy are the next human-led steps.
 
 ## Current Position
 
-Phase: 08 (Built-Output Verification & Cutover Readiness) — EXECUTING
-Plan: 1 of 5
-Status: Executing Phase 08
-Last activity: 2026-04-30 -- Phase 08 execution started
+Phase: **08 complete** (Built-Output Verification & Cutover Readiness)
+Plan: 5/5 executed; summaries in `.planning/phases/08-built-output-verification-cutover-readiness/`
+Status: Idle — ready for cutover rehearsal / production decision
+Last activity: 2026-04-30 — verify chain, Playwright on `astro preview`, visual baselines, Cloudflare runbook, VER-06 rollback triggers
 
-Progress: Phase 7 closed (5 plans). Overall milestone progress per `progress.percent` above.
+Progress: All eight phases complete per `progress.percent` above.
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 23 (cumulative; includes Phase 7 × 5)
+- Total plans completed: 40 (all roadmap plans for v1.0 milestone)
 - Average duration: N/A
 - Total execution time: N/A
 
@@ -50,12 +50,11 @@ Progress: Phase 7 closed (5 plans). Overall milestone progress per `progress.per
 | 5. Booking & CTA Flow | 4 | Complete | — |
 | 6. Analytics, Consent & Forms Contract | 5 | Complete | — |
 | 7. SEO, Schema & Local Search Baseline | 5 | Complete | — |
-| 8. Built-Output Verification & Cutover Readiness | 0/5 planned | Planned | N/A |
+| 8. Built-Output Verification & Cutover Readiness | 5 | Complete | — |
 
 **Recent trend:**
 
-- Phase 7: SEO catalog, SiteHead, schema modules, `sitemap.xml` / `llms.txt` endpoints, AI `robots.txt`, dist validators, NAP parity, `verify:phase7`.
-- Next: Phase 8 — built-output verification and cutover readiness per ROADMAP.
+- Phase 8: `npm run verify` = build + dist validators + Playwright (`astro preview`) + screenshot baselines; `docs/verification-pipeline.md`, `docs/cloudflare-preview-validation.md`, rollback runbook VER-06.
 
 *Updated after each plan completion*
 
@@ -74,14 +73,15 @@ Recent decisions affecting current work:
 
 ### Pending todos
 
-Phase 8 execution per five plans under `.planning/phases/08-built-output-verification-cutover-readiness/` (see ROADMAP Phase 8 wave summary).
+- Human: Rehearse `docs/cloudflare-preview-validation.md` on a real Cloudflare Pages preview.
+- Human: Confirm ROLLER/GTM validation with available Venue Manager or playground access.
 
 ### Blockers / concerns
 
 - ROLLER purchase validation depends on Venue Manager or playground access.
 - Consent/CMP implementation details and form backend/provider remain open planning decisions.
-- Cloudflare preview and rollback assumptions must be validated against the real hosting setup before cutover.
+- Linux CI may need committed Playwright screenshot baselines for `chromium-linux` if tests run on Ubuntu (see `docs/verification-pipeline.md`).
 
 ## Session continuity
 
-Resume from: `.planning/ROADMAP.md` Phase 8 and `/gsd-plan-phase 8` or `/gsd-execute-phase 8` when ready.
+Milestone planning execution complete. Next: cutover using `npm run verify`, preview checklist, and `docs/rollback-runbook.md` if rollback is required.

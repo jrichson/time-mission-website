@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Booking & CTA Flow** (2026-04-29) - Open-location, coming-soon, gift card, and ROLLER checkout intent paths work through validated destinations.
 - [x] **Phase 6: Analytics, Consent & Forms Contract** - GTM, consent-aware event tracking, dedupe-ready payloads, and provider-flexible forms are launch-ready.
 - [x] **Phase 7: SEO, Schema & Local Search Baseline** - Metadata, sitemap, structured data, local SEO, and AI-search readiness are generated from route/data truth.
-- [ ] **Phase 8: Built-Output Verification & Cutover Readiness** - The Astro `dist/` output, preview deployment, smoke flows, visual parity, and rollback plan pass launch gates.
+- [x] **Phase 8: Built-Output Verification & Cutover Readiness** (2026-04-30) - The Astro `dist/` output, preview deployment, smoke flows, visual parity, and rollback plan pass launch gates.
 
 ## Phase Details
 
@@ -180,10 +180,10 @@ Wave summary:
 
 Plans:
 - [x] 08-01-PLAN.md — **`npm run verify` = build + full dist validator chain** + `docs/verification-pipeline.md` (VER-01, VER-02)
-- [ ] 08-02-PLAN.md — Playwright **`astro preview` / dist** server + smoke URLs aligned to canonical routes + legacy coverage (VER-03)
-- [ ] 08-03-PLAN.md — Representative **screenshot baselines** via Playwright (VER-04)
-- [ ] 08-04-PLAN.md — **`docs/cloudflare-preview-validation.md`** + rollback-runbook cross-links (VER-05)
-- [ ] 08-05-PLAN.md — **VER-06 rollback triggers** explicit + `.planning/ROADMAP.md` / `STATE.md` + `verify:phase8` alias
+- [x] 08-02-PLAN.md — Playwright **`astro preview` / dist** server + smoke URLs aligned to canonical routes + legacy coverage (VER-03)
+- [x] 08-03-PLAN.md — Representative **screenshot baselines** via Playwright (VER-04)
+- [x] 08-04-PLAN.md — **`docs/cloudflare-preview-validation.md`** + rollback-runbook cross-links (VER-05)
+- [x] 08-05-PLAN.md — **VER-06 rollback triggers** explicit + `.planning/ROADMAP.md` / `STATE.md` + `verify:phase8` alias
 
 Wave summary:
 - Wave 1: 08-01 — Canonical verify semantics (fixes VER-01 gap vs legacy `verify`)
@@ -256,4 +256,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 5. Booking & CTA Flow | 4/4 | Complete | 2026-04-29 |
 | 6. Analytics, Consent & Forms Contract | 5/5 | Complete | 2026-04-29 |
 | 7. SEO, Schema & Local Search Baseline | 5/5 | Complete | 2026-04-29 |
-| 8. Built-Output Verification & Cutover Readiness | 0/5 | Planned | - |
+| 8. Built-Output Verification & Cutover Readiness | 5/5 | Complete | 2026-04-30 |
