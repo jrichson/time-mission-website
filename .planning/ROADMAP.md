@@ -132,8 +132,14 @@ Wave summary:
   3. Analytics payloads include stable `event_id`, timestamp, source, page context, CTA context, location context, destination URL, campaign context, and consent state where applicable.
   4. Browser events and optional server-side `/api/events` payloads share one dedupe-ready contract.
   5. Visitor can use contact and lead forms with provider-flexible markup, equivalent success/failure behavior, and clean `/contact-thank-you` routing.
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 5 (`06-01-PLAN.md` GTM + Consent Mode defaults + CSP + event contract doc, `06-02-PLAN.md` `analytics.js` + `check-analytics-contract.js`, `06-03-PLAN.md` contact / thank-you Astro parity + form analytics + smoke, `06-04-PLAN.md` ANLY-05 instrumentation waves A/B, `06-05-PLAN.md` operator runbook + ROLLER checklist + `verify:phase6` + summaries)
+Wave summary:
+- Wave 1: 06-01 — `SiteHead` GTM/`PUBLIC_GTM_CONTAINER_ID`, `TMConsent`, `_headers`, `docs/analytics-event-contract.md`
+- Wave 2: 06-02 — `TMAnalytics.track`, labels source of truth, `check:analytics`
+- Wave 2: 06-03 — Netlify form parity, Astro thank-you, form lifecycle events, smoke
+- Wave 3: 06-04 — ticket panel, nav, locations, gift/groups/missions CTAs
+- Wave 4: 06-05 — GTM runbook, ROLLER checklist analytics section, `verify:phase6`, ROADMAP
+**UI hint**: yes (`06-UI-SPEC.md` — parity-first, no new cookie banner)
 
 ### Phase 7: SEO, Schema & Local Search Baseline
 **Goal**: Search engines, AI crawlers, and local search surfaces receive coherent metadata, schema, sitemap, content, and location signals generated from the same route/data contracts as pages.
