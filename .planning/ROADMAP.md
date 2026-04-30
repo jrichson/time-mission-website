@@ -13,10 +13,10 @@ This roadmap migrates the existing Time Mission static website to Astro without 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Static Baseline & Rollback Guardrails** (2026-04-29) - Astro can emit deployable static output while current assets, host files, and old-site rollback remain protected.
-- [ ] **Phase 2: Route Registry & Clean URL Contract** - Clean extensionless URLs, legacy redirects, and route-derived public references are enforced from one contract.
-- [ ] **Phase 3: Validated Data Foundation** - Durable business facts move into validated Astro-consumable data modules before page scaling.
-- [ ] **Phase 4: Shared Components & Template Parity** - Shared Astro components and representative templates preserve the current visual and behavior contract.
-- [ ] **Phase 5: Booking & CTA Flow** - Open-location, coming-soon, gift card, and ROLLER checkout intent paths work through validated destinations.
+- [x] **Phase 2: Route Registry & Clean URL Contract** (2026-04-29) - Clean extensionless URLs, legacy redirects, and route-derived public references are enforced from one contract.
+- [x] **Phase 3: Validated Data Foundation** (2026-04-29) - Durable business facts move into validated Astro-consumable data modules before page scaling.
+- [x] **Phase 4: Shared Components & Template Parity** (2026-04-29) - Shared Astro components and representative templates preserve the current visual and behavior contract.
+- [ ] **Phase 5: Booking & CTA Flow** - Open-location, coming-soon, gift card, and ROLLER checkout intent paths work through validated destinations. *(4 plans: 05-01–05-04 — ready to execute)*
 - [ ] **Phase 6: Analytics, Consent & Forms Contract** - GTM, consent-aware event tracking, dedupe-ready payloads, and provider-flexible forms are launch-ready.
 - [ ] **Phase 7: SEO, Schema & Local Search Baseline** - Metadata, sitemap, structured data, local SEO, and AI-search readiness are generated from route/data truth.
 - [ ] **Phase 8: Built-Output Verification & Cutover Readiness** - The Astro `dist/` output, preview deployment, smoke flows, visual parity, and rollback plan pass launch gates.
@@ -47,13 +47,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 02-01-PLAN.md — Create route registry, route contract validator, and npm route-check scripts.
 - [x] 02-02-PLAN.md — Retarget redirects, sitemap, sitemap validation, and redirect documentation to clean URLs.
-- [ ] 02-03-PLAN.md — Sweep core top-level page metadata and first-party links to clean routes.
-- [ ] 02-04-PLAN.md — Sweep location pages and locations index URL surfaces.
-- [ ] 02-05-PLAN.md — Sweep group page metadata and first-party links to clean routes.
-- [ ] 02-06-PLAN.md — Sweep legal and utility page metadata and first-party links to clean routes.
-- [ ] 02-07-PLAN.md — Clean first-party location data URL values.
-- [ ] 02-08-PLAN.md — Clean runtime route helpers and route-sensitive smoke expectations.
-- [ ] 02-09-PLAN.md — Validate registered pages in Astro built output and run the Phase 02 gate.
+- [x] 02-03-PLAN.md — Sweep core top-level page metadata and first-party links to clean routes.
+- [x] 02-04-PLAN.md — Sweep location pages and locations index URL surfaces.
+- [x] 02-05-PLAN.md — Sweep group page metadata and first-party links to clean routes.
+- [x] 02-06-PLAN.md — Sweep legal and utility page metadata and first-party links to clean routes.
+- [x] 02-07-PLAN.md — Clean first-party location data URL values.
+- [x] 02-08-PLAN.md — Clean runtime route helpers and route-sensitive smoke expectations.
+- [x] 02-09-PLAN.md — Validate registered pages in Astro built output and run the Phase 02 gate.
 Wave summary:
 - Wave 1: 02-01 registry and standalone route checker.
 - Wave 2: 02-02 redirects/sitemap/docs, 02-03 core pages, 02-04 location HTML, 02-05 group pages, 02-06 legal/utility pages.
@@ -69,7 +69,15 @@ Wave summary:
   2. Visitor on open and coming-soon location pages sees appropriate booking, gift card, map, hours, contact, local SEO, and schema-eligible details.
   3. Site operator gets validation failures when required location fields or open/coming-soon rules are missing or inconsistent.
   4. Future international location data can express country, locale, timezone, phone format, currency, and `hreflang` inputs without launching translated pages.
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [x] 03-01-PLAN.md — Location JSON intl fields, expanded location contract (DATA-02), Astro `src/data/locations.ts` (DATA-01, DATA-04)
+- [x] 03-02-PLAN.md — Site chrome JSON (`navigation`, `footer`, `analytics-labels`) + `check-site-data.js` (DATA-03)
+- [x] 03-03-PLAN.md — Groups, missions, FAQs, SEO defaults catalogs + validator extensions (DATA-03)
+- [x] 03-04-PLAN.md — Location↔route alignment, `verify:phase3`, FALLBACK sync check, roadmap bookkeeping
+Wave summary:
+- Wave 1: 03-01, 03-02 (locations + site chrome validators)
+- Wave 2: 03-03, 03-04 (content catalogs + phase gate)
 
 ### Phase 4: Shared Components & Template Parity
 **Goal**: Shared UI and representative page templates render through Astro components while preserving the current visual design and browser behavior.
@@ -81,7 +89,19 @@ Wave summary:
   3. Browser behavior depending on CSS selectors, IDs, ARIA hooks, script hooks, and DOM structure continues to work on componentized pages.
   4. Site operator can retire the `build.sh` ticket-panel sync workflow only after the Astro ticket panel renders everywhere it is needed.
   5. Representative homepage, marketing, group, open-location, coming-soon-location, locations index, FAQ/contact, and policy/utility templates exist before bulk conversion.
-**Plans**: TBD
+**Plans**: 5 plans
+Plans:
+- [x] 04-01-PLAN.md — Layout shell: `SiteHead`, `SiteScripts`, `TicketPanel`, `SiteLayout` with script/CSS parity (FND-02, COMP-01, COMP-02)
+- [x] 04-02-PLAN.md — Shared chrome: `SiteNav`, `MobileMenu`, `LocationOverlay`, `SiteFooter`, `Faq`, `Breadcrumbs` + `SiteLayout` slot defaults consuming `src/data/site/*` (COMP-01, COMP-02)
+- [x] 04-03-PLAN.md — `sync-static-to-public.mjs` skip-list + simple representatives: `about`, `faq`, `contact`, `privacy` (COMP-04, COMP-03)
+- [x] 04-04-PLAN.md — Complex representatives: `index` (homepage parity), `locations`, `groups/corporate`, `philadelphia`, `houston` (COMP-04, FND-02)
+- [x] 04-05-PLAN.md — Parity verification scripts (`check-ticket-panel-parity`, `check-ticket-panel-source-parity`, `check-component-usage`) + `verify:phase4` gate (COMP-01, COMP-02, COMP-03, COMP-04)
+Wave summary:
+- Wave 1: 04-01 (layout shell + ticket panel + script/CSS parity)
+- Wave 2: 04-02 (data-driven shared chrome consuming `src/data/site/*`)
+- Wave 3: 04-03, 04-04 (representative Astro pages — disjoint files, parallel-safe)
+- Wave 4: 04-05 (parity verification scripts + `verify:phase4`)
+Wave 3 completion: `04-03-SUMMARY.md`, `04-04-SUMMARY.md`; Wave 4 completion: `04-05-SUMMARY.md` (under `phases/04-shared-components-template-parity/`).
 **UI hint**: yes
 
 ### Phase 5: Booking & CTA Flow
@@ -94,7 +114,12 @@ Wave summary:
   3. Visitor using the existing `?book=1` entry path gets preserved clean-URL behavior or an equivalent tested booking flow.
   4. Site operator can tell whether iframe/overlay checkout support remains as an optional fallback or has been intentionally removed.
   5. Site operator has ROLLER GTM/GA4 setup and purchase-event validation included in launch readiness when Venue Manager or playground access exists.
-**Plans**: TBD
+**Plans**: 4 (`05-01-PLAN.md` resolver + checks, `05-02-PLAN.md` iframe removal stub, `05-03-PLAN.md` same-tab CTAs + matrix doc, `05-04-PLAN.md` smoke + BOOK-05 + `verify:phase5`)
+Wave summary:
+- Wave 1: 05-01 — `rollerCheckoutUrl` precedence, BOOK-02/04 wiring in `ticket-panel.js`
+- Wave 2: 05-02 — BOOK-03 no-op `roller-checkout.js` + booking-architecture gate
+- Wave 3: 05-03 — D-01 `location.assign`, `docs/booking-cta-surface-matrix.md`
+- Wave 4: 05-04 — `?book=1` smoke, `docs/roller-booking-launch-checklist.md`, `npm run verify:phase5`
 **UI hint**: yes
 
 ### Phase 6: Analytics, Consent & Forms Contract
@@ -193,10 +218,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Static Baseline & Rollback Guardrails | 3/3 | Complete | 2026-04-29 |
-| 2. Route Registry & Clean URL Contract | 0/9 | Not started | - |
-| 3. Validated Data Foundation | 0/TBD | Not started | - |
-| 4. Shared Components & Template Parity | 0/TBD | Not started | - |
-| 5. Booking & CTA Flow | 0/TBD | Not started | - |
+| 2. Route Registry & Clean URL Contract | 9/9 | Complete | 2026-04-29 |
+| 3. Validated Data Foundation | 4/4 | Complete | 2026-04-29 |
+| 4. Shared Components & Template Parity | 5/5 | Complete | 2026-04-29 |
+| 5. Booking & CTA Flow | 0/4 | Planned | - |
 | 6. Analytics, Consent & Forms Contract | 0/TBD | Not started | - |
 | 7. SEO, Schema & Local Search Baseline | 0/TBD | Not started | - |
 | 8. Built-Output Verification & Cutover Readiness | 0/TBD | Not started | - |
