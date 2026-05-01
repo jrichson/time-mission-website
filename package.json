@@ -40,6 +40,7 @@
     "verify": "node scripts/verify-site-output.mjs",
     "verify:phase8": "npm run verify",
     "build:astro": "node scripts/sync-static-to-public.mjs && astro build",
+    "deploy:pages": "npm run build:astro && wrangler pages deploy dist",
     "preview:astro": "astro preview",
     "preview:test": "astro preview --host 127.0.0.1 --port 4173",
     "check:astro-dist": "node scripts/check-astro-dist-manifest.js",
@@ -72,6 +73,7 @@
     "astro": "^6.1.10",
     "tsx": "^4.19.2",
     "typescript": "^5.9.3",
-    "vitest": "^3.0.5"
+    "vitest": "^3.0.5",
+    "wrangler": "^4.87.0"
   }
 }

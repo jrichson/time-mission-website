@@ -2,13 +2,15 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import indexCss from '../partials/index-inline.raw.css.txt?raw';
-import indexMain from '../partials/index-main.frag.txt?raw';
+import indexMainRaw from '../partials/index-main.frag.txt?raw';
+import { applyTmMediaBase } from '../lib/tm-media';
 import indexPrenav from '../partials/index-prenav.frag.txt?raw';
 import indexAfter from '../partials/index-after.frag.txt?raw';
 import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 
 const ld = serializeGraph(buildHomeGraph());
 const page = definePage({ canonicalPath: '/' });
+const indexMain = applyTmMediaBase(indexMainRaw);
 ---
 
 <SiteLayout

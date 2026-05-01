@@ -1,0 +1,15 @@
+# Cloudflare Pages — CLI deploy (no GitHub integration required).
+#
+# First-time setup:
+#   1. npx wrangler login
+#   2. Create the project if needed: npx wrangler pages project create time-mission-website
+#   3. npm run deploy:pages
+#
+# Different Pages project without editing name below:
+#   npm run deploy:pages -- --project-name=my-staging-site
+# Hero MP4s on R2 (Pages 25 MiB/file limit): copy `.env.example` → `.env` and set
+# PUBLIC_TM_MEDIA_BASE to your public bucket URL (no trailing slash). Object keys in R2
+# must match site paths, e.g. `assets/video/hero-bg-web.mp4`.
+#
+name = "time-mission-website"
+pages_build_output_dir = "dist"
