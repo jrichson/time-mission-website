@@ -11,9 +11,29 @@ import path from 'path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'url';
 
+import {
+  TM_ENV_FILE_CHAIN,
+  mergeTmDotEnvFromDisk,
+  applyTmDotEnvToProcess,
+  normalizedPublicTmMediaBase,
+} from './tm-dotenv.mjs';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const publicDir = path.join(root, 'public');
+
+/** MP4s hosted on R2 when PUBLIC_TM_MEDIA_BASE is set — omit from Pages bundle (25 MiB limit). */
+const OFFLOAD_MP4 = ['hero-bg-web.mp4', 'hero-bg-mobile.mp4', 'groups-hero.mp4'];
+
+applyTmDotEnvToProcess(root);
+
+function tmMediaBaseFromEnv() {
+  return normalizedPublicTmMediaBase(root);
+}
+
+function applyTmMediaToken(html) {
+  return html.replaceAll('{{TM_MEDIA_BASE}}', tmMediaBaseFromEnv());
+}
 
 const compileArtifacts = path.join(__dirname, 'compile-route-artifacts.mjs');
 const compileRes = spawnSync(process.execPath, [compileArtifacts], { cwd: root, stdio: 'inherit' });
@@ -68,7 +88,37 @@ if (fs.existsSync(stalePublicSitemap)) {
 for (const d of mandatoryDirs) {
     const src = path.join(root, d);
     const dest = path.join(publicDir, d);
+    // Replace — do not merge: cpSync leaves stale files in `public/` when assets are removed
+    // from the repo (e.g. MP4s moved to R2), which breaks Pages' 25 MiB/file limit on deploy.
+    fs.rmSync(dest, { recursive: true, force: true });
     fs.cpSync(src, dest, { recursive: true });
+}
+
+const videoDir = path.join(publicDir, 'assets', 'video');
+
+if (tmMediaBaseFromEnv()) {
+  for (const name of OFFLOAD_MP4) {
+    const abs = path.join(videoDir, name);
+    try {
+      if (fs.existsSync(abs)) fs.unlinkSync(abs);
+    } catch {
+      /* noop */
+    }
+  }
+} else {
+  const missingMp4 = OFFLOAD_MP4.filter((name) => !fs.existsSync(path.join(videoDir, name)));
+  if (missingMp4.length > 0) {
+    const fromDiskPreview = mergeTmDotEnvFromDisk(root).PUBLIC_TM_MEDIA_BASE;
+    const envFilesSeen = TM_ENV_FILE_CHAIN.filter((n) => fs.existsSync(path.join(root, n)));
+    errors.push(
+      `Missing hero/group MP4s (${missingMp4.join(', ')}) in the Pages bundle — PUBLIC_TM_MEDIA_BASE is not resolving. ` +
+        'Add PUBLIC_TM_MEDIA_BASE=<your-public-r2-host> (no trailing slash, no `/assets/video` suffix) beside package.json `.env`. ' +
+        'Cloudflare Pages: set the variable in project Environment variables.\n' +
+        `       Project root: ${root}\n` +
+        `       .env chain present: ${envFilesSeen.join(', ') || '(none)'}\n` +
+        `       Parsed key in .env as: ${typeof fromDiskPreview === 'string' && fromDiskPreview.trim() ? JSON.stringify(fromDiskPreview.trim()) : '(missing or blank — check spelling PUBLIC_TM_MEDIA_BASE)'}`,
+    );
+  }
 }
 
 const analyticsLabelsSrc = path.join(root, 'src', 'data', 'site', 'analytics-labels.json');
@@ -130,7 +180,9 @@ for (const route of routes) {
     continue;
   }
   fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.copyFileSync(src, dest);
+  let html = fs.readFileSync(src, 'utf8');
+  html = applyTmMediaToken(html);
+  fs.writeFileSync(dest, html);
   copiedHtml += 1;
 }
 
