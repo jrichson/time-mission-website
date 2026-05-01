@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 6: Analytics, Consent & Forms Contract** - GTM, consent-aware event tracking, dedupe-ready payloads, and provider-flexible forms are launch-ready.
 - [x] **Phase 7: SEO, Schema & Local Search Baseline** - Metadata, sitemap, structured data, local SEO, and AI-search readiness are generated from route/data truth.
 - [x] **Phase 8: Built-Output Verification & Cutover Readiness** (2026-04-30) - The Astro `dist/` output, preview deployment, smoke flows, visual parity, and rollback plan pass launch gates.
-- [x] **Phase 9: Architecture deepening, verification hardening & template hygiene** (2026-04-30) - Single-source ticket options, compiled route artifacts, locations fingerprint + stale analytics signal, declarative booking policies + unit tests, `TMFacade` + public API doc; footer/newsletter CSS scoping and ticket-panel stylesheet on lean Astro pages. *(RFC split: `.planning/ARCHITECTURE-DEEPENING-PHASES.md` Phase 4 CSS decomposition partially complete — optional follow-up.)*
+- [x] **Phase 9: Architecture deepening, verification hardening & template hygiene** (2026-04-30) - Single-source ticket options, compiled route artifacts, locations fingerprint + stale analytics signal, declarative booking policies + unit tests, `TMFacade` + public API doc; footer/newsletter CSS scoping and ticket-panel stylesheet on lean Astro pages. *(Architecture RFC program closed 2026-05-01 per `.planning/ARCHITECTURE-DEEPENING-PHASES.md`; optional CSS file split remains discretionary backlog.)*
 
 ## Phase Details
 
@@ -194,7 +194,7 @@ Wave summary:
 - Wave 5: 08-05 — Rollback trigger alignment + milestone bookkeeping (VER-06)
 
 ### Phase 9: Architecture deepening, verification hardening & template hygiene
-**Goal:** Land RFC work from `.planning/ARCHITECTURE-DEEPENING-PHASES.md` and close UI parity gaps discovered after Phase 8, without reopening the original v1 requirement numbering.
+**Goal:** RFC-track work from `.planning/ARCHITECTURE-DEEPENING-PHASES.md` is **delivered**; the RFC program is **closed** (2026-05-01). UI parity gaps after Phase 8 were closed without reopening v1 requirement numbering.
 **Depends on:** Phase 8 (verify gate stable)
 **Requirements:** Engineering sustainment (no new v1 requirement IDs — extends DATA/ROUTE/BOOK/ANLY/COMP practices)
 **Success Criteria** (what must be TRUE):

@@ -1,5 +1,7 @@
 # Architecture deepening — phased plan (6 workstreams)
 
+**RFC program status: Closed (2026-05-01).** All phases below are accepted as delivered for migration purposes. Residual optional work (e.g. Phase 4 named partial split) lives in engineering backlog, not under this RFC set.
+
 RFC-style backlog derived from the “improve codebase architecture” analysis. Phases are ordered by **dependency, risk reduction, and cutover safety** for the Astro/static migration.
 
 ---
@@ -12,18 +14,19 @@ RFC-style backlog derived from the “improve codebase architecture” analysis.
 
 ---
 
-## Phase 0 — Preconditions (ongoing)
+## Phase 0 — Preconditions (standing discipline)
 
 | Item | Action |
 |------|--------|
 | Baseline | `npm run verify` green on `main` (or active migration branch). |
 | Scope | Treat `dist/` + `routes.json` as contract consumers; avoid drive-by legacy HTML edits in the same PRs as deep refactors. |
 
-**Exit:** None (standing discipline).
+**Exit:** None (standing discipline). Not an RFC deliverable; practice continues after RFC closure.
 
 ---
 
-## Phase 1 — Ticket options: one authoritative derivation
+## Phase 1 — Ticket options: one authoritative derivation *(RFC closed)*
+
 
 **Cluster:** `src/lib/site-contract.ts`, `js/locations.js` (`listTicketOptions`), `scripts/lib/derive-ticket-options-from-locations.cjs`, `TicketPanel.astro`, `check-site-contract.js`.
 
@@ -46,7 +49,8 @@ RFC-style backlog derived from the “improve codebase architecture” analysis.
 
 ---
 
-## Phase 2 — Route graph: derive manifests from `routes.json`
+## Phase 2 — Route graph: derive manifests from `routes.json` *(RFC closed)*
+
 
 **Cluster:** `src/data/routes.json`, `src/data/site/astro-rendered-output-files.json`, sitemap expectations, `scripts/check-astro-dist-manifest.js`, `sync-static-to-public.mjs`.
 
@@ -69,7 +73,8 @@ RFC-style backlog derived from the “improve codebase architecture” analysis.
 
 ---
 
-## Phase 3 — Site contract embed vs runtime (drift signal)
+## Phase 3 — Site contract embed vs runtime (drift signal) *(RFC closed)*
+
 
 **Cluster:** `getPublicSiteContract()`, `SiteScripts.astro`, `locations.json` fetch in `js/locations.js`, smoke tests.
 
@@ -89,7 +94,8 @@ RFC-style backlog derived from the “improve codebase architecture” analysis.
 
 ---
 
-## Phase 4 — Event-template CSS decomposition
+## Phase 4 — Event-template CSS decomposition *(RFC closed)*
+
 
 **Cluster:** `src/partials/birthdays-inline.raw.css.txt`, shared `css/ticket-panel.css`, `css/variables.css`, group Astro pages.
 
@@ -108,9 +114,12 @@ RFC-style backlog derived from the “improve codebase architecture” analysis.
 
 **Exit:** No ticket-panel “fork” inside raw inline; file boundaries map to page regions.
 
+**Closure note:** Duplicate ticket-panel rules were removed from the megapartial (see Phase 9 summary). Optional split into `css/event-type/*` or extra named partials is **out of RFC scope** and tracked only as discretionary cleanup.
+
 ---
 
-## Phase 5 — Verification: centralized policy runner
+## Phase 5 — Verification: centralized policy runner *(RFC closed)*
+
 
 **Cluster:** `scripts/check-booking-architecture.js`, other regex-heavy checks, `validation-core.js`.
 
@@ -130,7 +139,8 @@ RFC-style backlog derived from the “improve codebase architecture” analysis.
 
 ---
 
-## Phase 6 — Browser façade for `TM` / booking
+## Phase 6 — Browser façade for `TM` / booking *(RFC closed)*
+
 
 **Cluster:** `js/locations.js`, `js/booking-controller.js`, `js/ticket-panel.js`, `js/roller-checkout.js`, `check-booking-architecture.js`.
 
@@ -171,7 +181,7 @@ Phase 6 (TM façade) — best after Phase 1; coordinate with Phase 5 for booking
 - [x] No duplicate ticket-option mapping in TS/CJS/browser. *(canonical: `src/lib/ticket-options.ts` + checks)*
 - [x] Route manifests derived from `routes.json` (or single compile output). *(`scripts/compile-route-artifacts.mjs`)*
 - [x] Embed includes fingerprint; stale client data is observable (non-PII). *(`locationsFingerprint`, `site_contract_stale`)*
-- [ ] Event-template CSS has no forked ticket-panel block; split files are bounded. *(duplicate block removed; **named partial split** optional — see Phase 9 summary)*
+- [x] Event-template CSS has no forked ticket-panel block; split files are bounded. *(RFC closure: duplicate block removed; further file splits optional backlog — see Phase 9 summary)*
 - [x] New architectural rules default to policy table + tests.
 - [x] Published `TM`/booking surface documented and shape-tested. *(`docs/tm-public-api.md`, `TMFacade`, Vitest)*
 

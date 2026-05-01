@@ -1,6 +1,6 @@
 # Phase 09 — Delivered summary
 
-**Status:** Delivered (2026-04-30) with one **optional follow-up** (CSS partial split).
+**Status:** Delivered (2026-04-30). Architecture RFC program **closed** (2026-05-01). Optional CSS partial split is discretionary backlog only.
 
 Single place for work that was executed across several sessions after Phase 8 was marked complete.
 
@@ -13,7 +13,7 @@ Single place for work that was executed across several sessions after Phase 8 wa
 | **1** Ticket options SSoT | Yes | `src/lib/ticket-options.ts`, `scripts/lib/derive-ticket-options-from-locations.ts`, `scripts/check-site-contract.js`, `TicketPanel.astro` |
 | **2** Route artifacts | Yes | `scripts/compile-route-artifacts.mjs`, wired into compile/check/sync; regenerates `src/data/site/astro-rendered-output-files.json` |
 | **3** Embed vs runtime drift | Yes | `src/lib/locations-fingerprint.ts`, fingerprint on public contract, `site_contract_stale` in `analytics-labels.json` + `js/analytics.js` + `js/locations.js`, smoke coverage |
-| **4** Event-template CSS | **Partial** | Duplicate ticket-panel block removed from `src/partials/birthdays-inline.raw.css.txt`; full split into named partials (`event-hero`, etc.) **not done** |
+| **4** Event-template CSS | **Closed (RFC)** | Duplicate ticket-panel block removed from `src/partials/birthdays-inline.raw.css.txt`; named partials (`event-hero`, etc.) **deferred** to optional backlog — out of RFC scope |
 | **5** Policy runner | Yes | `scripts/lib/policy-runner.js`, `scripts/policies/booking-policies.cjs`, thin `check-booking-architecture.js`, Vitest / `test:unit` in check chain |
 | **6** Browser façade | Yes | `window.TMFacade` in `js/booking-controller.js`, `docs/tm-public-api.md`, unit tests |
 
@@ -37,9 +37,9 @@ Cross-domain **purchase** stitching (GA4/GTM linker + Roller hostnames) remains 
 
 ---
 
-## Follow-ups (optional)
+## Follow-ups (optional, non-RFC)
 
-1. **Phase 4 completion:** Split `birthdays-inline.raw.css.txt` (and siblings if needed) into 2–3 named partials or `css/event-type/*` imports per RFC.
+1. **CSS cleanup:** Split `birthdays-inline.raw.css.txt` (and siblings if needed) into 2–3 named partials or `css/event-type/*` imports if maintainers want smaller partials (not required for closed RFC success criteria).
 2. **Linux CI:** Committed Playwright screenshot baselines for `chromium-linux` if CI runs on Ubuntu (`STATE.md` concern).
 
 ---

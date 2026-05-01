@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: idle
-last_updated: "2026-04-30T12:00:00.000Z"
-last_activity: 2026-04-30 — Phase 09 catalogued (architecture deepening + template hygiene); v1 phases 1–8 unchanged
+last_updated: "2026-05-01T12:00:00.000Z"
+last_activity: 2026-05-01 — Architecture RFC program closed (`.planning/ARCHITECTURE-DEEPENING-PHASES.md`); optional CSS partial split remains backlog only
 progress:
   total_phases: 9
   completed_phases: 9
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-04-29)
 Phase: **09 complete** (summary-only phase — see `09-PLAN-SUMMARY.md`)
 Plans: v1 counted plans **40/40**; Phase 9 tracked as **1 deliverable summary** (not a numbered `NN-PLAN.md`)
 Status: Idle — ready for cutover rehearsal / production decision
-Last activity: 2026-04-30 — Roadmap + RFC success criteria aligned with shipped architecture deepening, policy runner, `TMFacade`, footer/newsletter scoping, ticket-panel CSS on privacy/FAQ
+Last activity: 2026-05-01 — Architecture RFC program marked closed; success criteria all checked; discretionary CSS partial split no longer tracked as open RFC scope
 
 Progress: Phases 1–9 documented; v1 requirement coverage still **43/43** (Phase 9 is sustainment, not a new requirement ID).
 
@@ -58,7 +58,7 @@ Progress: Phases 1–9 documented; v1 requirement coverage still **43/43** (Phas
 
 **Recent trend:**
 
-- Phase 9: Ticket options SSoT, `compile-route-artifacts`, `locationsFingerprint` + stale analytics event, `scripts/lib/policy-runner.js` + booking policies, `TMFacade` + `docs/tm-public-api.md`, footer/newsletter CSS isolation, `ticket-panel.css` on lean layouts; optional **CSS partial split** remains (RFC Phase 4).
+- Phase 9: Ticket options SSoT, `compile-route-artifacts`, `locationsFingerprint` + stale analytics event, `scripts/lib/policy-runner.js` + booking policies, `TMFacade` + `docs/tm-public-api.md`, footer/newsletter CSS isolation, `ticket-panel.css` on lean layouts; optional **CSS partial split** remains discretionary backlog (RFC program closed).
 
 *Updated after Phase 9 documentation pass*
 
@@ -80,7 +80,7 @@ Recent decisions affecting current work:
 
 - Human: Rehearse `docs/cloudflare-preview-validation.md` on a real Cloudflare Pages preview.
 - Human: Confirm ROLLER/GTM validation (including cross-domain / purchase) with Venue Manager or playground access — `docs/roller-booking-launch-checklist.md`.
-- Optional: Split group event inline CSS partials per `.planning/ARCHITECTURE-DEEPENING-PHASES.md` Phase 4.
+- Optional: Split group event inline CSS partials (discretionary cleanup; not an open RFC).
 
 ### Blockers / concerns
 
@@ -90,4 +90,4 @@ Recent decisions affecting current work:
 
 ## Session continuity
 
-Milestone planning execution complete through **Phase 9 documentation**. Next: cutover using `npm run verify`, preview checklist, and `docs/rollback-runbook.md` if rollback is required. Engineering backlog: optional RFC Phase 4 CSS file split.
+Milestone planning execution complete through **Phase 9 documentation**. Next: cutover using `npm run verify`, preview checklist, and `docs/rollback-runbook.md` if rollback is required. Engineering backlog: optional CSS file split for event templates (outside closed RFC scope).
