@@ -20,6 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 6: Analytics, Consent & Forms Contract** - GTM, consent-aware event tracking, dedupe-ready payloads, and provider-flexible forms are launch-ready.
 - [x] **Phase 7: SEO, Schema & Local Search Baseline** - Metadata, sitemap, structured data, local SEO, and AI-search readiness are generated from route/data truth.
 - [x] **Phase 8: Built-Output Verification & Cutover Readiness** (2026-04-30) - The Astro `dist/` output, preview deployment, smoke flows, visual parity, and rollback plan pass launch gates.
+- [x] **Phase 9: Architecture deepening, verification hardening & template hygiene** (2026-04-30) - Single-source ticket options, compiled route artifacts, locations fingerprint + stale analytics signal, declarative booking policies + unit tests, `TMFacade` + public API doc; footer/newsletter CSS scoping and ticket-panel stylesheet on lean Astro pages. *(RFC split: `.planning/ARCHITECTURE-DEEPENING-PHASES.md` Phase 4 CSS decomposition partially complete — optional follow-up.)*
 
 ## Phase Details
 
@@ -192,6 +193,20 @@ Wave summary:
 - Wave 4: 08-04 — Operator Cloudflare rehearsal checklist (VER-05)
 - Wave 5: 08-05 — Rollback trigger alignment + milestone bookkeeping (VER-06)
 
+### Phase 9: Architecture deepening, verification hardening & template hygiene
+**Goal:** Land RFC work from `.planning/ARCHITECTURE-DEEPENING-PHASES.md` and close UI parity gaps discovered after Phase 8, without reopening the original v1 requirement numbering.
+**Depends on:** Phase 8 (verify gate stable)
+**Requirements:** Engineering sustainment (no new v1 requirement IDs — extends DATA/ROUTE/BOOK/ANLY/COMP practices)
+**Success Criteria** (what must be TRUE):
+  1. Ticket panel select options derive from one TS module; validators catch structural drift vs `locations.json` fixtures.
+  2. Astro route / dist expected-output artifacts compile from the route registry (`scripts/compile-route-artifacts.mjs`) rather than hand-duplicated manifests where automatable.
+  3. Build-time site contract includes a locations fingerprint; runtime detects stale fetched JSON vs embed and emits a non-PII analytics signal once per session when configured.
+  4. Booking architecture rules run through a shared policy runner with golden tests; `check-booking-architecture` stays thin.
+  5. `window.TMFacade` (and related docs) define the supported public extension surface; unit tests assert shape.
+  6. Footer and newsletter styles are scoped so global footer rules don’t break page-level newsletter sections; `SiteFooter` matches legacy grid behavior.
+  7. Every `SiteLayout` page that mounts `TicketPanel` loads `ticket-panel.css` so overlay UI is not visible as in-flow content below the footer.
+**Plans:** 1 summary (`09-PLAN-SUMMARY.md`) + context (`09-CONTEXT.md`) under `.planning/phases/09-architecture-deepening-template-hygiene/`
+
 ## Coverage
 
 | Requirement | Phase |
@@ -242,10 +257,12 @@ Wave summary:
 
 **Coverage status:** 43/43 v1 requirements mapped exactly once.
 
+**Post-v1 bundle:** Phase 9 documents sustainment / architecture-deepening work; it does **not** add new v1 requirement rows. See `.planning/phases/09-architecture-deepening-template-hygiene/`.
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → **9** (post-v1 hardening / sustainment bundle)
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -257,3 +274,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 6. Analytics, Consent & Forms Contract | 5/5 | Complete | 2026-04-29 |
 | 7. SEO, Schema & Local Search Baseline | 5/5 | Complete | 2026-04-29 |
 | 8. Built-Output Verification & Cutover Readiness | 5/5 | Complete | 2026-04-30 |
+| 9. Architecture deepening & template hygiene | summary | Complete | 2026-04-30 |

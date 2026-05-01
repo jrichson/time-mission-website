@@ -1,0 +1,253 @@
+    <!-- HERO (groups.html-style: photo bg + centered copy) -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="/assets/photos/TM-Groups.jpg" alt="Birthday party at Time Mission" width="1920" height="1280">
+        </div>
+        <div class="hero-content">
+            <div class="section-badge">Groups &amp; Parties</div>
+            <h1 class="hero-title">
+                BIRTHDAY <span class="highlight">PARTIES</span>
+            </h1>
+            <p class="hero-subtitle">Give the guest of honor a birthday they'll actually remember, kids or adults. 25+ interactive missions, head-to-head competition, and a session built around your crew.</p>
+            <div class="hero-cta">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
+                    Book Now
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="/contact?type=birthday" class="btn-secondary">Inquire Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1, Why Time Mission (3 feature cards) -->
+    <section class="event-page-section">
+        <div class="event-page-section-inner">
+            <div class="event-page-section-header reveal">
+                <div class="section-badge">Why Time Mission</div>
+                <h2>A birthday that beats <span class="highlight">anything&nbsp;else</span></h2>
+                <p>Skip the standard spots. Whether it's a 7-year-old's first big party or a 40th milestone bash, Time Mission puts the whole crew inside 25+ interactive mission rooms, racing the clock, racking up points, and giving the guest of honor center stage.</p>
+            </div>
+            <div class="event-page-feature-grid">
+                <div class="event-page-feature-card reveal">
+                    <div class="event-page-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9"/></svg>
+                    </div>
+                    <h3>25+ Mission Rooms</h3>
+                    <p>Every room is a new challenge, physical, strategic, goofy, competitive. A completely different experience from anywhere else you've celebrated a birthday.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <div class="event-page-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3>Everyone Plays</h3>
+                    <p>Split into teams, race the clock, and score points together. Kids, grown-ups, and every age in between, everyone gets in the game.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <div class="event-page-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                    <h3>Guest Of Honor Gets The Spotlight</h3>
+                    <p>Live leaderboard, real scores, real bragging rights. Whether it's turning 8 or 38, the guest of honor walks out with the kind of stories a cake-and-candles party just can't deliver.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2, What's included (image + list) -->
+    <section class="event-page-section alt-bg">
+        <div class="event-page-section-inner">
+            <div class="event-page-split">
+                <div class="event-page-split-image reveal">
+                    <picture>
+                        <source srcset="/assets/photos/groups/field-trips.jpg" type="image/jpeg">
+                        <img src="/assets/photos/groups/field-trips.jpg" alt="Group playing at Time Mission" width="1400" height="1120" loading="lazy" decoding="async">
+                    </picture>
+                </div>
+                <div class="event-page-split-copy reveal">
+                    <div class="section-badge">What to Expect</div>
+                    <h2>A Session Built For Your <span class="highlight">Crew</span></h2>
+                    <p>Starting at a flat rate per guest, pricing varies by location. Everything the birthday crew needs to compete, score, and walk out with stories.</p>
+                    <ul class="event-page-includes">
+                        <li>Reserved session time for your whole group</li>
+                        <li>Full access to all 25+ interactive missions</li>
+                        <li>Team-based head-to-head scoring with live leaderboard</li>
+                        <li>Personal score card for every guest, replay anytime</li>
+                        <li>Ages 6 and up play together; no one sits out</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3, How it works (3-step feature cards) -->
+    <section class="event-page-section">
+        <div class="event-page-section-inner">
+            <div class="event-page-section-header reveal">
+                <div class="section-badge">How it works</div>
+                <h2>Three steps. <span class="highlight">That's it.</span></h2>
+            </div>
+            <div class="event-page-feature-grid">
+                <div class="event-page-feature-card reveal">
+                    <span class="event-page-step-number">Step 01</span>
+                    <h3>Pick a Date</h3>
+                    <p>Tell us the location, date, and headcount. We'll confirm availability and hold your session within one business day.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <span class="event-page-step-number">Step 02</span>
+                    <h3>Plan Your Extras</h3>
+                    <p>Add-ons like pizza, drinks, and party extras vary by location. We'll walk you through what's available when you book.</p>
+                </div>
+                <div class="event-page-feature-card reveal">
+                    <span class="event-page-step-number">Step 03</span>
+                    <h3>Show Up &amp; Compete</h3>
+                    <p>Arrive, split into teams, and let the birthday crew take over the missions. The leaderboard does the rest.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="event-page-faq">
+        <div class="event-page-faq-inner">
+            <div class="event-page-section-header reveal">
+                <div class="section-badge">Got Questions?</div>
+                <h2>Frequently Asked</h2>
+            </div>
+            <div class="faq-section">
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>How many kids can we have at the party?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Minimum group size is typically 8 guests. Maximum depends on the location, most venues can comfortably host 20–30 for a birthday party. Let us know your headcount and we'll confirm what's possible.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>Can we bring cake, food, or party extras?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">It varies by location. Some venues have seating areas for cake and snacks, others are mission-only. When you request a quote, we'll walk you through what your specific location offers, including any food, drink, or add-on packages available there.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>What ages does this work for?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Ages 6 and up. Kids 6–13 need an adult in the group. Ages 14+ can play on their own. Adult birthdays and milestone events are a big part of what we do too.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>How far in advance should we book?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Three to four weeks is the sweet spot for weekend parties, weekend slots fill fastest. Weekdays are usually available with a week's notice.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>Is food available at the venue?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">Food and drink offerings vary by location. Some venues have full concessions, others are BYO-friendly. We'll confirm what's available at your selected location when you book.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <h3>What's the deposit and cancellation policy?</h3>
+                        <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">A small deposit holds your date. Full details, including reschedule windows, are included in the booking confirmation we send once you request a quote.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA + Cross-sell to other event types -->
+    <section class="event-page-cta">
+        <div class="event-page-cta-inner">
+            <h2>Ready to <span class="highlight">celebrate?</span></h2>
+            <p class="event-page-cta-subtitle">Lock in your date and we'll take it from there.</p>
+            <div class="event-page-cta-buttons">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
+                    Book Now
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="/contact?type=birthday" class="btn-secondary">Inquire Now</a>
+            </div>
+
+            <div class="event-page-cross-sell-title">Other event types</div>
+            <div class="event-page-cross-sell-grid">
+                <a href="/groups/birthdays" class="is-current">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16h16"/><path d="M2 21h20"/><path d="M8 7V5a1 1 0 0 1 2 0v2"/><path d="M14 7V5a1 1 0 0 1 2 0v2"/></svg>
+                    <span>Birthdays</span>
+                </a>
+                <a href="/groups/corporate">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8"/><path d="M9 2l-1 6a4 4 0 0 0 8 0l-1-6"/><path d="M12 12v8"/><path d="M8 22h8"/></svg>
+                    <span>Corporate</span>
+                </a>
+                <a href="/groups/field-trips">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span>Field Trips</span>
+                </a>
+                <a href="/groups/bachelor-ette">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0L12 5.35l-.77-.77a5.41 5.41 0 1 0-7.65 7.65l8.42 8.42 8.42-8.42a5.41 5.41 0 0 0 0-7.65z"/></svg>
+                    <span>Bachelor/ette</span>
+                </a>
+                <a href="/groups/private-events">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16.5l-6.5-6.5-4.4 9.6a1 1 0 0 0 1.3 1.3l9.6-4.4z"/><path d="M18 13l2-.5"/><path d="M15 9l-1 1"/></svg>
+                    <span>Private Events</span>
+                </a>
+                <a href="/groups/holidays">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+                    <span>Holidays</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <h2>DON'T MISS A THING</h2>
+            <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
+            <form name="newsletter" method="POST" action="/contact-thank-you" data-netlify="true" netlify-honeypot="bot-field">
+                <input type="hidden" name="form-name" value="newsletter">
+                <p class="visually-hidden">
+                    <label>Do not fill this out if you are human: <input name="bot-field"></label>
+                </p>
+                <div class="newsletter-form">
+                    <label class="visually-hidden" for="newsletter-given-name-birthdays">First name</label>
+                    <input type="text" id="newsletter-given-name-birthdays" name="given_name" placeholder="First Name" autocomplete="given-name" required>
+                    <label class="visually-hidden" for="newsletter-family-name-birthdays">Last name</label>
+                    <input type="text" id="newsletter-family-name-birthdays" name="family_name" placeholder="Last Name" autocomplete="family-name">
+                    <label class="visually-hidden" for="newsletter-email-birthdays">Email</label>
+                    <input type="email" id="newsletter-email-birthdays" name="email" placeholder="Email" class="full-width" autocomplete="email" required>
+                </div>
+                <label class="newsletter-consent">
+                    <input type="checkbox" name="marketing_opt_in" value="yes" required>
+                    <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+                </label>
+                <button type="submit" class="btn-subscribe">Sign Up</button>
+                <p class="newsletter-legal">
+                    By signing up, you agree to our
+                    <a href="/terms">Terms of Service</a> and
+                    <a href="/privacy">Privacy Policy</a>.
+                </p>
+            </form>
+        </div>
+    </section>

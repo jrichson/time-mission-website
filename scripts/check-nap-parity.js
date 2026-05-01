@@ -1,11 +1,11 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
 
-/** keep in sync with scripts/sync-static-to-public.mjs ASTRO_RENDERED_OUTPUT_FILES (location pages only). */
-const ASTRO_RENDERED_LOCATION_HTML = new Set(['philadelphia.html', 'houston.html']);
+const ASTRO_RENDERED_OUTPUT_FILES = loadAstroRenderedOutputFilesSet(root);
 
 const locationsDoc = JSON.parse(fs.readFileSync(path.join(root, 'data/locations.json'), 'utf8'));
 const routesData = JSON.parse(fs.readFileSync(path.join(root, 'src/data/routes.json'), 'utf8'));
@@ -111,9 +111,12 @@ function assertNap(slug, loc, biz, outFile) {
   }
 }
 
-const locationRoutes = routesData.routes.filter((r) =>
-  ASTRO_RENDERED_LOCATION_HTML.has(r.outputFile.replace(/^\//, '')),
-);
+const locationSlugSet = new Set(locationsDoc.locations.map((l) => l.slug));
+const locationRoutes = routesData.routes.filter((r) => {
+  const out = r.outputFile.replace(/^\//, '');
+  const slug = r.canonicalPath.replace(/^\//, '');
+  return ASTRO_RENDERED_OUTPUT_FILES.has(out) && locationSlugSet.has(slug);
+});
 
 let count = 0;
 for (const route of locationRoutes) {

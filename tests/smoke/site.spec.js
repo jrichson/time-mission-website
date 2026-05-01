@@ -1,4 +1,20 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const path = require('node:path');
+const { fingerprintAnalyticsLabels } = require('../../scripts/lib/analytics-labels-fingerprint.cjs');
+
+require('tsx/cjs/api').register();
+const { locationsFingerprintFromRecords } = require('../../src/lib/locations-fingerprint.ts');
+
+const REPO_ROOT = path.resolve(__dirname, '../..');
+
+/** Wait for GTM bootstrap push, then read `consent_profile` from `tm_tagging_config`. */
+async function readTaggingConsentProfile(page) {
+  await page.waitForFunction(() => Array.isArray(window.dataLayer) && window.dataLayer.length > 0);
+  return page.evaluate(() => {
+    return window.dataLayer.find((entry) => entry && entry.event === 'tm_tagging_config')?.consent_profile || '';
+  });
+}
 
 test('homepage loads core navigation and booking panel', async ({ page }) => {
   await page.goto('/');
@@ -15,16 +31,55 @@ test('homepage loads core navigation and booking panel', async ({ page }) => {
 
 test('ticket panel options hydrate from location data', async ({ page }) => {
   await page.goto('/');
+
+  const expectedCount = await page.evaluate(() =>
+    typeof window.__TM_SITE_CONTRACT__ === 'object' && window.__TM_SITE_CONTRACT__
+      ? window.__TM_SITE_CONTRACT__.ticketOptionCount
+      : 0
+  );
+  expect(expectedCount).toBeGreaterThan(0);
+
   await page.locator('.hero-cta .btn-tickets').click();
 
   const options = page.locator('#ticketLocation option');
-  await expect(options).toHaveCount(10);
+  await expect(options).toHaveCount(expectedCount);
 
   await page.locator('#ticketLocation').selectOption('orland-park');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/orland-park?book=1');
 
   await page.locator('#ticketLocation').selectOption('manassas');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/manassas?book=1');
+});
+
+test('embedded site contract analytics slice matches analytics-labels.json', async ({ page }) => {
+  const labelsPath = path.join(REPO_ROOT, 'src', 'data', 'site', 'analytics-labels.json');
+  const labels = JSON.parse(fs.readFileSync(labelsPath, 'utf8'));
+  const expectedFp = fingerprintAnalyticsLabels(labels);
+  const expectedEventNames = Object.keys(labels.eventNames).length;
+  const expectedParams = Object.keys(labels.parameters).length;
+
+  await page.goto('/');
+  const got = await page.evaluate(() => {
+    const c = window.__TM_SITE_CONTRACT__;
+    return c && c.analytics ? c.analytics : null;
+  });
+  expect(got).toBeTruthy();
+  expect(got.fingerprint).toBe(expectedFp);
+  expect(got.eventNameCount).toBe(expectedEventNames);
+  expect(got.parameterCount).toBe(expectedParams);
+});
+
+test('embedded site contract locationsFingerprint matches data/locations.json roster', async ({ page }) => {
+  const locDoc = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'data', 'locations.json'), 'utf8'));
+  const expected = locationsFingerprintFromRecords(locDoc.locations || []);
+
+  await page.goto('/');
+  const got = await page.evaluate(() =>
+    window.__TM_SITE_CONTRACT__ ? window.__TM_SITE_CONTRACT__.locationsFingerprint : null
+  );
+  expect(got).toBe(expected);
+  expect(typeof got).toBe('string');
+  expect(got.length).toBe(8);
 });
 
 test('open location ?book=1 navigates to https checkout', async ({ page }) => {
@@ -88,18 +143,10 @@ test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer (Phase 6)', asyn
 
 test('startup tagging config exposes consent profile by route type', async ({ page }) => {
   await page.goto('/houston');
-  await page.waitForFunction(() => Array.isArray(window.dataLayer) && window.dataLayer.length > 0);
-  const usProfile = await page.evaluate(() => {
-    return window.dataLayer.find((entry) => entry && entry.event === 'tm_tagging_config')?.consent_profile || '';
-  });
-  expect(usProfile).toBe('us_open');
+  await expect.poll(async () => readTaggingConsentProfile(page)).toBe('us_open');
 
   await page.goto('/faq');
-  await page.waitForFunction(() => Array.isArray(window.dataLayer) && window.dataLayer.length > 0);
-  const globalProfile = await page.evaluate(() => {
-    return window.dataLayer.find((entry) => entry && entry.event === 'tm_tagging_config')?.consent_profile || '';
-  });
-  expect(globalProfile).toBe('global_strict');
+  await expect.poll(async () => readTaggingConsentProfile(page)).toBe('global_strict');
 });
 
 test('strict profiles do not persist paid attribution before consent grant', async ({ page }) => {
@@ -114,6 +161,44 @@ test('strict profiles do not persist paid attribution before consent grant', asy
   await page.waitForTimeout(50);
   const afterGrant = await page.evaluate(() => localStorage.getItem('tm_attribution_v1'));
   expect(afterGrant).not.toBeNull();
+});
+
+test('analytics click delegation tracks phone and email clicks without PII', async ({ page }) => {
+  await page.goto('/');
+
+  await page.evaluate(() => {
+    const phone = document.createElement('a');
+    phone.id = 'tm-test-phone-link';
+    phone.href = 'tel:+15555555555';
+    phone.textContent = 'Call Test';
+    document.body.appendChild(phone);
+
+    const email = document.createElement('a');
+    email.id = 'tm-test-email-link';
+    email.href = 'mailto:test@example.com';
+    email.textContent = 'Email Test';
+    document.body.appendChild(email);
+  });
+
+  await page.locator('#tm-test-phone-link').click();
+  await page.locator('#tm-test-email-link').click();
+
+  const result = await page.evaluate(() => {
+    const phoneEvent = window.dataLayer.find((entry) => entry && entry.event_name === 'PHONE_CLICK');
+    const emailEvent = window.dataLayer.find((entry) => entry && entry.event_name === 'EMAIL_CLICK');
+
+    return {
+      hasPhone: !!phoneEvent,
+      hasEmail: !!emailEvent,
+      phoneCtaId: phoneEvent?.parameters?.CTA_ID || '',
+      emailCtaId: emailEvent?.parameters?.CTA_ID || '',
+    };
+  });
+
+  expect(result.hasPhone).toBe(true);
+  expect(result.hasEmail).toBe(true);
+  expect(result.phoneCtaId).toBe('phone_link');
+  expect(result.emailCtaId).toBe('email_link');
 });
 
 test('legacy .html URLs are served or redirected (preview vs production redirects)', async ({ request }) => {

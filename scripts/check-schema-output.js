@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -8,18 +9,10 @@ function loadJson(rel) {
   return JSON.parse(fs.readFileSync(path.join(root, rel), 'utf8'));
 }
 
-/** keep in sync with scripts/sync-static-to-public.mjs — schema-checked subset (no JSON-LD on thank-you page). */
-const SCHEMA_CHECK_OUTPUT_FILES = new Set([
-  'index.html',
-  'about.html',
-  'faq.html',
-  'contact.html',
-  'privacy.html',
-  'locations.html',
-  'groups/corporate.html',
-  'philadelphia.html',
-  'houston.html',
-]);
+/** Subset of Astro-rendered routes: excludes pages without mandatory JSON-LD (e.g. thank-you). */
+const SCHEMA_CHECK_OUTPUT_FILES = new Set(
+  [...loadAstroRenderedOutputFilesSet(root)].filter((f) => f !== 'contact-thank-you.html'),
+);
 
 const routesData = loadJson('src/data/routes.json');
 const locationsDoc = loadJson('data/locations.json');

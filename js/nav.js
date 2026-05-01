@@ -5,7 +5,18 @@
 
 (function() {
     function normalizeLocation(value) {
+        if (window.TM && typeof window.TM.normalizeSlug === 'function') {
+            return window.TM.normalizeSlug(value);
+        }
         return (value || '').toLowerCase().trim().replace(/\s+/g, '-');
+    }
+
+    function pathIsHomeIndex() {
+        if (window.TM && typeof window.TM.isIndexPath === 'function') {
+            return window.TM.isIndexPath();
+        }
+        const p = window.location.pathname;
+        return p === '/' || p.endsWith('/index.html') || p.endsWith('/index.htm');
     }
 
     function getLocationContext() {
@@ -14,8 +25,8 @@
         return {
             ready: window.TM.ready,
             getCurrent: function() { return window.TM.current || null; },
-            select: function(slug) {
-                if (typeof window.TM.select === 'function') window.TM.select(slug);
+            select: function (slug, opts) {
+                if (typeof window.TM.select === 'function') window.TM.select(slug, opts);
             }
         };
     }
@@ -66,7 +77,7 @@
     }
 
     // Helper to sync all location displays + localStorage
-    function syncAllLocations(city, slug) {
+    function syncAllLocations(city, slug, selectOpts) {
         const normalized = normalizeLocation(slug || city);
         const mainLocText = document.getElementById('locationText');
         if (mainLocText) mainLocText.textContent = city;
@@ -76,7 +87,7 @@
         } catch (err) {}
         const context = getLocationContext();
         if (context && typeof context.select === 'function') {
-            context.select(normalized);
+            context.select(normalized, selectOpts);
         }
         // Update hero eyebrow on mobile (function exposed by index.html)
         if (window.updateEyebrowLocation) window.updateEyebrowLocation(city);
@@ -95,9 +106,9 @@
 
     // Location overlay toggle and selection
     const locationBtn = document.getElementById('locationBtn');
-    const locationText = document.getElementById('locationText');
     const locationOverlay = document.getElementById('locationDropdown');
     const locationLinks = locationOverlay ? locationOverlay.querySelectorAll('a') : [];
+    const narrowPickerQuery = window.matchMedia('(max-width: 768px)');
 
     if (locationBtn && locationOverlay) {
         function openLocationOverlay() {
@@ -148,42 +159,39 @@
             link.addEventListener('click', (e) => {
                 const cityName = link.dataset.city;
                 const slug = getLocationSlug(link);
+                const narrowPicker = narrowPickerQuery.matches;
+                const isComingSoonLink = link.classList.contains('location-coming-soon');
                 if (cityName) {
-                    syncAllLocations(cityName, slug);
+                    const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
+                    syncAllLocations(cityName, slug, overlayTrack);
                     showLocationInfo(slug || cityName);
                 }
 
-                const hrefPath = slug;
-                if (hrefPath && window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
-                    window.TMAnalytics.track('location_select', {
-                        location_slug: hrefPath,
-                        cta_id: 'nav_location_overlay',
-                    });
-                }
-
-                // Desktop: save location and navigate to location page
-                if (!window.matchMedia('(max-width: 768px)').matches) {
-                    // Let the default href navigation happen
+                /*
+                 * Narrow viewports + open venues: keep the overlay open after sync so users
+                 * can read details; they follow "Full venue page" or Book when ready.
+                 * Coming-soon rows still behave like landing links immediately.
+                 */
+                if (narrowPicker && slug && !isComingSoonLink) {
+                    e.preventDefault();
+                    const panel = document.getElementById('locationInfo');
+                    if (panel) {
+                        requestAnimationFrame(function () {
+                            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        });
+                    }
                     return;
                 }
 
-                // Mobile: save location, close overlay, navigate
+                // Desktop: default navigation to location slug
+                if (!narrowPicker) {
+                    return;
+                }
+
+                // Mobile coming-soon: close after navigation kicks in
                 closeLocationOverlay();
             });
         });
-
-        // Load saved location on page load (only on location pages, not index)
-        const isIndexPage = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname.endsWith('/index.htm');
-        const context = getLocationContext();
-        if (context && context.ready && typeof context.ready.then === 'function') {
-            context.ready.then(function () {
-                if (isIndexPage) return;
-                const current = typeof context.getCurrent === 'function' ? context.getCurrent() : null;
-                if (current && current.shortName) {
-                    syncAllLocations(current.shortName, current.slug || current.id);
-                }
-            });
-        }
     }
 
     function getLocationSlug(link) {
@@ -237,16 +245,33 @@
 
         renderMapEmbed(mapEl, data.mapEmbedUrl);
 
+        var pageTour = infoPanel.querySelector('.location-info-page');
+        if (pageTour && data.pageUrl) {
+            pageTour.href = data.pageUrl;
+            pageTour.hidden = !!data.comingSoon;
+            pageTour.setAttribute(
+                'aria-label',
+                data.name ? 'Open venue landing page — ' + data.name : 'Open venue landing page'
+            );
+        }
+
         if (empty) empty.style.display = 'none';
         details.style.display = 'block';
     }
 
-    // Show info for saved location on load
-    const contextForInfo = getLocationContext();
-    if (contextForInfo && contextForInfo.ready && typeof contextForInfo.ready.then === 'function') {
-        contextForInfo.ready.then(function () {
-            const current = typeof contextForInfo.getCurrent === 'function' ? contextForInfo.getCurrent() : null;
-            if (current && (current.id || current.slug)) showLocationInfo(current.id || current.slug);
+    const navLoadContext = getLocationContext();
+    if (navLoadContext && navLoadContext.ready && typeof navLoadContext.ready.then === 'function') {
+        navLoadContext.ready.then(function () {
+            if (locationBtn && locationOverlay && !pathIsHomeIndex()) {
+                const cur = typeof navLoadContext.getCurrent === 'function' ? navLoadContext.getCurrent() : null;
+                if (cur && cur.shortName) {
+                    syncAllLocations(cur.shortName, cur.slug || cur.id);
+                }
+            }
+            const cur = typeof navLoadContext.getCurrent === 'function' ? navLoadContext.getCurrent() : null;
+            if (cur && (cur.id || cur.slug)) {
+                showLocationInfo(cur.id || cur.slug);
+            }
         });
     }
 })();

@@ -8,11 +8,18 @@
  */
 import fs from 'fs';
 import path from 'path';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const publicDir = path.join(root, 'public');
+
+const compileArtifacts = path.join(__dirname, 'compile-route-artifacts.mjs');
+const compileRes = spawnSync(process.execPath, [compileArtifacts], { cwd: root, stdio: 'inherit' });
+if (compileRes.status !== 0) {
+  process.exit(compileRes.status ?? 1);
+}
 
 // sitemap.xml is now emitted by src/pages/sitemap.xml.ts at build time (Phase 7 D-04).
 // llms.txt is emitted by src/pages/llms.txt.ts.
@@ -76,19 +83,15 @@ const routesPath = path.join(root, 'src', 'data', 'routes.json');
 const routesJson = JSON.parse(fs.readFileSync(routesPath, 'utf8'));
 const routes = routesJson.routes || [];
 
-/** Routes whose HTML is produced by Astro `src/pages/*.astro` (Phase 4+). Skip copying legacy stubs into `public/`. */
-const ASTRO_RENDERED_OUTPUT_FILES = new Set([
-    'index.html',
-    'about.html',
-    'faq.html',
-    'contact.html',
-    'contact-thank-you.html',
-    'privacy.html',
-    'locations.html',
-    'groups/corporate.html',
-    'philadelphia.html',
-    'houston.html',
-]);
+const astroManifestPath = path.join(root, 'src', 'data', 'site', 'astro-rendered-output-files.json');
+const astroManifest = JSON.parse(fs.readFileSync(astroManifestPath, 'utf8'));
+
+/** Routes whose HTML is produced by Astro `src/pages/*.astro` — from `src/data/site/astro-rendered-output-files.json`. */
+const ASTRO_RENDERED_OUTPUT_FILES = new Set(astroManifest.outputFiles || []);
+if (ASTRO_RENDERED_OUTPUT_FILES.size === 0) {
+  console.error('- astro-rendered-output-files.json: missing or empty outputFiles');
+  process.exit(1);
+}
 
 /** Remove stale `public/` HTML from prior syncs so Astro output is not shadowed */
 for (const rel of ASTRO_RENDERED_OUTPUT_FILES) {

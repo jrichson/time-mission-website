@@ -45,4 +45,32 @@
     --body: 'DM Sans', sans-serif;
     --mono: 'DM Sans', sans-serif;
     --tech: 'Monument Extended', 'Orbitron', sans-serif;
+
+    /* Layout rhythm — shared by event-type & long-form marketing sections */
+    --space-page-inline: clamp(1.25rem, 4vw, 2rem);
+    --space-section-y: clamp(3.25rem, 8vw, 5.5rem);
+    --space-section-y-tight: clamp(2.75rem, 6vw, 4.25rem);
+    --space-gutter: clamp(1.5rem, 3vw, 2rem);
+    --space-gutter-lg: clamp(2rem, 4vw, 3rem);
+    --space-after-header: clamp(2rem, 4.5vw, 3rem);
+    --space-hero-top: clamp(7rem, 12vw, 10rem);
+    --space-hero-bottom: clamp(3rem, 6vw, 4.5rem);
+
+    /* Fixed ticker bar content height (nav offset = this + safe-area-inset-top in nav.css) */
+    --tm-ticker-height: 36px;
+
+    /*
+     * Responsive breakpoints (conventions across CSS):
+     * 1024 — nav hamburger, mobile menu, section texture scroll, location overlay stack
+     * 900  — footer grid, event-type splits
+     * 768  — footer 1-col, nav compact, FAQ padding, location overlay padding
+     * 600  — event hero / CTA stack
+     * 400  — ticket panel full viewport width
+     */
+}
+
+@media (max-width: 768px) {
+    :root {
+        --tm-ticker-height: 32px;
+    }
 }

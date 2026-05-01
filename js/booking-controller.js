@@ -124,20 +124,23 @@
         }
 
         if (opts.deferUntilLoad) {
-            window.addEventListener('load', function () {
+            function doDeferredNav() {
                 setTimeout(function () {
                     window.location.href = href;
                 }, 300);
-            });
+            }
+            // TM.ready often resolves after fetch — after window "load" already fired.
+            // Listening for "load" alone never runs in that case (BOOK-04 / ?book=1 auto-redirect).
+            if (document.readyState === 'complete') {
+                doDeferredNav();
+            } else {
+                window.addEventListener('load', doDeferredNav);
+            }
             return true;
         }
 
         window.location.assign(href);
         return true;
-    }
-
-    function collectButtons(root, selector) {
-        return Array.prototype.slice.call(root.querySelectorAll(selector || '[data-tm-booking-trigger]'));
     }
 
     function attach(root, options) {
@@ -165,7 +168,7 @@
             }
         };
 
-        var buttons = collectButtons(root, selector);
+        var buttons = Array.prototype.slice.call(root.querySelectorAll(selector));
         buttons.forEach(function (button) {
             button.addEventListener('click', handler);
         });
@@ -185,5 +188,21 @@
         getDestination: getDestination,
         navigate: navigate,
         isDirectBookingUrl: isDirectBookingUrl,
+    };
+
+    /** Supported extension surface for new features (see docs/tm-public-api.md). */
+    window.TMFacade = {
+        get TM() {
+            return window.TM;
+        },
+        get TMBooking() {
+            return window.TMBooking;
+        },
+        get TMAnalytics() {
+            return window.TMAnalytics;
+        },
+        get BookingController() {
+            return window.BookingController;
+        },
     };
 })();

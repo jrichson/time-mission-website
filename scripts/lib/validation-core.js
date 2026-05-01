@@ -73,6 +73,7 @@ module.exports = {
   loadJson,
   stripQueryAndHash,
   normalizeCanonicalPath,
+  walkHtmlFiles,
   listDeployableHtmlPages,
   printCheckErrors,
   runCheck,

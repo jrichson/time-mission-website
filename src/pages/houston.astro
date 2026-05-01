@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
 import houstonCss from '../partials/houston-inline.raw.css.txt?raw';
 import houstonMain from '../partials/houston-main.frag.txt?raw';
@@ -16,16 +17,17 @@ const ld = serializeGraph(
         { label: houston.shortName, href: '/houston' },
     ]),
 );
+const page = definePage({ canonicalPath: '/houston' });
 ---
 
 <SiteLayout
-    canonicalPath="/houston"
+    canonicalPath={page.canonicalPath}
     bodyDataLocation={houston.slug}
 >
     <Fragment slot="head-extra">
         <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" />
-        <link rel="stylesheet" href="/css/footer.css?v=2" />
-        <link rel="stylesheet" href="/css/newsletter.css" />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />
     </Fragment>
     <Fragment slot="page-style">

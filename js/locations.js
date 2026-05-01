@@ -9,7 +9,7 @@
  * API:
  *   TM.locations    — array of all location objects
  *   TM.current      — currently selected location object (or null)
- *   TM.select(id)   — set active location by id, persists to localStorage
+ *   TM.select(id, opts?) — set active location by id; optional opts.cta_id for analytics
  *   TM.clear()      — clear selected location
  *   TM.ready        — promise that resolves when data is loaded
  */
@@ -93,6 +93,12 @@
         return String(value || '').toLowerCase().trim().replace(/\s+/g, '-');
     }
 
+    /** Homepage paths where we skip auto-restore of saved location */
+    function isIndexPage() {
+        const pathname = window.location.pathname;
+        return pathname === '/' || pathname.endsWith('/index.html') || pathname.endsWith('/index.htm');
+    }
+
     function resolveLocationRef(id) {
         if (!id) return TM.current;
         const normalized = normalizeLocationId(id);
@@ -173,6 +179,7 @@
     }
 
     function listTicketOptions() {
+        // Labels/order must match src/lib/ticket-options.ts (ticketPanelSelectOptions).
         const source = TM.locations.length ? TM.locations : Object.keys(FALLBACK).map((id) => {
             return Object.assign({ id: id, slug: id }, FALLBACK[id]);
         });
@@ -183,6 +190,42 @@
         }));
     }
 
+    /** Must match src/lib/locations-fingerprint.ts (locationsFingerprintFromRecords). */
+    function fingerprintRuntimeLocations(locs) {
+        if (!locs || !locs.length) return '';
+        var sorted = locs.slice().sort(function (a, b) {
+            return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+        });
+        var h = 5381;
+        for (var li = 0; li < sorted.length; li++) {
+            var loc = sorted[li];
+            var chunk = loc.id + ':' + (loc.status || 'open') + '|';
+            for (var i = 0; i < chunk.length; i++) {
+                h = (Math.imul(33, h) + chunk.charCodeAt(i)) >>> 0;
+            }
+        }
+        return ('00000000' + h.toString(16)).slice(-8);
+    }
+
+    function maybeTrackSiteContractStale() {
+        var embed = window.__TM_SITE_CONTRACT__;
+        if (!embed || !embed.locationsFingerprint) return;
+        if (!TM.locations.length) return;
+        var runtimeFp = fingerprintRuntimeLocations(TM.locations);
+        if (runtimeFp === embed.locationsFingerprint) return;
+        try {
+            if (sessionStorage.getItem('tm_site_contract_stale') === '1') return;
+            sessionStorage.setItem('tm_site_contract_stale', '1');
+        } catch (e) {
+            return;
+        }
+        if (window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
+            window.TMAnalytics.track('site_contract_stale', {
+                cta_id: 'locations_roster_drift',
+            });
+        }
+    }
+
     let _readyResolve;
     const _readyPromise = new Promise(resolve => { _readyResolve = resolve; });
 
@@ -190,6 +233,7 @@
         locations: [],
         current: null,
         _pendingSelect: null,
+        _pendingSelectOpts: null,
 
         /** Promise that resolves when location data is loaded */
         ready: _readyPromise,
@@ -209,6 +253,7 @@
                 console.warn('TM Locations: Could not load data —', e.message);
                 TM.locations = [];
             }
+            maybeTrackSiteContractStale();
             _readyResolve();
         },
 
@@ -227,11 +272,22 @@
             return TM.locations.filter(loc => loc.region === region);
         },
 
+        /** Canonical slug normalization (aligned with `id` / `slug` keys) */
+        normalizeSlug(value) {
+            return normalizeLocationId(value);
+        },
+
+        /** Current URL is the marketing homepage */
+        isIndexPath() {
+            return isIndexPage();
+        },
+
         /** Select a location and persist */
-        select(id) {
+        select(id, opts) {
             // If data hasn't loaded yet, queue the selection
             if (TM.locations.length === 0) {
                 TM._pendingSelect = id;
+                TM._pendingSelectOpts = opts || null;
                 try { localStorage.setItem(STORAGE_KEY, id); } catch (e) {}
                 return;
             }
@@ -244,10 +300,12 @@
             TM.updateDOM();
             document.dispatchEvent(new CustomEvent('tm:location-changed', { detail: loc }));
             if (window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
-                window.TMAnalytics.track('location_select', {
+                var payload = {
                     location_slug: loc.slug || loc.id,
                     region: loc.region || '',
-                });
+                };
+                if (opts && opts.cta_id) payload.cta_id = opts.cta_id;
+                window.TMAnalytics.track('location_select', payload);
             }
         },
 
@@ -445,7 +503,6 @@
                 const phoneEl = infoPanel.querySelector('.footer-loc-phone');
                 const hoursEl = infoPanel.querySelector('.footer-loc-hours');
                 const mapEl = infoPanel.querySelector('.footer-loc-map');
-                const changeEl = infoPanel.querySelector('.footer-loc-change');
 
                 if (nameEl) nameEl.textContent = loc.name || loc.shortName || '';
                 if (addrEl) renderAddressLines(addrEl, loc.address);
@@ -469,14 +526,15 @@
             return TM.current.hours[today] || null;
         },
 
-        /** Check if the current location is open right now */
+        /** Check if the current location is open right now (needs structured open/close; label-only hours return null) */
         isOpenNow() {
             const hours = TM.getTodayHours();
-            if (!hours) return null;
+            if (!hours || typeof hours.open !== 'string' || typeof hours.close !== 'string') return null;
             const now = new Date();
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
             const [openH, openM] = hours.open.split(':').map(Number);
             const [closeH, closeM] = hours.close.split(':').map(Number);
+            if (Number.isNaN(openH) || Number.isNaN(closeH)) return null;
             const openMinutes = openH * 60 + openM;
             let closeMinutes = closeH * 60 + closeM;
             if (closeMinutes === 0) closeMinutes = 24 * 60;
@@ -487,12 +545,6 @@
     /** Resolve a dot-notation field path on an object */
     function resolveField(obj, path) {
         return path.split('.').reduce((o, key) => (o && o[key] !== undefined ? o[key] : undefined), obj);
-    }
-
-    /** Check if current page is the index/homepage */
-    function isIndexPage() {
-        const path = window.location.pathname;
-        return path === '/' || path.endsWith('/index.html') || path.endsWith('/index.htm');
     }
 
     /** Initialize on DOM ready */
@@ -506,8 +558,10 @@
         // Process any pending selection (from location pages that called select before load)
         if (TM._pendingSelect) {
             const pendingId = TM._pendingSelect;
+            const pendingOpts = TM._pendingSelectOpts;
             TM._pendingSelect = null;
-            TM.select(pendingId);
+            TM._pendingSelectOpts = null;
+            TM.select(pendingId, pendingOpts);
         }
 
         TM.updateDOM();
@@ -560,8 +614,8 @@
         getInfoPanelView(id) {
             return getInfoPanelView(id);
         },
-        select(id) {
-            if (typeof TM.select === 'function') TM.select(id);
+        select(id, opts) {
+            if (typeof TM.select === 'function') TM.select(id, opts);
         },
         clear() {
             if (typeof TM.clear === 'function') TM.clear();

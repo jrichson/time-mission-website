@@ -21,6 +21,14 @@
             z-index: 0;
         }
 
+        @media (max-width: 1024px) {
+            .what-is::before,
+            .steps::before,
+            .about-cta::before {
+                background-attachment: scroll;
+            }
+        }
+
         /* Hero */
         .about-hero {
             position: relative;

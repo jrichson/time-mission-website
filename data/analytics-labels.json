@@ -14,7 +14,8 @@
     "contact_form_focus": "CONTACT_FORM_FOCUS",
     "contact_form_submit_attempt": "CONTACT_FORM_SUBMIT_ATTEMPT",
     "contact_form_submit_success": "CONTACT_FORM_SUBMIT_SUCCESS",
-    "nav_cta_click": "NAV_CTA_CLICK"
+    "nav_cta_click": "NAV_CTA_CLICK",
+    "site_contract_stale": "SITE_CONTRACT_STALE"
   },
   "parameters": {
     "page_path": "PAGE_PATH",
@@ -41,6 +42,7 @@
     "landing_referrer": "LANDING_REFERRER",
     "form_name": "FORM_NAME",
     "consent_snapshot": "CONSENT_SNAPSHOT",
+    "consent_profile": "CONSENT_PROFILE",
     "timestamp": "TIMESTAMP",
     "event_name": "EVENT_NAME"
   }

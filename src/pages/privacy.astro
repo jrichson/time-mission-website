@@ -1,8 +1,8 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
 import privacyCss from '../partials/privacy-inline.raw.css.txt?raw';
 import privacyMain from '../partials/privacy-main.frag.txt?raw';
-import privacyAfter from '../partials/privacy-after.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 
 const ld = serializeGraph(
@@ -11,14 +11,16 @@ const ld = serializeGraph(
         { label: 'Privacy', href: '/privacy' },
     ]),
 );
+const page = definePage({ canonicalPath: '/privacy' });
 ---
 
 <SiteLayout
-    canonicalPath="/privacy"
+    canonicalPath={page.canonicalPath}
     bodyClass="has-noise"
 >
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/footer.css?v=2" />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
     </Fragment>
     <Fragment slot="page-style">
         <style is:global set:html={privacyCss}></style>
@@ -27,5 +29,4 @@ const ld = serializeGraph(
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={privacyMain} />
-    <Fragment slot="after-site-scripts" set:html={privacyAfter} />
 </SiteLayout>

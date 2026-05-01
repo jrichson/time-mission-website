@@ -29,6 +29,18 @@
             z-index: 0;
         }
 
+        @media (max-width: 1024px) {
+            .welcome::before,
+            .stats::before,
+            .experiences::before,
+            .groups-cta::before,
+            .mini-faq::before,
+            .cta-section::before,
+            .newsletter-section::before {
+                background-attachment: scroll;
+            }
+        }
+
         /* Noise texture overlay */
         body::before {
             content: '';

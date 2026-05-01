@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
 import phillyCss from '../partials/philadelphia-inline.raw.css.txt?raw';
 import phillyMain from '../partials/philadelphia-main.frag.txt?raw';
@@ -16,16 +17,17 @@ const ld = serializeGraph(
         { label: philly.shortName, href: '/philadelphia' },
     ]),
 );
+const page = definePage({ canonicalPath: '/philadelphia' });
 ---
 
 <SiteLayout
-    canonicalPath="/philadelphia"
+    canonicalPath={page.canonicalPath}
     bodyDataLocation={philly.slug}
 >
     <Fragment slot="head-extra">
         <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" />
-        <link rel="stylesheet" href="/css/footer.css?v=2" />
-        <link rel="stylesheet" href="/css/newsletter.css" />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />
     </Fragment>
     <Fragment slot="page-style">

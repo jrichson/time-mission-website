@@ -29,6 +29,18 @@
             z-index: 0;
         }
 
+        @media (max-width: 1024px) {
+            .welcome::before,
+            .stats::before,
+            .experiences::before,
+            .groups-cta::before,
+            .mini-faq::before,
+            .cta-section::before,
+            .newsletter-section::before {
+                background-attachment: scroll;
+            }
+        }
+
         /* Noise texture overlay */
         body::before {
             content: '';
@@ -2333,144 +2345,6 @@
                 gap: 0.75rem;
                 text-align: center;
             }
-        }
-
-        /* Newsletter Section */
-        /* Newsletter Section */
-        .newsletter-section {
-            padding: 4rem 2rem;
-            background: var(--dark);
-            position: relative;
-            overflow: visible;
-        }
-
-        .newsletter-section::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 150px;
-            background: linear-gradient(to top, rgba(239, 75, 35, 0.15) 0%, transparent 100%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .newsletter-inner {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .newsletter-inner h2 {
-            font-family: var(--display);
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            letter-spacing: 0.02em;
-            color: var(--white);
-            margin-bottom: 0.75rem;
-        }
-
-        .newsletter-inner > p {
-            color: var(--gray);
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-
-        .newsletter-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .newsletter-form .full-width {
-            grid-column: 1 / -1;
-        }
-
-        .newsletter-form input {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            color: var(--white);
-            font-family: var(--body);
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        .newsletter-form input:focus {
-            border-color: var(--orange);
-            box-shadow: 0 0 0 3px rgba(255, 107, 44, 0.1);
-        }
-
-        .newsletter-form input::placeholder {
-            color: var(--gray);
-        }
-
-            .newsletter-consent {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            margin-top: 1rem;
-            cursor: pointer;
-        }
-
-        .newsletter-consent input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--orange);
-            margin-top: 2px;
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-
-        .newsletter-consent span {
-            color: var(--gray);
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-
-        .btn-subscribe {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            background: var(--white);
-            border: none;
-            border-radius: 100px;
-            color: var(--black);
-            font-family: var(--tech);
-            font-size: 0.85rem;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5rem;
-        }
-
-        .btn-subscribe:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
-        }
-
-        .newsletter-inner > p.newsletter-legal {
-            color: var(--gray);
-            font-size: 0.85rem;
-            line-height: 1.5;
-            margin-top: 1rem;
-            margin-bottom: 0;
-        }
-
-        .newsletter-legal a {
-            color: var(--orange);
-            text-decoration: underline;
-        }
-
-            .newsletter-legal a:hover {
-            text-decoration: underline;
         }
 
         /* Mobile Styles */

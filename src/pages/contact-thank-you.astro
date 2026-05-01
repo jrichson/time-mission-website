@@ -1,11 +1,14 @@
 ---
 import SiteHead from '../components/SiteHead.astro';
+import { definePage } from '../lib/define-page';
+
+const page = definePage({ canonicalPath: '/contact-thank-you' });
 ---
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <SiteHead canonicalPath="/contact-thank-you" />
+        <SiteHead canonicalPath={page.canonicalPath} />
         <style is:global>
             body {
                 min-height: 100vh;

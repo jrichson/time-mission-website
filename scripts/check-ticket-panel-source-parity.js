@@ -21,6 +21,7 @@ function extractPanel(html) {
 function normalize(s) {
   return s
     .trim()
+    .replace(/<select\b[^>]*>[\s\S]*?<\/select>/gi, '<select></select>')
     .replace(/<option\b[^>]*>[\s\S]*?<\/option>/gi, '<option/>')
     .replace(/-->\s+</g, '--><')
     .replace(/\s+/g, ' ')

@@ -63,6 +63,17 @@ test.describe('visual regression (representative templates)', () => {
     });
   });
 
+  test('groups birthdays', async ({ page }) => {
+    await page.goto('/groups/birthdays');
+    await expect(page.locator('body')).toBeVisible();
+    await stabilizeForScreenshot(page);
+    await expect(page).toHaveScreenshot('groups-birthdays.png', {
+      fullPage: false,
+      animations: 'disabled',
+      maxDiffPixels: 3000,
+    });
+  });
+
   test('faq', async ({ page }) => {
     await page.goto('/faq');
     await page.locator('.faq-question').first().waitFor({ state: 'visible' });

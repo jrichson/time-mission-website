@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
 import contactCss from '../partials/contact-inline.raw.css.txt?raw';
 import contactMain from '../partials/contact-main.frag.txt?raw';
 import contactAfter from '../partials/contact-after.frag.txt?raw';
@@ -11,15 +12,16 @@ const ld = serializeGraph(
         { label: 'Contact', href: '/contact' },
     ]),
 );
+const page = definePage({ canonicalPath: '/contact' });
 ---
 
 <SiteLayout
-    canonicalPath="/contact"
+    canonicalPath={page.canonicalPath}
     bodyClass="has-noise"
 >
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/footer.css?v=2" />
-        <link rel="stylesheet" href="/css/newsletter.css" />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />
     </Fragment>
     <Fragment slot="page-style">

@@ -3,6 +3,7 @@
  */
 const fs = require('node:fs');
 const path = require('node:path');
+const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
 
 const root = path.resolve(__dirname, '..');
 const distDir = path.join(root, 'dist');
@@ -24,6 +25,14 @@ if (!fs.existsSync(distDir) || !fs.statSync(distDir).isDirectory()) {
   process.exit(1);
 }
 
+/** From `src/data/site/astro-rendered-output-files.json` — Astro pages use SiteScripts + site contract. */
+const ASTRO_RENDERED_DIST_HTML = loadAstroRenderedOutputFilesSet(root);
+
+function isAstroRenderedDistHtml(rel) {
+  const norm = rel.split(path.sep).join('/');
+  return ASTRO_RENDERED_DIST_HTML.has(norm);
+}
+
 const REQUIRED_SUBSTRINGS = [
   ['<!-- Ticket Popup Panel -->', 'marker comment'],
   ['id="ticketOverlay"', '#ticketOverlay'],
@@ -31,6 +40,10 @@ const REQUIRED_SUBSTRINGS = [
   ['id="ticketClose" aria-label="Close ticket panel"', 'labeled close button (#ticketClose)'],
   ['id="ticketLocation"', '#ticketLocation select'],
   ['id="ticketBookBtn"', '#ticketBookBtn anchor'],
+];
+
+const ASTRO_CONTRACT_SUBSTRINGS = [
+  ['window.__TM_SITE_CONTRACT__', 'compiled site contract bootstrap'],
 ];
 
 const allHtml = walk(distDir);
@@ -41,7 +54,10 @@ for (const file of allHtml) {
   const html = fs.readFileSync(file, 'utf8');
   if (!html.includes('/js/ticket-panel.js')) continue;
   scanned += 1;
-  for (const [needle, label] of REQUIRED_SUBSTRINGS) {
+  const checkSets = REQUIRED_SUBSTRINGS.concat(
+    isAstroRenderedDistHtml(rel) ? ASTRO_CONTRACT_SUBSTRINGS : []
+  );
+  for (const [needle, label] of checkSets) {
     if (!html.includes(needle)) errors.push(`${rel}: missing ${label}`);
   }
   if (/\/_astro\/[^"]*ticket-panel[^"]*\.js/.test(html)) {

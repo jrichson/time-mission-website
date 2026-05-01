@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
 import indexCss from '../partials/index-inline.raw.css.txt?raw';
 import indexMain from '../partials/index-main.frag.txt?raw';
 import indexPrenav from '../partials/index-prenav.frag.txt?raw';
@@ -7,16 +8,18 @@ import indexAfter from '../partials/index-after.frag.txt?raw';
 import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 
 const ld = serializeGraph(buildHomeGraph());
+const page = definePage({ canonicalPath: '/' });
 ---
 
 <SiteLayout
-    canonicalPath="/"
+    canonicalPath={page.canonicalPath}
 >
     <Fragment slot="head-extra">
         <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" fetchpriority="high" />
-        <link rel="preload" as="style" href="/css/footer.css?v=2" onload="this.onload=null;this.rel='stylesheet'" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
+        <link rel="preload" as="style" href="/css/footer.css?v=3" onload="this.onload=null;this.rel='stylesheet'" />
         <link rel="preload" as="style" href="/css/ticket-panel.css" onload="this.onload=null;this.rel='stylesheet'" />
-        <noscript><link rel="stylesheet" href="/css/footer.css?v=2" /></noscript>
+        <noscript><link rel="stylesheet" href="/css/footer.css?v=3" /></noscript>
         <noscript><link rel="stylesheet" href="/css/ticket-panel.css" /></noscript>
     </Fragment>
     <Fragment slot="page-style">

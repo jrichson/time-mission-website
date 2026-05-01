@@ -14,7 +14,8 @@
     "contact_form_focus": "CONTACT_FORM_FOCUS",
     "contact_form_submit_attempt": "CONTACT_FORM_SUBMIT_ATTEMPT",
     "contact_form_submit_success": "CONTACT_FORM_SUBMIT_SUCCESS",
-    "nav_cta_click": "NAV_CTA_CLICK"
+    "nav_cta_click": "NAV_CTA_CLICK",
+    "site_contract_stale": "SITE_CONTRACT_STALE"
   },
   "parameters": {
     "page_path": "PAGE_PATH",

@@ -37,67 +37,68 @@
             "Swipe Right on Adventure"
         ];
 
-        let currentTaglineIndex = 0;
         const taglineElement = document.getElementById('taglineText');
-        let isTyping = false;
+        window.updateEyebrowLocation = function() {};
 
-        async function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+        if (taglineElement) {
+            let currentTaglineIndex = 0;
+            let isTyping = false;
 
-        async function deleteText() {
-            const currentText = taglineElement.textContent;
-            for (let i = currentText.length; i >= 0; i--) {
-                taglineElement.textContent = currentText.substring(0, i);
-                await sleep(30); // Delete speed
+            async function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
             }
-        }
 
-        async function typeText(text) {
-            for (let i = 0; i <= text.length; i++) {
-                taglineElement.textContent = text.substring(0, i);
-                await sleep(50); // Type speed
+            async function deleteText() {
+                const currentText = taglineElement.textContent;
+                for (let i = currentText.length; i >= 0; i--) {
+                    taglineElement.textContent = currentText.substring(0, i);
+                    await sleep(30); // Delete speed
+                }
             }
+
+            async function typeText(text) {
+                for (let i = 0; i <= text.length; i++) {
+                    taglineElement.textContent = text.substring(0, i);
+                    await sleep(50); // Type speed
+                }
+            }
+
+            async function rotateTagline() {
+                if (isTyping) return;
+                isTyping = true;
+
+                await deleteText();
+                await sleep(200); // Pause between delete and type
+
+                currentTaglineIndex = (currentTaglineIndex + 1) % taglines.length;
+                await typeText(taglines[currentTaglineIndex]);
+
+                isTyping = false;
+            }
+
+            let taglineIntervalId = null;
+            const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+
+            function startRotation() {
+                taglineElement.classList.remove('no-cursor');
+                taglineIntervalId = setInterval(rotateTagline, 4000);
+            }
+
+            function setEyebrowToLocation(city) {
+                if (!isMobile() || !city) return;
+                if (taglineIntervalId) clearInterval(taglineIntervalId);
+                isTyping = false;
+                taglineElement.textContent = 'Time Mission ' + city;
+                taglineElement.classList.add('no-cursor');
+                setTimeout(startRotation, 5000);
+            }
+
+            window.updateEyebrowLocation = function(city) {
+                setEyebrowToLocation(city);
+            };
+
+            setTimeout(startRotation, 3000);
         }
-
-        async function rotateTagline() {
-            if (isTyping) return;
-            isTyping = true;
-
-            await deleteText();
-            await sleep(200); // Pause between delete and type
-
-            currentTaglineIndex = (currentTaglineIndex + 1) % taglines.length;
-            await typeText(taglines[currentTaglineIndex]);
-
-            isTyping = false;
-        }
-
-        let taglineIntervalId = null;
-        const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
-
-        function startRotation() {
-            taglineElement.classList.remove('no-cursor');
-            taglineIntervalId = setInterval(rotateTagline, 4000);
-        }
-
-        // On mobile with location: show "Time Mission {City}" for 5s, then rotate
-        function setEyebrowToLocation(city) {
-            if (!isMobile() || !city) return;
-            if (taglineIntervalId) clearInterval(taglineIntervalId);
-            isTyping = false;
-            taglineElement.textContent = 'Time Mission ' + city;
-            taglineElement.classList.add('no-cursor');
-            setTimeout(startRotation, 5000);
-        }
-
-        // Expose for nav.js to call on location change
-        window.updateEyebrowLocation = function(city) {
-            setEyebrowToLocation(city);
-        };
-
-        // Initialize, index page always uses normal tagline rotation
-        setTimeout(startRotation, 3000);
 
         // ==========================================
         // MINUTES COUNTER, fades through 60, 90, 120
@@ -418,11 +419,17 @@
         document.querySelectorAll('.mini-faq-q').forEach(btn => {
             btn.addEventListener('click', () => {
                 const item = btn.parentElement;
+                if (!item) return;
                 const wasOpen = item.classList.contains('open');
-                // Close all
-                document.querySelectorAll('.mini-faq-item').forEach(i => i.classList.remove('open'));
-                // Toggle clicked
-                if (!wasOpen) item.classList.add('open');
+                document.querySelectorAll('.mini-faq-item').forEach(i => {
+                    i.classList.remove('open');
+                    const q = i.querySelector('.mini-faq-q');
+                    if (q) q.setAttribute('aria-expanded', 'false');
+                });
+                if (!wasOpen) {
+                    item.classList.add('open');
+                    btn.setAttribute('aria-expanded', 'true');
+                }
             });
         });
 
@@ -545,42 +552,38 @@
         const gamePopupClose = document.getElementById('gamePopupClose');
         const gamePopupSkip = document.getElementById('gamePopupSkip');
 
-        function showGamePopup() {
-            // Check if user already dismissed the popup this session
-            if (sessionStorage.getItem('gamePopupDismissed')) return;
+        if (gamePopup && gamePopupClose && gamePopupSkip) {
+            function showGamePopup() {
+                if (sessionStorage.getItem('gamePopupDismissed')) return;
 
-            gamePopup.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent background scroll
-        }
-
-        function hideGamePopup() {
-            gamePopup.classList.remove('active');
-            document.body.style.overflow = '';
-            sessionStorage.setItem('gamePopupDismissed', 'true');
-        }
-
-        // Popup disabled for now, re-enable when ready:
-        // setTimeout(showGamePopup, 8000);
-
-        // Close popup on X button click
-        gamePopupClose.addEventListener('click', hideGamePopup);
-
-        // Close popup on "Maybe later" click
-        gamePopupSkip.addEventListener('click', hideGamePopup);
-
-        // Close popup when clicking outside
-        gamePopup.addEventListener('click', (e) => {
-            if (e.target === gamePopup) {
-                hideGamePopup();
+                gamePopup.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
-        });
 
-        // Close popup on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && gamePopup.classList.contains('active')) {
-                hideGamePopup();
+            function hideGamePopup() {
+                gamePopup.classList.remove('active');
+                document.body.style.overflow = '';
+                sessionStorage.setItem('gamePopupDismissed', 'true');
             }
-        });
+
+            // Popup disabled for now, re-enable when ready:
+            // setTimeout(showGamePopup, 8000);
+
+            gamePopupClose.addEventListener('click', hideGamePopup);
+            gamePopupSkip.addEventListener('click', hideGamePopup);
+
+            gamePopup.addEventListener('click', (e) => {
+                if (e.target === gamePopup) {
+                    hideGamePopup();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && gamePopup.classList.contains('active')) {
+                    hideGamePopup();
+                }
+            });
+        }
     </script>
     <script is:inline>
     // Testimonial carousel, transform-based infinite loop with swipe support

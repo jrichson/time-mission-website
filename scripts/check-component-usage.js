@@ -23,16 +23,45 @@ const pageFiles = walk(pagesDir);
 if (!pageFiles.length) errors.push('no src/pages/**/*.astro files found');
 
 const importLayoutRe = /import\s+SiteLayout\s+from\s+['"][^'"]+SiteLayout\.astro['"]/;
+const definePageImportRe = /import\s+\{\s*definePage\s*\}\s+from\s+['"][^'"]*\/lib\/define-page['"]/;
+const definePageCallRe = /\bdefinePage\s*\(\s*\{/;
 
-/** Pages that intentionally omit SiteLayout (parity with legacy minimal HTML). */
-const standalonePages = new Set([path.join('src', 'pages', 'contact-thank-you.astro')]);
+/** Canonical path wiring must flow through definePage(...) → page.canonicalPath. */
+function hasCanonicalSpread(text) {
+  return text.includes('canonicalPath={page.canonicalPath}');
+}
+
+/** Pages that intentionally omit SiteLayout (minimal HTML shell). RFC: still use definePage. */
+const standalonePageRels = new Set(['src/pages/contact-thank-you.astro']);
 
 for (const file of pageFiles) {
-  const rel = path.relative(root, file);
-  if (standalonePages.has(rel)) continue;
+  const rel = path.relative(root, file).split(path.sep).join('/');
   const text = fs.readFileSync(file, 'utf8');
+
+  if (!definePageImportRe.test(text)) {
+    errors.push(
+      `${rel}: missing import { definePage } from ".../lib/define-page" (relative path depth varies by folder)`,
+    );
+  }
+  if (!definePageCallRe.test(text)) {
+    errors.push(`${rel}: must call definePage({ canonicalPath: '…' }) in frontmatter`);
+  }
+
+  if (standalonePageRels.has(rel)) {
+    if (!/import\s+SiteHead\s+from\s+['"][^'"]+SiteHead\.astro['"]/.test(text)) {
+      errors.push(`${rel}: standalone page must import SiteHead`);
+    }
+    if (!text.includes('<SiteHead canonicalPath={page.canonicalPath}')) {
+      errors.push(`${rel}: SiteHead must use canonicalPath={page.canonicalPath}`);
+    }
+    continue;
+  }
+
   if (!importLayoutRe.test(text)) {
     errors.push(`${rel}: missing \`import SiteLayout from "...SiteLayout.astro"\``);
+  }
+  if (!hasCanonicalSpread(text)) {
+    errors.push(`${rel}: SiteLayout must set canonicalPath={page.canonicalPath} (RFC definePage spine)`);
   }
 }
 

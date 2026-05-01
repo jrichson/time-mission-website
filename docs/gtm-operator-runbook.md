@@ -13,6 +13,8 @@ If you are routing browser hits through an sGTM endpoint, set:
 - `PUBLIC_SGTM_CONTAINER_URL` (example: `https://sgtm.timemission.com`)
 - `PUBLIC_SGTM_COLLECT_PATH` (optional, default: `/g/collect`)
 
+If the sGTM hostname differs from the example, update **`connect-src`** in root `_headers` (and run `node scripts/sync-static-to-public.mjs`) so beacons to that origin are not CSP-blocked.
+
 The site will keep loading your **web GTM** container as usual and also push a startup `dataLayer` event:
 
 - `event: "tm_tagging_config"`

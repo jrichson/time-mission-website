@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -18,19 +19,7 @@ function resolveRobotsForRoute(canonicalPath, table) {
   return 'index,follow';
 }
 
-/** keep in sync with scripts/sync-static-to-public.mjs ASTRO_RENDERED_OUTPUT_FILES */
-const ASTRO_RENDERED_OUTPUT_FILES = new Set([
-  'index.html',
-  'about.html',
-  'faq.html',
-  'contact.html',
-  'contact-thank-you.html',
-  'privacy.html',
-  'locations.html',
-  'groups/corporate.html',
-  'philadelphia.html',
-  'houston.html',
-]);
+const ASTRO_RENDERED_OUTPUT_FILES = loadAstroRenderedOutputFilesSet(root);
 
 const routesData = loadJson('src/data/routes.json');
 const seoRoutes = loadJson('src/data/site/seo-routes.json');

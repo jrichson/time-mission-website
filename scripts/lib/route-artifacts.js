@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('node:fs');
 const path = require('node:path');
 const { loadJson, normalizeCanonicalPath } = require('./validation-core');
 
@@ -102,6 +103,30 @@ function resolveAbsoluteSiteHref(root, registry, href) {
   return path.join(root, rel);
 }
 
+/**
+ * Resolve an internal site path against a deploy root: Astro routes.json first,
+ * then static path under root (same rules as check-internal-links).
+ */
+function resolveInternalDeployTarget(deployRoot, registry, href) {
+  const clean = normalizeCanonicalPath(href);
+  if (!clean || clean === '/') return null;
+  const map = registry && registry.routes ? canonicalToOutputMap(registry) : new Map();
+  const rel = map.get(clean);
+  if (rel) {
+    const routed = path.join(deployRoot, rel);
+    if (fs.existsSync(routed)) return routed;
+    // Mapped output not present in this tree (e.g. source repo vs dist); try static path.
+  }
+  const tail = clean.replace(/^\//, '');
+  if (!tail || tail.includes('..')) return null;
+  const staticPath = path.normalize(path.join(deployRoot, tail));
+  const deployNorm = path.normalize(deployRoot + path.sep);
+  if (!staticPath.startsWith(deployNorm) && staticPath !== path.normalize(deployRoot)) {
+    return null;
+  }
+  return fs.existsSync(staticPath) ? staticPath : null;
+}
+
 module.exports = {
   loadRouteRegistry,
   expectedSitemapUrls,
@@ -110,4 +135,5 @@ module.exports = {
   verifySitemapXml,
   canonicalToOutputMap,
   resolveAbsoluteSiteHref,
+  resolveInternalDeployTarget,
 };

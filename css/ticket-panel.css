@@ -54,8 +54,8 @@
 }
 
 .ticket-panel-close {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,7 +64,7 @@
     border-radius: 10px;
     color: var(--gray);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .ticket-panel-close:hover {
@@ -114,11 +114,17 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 1rem center;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .ticket-location-select select:focus {
     outline: none;
+    border-color: var(--orange);
+}
+
+.ticket-location-select select:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
     border-color: var(--orange);
 }
 
@@ -143,7 +149,7 @@
     letter-spacing: 0.06em;
     border-radius: 100px;
     white-space: nowrap;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-transform: uppercase;
     box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
 }
@@ -193,5 +199,17 @@
 @media (max-width: 400px) {
     .ticket-panel {
         width: 100%;
+    }
+}
+
+.ticket-panel-close:focus-visible,
+.btn-ticket-book:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-ticket-book:hover {
+        transform: none;
     }
 }

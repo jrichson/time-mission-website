@@ -115,14 +115,15 @@ html {
     margin-bottom: 1.5rem;
 }
 
-.newsletter-form {
+/* Compact signup only when embedded in .footer-newsletter — do not target page-level .newsletter-section */
+.footer-newsletter .newsletter-form {
     display: flex;
     gap: 0.75rem;
     max-width: 500px;
     margin: 0 auto 1rem;
 }
 
-.newsletter-form input {
+.footer-newsletter .newsletter-form input {
     flex: 1;
     padding: 0.875rem 1.25rem;
     background: var(--dark);
@@ -135,15 +136,20 @@ html {
     transition: all 0.3s ease;
 }
 
-.newsletter-form input:focus {
+.footer-newsletter .newsletter-form input:focus {
     border-color: var(--orange);
 }
 
-.newsletter-form input::placeholder {
+.footer-newsletter .newsletter-form input:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
+}
+
+.footer-newsletter .newsletter-form input::placeholder {
     color: var(--gray);
 }
 
-.btn-subscribe {
+.footer-newsletter .btn-subscribe {
     padding: 0.875rem 1.75rem;
     background: var(--gradient-primary);
     border: none;
@@ -158,16 +164,21 @@ html {
     transition: all 0.3s ease;
 }
 
-.btn-subscribe:hover {
+.footer-newsletter .btn-subscribe:hover {
     transform: translateY(-2px);
 }
 
-.newsletter-legal {
+.footer-newsletter .btn-subscribe:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+}
+
+.footer-newsletter .newsletter-legal {
     color: var(--gray);
     font-size: 0.75rem;
 }
 
-.newsletter-legal a {
+.footer-newsletter .newsletter-legal a {
     color: var(--orange);
     text-decoration: none;
 }
@@ -410,7 +421,7 @@ html {
         gap: 1rem;
     }
 
-    .newsletter-form {
+    .footer-newsletter .newsletter-form {
         flex-direction: column;
     }
 }

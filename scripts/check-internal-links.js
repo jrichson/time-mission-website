@@ -1,53 +1,44 @@
+'use strict';
+
 const fs = require('node:fs');
 const path = require('node:path');
+
+const {
+  stripQueryAndHash,
+  normalizeCanonicalPath,
+  walkHtmlFiles,
+} = require('./lib/validation-core');
+const {
+  loadRouteRegistry,
+  resolveInternalDeployTarget,
+} = require('./lib/route-artifacts');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
 const ignoredSchemes = /^(https?:|mailto:|tel:|sms:|javascript:)/i;
+const useDist = process.argv.includes('--dist');
+const deployRoot = useDist ? path.join(root, 'dist') : root;
 
-const routesPath = path.join(root, 'src', 'data', 'routes.json');
-const canonicalToOutput = new Map();
-if (fs.existsSync(routesPath)) {
-  try {
-    const routesData = JSON.parse(fs.readFileSync(routesPath, 'utf8'));
-    for (const route of routesData.routes || []) {
-      let cp = route.canonicalPath || '';
-      if (!cp.startsWith('/')) cp = `/${cp}`;
-      const norm = cp.replace(/\/+$/, '') || '/';
-      canonicalToOutput.set(norm, route.outputFile.replace(/^\//, ''));
-    }
-  } catch (err) {
-    errors.push(`Failed to parse routes.json: ${err.message}`);
+let registry = null;
+try {
+  registry = loadRouteRegistry(root);
+} catch (err) {
+  errors.push(`Failed to load routes.json: ${err.message}`);
+}
+
+if (useDist && !fs.existsSync(deployRoot)) {
+  console.error('Internal link check (--dist): dist/ missing; run astro build first');
+  process.exit(1);
+}
+
+const allHtml = walkHtmlFiles(deployRoot);
+const pages = allHtml.filter((filePath) => {
+  const relative = path.relative(deployRoot, filePath);
+  if (useDist) {
+    return relative.endsWith('.html')
+      && !relative.startsWith('assets/')
+      && !relative.startsWith('_astro/');
   }
-}
-
-function resolveAbsoluteSiteHref(cleanHref) {
-  let key = cleanHref.replace(/\/+$/, '') || '/';
-  if (!key.startsWith('/')) key = `/${key}`;
-  const rel = canonicalToOutput.get(key);
-  if (!rel) return null;
-  return path.join(root, rel);
-}
-
-function walk(dir, files = []) {
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      walk(fullPath, files);
-    } else if (entry.name.endsWith('.html')) {
-      files.push(fullPath);
-    }
-  }
-  return files;
-}
-
-function stripQueryAndHash(href) {
-  return href.split('#')[0].split('?')[0];
-}
-
-const pages = walk(root).filter((filePath) => {
-  const relative = path.relative(root, filePath);
   return !relative.startsWith('assets/')
     && !relative.startsWith('ads/')
     && !relative.startsWith('components/')
@@ -56,7 +47,7 @@ const pages = walk(root).filter((filePath) => {
 });
 
 for (const filePath of pages) {
-  const relative = path.relative(root, filePath);
+  const relative = path.relative(deployRoot, filePath);
   const html = fs.readFileSync(filePath, 'utf8');
   const attrs = html.matchAll(/\s(?:href|src)=["']([^"']+)["']/g);
 
@@ -70,9 +61,9 @@ for (const filePath of pages) {
     if (!clean || clean === '/') continue;
 
     if (clean.startsWith('/')) {
-      const resolved = resolveAbsoluteSiteHref(clean);
-      const exists = resolved && fs.existsSync(resolved);
-      if (!exists) {
+      const key = normalizeCanonicalPath(clean);
+      const resolved = resolveInternalDeployTarget(deployRoot, registry, key);
+      if (!resolved) {
         errors.push(`${relative} references missing internal asset/page: ${raw}`);
       }
       continue;
@@ -92,4 +83,6 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Internal link check passed for ${pages.length} pages.`);
+console.log(
+  `Internal link check passed for ${pages.length} pages (${useDist ? 'dist output' : 'repo root'}).`,
+);

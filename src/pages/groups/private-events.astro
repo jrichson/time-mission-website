@@ -1,0 +1,37 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { definePage } from '../../lib/define-page';
+import groupEventPageCss from '../../partials/birthdays-inline.raw.css.txt?raw';
+import privateEventsMain from '../../partials/private-events-main.frag.txt?raw';
+import groupEventPageAfter from '../../partials/birthdays-after.frag.txt?raw';
+import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+
+const ld = serializeGraph(
+    buildSimpleGraph([
+        { label: 'Home', href: '/' },
+        { label: 'Groups', href: '/groups' },
+        { label: 'Private Events & Venue Buyouts', href: '/groups/private-events' },
+    ]),
+);
+const page = definePage({ canonicalPath: '/groups/private-events' });
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyClass="has-noise"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
+        <link rel="stylesheet" href="/css/faq.css?v=3" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={groupEventPageCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={privateEventsMain} />
+    <Fragment slot="after-site-scripts" set:html={groupEventPageAfter} />
+</SiteLayout>

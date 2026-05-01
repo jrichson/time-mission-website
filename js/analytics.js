@@ -24,6 +24,7 @@
             contact_form_submit_attempt: 'CONTACT_FORM_SUBMIT_ATTEMPT',
             contact_form_submit_success: 'CONTACT_FORM_SUBMIT_SUCCESS',
             nav_cta_click: 'NAV_CTA_CLICK',
+            site_contract_stale: 'SITE_CONTRACT_STALE',
         },
         parameters: {
             page_path: 'PAGE_PATH',
@@ -299,35 +300,40 @@
         return false;
     }
 
+    function buildRawParams(params) {
+        return Object.assign({}, getAttributionPayload(), cachedConsentContext, params || {});
+    }
+
+    function mapParameterAliases(raw, paramAliases) {
+        var parameterMap = {};
+        for (var pk in raw) {
+            if (!Object.prototype.hasOwnProperty.call(raw, pk)) continue;
+            var alias = paramAliases[pk] || String(pk).toUpperCase();
+            parameterMap[alias] = raw[pk];
+        }
+        return parameterMap;
+    }
+
+    function createEventId() {
+        return typeof crypto !== 'undefined' && crypto.randomUUID
+            ? crypto.randomUUID()
+            : 'tm-' + Date.now() + '-' + Math.random().toString(36).slice(2, 11);
+    }
+
     function track(eventKey, params) {
         var labels = getLabels();
         var eventName = labels.eventNames[eventKey];
         if (!eventName) {
             if (!unknownEventKeys[eventKey]) unknownEventKeys[eventKey] = true;
-            /* Unknown keys are dropped — intentional to avoid noisy prod consoles. */
             return;
         }
         if (hasBannedParamKey(params)) return;
 
         window.dataLayer = window.dataLayer || [];
         var paramAliases = labels.parameters || {};
-        var parameterMap = {};
-        var raw = Object.assign(
-            {},
-            getAttributionPayload(),
-            cachedConsentContext,
-            params || {}
-        );
-        for (var pk in raw) {
-            if (!Object.prototype.hasOwnProperty.call(raw, pk)) continue;
-            var alias = paramAliases[pk] || String(pk).toUpperCase();
-            parameterMap[alias] = raw[pk];
-        }
-
-        var eventId =
-            typeof crypto !== 'undefined' && crypto.randomUUID
-                ? crypto.randomUUID()
-                : 'tm-' + Date.now() + '-' + Math.random().toString(36).slice(2, 11);
+        var raw = buildRawParams(params);
+        var parameterMap = mapParameterAliases(raw, paramAliases);
+        var eventId = createEventId();
 
         var payload = {
             event: eventName,
@@ -391,8 +397,9 @@
 
                     if (inNav) {
                         if (href && href !== '#' && href.indexOf('javascript:') !== 0) {
+                            var linkPath = path.split('?')[0].split('#')[0];
                             track('nav_cta_click', {
-                                link_path: safeDestination(href) || href.split('?')[0].split('#')[0],
+                                link_path: linkPath,
                                 nav_section: navSurfaceFromEl(a),
                                 cta_id: (a.textContent || '').trim().slice(0, 80) || 'nav_link',
                             });
@@ -439,15 +446,15 @@
 
     refreshConsentContext();
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () {
-            document.addEventListener(CONSENT_CHANGE_EVENT, refreshAttributionState);
-            trackPaidLandingOnce();
-            bindClickTracking();
-        });
-    } else {
+    function wireAnalyticsAfterDomReady() {
         document.addEventListener(CONSENT_CHANGE_EVENT, refreshAttributionState);
         trackPaidLandingOnce();
         bindClickTracking();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireAnalyticsAfterDomReady);
+    } else {
+        wireAnalyticsAfterDomReady();
     }
 })();

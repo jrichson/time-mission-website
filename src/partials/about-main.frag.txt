@@ -148,20 +148,29 @@
         <div class="newsletter-inner">
             <h2>DON'T MISS A THING</h2>
             <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
-            <form class="newsletter-form">
-                <input type="text" placeholder="First Name" required>
-                <input type="text" placeholder="Last Name">
-                <input type="email" placeholder="Email" class="full-width" required>
+            <form name="newsletter" method="POST" action="/contact-thank-you" data-netlify="true" netlify-honeypot="bot-field">
+                <input type="hidden" name="form-name" value="newsletter">
+                <p class="visually-hidden">
+                    <label>Do not fill this out if you are human: <input name="bot-field"></label>
+                </p>
+                <div class="newsletter-form">
+                    <label class="visually-hidden" for="newsletter-given-name">First name</label>
+                    <input type="text" id="newsletter-given-name" name="given_name" placeholder="First Name" autocomplete="given-name" required>
+                    <label class="visually-hidden" for="newsletter-family-name">Last name</label>
+                    <input type="text" id="newsletter-family-name" name="family_name" placeholder="Last Name" autocomplete="family-name">
+                    <label class="visually-hidden" for="newsletter-email">Email</label>
+                    <input type="email" id="newsletter-email" name="email" placeholder="Email" class="full-width" autocomplete="email" required>
+                </div>
+                <label class="newsletter-consent">
+                    <input type="checkbox" name="marketing_opt_in" value="yes" required>
+                    <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+                </label>
+                <button type="submit" class="btn-subscribe">Sign Up</button>
+                <p class="newsletter-legal">
+                    By signing up, you agree to our
+                    <a href="/terms">Terms of Service</a> and
+                    <a href="/privacy">Privacy Policy</a>.
+                </p>
             </form>
-            <label class="newsletter-consent">
-                <input type="checkbox" required>
-                <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
-            </label>
-            <button type="submit" class="btn-subscribe">Sign Up</button>
-            <p class="newsletter-legal">
-                By signing up, you agree to our
-                <a href="/terms">Terms of Service</a> and
-                <a href="/privacy">Privacy Policy</a>.
-            </p>
         </div>
     </section>
