@@ -11,5 +11,8 @@
 # PUBLIC_TM_MEDIA_BASE to your public bucket URL (no trailing slash). Object keys in R2
 # must match site paths, e.g. `assets/video/hero-bg-web.mp4`.
 #
+# Hero video playback from R2: ensure the bucket CORS rule allows GET (and OPTIONS if used)
+# from your web origin (`https://timemission.com` or `*`) — Safari relies on ranged requests over HTTPS.
+#
 name = "time-mission-website"
 pages_build_output_dir = "dist"
