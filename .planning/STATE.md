@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-last_updated: "2026-05-04T22:50:00.000Z"
-last_activity: 2026-05-04 — Completed quick task 260504-lsk: Antwerp schema rename to "Time Mission Antwerp" + `alternateName` plumbing through LocationRecord and LocalBusinessNode (P0-5 / P0-8)
+last_updated: "2026-05-04T23:25:00.000Z"
+last_activity: 2026-05-04 — Completed quick task 260504-mly: WordPress-era + Palisades legacy redirects added to `_redirects` (P1-8). Prior: 260504-lsk Antwerp schema rename + alternateName (P0-5 / P0-8).
 progress:
   total_phases: 10
   completed_phases: 9
@@ -103,6 +103,7 @@ Recent decisions affecting current work:
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260504-lsk | Fix P0-5/P0-8: rename Antwerp to "Time Mission Antwerp" + plumb `alternateName` through LocationRecord and LocalBusinessNode | 2026-05-04 | 3e53692 | [260504-lsk-fix-p0-5-p0-8-rename-antwerp-location-to](./quick/260504-lsk-fix-p0-5-p0-8-rename-antwerp-location-to/) |
+| 260504-mly | Fix P1-8: WordPress-era + Palisades legacy redirects in `_redirects` (12 paths to `/`, `/palisades` → `/west-nyack`) | 2026-05-04 | 7240619 | [260504-mly-fix-p1-8-add-missing-legacy-url-redirect](./quick/260504-mly-fix-p1-8-add-missing-legacy-url-redirect/) |
 
 ## Session continuity
 
