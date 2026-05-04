@@ -262,7 +262,7 @@ Wave summary:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → **9** (post-v1 hardening / sustainment bundle)
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 (post-v1 hardening / sustainment bundle) → **10** (audit-gap closure / cutover readiness)
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -275,3 +275,37 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 7. SEO, Schema & Local Search Baseline | 5/5 | Complete | 2026-04-29 |
 | 8. Built-Output Verification & Cutover Readiness | 5/5 | Complete | 2026-04-30 |
 | 9. Architecture deepening & template hygiene | summary | Complete | 2026-04-30 |
+| 10. Audit-Gap Closure & Cutover Readiness | 0/9 | Not planned | — |
+
+### Phase 10: Audit-Gap Closure & Cutover Readiness
+
+**Goal:** Every P0 and P1 audit finding either ships fixed in the Astro `dist/` output, has a documented host-config change in the cutover runbook, or is explicitly deferred with rationale.
+**Requirements:** No new v1 IDs (extends SEO / COMP / DATA / ANLY / VER practices)
+**Depends on:** Phase 9
+**Plans:** 0/9 (suggested wave breakdown below — to be refined by `/gsd-plan-phase 10`)
+
+Origin: External SEO / A11y / Security / Performance audit (39 findings) against legacy live site. Phases 1–9 closed most; coverage analysis (2026-05-04) identified 13 code gaps + 9 host/external dependencies. See `.planning/phases/10-audit-gap-closure-cutover-readiness/10-CONTEXT.md`.
+
+Plans (suggested):
+- [ ] 10-01 — Antwerp schema rename + `alternateName` field + `check-schema-altname` (P0-5, P0-8)
+- [ ] 10-02 — Missing legacy redirects in `_redirects` (P1-8)
+- [ ] 10-03 — SSR landmarks + skip-link in `SiteLayout` + decorative SVG `aria-hidden` sweep (P1-3, P0-4 partial)
+- [ ] 10-04 — axe `dist` scan + `check-img-alt-axe` validator (P0-4)
+- [ ] 10-05 — Astro pages for terms / code-of-conduct / licensing / cookies / accessibility / waiver (P1-16)
+- [ ] 10-06 — Per-route `lang` prop + hreflang cluster on location pages (P1-9)
+- [ ] 10-07 — Hero `<picture>` srcset + `web-vitals` RUM beacon (P1-18, P2-1)
+- [ ] 10-08 — Cookie banner / CMP + tap-target a11y check (P2-4, P1-1)
+- [ ] 10-09 — `docs/cutover-checklist.md` with host-dependency owners + `verify:phase10` gate (host items: P1-7, P1-10, P1-11, P1-17, P2-8, P2-9, P2-10)
+
+Wave summary:
+- Wave 1 (parallel): 10-01, 10-02 — data + redirects (low blast radius)
+- Wave 2 (parallel): 10-03, 10-04 — a11y landmarks + axe scan
+- Wave 3: 10-05 — legal page Astro migration
+- Wave 4: 10-06 — i18n
+- Wave 5: 10-07 — perf + RUM
+- Wave 6: 10-08 — CMP + tap targets
+- Wave 7: 10-09 — cutover checklist + phase gate
+
+**UI hint:** yes (legal page parity, cookie banner, skip-link focus states, hero srcset)
+
+**Brand decision blocking:** P1-12 hero video — captions track vs `aria-hidden`. Resolve before 10-04.
