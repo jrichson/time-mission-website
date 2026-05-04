@@ -143,6 +143,39 @@ for (const route of schemaRoutes) {
       errors.push(`${outFile}: houston must not contain openingHoursSpecification`);
     }
   }
+
+  // Generalized open-location brand-name assertion: every open + schema-eligible
+  // location must emit name starting with "Time Mission " and an optional
+  // alternateName matching the source data when present (Phase 10 P0-5/P0-8).
+  const openLocationSlugs = locationsDoc.locations
+    .filter((l) => l.status === 'open' && l.localBusinessSchemaEligible === true)
+    .map((l) => l.slug);
+  const slugFromCp = cp.replace(/^\//, '');
+  if (openLocationSlugs.includes(slugFromCp)) {
+    const sourceLoc = locationsDoc.locations.find((l) => l.slug === slugFromCp);
+    const biz = findOne(graph, 'EntertainmentBusiness');
+    if (biz.length !== 1) {
+      errors.push(`${outFile}: expected one EntertainmentBusiness for open location ${slugFromCp}`);
+    } else {
+      const b = biz[0];
+      if (typeof b.name !== 'string' || !b.name.trim()) {
+        errors.push(`${outFile}: EntertainmentBusiness.name missing or empty for ${slugFromCp}`);
+      } else if (!b.name.startsWith('Time Mission ')) {
+        errors.push(`${outFile}: EntertainmentBusiness.name '${b.name}' must start with 'Time Mission ' (slug=${slugFromCp})`);
+      }
+      if ('alternateName' in b) {
+        if (typeof b.alternateName !== 'string' || !b.alternateName.trim()) {
+          errors.push(`${outFile}: EntertainmentBusiness.alternateName present but not a non-empty string (slug=${slugFromCp})`);
+        }
+      }
+      // Cross-check: if source data declares alternateName, emitted JSON-LD must match
+      if (sourceLoc && typeof sourceLoc.alternateName === 'string' && sourceLoc.alternateName.trim()) {
+        if (b.alternateName !== sourceLoc.alternateName) {
+          errors.push(`${outFile}: alternateName drift — emitted='${b.alternateName}' source='${sourceLoc.alternateName}' (slug=${slugFromCp})`);
+        }
+      }
+    }
+  }
 }
 
 if (errors.length) {

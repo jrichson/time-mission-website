@@ -30,6 +30,7 @@
     "check:robots-ai": "node scripts/check-robots-ai-bots.js",
     "check:llms-txt": "node scripts/check-llms-txt.js",
     "check:nap-parity": "node scripts/check-nap-parity.js",
+    "check:astro-dist": "node scripts/check-astro-dist-manifest.js",
     "check:site-contract": "node scripts/check-site-contract.js",
     "compile:routes": "node scripts/compile-route-artifacts.mjs",
     "test:unit": "vitest run",

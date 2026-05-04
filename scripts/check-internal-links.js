@@ -56,6 +56,12 @@ for (const filePath of pages) {
     if (!raw || raw.startsWith('#') || ignoredSchemes.test(raw) || raw.startsWith('//') || raw.startsWith('data:')) {
       continue;
     }
+    // Skip build-time template placeholders like {{TM_MEDIA_BASE}}/...
+    // These are substituted in scripts/sync-static-to-public.mjs and Astro at build time.
+    // They are not real internal references in the source HTML.
+    if (raw.startsWith('{{') || raw.includes('{{')) {
+      continue;
+    }
 
     const clean = stripQueryAndHash(raw);
     if (!clean || clean === '/') continue;
