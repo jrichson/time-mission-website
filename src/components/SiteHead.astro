@@ -1,6 +1,6 @@
 ---
 import analyticsLabels from '../data/site/analytics-labels.json';
-import { getSeoForRoute } from '../lib/seo/catalog';
+import { getSeoForRoute, resolveLandingHeadSeo, type LandingHeadInput } from '../lib/seo/catalog';
 import locationsData from '../../data/locations.json';
 
 interface Props {
@@ -10,6 +10,8 @@ interface Props {
     ogImage?: string;
     twitterImage?: string;
     robots?: string;
+    /** When set (CMS landing pages), bypasses seo-routes.json for this canonicalPath */
+    landingHead?: LandingHeadInput | null;
 }
 
 const {
@@ -19,9 +21,12 @@ const {
     ogImage: ogOverride,
     twitterImage: twOverride,
     robots: robotsOverride,
+    landingHead,
 } = Astro.props;
 
-const seo = getSeoForRoute(canonicalPath);
+const seo = landingHead
+    ? resolveLandingHeadSeo(canonicalPath, landingHead)
+    : getSeoForRoute(canonicalPath);
 const title = titleOverride ?? seo.title;
 const description = descOverride ?? seo.description;
 const canonicalUrl = seo.canonicalUrl;

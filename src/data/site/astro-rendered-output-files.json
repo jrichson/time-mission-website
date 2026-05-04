@@ -16,5 +16,8 @@
     "locations.html",
     "philadelphia.html",
     "privacy.html"
+  ],
+  "dynamicLandingModules": [
+    "c/[slug].astro"
   ]
 }

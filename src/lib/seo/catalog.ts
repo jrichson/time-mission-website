@@ -21,11 +21,46 @@ export interface ResolvedSeo {
     siteName: string;
 }
 
+/** CMS landing head fields (from Payload) — avoids seo-routes.json entries for /c/* */
+export interface LandingHeadInput {
+    metaTitle: string;
+    metaDescription: string;
+    robots: string;
+    canonicalOverride?: string | null;
+    ogImage: string;
+    twitterImage?: string | null;
+}
+
 const baseUrl = 'https://timemission.com';
 
 function toAbsolute(rootRelative: string): string {
     if (/^https?:\/\//.test(rootRelative)) return rootRelative;
     return `${baseUrl}${rootRelative}`;
+}
+
+export function resolveLandingHeadSeo(canonicalPath: string, landing: LandingHeadInput): ResolvedSeo {
+    const override = landing.canonicalOverride?.trim();
+    let canonicalUrl: string;
+    if (override && /^https:\/\//.test(override)) {
+        canonicalUrl = override;
+    } else {
+        canonicalUrl = canonicalPath === '/' ? `${baseUrl}/` : `${baseUrl}${canonicalPath}`;
+    }
+    const twitter = landing.twitterImage?.trim() || landing.ogImage;
+    const siteName = (defaults as { siteName: string }).siteName;
+    return {
+        title: landing.metaTitle,
+        description: landing.metaDescription,
+        canonicalPath,
+        canonicalUrl,
+        ogImage: toAbsolute(landing.ogImage),
+        twitterImage: toAbsolute(twitter),
+        robots:
+            landing.robots && landing.robots.length
+                ? landing.robots
+                : resolveRobotsForRoute(canonicalPath, robots as { rules: import('./route-patterns').RobotsRule[] }),
+        siteName,
+    };
 }
 
 export function getSeoForRoute(canonicalPath: string): ResolvedSeo {

@@ -321,8 +321,19 @@ function validateUrlSurfaceAgainstRegistry(registry, fileRel, rawUrl, errors, la
     return;
   }
 
+  function isDynamicLandingPath(reg, pathnameNorm) {
+    const prefixRaw =
+      reg && reg._meta && reg._meta.dynamicLandingPrefix ? String(reg._meta.dynamicLandingPrefix) : '/c';
+    const prefix = prefixRaw.startsWith('/') ? prefixRaw : `/${prefixRaw}`;
+    const base = pathnameNorm;
+    if (!base.startsWith(`${prefix}/`)) return false;
+    const slug = base.slice(prefix.length + 1).replace(/\/+$/, '');
+    if (!slug) return false;
+    return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+  }
+
   const allowed = new Set(registry.routes.map((r) => r.canonicalPath));
-  if (!allowed.has(normalized)) {
+  if (!allowed.has(normalized) && !isDynamicLandingPath(registry, normalized)) {
     errors.push(`${fileRel}: ${label} references unknown canonical "${rawUrl}"`);
   }
 }

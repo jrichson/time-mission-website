@@ -40,6 +40,7 @@ const steps = [
   ['check:routes', ['--', '--dist']],
   ['check:links', ['--', '--dist']],
   ['check:astro-dist', []],
+  ['check:payload-dist', []],
   ['check:ticket-panel-parity', []],
   ['check:ticket-panel-source-parity', []],
   ['check:seo-output', []],

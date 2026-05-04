@@ -37,5 +37,8 @@ test-results/
 
 # Full-resolution media backups (kept locally, not in repo)
 assets/photos/**/.orig-full/
-assets/video/.orig-full/
+
+# Payload / Next (cms workspace)
+cms/.next/
+
 .gitnexus

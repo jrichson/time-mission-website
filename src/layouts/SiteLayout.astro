@@ -16,6 +16,7 @@ interface Props {
     robots?: string;
     bodyDataLocation?: string;
     bodyClass?: string;
+    landingHead?: import('../lib/seo/catalog').LandingHeadInput | null;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
     robots,
     bodyDataLocation,
     bodyClass,
+    landingHead,
 } = Astro.props;
 ---
 
@@ -40,6 +42,7 @@ const {
             ogImage={ogImage}
             twitterImage={twitterImage}
             robots={robots}
+            landingHead={landingHead}
         />
         <slot name="head-extra" />
         <slot name="page-style" />

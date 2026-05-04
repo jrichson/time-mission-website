@@ -43,7 +43,7 @@
     "deploy:pages": "npm run build:astro && wrangler pages deploy dist",
     "preview:astro": "astro preview",
     "preview:test": "astro preview --host 127.0.0.1 --port 4173",
-    "check:astro-dist": "node scripts/check-astro-dist-manifest.js",
+    "check:payload-dist": "node scripts/check-payload-dist.mjs",
     "verify:phase1": "npm run verify && npm run build:astro && npm run check:astro-dist",
     "verify:phase2": "npm run check && npm run build:astro && npm run check:astro-dist && npm run check:routes -- --dist",
     "verify:phase3": "npm run check && npm run build:astro && npm run check:astro-dist && npm run check:routes -- --dist",

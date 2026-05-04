@@ -1,5 +1,8 @@
 {
   "baseUrl": "https://timemission.com",
+  "_meta": {
+    "dynamicLandingPrefix": "/c"
+  },
   "routes": [
     {
       "id": "home",

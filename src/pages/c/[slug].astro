@@ -1,0 +1,230 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { definePage } from '../../lib/define-page';
+import {
+    getPublishedLandings,
+    landingCanonicalPath,
+    landingDocLooksRenderable,
+    type PayloadLandingDoc,
+    type PayloadLandingSurface,
+} from '../../lib/payload/load';
+import type { LandingHeadInput } from '../../lib/seo/catalog';
+
+export const prerender = true;
+
+function buildLandingHead(doc: PayloadLandingDoc): LandingHeadInput | null {
+    const s = doc.seo;
+    if (!s?.metaTitle || !s.metaDescription || !s.ogImage) return null;
+    return {
+        metaTitle: s.metaTitle,
+        metaDescription: s.metaDescription,
+        robots: s.robots && s.robots.length ? s.robots : 'index,follow',
+        canonicalOverride: s.canonicalOverride,
+        ogImage: s.ogImage,
+        twitterImage: s.twitterImage,
+    };
+}
+
+export async function getStaticPaths() {
+    const raw = await getPublishedLandings();
+    const docs = raw.filter((d) => landingDocLooksRenderable(d));
+    return docs.map((doc) => ({
+        params: { slug: doc.slug },
+        props: { doc },
+    }));
+}
+
+const { doc } = Astro.props as { doc: PayloadLandingDoc };
+const page = definePage({ canonicalPath: landingCanonicalPath(doc.slug) });
+const landingHead = buildLandingHead(doc)!;
+const c = doc.content!;
+
+const surface = (c.ctaSurface || 'book_panel') as PayloadLandingSurface;
+const bullets = Array.isArray(c.bullets) ? c.bullets.map((b) => String(b?.text || '').trim()).filter(Boolean) : [];
+
+let primaryHref = '/missions';
+let bookTrigger = false;
+let linkPath = '';
+if (surface === 'book_panel') {
+    primaryHref = '#tickets';
+    bookTrigger = true;
+    linkPath = '/tickets';
+} else if (surface === 'missions') {
+    primaryHref = '/missions';
+    linkPath = '/missions';
+} else if (surface === 'groups') {
+    primaryHref = '/groups';
+    linkPath = '/groups';
+} else if (surface === 'contact') {
+    primaryHref = '/contact';
+    linkPath = '/contact';
+} else if (surface === 'gift_cards') {
+    primaryHref = '/gift-cards';
+    linkPath = '/gift-cards';
+} else if (surface === 'external' && c.ctaExternalUrl) {
+    primaryHref = c.ctaExternalUrl;
+    try {
+        linkPath = new URL(primaryHref).pathname || '/';
+    } catch {
+        linkPath = '/';
+    }
+}
+
+const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: landingHead.metaTitle,
+    url: page.canonicalPath === '/' ? 'https://timemission.com/' : `https://timemission.com${page.canonicalPath}`,
+};
+/** Embed-safe JSON-LD: escape `<` so `</script>` in strings cannot terminate the HTML script block. */
+const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} landingHead={landingHead} bodyClass="tm-landing-body">
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global>
+            body.tm-landing-body {
+                --tm-landing-accent: var(--orange, #ff6b2c);
+            }
+            .tm-landing-main {
+                min-height: 60vh;
+                padding: clamp(2rem, 5vw, 4rem) 1.5rem;
+                background: radial-gradient(circle at 20% 0%, rgba(255, 122, 0, 0.12), transparent 45%), var(--dark, #050508);
+                color: var(--white, #fff);
+                font-family: var(--body, 'DM Sans', sans-serif);
+            }
+            .tm-landing-shell {
+                max-width: 720px;
+                margin: 0 auto;
+            }
+            .tm-landing-kicker {
+                font-size: 0.75rem;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                color: var(--tm-landing-accent);
+                font-family: var(--tech, 'Orbitron', sans-serif);
+                margin-bottom: 0.75rem;
+            }
+            .tm-landing-headline {
+                font-family: var(--display, 'Bebas Neue', sans-serif);
+                font-size: clamp(2.25rem, 6vw, 3.5rem);
+                line-height: 1.05;
+                margin: 0 0 1rem;
+            }
+            .tm-landing-sub {
+                font-size: 1.1rem;
+                line-height: 1.55;
+                opacity: 0.9;
+                margin: 0 0 1.5rem;
+            }
+            .tm-landing-bullets {
+                list-style: none;
+                padding: 0;
+                margin: 0 0 2rem;
+            }
+            .tm-landing-bullets li {
+                position: relative;
+                padding-left: 1.35rem;
+                margin-bottom: 0.65rem;
+                line-height: 1.45;
+            }
+            .tm-landing-bullets li::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0.55rem;
+                width: 0.45rem;
+                height: 0.45rem;
+                border-radius: 50%;
+                background: var(--tm-landing-accent);
+            }
+            .tm-landing-cta {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.85rem 1.75rem;
+                font-size: 1rem;
+                font-weight: 600;
+                font-family: var(--body, 'DM Sans', sans-serif);
+                background: var(--gradient-primary, linear-gradient(135deg, #ff7a00, #ff3d00));
+                color: #0a0a0c;
+                border: none;
+                border-radius: 999px;
+                cursor: pointer;
+                text-decoration: none;
+                box-shadow: 0 0 24px rgba(255, 106, 0, 0.35);
+            }
+            .tm-landing-cta:focus-visible {
+                outline: 2px solid var(--white, #fff);
+                outline-offset: 3px;
+            }
+        </style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={jsonLdEmbed} />
+    </Fragment>
+
+    <main class="tm-landing-main" id="main">
+        <div class="tm-landing-shell">
+            <p class="tm-landing-kicker">Time Mission</p>
+            <h1 class="tm-landing-headline">{c.headline}</h1>
+            {c.subheadline ? <p class="tm-landing-sub">{c.subheadline}</p> : null}
+            {
+                bullets.length ? (
+                    <ul class="tm-landing-bullets">
+                        {bullets.map((t) => (
+                            <li>{t}</li>
+                        ))}
+                    </ul>
+                ) : null
+            }
+            {
+                bookTrigger ? (
+                    <button
+                        type="button"
+                        class="tm-landing-cta"
+                        data-tm-booking-trigger
+                        data-tm-landing-primary
+                        data-link-path={linkPath}
+                        data-cta-surface={surface}
+                    >
+                        {c.primaryCtaLabel}
+                    </button>
+                ) : (
+                    <a
+                        href={primaryHref}
+                        class="tm-landing-cta"
+                        data-tm-landing-primary
+                        data-link-path={linkPath}
+                        data-cta-surface={surface}
+                        {...surface === 'external' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+                    >
+                        {c.primaryCtaLabel}
+                    </a>
+                )
+            }
+        </div>
+    </main>
+
+    <Fragment slot="after-site-scripts">
+        <script is:inline define:vars={{ slug: doc.slug }}>
+            (function () {
+                var el = document.querySelector('[data-tm-landing-primary]');
+                if (!el) return;
+                el.addEventListener('click', function () {
+                    if (!window.TMAnalytics || typeof window.TMAnalytics.track !== 'function') return;
+                    var path = el.getAttribute('data-link-path') || window.location.pathname;
+                    window.TMAnalytics.track('cta_click', {
+                        cta_id: 'landing_primary_' + slug,
+                        link_path: path,
+                    });
+                });
+            })();
+        </script>
+    </Fragment>
+</SiteLayout>

@@ -76,8 +76,20 @@ function verifySitemapXml(xml, contract, options = {}) {
     }
   }
 
+  function isDynamicLandingSitemapLoc(loc) {
+    const registry = contract.registry || {};
+    const base = String(registry.baseUrl || '').replace(/\/+$/, '');
+    const prefixRaw = registry._meta && registry._meta.dynamicLandingPrefix ? String(registry._meta.dynamicLandingPrefix) : '/c';
+    const prefixSlug = prefixRaw.startsWith('/') ? prefixRaw.slice(1) : prefixRaw;
+    const expectedPrefixNoSlash = `${base}/${prefixSlug}`;
+    if (!loc.startsWith(`${expectedPrefixNoSlash}/`)) return false;
+    const slug = loc.slice(expectedPrefixNoSlash.length + 1).replace(/\/+$/, '');
+    if (!slug || slug.includes('/') || slug.includes('.')) return false;
+    return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+  }
+
   for (const loc of locs) {
-    if (!contract.sitemapUrlSet.has(loc)) {
+    if (!contract.sitemapUrlSet.has(loc) && !isDynamicLandingSitemapLoc(loc)) {
       errors.push(`Unexpected sitemap URL: ${loc}`);
     }
   }
