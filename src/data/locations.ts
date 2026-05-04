@@ -41,6 +41,7 @@ export interface LocationRecord {
     phoneE164: string | null;
     hreflang: Array<{ lang: string; url: string }> | null;
     localBusinessSchemaEligible: boolean;
+    alternateName?: string;
 }
 
 export interface LocationsDocument {

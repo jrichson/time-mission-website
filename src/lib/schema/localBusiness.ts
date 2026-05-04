@@ -16,6 +16,7 @@ export interface LocalBusinessNode {
     '@type': 'EntertainmentBusiness';
     '@id': string;
     name: string;
+    alternateName?: string;
     url: string;
     telephone?: string;
     email?: string;
@@ -57,6 +58,9 @@ export function localBusinessNode(loc: LocationRecord, canonicalPath: string): L
             addressCountry: loc.countryCode ?? loc.address.country,
         },
     };
+    if (typeof loc.alternateName === 'string' && loc.alternateName.trim()) {
+        node.alternateName = loc.alternateName;
+    }
     if (loc.address.state && loc.address.state.trim()) {
         node.address.addressRegion = loc.address.state;
     }
