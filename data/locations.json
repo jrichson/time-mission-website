@@ -392,7 +392,8 @@
     {
       "id": "antwerp",
       "slug": "antwerp",
-      "name": "Experience Factory Antwerp",
+      "name": "Time Mission Antwerp",
+      "alternateName": "Experience Factory Antwerp",
       "shortName": "Antwerp",
       "venueName": "Experience Factory",
       "region": "europe",
