@@ -55,3 +55,22 @@
 /providence /lincoln 301
 /experiences /missions 301
 /locations/ /locations 301
+
+# WordPress-era legacy paths (P1-8 audit finding)
+# 410 Gone is unsupported by Cloudflare Pages _redirects; using 301 to / per docs/redirect-map.md
+/wp-login.php / 301
+/wp-admin / 301
+/wp-admin/* / 301
+/cart / 301
+/cart/* / 301
+/checkout / 301
+/checkout/* / 301
+/shop / 301
+/shop/* / 301
+/feed / 301
+/atom.xml / 301
+/wp-sitemap.xml / 301
+
+# Palisades legacy slug — West Nyack is at Palisades Center (data/locations.json#west-nyack)
+# 301 to /west-nyack preserves link equity vs sending to /
+/palisades /west-nyack 301
