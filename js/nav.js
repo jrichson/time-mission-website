@@ -108,7 +108,6 @@
     const locationBtn = document.getElementById('locationBtn');
     const locationOverlay = document.getElementById('locationDropdown');
     const locationLinks = locationOverlay ? locationOverlay.querySelectorAll('a') : [];
-    const narrowPickerQuery = window.matchMedia('(max-width: 768px)');
 
     if (locationBtn && locationOverlay) {
         function openLocationOverlay() {
@@ -156,41 +155,17 @@
                 if (slug) showLocationInfo(slug);
             });
 
-            link.addEventListener('click', (e) => {
+            link.addEventListener('click', () => {
                 const cityName = link.dataset.city;
                 const slug = getLocationSlug(link);
-                const narrowPicker = narrowPickerQuery.matches;
-                const isComingSoonLink = link.classList.contains('location-coming-soon');
                 if (cityName) {
                     const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
                     syncAllLocations(cityName, slug, overlayTrack);
                     showLocationInfo(slug || cityName);
                 }
 
-                /*
-                 * Narrow viewports + open venues: keep the overlay open after sync so users
-                 * can read details; they follow "Full venue page" or Book when ready.
-                 * Coming-soon rows still behave like landing links immediately.
-                 */
-                if (narrowPicker && slug && !isComingSoonLink) {
-                    e.preventDefault();
-                    // P0-7a: stop bubble to overlay-background click handler (line ~145) which would call closeLocationOverlay()
-                    e.stopPropagation();
-                    const panel = document.getElementById('locationInfo');
-                    if (panel) {
-                        requestAnimationFrame(function () {
-                            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        });
-                    }
-                    return;
-                }
-
-                // Desktop: default navigation to location slug
-                if (!narrowPicker) {
-                    return;
-                }
-
-                // Mobile coming-soon: close after navigation kicks in
+                // Close overlay and let the browser follow the link's href to the venue page.
+                // Both desktop and mobile: single tap navigates to the location landing page after sync.
                 closeLocationOverlay();
             });
         });

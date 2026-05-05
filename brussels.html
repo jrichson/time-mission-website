@@ -2781,6 +2781,24 @@
     <!-- JSON-LD -->
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}</script>
     <!-- JSON-LD -->
+<style>
+/* Touch-only devices: nullify footer hover styles so iOS does not require a double-tap */
+@media (hover: none) {
+    .footer-social a:hover,
+    .footer-links a:hover,
+    .footer-legal a:hover,
+    .footer-location-toggle:hover,
+    .footer-location-list a:hover,
+    .footer-loc-phone:hover,
+    .footer-loc-map:hover,
+    .footer-loc-change:hover,
+    .footer-link-button:hover {
+        color: inherit;
+        transform: none;
+        opacity: inherit;
+    }
+}
+</style>
 </head>
 <body data-location="houston">
     <!-- Game Promo Popup -->
@@ -2843,11 +2861,11 @@
     <!-- Full-Screen Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <ul class="mobile-menu-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#experiences">Missions</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/missions">Missions</a></li>
             <li><a href="/groups">Groups & Events</a></li>
             <li><a href="/gift-cards">Gift Cards</a></li>
-            <li><a href="#faq">FAQ</a></li>
+            <li><a href="/faq">FAQ</a></li>
             <li><a href="/contact">Contact</a></li>
         </ul>
         <div class="mobile-menu-socials">
@@ -2883,10 +2901,10 @@
 
         <div class="nav-center">
             <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#experiences">Missions</a></li>
-                <li><a href="#groups">Groups</a></li>
-                <li><a href="#faq">FAQ</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/missions">Missions</a></li>
+                <li><a href="/groups">Groups</a></li>
+                <li><a href="/faq">FAQ</a></li>
             </ul>
         </div>
 

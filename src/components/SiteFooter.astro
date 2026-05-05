@@ -130,9 +130,13 @@ const year = new Date().getFullYear();
         padding: 0;
         cursor: pointer;
     }
-    .footer-link-button:hover,
     .footer-link-button:focus-visible {
         color: var(--white);
+    }
+    @media (hover: hover) {
+        .footer-link-button:hover {
+            color: var(--white);
+        }
     }
     .footer-location-list a.coming-soon {
         opacity: 0.7;

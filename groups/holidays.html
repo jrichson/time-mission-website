@@ -728,6 +728,24 @@
             height: 18px;
         }
     </style>
+<style>
+/* Touch-only devices: nullify footer hover styles so iOS does not require a double-tap */
+@media (hover: none) {
+    .footer-social a:hover,
+    .footer-links a:hover,
+    .footer-legal a:hover,
+    .footer-location-toggle:hover,
+    .footer-location-list a:hover,
+    .footer-loc-phone:hover,
+    .footer-loc-map:hover,
+    .footer-loc-change:hover,
+    .footer-link-button:hover {
+        color: inherit;
+        transform: none;
+        opacity: inherit;
+    }
+}
+</style>
 </head>
 <body class="has-noise">
     <!-- Announcement Ticker -->

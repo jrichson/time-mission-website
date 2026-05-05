@@ -56,8 +56,8 @@
           "label": "10am - 8pm"
         }
       },
-      "bookingUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/products",
-      "rollerCheckoutUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/home",
+      "bookingUrl": "https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home",
+      "rollerCheckoutUrl": "https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home",
       "navLabel": "IL - Mount Prospect",
       "mapUrl": "https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056",
       "faqs": [],
@@ -127,8 +127,8 @@
           "label": "10am - 10pm"
         }
       },
-      "bookingUrl": "https://tickets.timemission.com/onlinecheckout/en-us/products",
-      "rollerCheckoutUrl": "https://tickets.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
+      "bookingUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
+      "rollerCheckoutUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
       "navLabel": "PA - Philadelphia",
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
       "faqs": [],
@@ -269,7 +269,7 @@
           "label": "9am - 11pm"
         }
       },
-      "bookingUrl": "https://tickets.timemission.com/onlinecheckout/en-us/products",
+      "bookingUrl": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
       "navLabel": "RI - Lincoln",
       "mapUrl": "https://maps.google.com/?q=100+Higginson+Ave+Lincoln+RI+02865",
       "faqs": [],
@@ -340,8 +340,8 @@
           "label": "10am - 8pm"
         }
       },
-      "bookingUrl": "https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/products",
-      "rollerCheckoutUrl": "https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/home",
+      "bookingUrl": "https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home",
+      "rollerCheckoutUrl": "https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home",
       "navLabel": "VA - Manassas",
       "mapUrl": "https://maps.google.com/?q=8300+Sudley+Rd+Manassas+VA+20109",
       "faqs": [],
@@ -446,7 +446,7 @@
           "label": "11am - 11pm"
         }
       },
-      "bookingUrl": "mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Booking%20Request",
+      "bookingUrl": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
       "navLabel": "Belgium - Antwerp",
       "mapUrl": "https://maps.google.com/?q=Michiganstraat+1+Antwerp+2030+Belgium",
       "faqs": [],

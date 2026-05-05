@@ -53,9 +53,11 @@ html {
     transition: all 0.3s ease;
 }
 
-.footer-social a:hover {
-    color: var(--orange);
-    transform: translateY(-2px);
+@media (hover: hover) {
+    .footer-social a:hover {
+        color: var(--orange);
+        transform: translateY(-2px);
+    }
 }
 
 .footer-title,
@@ -90,8 +92,10 @@ html {
     transition: color 0.3s ease;
 }
 
-.footer-links a:hover {
-    color: var(--orange);
+@media (hover: hover) {
+    .footer-links a:hover {
+        color: var(--orange);
+    }
 }
 
 /* Newsletter */
@@ -212,8 +216,10 @@ html {
     transition: color 0.3s ease;
 }
 
-.footer-legal a:hover {
-    color: var(--orange);
+@media (hover: hover) {
+    .footer-legal a:hover {
+        color: var(--orange);
+    }
 }
 
 /* Location Dropdown */
@@ -250,8 +256,10 @@ html {
     transition: color 0.3s ease;
 }
 
-.footer-location-toggle:hover {
-    color: var(--orange);
+@media (hover: hover) {
+    .footer-location-toggle:hover {
+        color: var(--orange);
+    }
 }
 
 .footer-location-toggle svg {
@@ -282,8 +290,10 @@ html {
     transition: color 0.3s ease;
 }
 
-.footer-location-list a:hover {
-    color: var(--orange);
+@media (hover: hover) {
+    .footer-location-list a:hover {
+        color: var(--orange);
+    }
 }
 
 .footer-location-list a.coming-soon {
