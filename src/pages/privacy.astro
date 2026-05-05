@@ -1,7 +1,7 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
-import privacyCss from '../partials/privacy-inline.raw.css.txt?raw';
+import legalCss from '../partials/legal-inline.raw.css.txt?raw';
 import privacyMain from '../partials/privacy-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 
@@ -23,7 +23,7 @@ const page = definePage({ canonicalPath: '/privacy' });
         <link rel="stylesheet" href="/css/ticket-panel.css" />
     </Fragment>
     <Fragment slot="page-style">
-        <style is:global set:html={privacyCss}></style>
+        <style is:global set:html={legalCss}></style>
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
