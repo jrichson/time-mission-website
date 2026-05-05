@@ -316,7 +316,16 @@ Wave summary:
 
 **Depends on:** Phase 10
 
-**Plans:** TBD (will be populated by `/gsd-plan-phase 11`)
+**Plans:** 5 plans
 
 Plans:
-- [ ] TBD (planner agent will create wave-grouped plans for shared CSS, page partials, cookie banner CSS, and smoke test)
+- [ ] 11-01-PLAN.md — ≤480 tier for 5 shared CSS files (nav, footer, faq, base, newsletter)
+- [ ] 11-02-PLAN.md — ≤480 tier for 7 page partials (about, contact, faq, locations, birthdays, legal, houston)
+- [ ] 11-03-PLAN.md — POLISH-01 cookie banner .cm--box rewrite in css/cookie-consent.css
+- [ ] 11-04-PLAN.md — Playwright smoke assertion at 375×667 (no horizontal scroll, footer-legal wrap, .location-btn ≥ 44×44)
+- [ ] 11-05-PLAN.md — Verify chain + ROADMAP/STATE bookkeeping
+
+Wave summary:
+- Wave 1 (parallel): 11-01 shared CSS ≤480 + 11-02 page partials ≤480 + 11-03 cookie banner POLISH-01 (independent files)
+- Wave 2: 11-04 Playwright 375×667 smoke (depends on Wave 1 CSS)
+- Wave 3: 11-05 verify + ROADMAP/STATE bookkeeping (depends on Wave 2)
