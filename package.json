@@ -79,5 +79,8 @@
     "typescript": "^5.9.3",
     "vitest": "^3.0.5",
     "wrangler": "^4.87.0"
+  },
+  "dependencies": {
+    "web-vitals": "5.2.0"
   }
 }
