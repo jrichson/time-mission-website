@@ -21,6 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 7: SEO, Schema & Local Search Baseline** - Metadata, sitemap, structured data, local SEO, and AI-search readiness are generated from route/data truth.
 - [x] **Phase 8: Built-Output Verification & Cutover Readiness** (2026-04-30) - The Astro `dist/` output, preview deployment, smoke flows, visual parity, and rollback plan pass launch gates.
 - [x] **Phase 9: Architecture deepening, verification hardening & template hygiene** (2026-04-30) - Single-source ticket options, compiled route artifacts, locations fingerprint + stale analytics signal, declarative booking policies + unit tests, `TMFacade` + public API doc; footer/newsletter CSS scoping and ticket-panel stylesheet on lean Astro pages. *(Architecture RFC program closed 2026-05-01 per `.planning/ARCHITECTURE-DEEPENING-PHASES.md`; optional CSS file split remains discretionary backlog.)*
+- [x] **Phase 10: Audit-Gap Closure & Cutover Readiness** (2026-05-05) - Every P0/P1 audit finding shipped fixed, deferred with rationale, or recorded as a host action in `docs/cutover-checklist.md`. SSR landmarks + skip-link, axe `dist` scan, mobile Playwright project, 6 legal page Astro migrations, per-route `lang` + Antwerp Astro migration + hreflang cluster validator, hero medium audit + web-vitals RUM, EU-only cookie banner + tap-target validator, `verify:phase10` alias.
 
 ## Phase Details
 
@@ -275,14 +276,14 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 7. SEO, Schema & Local Search Baseline | 5/5 | Complete | 2026-04-29 |
 | 8. Built-Output Verification & Cutover Readiness | 5/5 | Complete | 2026-04-30 |
 | 9. Architecture deepening & template hygiene | summary | Complete | 2026-04-30 |
-| 10. Audit-Gap Closure & Cutover Readiness | 6/7 | In Progress|  |
+| 10. Audit-Gap Closure & Cutover Readiness | 7/7 | Complete | 2026-05-05 |
 
 ### Phase 10: Audit-Gap Closure & Cutover Readiness
 
 **Goal:** Every P0 and P1 audit finding either ships fixed in the Astro `dist/` output, has a documented host-config change in the cutover runbook, or is explicitly deferred with rationale.
 **Requirements:** No new v1 IDs (extends SEO / COMP / DATA / ANLY / VER practices)
 **Depends on:** Phase 9
-**Plans:** 6/7 plans executed
+**Plans:** 7/7 plans executed; closed 2026-05-05
 
 Origin: External SEO / A11y / Security / Performance audit (39 findings) against legacy live site. Phases 1–9 closed most; coverage analysis (2026-05-04) identified 13 code gaps + 9 host/external dependencies. See `.planning/phases/10-audit-gap-closure-cutover-readiness/10-CONTEXT.md`.
 
@@ -293,7 +294,7 @@ Plans:
 - [x] 10-04-PLAN.md — Per-route `lang` prop on `SiteLayout` + `antwerp.html` → `antwerp.astro` migration + `check-hreflang-cluster` validator (P1-9)
 - [x] 10-05-PLAN.md — Hero medium audit + `<picture>`/`srcset` for confirmed `<img>` heroes + `web-vitals@5` RUM beacon (P1-18, P2-1)
 - [x] 10-06-PLAN.md — Cookie banner (`vanilla-cookieconsent@3`, EU-routed) + `check-tap-targets` validator + desktop `.btn-tickets` measurement task (P2-4, P1-1)
-- [ ] 10-07-PLAN.md — `docs/cutover-checklist.md` with host-dependency owners + `verify:phase10` gate + brand compliance review (P2-6, host items P1-7, P1-10, P1-11, P1-17, P2-8, P2-9, P2-10)
+- [x] 10-07-PLAN.md — `docs/cutover-checklist.md` with host-dependency owners + `verify:phase10` gate + brand compliance review (P2-6, host items P1-7, P1-10, P1-11, P1-17, P2-8, P2-9, P2-10)
 
 Wave summary:
 - Wave 1 (parallel): 10-01 SSR landmarks + a11y attributes, 10-02 axe scan + mobile project + P0-7a fix

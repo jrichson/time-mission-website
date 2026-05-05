@@ -3,14 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-05-05T02:33:02.581Z"
-last_activity: 2026-05-05 -- Phase 10 planning complete
+last_updated: "2026-05-05T08:00:00.000Z"
+last_activity: 2026-05-05 -- Phase 10 (Audit-Gap Closure & Cutover Readiness) closed; 7 plans shipped, 7 host items recorded in docs/cutover-checklist.md, verify:phase10 alias wired
 progress:
   total_phases: 10
-  completed_phases: 4
-  total_plans: 42
-  completed_plans: 29
-  percent: 69
+  completed_phases: 10
+  total_plans: 47
+  completed_plans: 47
+  phase_10_plans: 7
+  phase_10_status: complete
+  percent: 100
+  percent_v1_core: 100
 ---
 
 # Project State
@@ -20,16 +23,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-29)
 
 **Core value:** The migrated site must preserve the existing customer-facing experience and conversion paths while making the site easier to maintain, measure, optimize, and scale.
-**Current focus:** v1.0 roadmap phases **1–8** complete; **Phase 9** bundles post-milestone engineering + UI parity work under `.planning/phases/09-architecture-deepening-template-hygiene/`. Cutover rehearsal and production deploy remain human-led next steps.
+**Current focus:** v1.0 roadmap phases **1–10** complete. Cutover gate is `npm run verify:phase10` + `docs/cutover-checklist.md` host items + `docs/rollback-runbook.md` rehearsal — all remaining work is human-led.
 
 ## Current Position
 
-Phase: **10 not planned yet** (Phases 1–9 complete; Phase 10 added 2026-05-04 from external audit coverage analysis)
-Plans: v1 counted plans **40/40**; Phase 9 tracked as **1 deliverable summary**; Phase 10 has **0/9** suggested plans (run `/gsd-plan-phase 10` to break down)
-Status: Ready to execute
-Last activity: 2026-05-05 -- Phase 10 planning complete
+Phase: **10 complete** (closed 2026-05-05; 7 plans shipped covering 13 P0/P1 audit code gaps; 7 host/external items deferred to `docs/cutover-checklist.md`)
+Plans: **47/47** (40 v1 roadmap + 7 Phase 10)
+Status: Cutover-ready
+Last activity: 2026-05-05 -- Phase 10 (Audit-Gap Closure & Cutover Readiness) closed
 
-Progress: Phases 1–9 documented; v1 requirement coverage still **43/43** (Phase 10 is sustainment, not a new requirement ID — extends SEO/COMP/DATA/ANLY/VER practices).
+Progress: All 10 phases documented and shipped; v1 requirement coverage **43/43** (Phase 10 extends SEO/COMP/DATA/ANLY/VER practices, no new requirement IDs).
 
 ## Performance Metrics
 
@@ -53,14 +56,15 @@ Progress: Phases 1–9 documented; v1 requirement coverage still **43/43** (Phas
 | 7. SEO, Schema & Local Search Baseline | 5 | Complete | — |
 | 8. Built-Output Verification & Cutover Readiness | 5 | Complete | — |
 | 9. Architecture deepening & template hygiene | summary docs | Complete | — |
-| 10. Audit-Gap Closure & Cutover Readiness | 0 (not planned) | Not planned | — |
+| 10. Audit-Gap Closure & Cutover Readiness | 7 | Complete | — |
 
 **Recent trend:**
 
-- Phase 10 (added 2026-05-04): External audit coverage analysis identified 13 code gaps (P0-4, P0-5, P0-7a, P0-8, P1-1, P1-3, P1-8, P1-9, P1-12, P1-16, P1-18, P2-1, P2-4, P2-6) + 9 host/external dependencies (P1-7, P1-10, P1-11, P1-17, P2-8, P2-9, P2-10). Antwerp schema rename + `alternateName` is the highest-leverage single fix.
+- **Phase 10 closed 2026-05-05**: 7 plans shipped covering 13 P0/P1 audit code gaps. Wave summary: (W1) SSR landmarks + skip-link + axe `dist` scan + Playwright mobile project + P0-7a `js/nav.js` `stopPropagation` fix; (W2) 6 legal-page Astro migrations with shared `legal-inline.raw.css.txt` partial; (W3) per-route `lang` prop + `antwerp.html` → `antwerp.astro` + `check-hreflang-cluster` validator; (W4) hero medium audit (zero IMG_SINGLE candidates) + `web-vitals@5.2.0` RUM beacon (consent-gated); (W5) EU-routed cookie banner (`vanilla-cookieconsent@3.1.0`) + `check-tap-targets` validator + `.btn-tickets` 48px / `.location-btn` 44px fixes; (W6) `docs/cutover-checklist.md` + `verify:phase10` alias + ROADMAP/STATE update. The 7 host/external items (P1-7, P1-10, P1-11, P1-17, P2-8, P2-9, P2-10) and P2-6 brand compliance are recorded in `docs/cutover-checklist.md` for human owners.
+- Phase 10 highest-leverage single fix: Antwerp schema rename + `alternateName` shipped pre-planning via quick-task 260504-lsk.
 - Phase 9: Ticket options SSoT, `compile-route-artifacts`, `locationsFingerprint` + stale analytics event, `scripts/lib/policy-runner.js` + booking policies, `TMFacade` + `docs/tm-public-api.md`, footer/newsletter CSS isolation, `ticket-panel.css` on lean layouts; optional **CSS partial split** remains discretionary backlog (RFC program closed).
 
-*Updated after Phase 10 scaffolding pass (2026-05-04)*
+*Updated after Phase 10 closure (2026-05-05)*
 
 ## Accumulated Context
 
@@ -82,8 +86,15 @@ Recent decisions affecting current work:
 
 ### Pending todos
 
-- **Phase 10 planning:** Run `/gsd-plan-phase 10` to break the suggested 9-plan wave structure into actionable plans.
-- **Brand decision blocking 10-04:** P1-12 hero `<video>` — captions track vs `aria-hidden` decorative. Owner: Brand.
+- **Cutover gate**: `npm run verify:phase10` must exit 0 before launch (currently green); see `docs/cutover-checklist.md` for the full 8-step Final Pre-Cutover Sequence.
+- **Host action P1-7** (Web Dev): Cloudflare case-insensitive routing — verify on preview per `docs/cloudflare-preview-validation.md`.
+- **Host action P1-10** (Product + Brand): ROLLER / Experience Factory brand strategy decision; document in cutover checklist.
+- **Host action P1-11** (GTM Admin): FB & TikTok pixel `domain=.timemission.com` fix in GTM container.
+- **Host action P1-17** (DevOps): `tickets.timemission.com` DNS + CSP — either deploy subdomain OR migrate booking URLs to `ecom.roller.app` then remove from `_headers`.
+- **Host action P2-8** (Designer): Re-export `share-image.jpg` (586 KB → ~150 KB).
+- **Host action P2-9** (Designer + Web Dev): Compress `brochure.pdf` (11.7 MB → ~2–3 MB).
+- **Host action P2-10** (DevOps): Narrow `api-1.timemission.com` CORS to `https://timemission.com` if PII-bound.
+- **Manual review P2-6** (Designer): Brand compliance review against `assets/mockup-reference/`.
 - Human: Rehearse `docs/cloudflare-preview-validation.md` on a real Cloudflare Pages preview.
 - Human: Confirm ROLLER/GTM validation (including cross-domain / purchase) with Venue Manager or playground access — `docs/roller-booking-launch-checklist.md`.
 - Optional: Split group event inline CSS partials (discretionary cleanup; not an open RFC).
@@ -103,4 +114,4 @@ Recent decisions affecting current work:
 
 ## Session continuity
 
-Milestone planning execution complete through **Phase 9 documentation**. Next: cutover using `npm run verify`, preview checklist, and `docs/rollback-runbook.md` if rollback is required. Engineering backlog: optional CSS file split for event templates (outside closed RFC scope).
+**All 10 v1.0 phases shipped (closed 2026-05-05).** Cutover gate is `npm run verify:phase10` (passes end-to-end against current state) + `docs/cutover-checklist.md` host items + `docs/rollback-runbook.md` rehearsal. The roadmap's code work is done; remaining items are human-led: Cloudflare preview rehearsal, ROLLER/GTM validation, the 7 host/external dependencies in the cutover checklist, and the P2-6 brand compliance review.
