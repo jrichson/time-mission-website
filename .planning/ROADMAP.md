@@ -22,6 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 8: Built-Output Verification & Cutover Readiness** (2026-04-30) - The Astro `dist/` output, preview deployment, smoke flows, visual parity, and rollback plan pass launch gates.
 - [x] **Phase 9: Architecture deepening, verification hardening & template hygiene** (2026-04-30) - Single-source ticket options, compiled route artifacts, locations fingerprint + stale analytics signal, declarative booking policies + unit tests, `TMFacade` + public API doc; footer/newsletter CSS scoping and ticket-panel stylesheet on lean Astro pages. *(Architecture RFC program closed 2026-05-01 per `.planning/ARCHITECTURE-DEEPENING-PHASES.md`; optional CSS file split remains discretionary backlog.)*
 - [x] **Phase 10: Audit-Gap Closure & Cutover Readiness** (2026-05-05) - Every P0/P1 audit finding shipped fixed, deferred with rationale, or recorded as a host action in `docs/cutover-checklist.md`. SSR landmarks + skip-link, axe `dist` scan, mobile Playwright project, 6 legal page Astro migrations, per-route `lang` + Antwerp Astro migration + hreflang cluster validator, hero medium audit + web-vitals RUM, EU-only cookie banner + tap-target validator, `verify:phase10` alias.
+- [x] **Phase 11: small-mobile responsiveness ≤480px tier + cookie banner placement polish** (2026-05-05) - Closed launch-blocking responsive gap diagnosed in Phase 10 UAT test 8 (≤425px viewport): added `@media (max-width: 480px)` tier to 5 shared CSS files + 7 page-local partials; shipped POLISH-01 cookie banner bottom-left card placement (`.cm--box` override per `docs/cutover-checklist.md` spec); added Playwright smoke assertion at 375×667 viewport covering no horizontal scroll, footer-legal wrap, and ≥44×44 tap targets.
 
 ## Phase Details
 
@@ -277,6 +278,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 8. Built-Output Verification & Cutover Readiness | 5/5 | Complete | 2026-04-30 |
 | 9. Architecture deepening & template hygiene | summary | Complete | 2026-04-30 |
 | 10. Audit-Gap Closure & Cutover Readiness | 7/7 | Complete    | 2026-05-05 |
+| 11. small-mobile responsiveness ≤480px tier + cookie banner placement | 5/5 | Complete | 2026-05-05 |
 
 ### Phase 10: Audit-Gap Closure & Cutover Readiness
 
@@ -316,14 +318,14 @@ Wave summary:
 
 **Depends on:** Phase 10
 
-**Plans:** 5 plans
+**Plans:** 5/5 plans complete
 
 Plans:
-- [ ] 11-01-PLAN.md — ≤480 tier for 5 shared CSS files (nav, footer, faq, base, newsletter)
-- [ ] 11-02-PLAN.md — ≤480 tier for 7 page partials (about, contact, faq, locations, birthdays, legal, houston)
-- [ ] 11-03-PLAN.md — POLISH-01 cookie banner .cm--box rewrite in css/cookie-consent.css
-- [ ] 11-04-PLAN.md — Playwright smoke assertion at 375×667 (no horizontal scroll, footer-legal wrap, .location-btn ≥ 44×44)
-- [ ] 11-05-PLAN.md — Verify chain + ROADMAP/STATE bookkeeping
+- [x] 11-01-PLAN.md — ≤480 tier for 5 shared CSS files (nav, footer, faq, base, newsletter) (FND-02)
+- [x] 11-02-PLAN.md — ≤480 tier for 7 page partials (about, contact, faq, locations, birthdays, legal, houston) (FND-02)
+- [x] 11-03-PLAN.md — POLISH-01 cookie banner `.cm--box` rewrite in `css/cookie-consent.css` (FND-02)
+- [x] 11-04-PLAN.md — Playwright smoke assertion at 375×667 (no horizontal scroll, footer-legal wrap, `.location-btn` ≥ 44×44) (FND-02)
+- [x] 11-05-PLAN.md — Verify chain + ROADMAP/STATE bookkeeping
 
 Wave summary:
 - Wave 1 (parallel): 11-01 shared CSS ≤480 + 11-02 page partials ≤480 + 11-03 cookie banner POLISH-01 (independent files)

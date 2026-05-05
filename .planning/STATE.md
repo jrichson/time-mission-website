@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-last_updated: "2026-05-05T17:42:57.202Z"
-last_activity: 2026-05-05 -- Phase 11 planning complete
+status: Cutover-ready
+last_updated: "2026-05-05T18:30:00.000Z"
+last_activity: 2026-05-05 -- Phase 11 (small-mobile responsiveness ≤480 + POLISH-01 cookie banner placement) closed; 5 plans shipped covering 5 shared CSS files + 7 partial ≤480 tiers + cookie banner .cm--box rewrite + Playwright 375×667 smoke
 progress:
   total_phases: 11
-  completed_phases: 5
-  total_plans: 47
-  completed_plans: 36
-  percent: 77
+  completed_phases: 11
+  total_plans: 52
+  completed_plans: 52
+  percent: 100
+  percent_v1_core: 100
 ---
 
 # Project State
@@ -20,22 +21,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-29)
 
 **Core value:** The migrated site must preserve the existing customer-facing experience and conversion paths while making the site easier to maintain, measure, optimize, and scale.
-**Current focus:** v1.0 roadmap phases **1–10** complete. Cutover gate is `npm run verify:phase10` + `docs/cutover-checklist.md` host items + `docs/rollback-runbook.md` rehearsal — all remaining work is human-led.
+**Current focus:** Phase 11 — small-mobile-responsiveness-480px-tier-cookie-banner-placeme
 
 ## Current Position
 
-Phase: 10
-Plans: **47/47** (40 v1 roadmap + 7 Phase 10)
-Status: Ready to execute
-Last activity: 2026-05-05 -- Phase 11 planning complete
+Phase: 11 (small-mobile-responsiveness-480px-tier-cookie-banner-placeme) — COMPLETE
+Plan: 5 of 5
+Plans: **52/52** (40 v1 roadmap + 7 Phase 10 + 5 Phase 11)
+Status: Cutover-ready (all 11 phases closed; verify chain green)
+Last activity: 2026-05-05 -- Phase 11 closed; npm run verify and verify:phase10 exit 0
 
-Progress: All 10 phases documented and shipped; v1 requirement coverage **43/43** (Phase 10 extends SEO/COMP/DATA/ANLY/VER practices, no new requirement IDs).
+Progress: All 11 phases documented and shipped; v1 requirement coverage **43/43** (Phases 10 + 11 extend SEO/COMP/DATA/ANLY/VER/FND practices, no new requirement IDs).
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total **v1** plans completed: 40 (roadmap `01-xx` … `08-xx`)
+- Total **v1** plans completed: 52 (40 roadmap `01-xx` … `08-xx` + 7 Phase 10 + 5 Phase 11)
 - **Phase 9:** 1 consolidated summary (`09-PLAN-SUMMARY.md`) + context (`09-CONTEXT.md`)
 - Average duration: N/A
 - Total execution time: N/A
@@ -54,9 +56,11 @@ Progress: All 10 phases documented and shipped; v1 requirement coverage **43/43*
 | 8. Built-Output Verification & Cutover Readiness | 5 | Complete | — |
 | 9. Architecture deepening & template hygiene | summary docs | Complete | — |
 | 10. Audit-Gap Closure & Cutover Readiness | 7 | Complete | — |
+| 11. small-mobile responsiveness ≤480 + POLISH-01 | 5 | Complete | — |
 
 **Recent trend:**
 
+- **Phase 11 closed 2026-05-05**: 5 plans shipped closing the launch-blocking responsive gap from Phase 10 UAT test 8 (severity major, ≤425px viewports). Wave summary: (W1) 11-01 ≤480 tier across `nav.css` / `footer.css` / `faq.css` / `base.css` / `newsletter.css`; 11-02 ≤480 tier across 7 partials (`about`, `contact`, `faq`, `locations`, `birthdays`, `legal`, `houston`); 11-03 POLISH-01 cookie banner `.cm--box` rewrite (`rgba(20,20,24,0.92)` surface, orange 18% border, 220ms `cubic-bezier` slide-up, mobile <640 full-width minus 16px gutter above iOS home indicator). (W2) 11-04 Playwright `small mobile (375x667)` describe with no-horizontal-scroll on 4 pages + `.footer-legal` wrap + `.location-btn` / `.btn-tickets` ≥ 44×44 tap targets, plus 8 visual baselines refreshed. (W3) 11-05 verify chain green + ROADMAP/STATE bookkeeping. Tap-target floor preserved throughout. `npm run verify` and `npm run verify:phase10` both exit 0.
 - **Phase 10 closed 2026-05-05**: 7 plans shipped covering 13 P0/P1 audit code gaps. Wave summary: (W1) SSR landmarks + skip-link + axe `dist` scan + Playwright mobile project + P0-7a `js/nav.js` `stopPropagation` fix; (W2) 6 legal-page Astro migrations with shared `legal-inline.raw.css.txt` partial; (W3) per-route `lang` prop + `antwerp.html` → `antwerp.astro` + `check-hreflang-cluster` validator; (W4) hero medium audit (zero IMG_SINGLE candidates) + `web-vitals@5.2.0` RUM beacon (consent-gated); (W5) EU-routed cookie banner (`vanilla-cookieconsent@3.1.0`) + `check-tap-targets` validator + `.btn-tickets` 48px / `.location-btn` 44px fixes; (W6) `docs/cutover-checklist.md` + `verify:phase10` alias + ROADMAP/STATE update. The 7 host/external items (P1-7, P1-10, P1-11, P1-17, P2-8, P2-9, P2-10) and P2-6 brand compliance are recorded in `docs/cutover-checklist.md` for human owners.
 - Phase 10 highest-leverage single fix: Antwerp schema rename + `alternateName` shipped pre-planning via quick-task 260504-lsk.
 - Phase 9: Ticket options SSoT, `compile-route-artifacts`, `locationsFingerprint` + stale analytics event, `scripts/lib/policy-runner.js` + booking policies, `TMFacade` + `docs/tm-public-api.md`, footer/newsletter CSS isolation, `ticket-panel.css` on lean layouts; optional **CSS partial split** remains discretionary backlog (RFC program closed).
@@ -82,6 +86,7 @@ Recent decisions affecting current work:
 - 2026-05-04 — Phase 10 added: Audit-Gap Closure & Cutover Readiness. Origin: external SEO/A11y/Security/Performance audit (39 findings) coverage analysis identified 13 code gaps remaining in Astro + 9 host/external dependencies. See `.planning/phases/10-audit-gap-closure-cutover-readiness/10-CONTEXT.md`.
 - 2026-05-05 — Phase 10 closed: 7 plans shipped covering 13 P0/P1 audit code gaps; 7 host/external items + P2-6 brand compliance recorded in `docs/cutover-checklist.md` for human owners; `verify:phase10` exits 0 end-to-end. v1.0 milestone code work complete; remaining items are human-led cutover steps.
 - 2026-05-05 — Phase 11 added: small-mobile responsiveness ≤480px tier + cookie banner placement polish. Origin: Phase 10 UAT discovered serious responsiveness issues at viewports ≤425px (footer columns not stacking, button sizes, copy sizes). Bundles RESP-01 (major — `@media (max-width: 480px)` tier across `nav.css`/`footer.css`/`faq.css` + 15 page-local partials) and POLISH-01 (minor — cookie banner bottom-left card placement per ui-design-brain spec). Full diagnosis in `.planning/phases/10-audit-gap-closure-cutover-readiness/10-UAT.md` Gaps section.
+- 2026-05-05 — Phase 11 closed: ≤480 small-mobile tier shipped across 5 shared CSS + 7 partials; POLISH-01 cookie banner placement implemented in `css/cookie-consent.css`; Playwright 375×667 smoke locked in. Cutover gate `npm run verify:phase10` remains green; v1 requirement coverage unchanged at 43/43.
 
 ### Pending todos
 
@@ -113,4 +118,4 @@ Recent decisions affecting current work:
 
 ## Session continuity
 
-**All 10 v1.0 phases shipped (closed 2026-05-05).** Cutover gate is `npm run verify:phase10` (passes end-to-end against current state) + `docs/cutover-checklist.md` host items + `docs/rollback-runbook.md` rehearsal. The roadmap's code work is done; remaining items are human-led: Cloudflare preview rehearsal, ROLLER/GTM validation, the 7 host/external dependencies in the cutover checklist, and the P2-6 brand compliance review.
+**All 11 v1.0 phases shipped (Phase 10 + 11 closed 2026-05-05).** Cutover gate is `npm run verify:phase10` (passes end-to-end against current state, including the new small-mobile 375×667 smoke) + `docs/cutover-checklist.md` host items + `docs/rollback-runbook.md` rehearsal. The roadmap's code work is done; remaining items are human-led: Cloudflare preview rehearsal, ROLLER/GTM validation, the 7 host/external dependencies in the cutover checklist, and the P2-6 brand compliance review.
