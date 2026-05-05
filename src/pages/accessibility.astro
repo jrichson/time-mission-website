@@ -1,0 +1,32 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import legalCss from '../partials/legal-inline.raw.css.txt?raw';
+import accessibilityMain from '../partials/accessibility-main.frag.txt?raw';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+
+const ld = serializeGraph(
+    buildSimpleGraph([
+        { label: 'Home', href: '/' },
+        { label: 'Accessibility', href: '/accessibility' },
+    ]),
+);
+const page = definePage({ canonicalPath: '/accessibility' });
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyClass="has-noise"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={legalCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={accessibilityMain} />
+</SiteLayout>
