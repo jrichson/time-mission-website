@@ -993,4 +993,10 @@
             width: 18px;
             height: 18px;
         }
-    
+
+        @media (max-width: 480px) {
+            .section-title { font-size: 2rem; }
+            .what-is, .steps, .about-cta { padding-left: 1rem; padding-right: 1rem; }
+            .what-is::before, .steps::before, .about-cta::before { background-size: 48px 48px; }
+        }
+

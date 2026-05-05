@@ -372,4 +372,9 @@
                 font-size: 0.8rem;
             }
         }
-    
+
+        @media (max-width: 480px) {
+            .hero { padding: 100px 1rem 2.5rem; min-height: 50vh; }
+            .hero-title { font-size: 2rem; line-height: 1.15; }
+            .locations-grid { padding-left: 0.75rem; padding-right: 0.75rem; }
+        }

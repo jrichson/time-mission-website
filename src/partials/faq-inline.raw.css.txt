@@ -262,3 +262,9 @@
                 width: 100%;
             }
         }
+
+        @media (max-width: 480px) {
+            .section-title { font-size: 2rem; }
+            .page-subtitle { font-size: 0.95rem; line-height: 1.6; }
+            .faq-section { padding-left: 1rem; padding-right: 1rem; }
+        }
