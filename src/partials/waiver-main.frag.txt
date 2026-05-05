@@ -1,0 +1,17 @@
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="reveal">
+            <h1 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">WAIVER</h1>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="legal-page">
+        <p class="section-badge">Before You Play</p>
+        <p>Time Mission guests may be asked to complete a venue waiver before participating. Requirements can vary by location, group type, and local operator.</p>
+        <p>For the fastest arrival, contact your selected location before your visit if you have questions about minors, guardians, accessibility accommodations, or group paperwork.</p>
+        <div class="waiver-actions">
+            <a href="/contact">Contact a Location</a>
+            <a href="/faq">Read FAQ</a>
+        </div>
+    </section>
