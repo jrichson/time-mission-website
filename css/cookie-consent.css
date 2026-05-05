@@ -35,8 +35,14 @@
 
 /* D-B1: Layout — bottom-left card, 380px max-width, 16-24px from edges. */
 /* D-B2: Visual — dark rgba surface, backdrop-blur, orange 18% border, 12px radius, deep shadow. */
+/* Qualify with library position classes so our rules win regardless of stylesheet load order.
+   vanilla-cookieconsent appends .cm--bottom .cm--center (per js guiOptions position: 'bottom center')
+   which makes the library's own selector more specific than a bare .cm--box rule.
+   Listing those combos here matches specificity and guarantees POLISH-01 placement applies. */
 .cm--box,
-.cm.cm--box {
+.cm.cm--box,
+.cm--box.cm--bottom.cm--center,
+.cm--box.cm--bottom.cm--left {
     position: fixed;
     bottom: 24px;
     left: 24px;
