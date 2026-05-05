@@ -99,7 +99,12 @@ test('open location ?book=1 navigates to https checkout', async ({ page }) => {
   expect(firstHttps.url()).not.toContain('book=1');
 });
 
-test('location selection persists canonical slug', async ({ page }) => {
+test('location selection persists canonical slug', async ({ page, isMobile }) => {
+  // Desktop-only: this flow uses the desktop `#locationBtn` in the nav.
+  // Mobile location selection lives inside the hamburger menu and is covered
+  // by the dedicated `Mobile location selector (P0-7a)` describe block below.
+  test.skip(isMobile, 'desktop-only flow (mobile path covered by P0-7a tests)');
+
   await page.goto('/');
 
   await page.locator('#locationBtn').click();

@@ -54,7 +54,8 @@
     "verify:phase4": "npm run check && npm run build:astro && npm run check:astro-dist && npm run check:routes -- --dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity",
     "verify:phase5": "npm run check && npm run build:astro && npm run check:routes -- --dist && npm run check:astro-dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity && npm run test:smoke",
     "verify:phase6": "npm run check && npm run build:astro && npm run check:routes -- --dist && npm run check:astro-dist && npm run check:ticket-panel-parity && npm run check:ticket-panel-source-parity && npm run test:smoke",
-    "verify:phase7": "npm run verify"
+    "verify:phase7": "npm run verify",
+    "verify:phase10": "npm run verify"
   },
   "repository": {
     "type": "git",
