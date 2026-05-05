@@ -282,30 +282,27 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 **Goal:** Every P0 and P1 audit finding either ships fixed in the Astro `dist/` output, has a documented host-config change in the cutover runbook, or is explicitly deferred with rationale.
 **Requirements:** No new v1 IDs (extends SEO / COMP / DATA / ANLY / VER practices)
 **Depends on:** Phase 9
-**Plans:** 0/9 (suggested wave breakdown below — to be refined by `/gsd-plan-phase 10`)
+**Plans:** 7 plans (originally 9 suggested; 10-01 Antwerp schema and 10-02 legacy redirects from the suggested list closed pre-planning by quick-tasks 260504-lsk and 260504-mly. Effective Phase 10 scope = 7 plans, renumbered 10-01 through 10-07.)
 
 Origin: External SEO / A11y / Security / Performance audit (39 findings) against legacy live site. Phases 1–9 closed most; coverage analysis (2026-05-04) identified 13 code gaps + 9 host/external dependencies. See `.planning/phases/10-audit-gap-closure-cutover-readiness/10-CONTEXT.md`.
 
-Plans (suggested):
-- [ ] 10-01 — Antwerp schema rename + `alternateName` field + `check-schema-altname` (P0-5, P0-8)
-- [ ] 10-02 — Missing legacy redirects in `_redirects` (P1-8)
-- [ ] 10-03 — SSR landmarks + skip-link in `SiteLayout` + decorative SVG `aria-hidden` sweep (P1-3, P0-4 partial)
-- [ ] 10-04 — axe `dist` scan + `check-img-alt-axe` validator (P0-4)
-- [ ] 10-05 — Astro pages for terms / code-of-conduct / licensing / cookies / accessibility / waiver (P1-16)
-- [ ] 10-06 — Per-route `lang` prop + hreflang cluster on location pages (P1-9)
-- [ ] 10-07 — Hero `<picture>` srcset + `web-vitals` RUM beacon (P1-18, P2-1)
-- [ ] 10-08 — Cookie banner / CMP + tap-target a11y check (P2-4, P1-1)
-- [ ] 10-09 — `docs/cutover-checklist.md` with host-dependency owners + `verify:phase10` gate (host items: P1-7, P1-10, P1-11, P1-17, P2-8, P2-9, P2-10)
+Plans:
+- [ ] 10-01-PLAN.md — SSR landmarks + skip-link in `SiteLayout` + decorative SVG/video `aria-hidden` sweep (P1-3, P0-4 partial, P1-12)
+- [ ] 10-02-PLAN.md — axe `dist` scan (`check-img-alt-axe`) + Playwright mobile project + P0-7a `js/nav.js` `stopPropagation` fix (P0-4, P0-7a)
+- [ ] 10-03-PLAN.md — 6 legal page Astro migrations (terms, code-of-conduct, licensing, cookies, accessibility, waiver) with shared `legal-inline.raw.css.txt` partial (P1-16)
+- [ ] 10-04-PLAN.md — Per-route `lang` prop on `SiteLayout` + `antwerp.html` → `antwerp.astro` migration + `check-hreflang-cluster` validator (P1-9)
+- [ ] 10-05-PLAN.md — Hero medium audit + `<picture>`/`srcset` for confirmed `<img>` heroes + `web-vitals@5` RUM beacon (P1-18, P2-1)
+- [ ] 10-06-PLAN.md — Cookie banner (`vanilla-cookieconsent@3`, EU-routed) + `check-tap-targets` validator + desktop `.btn-tickets` measurement task (P2-4, P1-1)
+- [ ] 10-07-PLAN.md — `docs/cutover-checklist.md` with host-dependency owners + `verify:phase10` gate + brand compliance review (P2-6, host items P1-7, P1-10, P1-11, P1-17, P2-8, P2-9, P2-10)
 
 Wave summary:
-- Wave 1 (parallel): 10-01, 10-02 — data + redirects (low blast radius)
-- Wave 2 (parallel): 10-03, 10-04 — a11y landmarks + axe scan
-- Wave 3: 10-05 — legal page Astro migration
-- Wave 4: 10-06 — i18n
-- Wave 5: 10-07 — perf + RUM
-- Wave 6: 10-08 — CMP + tap targets
-- Wave 7: 10-09 — cutover checklist + phase gate
+- Wave 1 (parallel): 10-01 SSR landmarks + a11y attributes, 10-02 axe scan + mobile project + P0-7a fix
+- Wave 2: 10-03 — 6 legal page Astro migrations (depends on 10-01 SiteLayout landmark wrappers)
+- Wave 3: 10-04 — `lang` prop + antwerp.astro migration + hreflang validator (depends on 10-01 SiteLayout edits)
+- Wave 4: 10-05 — hero `<picture>` srcset + `web-vitals` RUM (depends on 10-04 antwerp partials being in Astro)
+- Wave 5: 10-06 — cookie banner + tap-targets validator (depends on 10-04 + 10-05 for consent state plumbing)
+- Wave 6: 10-07 — cutover checklist + `verify:phase10` alias + ROADMAP/STATE bookkeeping (depends on all earlier waves)
 
-**UI hint:** yes (legal page parity, cookie banner, skip-link focus states, hero srcset)
+**UI hint:** yes (`10-UI-SPEC.md` approved 2026-05-04 — legal page parity via shared CSS partial, cookie banner copy "Manage Preferences", skip-link focus states already in `css/base.css`, hero srcset breakpoints)
 
-**Brand decision blocking:** P1-12 hero video — captions track vs `aria-hidden`. Resolve before 10-04.
+**Locked decisions (CONTEXT.md):** D-01 hero video decorative; D-02 lang attribute only (no cross-city hreflang); D-03 cookie banner EU pages only; D-04 antwerp migrates to Astro; D-05 "Manage Preferences" copy. P1-17 `tickets.timemission.com` CSP is a host action item (DevOps), tracked in 10-07's cutover checklist.
