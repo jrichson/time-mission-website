@@ -145,7 +145,7 @@
     {
       "id": "west-nyack",
       "slug": "west-nyack",
-      "name": "Time Mission Palisades",
+      "name": "Time Mission West Nyack",
       "shortName": "West Nyack",
       "venueName": "Palisades Center",
       "region": "us",
@@ -216,7 +216,7 @@
     {
       "id": "lincoln",
       "slug": "lincoln",
-      "name": "Time Mission Providence",
+      "name": "Time Mission Lincoln",
       "shortName": "Lincoln",
       "venueName": "R1 Indoor Karting",
       "region": "us",
