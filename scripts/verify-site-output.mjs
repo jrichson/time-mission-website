@@ -47,6 +47,7 @@ const steps = [
   ['check:schema-output', []],
   ['check:img-alt-axe', []],
   ['check:hreflang-cluster', []],
+  ['check:tap-targets', []],
   ['check:sitemap-output', []],
   ['check:robots-ai', []],
   ['check:llms-txt', []],

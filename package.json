@@ -12,6 +12,7 @@
     "check:components": "node scripts/check-components.js",
     "check:img-alt-axe": "node scripts/check-img-alt-axe.js",
     "check:hreflang-cluster": "node scripts/check-hreflang-cluster.js",
+    "check:tap-targets": "node scripts/check-tap-targets.js",
     "check:booking": "node scripts/check-booking-architecture.js",
     "check:a11y": "node scripts/check-accessibility-baseline.js",
     "check:links": "node scripts/check-internal-links.js",
