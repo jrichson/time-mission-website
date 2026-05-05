@@ -24,10 +24,10 @@
         <h2>Your Choices</h2>
         <p><strong>Browser Controls.</strong> Every major browser lets you block, delete, or be prompted about cookies. Disabling some may affect site functionality.</p>
         <p><strong>Opt Out of Advertising.</strong> Visit <a href="https://optout.aboutads.info/" target="_blank" rel="noopener">aboutads.info</a> or <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener">youronlinechoices.eu</a> (EU) to opt out of interest-based advertising.</p>
-        <p><strong>Consent Tools.</strong> We are rolling out an on-site consent banner that will let you accept or reject non-essential cookie categories. Until that is live, please use your browser controls or the opt-out links above.</p>
+        <p><strong>Consent Tools.</strong> We provide an on-site consent banner that lets you accept or reject non-essential cookie categories. Click "Manage Preferences" in the site footer to update your choices at any time.</p>
 
         <h2>Do Not Track</h2>
-        <p>Our site does not currently respond to browser "Do Not Track" signals, because no uniform standard exists. We rely on browser controls today and plan to add an on-site consent banner shortly.</p>
+        <p>Our site does not currently respond to browser "Do Not Track" signals, because no uniform standard exists. Use the on-site consent banner or your browser controls to manage cookie categories.</p>
 
         <h2>Changes to This Policy</h2>
         <p>We may update this policy as our practices or the tools we use change. The "Last Updated" date below reflects the most recent revision.</p>
