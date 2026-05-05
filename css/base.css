@@ -160,3 +160,22 @@ body.has-noise::before {
         padding: 8rem 1.5rem 3rem;
     }
 }
+
+/* ≤480 small-mobile tier — Phase 11 RESP-01.
+   Reduce page-header top padding so hero/title is visible above the fold on small phones. */
+@media (max-width: 480px) {
+    .page-header {
+        padding: 6.5rem 1rem 2rem;
+    }
+
+    .page-header::before {
+        width: 480px;
+        height: 480px;
+    }
+
+    .section-badge {
+        font-size: 0.6rem;
+        padding: 0.4rem 0.85rem;
+        letter-spacing: 0.12em;
+    }
+}

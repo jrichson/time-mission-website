@@ -168,3 +168,26 @@
         padding: 0 1.25rem 1.25rem;
     }
 }
+
+/* ≤480 small-mobile tier — Phase 11 RESP-01.
+   Reduce horizontal padding on accordion rows so question text doesn't wrap to 4+ lines on iPhone SE.
+   Keep vertical padding ≥ 14px so combined with 18px icon and line-height the row stays ≥ 44px tap target. */
+@media (max-width: 480px) {
+    .faq-question {
+        padding: 1rem 1rem;
+        gap: 0.75rem;
+    }
+
+    .faq-question h3,
+    .faq-question h4,
+    .faq-question-text {
+        font-size: 0.9rem;
+        line-height: 1.35;
+    }
+
+    .faq-answer-content,
+    .faq-answer > p {
+        padding: 0 1rem 1rem;
+        font-size: 0.85rem;
+    }
+}
