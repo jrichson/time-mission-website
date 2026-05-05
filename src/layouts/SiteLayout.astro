@@ -49,16 +49,23 @@ const {
         <slot name="json-ld" />
     </head>
     <body class={bodyClass} data-location={bodyDataLocation}>
-        <slot name="pre-nav" />
-        <slot name="nav">
-            <MobileMenu />
-            <SiteNav />
-            <LocationOverlay />
-        </slot>
-        <slot />
-        <slot name="footer">
-            <SiteFooter />
-        </slot>
+        <a class="skip-link" href="#main">Skip to main content</a>
+        <header role="banner">
+            <slot name="pre-nav" />
+            <slot name="nav">
+                <MobileMenu />
+                <SiteNav />
+                <LocationOverlay />
+            </slot>
+        </header>
+        <main id="main" tabindex="-1">
+            <slot />
+        </main>
+        <footer role="contentinfo">
+            <slot name="footer">
+                <SiteFooter />
+            </slot>
+        </footer>
         <TicketPanel />
         <SiteScripts />
         <slot name="after-site-scripts" />

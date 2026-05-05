@@ -2,6 +2,9 @@
     'use strict';
 
     function ensureSkipLink() {
+        // SSR skip-link is now emitted by src/layouts/SiteLayout.astro (Phase 10 plan 10-01).
+        // This guard makes the runtime injection a safe no-op for Astro-rendered pages.
+        // Retained for legacy HTML pages that don't yet use SiteLayout.
         if (document.querySelector('.skip-link')) return;
 
         var target = document.querySelector('main, [role="main"], .page-header, .hero, .hero-section, .contact-section');
