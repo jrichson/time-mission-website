@@ -10,37 +10,295 @@
         },
         {
           "q": "What ages can play?",
-          "a": "Ages 6 and up! Kids 6–13 need an adult in the group. Ages 14+ can play on their own."
+          "a": "Time Mission is perfect for ages 6 to 106! Kids 6–13 need an adult in the group. Ages 14+ can play on their own."
+        },
+        {
+          "q": "How many people can play together?",
+          "a": "Teams are between 2 to 5 players. Bigger crew? If you come with more than five people, we will simply break you into multiple teams and you play against each other for bragging rights."
         },
         {
           "q": "Do I need to book in advance?",
           "a": "We recommend it, especially on weekends. Walk-ins are welcome based on availability, but booking online guarantees your spot."
         },
         {
-          "q": "What are portals?",
-          "a": "Portals are individual challenge rooms, each with a unique puzzle or mission to solve. Every portal takes 1–5 minutes, and you can play them in any order or replay your favorites."
-        }
-      ]
-    },
-    {
-      "id": "gameplay",
-      "heading": "Gameplay",
-      "items": [
+          "q": "What are missions?",
+          "a": "Missions are individual challenge rooms, each with a unique puzzle or mission to solve. Every mission takes 1–5 minutes, and you can play them in any order or replay your favorites."
+        },
         {
-          "q": "How many portals are there?",
-          "a": "25–30 depending on your Time Mission location. Most groups tackle 15–20 portals in a 90-minute session."
+          "q": "How many missions are there?",
+          "a": "25–30 depending on your Time Mission location. Most groups tackle 15–20 missions in a 90-minute session."
         },
         {
           "q": "How physical is it?",
-          "a": "It's a mix. Some portals are brain teasers, others get you moving (throwing balls, dodging lasers, pressing buttons). Your team picks which portals to play, so you control the intensity. Meters outside each room show what skills you'll need before you walk in."
+          "a": "It's a mix. Some missions are brain teasers, others get you moving (throwing balls, dodging lasers, pressing buttons). Your team picks which portals to play, so you control the intensity. Meters outside each room show what skills you'll need before you walk in."
         },
         {
-          "q": "How many people can play together?",
-          "a": "Teams are up to 5 players. Bigger crew? Book multiple teams and compete for the highest score."
+          "q": "Is there parking?",
+          "a": "Yes, parking is available at most Time Mission locations except Philadelphia. For our Philly guests, we recommend public transit, rideshare, or nearby paid garages and street parking."
+        },
+        {
+          "q": "Do you have lockers?",
+          "a": "Yes, free small lockers are available. Space can fill up on busy days, so we recommend bringing as little as possible."
         },
         {
           "q": "What's the dress code?",
           "a": "Closed-toe shoes required (no sandals). Sneakers and flexible clothing are your best bet since about half the portals get physical."
+        },
+        {
+          "q": "What if we're late?",
+          "a": "Your session starts at your booked time, so arriving 10–15 minutes early is recommended. Groups of 30 or more should arrive 30 minutes early. Late arrivals may be rebooked or have a shorter session."
+        },
+        {
+          "q": "Can we host a birthday party or private event?",
+          "a": "Absolutely. We offer group packages for birthdays, team outings, and private events. Check out our Groups & Events page or contact us for details."
+        },
+        {
+          "q": "Is it wheelchair accessible?",
+          "a": "Details vary by location. Contact your nearest Time Mission for specifics."
+        },
+        {
+          "q": "Is there a waiting area for non-players?",
+          "a": "Details vary by location. Contact your nearest Time Mission for specifics."
+        },
+        {
+          "q": "Are we the only ones in the mission rooms?",
+          "a": "Yes. Each mission room is yours and your team's only, no strangers mixed in. Replay any challenge as many times as you want to chase that high score, as long as no one else is waiting."
+        },
+        {
+          "q": "Do I need to sign a waiver?",
+          "a": "Yes, everyone entering the portal area needs a signed waiver on file. For players under 18, a parent or legal guardian must sign."
+        },
+        {
+          "q": "Do you offer special rates or packages for schools, non-profits, youth groups, etc?",
+          "a": "Absolutely. We love supporting our community. Discount amounts depend on group size, date, and time. Reach out and we'll work something out."
+        },
+        {
+          "q": "Do you offer a military discount?",
+          "a": "Yes, 10% off with a valid military ID. Since we need to verify the ID in person, this discount is walk-in only, not available on advance reservations."
+        },
+        {
+          "q": "Can I take photos or video?",
+          "a": "Absolutely! Time Mission is built for share-worthy moments, perfect for social posts and saving memories. At the end of every session, your group also gets a photo op in our Time Machine."
+        }
+      ]
+    },
+    {
+      "id": "groups",
+      "heading": "Groups",
+      "items": [
+        {
+          "q": "How do I book for a group?",
+          "a": "The easiest way is to book group tickets directly through our online system. Just select your location, pick a date, and add your group. For larger or custom events, submit an event request and our team will be in touch."
+        },
+        {
+          "q": "What's the minimum group size?",
+          "a": "The minimum is two players. For private events and venue rentals, most locations can have up to 125 simultaneous players. Submit an event request to learn more."
+        },
+        {
+          "q": "Do you offer private party rooms?",
+          "a": "Yes! Party room availability and packages vary by location. You can book group tickets for the gaming experience and add a party room, or submit a custom event request for the full package."
+        },
+        {
+          "q": "Can you accommodate corporate events and large groups?",
+          "a": "Absolutely. We regularly host corporate outings, team building events, and groups of up to 125. Submit an event request and our team will create a custom package for your needs."
+        }
+      ]
+    },
+    {
+      "id": "gift-cards",
+      "heading": "Gift Cards",
+      "items": [
+        {
+          "q": "Do gift cards expire?",
+          "a": "No! Time Mission gift cards never expire. The recipient can use them whenever they're ready for their adventure."
+        },
+        {
+          "q": "What can gift cards be used for?",
+          "a": "Gift cards can be used for general admission tickets, birthday party packages, corporate events, and any merchandise at our locations."
+        },
+        {
+          "q": "Can I check my gift card balance?",
+          "a": "Yes! You can check your balance at any location or by contacting your location's customer service team."
+        },
+        {
+          "q": "Can I get a refund on a gift card?",
+          "a": "Gift cards are non-refundable but they never expire, so the recipient can use them whenever they're ready!"
+        }
+      ]
+    },
+    {
+      "id": "birthdays",
+      "heading": "Birthday Parties",
+      "items": [
+        {
+          "q": "Can we bring cake, food, or party extras?",
+          "a": "It varies by location. Most venues have seating areas for cake and snacks, a few are mission-only. When you request a quote, we'll walk you through what your specific location offers — including any food, drink, or add-on packages available there."
+        },
+        {
+          "q": "What ages does this work for?",
+          "a": "Time Mission is perfect for ages 6 to 106! Kids 6–13 need an adult in the group. Ages 14+ can play on their own. Adult birthdays and milestone events are a big part of what we do too."
+        },
+        {
+          "q": "How far in advance should we book?",
+          "a": "Three to four weeks is the sweet spot for weekend parties — weekend slots fill fastest. Weekdays are usually available with a week's notice."
+        },
+        {
+          "q": "Is food available at the venue?",
+          "a": "Food and drink offerings vary by location. Most locations without food or beverages will let you bring your own if you rent a party room. Please confirm what's available at your selected location when you book."
+        },
+        {
+          "q": "What's the deposit and cancellation policy?",
+          "a": "A small deposit holds your date. Full details — including reschedule windows — are included in the booking confirmation we send once you request a quote."
+        }
+      ]
+    },
+    {
+      "id": "corporate",
+      "heading": "Corporate Events",
+      "items": [
+        {
+          "q": "How big a team can you host?",
+          "a": "From 8-person team offsites up to 300+ full-venue buyouts, depending on the location. Send us your headcount and we'll confirm what's possible at your chosen venue."
+        },
+        {
+          "q": "Can we buy out the whole venue?",
+          "a": "Yes — most locations offer full-venue buyouts. Pricing and availability vary by location. Request a quote and we'll walk you through buyout options."
+        },
+        {
+          "q": "Is food and drink available?",
+          "a": "Varies by location. Some venues have full concessions and catering packages; others are BYO-friendly. We'll confirm what's available at your selected location when you book."
+        },
+        {
+          "q": "Can we brand the space or add custom signage?",
+          "a": "Custom branding, signage, and event personalization options depend on the location and event size. Full-venue buyouts generally have the most flexibility — let us know what you have in mind."
+        },
+        {
+          "q": "How far in advance should we book?",
+          "a": "Three to four weeks is typical for weekday team events. For peak corporate season (Q4, end-of-summer) we recommend six to eight weeks out."
+        },
+        {
+          "q": "Can we combine this with dinner or drinks nearby?",
+          "a": "Absolutely — most of our venues are near restaurants and bars. We can suggest partners near your selected location when you book."
+        }
+      ]
+    },
+    {
+      "id": "private-events",
+      "heading": "Private Events",
+      "items": [
+        {
+          "q": "What's the minimum headcount for a buyout?",
+          "a": "Varies by location, but most buyouts start around 40–60 guests. Send us your size and we'll confirm what works at your chosen venue."
+        },
+        {
+          "q": "How is buyout pricing structured?",
+          "a": "Custom pricing based on venue, date, duration, and headcount. Request a quote and we'll send a detailed proposal."
+        },
+        {
+          "q": "Can we add custom branding or signage?",
+          "a": "Yes — most buyouts include options for branded signage, custom welcome experiences, and sometimes mission personalization. Let us know what you have in mind."
+        },
+        {
+          "q": "Is catering available?",
+          "a": "Catering and bar options vary by location. Some venues have full in-house packages, others allow you to work with outside caterers. We'll walk you through what's available when you book."
+        },
+        {
+          "q": "What hours are buyouts available?",
+          "a": "Most locations can accommodate buyouts during standard operating hours plus extended or after-hours slots. Extended hours may carry additional cost."
+        },
+        {
+          "q": "Do you handle AV, entertainment, or activations?",
+          "a": "We can coordinate AV basics in-house and work with outside vendors for larger activations, entertainment, and custom experiences. Let's talk through what the event needs."
+        }
+      ]
+    },
+    {
+      "id": "holidays",
+      "heading": "Holiday Parties",
+      "items": [
+        {
+          "q": "How far in advance should we book peak-season dates?",
+          "a": "For December 1 through December 23, we recommend booking six to eight weeks out. Weekday slots are typically more available than weekends."
+        },
+        {
+          "q": "How big a group can you host?",
+          "a": "From 10-person small teams up to 125+ full-venue buyouts, depending on the location. Let us know your count and we'll confirm what's possible."
+        },
+        {
+          "q": "Is catering available?",
+          "a": "Varies by location. Many venues have holiday-ready food and drink packages; others work with outside caterers. We'll share what's available at your selected location."
+        },
+        {
+          "q": "Can we organize a gift exchange or festive extras?",
+          "a": "Most locations can accommodate gift exchange space and festive add-ons, depending on venue setup. Let us know what you're planning."
+        },
+        {
+          "q": "Is a full-venue buyout available?",
+          "a": "Yes — most locations offer buyouts for larger holiday parties. Pricing and availability depend on the location and date."
+        },
+        {
+          "q": "What ages can play?",
+          "a": "Time Mission is perfect for ages 6 to 106! Kids 6–13 need an adult in the group. Ages 14+ can play on their own. Perfect for mixed-age family holiday parties."
+        }
+      ]
+    },
+    {
+      "id": "field-trips",
+      "heading": "School Field Trips",
+      "items": [
+        {
+          "q": "What group sizes do you accommodate?",
+          "a": "From 10-student small groups up to 125+ depending on the venue. Tell us your class size and we'll confirm what's possible at your chosen location."
+        },
+        {
+          "q": "What are your chaperone requirements?",
+          "a": "Chaperone ratios depend on grade level. Generally, one adult per 8–10 students for elementary groups and one per 15 for middle/high school. Chaperones are typically free or discounted."
+        },
+        {
+          "q": "Is there weekday availability?",
+          "a": "Yes — weekdays are our most flexible days for field trips. Morning and afternoon slots both available."
+        },
+        {
+          "q": "How does the experience align with curriculum?",
+          "a": "Missions cover physics, logic, problem-solving, and teamwork. We can provide an educator info packet that connects the experience to science, math, and social-emotional learning standards."
+        },
+        {
+          "q": "Is there a place for lunches or bus drop-off?",
+          "a": "Varies by location. Some venues have nearby lunch spots or drop-off zones; others recommend a boxed lunch before or after. We'll share location-specific logistics when you book."
+        },
+        {
+          "q": "What's the age minimum?",
+          "a": "Ages 6 and up. Kids under 14 need adult supervision in the group (which chaperones cover)."
+        }
+      ]
+    },
+    {
+      "id": "bachelor-ette",
+      "heading": "Bachelor / Bachelorette",
+      "items": [
+        {
+          "q": "What group size works best?",
+          "a": "Anywhere from 6-person small crews up to 30+ party squads. Most locations can comfortably host a standard bachelor/ette group."
+        },
+        {
+          "q": "Are alcoholic drinks available?",
+          "a": "At most locations, yes — drink packages and bar options vary by venue. We'll confirm what's available when you request a quote."
+        },
+        {
+          "q": "Is there a dress code?",
+          "a": "Whatever you want. Sashes, matching shirts, custom tees — if it's fun and mission-friendly (no heels or open toed shoes for missions), we're into it."
+        },
+        {
+          "q": "Can we pair this with dinner or bars nearby?",
+          "a": "Absolutely — most of our venues are in entertainment districts with plenty of dinner and drink options nearby. We'll share recommendations when you book."
+        },
+        {
+          "q": "How far in advance should we book?",
+          "a": "Three to four weeks is typical for weekend slots. Popular wedding seasons (spring, summer, fall) fill faster — book earlier if you can."
+        },
+        {
+          "q": "Can we decorate or bring party favors?",
+          "a": "Decoration and party-favor options depend on the location. Some venues have designated staging areas, others are mission-only. Let us know what you have in mind."
         }
       ]
     }
