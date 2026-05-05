@@ -24,3 +24,154 @@
 .pm__btn[data-role="all"] {
     background: var(--gradient-primary);
 }
+
+/* ==========================================================================
+   POLISH-01 — Bottom-LEFT card placement (vanilla-cookieconsent .cm--box)
+   Spec source: docs/cutover-checklist.md lines 70-98 (D-B1..D-B6 in 11-CONTEXT.md)
+   CSS-only — no JS or markup changes. js/cookie-consent.js gate behavior is untouched.
+   Note: js/cookie-consent.js already sets guiOptions.consentModal.layout: 'box'
+   (line 59), so .cm--box selectors apply at runtime without a JS follow-up.
+   ========================================================================== */
+
+/* D-B1: Layout — bottom-left card, 380px max-width, 16-24px from edges. */
+/* D-B2: Visual — dark rgba surface, backdrop-blur, orange 18% border, 12px radius, deep shadow. */
+.cm--box,
+.cm.cm--box {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    right: auto;
+    top: auto;
+    max-width: 380px;
+    width: calc(100vw - 48px); /* leaves 24px gutter on each side until 380px is the cap */
+    margin: 0;
+    padding: 1.25rem 1.25rem 1rem;
+    background: rgba(20, 20, 24, 0.92);
+    backdrop-filter: blur(12px) saturate(1.1);
+    -webkit-backdrop-filter: blur(12px) saturate(1.1);
+    border: 1px solid rgba(255, 107, 44, 0.18); /* var(--orange) at 18% — literal rgba so it survives library specificity */
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    z-index: 9999; /* above page content; below .location-dropdown (10001) */
+    color: var(--white);
+    font-family: var(--body);
+}
+
+/* D-B3: Hierarchy — Orbitron 14px uppercase heading; DM Sans 14px body. */
+.cm--box .cm__title,
+.cm--box .cm__heading {
+    font-family: var(--tech); /* Orbitron / Monument Extended */
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin: 0 0 0.5rem;
+}
+
+.cm--box .cm__desc,
+.cm--box .cm__texts p {
+    font-family: var(--body); /* DM Sans */
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--white);
+    margin: 0 0 1rem;
+}
+
+/* D-B3: button row — Accept (filled) + Reject (outlined orange) equal prominence. */
+.cm--box .cm__btns {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.cm--box .cm__btn[data-role="all"] {
+    flex: 1 1 0;
+    background: var(--gradient-primary);
+    color: var(--white);
+    border: none;
+    font-weight: 600;
+}
+
+.cm--box .cm__btn[data-role="necessary"],
+.cm--box .cm__btn[data-role="reject"] {
+    flex: 1 1 0;
+    background: transparent;
+    color: var(--orange);
+    border: 1px solid var(--orange);
+    font-weight: 600;
+}
+
+/* D-B3: Manage Preferences as text-only tertiary BELOW the button row. */
+.cm--box .cm__btn[data-role="manage"],
+.cm--box .cm__btn[data-role="show"] {
+    flex: 1 1 100%;
+    background: transparent;
+    color: var(--gray);
+    border: none;
+    text-decoration: underline;
+    font-weight: 400;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    min-height: 44px; /* preserve tap-target floor on the tertiary too */
+}
+
+/* D-B4: Motion — slide-up + fade in 220ms cubic-bezier(0.32, 0.72, 0, 1). */
+@keyframes tm-cm-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cm--box.cm--anim,
+.cm--box {
+    animation: tm-cm-slide-up 220ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cm--box,
+    .cm--box.cm--anim {
+        animation: none;
+    }
+}
+
+/* D-B5: Mobile (< 640px) — full-width minus 16px gutter, 16px above bottom; buttons stack vertically with Accept on top. */
+@media (max-width: 640px) {
+    .cm--box,
+    .cm.cm--box {
+        left: 16px;
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px)); /* clear iOS home indicator */
+        max-width: none;
+        width: auto;
+        padding: 1rem;
+    }
+
+    .cm--box .cm__btns {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .cm--box .cm__btn[data-role="all"] {
+        order: 1; /* Accept on top */
+        flex: 1 1 100%;
+    }
+
+    .cm--box .cm__btn[data-role="necessary"],
+    .cm--box .cm__btn[data-role="reject"] {
+        order: 2;
+        flex: 1 1 100%;
+    }
+
+    .cm--box .cm__btn[data-role="manage"],
+    .cm--box .cm__btn[data-role="show"] {
+        order: 3;
+        margin-top: 0.25rem;
+    }
+}
