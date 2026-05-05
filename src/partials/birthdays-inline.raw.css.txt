@@ -661,3 +661,12 @@
         }
 
         /* Ticket panel: shared styles from /css/ticket-panel.css (linked in SiteLayout). */
+
+        @media (max-width: 480px) {
+            .hero { padding: 100px 1rem 2.5rem; min-height: 55vh; }
+            .hero-title { font-size: 2rem; line-height: 1.15; }
+            .hero-subtitle { font-size: 0.95rem; }
+            .event-page-feature-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+            .event-page-feature-card { padding: 1.5rem 1.25rem; }
+            .event-page-section { padding-left: 1rem; padding-right: 1rem; }
+        }

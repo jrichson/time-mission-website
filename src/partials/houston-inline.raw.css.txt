@@ -2757,4 +2757,18 @@
                 height: 32px;
             }
         }
-    
+
+        @media (max-width: 480px) {
+            .hero { padding: 100px 1rem 2.5rem; min-height: 55vh; }
+            .hero-title { font-size: 2rem; line-height: 1.15; }
+            .hero-subtitle { font-size: 0.95rem; }
+            .stat-card { padding: 1.25rem; }
+            .stat-card .stat-value { font-size: 1.75rem; }
+            .section-title { font-size: 1.85rem; }
+            .cta-section { padding: 3rem 1rem; }
+            .btn-tickets {
+                min-height: 48px; /* preserve .btn-tickets desktop floor on small mobile */
+                padding: 0.6rem 1.1rem;
+                font-size: 0.75rem;
+            }
+        }
