@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 10-audit-gap-closure-cutover-readiness
 source:
   - 10-01-SUMMARY.md
@@ -78,13 +78,24 @@ blocked: 0
   reason: "User reported: on small screens 425 and below - we have some serious responsiveness issues with button sizes, copy sizes, footer links not stacking, etc"
   severity: major
   test: 8
-  artifacts: []
-  missing: []
-  diagnosis_hint: |
-    Shared CSS (css/nav.css, css/base.css, css/footer.css, css/newsletter.css, css/faq.css)
-    has breakpoints at 768px and 1024px only. css/ticket-panel.css has one at 400px.
-    No ≤480px tier exists in shared CSS. Page-local partials only have @media (max-width: 480px)
-    in 3 of ~12 inline.raw.css.txt files (index, antwerp, philadelphia). Likely root cause:
-    layouts that compress acceptably at 768px don't have a second compression tier for
-    small phones, so footer columns, button rows, and body copy stay at 768px sizing
-    down through 320px viewport.
+  root_cause: "Shared CSS (base.css, nav.css, footer.css, newsletter.css, faq.css) has only 768px and 1024px @media breakpoints — no third tier for ≤480px small mobile. Three page-local partials (index, philadelphia, antwerp) already use @media (max-width: 480px), but 15 of 18 partials do not. Result: layouts that compress at 768px keep tablet sizing all the way down to 320px viewport. Typography is not fluid (no clamp() size tokens — only font-family tokens), so single-token fix is not viable. Each affected element needs an explicit ≤480px rule."
+  artifacts:
+    - path: "css/footer.css"
+      issue: "footer-legal row doesn't wrap cleanly at ≤425; .footer padding (32px sides) eats useful width below 375px"
+    - path: "css/nav.css"
+      issue: ".btn-tickets and .nav-logo don't tighten at ≤480 — at 320–375 with location-btn (44px) + brand mark + tickets, total exceeds viewport"
+    - path: "css/faq.css"
+      issue: "no ≤480 padding/font-size reduction (768 only)"
+    - path: "css/base.css"
+      issue: "page-header padding has 768 tier only; no ≤480 reduction"
+    - path: "src/partials/{about,brussels,contact,dallas,faq,gift-cards,groups,houston,lincoln,locations,manassas,missions,mount-prospect,orland-park,west-nyack}-inline.raw.css.txt"
+      issue: "15 partials missing @media (max-width: 480px) tier; hero h1, CTAs, grids, stat cards, testimonials don't recompress for small phones"
+  missing:
+    - "Add @media (max-width: 480px) tier to css/footer.css (footer-legal flex-wrap, .footer padding 2.5rem 1.25rem)"
+    - "Add @media (max-width: 480px) tier to css/nav.css (.btn-tickets padding/font-size reduction preserving min-height: 44px; .nav-logo min-width 88px; .nav padding 0.625rem 0.75rem)"
+    - "Add @media (max-width: 480px) tier to css/faq.css (.faq-question padding 16px, font-size 15px)"
+    - "Optional: add @media (max-width: 480px) tier to css/base.css (.page-header padding-top reduction)"
+    - "Add @media (max-width: 480px) tier to 15 page-local partials following the index/philadelphia/antwerp pattern (hero h1, .cta-row → column stack + 100% width, multi-column grids → 1fr)"
+    - "Add Playwright smoke assertion at viewport 375×667 for 3-4 representative pages (no horizontal scroll, footer-legal wraps, .location-btn = 44×44)"
+    - "Approach: per-element @media (max-width: 480px) rules — NOT clamp() typography refactor (visual-parity risk per CLAUDE.md; no size tokens exist to retrofit; tap-target precision concerns)"
+  debug_session: "(inline diagnosis from gsd-debugger agent — see commit 92703d2 → diagnose run 2026-05-05)"
