@@ -310,10 +310,13 @@ Wave summary:
 
 ### Phase 11: small-mobile responsiveness ≤480px tier + cookie banner placement polish
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Close the launch-blocking responsive gap diagnosed in Phase 10 UAT (test 8) by adding a `@media (max-width: 480px)` tier to 5 shared CSS files and 6 page-local partials, ship POLISH-01 cookie-banner placement (bottom-left card) so it stops competing with the sticky `.btn-tickets` mobile CTA, and add a Playwright smoke assertion at 375×667 covering no horizontal scroll, footer-legal wrap, and ≥44×44 tap targets — without redesign and without `clamp()` typography refactor (visual parity preserved).
+
+**Requirements**: FND-02 (preserve visual design / responsive parity); inherits Phase 10's tap-target and a11y baselines.
+
 **Depends on:** Phase 10
-**Plans:** 0 plans
+
+**Plans:** TBD (will be populated by `/gsd-plan-phase 11`)
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 11 to break down)
+- [ ] TBD (planner agent will create wave-grouped plans for shared CSS, page partials, cookie banner CSS, and smoke test)
