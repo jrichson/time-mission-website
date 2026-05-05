@@ -84,6 +84,7 @@ Recent decisions affecting current work:
 
 - 2026-05-04 — Phase 10 added: Audit-Gap Closure & Cutover Readiness. Origin: external SEO/A11y/Security/Performance audit (39 findings) coverage analysis identified 13 code gaps remaining in Astro + 9 host/external dependencies. See `.planning/phases/10-audit-gap-closure-cutover-readiness/10-CONTEXT.md`.
 - 2026-05-05 — Phase 10 closed: 7 plans shipped covering 13 P0/P1 audit code gaps; 7 host/external items + P2-6 brand compliance recorded in `docs/cutover-checklist.md` for human owners; `verify:phase10` exits 0 end-to-end. v1.0 milestone code work complete; remaining items are human-led cutover steps.
+- 2026-05-05 — Phase 11 added: small-mobile responsiveness ≤480px tier + cookie banner placement polish. Origin: Phase 10 UAT discovered serious responsiveness issues at viewports ≤425px (footer columns not stacking, button sizes, copy sizes). Bundles RESP-01 (major — `@media (max-width: 480px)` tier across `nav.css`/`footer.css`/`faq.css` + 15 page-local partials) and POLISH-01 (minor — cookie banner bottom-left card placement per ui-design-brain spec). Full diagnosis in `.planning/phases/10-audit-gap-closure-cutover-readiness/10-UAT.md` Gaps section.
 
 ### Pending todos
 

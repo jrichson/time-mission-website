@@ -307,3 +307,13 @@ Wave summary:
 **UI hint:** yes (`10-UI-SPEC.md` approved 2026-05-04 — legal page parity via shared CSS partial, cookie banner copy "Manage Preferences", skip-link focus states already in `css/base.css`, hero srcset breakpoints)
 
 **Locked decisions (CONTEXT.md):** D-01 hero video decorative; D-02 lang attribute only (no cross-city hreflang); D-03 cookie banner EU pages only; D-04 antwerp migrates to Astro; D-05 "Manage Preferences" copy. P1-17 `tickets.timemission.com` CSP is a host action item (DevOps), tracked in 10-07's cutover checklist.
+
+### Phase 11: small-mobile responsiveness ≤480px tier + cookie banner placement polish
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 10
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 11 to break down)
