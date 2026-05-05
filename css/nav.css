@@ -870,6 +870,7 @@
     background: var(--gradient-primary);
     color: var(--white);
     padding: 0.75rem 1.5rem;
+    min-height: 48px;
     text-decoration: none;
     font-family: 'Monument Extended', 'Orbitron', sans-serif;
     font-size: 0.85rem;
