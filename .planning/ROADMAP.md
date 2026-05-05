@@ -276,14 +276,14 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 7. SEO, Schema & Local Search Baseline | 5/5 | Complete | 2026-04-29 |
 | 8. Built-Output Verification & Cutover Readiness | 5/5 | Complete | 2026-04-30 |
 | 9. Architecture deepening & template hygiene | summary | Complete | 2026-04-30 |
-| 10. Audit-Gap Closure & Cutover Readiness | 7/7 | Complete | 2026-05-05 |
+| 10. Audit-Gap Closure & Cutover Readiness | 7/7 | Complete   | 2026-05-05 |
 
 ### Phase 10: Audit-Gap Closure & Cutover Readiness
 
 **Goal:** Every P0 and P1 audit finding either ships fixed in the Astro `dist/` output, has a documented host-config change in the cutover runbook, or is explicitly deferred with rationale.
 **Requirements:** No new v1 IDs (extends SEO / COMP / DATA / ANLY / VER practices)
 **Depends on:** Phase 9
-**Plans:** 7/7 plans executed; closed 2026-05-05
+**Plans:** 7/7 plans complete
 
 Origin: External SEO / A11y / Security / Performance audit (39 findings) against legacy live site. Phases 1–9 closed most; coverage analysis (2026-05-04) identified 13 code gaps + 9 host/external dependencies. See `.planning/phases/10-audit-gap-closure-cutover-readiness/10-CONTEXT.md`.
 
