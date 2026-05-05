@@ -294,7 +294,7 @@ test.describe('small mobile (375x667)', () => {
     await ticketsBtn.waitFor({ state: 'visible' });
     const box = await ticketsBtn.boundingBox();
     expect(box).not.toBeNull();
-    // .btn-tickets keeps min-height: 48px desktop floor in nav.css ≤480 block (D-A3).
-    expect(box.height).toBeGreaterThanOrEqual(44); // mobile floor; 48 still preserved at 375 in our ≤480 rule
+    // .btn-tickets keeps min-height: 48px per D-A3, even on small mobile (375px viewport).
+    expect(box.height).toBeGreaterThanOrEqual(48);
   });
 });
