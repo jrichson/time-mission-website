@@ -45,6 +45,7 @@ const steps = [
   ['check:ticket-panel-source-parity', []],
   ['check:seo-output', []],
   ['check:schema-output', []],
+  ['check:img-alt-axe', []],
   ['check:sitemap-output', []],
   ['check:robots-ai', []],
   ['check:llms-txt', []],
