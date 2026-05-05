@@ -1,0 +1,40 @@
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="reveal">
+            <h1 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">COOKIE POLICY</h1>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="legal-page">
+        <p>This Cookie Policy explains how Time Mission Corp. ("Time Mission," "we," "us," or "our") uses cookies and similar technologies when you visit <a href="https://timemission.com">timemission.com</a>. It works alongside our <a href="/privacy">Privacy Policy</a>.</p>
+
+        <h2>What Are Cookies?</h2>
+        <p>Cookies are small text files placed on your device when you visit a website. They let the site remember your preferences, keep you signed in, measure traffic, and support marketing.</p>
+
+        <h2>Categories We Use</h2>
+        <p><strong>Strictly Necessary.</strong> Required for the site to function, page navigation, security, and remembering your selected location. These cannot be disabled.</p>
+        <p><strong>Analytics &amp; Performance.</strong> Help us understand how visitors use the site so we can improve it. Examples: Google Analytics 4, Microsoft Clarity.</p>
+        <p><strong>Advertising &amp; Marketing.</strong> Used to measure the effectiveness of our ads and show you relevant content on other platforms. Examples: Meta (Facebook) Pixel, Google Ads conversion tag, TikTok Pixel.</p>
+        <p><strong>Functional.</strong> Remember choices you make (like your preferred location) to personalize your experience.</p>
+
+        <h2>Third-Party Cookies</h2>
+        <p>Some cookies are set by services we use, such as Google, Meta, and TikTok. We do not control these cookies directly. Review each provider's policy for details on what they collect.</p>
+
+        <h2>Your Choices</h2>
+        <p><strong>Browser Controls.</strong> Every major browser lets you block, delete, or be prompted about cookies. Disabling some may affect site functionality.</p>
+        <p><strong>Opt Out of Advertising.</strong> Visit <a href="https://optout.aboutads.info/" target="_blank" rel="noopener">aboutads.info</a> or <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener">youronlinechoices.eu</a> (EU) to opt out of interest-based advertising.</p>
+        <p><strong>Consent Tools.</strong> We are rolling out an on-site consent banner that will let you accept or reject non-essential cookie categories. Until that is live, please use your browser controls or the opt-out links above.</p>
+
+        <h2>Do Not Track</h2>
+        <p>Our site does not currently respond to browser "Do Not Track" signals, because no uniform standard exists. We rely on browser controls today and plan to add an on-site consent banner shortly.</p>
+
+        <h2>Changes to This Policy</h2>
+        <p>We may update this policy as our practices or the tools we use change. The "Last Updated" date below reflects the most recent revision.</p>
+
+        <h2>Contact</h2>
+        <p>Questions about our cookie practices? Email <a href="mailto:info@timemission.com">info@timemission.com</a>.</p>
+
+        <p class="legal-updated">Last Updated: April 2026</p>
+
+    </section>

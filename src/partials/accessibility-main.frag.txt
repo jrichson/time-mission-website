@@ -1,0 +1,39 @@
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="reveal">
+            <h1 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">ACCESSIBILITY STATEMENT</h1>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="legal-page">
+        <p>Time Mission Corp. is committed to making our website accessible to as many people as possible, regardless of ability or technology. We believe everyone should be able to step into the mission.</p>
+
+        <h2>Our Standard</h2>
+        <p>We target conformance with the <a href="https://www.w3.org/TR/WCAG21/" target="_blank" rel="noopener">Web Content Accessibility Guidelines (WCAG) 2.1 Level AA</a>. These guidelines cover a wide range of recommendations for making web content more accessible to people with visual, auditory, motor, and cognitive disabilities.</p>
+
+        <h2>What We Do</h2>
+        <p><strong>Color &amp; Contrast.</strong> We test foreground/background contrast ratios across the site and make adjustments where they fall below AA thresholds.</p>
+        <p><strong>Keyboard Navigation.</strong> All interactive elements can be reached and operated using a keyboard alone.</p>
+        <p><strong>Semantic HTML.</strong> We use proper headings, landmarks, and ARIA roles so assistive technology can interpret the page structure.</p>
+        <p><strong>Alternative Text.</strong> We provide descriptive alt text for photos and decorative alt="" for purely visual elements.</p>
+        <p><strong>Responsive Layout.</strong> Pages reflow at 320px width and scale to 200% without loss of content or function.</p>
+
+        <h2>Known Limitations</h2>
+        <p>We are continuing to improve. Current known issues include:</p>
+        <p><strong>Hero Videos.</strong> Background videos are decorative, muted, and have poster frames, but do not include captions.</p>
+        <p><strong>Motion.</strong> Some pages include scroll-triggered animations. These respect the <code>prefers-reduced-motion</code> setting on most browsers.</p>
+
+        <h2>Assistance</h2>
+        <p>If you encounter an accessibility barrier, or need information on this site in an alternative format, please contact us. We treat accessibility reports with priority and respond within three business days.</p>
+        <p>Email: <a href="mailto:accessibility@timemission.com">accessibility@timemission.com</a></p>
+
+        <h2>Formal Complaints</h2>
+        <p>We aim to resolve accessibility issues directly and quickly. If you are not satisfied with our response, you may file a complaint with the appropriate regulatory authority for your jurisdiction (e.g., the U.S. Department of Justice for ADA-related concerns, or national enforcement bodies for EN 301 549 in the EU).</p>
+
+        <h2>Updates to This Statement</h2>
+        <p>We will revise this statement as our site evolves and as we resolve known issues.</p>
+
+        <p class="legal-updated">Last Updated: April 2026</p>
+
+    </section>

@@ -2,16 +2,16 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import legalCss from '../partials/legal-inline.raw.css.txt?raw';
-import privacyMain from '../partials/privacy-main.frag.txt?raw';
+import waiverMain from '../partials/waiver-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 
 const ld = serializeGraph(
     buildSimpleGraph([
         { label: 'Home', href: '/' },
-        { label: 'Privacy', href: '/privacy' },
+        { label: 'Waiver', href: '/waiver' },
     ]),
 );
-const page = definePage({ canonicalPath: '/privacy' });
+const page = definePage({ canonicalPath: '/waiver' });
 ---
 
 <SiteLayout
@@ -28,5 +28,5 @@ const page = definePage({ canonicalPath: '/privacy' });
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
-    <div set:html={privacyMain} />
+    <div set:html={waiverMain} />
 </SiteLayout>

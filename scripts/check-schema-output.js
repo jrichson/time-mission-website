@@ -98,7 +98,20 @@ for (const route of schemaRoutes) {
     if (types.filter((t) => t === 'Organization').length !== 1) errors.push(`${outFile}: expected Organization only`);
   }
 
-  if (['/contact', '/locations', '/privacy', '/groups/corporate'].includes(cp)) {
+  // Pages that must emit BreadcrumbList (legal pages + nav pages with breadcrumb schema)
+  const BREADCRUMB_REQUIRED_PATHS = new Set([
+    '/contact',
+    '/locations',
+    '/privacy',
+    '/groups/corporate',
+    '/terms',
+    '/code-of-conduct',
+    '/licensing',
+    '/cookies',
+    '/accessibility',
+    '/waiver',
+  ]);
+  if (BREADCRUMB_REQUIRED_PATHS.has(cp)) {
     if (!has('BreadcrumbList')) errors.push(`${outFile}: missing BreadcrumbList`);
     if (has('FAQPage')) errors.push(`${outFile}: unexpected FAQPage`);
     if (has('EntertainmentBusiness')) errors.push(`${outFile}: unexpected EntertainmentBusiness`);
