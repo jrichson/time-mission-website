@@ -74,6 +74,15 @@ async function main() {
       );
       const ready = await waitForServer(30_000);
       if (!ready) {
+        // process.exit() bypasses the outer finally block; kill the detached
+        // child here so we don't leave an orphan preview server running.
+        try {
+          if (process.platform === 'win32') {
+            spawnSync('taskkill', ['/PID', String(serverChild.pid), '/F', '/T']);
+          } else {
+            process.kill(-serverChild.pid, 'SIGTERM');
+          }
+        } catch (_) {}
         console.error('check-img-alt-axe: preview server did not start within 30s');
         process.exit(1);
       }
