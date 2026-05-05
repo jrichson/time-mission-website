@@ -47,24 +47,15 @@ function validateIntlFields(location) {
       errors.push(`${id}: ${k} must be string or null`);
     }
   }
+  // Phase 10 D-02 (locked): hreflang is LANG ATTRIBUTE ONLY (BCP-47 string per location).
+  // Cross-city <link rel="alternate" hreflang> clusters are forbidden per Google docs.
   if (location.hreflang == null) return;
-  if (!Array.isArray(location.hreflang)) {
-    errors.push(`${id}: hreflang must be array or null`);
+  if (typeof location.hreflang !== 'string') {
+    errors.push(`${id}: hreflang must be BCP-47 language tag string or null`);
     return;
   }
-  for (const entry of location.hreflang) {
-    if (!entry || typeof entry !== 'object') {
-      errors.push(`${id}: hreflang entries must be objects`);
-      continue;
-    }
-    if (typeof entry.lang !== 'string' || typeof entry.url !== 'string') {
-      errors.push(`${id}: hreflang item needs string lang and url`);
-      continue;
-    }
-    const u = entry.url.trim();
-    if (u.indexOf('https://') === 0) continue;
-    if (INTERNAL_PATH.test(u) && !u.endsWith('.html')) continue;
-    errors.push(`${id}: hreflang url must be https or clean internal path without .html`);
+  if (!/^[a-z]{2,3}(-[A-Z]{2})?$/.test(location.hreflang)) {
+    errors.push(`${id}: hreflang must match BCP-47 pattern (e.g. "en", "nl-BE")`);
   }
 }
 

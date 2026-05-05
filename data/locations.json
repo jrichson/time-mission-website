@@ -457,7 +457,7 @@
       "timeZone": null,
       "currency": null,
       "phoneE164": null,
-      "hreflang": null,
+      "hreflang": "nl-BE",
       "localBusinessSchemaEligible": true
     },
     {
@@ -525,7 +525,7 @@
       "timeZone": null,
       "currency": null,
       "phoneE164": null,
-      "hreflang": null,
+      "hreflang": "fr-BE",
       "localBusinessSchemaEligible": false
     },
     {

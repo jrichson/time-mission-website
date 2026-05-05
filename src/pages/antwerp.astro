@@ -1,0 +1,44 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import { allLocations } from '../data/locations';
+import antwerpCss from '../partials/antwerp-inline.raw.css.txt?raw';
+import antwerpMainRaw from '../partials/antwerp-main.frag.txt?raw';
+import antwerpAfter from '../partials/antwerp-after.frag.txt?raw';
+import { applyTmMediaBase } from '../lib/tm-media';
+import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
+
+const antwerp = allLocations.find((l) => l.slug === 'antwerp');
+if (!antwerp) throw new Error('antwerp missing from src/data/locations');
+
+const ld = serializeGraph(
+    buildLocationGraph('antwerp', '/antwerp', [
+        { label: 'Home', href: '/' },
+        { label: 'Locations', href: '/locations' },
+        { label: antwerp.shortName, href: '/antwerp' },
+    ]),
+);
+const page = definePage({ canonicalPath: '/antwerp' });
+const antwerpMain = applyTmMediaBase(antwerpMainRaw);
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    lang="nl-BE"
+    bodyDataLocation={antwerp.slug}
+>
+    <Fragment slot="head-extra">
+        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={antwerpCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={antwerpMain} />
+    <Fragment slot="after-site-scripts" set:html={antwerpAfter} />
+</SiteLayout>
