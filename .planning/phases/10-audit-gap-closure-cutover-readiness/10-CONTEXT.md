@@ -101,6 +101,37 @@ Yes — this phase touches:
 - `js/a11y.js` (current runtime skip-link injection — to be replaced by SSR landmark)
 - `scripts/check-schema-output.js`, `scripts/check-accessibility-baseline.js`, `scripts/check-route-contract.js` (validators to extend)
 
+## Locked decisions (resolved 2026-05-04 during plan-phase)
+
+These answers came out of `/gsd-plan-phase 10` interactive questions and are inputs to the planner. They are LOCKED — do not re-litigate during planning or execution.
+
+1. **P1-12 hero video — DECORATIVE.** Mark `<video>` with `aria-hidden="true" tabindex="-1"`. No caption track. Plan 10-04 records rationale: *"Background motion, not informational content."* No caption-file authoring task.
+2. **P1-9 hreflang scope — LANG ATTRIBUTE ONLY.** No cross-city `<link rel="alternate" hreflang>` cluster. Per Google docs, hreflang is for translations of the same page, not different cities. Plan 10-06 emits per-route `lang` prop only (`nl-BE` for Antwerp, `en` for US). `check-hreflang-cluster.js` asserts `<html lang>` correctness AND absence of unapproved cross-cluster `<link>` tags.
+3. **P2-4 cookie banner — EU PAGES ONLY.** Detect via location slug (`antwerp`, future `brussels`). Use `vanilla-cookieconsent@3` integrated with existing Consent Mode v2 dataLayer contract from Phase 6. Plan 10-08 includes the per-route gating logic.
+4. **Antwerp file — MIGRATE to `antwerp.astro`.** Plan 10-06 migrates `antwerp.html` → `src/pages/antwerp.astro` so the `lang` prop can be set via `SiteLayout`. Aligns with broader migration trajectory.
+5. **P1-17 `tickets.timemission.com` CSP — HOST ACTION ITEM.** Code unchanged in Phase 10. Plan 10-09 records in `docs/cutover-checklist.md`: owner=DevOps, action=verify DNS+TLS before cutover OR migrate Philly/West Nyack/Lincoln booking URLs first. Phase passes regardless of subdomain status.
+
+## Closed gaps (already shipped before plan-phase ran)
+
+Per `10-RESEARCH.md` `## Pre-Research: Current State Assessment`, two gaps from the punch list above are already closed by quick-tasks:
+
+- **P0-5 / P0-8 (gap #1)** — closed by quick-task `260504-lsk-01`. Antwerp renamed to `Time Mission Antwerp`; `alternateName` field added to `LocalBusinessNode`; `scripts/check-schema-output.js` already asserts the contract. **No new `check-schema-altname` validator needed.** Plan 10-01 from the suggested wave breakdown is REMOVED.
+- **P1-8 (gap #5)** — closed by quick-task `260504-mly-01`. WordPress-era + Palisades 301 redirects are in `_redirects`. **410 Gone is not supported by Cloudflare Pages `_redirects`** — 301 is correct per CF Pages spec. Plan 10-02 from the suggested wave breakdown is REMOVED.
+
+**Effective scope for Phase 10:** 11 code gaps remaining (originally 13) + 9 host/external dependencies. Wave breakdown collapses from 9 plans to 7. Suggested mapping (planner may refine):
+
+| Wave | Plan | Focus |
+|------|------|-------|
+| 1 | 10-01 | SSR landmarks + skip-link in `SiteLayout`, decorative SVG `aria-hidden` sweep (P1-3, P0-4 partial) |
+| 1 (parallel) | 10-02 | axe `dist` scan + `check-img-alt-axe` + Playwright mobile project for P0-7a (P0-4, P0-7a) |
+| 2 | 10-03 | 6 legal page Astro migrations with `LegalPageLayout` if shared chrome justifies (P1-16) |
+| 3 | 10-04 | Per-route `lang` prop on `SiteLayout` + `antwerp.html` → `antwerp.astro` migration + `check-hreflang-cluster` (P1-9) |
+| 4 | 10-05 | Hero `<picture>`/`srcset` + `web-vitals@5` beacon → dataLayer (P1-18, P2-1) |
+| 5 | 10-06 | Cookie banner (`vanilla-cookieconsent@3`, EU-routed only) + `check-tap-targets` validator (P2-4, P1-1) |
+| 6 | 10-07 | `docs/cutover-checklist.md` + `verify:phase10` chain wiring + brand compliance pass (P2-6) (host items P1-7, P1-10, P1-11, P1-17, P2-8, P2-9, P2-10) |
+
+The planner is free to keep the original 7 numbers if they prefer, but the original `10-01` and `10-02` (Antwerp schema + redirects) should be SKIPPED because they're done.
+
 ## Next step
 
 `/gsd-plan-phase 10` to break this scope into sequenced plans with task lists.
