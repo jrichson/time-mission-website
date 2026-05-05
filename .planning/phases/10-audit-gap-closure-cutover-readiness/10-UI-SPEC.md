@@ -1,7 +1,8 @@
 ---
 phase: 10
 slug: audit-gap-closure-cutover-readiness
-status: draft
+status: approved
+reviewed_at: 2026-05-04
 shadcn_initialized: false
 preset: none
 created: 2026-05-04
@@ -70,6 +71,8 @@ Exceptions for Phase 10:
 ## Typography
 
 Phase 10 introduces no new type roles. The existing four-role hierarchy applies to all new surfaces.
+
+> **All font weights below (400, 500, 600, 700, 800) are existing values from `css/base.css`, `css/nav.css`, `css/variables.css`, and page-local styles. No new weights are introduced. Plan executors authoring new components MUST reuse these existing weights, not propose additional values.**
 
 | Role | Size | Weight | Line Height | Font | CSS Variable |
 |------|------|--------|-------------|------|-------------|
@@ -163,7 +166,7 @@ link text (default state), footer copy.
 | Cookie banner description | "We use cookies to improve your experience and measure site performance. You can accept all cookies, reject non-essential cookies, or manage your preferences." |
 | "Accept all" button label | "Accept all" |
 | "Reject all" button label | "Reject all" |
-| "Manage preferences" button label | "Customize" |
+| "Manage preferences" button label | "Manage Preferences" |
 | Consent preference center title | "Cookie Preferences" |
 | Necessary cookies label | "Necessary" |
 | Necessary cookies description | "Required for the site to function. Cannot be disabled." |

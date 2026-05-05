@@ -132,6 +132,20 @@ Per `10-RESEARCH.md` `## Pre-Research: Current State Assessment`, two gaps from 
 
 The planner is free to keep the original 7 numbers if they prefer, but the original `10-01` and `10-02` (Antwerp schema + redirects) should be SKIPPED because they're done.
 
+## UI-SPEC notes for the planner (from gsd-ui-checker, 2026-05-04)
+
+UI-SPEC at `10-UI-SPEC.md` was approved (3 PASS, 3 FLAG; no BLOCKs). Three executor-relevant notes the planner must surface as plan tasks:
+
+1. **`LegalPageLayout.astro` is NOT justified.** Per UI-SPEC, three chrome patterns repeat across the 6 legal pages but all are handled by existing `SiteLayout.astro`. Plan 10-03 (legal pages) should use a shared CSS partial (`src/partials/legal-inline.raw.css.txt` — UI-SPEC has the verbatim ruleset extracted from `terms.html`) — NOT a new layout component.
+
+2. **Skip-link CSS is already complete.** Per UI-SPEC, `css/base.css` lines 59–76 have the full `.skip-link` ruleset. Plan 10-01 (SSR landmarks + skip-link) only needs to add the `<a>` element to `SiteLayout.astro` and the semantic landmark wrappers (`<header>`, `<main id="main">`, `<footer>`). NO CSS work needed for the skip-link surface.
+
+3. **Hero `<img>` audit is required before Plan 10-05.** Per UI-SPEC + RESEARCH Assumption A3, Philadelphia's hero is `<video>` not `<img>`, and Houston may be the same. Plan 10-05 (hero `<picture>` srcset) MUST start with a "audit each location partial to find actual `<img>` hero targets" task. If both Philly and Houston are video, the `<picture>` srcset work applies only to `antwerp.astro` (migrated in 10-04) and any other location partials confirmed to use `<img>`. Plan 10-05's task list cannot be finalized until that audit runs.
+
+4. **Cookie banner desktop tap-target measurement (Plan 10-08).** Per UI-SPEC, `.btn-tickets` confirmed ≥44px at mobile but desktop computed height (with `padding: 0.75rem 1.5rem` and current line-height) is unverified. Plan 10-08 (cookie banner + `check-tap-targets`) MUST include a named task: "Measure desktop computed height of `.btn-tickets` in browser; if <48px, add explicit `min-height: 48px` to selector list." This stops the gap from slipping through to the validator.
+
+5. **Cookie banner copy alignment.** UI-SPEC frontmatter is now `status: approved, reviewed_at: 2026-05-04`. The "Customize" button label was renamed to "Manage Preferences" to satisfy Dim 1 (CTA noun-phrase rule). Plan 10-08 implementation must use the exact UI-SPEC copy values; no variation.
+
 ## Next step
 
-`/gsd-plan-phase 10` to break this scope into sequenced plans with task lists.
+`/gsd-plan-phase 10 --skip-research` to break this scope into sequenced plans. (`--skip-research` reuses the existing 10-RESEARCH.md.)
