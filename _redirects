@@ -36,27 +36,37 @@
 /licensing.html /licensing 301
 /waiver.html /waiver 301
 
-# Marketing shortcuts
-/adult-birthday-parties /groups#birthday 301
-/kids-birthday-party /groups#birthday 301
-/bachelorette-party /groups#private 301
-/date-night-ideas /groups#private 301
-/corporate-events /groups#corporate 301
-/team-building /groups#corporate 301
-/school-field-trips /groups#private 301
-/youth-group-camp /groups#private 301
-/family-gathering /groups#private 301
-/bus-tour /groups 301
+# Marketing shortcuts (per client audit 2026-05)
+/adult-birthday-parties /groups/birthdays 301
+/kids-birthday-party /groups/birthdays 301
+/bachelorette-party /groups/bachelor-ette 301
+/date-night-ideas / 301
+/corporate-events /groups/corporate 301
+/team-building /groups/private-events 301
+/school-field-trips /groups/field-trips 301
+/youth-group-camp /groups/private-events 301
+/family-gathering /groups/holidays 301
+/bus-tour /groups/private-events 301
 /house-rules /code-of-conduct 301
 /privacy-policy /privacy 301
 /privacy-policy/ /privacy 301
 /terms-and-conditions /terms 301
 /mountprospect /mount-prospect 301
+/mountprospect/* /mount-prospect/:splat 301
+/mt-prospect /mount-prospect 301
+/westnyack /west-nyack 301
+/westnyack/* /west-nyack/:splat 301
+/philly /philadelphia 301
+/philly/ /philadelphia 301
+/franchising /licensing 301
+/franchising/ /licensing 301
+/r1-indoor-karting /lincoln 301
 /providence /lincoln 301
 /experiences /missions 301
 /locations/ /locations 301
+/general / 301
 
-# WordPress-era legacy paths (P1-8 audit finding)
+# WordPress-era legacy paths (P1-8 audit + 2026-05 client audit)
 # 410 Gone is unsupported by Cloudflare Pages _redirects; using 301 to / per docs/redirect-map.md
 /wp-login.php / 301
 /wp-admin / 301
@@ -68,9 +78,98 @@
 /shop / 301
 /shop/* / 301
 /feed / 301
+/feed/ / 301
+/feed.xml / 301
+/feeds/* / 301
 /atom.xml / 301
 /wp-sitemap.xml / 301
+/index.php / 301
+/index.xml / 301
+/my-account/ / 301
+/comments/feed/ / 301
+/missionbox/ / 301
+/receipt/ / 301
+/review/ / 301
+/review-palisades/ / 301
+/thank-you/ / 301
+/thanks/ / 301
+/box/ / 301
+/brochure.pdf / 301
+/elementor-36877/ / 301
+/ads.txt / 301
+/app-ads.txt / 301
+/author/* / 301
+/10 / 301
 
 # Palisades legacy slug — West Nyack is at Palisades Center (data/locations.json#west-nyack)
 # 301 to /west-nyack preserves link equity vs sending to /
 /palisades /west-nyack 301
+
+# Per-location legacy group aliases (TODO: build location-scoped group pages
+# at /<location>/groups/<type> and update these targets — for now redirect to
+# the global group page so users land on working content)
+/antwerp/adult-birthday-parties /groups/birthdays 301
+/antwerp/bachelorette-party /groups/bachelor-ette 301
+/antwerp/bus-tour /groups/private-events 301
+/antwerp/corporate-events /groups/corporate 301
+/antwerp/date-night-ideas /antwerp 301
+/antwerp/family-gathering /groups/holidays 301
+/antwerp/kids-birthday-party /groups/birthdays 301
+/antwerp/school-field-trips /groups/field-trips 301
+/antwerp/team-building /groups/private-events 301
+/antwerp/youth-group-camp /groups/private-events 301
+
+/lincoln/adult-birthday-parties /groups/birthdays 301
+/lincoln/bachelorette-party /groups/bachelor-ette 301
+/lincoln/bus-tour /groups/private-events 301
+/lincoln/corporate-events /groups/corporate 301
+/lincoln/date-night-ideas /lincoln 301
+/lincoln/family-gathering /groups/holidays 301
+/lincoln/kids-birthday-party /groups/birthdays 301
+/lincoln/school-field-trips /groups/field-trips 301
+/lincoln/team-building /groups/private-events 301
+/lincoln/youth-group-camp /groups/private-events 301
+
+/manassas/adult-birthday-parties /groups/birthdays 301
+/manassas/bachelorette-party /groups/bachelor-ette 301
+/manassas/bus-tour /groups/private-events 301
+/manassas/corporate-events /groups/corporate 301
+/manassas/date-night-ideas /manassas 301
+/manassas/family-gathering /groups/holidays 301
+/manassas/kids-birthday-party /groups/birthdays 301
+/manassas/school-field-trips /groups/field-trips 301
+/manassas/team-building /groups/private-events 301
+/manassas/youth-group-camp /groups/private-events 301
+
+/mount-prospect/adult-birthday-parties /groups/birthdays 301
+/mount-prospect/bachelorette-party /groups/bachelor-ette 301
+/mount-prospect/bus-tour /groups/private-events 301
+/mount-prospect/corporate-events /groups/corporate 301
+/mount-prospect/date-night-ideas /mount-prospect 301
+/mount-prospect/family-gathering /groups/holidays 301
+/mount-prospect/kids-birthday-party /groups/birthdays 301
+/mount-prospect/school-field-trips /groups/field-trips 301
+/mount-prospect/team-building /groups/private-events 301
+/mount-prospect/youth-group-camp /groups/private-events 301
+
+/philadelphia/adult-birthday-parties /groups/birthdays 301
+/philadelphia/bachelorette-party /groups/bachelor-ette 301
+/philadelphia/bus-tour /groups/private-events 301
+/philadelphia/corporate-events /groups/corporate 301
+/philadelphia/date-night-ideas /philadelphia 301
+/philadelphia/family-gathering /groups/holidays 301
+/philadelphia/kids-birthday-party /groups/birthdays 301
+/philadelphia/school-field-trips /groups/field-trips 301
+/philadelphia/team-building /groups/private-events 301
+/philadelphia/youth-group-camp /groups/private-events 301
+
+/west-nyack/adult-birthday-parties /groups/birthdays 301
+/west-nyack/bachelorette-party /groups/bachelor-ette 301
+/west-nyack/bus-tour /groups/private-events 301
+/west-nyack/corporate-events /groups/corporate 301
+/west-nyack/date-night-ideas /west-nyack 301
+/west-nyack/family-gathering /groups/holidays 301
+/west-nyack/kids-birthday-party /groups/birthdays 301
+/west-nyack/school-field-trips /groups/field-trips 301
+/west-nyack/team-building /groups/private-events 301
+/west-nyack/youth-group-camp /groups/private-events 301
