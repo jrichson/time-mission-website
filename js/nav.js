@@ -174,6 +174,8 @@
                  */
                 if (narrowPicker && slug && !isComingSoonLink) {
                     e.preventDefault();
+                    // P0-7a: stop bubble to overlay-background click handler (line ~145) which would call closeLocationOverlay()
+                    e.stopPropagation();
                     const panel = document.getElementById('locationInfo');
                     if (panel) {
                         requestAnimationFrame(function () {

@@ -207,3 +207,24 @@ test('legacy .html URLs are served or redirected (preview vs production redirect
   const res = await request.get('/faq.html');
   expect(res.status()).toBeLessThan(400);
 });
+
+test.describe('Mobile location selector (P0-7a)', () => {
+  test.skip(({ isMobile }) => !isMobile, 'mobile-only test');
+
+  test('tapping a location link keeps overlay open and reveals info panel', async ({ page }) => {
+    await page.goto('/');
+    // Open the location overlay
+    await page.locator('#locationBtn').first().click();
+    await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
+
+    // Tap the Philadelphia link inside the overlay
+    const philly = page.locator('#locationDropdown a[href*="philadelphia"]').first();
+    await philly.tap();
+
+    // Assertion 1: location-info panel is visible
+    await expect(page.locator('#locationInfo')).toBeVisible();
+
+    // Assertion 2: overlay did NOT auto-close (still has .open class)
+    await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
+  });
+});
