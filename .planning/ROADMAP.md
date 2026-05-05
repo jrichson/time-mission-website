@@ -275,14 +275,14 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 7. SEO, Schema & Local Search Baseline | 5/5 | Complete | 2026-04-29 |
 | 8. Built-Output Verification & Cutover Readiness | 5/5 | Complete | 2026-04-30 |
 | 9. Architecture deepening & template hygiene | summary | Complete | 2026-04-30 |
-| 10. Audit-Gap Closure & Cutover Readiness | 4/7 | In Progress|  |
+| 10. Audit-Gap Closure & Cutover Readiness | 5/7 | In Progress|  |
 
 ### Phase 10: Audit-Gap Closure & Cutover Readiness
 
 **Goal:** Every P0 and P1 audit finding either ships fixed in the Astro `dist/` output, has a documented host-config change in the cutover runbook, or is explicitly deferred with rationale.
 **Requirements:** No new v1 IDs (extends SEO / COMP / DATA / ANLY / VER practices)
 **Depends on:** Phase 9
-**Plans:** 4/7 plans executed
+**Plans:** 5/7 plans executed
 
 Origin: External SEO / A11y / Security / Performance audit (39 findings) against legacy live site. Phases 1–9 closed most; coverage analysis (2026-05-04) identified 13 code gaps + 9 host/external dependencies. See `.planning/phases/10-audit-gap-closure-cutover-readiness/10-CONTEXT.md`.
 
@@ -291,7 +291,7 @@ Plans:
 - [x] 10-02-PLAN.md — axe `dist` scan (`check-img-alt-axe`) + Playwright mobile project + P0-7a `js/nav.js` `stopPropagation` fix (P0-4, P0-7a)
 - [x] 10-03-PLAN.md — 6 legal page Astro migrations (terms, code-of-conduct, licensing, cookies, accessibility, waiver) with shared `legal-inline.raw.css.txt` partial (P1-16)
 - [x] 10-04-PLAN.md — Per-route `lang` prop on `SiteLayout` + `antwerp.html` → `antwerp.astro` migration + `check-hreflang-cluster` validator (P1-9)
-- [ ] 10-05-PLAN.md — Hero medium audit + `<picture>`/`srcset` for confirmed `<img>` heroes + `web-vitals@5` RUM beacon (P1-18, P2-1)
+- [x] 10-05-PLAN.md — Hero medium audit + `<picture>`/`srcset` for confirmed `<img>` heroes + `web-vitals@5` RUM beacon (P1-18, P2-1)
 - [ ] 10-06-PLAN.md — Cookie banner (`vanilla-cookieconsent@3`, EU-routed) + `check-tap-targets` validator + desktop `.btn-tickets` measurement task (P2-4, P1-1)
 - [ ] 10-07-PLAN.md — `docs/cutover-checklist.md` with host-dependency owners + `verify:phase10` gate + brand compliance review (P2-6, host items P1-7, P1-10, P1-11, P1-17, P2-8, P2-9, P2-10)
 
