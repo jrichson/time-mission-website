@@ -1,0 +1,26 @@
+/* Phase 10 P2-4 — Brand-token overrides for vanilla-cookieconsent default styles */
+:root {
+    --cc-bg: var(--dark);
+    --cc-primary-color: var(--orange);
+    --cc-btn-primary-bg: var(--orange);
+    --cc-btn-primary-color: var(--white);
+    --cc-btn-secondary-bg: transparent;
+    --cc-btn-secondary-color: var(--white);
+    --cc-btn-secondary-border-color: rgba(255, 255, 255, 0.25);
+    --cc-text: var(--white);
+    --cc-secondary-text: var(--gray);
+    --cc-font-family: var(--body);
+    --cc-modal-border-radius: 12px;
+}
+
+/* Tap-target floor for cookie banner buttons (UI-SPEC Tap Target table — 44px) */
+.cm__btn,
+.pm__btn {
+    min-height: 44px;
+}
+
+/* Gradient on Accept all per UI-SPEC line 142 */
+.cm__btn[data-role="all"],
+.pm__btn[data-role="all"] {
+    background: var(--gradient-primary);
+}

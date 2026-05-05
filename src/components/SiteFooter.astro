@@ -113,11 +113,27 @@ const year = new Date().getFullYear();
             <a href="/code-of-conduct">Code of Conduct</a>
             <a href="/accessibility">Accessibility</a>
             <a href="/licensing">Licensing</a>
+            <button type="button" class="footer-link-button" data-cc="show-preferencesModal">
+                Cookie Preferences
+            </button>
         </div>
     </div>
 </footer>
 
 <style is:global>
+    .footer-link-button {
+        color: var(--gray);
+        font-family: var(--body);
+        font-size: 0.85rem;
+        background: transparent;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+    }
+    .footer-link-button:hover,
+    .footer-link-button:focus-visible {
+        color: var(--white);
+    }
     .footer-location-list a.coming-soon {
         opacity: 0.7;
         pointer-events: none;
