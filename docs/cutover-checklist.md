@@ -65,6 +65,38 @@ Cross-links:
 
 - [ ] Confirmed: hero video shipped with `aria-hidden="true" tabindex="-1"`
 
+## Post-Cutover Polish (non-blocking — defer to Phase 11+)
+
+### POLISH-01 — Cookie banner placement + brand-aligned styling
+
+**Owner:** Designer + Web Dev
+**Status:** Deferred. Current banner is GDPR-compliant; this is a UX/brand polish iteration.
+
+**Context:** Phase 10 ships the default `vanilla-cookieconsent` v3 bottom-center cloud layout on EU pages (per locked D-03). It satisfies all GDPR requirements (1-click reject, equal prominence, no consent wall) but the placement competes with the mobile thumb-reach zone where the sticky `.btn-tickets` Book Now CTA lives, and the visual treatment is library-default rather than brand-native.
+
+**Recommended spec:**
+
+- **Layout:** bottom-left card, 380px max-width desktop / `calc(100vw - 32px)` mobile. Anchor 16-24px from bottom and left edges. Z-index above page content but below `.btn-tickets` on mobile so the sticky CTA stays clickable through the gap.
+- **Visual:** dark surface (`rgba(20,20,24,0.92)` background + `backdrop-filter: blur(12px) saturate(1.1)`), 1px `--orange` border at 18% opacity, 12px radius, `0 10px 40px rgba(0,0,0,0.4)` shadow.
+- **Hierarchy:** Orbitron 14px uppercase heading (`We use cookies`); DM Sans 14px body; equal-prominence Accept all (`--orange` filled) and Reject all (outlined `--orange`); Manage Preferences as text-only tertiary below the button row.
+- **Motion:** slide-up + fade in 220ms `cubic-bezier(0.32, 0.72, 0, 1)` on mount.
+- **Mobile (< 640px):** full-width minus 16px gutter, anchored 16px above bottom edge to clear iOS Safari's home indicator. Buttons stack vertically with 8px gap; Accept on top.
+
+**Implementation notes:**
+
+- All changes are CSS-only — `vanilla-cookieconsent` exposes `.cm--cloud` / `.cm--bar` / `.cm--box` layout classes. Switch to `.cm--box` and override `position` + alignment in `css/cookie-consent.css`.
+- No JS or markup changes; consent gate behavior in `js/cookie-consent.js` stays untouched.
+- Verify `npm run check:tap-targets` still passes (button min-heights stay ≥ 44/48 px).
+
+**Pass criteria:**
+
+- [ ] Banner renders in bottom-left card layout on `/antwerp` desktop
+- [ ] Banner renders full-width minus 16px gutter on mobile, above iOS home indicator
+- [ ] Accept and Reject are visually equal prominence (size, weight, contrast)
+- [ ] Manage Preferences is tertiary text-only style
+- [ ] `npm run check:tap-targets` exit 0
+- [ ] `npm run check:img-alt-axe` exit 0 (sanity)
+
 ## Final Pre-Cutover Sequence
 
 1. Run `npm run verify:phase10` — must exit 0.
