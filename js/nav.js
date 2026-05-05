@@ -230,7 +230,14 @@
         const details = infoPanel.querySelector('.location-info-details');
         const mapEl = document.getElementById('locationMap');
         const context = getLocationContext();
-        if (!context || typeof context.getInfoPanelView !== 'function' || !details) return;
+        if (!context || typeof context.getInfoPanelView !== 'function' || !details) {
+            // getInfoPanelView missing — LocationContext not fully initialized yet.
+            // Surface this in dev so the silent-empty-panel symptom is debuggable.
+            if (context && typeof context.getInfoPanelView !== 'function') {
+                console.warn('nav.js: showLocationInfo skipped — context.getInfoPanelView is not a function');
+            }
+            return;
+        }
 
         const data = context.getInfoPanelView(locationRef);
         if (!data) return;
