@@ -1,0 +1,43 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import { allLocations } from '../data/locations';
+import manassasCss from '../partials/manassas-inline.raw.css.txt?raw';
+import manassasMainRaw from '../partials/manassas-main.frag.txt?raw';
+import { applyTmMediaBase } from '../lib/tm-media';
+import manassasAfter from '../partials/manassas-after.frag.txt?raw';
+import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
+
+const manassas = allLocations.find((l) => l.slug === 'manassas');
+if (!manassas) throw new Error('manassas missing from src/data/locations');
+
+const ld = serializeGraph(
+    buildLocationGraph('manassas', '/manassas', [
+        { label: 'Home', href: '/' },
+        { label: 'Locations', href: '/locations' },
+        { label: manassas.shortName, href: '/manassas' },
+    ]),
+);
+const page = definePage({ canonicalPath: '/manassas' });
+const manassasMain = applyTmMediaBase(manassasMainRaw);
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyDataLocation={manassas.slug}
+>
+    <Fragment slot="head-extra">
+        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={manassasCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={manassasMain} />
+    <Fragment slot="after-site-scripts" set:html={manassasAfter} />
+</SiteLayout>

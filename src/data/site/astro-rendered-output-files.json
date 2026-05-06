@@ -18,11 +18,15 @@
     "houston.html",
     "index.html",
     "licensing.html",
+    "lincoln.html",
     "locations.html",
+    "manassas.html",
+    "mount-prospect.html",
     "philadelphia.html",
     "privacy.html",
     "terms.html",
-    "waiver.html"
+    "waiver.html",
+    "west-nyack.html"
   ],
   "dynamicLandingModules": [
     "c/[slug].astro"

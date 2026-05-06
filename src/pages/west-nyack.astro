@@ -1,0 +1,43 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import { allLocations } from '../data/locations';
+import westNyackCss from '../partials/west-nyack-inline.raw.css.txt?raw';
+import westNyackMainRaw from '../partials/west-nyack-main.frag.txt?raw';
+import { applyTmMediaBase } from '../lib/tm-media';
+import westNyackAfter from '../partials/west-nyack-after.frag.txt?raw';
+import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
+
+const westNyack = allLocations.find((l) => l.slug === 'west-nyack');
+if (!westNyack) throw new Error('west-nyack missing from src/data/locations');
+
+const ld = serializeGraph(
+    buildLocationGraph('west-nyack', '/west-nyack', [
+        { label: 'Home', href: '/' },
+        { label: 'Locations', href: '/locations' },
+        { label: westNyack.shortName, href: '/west-nyack' },
+    ]),
+);
+const page = definePage({ canonicalPath: '/west-nyack' });
+const westNyackMain = applyTmMediaBase(westNyackMainRaw);
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyDataLocation={westNyack.slug}
+>
+    <Fragment slot="head-extra">
+        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={westNyackCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={westNyackMain} />
+    <Fragment slot="after-site-scripts" set:html={westNyackAfter} />
+</SiteLayout>

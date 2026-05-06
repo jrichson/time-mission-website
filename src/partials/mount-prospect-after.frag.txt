@@ -1,0 +1,567 @@
+    <script>
+
+        // ==========================================
+        // ROTATING TYPEWRITER TAGLINES
+        // Changes every 4 seconds with delete/retype effect
+        // ==========================================
+        const taglines = [
+            "Social Gaming Adventure",
+            "Family Game Night on Steroids",
+            "Birthday Parties, Leveled Up",
+            "Where Couch Potatoes Become Heroes",
+            "Touch Grass... Indoors",
+            "Corporate Team Building, But Fun",
+            "Making Memories Together",
+            "Built For Every Age",
+            "Your New Favorite Weekend",
+            "No Screens. Just Fun.",
+            "Team Up. Beat The Clock."
+        ];
+
+        let currentTaglineIndex = 0;
+        const taglineElement = document.getElementById('taglineText');
+        let isTyping = false;
+
+        async function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function deleteText() {
+            const currentText = taglineElement.textContent;
+            for (let i = currentText.length; i >= 0; i--) {
+                taglineElement.textContent = currentText.substring(0, i);
+                await sleep(30); // Delete speed
+            }
+        }
+
+        async function typeText(text) {
+            for (let i = 0; i <= text.length; i++) {
+                taglineElement.textContent = text.substring(0, i);
+                await sleep(50); // Type speed
+            }
+        }
+
+        async function rotateTagline() {
+            if (isTyping) return;
+            isTyping = true;
+
+            await deleteText();
+            await sleep(200); // Pause between delete and type
+
+            currentTaglineIndex = (currentTaglineIndex + 1) % taglines.length;
+            await typeText(taglines[currentTaglineIndex]);
+
+            isTyping = false;
+        }
+
+        let taglineIntervalId = null;
+        const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+
+        function startRotation() {
+            taglineElement.classList.remove('no-cursor');
+            taglineIntervalId = setInterval(rotateTagline, 4000);
+        }
+
+        // On mobile with location: show "Time Mission {City}" for 5s, then rotate
+        function setEyebrowToLocation(city) {
+            if (!isMobile() || !city) return;
+            if (taglineIntervalId) clearInterval(taglineIntervalId);
+            isTyping = false;
+            taglineElement.textContent = 'Time Mission ' + city;
+            taglineElement.classList.add('no-cursor');
+            setTimeout(startRotation, 5000);
+        }
+
+        // Expose for nav.js to call on location change
+        window.updateEyebrowLocation = function(city) {
+            setEyebrowToLocation(city);
+        };
+
+        // Initialize, location pages show location name first, then rotate
+        taglineElement.textContent = 'Time Mission Mount Prospect';
+        taglineElement.classList.add('no-cursor');
+        setTimeout(startRotation, 3500);
+
+        // ==========================================
+        // MINUTES COUNTER, fades through 60, 90, 120
+        // ==========================================
+        const minutesEl = document.getElementById('minutesCounter');
+        const minuteValues = [60, 90, 120];
+        let minuteIndex = 0;
+
+        function cycleMinutes() {
+            if (!minutesEl) return;
+            minutesEl.classList.add('fade-out');
+            setTimeout(() => {
+                minuteIndex = (minuteIndex + 1) % minuteValues.length;
+                minutesEl.textContent = minuteValues[minuteIndex];
+                minutesEl.classList.remove('fade-out');
+            }, 400);
+        }
+
+        setInterval(cycleMinutes, 2500);
+
+        // ==========================================
+        // POINTS COUNTER, score counts up with hit-point popups
+        // ==========================================
+        const pointsEl = document.getElementById('pointsCounter');
+        const pointsWrap = document.getElementById('pointsWrap');
+        let currentScore = 0;
+        const hitValues = [50, 100, 75, 150, 200, 100, 250, 50, 125, 100];
+        let hitIndex = 0;
+
+        function spawnHitPoint(value) {
+            if (!pointsWrap) return;
+            const el = document.createElement('span');
+            el.className = 'hit-point';
+            el.textContent = '+' + value;
+            // Random horizontal position around the number
+            const offsetX = (Math.random() - 0.5) * 80;
+            el.style.left = 'calc(50% + ' + offsetX + 'px)';
+            el.style.top = '-10px';
+            pointsWrap.appendChild(el);
+            el.addEventListener('animationend', () => el.remove());
+        }
+
+        function addPoints() {
+            if (!pointsEl) return;
+            const value = hitValues[hitIndex % hitValues.length];
+            hitIndex++;
+            currentScore += value;
+
+            // Reset after reaching ~1200 so it loops
+            if (currentScore > 1200) {
+                currentScore = 0;
+                pointsEl.textContent = '0';
+                return;
+            }
+
+            // Animate the number counting up
+            const startVal = currentScore - value;
+            const endVal = currentScore;
+            const duration = 400;
+            const startTime = performance.now();
+
+            function tick(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                const current = Math.round(startVal + (endVal - startVal) * eased);
+                pointsEl.textContent = current.toLocaleString();
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+
+            requestAnimationFrame(tick);
+
+            // Bump animation on the number
+            pointsEl.classList.remove('bump');
+            void pointsEl.offsetWidth; // force reflow
+            pointsEl.classList.add('bump');
+
+            // Spawn floating hit point
+            spawnHitPoint(value);
+        }
+
+        setInterval(addPoints, 1800);
+
+        // Mobile menu, location picker, and scroll effect are handled by js/nav.js
+
+        // ==========================================
+        // INFINITE CAROUSEL WITH DRAG SCROLL
+        // ==========================================
+        const scrollEl = document.getElementById('experiencesScroll');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        if (scrollEl) {
+            let scrollPos = 0;
+            let autoScrollSpeed = 0.8;
+            let isHovering = false;
+            let isDragging = false;
+            let dragStartX = 0;
+            let dragScrollStart = 0;
+            let animationId = null;
+            let isTouching = false;
+            let touchStartX = 0;
+            let touchScrollStart = 0;
+            let touchVelocity = 0;
+            let lastTouchX = 0;
+            let lastTouchTime = 0;
+
+            // Measure actual rendered width of original cards
+            const originalCards = scrollEl.querySelectorAll('.experience-card:not([aria-hidden])');
+
+            function getHalfWidth() {
+                let total = 0;
+                const gap = parseFloat(getComputedStyle(scrollEl).gap) || 24;
+                originalCards.forEach(card => {
+                    total += card.offsetWidth + gap;
+                });
+                return total;
+            }
+
+            function wrapPos(pos) {
+                const halfW = getHalfWidth();
+                if (halfW <= 0) return pos;
+                while (pos >= halfW) pos -= halfW;
+                while (pos < 0) pos += halfW;
+                return pos;
+            }
+
+            function applyPos() {
+                scrollEl.style.transform = 'translateX(' + (-scrollPos) + 'px)';
+            }
+
+            // Auto-scroll loop
+            function autoScroll() {
+                if (!isHovering && !isDragging && !isTouching) {
+                    scrollPos += autoScrollSpeed;
+                    scrollPos = wrapPos(scrollPos);
+                    applyPos();
+                }
+                animationId = requestAnimationFrame(autoScroll);
+            }
+
+            animationId = requestAnimationFrame(autoScroll);
+
+            // Hover: pause auto-scroll (desktop)
+            scrollEl.addEventListener('mouseenter', () => { isHovering = true; });
+            scrollEl.addEventListener('mouseleave', () => {
+                isHovering = false;
+                isDragging = false;
+                scrollEl.classList.remove('dragging');
+            });
+
+            // Mouse drag to scroll (desktop)
+            let wasDragged = false;
+            scrollEl.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                wasDragged = false;
+                dragStartX = e.clientX;
+                dragScrollStart = scrollPos;
+                scrollEl.classList.add('dragging');
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - dragStartX;
+                if (Math.abs(dx) > 5) wasDragged = true;
+                scrollPos = wrapPos(dragScrollStart - dx);
+                applyPos();
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    scrollEl.classList.remove('dragging');
+                }
+            });
+
+            // Touch swipe (mobile)
+            scrollEl.addEventListener('touchstart', (e) => {
+                isTouching = true;
+                touchStartX = e.touches[0].clientX;
+                touchScrollStart = scrollPos;
+                touchVelocity = 0;
+                lastTouchX = touchStartX;
+                lastTouchTime = Date.now();
+            }, { passive: true });
+
+            scrollEl.addEventListener('touchmove', (e) => {
+                if (!isTouching) return;
+                const x = e.touches[0].clientX;
+                const dx = touchStartX - x;
+                scrollPos = wrapPos(touchScrollStart + dx);
+                applyPos();
+
+                // Track velocity for momentum
+                const now = Date.now();
+                const dt = now - lastTouchTime;
+                if (dt > 0) {
+                    touchVelocity = (lastTouchX - x) / dt;
+                }
+                lastTouchX = x;
+                lastTouchTime = now;
+            }, { passive: true });
+
+            scrollEl.addEventListener('touchend', () => {
+                isTouching = false;
+                // Momentum coast
+                let velocity = touchVelocity * 15;
+                function coast() {
+                    if (Math.abs(velocity) < 0.3) return;
+                    scrollPos = wrapPos(scrollPos + velocity);
+                    applyPos();
+                    velocity *= 0.95;
+                    requestAnimationFrame(coast);
+                }
+                coast();
+            }, { passive: true });
+
+            // Wheel scroll on hover, disabled on desktop to avoid hijacking page scroll
+            // Only enable on touch devices where horizontal swipe is natural
+            if ('ontouchstart' in window) {
+                scrollEl.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    scrollPos = wrapPos(scrollPos + e.deltaY * 0.5);
+                    applyPos();
+                }, { passive: false });
+            }
+
+            // Prev/Next buttons, smooth slide
+            function smoothSlide(delta) {
+                const gap = parseFloat(getComputedStyle(scrollEl).gap) || 24;
+                const cw = (originalCards[0] ? originalCards[0].offsetWidth : 350) + gap;
+                scrollEl.style.transition = 'transform 0.4s ease';
+                scrollPos = wrapPos(scrollPos + delta * cw);
+                applyPos();
+                scrollEl.addEventListener('transitionend', function handler() {
+                    scrollEl.style.transition = '';
+                    scrollEl.removeEventListener('transitionend', handler);
+                }, { once: true });
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => smoothSlide(-1));
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => smoothSlide(1));
+            }
+        }
+
+        // 3D Tilt Effect for Experience Cards
+        const cards = document.querySelectorAll('.experience-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / centerY * -8;
+                const rotateY = (x - centerX) / centerX * 8;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+
+            card.addEventListener('click', () => {
+                if (isHovering && !wasDragged) {
+                    window.location.href = 'missions.html';
+                }
+            });
+        });
+
+        // Respect reduced motion preference
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            cards.forEach(card => {
+                card.style.transition = 'none';
+                card.addEventListener('mousemove', () => {});
+            });
+        }
+
+        // ==========================================
+        // MINI FAQ ACCORDION
+        // ==========================================
+        document.querySelectorAll('.mini-faq-q').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const wasOpen = item.classList.contains('open');
+                // Close all
+                document.querySelectorAll('.mini-faq-item').forEach(i => i.classList.remove('open'));
+                // Toggle clicked
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+
+        // ==========================================
+        // FOOTER LOCATION DROPDOWNS
+        // ==========================================
+        document.querySelectorAll('.footer-location-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.classList.toggle('open');
+            });
+        });
+
+        // ==========================================
+        // TESTIMONIALS AUTO-SCROLL
+        // ==========================================
+        (function() {
+            const scroll = document.querySelector('.testimonials-scroll');
+            if (!scroll) return;
+            const cards = scroll.querySelectorAll('.testimonial-card');
+            if (cards.length < 2) return;
+            let current = 0;
+            let timer;
+
+            function goTo(i) {
+                current = i % cards.length;
+                scroll.scrollTo({ left: scroll.offsetWidth * current, behavior: 'smooth' });
+            }
+
+            function startAuto() {
+                timer = setInterval(() => goTo(current + 1), 4000);
+            }
+
+            // Pause on interaction, resume after
+            scroll.addEventListener('touchstart', () => clearInterval(timer), { passive: true });
+            scroll.addEventListener('touchend', () => {
+                // Sync current index to nearest card after swipe
+                current = Math.round(scroll.scrollLeft / scroll.offsetWidth);
+                startAuto();
+            }, { passive: true });
+
+            startAuto();
+        })();
+
+        // ==========================================
+        // PRESS TICKER, JS-driven seamless loop
+        // ==========================================
+        (function() {
+            const logosContainer = document.getElementById('pressLogos');
+            if (!logosContainer) return;
+
+            const logos = logosContainer.querySelectorAll('.press-logo');
+            const halfCount = logos.length / 2;
+            let tickerPos = 0;
+            let tickerSpeed = 0.6;
+            let tickerPaused = false;
+            let tickerRaf;
+
+            function getHalfWidth() {
+                let w = 0;
+                const gap = 64; // 4rem = 64px
+                for (let i = 0; i < halfCount; i++) {
+                    w += logos[i].getBoundingClientRect().width + gap;
+                }
+                return w;
+            }
+
+            let halfWidth = 0;
+
+            // Wait for images to load to get accurate widths
+            function initTicker() {
+                halfWidth = getHalfWidth();
+                if (halfWidth === 0) {
+                    requestAnimationFrame(initTicker);
+                    return;
+                }
+                tickerRaf = requestAnimationFrame(tickerLoop);
+            }
+
+            function tickerLoop() {
+                if (!tickerPaused) {
+                    tickerPos += tickerSpeed;
+                    if (tickerPos >= halfWidth) {
+                        tickerPos -= halfWidth;
+                    }
+                    logosContainer.style.transform = `translateX(${-tickerPos}px)`;
+                }
+                tickerRaf = requestAnimationFrame(tickerLoop);
+            }
+
+            logosContainer.addEventListener('mouseenter', () => { tickerPaused = true; });
+            logosContainer.addEventListener('mouseleave', () => { tickerPaused = false; });
+
+            // Start after a short delay to let images load
+            window.addEventListener('load', () => {
+                halfWidth = getHalfWidth();
+                tickerRaf = requestAnimationFrame(tickerLoop);
+            });
+
+            // Fallback: start immediately too
+            requestAnimationFrame(initTicker);
+        })();
+
+        // Reveal on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Trigger counter wheel animation
+                    if (entry.target.classList.contains('stat-card')) {
+                        setTimeout(() => {
+                            entry.target.classList.add('animated');
+                        }, 200);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+                // ==========================================
+        // GAME PROMO POPUP
+        // Shows after 8 seconds, remembers dismissal
+        // ==========================================
+        const gamePopup = document.getElementById('gamePopup');
+        const gamePopupClose = document.getElementById('gamePopupClose');
+        const gamePopupSkip = document.getElementById('gamePopupSkip');
+
+        function showGamePopup() {
+            // Check if user already dismissed the popup this session
+            if (sessionStorage.getItem('gamePopupDismissed')) return;
+
+            gamePopup.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
+        }
+
+        function hideGamePopup() {
+            gamePopup.classList.remove('active');
+            document.body.style.overflow = '';
+            sessionStorage.setItem('gamePopupDismissed', 'true');
+        }
+
+        // Popup disabled for now, re-enable when ready:
+        // setTimeout(showGamePopup, 8000);
+
+        // Close popup on X button click
+        gamePopupClose.addEventListener('click', hideGamePopup);
+
+        // Close popup on "Maybe later" click
+        gamePopupSkip.addEventListener('click', hideGamePopup);
+
+        // Close popup when clicking outside
+        gamePopup.addEventListener('click', (e) => {
+            if (e.target === gamePopup) {
+                hideGamePopup();
+            }
+        });
+
+        // Close popup on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && gamePopup.classList.contains('active')) {
+                hideGamePopup();
+            }
+        });
+    </script>

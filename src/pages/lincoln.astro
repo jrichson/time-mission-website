@@ -1,0 +1,43 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import { allLocations } from '../data/locations';
+import lincolnCss from '../partials/lincoln-inline.raw.css.txt?raw';
+import lincolnMainRaw from '../partials/lincoln-main.frag.txt?raw';
+import { applyTmMediaBase } from '../lib/tm-media';
+import lincolnAfter from '../partials/lincoln-after.frag.txt?raw';
+import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
+
+const lincoln = allLocations.find((l) => l.slug === 'lincoln');
+if (!lincoln) throw new Error('lincoln missing from src/data/locations');
+
+const ld = serializeGraph(
+    buildLocationGraph('lincoln', '/lincoln', [
+        { label: 'Home', href: '/' },
+        { label: 'Locations', href: '/locations' },
+        { label: lincoln.shortName, href: '/lincoln' },
+    ]),
+);
+const page = definePage({ canonicalPath: '/lincoln' });
+const lincolnMain = applyTmMediaBase(lincolnMainRaw);
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyDataLocation={lincoln.slug}
+>
+    <Fragment slot="head-extra">
+        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+    </Fragment>
+    <Fragment slot="page-style">
+        <style is:global set:html={lincolnCss}></style>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={lincolnMain} />
+    <Fragment slot="after-site-scripts" set:html={lincolnAfter} />
+</SiteLayout>
