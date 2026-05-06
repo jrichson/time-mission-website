@@ -29,7 +29,7 @@ Phase: 11 (small-mobile-responsiveness-480px-tier-cookie-banner-placeme) — COM
 Plan: 5 of 5
 Plans: **52/52** (40 v1 roadmap + 7 Phase 10 + 5 Phase 11)
 Status: Cutover-ready (all 11 phases closed; verify chain green)
-Last activity: 2026-05-06 -- Completed quick task 260506-gnx: implemented RFC #10 booking module deepening — collapsed ticket-panel.js URL/auto-redirect logic into TMBooking, added open/resolve/mount, fixed BOOK-04 ?book=1 race, deleted js/roller-checkout.js stub; npm run check exits 0
+Last activity: 2026-05-06 -- Completed quick task 260506-hz2: fixed 3 pre-existing smoke failures from RFC-10 deferred-items — updated hero H1 assertions to match post-Astro accessible markup, restored mobile narrow-picker branch in js/nav.js (P0-7a regression from 7656203); smoke now 58/58 pass (was 55/3-fail/2-skip)
 
 Progress: All 11 phases documented and shipped; v1 requirement coverage **43/43** (Phases 10 + 11 extend SEO/COMP/DATA/ANLY/VER/FND practices, no new requirement IDs).
 
@@ -122,6 +122,7 @@ Recent decisions affecting current work:
 | 260506-dxi | Compress 38 experience JPGs in place via sharp+mozjpeg (1600px@q78, 1400px@q70 for one outlier); experience photo dir ~120MB→13MB, all targets ≤300KB; no markup/filename changes | 2026-05-06 | 35faf5d | [260506-dxi-compress-experience-jpgs-to-300kb-via-sh](./quick/260506-dxi-compress-experience-jpgs-to-300kb-via-sh/) |
 | 260506-ehf | Generate 24 WebP companions (cwebp -q 78) for experience JPGs; wire `<source srcset>` into 20 `<picture>` blocks in missions.html; regex bug caught mid-run (filename mismatch) and fixed before commit | 2026-05-06 | 3ac7677 | [260506-ehf-generate-webp-companions-for-24-experien](./quick/260506-ehf-generate-webp-companions-for-24-experien/) |
 | 260506-gnx | Implement RFC #10 — deepen booking module: collapse ticket-panel.js URL logic into TMBooking, add open/resolve/mount surface, fix BOOK-04 `?book=1` race via deadline-bounded `awaitTMReady`, slim ticket-panel.js 258→119 LoC, delete js/roller-checkout.js (31 HTML pages + Astro components updated); follow-up commit removed dead code flagged by lint | 2026-05-06 | 305c745 | [260506-gnx-implement-rfc-10-deepen-booking-module-c](./quick/260506-gnx-implement-rfc-10-deepen-booking-module-c/) |
+| 260506-hz2 | Fix 3 pre-existing smoke failures from RFC-10 deferred-items: (1+2) updated hero H1 assertions to match post-Astro accessible markup (`.hero-h1-seo` + `.line-1` + `.line-2`); (3) restored mobile narrow-picker branch in js/nav.js — P0-7a regression from `7656203` (audit-wave1) deleted the `e.preventDefault()`+`scrollIntoView` path that keeps overlay open on mobile; smoke now 58/58 pass | 2026-05-06 | 8ba675e | [260506-hz2-fix-3-pre-existing-smoke-failures-from-r](./quick/260506-hz2-fix-3-pre-existing-smoke-failures-from-r/) |
 
 ## Session continuity
 
