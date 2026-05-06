@@ -6,6 +6,7 @@ import LocationOverlay from '../components/LocationOverlay.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import TicketPanel from '../components/TicketPanel.astro';
 import SiteScripts from '../components/SiteScripts.astro';
+import { resolveLastUpdated } from '../lib/last-updated';
 
 interface Props {
     canonicalPath: string;
@@ -18,6 +19,13 @@ interface Props {
     bodyClass?: string;
     landingHead?: import('../lib/seo/catalog').LandingHeadInput | null;
     lang?: string;
+    /** Optional YYYY-MM-DD override; otherwise resolved from git mtime of the page source file. */
+    lastUpdated?: string;
+    /**
+     * @deprecated No longer needed — SiteLayout derives the source path from canonicalPath.
+     * Kept for backward compatibility; ignored if canonicalPath resolves the mtime correctly.
+     */
+    sourcePageUrl?: string;
 }
 
 const {
@@ -31,7 +39,15 @@ const {
     bodyClass,
     landingHead,
     lang = 'en',
+    lastUpdated,
+    sourcePageUrl,
 } = Astro.props;
+
+const lastUpdatedInfo = resolveLastUpdated({
+    override: lastUpdated,
+    canonicalPath,
+    sourceFile: sourcePageUrl,
+});
 ---
 
 <!DOCTYPE html>
@@ -45,6 +61,7 @@ const {
             twitterImage={twitterImage}
             robots={robots}
             landingHead={landingHead}
+            lastUpdatedIso={lastUpdatedInfo.iso}
         />
         <slot name="head-extra" />
         <slot name="page-style" />
@@ -68,8 +85,27 @@ const {
                 <SiteFooter />
             </slot>
         </footer>
+        <aside class="page-last-updated" aria-label="Page freshness">
+            <time datetime={lastUpdatedInfo.iso}>{lastUpdatedInfo.human}</time>
+        </aside>
         <TicketPanel />
         <SiteScripts />
         <slot name="after-site-scripts" />
     </body>
 </html>
+
+<style is:global>
+    .page-last-updated {
+        text-align: center;
+        padding: 0.75rem 1rem 1.5rem;
+        font-family: var(--body);
+        font-size: 0.75rem;
+        color: var(--gray);
+        opacity: 0.85;
+        background: transparent;
+    }
+    .page-last-updated time { font-variant-numeric: tabular-nums; }
+    @media (max-width: 480px) {
+        .page-last-updated { padding: 0.5rem 1rem 1rem; font-size: 0.7rem; }
+    }
+</style>

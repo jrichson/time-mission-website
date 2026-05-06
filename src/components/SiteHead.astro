@@ -12,6 +12,8 @@ interface Props {
     robots?: string;
     /** When set (CMS landing pages), bypasses seo-routes.json for this canonicalPath */
     landingHead?: LandingHeadInput | null;
+    /** ISO date string (YYYY-MM-DD) for <meta name="last-modified">. Resolved by SiteLayout. */
+    lastUpdatedIso?: string;
 }
 
 const {
@@ -22,6 +24,7 @@ const {
     twitterImage: twOverride,
     robots: robotsOverride,
     landingHead,
+    lastUpdatedIso,
 } = Astro.props;
 
 const seo = landingHead
@@ -107,6 +110,7 @@ const consentDefaults: ConsentDefaults =
     <link rel="alternate" hreflang={alt.lang} href={alt.href} />
 ))}
 <meta name="robots" content={robotsValue} />
+{lastUpdatedIso ? <meta name="last-modified" content={lastUpdatedIso} /> : null}
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content={seo.siteName} />
 <meta property="og:title" content={title} />
