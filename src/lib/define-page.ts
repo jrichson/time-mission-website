@@ -6,6 +6,8 @@
 export interface SitePageMeta {
     /** Must match Phase 2 clean URL (e.g. `/about`). */
     canonicalPath: string;
+    /** Optional explicit last-updated override (YYYY-MM-DD). Validated at usage in resolveLastUpdated(). */
+    lastUpdated?: string;
 }
 
 export function definePage<const T extends SitePageMeta>(page: T): T {
