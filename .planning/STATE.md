@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Cutover-ready
-last_updated: "2026-05-06T02:30:00.000Z"
-last_activity: 2026-05-06 -- Quick task 260505-r78: added per-page last-updated stamp + meta to all 25 Astro pages via git mtime (src/lib/last-updated.ts + SiteLayout + SiteHead; npm run check exits 0)
+last_updated: "2026-05-06T06:00:00.000Z"
+last_activity: 2026-05-06 -- Quick task 260505-t7n: extracted 14 page-CSS and 12 page-after-JS files from inline set:html injections in 25 Astro wrappers; antwerp.html inline style 83KB→906B, no-src script 21KB→5.6KB; npm run check + verify:phase10 both exit 0
 progress:
   total_phases: 11
   completed_phases: 11
@@ -29,7 +29,7 @@ Phase: 11 (small-mobile-responsiveness-480px-tier-cookie-banner-placeme) — COM
 Plan: 5 of 5
 Plans: **52/52** (40 v1 roadmap + 7 Phase 10 + 5 Phase 11)
 Status: Cutover-ready (all 11 phases closed; verify chain green)
-Last activity: 2026-05-06 -- Completed quick task 260505-r78: added per-page Last updated stamp + meta to all 25 Astro pages via git mtime (src/lib/last-updated.ts + SiteLayout + SiteHead; npm run check exits 0)
+Last activity: 2026-05-06 -- Completed quick task 260505-t7n: extracted 14 page-CSS + 12 page-after-JS partials from inline set:html injections in 25 Astro wrappers (antwerp.html style 83KB→906B, no-src script 21KB→5.6KB); _headers untouched, CSP hash work deferred to t7n-2; npm run check exits 0
 
 Progress: All 11 phases documented and shipped; v1 requirement coverage **43/43** (Phases 10 + 11 extend SEO/COMP/DATA/ANLY/VER/FND practices, no new requirement IDs).
 
@@ -117,6 +117,7 @@ Recent decisions affecting current work:
 | 260504-mly | Fix P1-8: WordPress-era + Palisades legacy redirects in `_redirects` (12 paths to `/`, `/palisades` → `/west-nyack`) | 2026-05-04 | 7240619 | [260504-mly-fix-p1-8-add-missing-legacy-url-redirect](./quick/260504-mly-fix-p1-8-add-missing-legacy-url-redirect/) |
 | 260505-qod | Migrate 4 legacy location pages (lincoln, mount-prospect, manassas, west-nyack) to Astro three-fragment wrappers | 2026-05-05 | f3240ab | [260505-qod-migrate-4-legacy-location-pages-lincoln-](./quick/260505-qod-migrate-4-legacy-location-pages-lincoln-/) |
 | 260505-r78 | Add per-page "Last updated: Month YYYY" stamp + `<meta name="last-modified">` to all 25 Astro pages via git mtime (override > git > build-date chain; process.cwd() for stable repo-root in Vite prerender) | 2026-05-06 | 68f25f1 | [260505-r78-add-per-page-last-updated-visible-date-f](./quick/260505-r78-add-per-page-last-updated-visible-date-f/) |
+| 260505-t7n | Extract 14 page-CSS and 12 page-after-JS files from inline set:html injections in 25 Astro wrappers; antwerp.html inline style 83KB→906B, no-src script 21KB→5.6KB; unblocks CSP hash follow-up (t7n-2) | 2026-05-06 | d13791c | [260505-t7n-remove-unsafe-inline-from-csp-via-hash-b](./quick/260505-t7n-remove-unsafe-inline-from-csp-via-hash-b/) |
 
 ## Session continuity
 
