@@ -4,14 +4,24 @@ import { definePage } from '../../lib/define-page';
 import groupEventPageCss from '../../partials/birthdays-inline.raw.css.txt?raw';
 import corporateMain from '../../partials/corporate-main.frag.txt?raw';
 import groupEventPageAfter from '../../partials/birthdays-after.frag.txt?raw';
-import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+import faqs from '../../data/site/faqs.json';
+import { buildGroupEventGraph, serializeGraph } from '../../lib/schema/graph';
 
+const faqItems = faqs.sections.find((s) => s.id === 'corporate')?.items ?? [];
 const ld = serializeGraph(
-    buildSimpleGraph([
-        { label: 'Home', href: '/' },
-        { label: 'Groups', href: '/groups' },
-        { label: 'Corporate Events', href: '/groups/corporate' },
-    ]),
+    buildGroupEventGraph({
+        canonicalPath: '/groups/corporate',
+        crumbs: [
+            { label: 'Home', href: '/' },
+            { label: 'Groups', href: '/groups' },
+            { label: 'Corporate Events', href: '/groups/corporate' },
+        ],
+        serviceName: 'Corporate Event Hosting',
+        serviceType: 'BusinessEvent',
+        serviceDescription:
+            'Corporate team-building events, offsites, and full-venue buyouts at Time Mission with 25+ interactive challenge rooms and head-to-head scoring.',
+        faqs: faqItems,
+    }),
 );
 const page = definePage({ canonicalPath: '/groups/corporate' });
 ---

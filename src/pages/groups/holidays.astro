@@ -4,14 +4,24 @@ import { definePage } from '../../lib/define-page';
 import groupEventPageCss from '../../partials/birthdays-inline.raw.css.txt?raw';
 import holidaysMain from '../../partials/holidays-main.frag.txt?raw';
 import groupEventPageAfter from '../../partials/birthdays-after.frag.txt?raw';
-import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+import faqs from '../../data/site/faqs.json';
+import { buildGroupEventGraph, serializeGraph } from '../../lib/schema/graph';
 
+const faqItems = faqs.sections.find((s) => s.id === 'holidays')?.items ?? [];
 const ld = serializeGraph(
-    buildSimpleGraph([
-        { label: 'Home', href: '/' },
-        { label: 'Groups', href: '/groups' },
-        { label: 'Holiday Parties', href: '/groups/holidays' },
-    ]),
+    buildGroupEventGraph({
+        canonicalPath: '/groups/holidays',
+        crumbs: [
+            { label: 'Home', href: '/' },
+            { label: 'Groups', href: '/groups' },
+            { label: 'Holiday Parties', href: '/groups/holidays' },
+        ],
+        serviceName: 'Holiday Party Hosting',
+        serviceType: 'BusinessEvent',
+        serviceDescription:
+            'Holiday party packages and full-venue buyouts at Time Mission for teams and families up to 125+ guests with festive add-ons and catering options.',
+        faqs: faqItems,
+    }),
 );
 const page = definePage({ canonicalPath: '/groups/holidays' });
 ---

@@ -329,52 +329,52 @@
   "aliases": [
     {
       "source": "/adult-birthday-parties",
-      "target": "/groups#birthday",
+      "target": "/groups/birthdays",
       "status": 301
     },
     {
       "source": "/kids-birthday-party",
-      "target": "/groups#birthday",
+      "target": "/groups/birthdays",
       "status": 301
     },
     {
       "source": "/bachelorette-party",
-      "target": "/groups#private",
+      "target": "/groups/bachelor-ette",
       "status": 301
     },
     {
       "source": "/date-night-ideas",
-      "target": "/groups#private",
+      "target": "/",
       "status": 301
     },
     {
       "source": "/corporate-events",
-      "target": "/groups#corporate",
+      "target": "/groups/corporate",
       "status": 301
     },
     {
       "source": "/team-building",
-      "target": "/groups#corporate",
+      "target": "/groups/private-events",
       "status": 301
     },
     {
       "source": "/school-field-trips",
-      "target": "/groups#private",
+      "target": "/groups/field-trips",
       "status": 301
     },
     {
       "source": "/youth-group-camp",
-      "target": "/groups#private",
+      "target": "/groups/private-events",
       "status": 301
     },
     {
       "source": "/family-gathering",
-      "target": "/groups#private",
+      "target": "/groups/holidays",
       "status": 301
     },
     {
       "source": "/bus-tour",
-      "target": "/groups",
+      "target": "/groups/private-events",
       "status": 301
     },
     {

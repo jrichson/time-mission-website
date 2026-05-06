@@ -4,14 +4,24 @@ import { definePage } from '../../lib/define-page';
 import birthdaysCss from '../../partials/birthdays-inline.raw.css.txt?raw';
 import birthdaysMain from '../../partials/birthdays-main.frag.txt?raw';
 import birthdaysAfter from '../../partials/birthdays-after.frag.txt?raw';
-import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+import faqs from '../../data/site/faqs.json';
+import { buildGroupEventGraph, serializeGraph } from '../../lib/schema/graph';
 
+const faqItems = faqs.sections.find((s) => s.id === 'birthdays')?.items ?? [];
 const ld = serializeGraph(
-    buildSimpleGraph([
-        { label: 'Home', href: '/' },
-        { label: 'Groups', href: '/groups' },
-        { label: 'Birthday Parties', href: '/groups/birthdays' },
-    ]),
+    buildGroupEventGraph({
+        canonicalPath: '/groups/birthdays',
+        crumbs: [
+            { label: 'Home', href: '/' },
+            { label: 'Groups', href: '/groups' },
+            { label: 'Birthday Parties', href: '/groups/birthdays' },
+        ],
+        serviceName: 'Birthday Party Hosting',
+        serviceType: 'PartyService',
+        serviceDescription:
+            'Birthday party packages at Time Mission with private mission rooms, party hosts, and group scoring across 25+ interactive challenges.',
+        faqs: faqItems,
+    }),
 );
 const page = definePage({ canonicalPath: '/groups/birthdays' });
 ---

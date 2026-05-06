@@ -1,6 +1,8 @@
 import { allLocations } from '../../data/locations';
 import faqsDoc from '../../data/site/faqs.json';
 import { organizationNode } from './organization';
+import { websiteNode } from './website';
+import { serviceNode } from './service';
 import { breadcrumbNode, type Crumb } from './breadcrumb';
 import { localBusinessNode } from './localBusiness';
 import { faqPageNode, type FaqItem } from './faqPage';
@@ -20,12 +22,41 @@ export function serializeGraph(graph: Graph): string {
 }
 
 export function buildHomeGraph(): Graph {
-    return withContext([organizationNode()]);
+    return withContext([organizationNode(), websiteNode()]);
 }
 
 export function buildSimpleGraph(crumbs?: Crumb[]): Graph {
     const nodes: unknown[] = [organizationNode()];
     if (crumbs && crumbs.length > 1) nodes.push(breadcrumbNode(crumbs));
+    return withContext(nodes);
+}
+
+/**
+ * Builds the graph for a group-event landing page. Adds Service + FAQPage
+ * nodes alongside the standard Organization + BreadcrumbList so AI search
+ * engines treat each /groups/<type> page as a distinct commercial offering.
+ */
+export function buildGroupEventGraph(opts: {
+    canonicalPath: string;
+    crumbs: Crumb[];
+    serviceName: string;
+    serviceType: string;
+    serviceDescription: string;
+    faqs?: FaqItem[];
+}): Graph {
+    const nodes: unknown[] = [
+        organizationNode(),
+        breadcrumbNode(opts.crumbs),
+        serviceNode({
+            canonicalPath: opts.canonicalPath,
+            name: opts.serviceName,
+            serviceType: opts.serviceType,
+            description: opts.serviceDescription,
+        }),
+    ];
+    if (opts.faqs && opts.faqs.length > 0) {
+        nodes.push(faqPageNode(opts.faqs));
+    }
     return withContext(nodes);
 }
 

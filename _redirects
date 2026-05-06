@@ -2,6 +2,24 @@
 # Phase 02 — legacy sources and aliases redirect to clean canonical paths
 # See docs/redirect-map.md for Cloudflare vs Netlify behavior and verification.
 
+# Case-variant location URLs (audit SEO #12 — duplicate-content risk)
+# Redirect title-case and all-caps spellings to canonical lowercase slug.
+/Manassas /manassas 301
+/MANASSAS /manassas 301
+/Lincoln /lincoln 301
+/Philadelphia /philadelphia 301
+/PHILADELPHIA /philadelphia 301
+/Antwerp /antwerp 301
+/Mount-Prospect /mount-prospect 301
+/MountProspect /mount-prospect 301
+/West-Nyack /west-nyack 301
+/WestNyack /west-nyack 301
+/Houston /houston 301
+/Brussels /brussels 301
+/Dallas /dallas 301
+/Orland-Park /orland-park 301
+/OrlandPark /orland-park 301
+
 /index.html / 301
 /about.html /about 301
 /missions.html /missions 301

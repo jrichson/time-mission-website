@@ -4,14 +4,24 @@ import { definePage } from '../../lib/define-page';
 import groupEventPageCss from '../../partials/birthdays-inline.raw.css.txt?raw';
 import privateEventsMain from '../../partials/private-events-main.frag.txt?raw';
 import groupEventPageAfter from '../../partials/birthdays-after.frag.txt?raw';
-import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+import faqs from '../../data/site/faqs.json';
+import { buildGroupEventGraph, serializeGraph } from '../../lib/schema/graph';
 
+const faqItems = faqs.sections.find((s) => s.id === 'private-events')?.items ?? [];
 const ld = serializeGraph(
-    buildSimpleGraph([
-        { label: 'Home', href: '/' },
-        { label: 'Groups', href: '/groups' },
-        { label: 'Private Events & Venue Buyouts', href: '/groups/private-events' },
-    ]),
+    buildGroupEventGraph({
+        canonicalPath: '/groups/private-events',
+        crumbs: [
+            { label: 'Home', href: '/' },
+            { label: 'Groups', href: '/groups' },
+            { label: 'Private Events', href: '/groups/private-events' },
+        ],
+        serviceName: 'Private Event Hosting',
+        serviceType: 'EventVenue',
+        serviceDescription:
+            'Full-venue buyouts and private events at Time Mission for 40-300+ guests with custom branding, AV coordination, and 25+ interactive missions.',
+        faqs: faqItems,
+    }),
 );
 const page = definePage({ canonicalPath: '/groups/private-events' });
 ---

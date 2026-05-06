@@ -85,13 +85,27 @@ if (fs.existsSync(stalePublicSitemap)) {
   fs.unlinkSync(stalePublicSitemap);
 }
 
+/**
+ * Patterns that should NEVER ship to production — internal mockups, archives,
+ * and macOS Finder duplicate files (e.g. "foo 2.html"). Keep this in sync with
+ * .gitignore where possible; the filter runs at copy time as a last line of defense.
+ */
+const EXCLUDE_PATH_RE = /(?:^|\/)(?:mockup-reference|_archive)(?:\/|$)|\s[0-9]+\.[a-z0-9]+$/i;
+
+function copyFiltered(src, dest) {
+    fs.cpSync(src, dest, {
+        recursive: true,
+        filter: (s) => !EXCLUDE_PATH_RE.test(s),
+    });
+}
+
 for (const d of mandatoryDirs) {
     const src = path.join(root, d);
     const dest = path.join(publicDir, d);
     // Replace — do not merge: cpSync leaves stale files in `public/` when assets are removed
     // from the repo (e.g. MP4s moved to R2), which breaks Pages' 25 MiB/file limit on deploy.
     fs.rmSync(dest, { recursive: true, force: true });
-    fs.cpSync(src, dest, { recursive: true });
+    copyFiltered(src, dest);
 }
 
 const videoDir = path.join(publicDir, 'assets', 'video');

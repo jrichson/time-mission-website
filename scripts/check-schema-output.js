@@ -103,7 +103,6 @@ for (const route of schemaRoutes) {
     '/contact',
     '/locations',
     '/privacy',
-    '/groups/corporate',
     '/terms',
     '/code-of-conduct',
     '/licensing',
@@ -115,6 +114,33 @@ for (const route of schemaRoutes) {
     if (!has('BreadcrumbList')) errors.push(`${outFile}: missing BreadcrumbList`);
     if (has('FAQPage')) errors.push(`${outFile}: unexpected FAQPage`);
     if (has('EntertainmentBusiness')) errors.push(`${outFile}: unexpected EntertainmentBusiness`);
+  }
+
+  /**
+   * Group event landing pages (/groups/<type>) carry Service + per-page
+   * FAQPage schema on top of Organization + BreadcrumbList. Each FAQPage
+   * mainEntity should match the corresponding section in faqs.json.
+   */
+  const GROUP_EVENT_PATHS = new Map([
+    ['/groups/birthdays', 'birthdays'],
+    ['/groups/corporate', 'corporate'],
+    ['/groups/private-events', 'private-events'],
+    ['/groups/holidays', 'holidays'],
+    ['/groups/field-trips', 'field-trips'],
+    ['/groups/bachelor-ette', 'bachelor-ette'],
+  ]);
+  if (GROUP_EVENT_PATHS.has(cp)) {
+    if (!has('BreadcrumbList')) errors.push(`${outFile}: missing BreadcrumbList`);
+    if (!has('Service')) errors.push(`${outFile}: missing Service node`);
+    if (!has('FAQPage')) errors.push(`${outFile}: missing FAQPage`);
+    if (has('EntertainmentBusiness')) errors.push(`${outFile}: unexpected EntertainmentBusiness on group page`);
+    const expectedFaqId = GROUP_EVENT_PATHS.get(cp);
+    const expectedSection = faqsDoc.sections.find((s) => s.id === expectedFaqId);
+    const faqNodes = findOne(graph, 'FAQPage');
+    const mainLen = faqNodes[0]?.mainEntity?.length;
+    if (expectedSection && mainLen !== expectedSection.items.length) {
+      errors.push(`${outFile}: FAQPage mainEntity length ${mainLen}, expected ${expectedSection.items.length}`);
+    }
   }
 
   if (cp === '/faq') {

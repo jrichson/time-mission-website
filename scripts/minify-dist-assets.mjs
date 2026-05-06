@@ -48,6 +48,23 @@ async function minifyFile(file) {
     return { file, before: original.length, after: result.code.length, skipped: false };
 }
 
+/**
+ * Strip macOS Finder duplicate artifacts ("foo 2.html", "sitemap 3.xml")
+ * that get copied through the build. They're indistinguishable to Cloudflare
+ * Pages from real routes and create duplicate-content URLs.
+ */
+async function removeFinderDuplicates(files) {
+    const re = /\s[0-9]+\.[a-z0-9]+$/i;
+    let removed = 0;
+    for (const f of files) {
+        if (re.test(f)) {
+            await fs.unlink(f);
+            removed += 1;
+        }
+    }
+    return removed;
+}
+
 async function main() {
     let exists = false;
     try {
@@ -59,7 +76,12 @@ async function main() {
         process.exit(1);
     }
 
-    const all = await walk(distDir);
+    let all = await walk(distDir);
+    const dupesRemoved = await removeFinderDuplicates(all);
+    if (dupesRemoved > 0) {
+        console.log(`Removed ${dupesRemoved} macOS Finder duplicate file(s) from dist/.`);
+        all = await walk(distDir);
+    }
     const targets = all.filter((f) => /\.(css|js|mjs)$/.test(f));
 
     let totalBefore = 0;

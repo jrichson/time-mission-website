@@ -23,6 +23,13 @@ const siteContract = getPublicSiteContract();
         }
     })();
 </script>
+<script is:inline>
+    document.querySelectorAll('.footer-location-toggle').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            btn.parentElement.classList.toggle('open');
+        });
+    });
+</script>
 <script defer is:inline src="/js/consent-bridge.js?v=1"></script>
 <script defer is:inline src="/js/analytics.js?v=1"></script>
 <script defer is:inline src="/js/contact-form-analytics.js?v=1"></script>

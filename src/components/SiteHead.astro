@@ -58,6 +58,23 @@ for (const entry of locationEntries) {
 const currentRegion = pathRegionMap.get(canonicalPath) || '';
 const consentProfile: ConsentProfile =
     currentRegion === 'europe' ? 'eu_strict' : currentRegion === 'us' ? 'us_open' : 'global_strict';
+
+/**
+ * Hreflang cluster — home + EU locale entry points form the multi-region
+ * equivalence set. Per-US-location pages aren't translated alternates and
+ * stay out of the cluster (avoids false-equivalence between geo-distinct
+ * venues). Reciprocity is satisfied because every cluster member emits
+ * the same set with self-reference.
+ */
+type HreflangEntry = { lang: string; href: string };
+const hreflangCluster: HreflangEntry[] = [
+    { lang: 'en-US', href: 'https://timemission.com/' },
+    { lang: 'nl-BE', href: 'https://timemission.com/antwerp' },
+    { lang: 'fr-BE', href: 'https://timemission.com/brussels' },
+    { lang: 'x-default', href: 'https://timemission.com/' },
+];
+const clusterPaths = new Set(['/', '/antwerp', '/brussels', '/locations']);
+const showHreflang = clusterPaths.has(canonicalPath);
 const consentDefaults: ConsentDefaults =
     consentProfile === 'us_open'
         ? {
@@ -86,6 +103,9 @@ const consentDefaults: ConsentDefaults =
 <!-- SEO META -->
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalUrl} />
+{showHreflang && hreflangCluster.map((alt) => (
+    <link rel="alternate" hreflang={alt.lang} href={alt.href} />
+))}
 <meta name="robots" content={robotsValue} />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content={seo.siteName} />

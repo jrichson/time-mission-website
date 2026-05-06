@@ -18,8 +18,10 @@ export interface LocalBusinessNode {
     name: string;
     alternateName?: string;
     url: string;
+    image?: string;
     telephone?: string;
     email?: string;
+    priceRange?: string;
     address: {
         '@type': 'PostalAddress';
         streetAddress: string;
@@ -37,6 +39,9 @@ export interface LocalBusinessNode {
     sameAs?: string[];
 }
 
+const DEFAULT_VENUE_IMAGE = 'https://timemission.com/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
+const DEFAULT_PRICE_RANGE = '$$';
+
 /**
  * Returns null when the location is NOT eligible (coming-soon OR localBusinessSchemaEligible !== true).
  * Callers MUST treat null as "skip this node entirely" — Pitfall 6 / D-07 / D-10.
@@ -50,6 +55,8 @@ export function localBusinessNode(loc: LocationRecord, canonicalPath: string): L
         '@id': `${baseUrl}${canonicalPath}#business`,
         name: loc.name,
         url: `${baseUrl}${canonicalPath}`,
+        image: DEFAULT_VENUE_IMAGE,
+        priceRange: DEFAULT_PRICE_RANGE,
         address: {
             '@type': 'PostalAddress',
             streetAddress: [loc.address.line1, loc.address.line2].filter(Boolean).join(', '),

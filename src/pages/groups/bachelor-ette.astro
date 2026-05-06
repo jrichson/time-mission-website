@@ -4,14 +4,24 @@ import { definePage } from '../../lib/define-page';
 import groupEventPageCss from '../../partials/birthdays-inline.raw.css.txt?raw';
 import bachelorEtteMain from '../../partials/bachelor-ette-main.frag.txt?raw';
 import groupEventPageAfter from '../../partials/birthdays-after.frag.txt?raw';
-import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+import faqs from '../../data/site/faqs.json';
+import { buildGroupEventGraph, serializeGraph } from '../../lib/schema/graph';
 
+const faqItems = faqs.sections.find((s) => s.id === 'bachelor-ette')?.items ?? [];
 const ld = serializeGraph(
-    buildSimpleGraph([
-        { label: 'Home', href: '/' },
-        { label: 'Groups', href: '/groups' },
-        { label: 'Bachelor & Bachelorette Parties', href: '/groups/bachelor-ette' },
-    ]),
+    buildGroupEventGraph({
+        canonicalPath: '/groups/bachelor-ette',
+        crumbs: [
+            { label: 'Home', href: '/' },
+            { label: 'Groups', href: '/groups' },
+            { label: 'Bachelor / Bachelorette', href: '/groups/bachelor-ette' },
+        ],
+        serviceName: 'Bachelor / Bachelorette Party Hosting',
+        serviceType: 'PartyService',
+        serviceDescription:
+            'Bachelor and bachelorette party experiences at Time Mission for 6-30+ guests with drink packages, group scoring, and venues in entertainment districts.',
+        faqs: faqItems,
+    }),
 );
 const page = definePage({ canonicalPath: '/groups/bachelor-ette' });
 ---

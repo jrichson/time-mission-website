@@ -23,6 +23,17 @@ node_modules/
 # Archive (dev experiments, not for production)
 _archive/
 
+# Internal mockups — design references, never deploy (audit Wave 6-5)
+assets/mockup-reference/
+
+# macOS Finder duplicates ("foo 2.html", "sitemap 3.xml") — never commit
+*\ [0-9].html
+*\ [0-9].js
+*\ [0-9].css
+*\ [0-9].xml
+*\ [0-9].txt
+*\ [0-9]/
+
 # Build artifacts
 *.log
 dist/
