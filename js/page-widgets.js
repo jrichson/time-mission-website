@@ -894,4 +894,28 @@
     }
 
     window.TMPage = { initCity: initCity, initIndex: initIndex };
+
+    // ==========================================================================
+    // Auto-init from inline config — handles the defer/inline ordering case.
+    //
+    // Pattern: each Astro page sets a synchronous `window.__TM_PAGE_INIT__`
+    // before the deferred `page-widgets.js` script tag is parsed. Because
+    // synchronous inline scripts always execute in document order before any
+    // deferred external script, the config is guaranteed to be set by the
+    // time this IIFE runs.
+    //
+    // Schema:
+    //   window.__TM_PAGE_INIT__ = { mode: 'city' | 'index', config: {...} };
+    //
+    // The TMPage.initCity / TMPage.initIndex methods remain available for any
+    // non-deferred caller (e.g., future programmatic re-init, tests).
+    // ==========================================================================
+    var pageInit = window.__TM_PAGE_INIT__;
+    if (pageInit && typeof pageInit === 'object') {
+        if (pageInit.mode === 'city') {
+            initCity(pageInit.config);
+        } else if (pageInit.mode === 'index') {
+            initIndex(pageInit.config);
+        }
+    }
 })();

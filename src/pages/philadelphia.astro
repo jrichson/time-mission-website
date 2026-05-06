@@ -36,24 +36,27 @@ const phillyMain = applyTmMediaBase(phillyMainRaw);
     </Fragment>
     <div set:html={phillyMain} />
     <Fragment slot="after-site-scripts">
-        <script defer is:inline src="/js/page-widgets.js?v=1"></script>
         <script is:inline>
-            window.TMPage.initCity({
-                city: 'Philadelphia',
-                taglines: [
-                    'Social Gaming Adventure',
-                    "Better Than Your Ex's Personality",
-                    'Date Night, Leveled Up',
-                    'Family Game Night on Steroids',
-                    'Where Couch Potatoes Become Heroes',
-                    'Touch Grass... Indoors',
-                    'Corporate Team Building, But Fun',
-                    'Cheaper Than Therapy',
-                    'Your New Favorite Addiction',
-                    'Making Memories (& Enemies)',
-                    'Swipe Right on Adventure'
-                ]
-            });
+            window.__TM_PAGE_INIT__ = {
+                mode: 'city',
+                config: {
+                    city: 'Philadelphia',
+                    taglines: [
+                        'Social Gaming Adventure',
+                        "Better Than Your Ex's Personality",
+                        'Date Night, Leveled Up',
+                        'Family Game Night on Steroids',
+                        'Where Couch Potatoes Become Heroes',
+                        'Touch Grass... Indoors',
+                        'Corporate Team Building, But Fun',
+                        'Cheaper Than Therapy',
+                        'Your New Favorite Addiction',
+                        'Making Memories (& Enemies)',
+                        'Swipe Right on Adventure'
+                    ]
+                }
+            };
         </script>
+        <script defer is:inline src="/js/page-widgets.js?v=1"></script>
     </Fragment>
 </SiteLayout>

@@ -37,24 +37,27 @@ const antwerpMain = applyTmMediaBase(antwerpMainRaw);
     </Fragment>
     <div set:html={antwerpMain} />
     <Fragment slot="after-site-scripts">
-        <script defer is:inline src="/js/page-widgets.js?v=1"></script>
         <script is:inline>
-            window.TMPage.initCity({
-                city: 'Antwerp',
-                taglines: [
-                    'Social Gaming Adventure',
-                    'Family Game Night on Steroids',
-                    'Birthday Parties, Leveled Up',
-                    'Where Couch Potatoes Become Heroes',
-                    'Touch Grass... Indoors',
-                    'Corporate Team Building, But Fun',
-                    'Making Memories Together',
-                    'Built For Every Age',
-                    'Your New Favorite Weekend',
-                    'No Screens. Just Fun.',
-                    'Team Up. Beat The Clock.'
-                ]
-            });
+            window.__TM_PAGE_INIT__ = {
+                mode: 'city',
+                config: {
+                    city: 'Antwerp',
+                    taglines: [
+                        'Social Gaming Adventure',
+                        'Family Game Night on Steroids',
+                        'Birthday Parties, Leveled Up',
+                        'Where Couch Potatoes Become Heroes',
+                        'Touch Grass... Indoors',
+                        'Corporate Team Building, But Fun',
+                        'Making Memories Together',
+                        'Built For Every Age',
+                        'Your New Favorite Weekend',
+                        'No Screens. Just Fun.',
+                        'Team Up. Beat The Clock.'
+                    ]
+                }
+            };
         </script>
+        <script defer is:inline src="/js/page-widgets.js?v=1"></script>
     </Fragment>
 </SiteLayout>
