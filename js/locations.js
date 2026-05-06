@@ -2,51 +2,34 @@
  * Time Mission — Location Manager
  * Handles location data loading, persistence (localStorage), and DOM updates.
  *
+ * Data is provided synchronously via `window.TM_DATA` (inlined by
+ * src/components/SiteScripts.astro before this script tag). No fetch.
+ *
  * Usage:
  *   <script src="js/locations.js"></script>
  *   Automatically initializes on DOMContentLoaded.
  *
  * API:
- *   TM.locations    — array of all location objects
- *   TM.current      — currently selected location object (or null)
- *   TM.select(id, opts?) — set active location by id; optional opts.cta_id for analytics
- *   TM.clear()      — clear selected location
- *   TM.ready        — promise that resolves when data is loaded
+ *   TM.locations           — array of all location objects
+ *   TM.current             — currently selected location object (or null)
+ *   TM.select(id, opts?)   — set active location by id; optional opts.cta_id for analytics
+ *   TM.clear()             — clear selected location
+ *   TM.restore()           — restore from localStorage; migrates legacy key once
+ *   TM.ready               — Promise.resolve() (kept for backward compat with .then consumers)
+ *   TM.getSavedSlug()      — sync read of canonical persisted slug; heals legacy key once
+ *   TM.onChange(callback)  — subscribe to select/clear/restore; returns unsubscribe fn
+ *
+ * SINGLE-WRITER INVARIANT (RFC #11):
+ *   Only this file may call localStorage.setItem('tm_location', ...) or
+ *   localStorage.setItem('timeMissionLocation', ...). Enforced at CI by
+ *   scripts/check-locations-architecture.js.
  */
 
 (function () {
     'use strict';
 
     const STORAGE_KEY = 'tm_location';
-
-    // Full fallback used when locations.json can't load
-    // (e.g. file:// protocol blocks fetch, offline, transient network error).
-    // Mirrors data/locations.json so the nav, Tickets/Buy-Gift-Card buttons,
-    // AND the footer location info panel render identically without the JSON.
-    // KEEP IN SYNC with data/locations.json.
-    const FALLBACK = {
-        'mount-prospect': {"name":"Time Mission Mount Prospect","shortName":"Mount Prospect","address":{"line1":"132 Randhurst Village Drive","city":"Mount Prospect","state":"IL","zip":"60056","country":"United States"},"contact":{"phone":"(847) 250-9560","email":"mtprospect@timemission.com"},"hours":{"mon":{"label":"12pm - 9pm"},"tue":{"label":"12pm - 9pm"},"wed":{"label":"12pm - 9pm"},"thu":{"label":"12pm - 9pm"},"fri":{"label":"12pm - Midnight"},"sat":{"label":"10am - Midnight"},"sun":{"label":"10am - 8pm"}},"mapUrl":"https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056","bookingUrl":"https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home","giftCardUrl":"https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/giftcards"},
-        'philadelphia':   {"name":"Time Mission Philadelphia","shortName":"Philadelphia","address":{"line1":"1530 Chestnut Street","city":"Philadelphia","state":"PA","zip":"19102","country":"United States"},"contact":{"phone":"(267) 710-1240","email":"philly@timemission.com"},"hours":{"mon":{"label":"12pm - 10pm"},"tue":{"label":"12pm - 10pm"},"wed":{"label":"12pm - 10pm"},"thu":{"label":"12pm - 10pm"},"fri":{"label":"12pm - 11pm"},"sat":{"label":"10am - 11pm"},"sun":{"label":"10am - 10pm"}},"mapUrl":"https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102","bookingUrl":"https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home","giftCardUrl":"https://tickets.timemission.com/onlinecheckout/en-us/giftcards"},
-        'west-nyack':     {"name":"Time Mission West Nyack","shortName":"West Nyack","address":{"line1":"3532 Palisades Center Dr","line2":"Level 3","city":"West Nyack","state":"NY","zip":"10994","country":"United States"},"contact":{"phone":"(845) 328-4528","email":"palisades@timemission.com"},"hours":{"mon":{"label":"12pm - 9pm"},"tue":{"label":"12pm - 9pm"},"wed":{"label":"12pm - 9pm"},"thu":{"label":"12pm - 9pm"},"fri":{"label":"12pm - 11pm"},"sat":{"label":"10am - 11pm"},"sun":{"label":"10am - 8pm"}},"mapUrl":"https://maps.google.com/?q=3532+Palisades+Center+Dr+West+Nyack+NY+10994","bookingUrl":"https://tickets.timemission.com/onlinecheckout/en-us/products","giftCardUrl":"https://tickets.timemission.com/onlinecheckout/en-us/giftcards"},
-        'lincoln':        {"name":"Time Mission Lincoln","shortName":"Lincoln","address":{"line1":"100 Higginson Ave","city":"Lincoln","state":"RI","zip":"02865","country":"United States"},"contact":{"phone":"(401) 721-5554","email":"info@r1indoorkarting.com"},"hours":{"mon":{"label":"12pm - 11pm"},"tue":{"label":"12pm - 11pm"},"wed":{"label":"12pm - 11pm"},"thu":{"label":"12pm - 11pm"},"fri":{"label":"12pm - Midnight"},"sat":{"label":"9am - Midnight"},"sun":{"label":"9am - 11pm"}},"mapUrl":"https://maps.google.com/?q=100+Higginson+Ave+Lincoln+RI+02865","bookingUrl":"https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959","giftCardUrl":"https://tickets.timemission.com/onlinecheckout/en-us/giftcards"},
-        'manassas':       {"name":"Time Mission Manassas","shortName":"Manassas","address":{"line1":"8300 Sudley Rd","line2":"Unit A2","city":"Manassas","state":"VA","zip":"20109","country":"United States"},"contact":{"phone":"(571) 732-1050","email":"manassas@timemission.com"},"hours":{"mon":{"label":"12pm - 9pm"},"tue":{"label":"12pm - 9pm"},"wed":{"label":"12pm - 9pm"},"thu":{"label":"12pm - 9pm"},"fri":{"label":"12pm - Midnight"},"sat":{"label":"10am - Midnight"},"sun":{"label":"10am - 8pm"}},"mapUrl":"https://maps.google.com/?q=8300+Sudley+Rd+Manassas+VA+20109","bookingUrl":"https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home","giftCardUrl":"https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/giftcards"},
-        'antwerp':        {"name":"Time Mission Antwerp","shortName":"Antwerp","address":{"line1":"Michiganstraat 1","city":"Antwerp","state":"","zip":"2030","country":"Belgium"},"contact":{"phone":"+32 3 301 03 03","email":"info@experience-factory.com"},"hours":{"mon":{"label":"2pm - 11pm"},"tue":{"label":"2pm - 11pm"},"wed":{"label":"2pm - 11pm"},"thu":{"label":"2pm - 11pm"},"fri":{"label":"2pm - 11pm"},"sat":{"label":"11am - 11pm"},"sun":{"label":"11am - 11pm"}},"mapUrl":"https://maps.google.com/?q=Michiganstraat+1+Antwerp+2030+Belgium","bookingUrl":"https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission","giftCardUrl":"mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Gift%20Card"},
-        'houston':        { shortName: 'Houston',     bookingUrl: '', giftCardUrl: '/houston' },
-        'orland-park':    { shortName: 'Orland Park', bookingUrl: '', giftCardUrl: '', mapUrl: 'https://maps.google.com/?q=66+Orland+Park+IL+60462' },
-        'dallas':         { shortName: 'Dallas',      bookingUrl: '', giftCardUrl: '', mapUrl: 'https://maps.google.com/?q=Dallas+TX' },
-        'brussels':       { shortName: 'Brussels',    bookingUrl: '', giftCardUrl: '', mapUrl: 'https://maps.google.com/?q=Av.+Imp%C3%A9ratrice+Charlotte+1020+Bruxelles+Belgium' }
-    };
-
-    // Resolve data path relative to site root
-    function getDataUrl() {
-        const base = document.querySelector('meta[name="tm-base"]');
-        if (base) return base.content + 'data/locations.json';
-
-        const path = window.location.pathname;
-        const depth = (path.match(/\//g) || []).length - 1;
-        const prefix = depth > 0 ? '../'.repeat(depth) : '';
-        return prefix + 'data/locations.json';
-    }
+    const LEGACY_STORAGE_KEY = 'timeMissionLocation';
 
     function renderAddressLines(container, addr) {
         if (!container) return;
@@ -180,10 +163,7 @@
 
     function listTicketOptions() {
         // Labels/order must match src/lib/ticket-options.ts (ticketPanelSelectOptions).
-        const source = TM.locations.length ? TM.locations : Object.keys(FALLBACK).map((id) => {
-            return Object.assign({ id: id, slug: id }, FALLBACK[id]);
-        });
-        return source.map((loc) => ({
+        return TM.locations.map((loc) => ({
             value: loc.id,
             label: (loc.shortName || loc.name || loc.id) + (loc.status === 'coming-soon' ? ' (Coming Soon)' : ''),
             status: loc.status || 'open',
@@ -226,35 +206,33 @@
         }
     }
 
-    let _readyResolve;
-    const _readyPromise = new Promise(resolve => { _readyResolve = resolve; });
+    // RFC #11: data is provided synchronously via window.TM_DATA (inlined by
+    // src/components/SiteScripts.astro). TM.ready resolves immediately to keep
+    // existing .ready.then(...) consumers working unchanged.
+    const _readyPromise = Promise.resolve();
 
     const TM = {
         locations: [],
         current: null,
         _pendingSelect: null,
         _pendingSelectOpts: null,
+        _changeListeners: [],
 
-        /** Promise that resolves when location data is loaded */
+        /** Resolved promise; kept for backward compat with existing .then consumers */
         ready: _readyPromise,
 
-        /** Load locations data from JSON */
+        /** Load locations data from synchronous window.TM_DATA injection */
         async load() {
-            try {
-                const url = getDataUrl();
-                // Append version-bump so CDN/browser cache doesn't serve stale data.
-                // Update this string whenever data/locations.json changes.
-                const versioned = url + (url.includes('?') ? '&' : '?') + 'v=8';
-                const res = await fetch(versioned);
-                if (!res.ok) throw new Error('Failed to load locations.json');
-                const data = await res.json();
-                TM.locations = data.locations || [];
-            } catch (e) {
-                console.warn('TM Locations: Could not load data —', e.message);
+            const data = (typeof window !== 'undefined' && window.TM_DATA) || null;
+            if (data && Array.isArray(data.locations)) {
+                TM.locations = data.locations;
+            } else {
+                // Defensive: matches the pre-RFC fetch-failure path
+                console.warn('TM Locations: window.TM_DATA missing — locations unavailable');
                 TM.locations = [];
             }
             maybeTrackSiteContractStale();
-            _readyResolve();
+            // No _readyResolve() — ready is already resolved.
         },
 
         /** Get a location by id */
@@ -282,6 +260,40 @@
             return isIndexPage();
         },
 
+        /** Sync read of the canonical persisted slug. Heals legacy
+         *  'timeMissionLocation' key once by writing canonical + removing legacy. */
+        getSavedSlug() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) return saved;
+                const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
+                if (!legacy) return '';
+                const slug = normalizeLocationId(legacy);
+                // Migrate-once: write canonical, delete legacy permanently.
+                try {
+                    localStorage.setItem(STORAGE_KEY, slug);
+                    localStorage.removeItem(LEGACY_STORAGE_KEY);
+                } catch (e) { /* storage unavailable — return slug anyway */ }
+                return slug;
+            } catch (e) { return ''; }
+        },
+
+        /** Subscribe to location changes (select/clear/restore). Returns unsubscribe. */
+        onChange(callback) {
+            if (typeof callback !== 'function') return function () {};
+            TM._changeListeners.push(callback);
+            return function unsubscribe() {
+                const idx = TM._changeListeners.indexOf(callback);
+                if (idx !== -1) TM._changeListeners.splice(idx, 1);
+            };
+        },
+
+        _emitChange() {
+            for (let i = 0; i < TM._changeListeners.length; i++) {
+                try { TM._changeListeners[i](TM.current); } catch (e) { /* swallow listener errors */ }
+            }
+        },
+
         /** Select a location and persist */
         select(id, opts) {
             // If data hasn't loaded yet, queue the selection
@@ -298,6 +310,7 @@
                 localStorage.setItem(STORAGE_KEY, id);
             } catch (e) { /* localStorage unavailable */ }
             TM.updateDOM();
+            TM._emitChange();
             document.dispatchEvent(new CustomEvent('tm:location-changed', { detail: loc }));
             if (window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
                 var payload = {
@@ -316,40 +329,38 @@
                 localStorage.removeItem(STORAGE_KEY);
             } catch (e) { /* localStorage unavailable */ }
             TM.updateDOM();
+            TM._emitChange();
         },
 
-        /** Restore location from localStorage */
+        /** Restore location from localStorage; migrates legacy key once. */
         restore() {
             try {
-                // Primary key (slug)
                 let saved = localStorage.getItem(STORAGE_KEY);
-                // Fallback — legacy/nav.js key stores display name ("Philadelphia")
                 if (!saved) {
-                    const legacy = localStorage.getItem('timeMissionLocation');
-                    if (legacy) saved = legacy.toLowerCase().replace(/\s+/g, '-');
+                    const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
+                    if (legacy) {
+                        saved = normalizeLocationId(legacy);
+                        // Migrate-once heal: write canonical, remove legacy permanently.
+                        try {
+                            localStorage.setItem(STORAGE_KEY, saved);
+                            localStorage.removeItem(LEGACY_STORAGE_KEY);
+                        } catch (e) {}
+                    }
                 }
                 if (saved) {
                     const loc = TM.get(saved);
                     if (loc) {
                         TM.current = loc;
-                        // Heal the canonical key for next time
-                        try { localStorage.setItem(STORAGE_KEY, loc.id); } catch (e) {}
+                        TM._emitChange();
                         return;
                     }
-                    // If locations.json didn't load (e.g. file:// protocol),
-                    // build a synthetic current from the embedded fallback so
-                    // active-state highlighting and the Tickets button still work.
-                    if (TM.locations.length === 0 && FALLBACK[saved]) {
-                        TM.current = Object.assign({ id: saved, slug: saved }, FALLBACK[saved]);
-                        try { localStorage.setItem(STORAGE_KEY, saved); } catch (e) {}
-                        return;
-                    }
-                    if (TM.locations.length === 0) return;
+                    // Saved slug doesn't match any location (data drift) — clear silently.
+                    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
                 }
             } catch (e) { /* localStorage unavailable */ }
-            // Only null out if we actually have data and no match
             if (TM.locations.length > 0) {
                 TM.current = null;
+                TM._emitChange();
             }
         },
 

@@ -1,11 +1,16 @@
 ---
 import { getPublicSiteContract } from '../lib/site-contract';
+import locationsData from '../../data/locations.json';
 
 const siteContract = getPublicSiteContract();
+const tmData = locationsData;
 ---
 
 <script is:inline define:vars={{ siteContract }}>
     window.__TM_SITE_CONTRACT__ = siteContract;
+</script>
+<script is:inline define:vars={{ tmData }}>
+    window.TM_DATA = tmData;
 </script>
 <script defer is:inline src="/js/site-progressive.js?v=1"></script>
 <script defer is:inline src="/js/consent-bridge.js?v=1"></script>
