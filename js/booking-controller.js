@@ -214,8 +214,6 @@
     function mount(panelEl, opts) {
         var options = opts || {};
         var panel       = panelEl                || document.getElementById('ticketPanel');
-        var overlay     = options.overlayEl      || document.getElementById('ticketOverlay');
-        var closeBtn    = options.closeEl        || document.getElementById('ticketClose');
         var locSelect   = options.selectEl       || document.getElementById('ticketLocation');
         var ctaBtn      = options.ctaEl          || document.getElementById('ticketBookBtn');
         var openPanel   = typeof options.openPanel === 'function' ? options.openPanel : null;

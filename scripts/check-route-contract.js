@@ -108,10 +108,6 @@ function normalizePath(p) {
   return normalizeCanonicalPath(p);
 }
 
-function stripQueryAndHash(value) {
-  return String(value).split('#')[0].split('?')[0];
-}
-
 function parseRedirects(content) {
   const rows = [];
   for (const line of content.split(/\r?\n/)) {
