@@ -21,7 +21,14 @@ test('homepage loads core navigation and booking panel', async ({ page }) => {
 
   await expect(page).toHaveTitle(/Time Mission/i);
   await expect(page.locator('.hero-title')).toContainText(/STEP INTO THE/i);
-  await expect(page.locator('.hero-title [aria-label="MISSION"]')).toBeVisible();
+  // Post-Astro hero H1 contract:
+  // - .hero-h1-seo carries the screen-reader H1 text (visually-hidden)
+  // - .line-1 is the decorative "STEP INTO THE" eyebrow (visible, aria-hidden)
+  // - .line-2 renders "TIME MISSION" via SVG mask (visible, aria-hidden, no text node)
+  await expect(page.locator('.hero-title .hero-h1-seo')).toHaveText(/Time Mission.*Interactive Mission Rooms/i);
+  await expect(page.locator('.hero-title .line-1')).toBeVisible();
+  await expect(page.locator('.hero-title .line-1')).toHaveText(/STEP INTO THE/);
+  await expect(page.locator('.hero-title .line-2')).toBeVisible();
 
   await page.locator('.hero-cta .btn-tickets').click();
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
