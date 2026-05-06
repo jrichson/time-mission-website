@@ -1,6 +1,8 @@
 // ==========================================
 // BOOKING CONTROLLER
-// Explicit booking trigger contract.
+// Single canonical booking gateway (RFC-10).
+// All booking URL math, analytics tracking, panel mount, and the ?book=1
+// auto-redirect live here on window.TMBooking.
 // ==========================================
 (function () {
     'use strict';
@@ -81,6 +83,11 @@
         }
 
         return resolveOpenCheckoutUrl(loc);
+    }
+
+    /** RFC-10: canonical resolver alias. Thin wrapper over getDestination. */
+    function resolve(opts) {
+        return getDestination(opts);
     }
 
     function navigate(intent) {
@@ -179,6 +186,156 @@
         };
     }
 
+    // -----------------------------------------------------------------
+    // RFC-10: Panel mount + open + auto-redirect (centralized in TMBooking)
+    // -----------------------------------------------------------------
+
+    var mountedPanel = null;
+
+    /**
+     * Programmatic ticket-panel open. Looks for a registered panel mount; if
+     * none, dispatches a CustomEvent('tm:booking:open') so panel impls can
+     * listen and open without TMBooking importing UI code.
+     */
+    function open(opts) {
+        var detail = opts || {};
+        if (mountedPanel && typeof mountedPanel.openPanel === 'function') {
+            mountedPanel.openPanel(detail);
+            return;
+        }
+        document.dispatchEvent(new CustomEvent('tm:booking:open', { detail: detail }));
+    }
+
+    /**
+     * Wire a panel DOM (selectEl, ctaBtn, etc.) to TMBooking handlers.
+     * panelEl optional — auto-discovers via #ticketPanel/#ticketLocation/#ticketBookBtn
+     * if absent. Returns a small handle for callers (mainly { syncCtaHref }).
+     */
+    function mount(panelEl, opts) {
+        var options = opts || {};
+        var panel       = panelEl                || document.getElementById('ticketPanel');
+        var overlay     = options.overlayEl      || document.getElementById('ticketOverlay');
+        var closeBtn    = options.closeEl        || document.getElementById('ticketClose');
+        var locSelect   = options.selectEl       || document.getElementById('ticketLocation');
+        var ctaBtn      = options.ctaEl          || document.getElementById('ticketBookBtn');
+        var openPanel   = typeof options.openPanel === 'function' ? options.openPanel : null;
+        var closePanel  = typeof options.closePanel === 'function' ? options.closePanel : null;
+        var pageLocationSlug = normalizeLocation(options.pageLocationSlug || (document.body && document.body.dataset.location) || '');
+
+        mountedPanel = { panelEl: panel, openPanel: openPanel, closePanel: closePanel };
+
+        // Mark CTA button as a booking trigger so attach() owns its click.
+        if (ctaBtn) {
+            ctaBtn.setAttribute('data-tm-booking-trigger', '');
+            ctaBtn.removeAttribute('target');
+        }
+
+        // Keep the CTA button's href in sync with the dropdown selection.
+        function syncCtaHref() {
+            if (!ctaBtn || !locSelect) return;
+            var url = getDestination({
+                kind: 'tickets',
+                locationId: locSelect.value,
+                pageLocationSlug: pageLocationSlug,
+                preferLocationPageFlow: !pageLocationSlug,
+            });
+            // Coming-soon location-page flow: append ?book=1 if the resolved url is just /slug
+            if (!pageLocationSlug && url && /^\//.test(url) && url.indexOf('?') === -1) {
+                var loc = getLocation(locSelect.value);
+                if (loc && loc.status === 'coming-soon') url += '?book=1';
+            }
+            ctaBtn.href = url || '#';
+        }
+
+        if (locSelect) {
+            locSelect.addEventListener('change', function () {
+                syncCtaHref();
+                tmTrack('location_select', {
+                    location_slug: locSelect.value,
+                    cta_id: 'ticket_panel_dropdown',
+                });
+            });
+        }
+
+        // Defer the initial sync until TM data is hydrated.
+        var ctx = (window.LocationContext || (window.TM && { ready: window.TM.ready })) || null;
+        if (ctx && ctx.ready && typeof ctx.ready.then === 'function') {
+            ctx.ready.then(syncCtaHref);
+        } else {
+            syncCtaHref();
+        }
+
+        // attach() binds [data-tm-booking-trigger] click delegation, so the CTA
+        // button now flows through navigate() automatically. Don't add a second handler.
+        attach(document, {
+            selector: '[data-tm-booking-trigger]',
+            pageLocationSlug: pageLocationSlug,
+            openPanel: openPanel,
+        });
+
+        return { syncCtaHref: syncCtaHref };
+    }
+
+    /**
+     * RFC-10 fix for BOOK-04 race: ?book=1 auto-redirect on a location page
+     * deterministically waits for window.TM.ready before navigating. The
+     * previous implementation in ticket-panel.js had a synchronous else-branch
+     * fallthrough that could fire before TM hydration completed.
+     */
+    function scheduleAutoRedirect() {
+        var pageLocationSlug = normalizeLocation((document.body && document.body.dataset.location) || '');
+        if (!pageLocationSlug) return;
+        if (window.location.search.indexOf('book=1') === -1) return;
+
+        function doRedirect() {
+            var href = getDestination({
+                kind: 'tickets',
+                locationId: pageLocationSlug,
+                pageLocationSlug: pageLocationSlug,
+                preferLocationPageFlow: false,
+            });
+            if (!href) return;
+            navigate({
+                source: 'book_param_auto',
+                ctaId: 'book_param_auto',
+                href: href,
+                locationId: pageLocationSlug,
+                cleanBookParam: true,
+                deferUntilLoad: true,
+            });
+        }
+
+        // Always wait for TM.ready. Never fall through synchronously even if
+        // window.TM is not yet defined when this script runs. Poll briefly
+        // (≤1s) for TM.ready, then resolve. Closes the BOOK-04 race where the
+        // else branch fired before location data hydrated.
+        function awaitTMReady(deadline) {
+            if (window.TM && window.TM.ready && typeof window.TM.ready.then === 'function') {
+                window.TM.ready.then(doRedirect);
+                return;
+            }
+            if (Date.now() > deadline) {
+                // Last resort after 1s: TM script never loaded. Better to navigate
+                // to /slug than leave the user stranded on /slug?book=1 forever.
+                doRedirect();
+                return;
+            }
+            setTimeout(function () { awaitTMReady(deadline); }, 25);
+        }
+        awaitTMReady(Date.now() + 1000);
+    }
+
+    // Auto-boot on script load (defer is set on the <script>, so DOM is ready).
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', scheduleAutoRedirect);
+    } else {
+        scheduleAutoRedirect();
+    }
+
+    // -----------------------------------------------------------------
+    // Public surface
+    // -----------------------------------------------------------------
+
     window.BookingController = {
         attach: attach,
         isDirectBookingUrl: isDirectBookingUrl
@@ -188,6 +345,9 @@
         getDestination: getDestination,
         navigate: navigate,
         isDirectBookingUrl: isDirectBookingUrl,
+        open: open,
+        resolve: resolve,
+        mount: mount,
     };
 
     /** Supported extension surface for new features (see docs/tm-public-api.md). */
