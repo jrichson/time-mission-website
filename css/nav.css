@@ -612,7 +612,7 @@
     margin-top: 1.5rem;
 }
 
-.location-dropdown a.location-info-book {
+.location-dropdown .location-info-page {
     display: inline-block;
     padding: 0.7rem 2rem;
     background: var(--gradient-primary);
@@ -628,14 +628,16 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.location-dropdown a.location-info-book:hover {
+.location-dropdown .location-info-page:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
     background: var(--gradient-primary);
     color: var(--white);
+    text-decoration: none;
+    opacity: 1;
 }
 
-.location-dropdown a.location-info-contact {
+.location-dropdown a.location-info-book {
     display: inline-block;
     padding: 0.7rem 2rem;
     background: transparent;
@@ -651,25 +653,32 @@
     transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
 }
 
-.location-dropdown a.location-info-contact:hover {
+.location-dropdown a.location-info-book:hover {
     transform: translateY(-2px);
     border-color: var(--orange);
     color: var(--orange);
     background: rgba(255, 107, 44, 0.08);
 }
 
-.location-dropdown .location-info-page {
+.location-dropdown a.location-info-contact {
     display: inline-flex;
-    margin-top: 0.85rem;
+    padding: 0.4rem 0.5rem;
+    background: transparent;
+    color: var(--white-soft, #ccc);
+    text-decoration: none;
     font-family: var(--body);
     font-size: 0.82rem;
     font-weight: 500;
-    color: var(--cyan, #00e5ff);
-    text-decoration: none;
+    letter-spacing: 0;
+    text-transform: none;
+    border-radius: 4px;
+    border: 0;
     transition: color 0.2s ease, opacity 0.2s ease;
 }
 
-.location-dropdown .location-info-page:hover {
+.location-dropdown a.location-info-contact:hover {
+    color: var(--orange);
+    background: transparent;
     text-decoration: underline;
     opacity: 0.95;
 }
@@ -966,6 +975,7 @@
     .location-btn:hover,
     .btn-tickets:hover,
     .mobile-menu-socials a:hover,
+    .location-dropdown .location-info-page:hover,
     .location-dropdown a.location-info-book:hover,
     .location-dropdown a.location-info-contact:hover,
     .location-overlay-social a:hover {

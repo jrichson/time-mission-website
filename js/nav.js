@@ -251,6 +251,8 @@
         if (pageTour && data.pageUrl) {
             pageTour.href = data.pageUrl;
             pageTour.hidden = !!data.comingSoon;
+            var visitLabel = data.shortName || data.name;
+            pageTour.textContent = visitLabel ? 'Visit ' + visitLabel : 'Visit venue';
             pageTour.setAttribute(
                 'aria-label',
                 data.name ? 'Open venue landing page — ' + data.name : 'Open venue landing page'
