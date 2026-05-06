@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Cutover-ready
-last_updated: "2026-05-05T18:30:00.000Z"
-last_activity: 2026-05-05 -- Phase 11 (small-mobile responsiveness ≤480 + POLISH-01 cookie banner placement) closed; 5 plans shipped covering 5 shared CSS files + 7 partial ≤480 tiers + cookie banner .cm--box rewrite + Playwright 375×667 smoke
+last_updated: "2026-05-06T02:30:00.000Z"
+last_activity: 2026-05-06 -- Quick task 260505-qod: migrated lincoln/mount-prospect/manassas/west-nyack to Astro three-fragment wrappers (16 new files in src/pages + src/partials; npm run check exits 0; legacy *.html untouched)
 progress:
   total_phases: 11
   completed_phases: 11
@@ -29,7 +29,7 @@ Phase: 11 (small-mobile-responsiveness-480px-tier-cookie-banner-placeme) — COM
 Plan: 5 of 5
 Plans: **52/52** (40 v1 roadmap + 7 Phase 10 + 5 Phase 11)
 Status: Cutover-ready (all 11 phases closed; verify chain green)
-Last activity: 2026-05-05 -- Phase 11 closed; npm run verify and verify:phase10 exit 0
+Last activity: 2026-05-06 -- Completed quick task 260505-qod: migrated lincoln/mount-prospect/manassas/west-nyack to Astro three-fragment wrappers (16 new files, npm run check exits 0)
 
 Progress: All 11 phases documented and shipped; v1 requirement coverage **43/43** (Phases 10 + 11 extend SEO/COMP/DATA/ANLY/VER/FND practices, no new requirement IDs).
 
@@ -115,6 +115,7 @@ Recent decisions affecting current work:
 |---|-------------|------|--------|-----------|
 | 260504-lsk | Fix P0-5/P0-8: rename Antwerp to "Time Mission Antwerp" + plumb `alternateName` through LocationRecord and LocalBusinessNode | 2026-05-04 | 3e53692 | [260504-lsk-fix-p0-5-p0-8-rename-antwerp-location-to](./quick/260504-lsk-fix-p0-5-p0-8-rename-antwerp-location-to/) |
 | 260504-mly | Fix P1-8: WordPress-era + Palisades legacy redirects in `_redirects` (12 paths to `/`, `/palisades` → `/west-nyack`) | 2026-05-04 | 7240619 | [260504-mly-fix-p1-8-add-missing-legacy-url-redirect](./quick/260504-mly-fix-p1-8-add-missing-legacy-url-redirect/) |
+| 260505-qod | Migrate 4 legacy location pages (lincoln, mount-prospect, manassas, west-nyack) to Astro three-fragment wrappers | 2026-05-05 | f3240ab | [260505-qod-migrate-4-legacy-location-pages-lincoln-](./quick/260505-qod-migrate-4-legacy-location-pages-lincoln-/) |
 
 ## Session continuity
 
