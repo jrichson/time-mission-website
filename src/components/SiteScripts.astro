@@ -7,29 +7,7 @@ const siteContract = getPublicSiteContract();
 <script is:inline define:vars={{ siteContract }}>
     window.__TM_SITE_CONTRACT__ = siteContract;
 </script>
-<script is:inline>
-    (function () {
-        var revealEls = document.querySelectorAll('.reveal');
-        if (!revealEls.length) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            revealEls.forEach(function (el) { el.classList.add('visible'); });
-        } else {
-            var observer = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) entry.target.classList.add('visible');
-                });
-            }, { threshold: 0.1 });
-            revealEls.forEach(function (el) { observer.observe(el); });
-        }
-    })();
-</script>
-<script is:inline>
-    document.querySelectorAll('.footer-location-toggle').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            btn.parentElement.classList.toggle('open');
-        });
-    });
-</script>
+<script defer is:inline src="/js/site-progressive.js?v=1"></script>
 <script defer is:inline src="/js/consent-bridge.js?v=1"></script>
 <script defer is:inline src="/js/analytics.js?v=1"></script>
 <script defer is:inline src="/js/contact-form-analytics.js?v=1"></script>
