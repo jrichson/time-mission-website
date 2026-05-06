@@ -8,8 +8,4 @@
             });
         });
 
-        // Footer locations dropdown toggle
-        document.querySelectorAll('.footer-location-toggle').forEach(btn => {
-            btn.addEventListener('click', () => btn.parentElement.classList.toggle('open'));
-        });
     

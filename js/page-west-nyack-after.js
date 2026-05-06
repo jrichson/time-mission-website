@@ -383,13 +383,6 @@
         });
 
         // ==========================================
-        // FOOTER LOCATION DROPDOWNS
-        // ==========================================
-        document.querySelectorAll('.footer-location-toggle').forEach(btn => {
-            btn.addEventListener('click', () => {
-                btn.parentElement.classList.toggle('open');
-            });
-        });
 
         // ==========================================
         // TESTIMONIALS AUTO-SCROLL

@@ -1,8 +1,3 @@
-    document.querySelectorAll('.footer-location-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-            btn.parentElement.classList.toggle('open');
-        });
-    });
 
     // Pre-select the Subject field from ?type= deep-links (group page CTAs)
     // and strip the query param so SEO crawlers see one canonical /contact URL

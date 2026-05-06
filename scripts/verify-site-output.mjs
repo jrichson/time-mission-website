@@ -37,6 +37,7 @@ function runNpm(script, forwarded = []) {
 const steps = [
   ['check', []],
   ['build:astro', []],
+  ['check:csp-hashes', []],
   ['check:routes', ['--', '--dist']],
   ['check:links', ['--', '--dist']],
   ['check:astro-dist', []],
