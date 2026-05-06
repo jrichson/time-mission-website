@@ -17,13 +17,6 @@ module.exports = [
     message: 'js/ticket-panel.js must not define a locationPages map; derive pages from location slugs',
   },
   {
-    id: 'no-roller-checkouts-map',
-    files: ['js/roller-checkout.js'],
-    type: 'forbidden_regex',
-    pattern: /rollerCheckouts\s*=/,
-    message: 'js/roller-checkout.js must not define rollerCheckouts; use location.rollerCheckoutUrl',
-  },
-  {
     id: 'ticket-panel-waits-tm-ready',
     files: ['js/ticket-panel.js'],
     type: 'required_substring',
@@ -34,8 +27,8 @@ module.exports = [
     id: 'ticket-panel-uses-tm-booking',
     files: ['js/ticket-panel.js'],
     type: 'required_substring',
-    needle: 'getTMBooking',
-    message: 'js/ticket-panel.js must use TMBooking gateway for booking decisions',
+    needle: 'window.TMBooking',
+    message: 'js/ticket-panel.js must reference window.TMBooking gateway for booking decisions',
   },
   {
     id: 'booking-controller-exposes-tm-booking',
@@ -80,27 +73,6 @@ module.exports = [
     pattern:
       /\.btn-tickets,\s*\.btn-book-now|btn-primary\[href\*="roller"\]|btn-primary\[href\*="tickets\.timemission"\]/,
     message: 'js/booking-controller.js must not use heuristic booking selectors; use [data-tm-booking-trigger]',
-  },
-  {
-    id: 'roller-no-iframe-cdn',
-    files: ['js/roller-checkout.js'],
-    type: 'forbidden_substring',
-    needle: 'checkout_iframe.js',
-    message: 'js/roller-checkout.js must not load Roller iframe CDN (BOOK-03)',
-  },
-  {
-    id: 'roller-no-checkout-symbol',
-    files: ['js/roller-checkout.js'],
-    type: 'forbidden_substring',
-    needle: 'RollerCheckout',
-    message: 'js/roller-checkout.js must not reference RollerCheckout (BOOK-03)',
-  },
-  {
-    id: 'roller-no-cdn-domain',
-    files: ['js/roller-checkout.js'],
-    type: 'forbidden_substring',
-    needle: 'cdn.rollerdigital.com',
-    message: 'js/roller-checkout.js must not reference cdn.rollerdigital.com (BOOK-03)',
   },
   {
     id: 'booking-controller-tm-facade',

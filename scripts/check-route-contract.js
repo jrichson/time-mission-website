@@ -53,7 +53,6 @@ const SCOPE_FILES = {
   shared: [
     'js/nav.js',
     'js/ticket-panel.js',
-    'js/roller-checkout.js',
     'js/locations.js',
     'tests/smoke/site.spec.js',
     'src/pages/index.astro',
