@@ -108,6 +108,7 @@
     const locationBtn = document.getElementById('locationBtn');
     const locationOverlay = document.getElementById('locationDropdown');
     const locationLinks = locationOverlay ? locationOverlay.querySelectorAll('a') : [];
+    const narrowPickerQuery = window.matchMedia('(max-width: 768px)');
 
     if (locationBtn && locationOverlay) {
         function openLocationOverlay() {
@@ -155,17 +156,34 @@
                 if (slug) showLocationInfo(slug);
             });
 
-            link.addEventListener('click', () => {
+            link.addEventListener('click', (e) => {
                 const cityName = link.dataset.city;
                 const slug = getLocationSlug(link);
+                const narrowPicker = narrowPickerQuery.matches;
+                const isComingSoonLink = link.classList.contains('location-coming-soon');
+
                 if (cityName) {
                     const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
                     syncAllLocations(cityName, slug, overlayTrack);
                     showLocationInfo(slug || cityName);
                 }
 
-                // Close overlay and let the browser follow the link's href to the venue page.
-                // Both desktop and mobile: single tap navigates to the location landing page after sync.
+                // Mobile narrow-picker (P0-7a): keep overlay open, reveal #locationInfo, scroll it into view.
+                // Coming-soon links bypass this and navigate normally so users still see the coming-soon page.
+                if (narrowPicker && slug && !isComingSoonLink) {
+                    e.preventDefault();
+                    // Stop bubble to overlay-background click handler which would call closeLocationOverlay()
+                    e.stopPropagation();
+                    const panel = document.getElementById('locationInfo');
+                    if (panel) {
+                        requestAnimationFrame(function () {
+                            panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        });
+                    }
+                    return;
+                }
+
+                // Desktop (or coming-soon on any width): close overlay and let the browser follow href.
                 closeLocationOverlay();
             });
         });
