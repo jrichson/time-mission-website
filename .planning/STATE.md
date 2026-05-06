@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: Cutover-ready
 last_updated: "2026-05-06T02:30:00.000Z"
-last_activity: 2026-05-06 -- Quick task 260505-qod: migrated lincoln/mount-prospect/manassas/west-nyack to Astro three-fragment wrappers (16 new files in src/pages + src/partials; npm run check exits 0; legacy *.html untouched)
+last_activity: 2026-05-06 -- Quick task 260505-r78: added per-page last-updated stamp + meta to all 25 Astro pages via git mtime (src/lib/last-updated.ts + SiteLayout + SiteHead; npm run check exits 0)
 progress:
   total_phases: 11
   completed_phases: 11
@@ -116,6 +116,7 @@ Recent decisions affecting current work:
 | 260504-lsk | Fix P0-5/P0-8: rename Antwerp to "Time Mission Antwerp" + plumb `alternateName` through LocationRecord and LocalBusinessNode | 2026-05-04 | 3e53692 | [260504-lsk-fix-p0-5-p0-8-rename-antwerp-location-to](./quick/260504-lsk-fix-p0-5-p0-8-rename-antwerp-location-to/) |
 | 260504-mly | Fix P1-8: WordPress-era + Palisades legacy redirects in `_redirects` (12 paths to `/`, `/palisades` → `/west-nyack`) | 2026-05-04 | 7240619 | [260504-mly-fix-p1-8-add-missing-legacy-url-redirect](./quick/260504-mly-fix-p1-8-add-missing-legacy-url-redirect/) |
 | 260505-qod | Migrate 4 legacy location pages (lincoln, mount-prospect, manassas, west-nyack) to Astro three-fragment wrappers | 2026-05-05 | f3240ab | [260505-qod-migrate-4-legacy-location-pages-lincoln-](./quick/260505-qod-migrate-4-legacy-location-pages-lincoln-/) |
+| 260505-r78 | Add per-page "Last updated: Month YYYY" stamp + `<meta name="last-modified">` to all 25 Astro pages via git mtime (override > git > build-date chain; process.cwd() for stable repo-root in Vite prerender) | 2026-05-06 | 68f25f1 | [260505-r78-add-per-page-last-updated-visible-date-f](./quick/260505-r78-add-per-page-last-updated-visible-date-f/) |
 
 ## Session continuity
 
