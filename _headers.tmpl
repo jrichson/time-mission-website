@@ -1,0 +1,11 @@
+# _headers.tmpl — TEMPLATE FILE. Do not edit _headers directly; edit this file.
+# Rendered to both _headers (repo root, for inspectability) and dist/_headers (Cloudflare deploy)
+# by scripts/inject-csp-hashes.mjs as the final step of npm run build:astro.
+# {{SCRIPT_HASHES}} and {{STYLE_HASHES}} are replaced with space-separated sha256-... tokens.
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' {{SCRIPT_HASHES}} https://cdn.rollerdigital.com https://www.googletagmanager.com; script-src-attr 'none'; style-src 'self' {{STYLE_HASHES}} https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' https:; frame-src https://www.google.com https://maps.google.com https://cdn.rollerdigital.com https://tickets.timemission.com https://ecom.roller.app https://www.googletagmanager.com; connect-src 'self' https://tickets.timemission.com https://ecom.roller.app https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://sgtm.timemission.com; object-src 'none'; form-action 'self'; base-uri 'self'; frame-ancestors 'self'

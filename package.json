@@ -43,7 +43,7 @@
     "test": "npm run test:smoke",
     "verify": "node scripts/verify-site-output.mjs",
     "verify:phase8": "npm run verify",
-    "build:astro": "node scripts/sync-static-to-public.mjs && astro build && node scripts/minify-dist-assets.mjs",
+    "build:astro": "node scripts/sync-static-to-public.mjs && astro build && node scripts/minify-dist-assets.mjs && node scripts/inject-csp-hashes.mjs",
     "deploy:pages": "npm run build:astro && wrangler pages deploy dist",
     "preview:astro": "astro preview",
     "preview:test": "astro preview --host 127.0.0.1 --port 4173",
