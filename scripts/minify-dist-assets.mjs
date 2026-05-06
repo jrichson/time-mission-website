@@ -109,6 +109,19 @@ async function main() {
     console.log(
         `Minified ${minified} files (${(totalBefore / 1024).toFixed(1)}KB → ${(totalAfter / 1024).toFixed(1)}KB, saved ${(saved / 1024).toFixed(1)}KB / ${pct}%); skipped ${skipped} (no gain); errors ${errors}.`,
     );
+
+    // Mirror the canonical Astro-generated sitemap back to the repo root so
+    // legacy validators (scripts/check-sitemap.js, check-route-contract.js)
+    // that read root/sitemap.xml stay in sync without separate maintenance.
+    const distSitemap = path.resolve(distDir, 'sitemap.xml');
+    const rootSitemap = path.resolve(distDir, '..', 'sitemap.xml');
+    try {
+        await fs.copyFile(distSitemap, rootSitemap);
+        console.log(`Mirrored ${path.basename(distSitemap)} → ${path.relative(path.resolve(distDir, '..'), rootSitemap)}.`);
+    } catch (err) {
+        console.warn(`Could not mirror sitemap.xml: ${err.message}`);
+    }
+
     if (errors > 0) process.exit(1);
 }
 
