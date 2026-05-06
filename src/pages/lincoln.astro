@@ -36,6 +36,24 @@ const lincolnMain = applyTmMediaBase(lincolnMainRaw);
     </Fragment>
     <div set:html={lincolnMain} />
     <Fragment slot="after-site-scripts">
-        <script defer src="/js/page-lincoln-after.js?v=1"></script>
+        <script defer is:inline src="/js/page-widgets.js?v=1"></script>
+        <script is:inline>
+            window.TMPage.initCity({
+                city: 'Lincoln',
+                taglines: [
+                    'Social Gaming Adventure',
+                    'Family Game Night on Steroids',
+                    'Birthday Parties, Leveled Up',
+                    'Where Couch Potatoes Become Heroes',
+                    'Touch Grass... Indoors',
+                    'Corporate Team Building, But Fun',
+                    'Making Memories Together',
+                    'Built For Every Age',
+                    'Your New Favorite Weekend',
+                    'No Screens. Just Fun.',
+                    'Team Up. Beat The Clock.'
+                ]
+            });
+        </script>
     </Fragment>
 </SiteLayout>

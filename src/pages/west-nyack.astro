@@ -36,6 +36,24 @@ const westNyackMain = applyTmMediaBase(westNyackMainRaw);
     </Fragment>
     <div set:html={westNyackMain} />
     <Fragment slot="after-site-scripts">
-        <script defer src="/js/page-west-nyack-after.js?v=1"></script>
+        <script defer is:inline src="/js/page-widgets.js?v=1"></script>
+        <script is:inline>
+            window.TMPage.initCity({
+                city: 'West Nyack',
+                taglines: [
+                    'Social Gaming Adventure',
+                    'Family Game Night on Steroids',
+                    'Birthday Parties, Leveled Up',
+                    'Where Couch Potatoes Become Heroes',
+                    'Touch Grass... Indoors',
+                    'Corporate Team Building, But Fun',
+                    'Making Memories Together',
+                    'Built For Every Age',
+                    'Your New Favorite Weekend',
+                    'No Screens. Just Fun.',
+                    'Team Up. Beat The Clock.'
+                ]
+            });
+        </script>
     </Fragment>
 </SiteLayout>
