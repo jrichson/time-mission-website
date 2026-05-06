@@ -29,7 +29,7 @@ Phase: 11 (small-mobile-responsiveness-480px-tier-cookie-banner-placeme) — COM
 Plan: 5 of 5
 Plans: **52/52** (40 v1 roadmap + 7 Phase 10 + 5 Phase 11)
 Status: Cutover-ready (all 11 phases closed; verify chain green)
-Last activity: 2026-05-06 -- Completed quick task 260505-qod: migrated lincoln/mount-prospect/manassas/west-nyack to Astro three-fragment wrappers (16 new files, npm run check exits 0)
+Last activity: 2026-05-06 -- Completed quick task 260505-r78: added per-page Last updated stamp + meta to all 25 Astro pages via git mtime (src/lib/last-updated.ts + SiteLayout + SiteHead; npm run check exits 0)
 
 Progress: All 11 phases documented and shipped; v1 requirement coverage **43/43** (Phases 10 + 11 extend SEO/COMP/DATA/ANLY/VER/FND practices, no new requirement IDs).
 
