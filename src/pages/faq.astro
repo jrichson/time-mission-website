@@ -4,8 +4,6 @@ import { definePage } from '../lib/define-page';
 import Faq from '../components/Faq.astro';
 import faqs from '../data/site/faqs.json';
 import faqFooter from '../partials/faq-footer.frag.txt?raw';
-import faqCss from '../partials/faq-inline.raw.css.txt?raw';
-import faqAfter from '../partials/faq-after.frag.txt?raw';
 import { buildFaqGraph, serializeGraph } from '../lib/schema/graph';
 
 const ld = serializeGraph(buildFaqGraph());
@@ -20,9 +18,7 @@ const page = definePage({ canonicalPath: '/faq' });
         <link rel="stylesheet" href="/css/newsletter.css?v=2" />
         <link rel="stylesheet" href="/css/faq.css?v=3" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />
-    </Fragment>
-    <Fragment slot="page-style">
-        <style is:global set:html={faqCss}></style>
+        <link rel="stylesheet" href="/css/page-faq.css?v=1" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
@@ -119,5 +115,7 @@ const page = definePage({ canonicalPath: '/faq' });
         </section>
     </main>
 
-    <Fragment slot="after-site-scripts" set:html={faqAfter} />
+    <Fragment slot="after-site-scripts">
+        <script defer src="/js/page-faq-after.js?v=1"></script>
+    </Fragment>
 </SiteLayout>

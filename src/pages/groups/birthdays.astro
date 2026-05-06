@@ -1,9 +1,7 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { definePage } from '../../lib/define-page';
-import birthdaysCss from '../../partials/birthdays-inline.raw.css.txt?raw';
 import birthdaysMain from '../../partials/birthdays-main.frag.txt?raw';
-import birthdaysAfter from '../../partials/birthdays-after.frag.txt?raw';
 import faqs from '../../data/site/faqs.json';
 import { buildGroupEventGraph, serializeGraph } from '../../lib/schema/graph';
 
@@ -35,13 +33,13 @@ const page = definePage({ canonicalPath: '/groups/birthdays' });
         <link rel="stylesheet" href="/css/newsletter.css?v=2" />
         <link rel="stylesheet" href="/css/faq.css?v=3" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />
-    </Fragment>
-    <Fragment slot="page-style">
-        <style is:global set:html={birthdaysCss}></style>
+        <link rel="stylesheet" href="/css/page-group-event.css?v=1" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={birthdaysMain} />
-    <Fragment slot="after-site-scripts" set:html={birthdaysAfter} />
+    <Fragment slot="after-site-scripts">
+        <script defer src="/js/page-group-event-after.js?v=1"></script>
+    </Fragment>
 </SiteLayout>

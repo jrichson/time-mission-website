@@ -2,10 +2,8 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
-import houstonCss from '../partials/houston-inline.raw.css.txt?raw';
 import houstonMainRaw from '../partials/houston-main.frag.txt?raw';
 import { applyTmMediaBase } from '../lib/tm-media';
-import houstonAfter from '../partials/houston-after.frag.txt?raw';
 import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
 
 const houston = allLocations.find((l) => l.slug === 'houston');
@@ -31,13 +29,13 @@ const houstonMain = applyTmMediaBase(houstonMainRaw);
         <link rel="stylesheet" href="/css/footer.css?v=3" />
         <link rel="stylesheet" href="/css/newsletter.css?v=2" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />
-    </Fragment>
-    <Fragment slot="page-style">
-        <style is:global set:html={houstonCss}></style>
+        <link rel="stylesheet" href="/css/page-houston.css?v=1" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={houstonMain} />
-    <Fragment slot="after-site-scripts" set:html={houstonAfter} />
+    <Fragment slot="after-site-scripts">
+        <script defer src="/js/page-houston-after.js?v=1"></script>
+    </Fragment>
 </SiteLayout>

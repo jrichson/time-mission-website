@@ -1,10 +1,8 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
-import aboutCss from '../partials/about-inline.raw.css.txt?raw';
 import aboutMain from '../partials/about-main.frag.txt?raw';
 import aboutFooter from '../partials/about-footer.frag.txt?raw';
-import aboutTail from '../partials/about-inline-scripts.frag.txt?raw';
 import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 
 const ld = serializeGraph(buildHomeGraph());
@@ -18,14 +16,14 @@ const page = definePage({ canonicalPath: '/about' });
         <link rel="stylesheet" href="/css/footer.css?v=3" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />
         <link rel="stylesheet" href="/css/newsletter.css?v=2" />
-    </Fragment>
-    <Fragment slot="page-style">
-        <style is:global set:html={aboutCss}></style>
+        <link rel="stylesheet" href="/css/page-about.css?v=1" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={aboutMain} />
     <Fragment slot="footer" set:html={aboutFooter} />
-    <Fragment slot="after-site-scripts" set:html={aboutTail} />
+    <Fragment slot="after-site-scripts">
+        <script defer src="/js/page-about-after.js?v=1"></script>
+    </Fragment>
 </SiteLayout>

@@ -2,9 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
-import antwerpCss from '../partials/antwerp-inline.raw.css.txt?raw';
 import antwerpMainRaw from '../partials/antwerp-main.frag.txt?raw';
-import antwerpAfter from '../partials/antwerp-after.frag.txt?raw';
 import { applyTmMediaBase } from '../lib/tm-media';
 import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
 
@@ -32,13 +30,13 @@ const antwerpMain = applyTmMediaBase(antwerpMainRaw);
         <link rel="stylesheet" href="/css/footer.css?v=3" />
         <link rel="stylesheet" href="/css/newsletter.css?v=2" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />
-    </Fragment>
-    <Fragment slot="page-style">
-        <style is:global set:html={antwerpCss}></style>
+        <link rel="stylesheet" href="/css/page-antwerp.css?v=1" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={antwerpMain} />
-    <Fragment slot="after-site-scripts" set:html={antwerpAfter} />
+    <Fragment slot="after-site-scripts">
+        <script defer src="/js/page-antwerp-after.js?v=1"></script>
+    </Fragment>
 </SiteLayout>

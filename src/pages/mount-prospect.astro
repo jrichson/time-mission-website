@@ -2,10 +2,8 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
-import mountProspectCss from '../partials/mount-prospect-inline.raw.css.txt?raw';
 import mountProspectMainRaw from '../partials/mount-prospect-main.frag.txt?raw';
 import { applyTmMediaBase } from '../lib/tm-media';
-import mountProspectAfter from '../partials/mount-prospect-after.frag.txt?raw';
 import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
 
 const mountProspect = allLocations.find((l) => l.slug === 'mount-prospect');
@@ -31,13 +29,13 @@ const mountProspectMain = applyTmMediaBase(mountProspectMainRaw);
         <link rel="stylesheet" href="/css/footer.css?v=3" />
         <link rel="stylesheet" href="/css/newsletter.css?v=2" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />
-    </Fragment>
-    <Fragment slot="page-style">
-        <style is:global set:html={mountProspectCss}></style>
+        <link rel="stylesheet" href="/css/page-mount-prospect.css?v=1" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={mountProspectMain} />
-    <Fragment slot="after-site-scripts" set:html={mountProspectAfter} />
+    <Fragment slot="after-site-scripts">
+        <script defer src="/js/page-mount-prospect-after.js?v=1"></script>
+    </Fragment>
 </SiteLayout>

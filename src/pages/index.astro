@@ -1,11 +1,9 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
-import indexCss from '../partials/index-inline.raw.css.txt?raw';
 import indexMainRaw from '../partials/index-main.frag.txt?raw';
 import { applyTmMediaBase } from '../lib/tm-media';
 import indexPrenav from '../partials/index-prenav.frag.txt?raw';
-import indexAfter from '../partials/index-after.frag.txt?raw';
 import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 
 const ld = serializeGraph(buildHomeGraph());
@@ -23,14 +21,14 @@ const indexMain = applyTmMediaBase(indexMainRaw);
         <link rel="preload" as="style" href="/css/ticket-panel.css" onload="this.onload=null;this.rel='stylesheet'" />
         <noscript><link rel="stylesheet" href="/css/footer.css?v=3" /></noscript>
         <noscript><link rel="stylesheet" href="/css/ticket-panel.css" /></noscript>
-    </Fragment>
-    <Fragment slot="page-style">
-        <style is:global set:html={indexCss}></style>
+        <link rel="stylesheet" href="/css/page-index.css?v=1" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <Fragment slot="pre-nav" set:html={indexPrenav} />
     <div class="home-main" set:html={indexMain} />
-    <Fragment slot="after-site-scripts" set:html={indexAfter} />
+    <Fragment slot="after-site-scripts">
+        <script defer src="/js/page-index-after.js?v=1"></script>
+    </Fragment>
 </SiteLayout>
