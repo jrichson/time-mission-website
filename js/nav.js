@@ -35,15 +35,16 @@
     const mobileMenu = document.getElementById('mobileMenu');
     const navEl = document.getElementById('nav');
 
-    // Logo — if a location is saved, route home to that location's page
-    // (reads localStorage synchronously so it works before locations.json finishes loading)
+    // Logo — if a location is saved, route home to that location's page.
+    // Reads canonical slug via TM.getSavedSlug() so the legacy key is migrated
+    // once and we never duplicate the storage-key knowledge here (RFC #11).
     document.querySelectorAll('.nav-logo, .location-dropdown-logo').forEach(logo => {
         logo.addEventListener('click', function (e) {
             const context = getLocationContext();
             const current = context && typeof context.getCurrent === 'function' ? context.getCurrent() : null;
             let slug = (current && (current.slug || current.id)) || '';
-            if (!slug) {
-                try { slug = localStorage.getItem('tm_location') || ''; } catch (err) {}
+            if (!slug && window.TM && typeof window.TM.getSavedSlug === 'function') {
+                slug = window.TM.getSavedSlug();
             }
             if (!slug) return; // no location — let the default index.html link work
             e.preventDefault();
@@ -76,15 +77,14 @@
         });
     }
 
-    // Helper to sync all location displays + localStorage
+    // Helper to sync all location displays. RFC #11: nav no longer writes
+    // localStorage directly — TM.select is the sole writer of the canonical
+    // 'tm_location' key. The legacy 'timeMissionLocation' key is migrate-only
+    // (TM.getSavedSlug / TM.restore heal it once and remove it).
     function syncAllLocations(city, slug, selectOpts) {
         const normalized = normalizeLocation(slug || city);
         const mainLocText = document.getElementById('locationText');
         if (mainLocText) mainLocText.textContent = city;
-        try {
-            localStorage.setItem('tm_location', normalized);
-            localStorage.setItem('timeMissionLocation', city);
-        } catch (err) {}
         const context = getLocationContext();
         if (context && typeof context.select === 'function') {
             context.select(normalized, selectOpts);
@@ -273,6 +273,21 @@
             const cur = typeof navLoadContext.getCurrent === 'function' ? navLoadContext.getCurrent() : null;
             if (cur && (cur.id || cur.slug)) {
                 showLocationInfo(cur.id || cur.slug);
+            }
+        });
+    }
+
+    // RFC #11: Subscribe to TM changes to keep nav dropdown in sync.
+    // Additive to the existing tm:location-changed CustomEvent path, not a
+    // replacement — both deliver after TM.select runs.
+    if (window.TM && typeof window.TM.onChange === 'function') {
+        window.TM.onChange(function (loc) {
+            const mainLocText = document.getElementById('locationText');
+            if (mainLocText && loc && (loc.shortName || loc.name)) {
+                mainLocText.textContent = loc.shortName || loc.name;
+            }
+            if (loc && (loc.id || loc.slug)) {
+                showLocationInfo(loc.id || loc.slug);
             }
         });
     }

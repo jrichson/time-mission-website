@@ -4288,11 +4288,9 @@
     (function() {
         var id = 'mount-prospect';
         var name = 'Mount Prospect';
-        // Set both localStorage keys (tm_location for locations.js, timeMissionLocation for nav.js)
-        try {
-            localStorage.setItem('tm_location', id);
-            localStorage.setItem('timeMissionLocation', name);
-        } catch(e) {}
+        // RFC #11: persistence is now handled exclusively by js/locations.js
+        // (TM.select sole-writer of tm_location). The TM.ready.then(TM.select)
+        // call below is enough; no direct localStorage writes from page scripts.
         document.addEventListener('DOMContentLoaded', function() {
             // Set nav text
             var el = document.getElementById('locationText');
