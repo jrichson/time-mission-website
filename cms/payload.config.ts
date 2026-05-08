@@ -98,6 +98,12 @@ export default buildConfig({
     importMap: {
       baseDir: dirname,
     },
+    components: {
+      graphics: {
+        Icon: '/components/TimeMissionIcon.tsx',
+        Logo: '/components/TimeMissionLogo.tsx',
+      },
+    },
     meta: {
       defaultOGImageType: 'off',
       titleSuffix: ' - Time Mission CMS',

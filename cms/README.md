@@ -4,13 +4,13 @@ PostgreSQL-backed Payload 3 admin for **landing pages** consumed by the Astro si
 
 ## Local
 
-1. Copy `.env.example` to `.env` and set `DATABASE_URL` (Postgres), `PAYLOAD_SECRET` (32+ chars), and `PAYLOAD_SERVER_URL` (for local dev this can be `http://localhost:3000`).
+1. Copy `.env.example` to `.env` and set `DATABASE_URL` (Postgres), `PAYLOAD_SECRET` (32+ chars), `PAYLOAD_SERVER_URL` (for local dev this can be `http://localhost:3000`), and `CMS_OWNER_EMAIL` (the email address allowed to manage CMS users).
 2. From this directory:
    ```bash
    npm install
    npm run dev
    ```
-3. Open [http://localhost:3000/admin](http://localhost:3000/admin) and create the first admin user.
+3. Open [http://localhost:3000/admin](http://localhost:3000/admin) and create the first admin user. Use the same email as `CMS_OWNER_EMAIL` if you want that account to add or manage users.
 
 ## Content model
 
@@ -21,6 +21,7 @@ PostgreSQL-backed Payload 3 admin for **landing pages** consumed by the Astro si
 Set these in Railway:
 
 - `PAYLOAD_SERVER_URL` — public CMS origin only, no path, e.g. `https://your-app.up.railway.app`. Production requires HTTPS.
+- `CMS_OWNER_EMAIL` — exact email address for the account allowed to create, update, delete, unlock, and assign roles for CMS users. If this is unset, user management fails closed while existing admins/editors can still use the admin panel for allowed content operations.
 - `PAYLOAD_ALLOWED_ORIGINS` — optional comma-separated browser origins allowed to call the CMS API with cookies. `PAYLOAD_SERVER_URL` is always included.
 - `PAYLOAD_ENABLE_GRAPHQL` — optional. Defaults to `false`; the public site uses REST.
 - `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` — same value you use for “Deploy hook” in Cloudflare Pages.

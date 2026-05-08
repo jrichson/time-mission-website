@@ -1,14 +1,44 @@
 const USER_COLLECTION = 'users';
 const isProduction = process.env.NODE_ENV === 'production';
 
+function normalizeEmail(email) {
+  return typeof email === 'string' ? email.trim().toLowerCase() : '';
+}
+
+function ownerEmail() {
+  return normalizeEmail(process.env.CMS_OWNER_EMAIL);
+}
+
 function userRole(user) {
   return user?.role;
 }
 
-function isAdmin({ req: { user } }) {
+function isCMSUser(user) {
   if (!user || user.collection !== USER_COLLECTION) return false;
+  return true;
+}
 
-  return userRole(user) === 'admin' || userRole(user) == null;
+function canAccessAdmin({ req: { user } }) {
+  if (!isCMSUser(user)) return false;
+
+  const role = userRole(user);
+  return role === 'admin' || role === 'editor' || role == null;
+}
+
+function isAdmin({ req: { user } }) {
+  if (!isCMSUser(user)) return false;
+
+  const role = userRole(user);
+  return role === 'admin' || role == null;
+}
+
+function isOwner({ req: { user } }) {
+  if (!isAdmin({ req: { user } })) return false;
+
+  const configuredOwnerEmail = ownerEmail();
+  if (!configuredOwnerEmail) return false;
+
+  return normalizeEmail(user.email) === configuredOwnerEmail;
 }
 
 export const Users = {
@@ -17,12 +47,12 @@ export const Users = {
     useAsTitle: 'email',
   },
   access: {
-    admin: isAdmin,
-    create: isAdmin,
-    read: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
-    unlock: isAdmin,
+    admin: canAccessAdmin,
+    create: isOwner,
+    read: isOwner,
+    update: isOwner,
+    delete: isOwner,
+    unlock: isOwner,
   },
   auth: {
     cookies: {
@@ -38,18 +68,18 @@ export const Users = {
       name: 'role',
       type: 'select',
       required: true,
-      defaultValue: 'admin',
+      defaultValue: 'editor',
       options: [
         { label: 'Admin', value: 'admin' },
         { label: 'Editor', value: 'editor' },
       ],
       access: {
-        read: isAdmin,
-        update: isAdmin,
+        read: isOwner,
+        update: isOwner,
       },
       admin: {
         position: 'sidebar',
-        description: 'Admins manage users; editors manage landing content only.',
+        description: 'Only the CMS owner can assign roles. Editors manage landing content only.',
       },
     },
   ],
