@@ -42,6 +42,31 @@
         return booking;
     }
 
+    function resolveLocationDestination(loc, options) {
+        var opts = options || {};
+        if (!loc) return '';
+        var kind = String(opts.kind || 'tickets').toLowerCase();
+
+        if (kind === 'gift-cards' || kind === 'giftcards') {
+            return loc.giftCardUrl || '';
+        }
+
+        if (kind === 'groups') {
+            return loc.groupsUrl || '';
+        }
+
+        var slug = loc.slug || loc.id || normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
+        if (loc.status === 'coming-soon') {
+            return slug ? '/' + slug : '';
+        }
+
+        if (opts.preferLocationPageFlow && slug) {
+            return '/' + slug + '?book=1';
+        }
+
+        return resolveOpenCheckoutUrl(loc);
+    }
+
     function tmTrack(key, payload) {
         if (window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
             window.TMAnalytics.track(key, payload);
@@ -65,24 +90,12 @@
         var loc = getLocation(locationId) || getLocation(pageLocationSlug) || getLocation(null);
         if (!loc) return '';
 
-        if (kind === 'gift-cards' || kind === 'giftcards') {
-            return loc.giftCardUrl || '';
-        }
-
-        if (kind === 'groups') {
-            return loc.groupsUrl || '';
-        }
-
-        var slug = loc.slug || loc.id || locationId || pageLocationSlug;
-        if (loc.status === 'coming-soon') {
-            return slug ? '/' + slug : '';
-        }
-
-        if (preferLocationPageFlow && slug) {
-            return '/' + slug + '?book=1';
-        }
-
-        return resolveOpenCheckoutUrl(loc);
+        return resolveLocationDestination(loc, {
+            kind: kind,
+            locationId: locationId,
+            pageLocationSlug: pageLocationSlug,
+            preferLocationPageFlow: preferLocationPageFlow,
+        });
     }
 
     /** RFC-10: canonical resolver alias. Thin wrapper over getDestination. */
@@ -341,6 +354,7 @@
     window.TMBooking = {
         attach: attach,
         getDestination: getDestination,
+        resolveLocationDestination: resolveLocationDestination,
         navigate: navigate,
         isDirectBookingUrl: isDirectBookingUrl,
         open: open,

@@ -4,11 +4,14 @@
  * Keep this ordered list authoritative when adding dist/post-build gates.
  */
 import { spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
+const require = createRequire(import.meta.url);
+const { VERIFY_STEPS } = require('./lib/verify-pipeline.cjs');
 
 /**
  * @param {string} script npm script name from package.json
@@ -34,29 +37,7 @@ function runNpm(script, forwarded = []) {
   return result.status === null ? 1 : result.status;
 }
 
-const steps = [
-  ['check', []],
-  ['build:astro', []],
-  ['check:csp-hashes', []],
-  ['check:routes', ['--', '--dist']],
-  ['check:links', ['--', '--dist']],
-  ['check:astro-dist', []],
-  ['check:payload-dist', []],
-  ['check:ticket-panel-parity', []],
-  ['check:ticket-panel-source-parity', []],
-  ['check:seo-output', []],
-  ['check:schema-output', []],
-  ['check:img-alt-axe', []],
-  ['check:hreflang-cluster', []],
-  ['check:tap-targets', []],
-  ['check:sitemap-output', []],
-  ['check:robots-ai', []],
-  ['check:llms-txt', []],
-  ['check:nap-parity', []],
-  ['test:smoke', []],
-];
-
-for (const [name, extra] of steps) {
+for (const [name, extra] of VERIFY_STEPS) {
   const code = runNpm(name, extra);
   if (code !== 0) process.exit(code);
 }

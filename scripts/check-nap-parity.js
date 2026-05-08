@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
+const { findJsonLdNodes } = require('./lib/rendered-page-contract');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -28,30 +29,8 @@ if (!fs.existsSync(distDir)) {
   process.exit(1);
 }
 
-function extractLdScripts(html) {
-  const re = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi;
-  return [...html.matchAll(re)].map((m) => m[1].trim());
-}
-
 function findEntertainmentBusinessNodes(html) {
-  const out = [];
-  for (const block of extractLdScripts(html)) {
-    if (!block.includes('EntertainmentBusiness')) continue;
-    let data;
-    try {
-      data = JSON.parse(block);
-    } catch {
-      continue;
-    }
-    if (data['@graph'] && Array.isArray(data['@graph'])) {
-      for (const n of data['@graph']) {
-        if (n && n['@type'] === 'EntertainmentBusiness') out.push(n);
-      }
-    } else if (data['@type'] === 'EntertainmentBusiness') {
-      out.push(data);
-    }
-  }
-  return out;
+  return findJsonLdNodes(html, 'EntertainmentBusiness');
 }
 
 function expectedHours(loc) {

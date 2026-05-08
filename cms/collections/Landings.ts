@@ -1,13 +1,62 @@
-import type { CollectionConfig } from 'payload';
+import type { CollectionConfig, PayloadRequest } from 'payload';
 
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const assetPathUnsafeRegex = /[<>"'\\\s]/;
 
 const CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS = 15_000;
 
-function triggerPagesDeploy(reason: string) {
-  const url = process.env.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL;
-  if (!url || !/^https:\/\//.test(url)) {
+function validateAssetPath(val: unknown) {
+  if (typeof val !== 'string' || !val.startsWith('/assets/')) {
+    return 'Must be a root-relative path starting with /assets/';
+  }
+  if (val.includes('://') || val.includes('..') || assetPathUnsafeRegex.test(val)) {
+    return 'Invalid image path';
+  }
+  return true;
+}
+
+function validateHttpsUrl(val: unknown, label: string) {
+  if (typeof val !== 'string') return `${label} must be an https URL`;
+  if (val.length > 2048) return `${label} is too long`;
+
+  let url: URL;
+  try {
+    url = new URL(val);
+  } catch {
+    return `${label} must be a valid URL`;
+  }
+
+  if (url.protocol !== 'https:') return `${label} must use https`;
+  if (url.username || url.password) return `${label} must not include credentials`;
+  return true;
+}
+
+function deployHookURL() {
+  const value = process.env.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL;
+  if (!value) {
     console.warn('[landings] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL unset');
+    return null;
+  }
+
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    console.warn('[landings] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL is invalid');
+    return null;
+  }
+
+  if (url.protocol !== 'https:' || url.username || url.password) {
+    console.warn('[landings] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL must be a credential-free https URL');
+    return null;
+  }
+
+  return url.toString();
+}
+
+function triggerPagesDeploy(reason: string) {
+  const url = deployHookURL();
+  if (!url) {
     return;
   }
   void fetch(url, {
@@ -20,6 +69,17 @@ function triggerPagesDeploy(reason: string) {
   );
 }
 
+function userRole(user: unknown): string | undefined {
+  return (user as { role?: string } | null | undefined)?.role;
+}
+
+function canManageLandings({ req: { user } }: { req: PayloadRequest }): boolean {
+  if (!user || user.collection !== 'users') return false;
+
+  const role = userRole(user);
+  return role === 'admin' || role === 'editor' || role == null;
+}
+
 export const Landings: CollectionConfig = {
   slug: 'landings',
   admin: {
@@ -27,10 +87,11 @@ export const Landings: CollectionConfig = {
     defaultColumns: ['title', 'slug', 'published', 'updatedAt'],
   },
   access: {
-    read: ({ req }) => (req.user ? true : { published: { equals: true } }),
-    create: ({ req }) => Boolean(req.user),
-    update: ({ req }) => Boolean(req.user),
-    delete: ({ req }) => Boolean(req.user),
+    admin: canManageLandings,
+    read: ({ req }) => (canManageLandings({ req }) ? true : { published: { equals: true } }),
+    create: canManageLandings,
+    update: canManageLandings,
+    delete: canManageLandings,
   },
   fields: [
     {
@@ -134,15 +195,7 @@ export const Landings: CollectionConfig = {
           type: 'text',
           required: true,
           admin: { description: 'Root-relative path, e.g. /assets/photos/...' },
-          validate: (val: unknown) => {
-            if (typeof val !== 'string' || !val.startsWith('/assets/')) {
-              return 'Must be a root-relative path starting with /assets/';
-            }
-            if (val.includes('://') || val.includes('<')) {
-              return 'Invalid image path';
-            }
-            return true;
-          },
+          validate: validateAssetPath,
         },
         {
           name: 'twitterImage',
@@ -150,10 +203,7 @@ export const Landings: CollectionConfig = {
           admin: { description: 'Defaults to og:image if empty' },
           validate: (val: unknown) => {
             if (val == null || val === '') return true;
-            if (typeof val !== 'string' || !val.startsWith('/assets/')) {
-              return 'Must be a root-relative path starting with /assets/';
-            }
-            return true;
+            return validateAssetPath(val);
           },
         },
       ],
@@ -197,10 +247,7 @@ export const Landings: CollectionConfig = {
           },
           validate: (val: unknown, { siblingData }: { siblingData?: { ctaSurface?: string } }) => {
             if (siblingData?.ctaSurface !== 'external') return true;
-            if (typeof val !== 'string' || !/^https:\/\/.+/.test(val)) {
-              return 'External CTAs must use an https URL';
-            }
-            return true;
+            return validateHttpsUrl(val, 'External CTA');
           },
         },
       ],

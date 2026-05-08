@@ -5,6 +5,7 @@ const path = require('node:path');
 const {
   loadRouteRegistry,
   compileRouteContract,
+  compilePublicUrlSurface,
   verifySitemapXml,
 } = require('./lib/route-artifacts');
 const { normalizeCanonicalPath } = require('./lib/validation-core');
@@ -193,28 +194,6 @@ function validateRegistry(registry, errors) {
   }
 }
 
-function expectedRedirectPairs(registry) {
-  const pairs = [];
-  for (const route of registry.routes) {
-    const canonicalTarget = route.canonicalPath === '/' ? '/' : route.canonicalPath;
-    for (const legacy of route.legacySources) {
-      pairs.push({
-        source: legacy,
-        target: canonicalTarget,
-        status: route.status,
-      });
-    }
-  }
-  for (const alias of registry.aliases) {
-    pairs.push({
-      source: alias.source,
-      target: alias.target,
-      status: alias.status,
-    });
-  }
-  return pairs;
-}
-
 function validateRedirects(registry, errors) {
   const redirectsPath = path.join(root, '_redirects');
   if (!fs.existsSync(redirectsPath)) {
@@ -232,7 +211,7 @@ function validateRedirects(registry, errors) {
     actual.set(redirectRowKey(row.source, row.target, row.status), row);
   }
 
-  const expected = expectedRedirectPairs(registry);
+  const expected = compilePublicUrlSurface(registry).redirectPairs;
 
   for (const pair of expected) {
     const key = redirectRowKey(pair.source, pair.target, pair.status);
@@ -289,7 +268,7 @@ function resolveScopeFiles(scope) {
 
 const EXTERNAL_SCHEME = /^(https?:|mailto:|tel:|sms:|javascript:)/i;
 
-function validateUrlSurfaceAgainstRegistry(registry, fileRel, rawUrl, errors, label) {
+function validateUrlSurfaceAgainstRegistry(surface, fileRel, rawUrl, errors, label) {
   if (!rawUrl || EXTERNAL_SCHEME.test(rawUrl) || rawUrl.startsWith('//')) return;
   let pathname = rawUrl.split('#')[0].split('?')[0];
   if (
@@ -316,19 +295,7 @@ function validateUrlSurfaceAgainstRegistry(registry, fileRel, rawUrl, errors, la
     return;
   }
 
-  function isDynamicLandingPath(reg, pathnameNorm) {
-    const prefixRaw =
-      reg && reg._meta && reg._meta.dynamicLandingPrefix ? String(reg._meta.dynamicLandingPrefix) : '/c';
-    const prefix = prefixRaw.startsWith('/') ? prefixRaw : `/${prefixRaw}`;
-    const base = pathnameNorm;
-    if (!base.startsWith(`${prefix}/`)) return false;
-    const slug = base.slice(prefix.length + 1).replace(/\/+$/, '');
-    if (!slug) return false;
-    return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
-  }
-
-  const allowed = new Set(registry.routes.map((r) => r.canonicalPath));
-  if (!allowed.has(normalized) && !isDynamicLandingPath(registry, normalized)) {
+  if (!surface.isKnownCanonical(normalized)) {
     errors.push(`${fileRel}: ${label} references unknown canonical "${rawUrl}"`);
   }
 }
@@ -342,6 +309,7 @@ function validateSources(registry, scope, errors) {
     return;
   }
 
+  const surface = compilePublicUrlSurface(registry);
   const canonicalRe = /<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']+)["']/gi;
   const ogRe = /<meta[^>]*property=["']og:url["'][^>]*content=["']([^"']+)["']/gi;
   const urlJsonLdRe = /"(?:url|@id)"\s*:\s*"([^"]+)"/g;
@@ -354,22 +322,22 @@ function validateSources(registry, scope, errors) {
     const text = fs.readFileSync(fp, 'utf8');
 
     for (const m of text.matchAll(canonicalRe)) {
-      validateUrlSurfaceAgainstRegistry(registry, rel, m[1].trim(), errors, 'canonical');
+      validateUrlSurfaceAgainstRegistry(surface, rel, m[1].trim(), errors, 'canonical');
     }
     for (const m of text.matchAll(ogRe)) {
-      validateUrlSurfaceAgainstRegistry(registry, rel, m[1].trim(), errors, 'og:url');
+      validateUrlSurfaceAgainstRegistry(surface, rel, m[1].trim(), errors, 'og:url');
     }
     for (const m of text.matchAll(urlJsonLdRe)) {
-      validateUrlSurfaceAgainstRegistry(registry, rel, m[1].trim(), errors, 'JSON-LD url/@id');
+      validateUrlSurfaceAgainstRegistry(surface, rel, m[1].trim(), errors, 'JSON-LD url/@id');
     }
     for (const m of text.matchAll(hrefRe)) {
-      validateUrlSurfaceAgainstRegistry(registry, rel, m[1].trim(), errors, 'href');
+      validateUrlSurfaceAgainstRegistry(surface, rel, m[1].trim(), errors, 'href');
     }
 
     if (rel.endsWith('.json')) {
       const urls = text.match(/https:\/\/timemission\.com[^\s"'<>]+/g) || [];
       for (const u of urls) {
-        validateUrlSurfaceAgainstRegistry(registry, rel, u, errors, 'locations JSON URL');
+        validateUrlSurfaceAgainstRegistry(surface, rel, u, errors, 'locations JSON URL');
       }
     }
   }
@@ -382,7 +350,8 @@ function validateDist(registry, errors) {
     return;
   }
 
-  for (const route of registry.routes) {
+  const surface = compilePublicUrlSurface(registry);
+  for (const route of surface.routes) {
     const target = path.join(distRoot, route.outputFile);
     if (!fs.existsSync(target)) {
       errors.push(`missing dist output for ${route.canonicalPath}: dist/${route.outputFile}`);

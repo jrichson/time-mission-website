@@ -5,6 +5,17 @@ import {
     PAYLOAD_FETCH_TIMEOUT_MS,
     validatedCmsOriginBase,
 } from './cms-origin';
+import type { PayloadLandingSurface } from './landing-contract';
+export {
+    landingCanonicalPath,
+    landingCtaForDoc,
+    landingDistOutputCandidates,
+    landingDocLooksRenderable,
+    landingHeadForDoc,
+    landingShouldAppearInSitemap,
+    slugIsValidForLanding,
+} from './landing-contract';
+export type { PayloadLandingSurface } from './landing-contract';
 
 const DEFAULT_ORIGIN_KEYS = ['PAYLOAD_CMS_ORIGIN', 'PAYLOAD_PUBLIC_CMS_ORIGIN'] as const;
 
@@ -52,14 +63,6 @@ export interface PayloadLandingDoc {
     };
 }
 
-export type PayloadLandingSurface =
-    | 'book_panel'
-    | 'missions'
-    | 'groups'
-    | 'contact'
-    | 'gift_cards'
-    | 'external';
-
 interface PayloadListResponse {
     docs?: PayloadLandingDoc[];
 }
@@ -105,22 +108,4 @@ export async function getPublishedLandings(origin?: string): Promise<PayloadLand
         return [];
     }
     return fetchPayloadLandings(base, strict);
-}
-
-export function landingCanonicalPath(slug: string, prefix = '/c'): string {
-    const p = prefix.startsWith('/') ? prefix : `/${prefix}`;
-    return `${p}/${slug}`;
-}
-
-export function slugIsValidForLanding(slug: string): boolean {
-    return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
-}
-
-/** Minimum fields needed for Astro `c/[slug]` prerender — keep in sync with page template guards */
-export function landingDocLooksRenderable(doc: PayloadLandingDoc): boolean {
-    if (!doc.slug || !slugIsValidForLanding(doc.slug)) return false;
-    const s = doc.seo;
-    if (!s?.metaTitle || !s.metaDescription || !s.ogImage) return false;
-    if (!doc.content?.headline || !doc.content?.primaryCtaLabel) return false;
-    return true;
 }

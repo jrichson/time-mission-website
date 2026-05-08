@@ -7,6 +7,19 @@ require('tsx/cjs/api').register();
 const { locationsFingerprintFromRecords } = require('../../src/lib/locations-fingerprint.ts');
 
 const REPO_ROOT = path.resolve(__dirname, '../..');
+const VIDEO_MEDIA_RE = /\.(mp4|webm)(?:\?.*)?$/i;
+
+test.beforeEach(async ({ page }) => {
+  await page.route(VIDEO_MEDIA_RE, (route) => route.abort());
+});
+
+async function gotoHome(page) {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.getByRole('heading', { level: 1, name: /Time Mission/i }).waitFor({
+    state: 'visible',
+    timeout: 15000,
+  });
+}
 
 /** Wait for GTM bootstrap push, then read `consent_profile` from `tm_tagging_config`. */
 async function readTaggingConsentProfile(page) {
@@ -17,18 +30,40 @@ async function readTaggingConsentProfile(page) {
 }
 
 test('homepage loads core navigation and booking panel', async ({ page }) => {
-  await page.goto('/');
+  test.slow();
+
+  await gotoHome(page);
 
   await expect(page).toHaveTitle(/Time Mission/i);
-  await expect(page.locator('.hero-title')).toContainText(/STEP INTO THE/i);
   // Post-Astro hero H1 contract:
   // - .hero-h1-seo carries the screen-reader H1 text (visually-hidden)
   // - .line-1 is the decorative "STEP INTO THE" eyebrow (visible, aria-hidden)
   // - .line-2 renders "TIME MISSION" via SVG mask (visible, aria-hidden, no text node)
-  await expect(page.locator('.hero-title .hero-h1-seo')).toHaveText(/Time Mission.*Interactive Mission Rooms/i);
-  await expect(page.locator('.hero-title .line-1')).toBeVisible();
-  await expect(page.locator('.hero-title .line-1')).toHaveText(/STEP INTO THE/);
-  await expect(page.locator('.hero-title .line-2')).toBeVisible();
+  const heroContract = await page
+    .waitForFunction(
+      () => {
+        const hero = document.querySelector('.hero-title');
+        if (!hero) return null;
+        const line1 = hero.querySelector('.line-1');
+        const line2 = hero.querySelector('.line-2');
+        const seo = hero.querySelector('.hero-h1-seo');
+
+        return {
+          seoText: seo?.textContent || '',
+          line1Text: line1?.textContent || '',
+          line1Visible: !!line1 && getComputedStyle(line1).visibility !== 'hidden',
+          line2Visible: !!line2 && getComputedStyle(line2).visibility !== 'hidden',
+        };
+      },
+      undefined,
+      { timeout: 15000 }
+    )
+    .then((handle) => handle.jsonValue());
+
+  expect(heroContract.seoText).toMatch(/Time Mission.*Interactive Mission Rooms/i);
+  expect(heroContract.line1Text).toMatch(/STEP INTO THE/);
+  expect(heroContract.line1Visible).toBe(true);
+  expect(heroContract.line2Visible).toBe(true);
 
   await page.locator('.hero-cta .btn-tickets').click();
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);

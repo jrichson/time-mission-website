@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
+const { extractHeadMetadata, readDistRouteHtml } = require('./lib/rendered-page-contract');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -35,22 +36,6 @@ function toAbsoluteAsset(rootRelative) {
   return `${baseUrl}${rootRelative}`;
 }
 
-function decodeBasicEntities(s) {
-  if (!s) return s;
-  return s
-    .replace(/&amp;/gi, '&')
-    .replace(/&#38;/g, '&')
-    .replace(/&quot;/g, '"')
-    .replace(/&#x27;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>');
-}
-
-function extractFirst(html, re) {
-  const m = html.match(re);
-  return m ? decodeBasicEntities(m[1].trim()) : null;
-}
-
 const distDir = path.join(root, 'dist');
 if (!fs.existsSync(distDir)) {
   console.error('dist/ missing — run npm run build:astro first');
@@ -63,42 +48,31 @@ const astroRoutes = routesData.routes.filter((r) =>
 
 for (const route of astroRoutes) {
   const cp = route.canonicalPath;
-  const outFile = route.outputFile.replace(/^\//, '');
-  const absHtml = path.join(distDir, outFile);
-  if (!fs.existsSync(absHtml)) {
+  const { outFile, exists, html } = readDistRouteHtml(root, route);
+  if (!exists) {
     errors.push(`missing dist file: ${outFile}`);
     continue;
   }
-  const html = fs.readFileSync(absHtml, 'utf8');
   const entry = seoRoutes[cp];
   if (!entry) {
     errors.push(`no seo-routes entry for ${cp}`);
     continue;
   }
 
-  const title = extractFirst(html, /<title>([^<]*)<\/title>/i);
-  const description = extractFirst(
-    html,
-    /<meta\s+name="description"\s+content="([^"]*)"/i,
-  );
-  const canonical = extractFirst(html, /<link\s+rel="canonical"\s+href="([^"]+)"/i);
-  const ogUrl = extractFirst(html, /<meta\s+property="og:url"\s+content="([^"]+)"/i);
-  const ogImage = extractFirst(html, /<meta\s+property="og:image"\s+content="([^"]+)"/i);
-  const twImage = extractFirst(html, /<meta\s+name="twitter:image"\s+content="([^"]+)"/i);
-  const robots = extractFirst(html, /<meta\s+name="robots"\s+content="([^"]+)"/i);
+  const meta = extractHeadMetadata(html);
 
   const expectCanon = toAbsolutePath(cp);
   const expectOg = toAbsoluteAsset(entry.ogImage);
   const expectTw = toAbsoluteAsset(entry.twitterImage || entry.ogImage);
   const expectRB = resolveRobotsForRoute(cp, robotsTable);
 
-  if (title !== entry.title) errors.push(`${outFile}: title mismatch`);
-  if (description !== entry.description) errors.push(`${outFile}: description mismatch`);
-  if (canonical !== expectCanon) errors.push(`${outFile}: canonical mismatch (got ${canonical}, expected ${expectCanon})`);
-  if (ogUrl !== expectCanon) errors.push(`${outFile}: og:url mismatch`);
-  if (ogImage !== expectOg) errors.push(`${outFile}: og:image mismatch`);
-  if (twImage !== expectTw) errors.push(`${outFile}: twitter:image mismatch`);
-  if (robots !== expectRB) errors.push(`${outFile}: robots mismatch (got ${robots}, expected ${expectRB})`);
+  if (meta.title !== entry.title) errors.push(`${outFile}: title mismatch`);
+  if (meta.description !== entry.description) errors.push(`${outFile}: description mismatch`);
+  if (meta.canonical !== expectCanon) errors.push(`${outFile}: canonical mismatch (got ${meta.canonical}, expected ${expectCanon})`);
+  if (meta.ogUrl !== expectCanon) errors.push(`${outFile}: og:url mismatch`);
+  if (meta.ogImage !== expectOg) errors.push(`${outFile}: og:image mismatch`);
+  if (meta.twitterImage !== expectTw) errors.push(`${outFile}: twitter:image mismatch`);
+  if (meta.robots !== expectRB) errors.push(`${outFile}: robots mismatch (got ${meta.robots}, expected ${expectRB})`);
 }
 
 if (errors.length) {

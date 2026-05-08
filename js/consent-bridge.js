@@ -5,6 +5,24 @@
 (function () {
     'use strict';
 
+    function emitConsentUpdated(state) {
+        var detail = Object.assign({}, state || {});
+        try {
+            document.dispatchEvent(
+                new CustomEvent('tm:consent-updated', {
+                    detail: detail,
+                })
+            );
+        } catch (e) {}
+        try {
+            window.dispatchEvent(
+                new CustomEvent('tm:consent-updated', {
+                    detail: detail,
+                })
+            );
+        } catch (e) {}
+    }
+
     window.TMConsent = {
         /**
          * @param {Record<string, string>} settings Consent Mode fields, e.g. { analytics_storage: 'granted' }
@@ -18,13 +36,8 @@
             if (typeof window.gtag === 'function') {
                 window.gtag('consent', 'update', update);
             }
-            try {
-                document.dispatchEvent(
-                    new CustomEvent('tm:consent-updated', {
-                        detail: Object.assign({}, window.__TM_CONSENT_STATE__),
-                    })
-                );
-            } catch (e) {}
+            emitConsentUpdated(window.__TM_CONSENT_STATE__);
+            return window.__TM_CONSENT_STATE__;
         },
     };
 })();

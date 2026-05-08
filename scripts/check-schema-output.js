@@ -1,6 +1,11 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
+const {
+  extractLdScripts,
+  findNodesByType,
+  typesInGraph,
+} = require('./lib/rendered-page-contract');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -27,28 +32,8 @@ if (!fs.existsSync(distDir)) {
   process.exit(1);
 }
 
-function extractLdScripts(html) {
-  const re = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi;
-  return [...html.matchAll(re)].map((m) => m[1].trim());
-}
-
-function typesInGraph(graph) {
-  const types = [];
-  if (!graph || graph['@context'] !== 'https://schema.org' || !Array.isArray(graph['@graph'])) {
-    return { ok: false, types: [] };
-  }
-  for (const node of graph['@graph']) {
-    if (node && node['@type']) types.push(node['@type']);
-  }
-  return { ok: true, types };
-}
-
-function findOne(nodes, t) {
-  return nodes['@graph'].filter((n) => n['@type'] === t);
-}
-
 function assertOrg(graph) {
-  const orgs = findOne(graph, 'Organization');
+  const orgs = findNodesByType(graph, 'Organization');
   if (orgs.length !== 1) {
     errors.push('expected exactly one Organization');
     return null;
@@ -136,7 +121,7 @@ for (const route of schemaRoutes) {
     if (has('EntertainmentBusiness')) errors.push(`${outFile}: unexpected EntertainmentBusiness on group page`);
     const expectedFaqId = GROUP_EVENT_PATHS.get(cp);
     const expectedSection = faqsDoc.sections.find((s) => s.id === expectedFaqId);
-    const faqNodes = findOne(graph, 'FAQPage');
+    const faqNodes = findNodesByType(graph, 'FAQPage');
     const mainLen = faqNodes[0]?.mainEntity?.length;
     if (expectedSection && mainLen !== expectedSection.items.length) {
       errors.push(`${outFile}: FAQPage mainEntity length ${mainLen}, expected ${expectedSection.items.length}`);
@@ -145,7 +130,7 @@ for (const route of schemaRoutes) {
 
   if (cp === '/faq') {
     if (!has('FAQPage')) errors.push(`${outFile}: missing FAQPage`);
-    const faqNodes = findOne(graph, 'FAQPage');
+    const faqNodes = findNodesByType(graph, 'FAQPage');
     const mainLen = faqNodes[0]?.mainEntity?.length;
     if (mainLen !== faqItemCount) {
       errors.push(`${outFile}: FAQPage mainEntity length ${mainLen}, expected ${faqItemCount}`);
@@ -157,7 +142,7 @@ for (const route of schemaRoutes) {
     const loc = locationsDoc.locations.find((l) => l.slug === 'philadelphia');
     if (!loc) errors.push('philadelphia missing from data/locations.json');
     if (!has('BreadcrumbList')) errors.push(`${outFile}: missing BreadcrumbList`);
-    const biz = findOne(graph, 'EntertainmentBusiness');
+    const biz = findNodesByType(graph, 'EntertainmentBusiness');
     if (biz.length !== 1) {
       errors.push(`${outFile}: expected one EntertainmentBusiness`);
     } else {
@@ -174,7 +159,7 @@ for (const route of schemaRoutes) {
   }
 
   if (cp === '/houston') {
-    if (findOne(graph, 'EntertainmentBusiness').length) {
+    if (findNodesByType(graph, 'EntertainmentBusiness').length) {
       errors.push(`${outFile}: houston must not emit EntertainmentBusiness`);
     }
     const raw = graphBlock;
@@ -192,7 +177,7 @@ for (const route of schemaRoutes) {
   const slugFromCp = cp.replace(/^\//, '');
   if (openLocationSlugs.includes(slugFromCp)) {
     const sourceLoc = locationsDoc.locations.find((l) => l.slug === slugFromCp);
-    const biz = findOne(graph, 'EntertainmentBusiness');
+      const biz = findNodesByType(graph, 'EntertainmentBusiness');
     if (biz.length !== 1) {
       errors.push(`${outFile}: expected one EntertainmentBusiness for open location ${slugFromCp}`);
     } else {

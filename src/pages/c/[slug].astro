@@ -3,27 +3,14 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import { definePage } from '../../lib/define-page';
 import {
     getPublishedLandings,
+    landingCtaForDoc,
     landingCanonicalPath,
     landingDocLooksRenderable,
+    landingHeadForDoc,
     type PayloadLandingDoc,
-    type PayloadLandingSurface,
 } from '../../lib/payload/load';
-import type { LandingHeadInput } from '../../lib/seo/catalog';
 
 export const prerender = true;
-
-function buildLandingHead(doc: PayloadLandingDoc): LandingHeadInput | null {
-    const s = doc.seo;
-    if (!s?.metaTitle || !s.metaDescription || !s.ogImage) return null;
-    return {
-        metaTitle: s.metaTitle,
-        metaDescription: s.metaDescription,
-        robots: s.robots && s.robots.length ? s.robots : 'index,follow',
-        canonicalOverride: s.canonicalOverride,
-        ogImage: s.ogImage,
-        twitterImage: s.twitterImage,
-    };
-}
 
 export async function getStaticPaths() {
     const raw = await getPublishedLandings();
@@ -36,39 +23,11 @@ export async function getStaticPaths() {
 
 const { doc } = Astro.props as { doc: PayloadLandingDoc };
 const page = definePage({ canonicalPath: landingCanonicalPath(doc.slug) });
-const landingHead = buildLandingHead(doc)!;
+const landingHead = landingHeadForDoc(doc)!;
 const c = doc.content!;
+const cta = landingCtaForDoc(doc);
 
-const surface = (c.ctaSurface || 'book_panel') as PayloadLandingSurface;
 const bullets = Array.isArray(c.bullets) ? c.bullets.map((b) => String(b?.text || '').trim()).filter(Boolean) : [];
-
-let primaryHref = '/missions';
-let bookTrigger = false;
-let linkPath = '';
-if (surface === 'book_panel') {
-    primaryHref = '#tickets';
-    bookTrigger = true;
-    linkPath = '/tickets';
-} else if (surface === 'missions') {
-    primaryHref = '/missions';
-    linkPath = '/missions';
-} else if (surface === 'groups') {
-    primaryHref = '/groups';
-    linkPath = '/groups';
-} else if (surface === 'contact') {
-    primaryHref = '/contact';
-    linkPath = '/contact';
-} else if (surface === 'gift_cards') {
-    primaryHref = '/gift-cards';
-    linkPath = '/gift-cards';
-} else if (surface === 'external' && c.ctaExternalUrl) {
-    primaryHref = c.ctaExternalUrl;
-    try {
-        linkPath = new URL(primaryHref).pathname || '/';
-    } catch {
-        linkPath = '/';
-    }
-}
 
 const jsonLd = {
     '@context': 'https://schema.org',
@@ -184,25 +143,25 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                 ) : null
             }
             {
-                bookTrigger ? (
+                cta.bookTrigger ? (
                     <button
                         type="button"
                         class="tm-landing-cta"
                         data-tm-booking-trigger
                         data-tm-landing-primary
-                        data-link-path={linkPath}
-                        data-cta-surface={surface}
+                        data-link-path={cta.linkPath}
+                        data-cta-surface={cta.surface}
                     >
                         {c.primaryCtaLabel}
                     </button>
                 ) : (
                     <a
-                        href={primaryHref}
+                        href={cta.primaryHref}
                         class="tm-landing-cta"
                         data-tm-landing-primary
-                        data-link-path={linkPath}
-                        data-cta-surface={surface}
-                        {...surface === 'external' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+                        data-link-path={cta.linkPath}
+                        data-cta-surface={cta.surface}
+                        {...cta.surface === 'external' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
                     >
                         {c.primaryCtaLabel}
                     </a>

@@ -33,6 +33,70 @@ function compileRouteContract(registry) {
   };
 }
 
+function normalizeDynamicLandingPrefix(registry) {
+  const raw = registry && registry._meta && registry._meta.dynamicLandingPrefix
+    ? String(registry._meta.dynamicLandingPrefix)
+    : '/c';
+  return raw.startsWith('/') ? raw : `/${raw}`;
+}
+
+function isDynamicLandingPath(registry, pathnameNorm) {
+  const prefix = normalizeDynamicLandingPrefix(registry);
+  const base = normalizeCanonicalPath(pathnameNorm);
+  if (!base.startsWith(`${prefix}/`)) return false;
+  const slug = base.slice(prefix.length + 1).replace(/\/+$/, '');
+  if (!slug || slug.includes('/') || slug.includes('.')) return false;
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+}
+
+function expectedRedirectPairs(registry) {
+  const pairs = [];
+  for (const route of registry.routes || []) {
+    const canonicalTarget = route.canonicalPath === '/' ? '/' : route.canonicalPath;
+    for (const legacy of route.legacySources || []) {
+      pairs.push({
+        source: legacy,
+        target: canonicalTarget,
+        status: route.status,
+      });
+    }
+  }
+  for (const alias of registry.aliases || []) {
+    pairs.push({
+      source: alias.source,
+      target: alias.target,
+      status: alias.status,
+    });
+  }
+  return pairs;
+}
+
+function compilePublicUrlSurface(registry) {
+  const contract = compileRouteContract(registry);
+  const routeByCanonical = new Map();
+  const canonicalPaths = new Set();
+  for (const route of registry.routes || []) {
+    const canonical = normalizeCanonicalPath(route.canonicalPath || '');
+    if (!canonical) continue;
+    canonicalPaths.add(canonical);
+    routeByCanonical.set(canonical, route);
+  }
+
+  return {
+    ...contract,
+    routes: registry.routes || [],
+    aliases: registry.aliases || [],
+    canonicalPaths,
+    routeByCanonical,
+    redirectPairs: expectedRedirectPairs(registry),
+    dynamicLandingPrefix: normalizeDynamicLandingPrefix(registry),
+    isKnownCanonical(value) {
+      const normalized = normalizeCanonicalPath(value);
+      return canonicalPaths.has(normalized) || isDynamicLandingPath(registry, normalized);
+    },
+  };
+}
+
 function parseSitemapLocs(xml) {
   const locRe = /<loc>([^<]+)<\/loc>/g;
   return [...String(xml || '').matchAll(locRe)].map((m) => m[1]);
@@ -79,8 +143,8 @@ function verifySitemapXml(xml, contract, options = {}) {
   function isDynamicLandingSitemapLoc(loc) {
     const registry = contract.registry || {};
     const base = String(registry.baseUrl || '').replace(/\/+$/, '');
-    const prefixRaw = registry._meta && registry._meta.dynamicLandingPrefix ? String(registry._meta.dynamicLandingPrefix) : '/c';
-    const prefixSlug = prefixRaw.startsWith('/') ? prefixRaw.slice(1) : prefixRaw;
+    const prefix = normalizeDynamicLandingPrefix(registry);
+    const prefixSlug = prefix.startsWith('/') ? prefix.slice(1) : prefix;
     const expectedPrefixNoSlash = `${base}/${prefixSlug}`;
     if (!loc.startsWith(`${expectedPrefixNoSlash}/`)) return false;
     const slug = loc.slice(expectedPrefixNoSlash.length + 1).replace(/\/+$/, '');
@@ -143,6 +207,10 @@ module.exports = {
   loadRouteRegistry,
   expectedSitemapUrls,
   compileRouteContract,
+  compilePublicUrlSurface,
+  expectedRedirectPairs,
+  normalizeDynamicLandingPrefix,
+  isDynamicLandingPath,
   parseSitemapLocs,
   verifySitemapXml,
   canonicalToOutputMap,

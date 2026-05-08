@@ -30,7 +30,7 @@ Defined in `js/locations.js`. Notable methods:
 
 ## `window.TMBooking`
 
-Defined in `js/booking-controller.js`. Use for programmatic booking navigation and panel coordination.
+Defined in `js/booking-controller.js`. Use for programmatic booking navigation and panel coordination. Destination rules are owned here; `LocationContext.resolveBookingUrl()` delegates to this gateway after the script is loaded.
 
 ## `window.TMAnalytics`
 

@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import routes from '../data/routes.json';
 import { cmsBuildStrict } from '../lib/payload/cms-origin';
-import { getPublishedLandings, landingCanonicalPath } from '../lib/payload/load';
+import { getPublishedLandings, landingCanonicalPath, landingShouldAppearInSitemap } from '../lib/payload/load';
 
 export const prerender = true;
 
@@ -37,11 +37,7 @@ export const GET: APIRoute = async () => {
         const landings = await getPublishedLandings();
         const prefix = landingPrefix.startsWith('/') ? landingPrefix : `/${landingPrefix}`;
         for (const doc of landings) {
-            if (!doc.slug) continue;
-            if (doc.includeInSitemap === false) continue;
-            const seo = doc.seo;
-            if (!seo?.metaTitle) continue;
-            if (seo.robots === 'noindex,follow') continue;
+            if (!landingShouldAppearInSitemap(doc)) continue;
             const cp = landingCanonicalPath(doc.slug, prefix);
             const loc = `${baseUrl}${cp}`;
             items.push(loc);

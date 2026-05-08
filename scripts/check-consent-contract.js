@@ -48,6 +48,9 @@ if (!errors.length) {
 
     requireIncludes(consentBridge, 'js/consent-bridge.js', [
         'window.__TM_CONSENT_STATE__ = Object.assign({}, current, update);',
+        'function emitConsentUpdated(state)',
+        'document.dispatchEvent(',
+        'window.dispatchEvent(',
         "new CustomEvent('tm:consent-updated'",
     ]);
 

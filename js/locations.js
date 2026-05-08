@@ -635,6 +635,12 @@
             const loc = id ? (typeof TM.get === 'function' ? TM.get(id) : null) : TM.current;
             if (!loc) return '';
             const bookingKind = String(kind || 'tickets').toLowerCase();
+            if (window.TMBooking && typeof window.TMBooking.resolveLocationDestination === 'function') {
+                return window.TMBooking.resolveLocationDestination(loc, {
+                    kind: bookingKind,
+                    locationId: id || (loc && (loc.id || loc.slug)) || '',
+                });
+            }
             if (bookingKind === 'gift-cards' || bookingKind === 'giftcards') {
                 return loc.giftCardUrl || '';
             }

@@ -21,20 +21,16 @@
 
     if (!window.CookieConsent || typeof window.CookieConsent.run !== 'function') return;
 
-    function dispatchConsentUpdated() {
+    function applyConsentUpdate(update) {
+        if (window.TMConsent && typeof window.TMConsent.update === 'function') {
+            window.TMConsent.update(update);
+            return;
+        }
         try {
-            window.dispatchEvent(new CustomEvent('tm:consent-updated'));
-        } catch (e) { /* IE fallback not required — supported browsers only */ }
-    }
-
-    function gtagConsent(update) {
-        try {
-            if (typeof window.gtag === 'function') {
-                window.gtag('consent', 'update', update);
-            } else {
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push(['consent', 'update', update]);
-            }
+            window.__TM_CONSENT_STATE__ = Object.assign(window.__TM_CONSENT_STATE__ || {}, update);
+            window.dispatchEvent(new CustomEvent('tm:consent-updated', {
+                detail: Object.assign({}, window.__TM_CONSENT_STATE__),
+            }));
         } catch (e) { /* fail soft */ }
     }
 
@@ -46,11 +42,7 @@
             ad_user_data: cats.indexOf('marketing') !== -1 ? 'granted' : 'denied',
             ad_personalization: cats.indexOf('marketing') !== -1 ? 'granted' : 'denied',
         };
-        gtagConsent(update);
-        try {
-            window.__TM_CONSENT_STATE__ = Object.assign(window.__TM_CONSENT_STATE__ || {}, update);
-        } catch (e) { /* fail soft */ }
-        dispatchConsentUpdated();
+        applyConsentUpdate(update);
     }
 
     window.CookieConsent.run({

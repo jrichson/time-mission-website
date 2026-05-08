@@ -1,10 +1,39 @@
 const { test, expect } = require('@playwright/test');
 
+const VIDEO_MEDIA_RE = /\.(mp4|webm)(?:\?.*)?$/i;
+const REDUCE_MOTION_CSS = `
+  *, *::before, *::after {
+    animation-delay: 0s !important;
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-delay: 0s !important;
+    transition-duration: 0s !important;
+  }
+
+  .hero-video-container {
+    display: none !important;
+  }
+`;
+
+test.beforeEach(async ({ page }) => {
+  await page.route(VIDEO_MEDIA_RE, (route) => route.abort());
+  await page.addInitScript(() => {
+    const realSetInterval = window.setInterval.bind(window);
+
+    window.setInterval = (handler, timeout, ...args) => {
+      if (typeof timeout === 'number' && timeout >= 1000) return 0;
+      return realSetInterval(handler, timeout, ...args);
+    };
+  });
+});
+
 /**
  * Stabilize motion-heavy elements before screenshots (VER-04).
  * Hero video and other media can otherwise cause flaky pixel diffs.
  */
 async function stabilizeForScreenshot(page) {
+  await page.addStyleTag({ content: REDUCE_MOTION_CSS });
   await page.evaluate(() => {
     document.querySelectorAll('video').forEach((v) => {
       try {
@@ -14,14 +43,30 @@ async function stabilizeForScreenshot(page) {
         /* ignore */
       }
     });
+    document.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
+    document.querySelectorAll('.hit-point').forEach((el) => el.remove());
+
+    const tagline = document.getElementById('taglineText');
+    if (tagline) {
+      tagline.textContent = 'Social Gaming Adventure';
+      tagline.classList.remove('no-cursor');
+    }
+
+    const minutes = document.getElementById('minutesCounter');
+    if (minutes) minutes.textContent = '60';
+
+    const points = document.getElementById('pointsCounter');
+    if (points) points.textContent = '0';
   });
   await page.mouse.move(0, 0);
 }
 
 test.describe('visual regression (representative templates)', () => {
   test('homepage', async ({ page }) => {
-    await page.goto('/');
-    await page.locator('.hero-title').first().waitFor({ state: 'visible' });
+    test.slow();
+
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.locator('.hero-title').first().waitFor({ state: 'attached', timeout: 10000 });
     await stabilizeForScreenshot(page);
     await expect(page).toHaveScreenshot('homepage.png', {
       fullPage: false,

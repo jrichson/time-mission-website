@@ -4,7 +4,7 @@ PostgreSQL-backed Payload 3 admin for **landing pages** consumed by the Astro si
 
 ## Local
 
-1. Copy `.env.example` to `.env` and set `DATABASE_URL` (Postgres) and `PAYLOAD_SECRET` (32+ chars).
+1. Copy `.env.example` to `.env` and set `DATABASE_URL` (Postgres), `PAYLOAD_SECRET` (32+ chars), and `PAYLOAD_SERVER_URL` (for local dev this can be `http://localhost:3000`).
 2. From this directory:
    ```bash
    npm install
@@ -18,7 +18,15 @@ PostgreSQL-backed Payload 3 admin for **landing pages** consumed by the Astro si
 
 ## Webhook
 
-Set `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` in Railway (same value you use for “Deploy hook” in Cloudflare Pages). Saving a **published** landing (or unpublishing / deleting one that was published) triggers a POST to redeploy the static site.
+Set these in Railway:
+
+- `PAYLOAD_SERVER_URL` — public CMS origin only, no path, e.g. `https://your-app.up.railway.app`. Production requires HTTPS.
+- `PAYLOAD_ALLOWED_ORIGINS` — optional comma-separated browser origins allowed to call the CMS API with cookies. `PAYLOAD_SERVER_URL` is always included.
+- `PAYLOAD_DB_PUSH` — optional. Defaults to `false` in production and `true` locally. Set `true` only when you intentionally want Payload to push schema changes directly.
+- `PAYLOAD_ENABLE_GRAPHQL` — optional. Defaults to `false`; the public site uses REST.
+- `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` — same value you use for “Deploy hook” in Cloudflare Pages.
+
+Saving a **published** landing (or unpublishing / deleting one that was published) triggers a POST to redeploy the static site.
 
 Marketing should expect **minutes** of delay (Payload save → hook → CI build → upload), not instant publishes.
 

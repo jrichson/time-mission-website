@@ -7,12 +7,19 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 
 import { validatedCmsOriginBase, PAYLOAD_FETCH_TIMEOUT_MS } from './lib/payload-origin.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
+const require = createRequire(import.meta.url);
+require('tsx/cjs/api').register();
+const {
+  landingDistOutputCandidates,
+  landingDocLooksRenderable,
+} = require('../src/lib/payload/landing-contract.ts');
 
 const origin = process.env.PAYLOAD_CMS_ORIGIN || process.env.PAYLOAD_PUBLIC_CMS_ORIGIN || '';
 const errors = [];
@@ -43,23 +50,19 @@ if (!res.ok) {
 
 const payload = await res.json();
 const docs = Array.isArray(payload.docs) ? payload.docs : [];
-const slugRe = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
 const registry = JSON.parse(fs.readFileSync(path.join(root, 'src', 'data', 'routes.json'), 'utf8'));
 const prefixRaw = registry._meta?.dynamicLandingPrefix || '/c';
-const prefix = prefixRaw.startsWith('/') ? prefixRaw.slice(1) : prefixRaw;
+const prefix = prefixRaw.startsWith('/') ? prefixRaw : `/${prefixRaw}`;
 
 function distLandingExists(slug) {
-  const variantA = path.join(root, 'dist', prefix, `${slug}.html`);
-  const variantB = path.join(root, 'dist', prefix, slug, 'index.html');
-  return fs.existsSync(variantA) || fs.existsSync(variantB);
+  return landingDistOutputCandidates(root, prefix, slug).some((candidate) => fs.existsSync(candidate));
 }
 
 for (const doc of docs) {
   const slug = typeof doc.slug === 'string' ? doc.slug : '';
-  if (!slug || !slugRe.test(slug)) continue;
+  if (!landingDocLooksRenderable(doc)) continue;
   if (!distLandingExists(slug)) {
-    errors.push(`missing dist output for Payload landing slug "${slug}" (expected dist/${prefix}/${slug}.html or dist/${prefix}/${slug}/index.html)`);
+    errors.push(`missing dist output for Payload landing slug "${slug}" (expected dist/${prefix.replace(/^\//, '')}/${slug}.html or dist/${prefix.replace(/^\//, '')}/${slug}/index.html)`);
   }
 }
 
