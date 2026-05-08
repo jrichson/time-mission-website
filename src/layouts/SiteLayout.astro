@@ -7,6 +7,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import TicketPanel from '../components/TicketPanel.astro';
 import SiteScripts from '../components/SiteScripts.astro';
 import { resolveLastUpdated } from '../lib/last-updated';
+import { getPublishedSitePage, sitePageHeadForDoc } from '../lib/payload/load';
 
 interface Props {
     canonicalPath: string;
@@ -48,6 +49,7 @@ const lastUpdatedInfo = resolveLastUpdated({
     canonicalPath,
     sourceFile: sourcePageUrl,
 });
+const sitePageHead = landingHead ? null : sitePageHeadForDoc(await getPublishedSitePage(canonicalPath));
 ---
 
 <!DOCTYPE html>
@@ -60,7 +62,7 @@ const lastUpdatedInfo = resolveLastUpdated({
             ogImage={ogImage}
             twitterImage={twitterImage}
             robots={robots}
-            landingHead={landingHead}
+            landingHead={landingHead ?? sitePageHead}
             lastUpdatedIso={lastUpdatedInfo.iso}
         />
         <slot name="head-extra" />

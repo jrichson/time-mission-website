@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 
 import { Landings } from './collections/Landings.js';
+import { SitePages } from './collections/SitePages.js';
 import { Users } from './collections/Users.js';
 
 const filename = fileURLToPath(import.meta.url);
@@ -109,7 +110,7 @@ export default buildConfig({
       titleSuffix: ' - Time Mission CMS',
     },
   },
-  collections: [Users as CollectionConfig, Landings as CollectionConfig],
+  collections: [SitePages as CollectionConfig, Landings as CollectionConfig, Users as CollectionConfig],
   cors: allowedOrigins,
   csrf: allowedOrigins,
   defaultDepth: 0,

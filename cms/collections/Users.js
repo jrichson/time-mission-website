@@ -25,15 +25,8 @@ function canAccessAdmin({ req: { user } }) {
   return role === 'admin' || role === 'editor' || role == null;
 }
 
-function isAdmin({ req: { user } }) {
-  if (!isCMSUser(user)) return false;
-
-  const role = userRole(user);
-  return role === 'admin' || role == null;
-}
-
 function isOwner({ req: { user } }) {
-  if (!isAdmin({ req: { user } })) return false;
+  if (!isCMSUser(user)) return false;
 
   const configuredOwnerEmail = ownerEmail();
   if (!configuredOwnerEmail) return false;
@@ -41,16 +34,43 @@ function isOwner({ req: { user } }) {
   return normalizeEmail(user.email) === configuredOwnerEmail;
 }
 
+function isSelf({ req: { user }, id }) {
+  if (!isCMSUser(user) || id == null) return false;
+
+  return String(user.id) === String(id);
+}
+
+function readOwnerOrSelf(args) {
+  if (isOwner(args)) return true;
+  if (!isCMSUser(args.req.user)) return false;
+  if (args.id != null) return isSelf(args);
+
+  return { id: { equals: args.req.user.id } };
+}
+
+function updateOwnerOrSelf(args) {
+  if (isOwner(args)) return true;
+  if (!isCMSUser(args.req.user)) return false;
+  if (args.id != null) return isSelf(args);
+
+  return { id: { equals: args.req.user.id } };
+}
+
 export const Users = {
   slug: USER_COLLECTION,
+  labels: {
+    singular: 'User',
+    plural: 'Users',
+  },
   admin: {
+    group: 'Settings',
     useAsTitle: 'email',
   },
   access: {
     admin: canAccessAdmin,
     create: isOwner,
-    read: isOwner,
-    update: isOwner,
+    read: readOwnerOrSelf,
+    update: updateOwnerOrSelf,
     delete: isOwner,
     unlock: isOwner,
   },

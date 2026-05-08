@@ -80,9 +80,15 @@ function canManageLandings({ req: { user } }) {
 
 export const Landings = {
   slug: 'landings',
+  labels: {
+    singular: 'Landing Page',
+    plural: 'Landing Pages',
+  },
   admin: {
+    group: 'Pages',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'published', 'updatedAt'],
+    description: 'Campaign and promotional pages rendered under /c/{slug}.',
   },
   access: {
     admin: canManageLandings,

@@ -14,7 +14,8 @@ PostgreSQL-backed Payload 3 admin for **landing pages** consumed by the Astro si
 
 ## Content model
 
-- **Landings**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
+- **Existing Pages**: `path` matches a static Astro page such as `/`, `/about`, or `/groups/birthdays`. Published records override that page's SEO metadata at Astro build time.
+- **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
 
 ## Railway
 
@@ -42,7 +43,12 @@ Configure the Pages project (or GitHub Action) with:
 - `PAYLOAD_CMS_BUILD_STRICT` — optional. Set `1` or `true` in CI so a missing / invalid CMS origin or a failed landings fetch **fails the Astro build** instead of silently building without CMS pages.
 - `PAYLOAD_CMS_ALLOWED_HOSTS` — optional comma-separated hostnames (lowercase). If set, `PAYLOAD_CMS_ORIGIN`'s hostname must match an entry exactly or be its subdomain (`timemission.com` covers `www.timemission.com`; `railway.app` covers hosts like `x.up.railway.app`).
 
-The static build calls `GET {PAYLOAD_CMS_ORIGIN}/api/landings?limit=250&depth=0` to list **published** landing documents (no API key required for read).
+The static build calls:
+
+- `GET {PAYLOAD_CMS_ORIGIN}/api/site-pages?limit=250&depth=0` for **published** existing-page SEO overrides.
+- `GET {PAYLOAD_CMS_ORIGIN}/api/landings?limit=250&depth=0` for **published** landing documents.
+
+No API key is required for public published reads.
 
 ## Monorepo
 

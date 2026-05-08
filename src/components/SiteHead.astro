@@ -30,12 +30,12 @@ const {
 const seo = landingHead
     ? resolveLandingHeadSeo(canonicalPath, landingHead)
     : getSeoForRoute(canonicalPath);
-const title = titleOverride ?? seo.title;
-const description = descOverride ?? seo.description;
+const title = landingHead ? seo.title : titleOverride ?? seo.title;
+const description = landingHead ? seo.description : descOverride ?? seo.description;
 const canonicalUrl = seo.canonicalUrl;
-const og = ogOverride ?? seo.ogImage;
-const tw = twOverride ?? seo.twitterImage;
-const robotsValue = robotsOverride ?? seo.robots;
+const og = landingHead ? seo.ogImage : ogOverride ?? seo.ogImage;
+const tw = landingHead ? seo.twitterImage : twOverride ?? seo.twitterImage;
+const robotsValue = landingHead ? seo.robots : robotsOverride ?? seo.robots;
 
 const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || '').trim();
 const sgtmContainerUrl = String(import.meta.env.PUBLIC_SGTM_CONTAINER_URL || '').trim().replace(/\/+$/, '');

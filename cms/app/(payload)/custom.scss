@@ -90,18 +90,24 @@
   }
 
   .tm-admin-icon {
-    display: grid;
+    display: block;
     width: 44px;
     height: 44px;
-    place-items: center;
-    border: 1px solid var(--tm-line-strong);
-    border-radius: 6px;
-    background:
-      linear-gradient(135deg, rgba(255, 107, 44, 0.18), rgba(0, 229, 255, 0.08)),
-      var(--tm-panel);
-    color: var(--tm-orange);
-    font-size: 0.8rem;
-    font-weight: 800;
+    flex: 0 0 auto;
+  }
+
+  .tm-admin-icon__frame {
+    fill: var(--tm-panel);
+    stroke: var(--tm-line-strong);
+    stroke-width: 1.25;
+  }
+
+  .tm-admin-icon__letter {
+    fill: var(--tm-text);
+  }
+
+  .tm-admin-icon__letter--accent {
+    fill: var(--tm-orange);
   }
 
   .tm-admin-logo {
