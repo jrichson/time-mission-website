@@ -9,8 +9,49 @@ export type PayloadLandingSurface =
     | 'gift_cards'
     | 'external';
 
+export type PayloadLandingTemplate =
+    | 'campaign'
+    | 'group_event'
+    | 'location_promo'
+    | 'coming_soon';
+
+export const DEFAULT_LANDING_TEMPLATE: PayloadLandingTemplate = 'campaign';
+
+export const LANDING_TEMPLATE_OPTIONS: Array<{
+    value: PayloadLandingTemplate;
+    label: string;
+    source: string;
+    summary: string;
+}> = [
+    {
+        value: 'campaign',
+        label: 'Simple Campaign',
+        source: '/c/{slug}',
+        summary: 'Focused hero, short proof points, and one primary CTA.',
+    },
+    {
+        value: 'group_event',
+        label: 'Group Event',
+        source: '/groups/birthdays and /groups/corporate',
+        summary: 'Photo-led hero, feature cards, and event-planning proof points.',
+    },
+    {
+        value: 'location_promo',
+        label: 'Location Promo',
+        source: '/philadelphia, /mount-prospect, and /houston',
+        summary: 'Venue-forward layout for local offers, openings, and city campaigns.',
+    },
+    {
+        value: 'coming_soon',
+        label: 'Coming Soon',
+        source: '/dallas and /brussels',
+        summary: 'Launch-waitlist style for future cities and early-access campaigns.',
+    },
+];
+
 export interface PayloadLandingContractDoc {
     slug?: string | null;
+    template?: PayloadLandingTemplate | string | null;
     includeInSitemap?: boolean;
     seo?: {
         metaTitle?: string | null;
@@ -42,6 +83,17 @@ export function landingCanonicalPath(slug: string, prefix = '/c'): string {
 
 export function slugIsValidForLanding(slug: string): boolean {
     return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+}
+
+export function landingTemplateForDoc(doc: PayloadLandingContractDoc): PayloadLandingTemplate {
+    const value = doc.template;
+    return LANDING_TEMPLATE_OPTIONS.some((option) => option.value === value)
+        ? (value as PayloadLandingTemplate)
+        : DEFAULT_LANDING_TEMPLATE;
+}
+
+export function landingTemplateLabel(template: PayloadLandingTemplate): string {
+    return LANDING_TEMPLATE_OPTIONS.find((option) => option.value === template)?.label ?? 'Simple Campaign';
 }
 
 /** Minimum fields needed for Astro `c/[slug]` prerender — keep in sync with page template guards. */

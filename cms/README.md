@@ -1,6 +1,6 @@
 # Payload CMS (Railway)
 
-PostgreSQL-backed Payload 3 admin for **landing pages** consumed by the Astro site at build time.
+PostgreSQL-backed Payload 3 admin for **existing pages** and **landing pages** consumed by the Astro site at build time.
 
 ## Local
 
@@ -15,19 +15,35 @@ PostgreSQL-backed Payload 3 admin for **landing pages** consumed by the Astro si
 ## Content model
 
 - **Existing Pages**: `path` matches a route-registry page such as `/`, `/about`, or `/groups/birthdays`. The production migration preloads one row per registered route. Published records override that page's SEO metadata at Astro build time.
-- **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
+- **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Pick a template inspired by existing Time Mission pages, save, then use **Preview** in Payload to view the Railway-hosted saved preview. Enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
+- **User Invites**: owner-only records that create or update a CMS user, then either email a password setup link or create a copyable invite link. Use this instead of manually creating users with temporary passwords.
 
 ## Railway
 
 Set these in Railway:
 
 - `PAYLOAD_SERVER_URL` — public CMS origin only, no path, e.g. `https://your-app.up.railway.app`. Production requires HTTPS.
-- `CMS_OWNER_EMAIL` — exact email address for the account allowed to create, update, delete, unlock, and assign roles for CMS users. If this is unset, user management fails closed while existing admins/editors can still use the admin panel for allowed content operations.
+- `CMS_OWNER_EMAIL` — exact email address for the account allowed to create invites, update, delete, unlock, and assign roles for CMS users. If this is unset, user management fails closed while existing admins/editors can still use the admin panel for allowed content operations.
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` — SMTP settings for invite delivery. Without `SMTP_HOST`, new invite records are marked `failed` so you do not mistake a console-only email log for a real sent invite.
+- `SMTP_FROM_ADDRESS`, `SMTP_FROM_NAME` — optional sender identity for CMS invite emails. Defaults to `noreply@timemission.com` / `Time Mission CMS` when SMTP is configured.
+- `SMTP_SECURE` — optional boolean. Defaults to `true` when `SMTP_PORT=465`, otherwise `false`.
+- `SMTP_SKIP_VERIFY` — optional boolean. Defaults to `false`; set `true` only if the provider rejects startup verification but sends mail successfully.
 - `PAYLOAD_ALLOWED_ORIGINS` — optional comma-separated browser origins allowed to call the CMS API with cookies. `PAYLOAD_SERVER_URL` is always included.
+- `PAYLOAD_PUBLIC_SITE_ORIGIN` — optional public Astro/Cloudflare origin used by CMS previews to load `/assets/...` images. Set this to your current Pages preview/custom domain while `timemission.com` is not live.
 - `PAYLOAD_ENABLE_GRAPHQL` — optional. Defaults to `false`; the public site uses REST.
 - `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` — same value you use for “Deploy hook” in Cloudflare Pages.
 
 Production schema changes are handled by committed Payload migrations. `npm start` runs `payload migrate` before `next start`, so a fresh Railway Postgres database gets the required tables automatically. `PAYLOAD_DB_PUSH` is only useful in local/dev mode; Payload's Postgres adapter does not push schema in `NODE_ENV=production`.
+
+## Inviting CMS users
+
+1. Log in as the account matching `CMS_OWNER_EMAIL`.
+2. Go to **Settings -> User Invites**.
+3. Create a new invite with the recipient email, role, and delivery method.
+4. Choose **Send email** to email the 7-day setup link, or **Create invite link** to generate a copyable link in the invite record.
+5. Payload creates the user if needed, then marks the invite as `sent`, `link_created`, or `failed`.
+
+If an email invite is marked `failed`, check SMTP env vars and create a new invite for the same email to resend. If you need to invite someone before SMTP is ready, use **Create invite link**.
 
 ## Webhook
 

@@ -3,6 +3,8 @@ import {
   landingCtaForDoc,
   landingDocLooksRenderable,
   landingShouldAppearInSitemap,
+  landingTemplateForDoc,
+  landingTemplateLabel,
 } from '../src/lib/payload/landing-contract';
 
 const baseDoc = {
@@ -48,5 +50,12 @@ describe('Payload landing contract', () => {
       bookTrigger: false,
       linkPath: '/gift-cards',
     });
+  });
+
+  it('normalizes landing templates from the CMS model', () => {
+    expect(landingTemplateForDoc(baseDoc)).toBe('campaign');
+    expect(landingTemplateForDoc({ ...baseDoc, template: 'group_event' })).toBe('group_event');
+    expect(landingTemplateForDoc({ ...baseDoc, template: 'not-a-template' })).toBe('campaign');
+    expect(landingTemplateLabel('coming_soon')).toBe('Coming Soon');
   });
 });

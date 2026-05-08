@@ -7,12 +7,16 @@ import {
 } from './cms-origin';
 import type { PayloadLandingSurface } from './landing-contract';
 export {
+    DEFAULT_LANDING_TEMPLATE,
+    LANDING_TEMPLATE_OPTIONS,
     landingCanonicalPath,
     landingCtaForDoc,
     landingDistOutputCandidates,
     landingDocLooksRenderable,
     landingHeadForDoc,
     landingShouldAppearInSitemap,
+    landingTemplateForDoc,
+    landingTemplateLabel,
     slugIsValidForLanding,
 } from './landing-contract';
 export {
@@ -21,6 +25,7 @@ export {
     sitePagePathIsValid,
 } from './site-page-contract';
 export type { PayloadLandingSurface } from './landing-contract';
+export type { PayloadLandingTemplate } from './landing-contract';
 
 const DEFAULT_ORIGIN_KEYS = ['PAYLOAD_CMS_ORIGIN', 'PAYLOAD_PUBLIC_CMS_ORIGIN'] as const;
 
@@ -47,6 +52,7 @@ export interface PayloadLandingBulletsRow {
 export interface PayloadLandingDoc {
     id: string | number;
     slug: string;
+    template?: string | null;
     published?: boolean;
     includeInSitemap?: boolean;
     title: string;

@@ -2,6 +2,24 @@ const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const assetPathUnsafeRegex = /[<>"'\\\s]/;
 
 const CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS = 15_000;
+const landingTemplateOptions = [
+  {
+    label: 'Simple Campaign - focused /c page',
+    value: 'campaign',
+  },
+  {
+    label: 'Group Event - like birthday and corporate pages',
+    value: 'group_event',
+  },
+  {
+    label: 'Location Promo - like venue/city pages',
+    value: 'location_promo',
+  },
+  {
+    label: 'Coming Soon - like future city pages',
+    value: 'coming_soon',
+  },
+];
 
 function validateAssetPath(val) {
   if (typeof val !== 'string' || !val.startsWith('/assets/')) {
@@ -78,6 +96,11 @@ function canManageLandings({ req: { user } }) {
   return role === 'admin' || role === 'editor' || role == null;
 }
 
+function landingPreviewPath(doc) {
+  if (!doc?.id) return null;
+  return `/preview/landings/${encodeURIComponent(String(doc.id))}`;
+}
+
 export const Landings = {
   slug: 'landings',
   labels: {
@@ -87,8 +110,9 @@ export const Landings = {
   admin: {
     group: 'Pages',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'published', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'template', 'published', 'updatedAt'],
     description: 'Campaign and promotional pages rendered under /c/{slug}.',
+    preview: landingPreviewPath,
   },
   access: {
     admin: canManageLandings,
@@ -122,6 +146,17 @@ export const Landings = {
           },
         },
       ],
+    },
+    {
+      name: 'template',
+      type: 'select',
+      required: true,
+      defaultValue: 'campaign',
+      options: landingTemplateOptions,
+      admin: {
+        position: 'sidebar',
+        description: 'Layout guide inspired by existing Time Mission pages. Use Preview after saving to see it on Railway.',
+      },
     },
     {
       name: 'published',

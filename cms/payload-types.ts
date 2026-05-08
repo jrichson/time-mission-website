@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     'site-pages': SitePage;
     landings: Landing;
+    'user-invites': UserInvite;
     users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -79,6 +80,7 @@ export interface Config {
   collectionsSelect: {
     'site-pages': SitePagesSelect<false> | SitePagesSelect<true>;
     landings: LandingsSelect<false> | LandingsSelect<true>;
+    'user-invites': UserInvitesSelect<false> | UserInvitesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -169,6 +171,10 @@ export interface Landing {
    */
   slug: string;
   /**
+   * Layout guide inspired by existing Time Mission pages. Use Preview after saving to see it on Railway.
+   */
+  template: 'campaign' | 'group_event' | 'location_promo' | 'coming_soon';
+  /**
    * When checked, this page is included in the public site build.
    */
   published?: boolean | null;
@@ -212,6 +218,28 @@ export interface Landing {
      */
     ctaExternalUrl?: string | null;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Owner-only invites for CMS access. Creating an invite emails a password setup link.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-invites".
+ */
+export interface UserInvite {
+  id: number;
+  /**
+   * The email address that will receive the CMS invite.
+   */
+  email: string;
+  /**
+   * Editors manage page content. Admins can also access admin-level CMS areas.
+   */
+  role: 'admin' | 'editor';
+  status: 'pending' | 'sent' | 'failed';
+  sentAt?: string | null;
+  errorMessage?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -275,6 +303,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'landings';
         value: number | Landing;
+      } | null)
+    | ({
+        relationTo: 'user-invites';
+        value: number | UserInvite;
       } | null)
     | ({
         relationTo: 'users';
@@ -349,6 +381,7 @@ export interface SitePagesSelect<T extends boolean = true> {
 export interface LandingsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  template?: T;
   published?: T;
   includeInSitemap?: T;
   seo?:
@@ -376,6 +409,19 @@ export interface LandingsSelect<T extends boolean = true> {
         ctaSurface?: T;
         ctaExternalUrl?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-invites_select".
+ */
+export interface UserInvitesSelect<T extends boolean = true> {
+  email?: T;
+  role?: T;
+  status?: T;
+  sentAt?: T;
+  errorMessage?: T;
   updatedAt?: T;
   createdAt?: T;
 }

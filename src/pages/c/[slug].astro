@@ -7,6 +7,8 @@ import {
     landingCanonicalPath,
     landingDocLooksRenderable,
     landingHeadForDoc,
+    landingTemplateForDoc,
+    landingTemplateLabel,
     type PayloadLandingDoc,
 } from '../../lib/payload/load';
 
@@ -26,8 +28,14 @@ const page = definePage({ canonicalPath: landingCanonicalPath(doc.slug) });
 const landingHead = landingHeadForDoc(doc)!;
 const c = doc.content!;
 const cta = landingCtaForDoc(doc);
+const template = landingTemplateForDoc(doc);
+const templateLabel = landingTemplateLabel(template);
+const heroImage = doc.seo?.ogImage || '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
 
 const bullets = Array.isArray(c.bullets) ? c.bullets.map((b) => String(b?.text || '').trim()).filter(Boolean) : [];
+const proofItems = bullets.length
+    ? bullets.slice(0, 6)
+    : ['25+ interactive mission rooms', 'Team-based scoring', 'Built for every age and group size'];
 
 const jsonLd = {
     '@context': 'https://schema.org',
@@ -49,48 +57,206 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
         <style is:global>
             body.tm-landing-body {
                 --tm-landing-accent: var(--orange, #ff6b2c);
+                --tm-landing-black: #050508;
+                --tm-landing-panel: #101014;
+                --tm-landing-line: rgba(255, 255, 255, 0.14);
             }
             .tm-landing-main {
-                min-height: 60vh;
-                padding: clamp(2rem, 5vw, 4rem) 1.5rem;
-                background: radial-gradient(circle at 20% 0%, rgba(255, 122, 0, 0.12), transparent 45%), var(--dark, #050508);
                 color: var(--white, #fff);
                 font-family: var(--body, 'DM Sans', sans-serif);
+                background: var(--tm-landing-black);
+            }
+            .tm-landing-hero {
+                position: relative;
+                min-height: 70vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                padding: clamp(7rem, 12vw, 9rem) 1.5rem clamp(3rem, 7vw, 5rem);
             }
             .tm-landing-shell {
-                max-width: 720px;
+                position: relative;
+                z-index: 2;
+                width: min(100%, 74rem);
                 margin: 0 auto;
             }
+            .tm-landing-hero-copy {
+                width: min(100%, 48rem);
+                margin: 0 auto;
+                text-align: center;
+            }
+            .tm-landing-hero-media {
+                position: absolute;
+                inset: 0;
+                z-index: 0;
+            }
+            .tm-landing-hero-media::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(180deg, rgba(5, 5, 8, 0.38), rgba(5, 5, 8, 0.68) 58%, var(--tm-landing-black));
+            }
+            .tm-landing-hero-media img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center 42%;
+                opacity: 0.68;
+            }
             .tm-landing-kicker {
-                font-size: 0.75rem;
-                letter-spacing: 0.16em;
+                display: inline-flex;
+                align-items: center;
+                min-height: 2rem;
+                padding: 0.35rem 0.75rem;
+                border: 1px solid rgba(255, 255, 255, 0.18);
+                border-radius: 999px;
+                background: rgba(5, 5, 8, 0.62);
+                font-size: 0.72rem;
+                letter-spacing: 0.14em;
                 text-transform: uppercase;
                 color: var(--tm-landing-accent);
                 font-family: var(--tech, 'Orbitron', sans-serif);
-                margin-bottom: 0.75rem;
+                margin: 0 0 1rem;
             }
             .tm-landing-headline {
                 font-family: var(--display, 'Bebas Neue', sans-serif);
-                font-size: clamp(2.25rem, 6vw, 3.5rem);
-                line-height: 1.05;
+                font-size: clamp(3rem, 8vw, 6rem);
+                line-height: 0.94;
                 margin: 0 0 1rem;
+                text-wrap: balance;
             }
             .tm-landing-sub {
-                font-size: 1.1rem;
-                line-height: 1.55;
-                opacity: 0.9;
-                margin: 0 0 1.5rem;
+                width: min(100%, 42rem);
+                font-size: clamp(1rem, 2vw, 1.22rem);
+                line-height: 1.65;
+                color: rgba(255, 255, 255, 0.78);
+                margin: 0 auto 1.75rem;
+            }
+            .tm-landing-actions,
+            .tm-landing-cta-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.85rem;
+                justify-content: center;
+            }
+            .tm-landing-cta,
+            .tm-landing-secondary {
+                display: inline-flex;
+                min-height: 44px;
+                align-items: center;
+                justify-content: center;
+                border-radius: 999px;
+                padding: 0.85rem 1.35rem;
+                font-size: 0.9rem;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            .tm-landing-cta {
+                background: var(--gradient-primary, linear-gradient(135deg, #ff7a00, #ff3d00));
+                color: #fff;
+                border: 0;
+                box-shadow: 0 0 24px rgba(255, 106, 0, 0.34);
+            }
+            .tm-landing-secondary {
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.24);
+                background: rgba(255, 255, 255, 0.04);
+            }
+            .tm-landing-cta:focus-visible,
+            .tm-landing-secondary:focus-visible {
+                outline: 2px solid #fff;
+                outline-offset: 3px;
+            }
+            .tm-landing-proof,
+            .tm-landing-split,
+            .tm-landing-final {
+                padding: clamp(3.5rem, 8vw, 6rem) 1.5rem;
+            }
+            .tm-landing-proof {
+                background: var(--tm-landing-black);
+            }
+            .tm-landing-section-head {
+                width: min(100%, 46rem);
+                margin: 0 auto 2rem;
+                text-align: center;
+            }
+            .tm-landing-section-head h2,
+            .tm-landing-split-copy h2,
+            .tm-landing-final h2 {
+                font-family: var(--display, 'Bebas Neue', sans-serif);
+                font-size: clamp(2.4rem, 5vw, 4rem);
+                line-height: 0.98;
+                margin: 0 0 0.8rem;
+                text-wrap: balance;
+            }
+            .tm-landing-section-head p,
+            .tm-landing-split-copy p,
+            .tm-landing-final p {
+                color: rgba(255, 255, 255, 0.7);
+                line-height: 1.65;
+                margin: 0;
+            }
+            .tm-landing-proof-grid {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 1rem;
+            }
+            .tm-landing-proof-card {
+                min-height: 11rem;
+                border: 1px solid var(--tm-landing-line);
+                border-radius: 8px;
+                padding: 1.25rem;
+                background: rgba(255, 255, 255, 0.04);
+            }
+            .tm-landing-proof-number {
+                display: block;
+                margin-bottom: 1rem;
+                color: var(--tm-landing-accent);
+                font-family: var(--tech, 'Orbitron', sans-serif);
+                font-size: 0.75rem;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+            }
+            .tm-landing-proof-card h3 {
+                margin: 0;
+                font-size: 1.05rem;
+                line-height: 1.35;
+            }
+            .tm-landing-split {
+                background: var(--tm-landing-panel);
+            }
+            .tm-landing-split-grid {
+                display: grid;
+                grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+                gap: clamp(1.5rem, 5vw, 4rem);
+                align-items: center;
+            }
+            .tm-landing-split-image {
+                aspect-ratio: 4 / 3;
+                overflow: hidden;
+                border-radius: 8px;
+                border: 1px solid var(--tm-landing-line);
+            }
+            .tm-landing-split-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
             }
             .tm-landing-bullets {
                 list-style: none;
                 padding: 0;
-                margin: 0 0 2rem;
+                margin: 1.5rem 0 0;
             }
             .tm-landing-bullets li {
                 position: relative;
                 padding-left: 1.35rem;
                 margin-bottom: 0.65rem;
                 line-height: 1.45;
+                color: rgba(255, 255, 255, 0.82);
             }
             .tm-landing-bullets li::before {
                 content: '';
@@ -102,25 +268,32 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                 border-radius: 50%;
                 background: var(--tm-landing-accent);
             }
-            .tm-landing-cta {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0.85rem 1.75rem;
-                font-size: 1rem;
-                font-weight: 600;
-                font-family: var(--body, 'DM Sans', sans-serif);
-                background: var(--gradient-primary, linear-gradient(135deg, #ff7a00, #ff3d00));
-                color: #0a0a0c;
-                border: none;
-                border-radius: 999px;
-                cursor: pointer;
-                text-decoration: none;
-                box-shadow: 0 0 24px rgba(255, 106, 0, 0.35);
+            .tm-landing-final {
+                text-align: center;
+                background: var(--tm-landing-black);
             }
-            .tm-landing-cta:focus-visible {
-                outline: 2px solid var(--white, #fff);
-                outline-offset: 3px;
+            .tm-landing-final p {
+                margin: 0 auto 1.5rem;
+                width: min(100%, 38rem);
+            }
+            .tm-landing-main--location_promo .tm-landing-proof-card,
+            .tm-landing-main--coming_soon .tm-landing-proof-card {
+                min-height: 8rem;
+            }
+            .tm-landing-main--coming_soon .tm-landing-kicker {
+                color: #ffd0b8;
+            }
+            @media (max-width: 840px) {
+                .tm-landing-proof-grid,
+                .tm-landing-split-grid {
+                    grid-template-columns: 1fr;
+                }
+                .tm-landing-hero {
+                    min-height: 62vh;
+                }
+                .tm-landing-headline {
+                    font-size: clamp(2.75rem, 14vw, 4.4rem);
+                }
             }
         </style>
     </Fragment>
@@ -128,46 +301,137 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
         <script type="application/ld+json" is:inline set:html={jsonLdEmbed} />
     </Fragment>
 
-    <main class="tm-landing-main" id="main">
-        <div class="tm-landing-shell">
-            <p class="tm-landing-kicker">Time Mission</p>
-            <h1 class="tm-landing-headline">{c.headline}</h1>
-            {c.subheadline ? <p class="tm-landing-sub">{c.subheadline}</p> : null}
-            {
-                bullets.length ? (
+    <main class:list={['tm-landing-main', `tm-landing-main--${template}`]} id="main">
+        <section class="tm-landing-hero">
+            <div class="tm-landing-hero-media" aria-hidden="true">
+                <img src={heroImage} alt="" width="1920" height="1280" loading="eager" decoding="async" />
+            </div>
+            <div class="tm-landing-shell">
+                <div class="tm-landing-hero-copy">
+                    <p class="tm-landing-kicker">{templateLabel}</p>
+                    <h1 class="tm-landing-headline">{c.headline}</h1>
+                    {c.subheadline ? <p class="tm-landing-sub">{c.subheadline}</p> : null}
+                    <div class="tm-landing-actions">
+                        {
+                            cta.bookTrigger ? (
+                                <button
+                                    type="button"
+                                    class="tm-landing-cta"
+                                    data-tm-booking-trigger
+                                    data-tm-landing-primary
+                                    data-link-path={cta.linkPath}
+                                    data-cta-surface={cta.surface}
+                                >
+                                    {c.primaryCtaLabel}
+                                </button>
+                            ) : (
+                                <a
+                                    href={cta.primaryHref}
+                                    class="tm-landing-cta"
+                                    data-tm-landing-primary
+                                    data-link-path={cta.linkPath}
+                                    data-cta-surface={cta.surface}
+                                    {...cta.surface === 'external' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+                                >
+                                    {c.primaryCtaLabel}
+                                </a>
+                            )
+                        }
+                        {
+                            template === 'group_event' ? (
+                                <a class="tm-landing-secondary" href="/groups">Explore events</a>
+                            ) : template === 'location_promo' || template === 'coming_soon' ? (
+                                <a class="tm-landing-secondary" href="/locations">View locations</a>
+                            ) : null
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tm-landing-proof">
+            <div class="tm-landing-shell">
+                <div class="tm-landing-section-head">
+                    <p class="tm-landing-kicker">Why Time Mission</p>
+                    <h2>
+                        {template === 'group_event'
+                            ? 'Built for groups that want more than a reservation'
+                            : template === 'coming_soon'
+                                ? 'Get ready before the doors open'
+                                : template === 'location_promo'
+                                    ? 'A venue-first way to sell the mission'
+                                    : 'Make the first click count'}
+                    </h2>
+                    <p>{landingHead.metaDescription}</p>
+                </div>
+                <div class="tm-landing-proof-grid">
+                    {
+                        proofItems.slice(0, 3).map((item, index) => (
+                            <article class="tm-landing-proof-card">
+                                <span class="tm-landing-proof-number">Proof {String(index + 1).padStart(2, '0')}</span>
+                                <h3>{item}</h3>
+                            </article>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="tm-landing-split">
+            <div class="tm-landing-shell tm-landing-split-grid">
+                <div class="tm-landing-split-image">
+                    <img src={heroImage} alt="" width="1400" height="1050" loading="lazy" decoding="async" />
+                </div>
+                <div class="tm-landing-split-copy">
+                    <p class="tm-landing-kicker">
+                        {template === 'group_event'
+                            ? 'What to Expect'
+                            : template === 'coming_soon'
+                                ? 'Opening Updates'
+                                : template === 'location_promo'
+                                    ? 'Local Campaign'
+                                    : 'Campaign Details'}
+                    </p>
+                    <h2>
+                        {template === 'group_event'
+                            ? 'A session built for your crew'
+                            : template === 'coming_soon'
+                                ? 'First in line for the next mission'
+                                : template === 'location_promo'
+                                    ? 'Give the city a reason to book'
+                                    : 'Focused, fast, and easy to act on'}
+                    </h2>
+                    {c.subheadline ? <p>{c.subheadline}</p> : null}
                     <ul class="tm-landing-bullets">
-                        {bullets.map((t) => (
-                            <li>{t}</li>
-                        ))}
+                        {proofItems.map((t) => <li>{t}</li>)}
                     </ul>
-                ) : null
-            }
-            {
-                cta.bookTrigger ? (
-                    <button
-                        type="button"
-                        class="tm-landing-cta"
-                        data-tm-booking-trigger
-                        data-tm-landing-primary
-                        data-link-path={cta.linkPath}
-                        data-cta-surface={cta.surface}
-                    >
-                        {c.primaryCtaLabel}
-                    </button>
-                ) : (
-                    <a
-                        href={cta.primaryHref}
-                        class="tm-landing-cta"
-                        data-tm-landing-primary
-                        data-link-path={cta.linkPath}
-                        data-cta-surface={cta.surface}
-                        {...cta.surface === 'external' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
-                    >
-                        {c.primaryCtaLabel}
-                    </a>
-                )
-            }
-        </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tm-landing-final">
+            <div class="tm-landing-shell">
+                <h2>{template === 'coming_soon' ? 'Want opening updates?' : 'Ready to start?'}</h2>
+                <p>{template === 'group_event' ? 'Bring the crew. We will handle the missions, scoring, and momentum.' : landingHead.metaDescription}</p>
+                <div class="tm-landing-cta-row">
+                    {
+                        cta.bookTrigger ? (
+                            <button type="button" class="tm-landing-cta" data-tm-booking-trigger>
+                                {c.primaryCtaLabel}
+                            </button>
+                        ) : (
+                            <a
+                                href={cta.primaryHref}
+                                class="tm-landing-cta"
+                                {...cta.surface === 'external' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+                            >
+                                {c.primaryCtaLabel}
+                            </a>
+                        )
+                    }
+                </div>
+            </div>
+        </section>
     </main>
 
     <Fragment slot="after-site-scripts">

@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { postgresAdapter } from '@payloadcms/db-postgres';
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import path from 'path';
 import { buildConfig } from 'payload';
@@ -9,6 +10,7 @@ import sharp from 'sharp';
 
 import { Landings } from './collections/Landings.js';
 import { SitePages } from './collections/SitePages.js';
+import { UserInvites } from './collections/UserInvites.js';
 import { Users } from './collections/Users.js';
 
 const filename = fileURLToPath(import.meta.url);
@@ -63,6 +65,18 @@ function readOptionalOrigin(name: string): string | undefined {
   return value ? normalizeOrigin(value, name) : undefined;
 }
 
+function readOptionalIntegerEnv(name: string, defaultValue: number): number {
+  const value = process.env[name]?.trim();
+  if (!value) return defaultValue;
+
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    throw new Error(`[payload config] ${name} must be a positive integer`);
+  }
+
+  return parsed;
+}
+
 function readOriginList(name: string): string[] {
   const value = process.env[name]?.trim();
   if (!value) return [];
@@ -93,6 +107,33 @@ const allowedOrigins = Array.from(
   ]),
 );
 
+function buildEmailAdapter() {
+  const smtpHost = process.env.SMTP_HOST?.trim();
+  if (!smtpHost) return undefined;
+
+  const smtpPort = readOptionalIntegerEnv('SMTP_PORT', 587);
+  const smtpUser = process.env.SMTP_USER?.trim();
+  const smtpPass = process.env.SMTP_PASS?.trim();
+
+  if ((smtpUser && !smtpPass) || (!smtpUser && smtpPass)) {
+    throw new Error('[payload config] SMTP_USER and SMTP_PASS must be set together');
+  }
+
+  return nodemailerAdapter({
+    defaultFromAddress: process.env.SMTP_FROM_ADDRESS?.trim() || 'noreply@timemission.com',
+    defaultFromName: process.env.SMTP_FROM_NAME?.trim() || 'Time Mission CMS',
+    skipVerify: readBooleanEnv('SMTP_SKIP_VERIFY', false),
+    transportOptions: {
+      auth: smtpUser && smtpPass ? { pass: smtpPass, user: smtpUser } : undefined,
+      host: smtpHost,
+      port: smtpPort,
+      secure: readBooleanEnv('SMTP_SECURE', smtpPort === 465),
+    },
+  });
+}
+
+const emailAdapter = buildEmailAdapter();
+
 export default buildConfig({
   admin: {
     avatar: 'default',
@@ -111,10 +152,16 @@ export default buildConfig({
       titleSuffix: ' - Time Mission CMS',
     },
   },
-  collections: [SitePages as CollectionConfig, Landings as CollectionConfig, Users as CollectionConfig],
+  collections: [
+    SitePages as CollectionConfig,
+    Landings as CollectionConfig,
+    UserInvites as CollectionConfig,
+    Users as CollectionConfig,
+  ],
   cors: allowedOrigins,
   csrf: allowedOrigins,
   defaultDepth: 0,
+  ...(emailAdapter ? { email: emailAdapter } : {}),
   editor: lexicalEditor(),
   graphQL: {
     disable: !readBooleanEnv('PAYLOAD_ENABLE_GRAPHQL', false),
