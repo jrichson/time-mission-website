@@ -95,6 +95,7 @@ const allowedOrigins = Array.from(
 
 export default buildConfig({
   admin: {
+    avatar: 'default',
     user: Users.slug,
     importMap: {
       baseDir: dirname,

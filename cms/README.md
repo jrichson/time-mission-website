@@ -14,7 +14,7 @@ PostgreSQL-backed Payload 3 admin for **landing pages** consumed by the Astro si
 
 ## Content model
 
-- **Existing Pages**: `path` matches a static Astro page such as `/`, `/about`, or `/groups/birthdays`. Published records override that page's SEO metadata at Astro build time.
+- **Existing Pages**: `path` matches a route-registry page such as `/`, `/about`, or `/groups/birthdays`. The production migration preloads one row per registered route. Published records override that page's SEO metadata at Astro build time.
 - **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
 
 ## Railway

@@ -2,13 +2,11 @@ import React from 'react';
 
 export function TimeMissionIcon() {
   return (
-    <svg className="tm-admin-icon" viewBox="0 0 48 48" role="img" aria-label="Time Mission CMS">
-      <rect className="tm-admin-icon__frame" x="1" y="1" width="46" height="46" rx="6" />
-      <path className="tm-admin-icon__letter" d="M9 13h18v5h-6v17h-6V18H9z" />
-      <path
-        className="tm-admin-icon__letter tm-admin-icon__letter--accent"
-        d="M27 35V13h5l4 8.5 4-8.5h5v22h-5.5V25l-2.5 5h-2l-2.5-5v10z"
-      />
+    <svg className="tm-admin-icon" viewBox="0 0 24 24" role="img" aria-label="Time Mission CMS">
+      <rect className="tm-admin-icon__frame" x="1" y="1" width="22" height="22" rx="5" />
+      <path className="tm-admin-icon__orbit" d="M5.75 12c0-3.45 2.8-6.25 6.25-6.25s6.25 2.8 6.25 6.25-2.8 6.25-6.25 6.25S5.75 15.45 5.75 12Z" />
+      <path className="tm-admin-icon__pulse" d="M12 7.25v4.55l3.35 2.05" />
+      <circle className="tm-admin-icon__dot" cx="12" cy="12" r="1.7" />
     </svg>
   );
 }

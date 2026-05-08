@@ -91,22 +91,63 @@
 
   .tm-admin-icon {
     display: block;
-    width: 44px;
-    height: 44px;
+    width: 24px;
+    height: 24px;
     flex: 0 0 auto;
   }
 
   .tm-admin-icon__frame {
     fill: var(--tm-panel);
     stroke: var(--tm-line-strong);
-    stroke-width: 1.25;
+    stroke-width: 1.2;
   }
 
-  .tm-admin-icon__letter {
-    fill: var(--tm-text);
+  .tm-admin-icon__orbit,
+  .tm-admin-icon__pulse {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
-  .tm-admin-icon__letter--accent {
+  .tm-admin-icon__orbit {
+    stroke: var(--tm-orange);
+    stroke-width: 1.6;
+  }
+
+  .tm-admin-icon__pulse {
+    stroke: var(--tm-text);
+    stroke-width: 1.45;
+  }
+
+  .tm-admin-icon__dot {
+    fill: var(--tm-orange);
+  }
+
+  .app-header__account {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .app-header__account:hover,
+  .app-header__account:focus-visible {
+    background: var(--tm-orange-soft);
+  }
+
+  .graphic-account {
+    display: block;
+  }
+
+  .graphic-account__bg {
+    fill: var(--tm-panel);
+    stroke: var(--tm-line-strong);
+  }
+
+  .graphic-account__head,
+  .graphic-account__body {
     fill: var(--tm-orange);
   }
 

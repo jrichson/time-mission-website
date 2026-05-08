@@ -1,0 +1,90 @@
+import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+
+export async function up({ db }: MigrateUpArgs): Promise<void> {
+  await db.execute(sql`
+    INSERT INTO "site_pages" (
+      "title",
+      "path",
+      "published",
+      "seo_meta_title",
+      "seo_meta_description",
+      "seo_robots",
+      "seo_og_image",
+      "seo_twitter_image"
+    )
+    VALUES
+      ('Time Mission – 25+ Interactive Mission Rooms', '/', true, 'Time Mission – 25+ Interactive Mission Rooms', 'Step into the mission. Teams of 2–5 compete through 25+ immersive missions at Time Mission, test your speed, strength, skill, and smarts.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('About | Time Mission', '/about', true, 'About | Time Mission', 'Time Mission is the next generation of immersive gaming. Built for groups, powered by real-time scoring, inspired by escape rooms and video games.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Missions | Time Mission', '/missions', true, 'Missions | Time Mission', 'Explore 25+ action-packed challenge rooms at Time Mission. From speed to strategy, each mission tests something different.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Groups & Events | Time Mission', '/groups', true, 'Groups & Events | Time Mission', 'Birthday parties, corporate team-building, and private events at Time Mission. Two ways to book: group tickets or full custom events.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Bachelor & Bachelorette Parties | Time Mission', '/groups/bachelor-ette', true, 'Bachelor & Bachelorette Parties | Time Mission', 'Bachelor and bachelorette parties at Time Mission. 25+ head-to-head missions, team chaos, and a night that beats a bar crawl, crews welcome.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/groups/bachelor-bachelorette.jpg', '/assets/photos/groups/bachelor-bachelorette.jpg'),
+      ('Birthday Parties | Time Mission', '/groups/birthdays', true, 'Birthday Parties | Time Mission', 'Host an unforgettable birthday party at Time Mission. Private missions, party hosts, and space for cake, we handle the setup so you can just show up and celebrate.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/TM-Groups.jpg', '/assets/photos/TM-Groups.jpg'),
+      ('Corporate Events & Team Outings | Time Mission', '/groups/corporate', true, 'Corporate Events & Team Outings | Time Mission', 'Team outings, offsites, and corporate events at Time Mission. 25+ interactive missions, head-to-head scoring, and a session your team will actually show up for.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/groups/corporate-events.jpg', '/assets/photos/groups/corporate-events.jpg'),
+      ('Field Trips &amp; School Groups | Time Mission', '/groups/field-trips', true, 'Field Trips &amp; School Groups | Time Mission', 'Book a Time Mission field trip. 25+ interactive missions that turn physics, problem-solving, and teamwork into an adventure. Weekday group rates, ages 6+.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/groups/field-trips.jpg', '/assets/photos/groups/field-trips.jpg'),
+      ('Holiday Parties at Time Mission', '/groups/holidays', true, 'Holiday Parties at Time Mission', 'Skip the banquet hall. Host your holiday party at Time Mission, 25+ interactive missions, group scoring, and a session people actually look forward to.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/groups/holiday-parties.jpg', '/assets/photos/groups/holiday-parties.jpg'),
+      ('Private Events &amp; Venue Buyouts | Time Mission', '/groups/private-events', true, 'Private Events &amp; Venue Buyouts | Time Mission', 'Buy out a Time Mission location for your private event. Full-venue access, 25+ interactive missions, custom configurations, and scalable capacity for milestone celebrations.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/venue/_Time-Mission_0024.jpg', '/assets/photos/venue/_Time-Mission_0024.jpg'),
+      ('Gift Cards | Time Mission', '/gift-cards', true, 'Gift Cards | Time Mission', 'Give the gift of the mission. Time Mission gift cards work at every location and never expire.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('FAQ | Time Mission', '/faq', true, 'FAQ | Time Mission', 'Everything you need to know before your first Time Mission, age limits, pricing, what to wear, how teams work, and more.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Contact Us | Time Mission', '/contact', true, 'Contact Us | Time Mission', 'Contact Time Mission for questions, group bookings, or media inquiries. We respond within one business day.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Message Sent | Time Mission', '/contact-thank-you', true, 'Message Sent | Time Mission', 'Thanks for contacting Time Mission. We received your message and will respond soon.', 'noindex,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Locations | Time Mission', '/locations', true, 'Locations | Time Mission', 'Find a Time Mission near you, locations in Philadelphia, Mount Prospect, Houston, West Nyack, Lincoln, Manassas, and Antwerp.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Time Mission Philadelphia – 25+ Interactive Mission Rooms', '/philadelphia', true, 'Time Mission Philadelphia – 25+ Interactive Mission Rooms', 'Teams of 2–5 compete through 25+ immersive missions. Time Mission Philadelphia, book your adventure today.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Time Mission Houston – Coming Soon to Texas', '/houston', true, 'Time Mission Houston – Coming Soon to Texas', 'Time Mission is bringing 25+ immersive mission rooms to Houston, Texas for birthdays, corporate offsites, and groups of 2–5. Sign up for early-access pricing and opening updates.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Time Mission Mount Prospect – 25+ Interactive Mission Rooms', '/mount-prospect', true, 'Time Mission Mount Prospect – 25+ Interactive Mission Rooms', 'Time Mission Mount Prospect, 25+ challenge rooms for groups of 2–5. Book your mission today.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg', '/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg'),
+      ('Time Mission West Nyack – 25+ Interactive Mission Rooms', '/west-nyack', true, 'Time Mission West Nyack – 25+ Interactive Mission Rooms', 'Time Mission West Nyack at Palisades Center, 25+ immersive challenges for teams of 2–5. Book your mission today.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Time Mission Lincoln – 25+ Interactive Mission Rooms', '/lincoln', true, 'Time Mission Lincoln – 25+ Interactive Mission Rooms', 'Time Mission Lincoln, 25+ immersive challenge rooms for groups of 2–5. Book your mission today.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Time Mission Manassas – 25+ Interactive Mission Rooms', '/manassas', true, 'Time Mission Manassas – 25+ Interactive Mission Rooms', 'Time Mission Manassas, 25+ immersive challenge rooms for groups of 2–5. Book your mission today.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Time Mission Antwerp – 25+ Interactive Mission Rooms', '/antwerp', true, 'Time Mission Antwerp – 25+ Interactive Mission Rooms', 'Time Mission Antwerp, 25+ immersive challenge rooms for groups of 2–5. Réserve ta mission.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Time Mission Orland Park – Coming Soon to the Chicago Area', '/orland-park', true, 'Time Mission Orland Park – Coming Soon to the Chicago Area', 'Time Mission is opening a second Chicago-area location in Orland Park, IL with 25+ themed missions for groups, birthdays, and corporate events. Get notified when bookings open.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Time Mission Dallas – Coming Soon to Texas', '/dallas', true, 'Time Mission Dallas – Coming Soon to Texas', 'Time Mission is bringing 25+ immersive challenge rooms to Dallas, Texas — for teams of 2–5 with packages for birthdays, corporate outings, and private events. Reserve your spot.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Time Mission Brussels – Coming Soon to Belgium', '/brussels', true, 'Time Mission Brussels – Coming Soon to Belgium', 'Time Mission is expanding to Brussels — joining our Antwerp venue with 25+ immersive missions for groups, families, and corporate teams across Belgium. Sign up for opening updates.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Privacy Policy | Time Mission', '/privacy', true, 'Privacy Policy | Time Mission', 'Time Mission privacy policy, what data we collect, how we use it, and your rights.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Terms and Conditions | Time Mission', '/terms', true, 'Terms and Conditions | Time Mission', 'Time Mission terms and conditions for booking, participation, and use of our venues.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Code of Conduct | Time Mission', '/code-of-conduct', true, 'Code of Conduct | Time Mission', 'Time Mission code of conduct, how we keep every mission safe, fair, and fun for all players.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Cookie Policy | Time Mission', '/cookies', true, 'Cookie Policy | Time Mission', 'Time Mission cookie policy, the categories of cookies we use, what each does, and how to control them in your browser.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Accessibility Statement | Time Mission', '/accessibility', true, 'Accessibility Statement | Time Mission', 'Time Mission''s commitment to digital accessibility, our conformance target, known limitations, and how to request assistance or report an issue.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Licensing & Franchise | Time Mission', '/licensing', true, 'Licensing & Franchise | Time Mission', 'Bring Time Mission to your market. Corporate offices in Cranston, RI and Nuenen, Netherlands. Download the brochure or contact us for licensing and franchise opportunities.', 'index,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg'),
+      ('Waiver | Time Mission', '/waiver', true, 'Waiver | Time Mission', 'Review Time Mission waiver guidance before your visit.', 'noindex,follow'::"enum_site_pages_seo_robots", '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg', '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg')
+    ON CONFLICT ("path") DO NOTHING;
+  `)
+}
+
+export async function down({ db }: MigrateDownArgs): Promise<void> {
+  await db.execute(sql`
+    DELETE FROM "site_pages"
+    WHERE "path" IN (
+      '/',
+      '/about',
+      '/missions',
+      '/groups',
+      '/groups/bachelor-ette',
+      '/groups/birthdays',
+      '/groups/corporate',
+      '/groups/field-trips',
+      '/groups/holidays',
+      '/groups/private-events',
+      '/gift-cards',
+      '/faq',
+      '/contact',
+      '/contact-thank-you',
+      '/locations',
+      '/philadelphia',
+      '/houston',
+      '/mount-prospect',
+      '/west-nyack',
+      '/lincoln',
+      '/manassas',
+      '/antwerp',
+      '/orland-park',
+      '/dallas',
+      '/brussels',
+      '/privacy',
+      '/terms',
+      '/code-of-conduct',
+      '/cookies',
+      '/accessibility',
+      '/licensing',
+      '/waiver'
+    );
+  `)
+}
