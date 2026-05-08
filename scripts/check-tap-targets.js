@@ -1,9 +1,9 @@
 /**
  * Phase 10 P1-1 — Static CSS tap-target audit (heuristic).
  *
- * Reads `css/base.css` and `css/nav.css` and asserts that the tap-target
- * minimums declared in UI-SPEC (Tap Target Minimums table) are present in
- * the source CSS for the documented selectors.
+ * Reads shared CSS, page CSS, and source inline-CSS partials and asserts that
+ * the tap-target minimums declared in UI-SPEC (Tap Target Minimums table) are
+ * present in source CSS for the documented selectors.
  *
  * NOTE: This is a STATIC HEURISTIC. The validator parses CSS source and
  * estimates an effective minimum height from `min-height`, `height`, or
@@ -11,10 +11,9 @@
  * runtime Playwright check — see plan 10-06 Task 2 for the human-driven
  * desktop-viewport spot check on `.btn-tickets` and `.btn-primary`.
  *
- * Validator scope is intentionally limited to shared CSS (`css/base.css` and
- * `css/nav.css`) per UI-SPEC line 642-660. Selectors that only exist in page
- * inline CSS (e.g. `.btn-primary` in `src/partials/*-inline.raw.css.txt`) are
- * skipped with an informational note, not flagged as failures.
+ * The validator intentionally includes page-local button CSS so core CTAs like
+ * `.btn-primary` and `.btn-secondary` are not missed when they are declared
+ * outside shared nav/base styles.
  */
 'use strict';
 
@@ -40,8 +39,26 @@ const REQUIRES_48PX = [
     '.mobile-menu-cta a',
 ];
 
-const baseCss = fs.readFileSync(path.join(root, 'css', 'base.css'), 'utf8');
-const navCss = fs.readFileSync(path.join(root, 'css', 'nav.css'), 'utf8');
+function listCssSources() {
+    const files = new Set();
+    const cssDir = path.join(root, 'css');
+    const partialsDir = path.join(root, 'src', 'partials');
+
+    for (const name of fs.readdirSync(cssDir)) {
+        if (name.endsWith('.css')) files.add(path.join('css', name));
+    }
+
+    for (const name of fs.readdirSync(partialsDir)) {
+        if (name.endsWith('-inline.raw.css.txt')) files.add(path.join('src', 'partials', name));
+    }
+
+    return Array.from(files).sort().map((relPath) => ({
+        relPath,
+        css: fs.readFileSync(path.join(root, relPath), 'utf8'),
+    }));
+}
+
+const cssSources = listCssSources();
 
 const REM_PX = 16;
 
@@ -150,12 +167,11 @@ function estimateHeight(rule) {
 
 function checkSelector(selector, requiredPx) {
     const rulesets = [
-        ...findAllRulesets(navCss, selector, 'css/nav.css'),
-        ...findAllRulesets(baseCss, selector, 'css/base.css'),
+        ...cssSources.flatMap((source) => findAllRulesets(source.css, selector, source.relPath)),
     ];
     const rule = pickPrimaryRuleset(rulesets);
     if (!rule) {
-        skipped.push(`${selector}: not found in css/base.css or css/nav.css (may be page-local; skipped)`);
+        skipped.push(`${selector}: not found in scanned CSS sources; skipped`);
         return;
     }
     const est = estimateHeight(rule);
@@ -183,7 +199,7 @@ if (errors.length > 0) {
 
 const total = REQUIRES_44PX.length + REQUIRES_48PX.length;
 const validated = total - skipped.length;
-console.log(`check-tap-targets passed: ${validated}/${total} selectors validated against css/base.css + css/nav.css.`);
+console.log(`check-tap-targets passed: ${validated}/${total} selectors validated across ${cssSources.length} CSS source files.`);
 if (skipped.length > 0) {
     for (const s of skipped) console.log('  note: ' + s);
 }

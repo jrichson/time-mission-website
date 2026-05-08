@@ -3,11 +3,12 @@ import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import path from 'path';
 import { buildConfig } from 'payload';
+import type { CollectionConfig } from 'payload';
 import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 
-import { Landings } from './collections/Landings';
-import { Users } from './collections/Users';
+import { Landings } from './collections/Landings.js';
+import { Users } from './collections/Users.js';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -102,7 +103,7 @@ export default buildConfig({
       titleSuffix: ' - Time Mission CMS',
     },
   },
-  collections: [Users, Landings],
+  collections: [Users as CollectionConfig, Landings as CollectionConfig],
   cors: allowedOrigins,
   csrf: allowedOrigins,
   defaultDepth: 0,

@@ -709,7 +709,12 @@
         }
 
         .ticket-location-select select:focus {
-            outline: none;
+            border-color: var(--orange);
+        }
+
+        .ticket-location-select select:focus-visible {
+            outline: 2px solid var(--orange);
+            outline-offset: 2px;
             border-color: var(--orange);
         }
 
@@ -1024,7 +1029,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-bg">
-            <picture><source srcset="assets/photos/experiences/experiences-hero.webp" type="image/webp"><img src="assets/photos/experiences/experiences-hero.jpg" alt="Players competing in Time Mission challenges" loading="eager" fetchpriority="high" decoding="async"></picture>
+            <picture><source srcset="assets/photos/experiences/experiences-hero.webp" type="image/webp"><img src="assets/photos/experiences/experiences-hero.jpg" alt="Players competing in Time Mission challenges" loading="lazy" decoding="async"></picture>
         </div>
         <div class="hero-content">
             <div class="section-badge">THE MISSIONS</div>

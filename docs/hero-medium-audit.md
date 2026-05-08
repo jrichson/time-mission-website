@@ -2,6 +2,7 @@
 
 Status: complete
 Date: 2026-05-04
+Updated: 2026-05-08
 Source: src/partials/{location}-main.frag.txt
 
 ## Astro-rendered location pages
@@ -18,6 +19,7 @@ Source: src/partials/{location}-main.frag.txt
 - All three partials (philadelphia, houston, antwerp) use a `<video id="heroVideo">` element with two `<source>` children (mobile + desktop MP4s) as their hero medium.
 - No `<picture>` srcset conversion is required in Task 2 of Plan 10-05.
 - Statement: "Per docs/hero-medium-audit.md, all Astro-rendered location partials use `<video>` heroes; no srcset conversion needed in Phase 10."
+- Follow-up: hero videos now keep the poster as first paint with `preload="none"` in markup. Shared JS defers muted playback until after first paint and skips playback for reduced-motion, Save-Data, and slow-connection users. Visual parity is preserved because the hero medium remains video for eligible users.
 
 ## Asset availability
 
@@ -33,7 +35,7 @@ inside `<section class="hero">`. All three partials share an identical structure
 ```html
 <section class="hero">
     <div class="hero-video-container">
-        <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline ...>
+        <video id="heroVideo" muted loop playsinline webkit-playsinline preload="none" ...>
             <source src="{{TM_MEDIA_BASE}}/assets/video/hero-bg-mobile.mp4" ...>
             <source src="{{TM_MEDIA_BASE}}/assets/video/hero-bg-web.mp4" ...>
         </video>

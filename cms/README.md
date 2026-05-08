@@ -16,15 +16,18 @@ PostgreSQL-backed Payload 3 admin for **landing pages** consumed by the Astro si
 
 - **Landings**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
 
-## Webhook
+## Railway
 
 Set these in Railway:
 
 - `PAYLOAD_SERVER_URL` — public CMS origin only, no path, e.g. `https://your-app.up.railway.app`. Production requires HTTPS.
 - `PAYLOAD_ALLOWED_ORIGINS` — optional comma-separated browser origins allowed to call the CMS API with cookies. `PAYLOAD_SERVER_URL` is always included.
-- `PAYLOAD_DB_PUSH` — optional. Defaults to `false` in production and `true` locally. Set `true` only when you intentionally want Payload to push schema changes directly.
 - `PAYLOAD_ENABLE_GRAPHQL` — optional. Defaults to `false`; the public site uses REST.
 - `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` — same value you use for “Deploy hook” in Cloudflare Pages.
+
+Production schema changes are handled by committed Payload migrations. `npm start` runs `payload migrate` before `next start`, so a fresh Railway Postgres database gets the required tables automatically. `PAYLOAD_DB_PUSH` is only useful in local/dev mode; Payload's Postgres adapter does not push schema in `NODE_ENV=production`.
+
+## Webhook
 
 Saving a **published** landing (or unpublishing / deleting one that was published) triggers a POST to redeploy the static site.
 

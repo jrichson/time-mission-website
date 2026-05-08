@@ -19,6 +19,36 @@
 (function () {
     'use strict';
 
+    function prefersReducedMotion() {
+        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    function shouldLimitAutoplayMedia() {
+        var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        var effectiveType = connection && typeof connection.effectiveType === 'string'
+            ? connection.effectiveType
+            : '';
+        return prefersReducedMotion()
+            || Boolean(connection && connection.saveData)
+            || effectiveType === 'slow-2g'
+            || effectiveType === '2g';
+    }
+
+    function runAfterFirstPaint(callback) {
+        var run = function () {
+            if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(callback, { timeout: 1800 });
+            } else {
+                window.setTimeout(callback, 800);
+            }
+        };
+        if (document.readyState === 'complete') {
+            run();
+        } else {
+            window.addEventListener('load', run, { once: true });
+        }
+    }
+
     // ==========================================================================
     // Shared widget primitives — closure-scoped, not exported
     // ==========================================================================
@@ -46,6 +76,7 @@
         var currentTaglineIndex = 0;
         var isTyping = false;
         var taglineIntervalId = null;
+        var reduceMotion = prefersReducedMotion();
 
         function sleep(ms) {
             return new Promise(function (resolve) { setTimeout(resolve, ms); });
@@ -84,6 +115,7 @@
         }
 
         function startRotation() {
+            if (reduceMotion) return;
             taglineElement.classList.remove('no-cursor');
             taglineIntervalId = setInterval(rotateTagline, 4000);
         }
@@ -95,7 +127,7 @@
             isTyping = false;
             taglineElement.textContent = 'Time Mission ' + city;
             taglineElement.classList.add('no-cursor');
-            setTimeout(startRotation, mobileLocationHoldMs);
+            if (!reduceMotion) setTimeout(startRotation, mobileLocationHoldMs);
         }
 
         if (initialCity) {
@@ -103,7 +135,11 @@
             taglineElement.textContent = 'Time Mission ' + initialCity;
             taglineElement.classList.add('no-cursor');
         }
-        setTimeout(startRotation, initialHoldMs);
+        if (reduceMotion) {
+            taglineElement.classList.add('no-cursor');
+        } else {
+            setTimeout(startRotation, initialHoldMs);
+        }
 
         return { setEyebrowToLocation: setEyebrowToLocation };
     }
@@ -209,6 +245,7 @@
         var scrollEl = document.getElementById('experiencesScroll');
         var prevBtn = document.getElementById('prevBtn');
         var nextBtn = document.getElementById('nextBtn');
+        var reduceMotion = prefersReducedMotion();
 
         // closure-shared state used by both carousel and tilt-click
         var isHovering = false;
@@ -262,7 +299,9 @@
                 animationId = requestAnimationFrame(autoScroll);
             }
 
-            animationId = requestAnimationFrame(autoScroll);
+            if (!reduceMotion) {
+                animationId = requestAnimationFrame(autoScroll);
+            }
 
             // Hover: pause auto-scroll (desktop)
             scrollEl.addEventListener('mouseenter', function () { isHovering = true; });
@@ -335,7 +374,7 @@
                     velocity *= 0.95;
                     requestAnimationFrame(coast);
                 }
-                coast();
+                if (!reduceMotion) coast();
             }, { passive: true });
 
             // Wheel scroll on hover, disabled on desktop to avoid hijacking page scroll
@@ -370,6 +409,15 @@
 
                 var target = scrollPos + delta * cw;
 
+                if (reduceMotion) {
+                    scrollEl.style.transition = 'none';
+                    scrollPos = wrapPos(target);
+                    applyPos();
+                    void scrollEl.offsetWidth;
+                    scrollEl.style.transition = '';
+                    return;
+                }
+
                 scrollEl.style.transition = 'transform 0.4s ease';
                 scrollPos = target;
                 applyPos();
@@ -401,23 +449,27 @@
         var cards = document.querySelectorAll('.experience-card');
 
         cards.forEach(function (card) {
-            card.addEventListener('mousemove', function (e) {
-                var rect = card.getBoundingClientRect();
-                var x = e.clientX - rect.left;
-                var y = e.clientY - rect.top;
+            if (reduceMotion) {
+                card.style.transition = 'none';
+            } else {
+                card.addEventListener('mousemove', function (e) {
+                    var rect = card.getBoundingClientRect();
+                    var x = e.clientX - rect.left;
+                    var y = e.clientY - rect.top;
 
-                var centerX = rect.width / 2;
-                var centerY = rect.height / 2;
+                    var centerX = rect.width / 2;
+                    var centerY = rect.height / 2;
 
-                var rotateX = (y - centerY) / centerY * -8;
-                var rotateY = (x - centerX) / centerX * 8;
+                    var rotateX = (y - centerY) / centerY * -8;
+                    var rotateY = (x - centerX) / centerX * 8;
 
-                card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-8px)';
-            });
+                    card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-8px)';
+                });
 
-            card.addEventListener('mouseleave', function () {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-            });
+                card.addEventListener('mouseleave', function () {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+                });
+            }
 
             card.addEventListener('click', function () {
                 if (isHovering && !wasDragged) {
@@ -425,14 +477,6 @@
                 }
             });
         });
-
-        // Respect reduced motion preference
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            cards.forEach(function (card) {
-                card.style.transition = 'none';
-                card.addEventListener('mousemove', function () {});
-            });
-        }
     }
 
     // ==========================================
@@ -465,6 +509,7 @@
         if (!scroll) return;
         var cards = scroll.querySelectorAll('.testimonial-card');
         if (cards.length < 2) return;
+        var reduceMotion = prefersReducedMotion();
         var current = 0;
         var timer;
 
@@ -482,10 +527,10 @@
         scroll.addEventListener('touchend', function () {
             // Sync current index to nearest card after swipe
             current = Math.round(scroll.scrollLeft / scroll.offsetWidth);
-            startAuto();
+            if (!reduceMotion) startAuto();
         }, { passive: true });
 
-        startAuto();
+        if (!reduceMotion) startAuto();
     }
 
     // ==========================================
@@ -505,6 +550,7 @@
         var resumeTimer = null;
         var offset = count; // DOM offset after prepending clones
         var ANIM_MS = 450; // must match CSS transition duration
+        var reduceMotion = prefersReducedMotion();
 
         // Clone cards: prepend last→first, append first→last
         var i, clone;
@@ -556,6 +602,7 @@
 
         // Auto-play
         function startAuto() {
+            if (reduceMotion) return;
             stopAuto();
             autoTimer = setInterval(advance, 5000);
         }
@@ -564,6 +611,7 @@
         }
         function pauseAndResume() {
             stopAuto();
+            if (reduceMotion) return;
             if (resumeTimer) clearTimeout(resumeTimer);
             resumeTimer = setTimeout(startAuto, 8000);
         }
@@ -640,7 +688,7 @@
 
         // Init
         jumpTo(0);
-        startAuto();
+        if (!reduceMotion) startAuto();
     }
 
     // ==========================================
@@ -652,6 +700,7 @@
 
         var logos = logosContainer.querySelectorAll('.press-logo');
         var halfCount = logos.length / 2;
+        if (prefersReducedMotion()) return;
         var tickerPos = 0;
         var tickerSpeed = 0.6;
         var tickerPaused = false;
@@ -802,36 +851,45 @@
     }
 
     // ==========================================
-    // HERO VIDEO + REDUCED MOTION (INDEX variant only)
-    // If the user prefers reduced motion, skip autoplay; poster still shows
-    // (WCAG-aligned). Otherwise always try playback (no save-data /
-    // effectiveType gating — marketing wants the hero video broadly).
+    // HERO VIDEO + REDUCED MOTION / DATA SAVER
+    // Keep the poster as the first paint, then defer muted playback for users
+    // who have not asked for reduced motion or data savings.
     // ==========================================
     function initHeroVideo() {
         var heroVideoEl = document.getElementById('heroVideo');
         if (!heroVideoEl) return;
-        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        if (prefersReducedMotion) {
+        if (shouldLimitAutoplayMedia()) {
             heroVideoEl.removeAttribute('autoplay');
             heroVideoEl.removeAttribute('loop');
             heroVideoEl.preload = 'none';
             heroVideoEl.pause();
-        } else {
-            heroVideoEl.muted = true;
+            return;
+        }
+
+        heroVideoEl.removeAttribute('autoplay');
+        heroVideoEl.muted = true;
+        heroVideoEl.loop = true;
+        heroVideoEl.preload = 'none';
+
+        runAfterFirstPaint(function () {
             var attempted = false;
             function kickHeroPlayback() {
                 if (attempted) return;
                 attempted = true;
                 heroVideoEl.play().catch(function () {});
             }
+
+            heroVideoEl.preload = 'metadata';
+            heroVideoEl.load();
+
             if (heroVideoEl.readyState >= 2) {
                 kickHeroPlayback();
             } else {
                 heroVideoEl.addEventListener('loadeddata', kickHeroPlayback, { once: true });
                 heroVideoEl.addEventListener('canplay', kickHeroPlayback, { once: true });
             }
-        }
+        });
     }
 
     // ==========================================================================
@@ -842,7 +900,10 @@
         if (!config || typeof config !== 'object') return;
         var city = config.city || '';
         var taglines = Array.isArray(config.taglines) ? config.taglines : [];
+        var heroVideo = config.heroVideo !== false;
         var gamePopup = config.gamePopup === true;
+
+        if (heroVideo) initHeroVideo();
 
         // initTagline returns { setEyebrowToLocation } so we can register the nav.js hook.
         var tagline = initTagline(taglines, {

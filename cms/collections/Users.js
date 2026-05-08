@@ -1,19 +1,17 @@
-import type { CollectionConfig, PayloadRequest } from 'payload';
-
 const USER_COLLECTION = 'users';
 const isProduction = process.env.NODE_ENV === 'production';
 
-function userRole(user: unknown): string | undefined {
-  return (user as { role?: string } | null | undefined)?.role;
+function userRole(user) {
+  return user?.role;
 }
 
-function isAdmin({ req: { user } }: { req: PayloadRequest }): boolean {
+function isAdmin({ req: { user } }) {
   if (!user || user.collection !== USER_COLLECTION) return false;
 
   return userRole(user) === 'admin' || userRole(user) == null;
 }
 
-export const Users: CollectionConfig = {
+export const Users = {
   slug: USER_COLLECTION,
   admin: {
     useAsTitle: 'email',

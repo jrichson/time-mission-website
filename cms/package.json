@@ -2,13 +2,15 @@
   "name": "cms",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npm run migrate && next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "audit": "npm audit --audit-level=moderate",
+    "migrate": "payload migrate",
     "payload": "payload",
     "generate:importmap": "payload generate:importmap",
     "generate:types": "payload generate:types"

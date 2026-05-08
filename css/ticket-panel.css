@@ -118,7 +118,6 @@
 }
 
 .ticket-location-select select:focus {
-    outline: none;
     border-color: var(--orange);
 }
 

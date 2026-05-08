@@ -1,11 +1,9 @@
-import type { CollectionConfig, PayloadRequest } from 'payload';
-
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const assetPathUnsafeRegex = /[<>"'\\\s]/;
 
 const CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS = 15_000;
 
-function validateAssetPath(val: unknown) {
+function validateAssetPath(val) {
   if (typeof val !== 'string' || !val.startsWith('/assets/')) {
     return 'Must be a root-relative path starting with /assets/';
   }
@@ -15,11 +13,11 @@ function validateAssetPath(val: unknown) {
   return true;
 }
 
-function validateHttpsUrl(val: unknown, label: string) {
+function validateHttpsUrl(val, label) {
   if (typeof val !== 'string') return `${label} must be an https URL`;
   if (val.length > 2048) return `${label} is too long`;
 
-  let url: URL;
+  let url;
   try {
     url = new URL(val);
   } catch {
@@ -38,7 +36,7 @@ function deployHookURL() {
     return null;
   }
 
-  let url: URL;
+  let url;
   try {
     url = new URL(value);
   } catch {
@@ -54,7 +52,7 @@ function deployHookURL() {
   return url.toString();
 }
 
-function triggerPagesDeploy(reason: string) {
+function triggerPagesDeploy(reason) {
   const url = deployHookURL();
   if (!url) {
     return;
@@ -69,18 +67,18 @@ function triggerPagesDeploy(reason: string) {
   );
 }
 
-function userRole(user: unknown): string | undefined {
-  return (user as { role?: string } | null | undefined)?.role;
+function userRole(user) {
+  return user?.role;
 }
 
-function canManageLandings({ req: { user } }: { req: PayloadRequest }): boolean {
+function canManageLandings({ req: { user } }) {
   if (!user || user.collection !== 'users') return false;
 
   const role = userRole(user);
   return role === 'admin' || role === 'editor' || role == null;
 }
 
-export const Landings: CollectionConfig = {
+export const Landings = {
   slug: 'landings',
   admin: {
     useAsTitle: 'title',
@@ -110,7 +108,7 @@ export const Landings: CollectionConfig = {
           unique: true,
           index: true,
           admin: { description: 'URL segment: /c/{slug} (lowercase, hyphens only)' },
-          validate: (val: unknown) => {
+          validate: (val) => {
             if (typeof val !== 'string' || !slugRegex.test(val)) {
               return 'Slug must match ^[a-z0-9-]+$ (no leading/trailing hyphens)';
             }
@@ -171,11 +169,11 @@ export const Landings: CollectionConfig = {
             description:
               'Optional full https URL on timemission.com; leave empty for default https://timemission.com/c/{slug}',
           },
-          validate: (val: unknown) => {
+          validate: (val) => {
             if (val == null || val === '') return true;
             if (typeof val !== 'string') return 'Canonical must be empty or an https URL on timemission.com';
             const s = val.trim();
-            let u: URL;
+            let u;
             try {
               u = new URL(s);
             } catch {
@@ -201,7 +199,7 @@ export const Landings: CollectionConfig = {
           name: 'twitterImage',
           type: 'text',
           admin: { description: 'Defaults to og:image if empty' },
-          validate: (val: unknown) => {
+          validate: (val) => {
             if (val == null || val === '') return true;
             return validateAssetPath(val);
           },
@@ -243,9 +241,9 @@ export const Landings: CollectionConfig = {
           type: 'text',
           admin: {
             condition: (_, siblingData) => siblingData?.ctaSurface === 'external',
-            description: 'https://… when CTA surface is External',
+            description: 'https://... when CTA surface is External',
           },
-          validate: (val: unknown, { siblingData }: { siblingData?: { ctaSurface?: string } }) => {
+          validate: (val, { siblingData } = {}) => {
             if (siblingData?.ctaSurface !== 'external') return true;
             return validateHttpsUrl(val, 'External CTA');
           },
@@ -256,14 +254,14 @@ export const Landings: CollectionConfig = {
   hooks: {
     afterChange: [
       ({ doc, previousDoc }) => {
-        const pub = Boolean((doc as { published?: boolean }).published);
-        const wasPub = Boolean((previousDoc as { published?: boolean } | undefined)?.published);
+        const pub = Boolean(doc?.published);
+        const wasPub = Boolean(previousDoc?.published);
         if (pub || wasPub) triggerPagesDeploy('landing-change');
       },
     ],
     afterDelete: [
       ({ doc }) => {
-        if (Boolean((doc as { published?: boolean }).published)) {
+        if (Boolean(doc?.published)) {
           triggerPagesDeploy('landing-delete');
         }
       },
