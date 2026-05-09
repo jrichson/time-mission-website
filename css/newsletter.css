@@ -116,6 +116,13 @@
     line-height: 1.5;
 }
 
+.newsletter-section .tm-turnstile {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    min-height: 65px;
+}
+
 .newsletter-section .btn-subscribe {
     display: block;
     width: auto;

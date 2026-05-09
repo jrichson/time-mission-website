@@ -173,7 +173,9 @@ test('contact form uses configured submission endpoint', async ({ page }) => {
 
   const form = page.locator('form.contact-form');
   await expect(form).toHaveAttribute('method', /post/i);
-  await expect(form).toHaveAttribute('action', /\/contact-thank-you|formspree|netlify/i);
+  await expect(form).toHaveAttribute('action', /\/api\/contact$/i);
+  await expect(form).toHaveAttribute('data-tm-form', 'contact');
+  await expect(form.locator('[data-tm-turnstile]')).toHaveCount(1);
 });
 
 test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer (Phase 6)', async ({ page }) => {

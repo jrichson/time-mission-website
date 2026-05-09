@@ -462,7 +462,7 @@
         <div class="newsletter-inner">
             <h2>DON'T MISS A THING</h2>
             <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
-            <form name="newsletter" method="POST" action="/contact-thank-you" data-netlify="true" netlify-honeypot="bot-field">
+            <form name="newsletter" method="POST" action="/api/newsletter" data-tm-form="newsletter">
                 <input type="hidden" name="form-name" value="newsletter">
                 <p class="visually-hidden">
                     <label>Do not fill this out if you are human: <input name="bot-field"></label>
@@ -479,6 +479,7 @@
                     <input type="checkbox" name="marketing_opt_in" value="yes" required>
                     <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
                 </label>
+                <div class="tm-turnstile" data-tm-turnstile></div>
                 <button type="submit" class="btn-subscribe">Sign Up</button>
                 <p class="newsletter-legal">
                     By signing up, you agree to our

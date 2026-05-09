@@ -35,6 +35,15 @@ Use this checklist on a **Cloudflare Pages preview deployment** before promoting
 | Critical assets | Load `/`, `/faq`, one location in browser (Network tab) | hero video poster, fonts, `locations.json`, primary CSS/JS 200 | Manual |
 | JSON-LD spot-check | View source on `/`, `/faq`, open location | `<script type="application/ld+json">` present where expected | `npm run check:schema-output` |
 
+## Forms and Functions
+
+| Check | How to verify | Pass criteria | Related automation |
+|--------|----------------|---------------|-------------------|
+| Pages Functions uploaded | Deploy with `npm run deploy:pages` from repo root, then open the deployment details | `functions/` routes are included in the Wrangler deployment; dashboard drag-and-drop is not used for this release | `wrangler.toml`, `functions/api/contact.js`, `functions/api/newsletter.js` |
+| Contact form | Submit `/contact` with a valid Turnstile challenge | Redirects to `/contact-thank-you`; configured `CONTACT_TO_EMAIL` inbox receives a Resend email | `npm run test:unit` |
+| Newsletter form | Submit a representative newsletter form | Redirects to `/contact-thank-you`; configured `NEWSLETTER_TO_EMAIL` inbox receives a Resend email | `npm run test:unit` |
+| Form abuse controls | Submit without Turnstile token or with a filled honeypot in a controlled test | Missing Turnstile is rejected; honeypot submissions silently succeed without delivery | `tests/form-handler.test.mjs` |
+
 ## Analytics and third parties
 
 | Check | How to verify | Pass criteria | Related automation |

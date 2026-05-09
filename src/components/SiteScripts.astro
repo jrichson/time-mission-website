@@ -4,6 +4,9 @@ import locationsData from '../../data/locations.json';
 
 const siteContract = getPublicSiteContract();
 const tmData = locationsData;
+const formConfig = {
+    turnstileSiteKey: String(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '').trim(),
+};
 ---
 
 <script is:inline define:vars={{ siteContract }}>
@@ -12,10 +15,14 @@ const tmData = locationsData;
 <script is:inline define:vars={{ tmData }}>
     window.TM_DATA = tmData;
 </script>
+<script is:inline define:vars={{ formConfig }}>
+    window.__TM_FORM_CONFIG__ = formConfig;
+</script>
 <script defer is:inline src="/js/site-progressive.js?v=1"></script>
 <script defer is:inline src="/js/consent-bridge.js?v=1"></script>
 <script defer is:inline src="/js/analytics.js?v=1"></script>
 <script defer is:inline src="/js/contact-form-analytics.js?v=1"></script>
+<script defer is:inline src="/js/form-protection.js?v=1"></script>
 <script defer is:inline src="/js/nav.js?v=4"></script>
 <script defer is:inline src="/js/locations.js?v=10"></script>
 <script defer is:inline src="/js/booking-controller.js?v=2"></script>

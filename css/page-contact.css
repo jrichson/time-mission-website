@@ -123,6 +123,10 @@
             min-height: 120px;
         }
 
+        .contact-form .tm-turnstile {
+            min-height: 65px;
+        }
+
         .btn-submit {
             display: inline-flex;
             align-items: center;
@@ -465,4 +469,3 @@
             .form-group input, .form-group textarea { padding: 0.75rem 0.9rem; font-size: 0.95rem; }
             .btn-submit { min-height: 44px; font-size: 0.85rem; padding: 0.85rem 1.5rem; }
         }
-    

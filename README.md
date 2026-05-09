@@ -38,12 +38,13 @@ npm run test:smoke
 - `data/locations.json` is the source of truth for location state, booking URLs, gift card URLs, and Roller checkout URLs.
 - `js/ticket-panel.js` and `js/roller-checkout.js` consume location data through `window.TM`; do not reintroduce separate URL maps.
 - `components/ticket-panel.html` is synced into pages by `./build.sh`.
-- `_headers` contains static-host security headers and must be reviewed against the final hosting provider.
+- `_headers` contains Cloudflare Pages security headers and is generated from `_headers.tmpl` during `npm run build:astro`.
 - `_redirects` is written for Netlify/Cloudflare Pages style routing.
+- Contact and newsletter forms are handled by Cloudflare Pages Functions in `functions/api/`. Wrangler Direct Upload must be run from the repo root so the sibling `functions/` directory is uploaded with `dist/`.
+- Required Pages Function secrets: `FORM_EMAIL_API_KEY`, `FORM_FROM_EMAIL`, `CONTACT_TO_EMAIL`, `NEWSLETTER_TO_EMAIL`, `TURNSTILE_SECRET_KEY`. Required public build var: `PUBLIC_TURNSTILE_SITE_KEY`.
 
 ## Remaining Modernization Risks
 
-- Contact form handling assumes a static-form provider that supports Netlify-style attributes, or equivalent routing for `contact-thank-you.html`.
 - A GitHub Actions workflow was not added because the local environment blocked workflow-file edits; CI should run `npm ci`, install Chromium, then `npm run verify`.
 - Image and video optimization still need a dedicated Core Web Vitals pass.
 - Most CSS is still page-local; extract shared styles only behind visual regression or expanded Playwright coverage.

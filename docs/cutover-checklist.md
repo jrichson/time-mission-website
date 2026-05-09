@@ -35,6 +35,8 @@ Cross-links:
 | P1-10 | Product + Brand | ROLLER / Experience Factory brand strategy decision | Confirm whether "Experience Factory" surfaces anywhere on-site post-cutover (e.g., legacy schema fields, copy on coming-soon Brussels page, ROLLER widget defaults). Document decision in this row. | [ ] not started |
 | P1-11 | GTM Admin | FB & TikTok pixel `domain=.timemission.com` | Fix `domain` attribute on Meta Pixel + TikTok Pixel tags inside the GTM container (NOT in repo); verify in GTM Preview before publish; confirm no cross-subdomain cookie loss after cutover | [ ] not started |
 | P1-17 | DevOps | `tickets.timemission.com` DNS + CSP allowlist | Two safe paths: (a) deploy `tickets.timemission.com` subdomain DNS+TLS so the existing CSP entry resolves; OR (b) migrate Philadelphia + West Nyack + Lincoln booking URLs from `tickets.timemission.com` to `ecom.roller.app` first, then remove from `_headers` `frame-src`/`connect-src`. The current `_headers` retains the entry — booking would break if removed prematurely. | [ ] not started |
+| FORM-01 | Web Dev | Cloudflare Pages Functions form backend | Configure Pages Function secrets: `FORM_EMAIL_API_KEY`, `FORM_FROM_EMAIL`, `CONTACT_TO_EMAIL`, `NEWSLETTER_TO_EMAIL`, `TURNSTILE_SECRET_KEY`; set public build var `PUBLIC_TURNSTILE_SITE_KEY`; deploy with Wrangler from repo root so `functions/` uploads with `dist/`; submit contact + newsletter forms on preview and confirm inbox delivery. | [ ] not started |
+| CMS-01 | Web Dev | Railway CMS launch env | Keep CMS on `https://time-mission-website-production.up.railway.app`; set `PAYLOAD_SERVER_URL` to that origin, `PAYLOAD_PUBLIC_SITE_ORIGIN` to the current Pages preview before cutover and `https://timemission.com` after cutover, `PAYLOAD_ALLOWED_ORIGINS` to Railway + apex + www, and keep `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` unset until a direct-upload CI hook exists. | [ ] not started |
 | P2-8 | Designer | Re-export `share-image.jpg` (586 KB → ~150 KB target) | Compressed file delivered; replace at original path under `assets/`; rebuild dist; confirm OG/Twitter card preview still renders correctly | [ ] not started |
 | P2-9 | Designer + Web Dev | Compress `brochure.pdf` (11.7 MB → ~2–3 MB target) | Compressed PDF delivered; replace at original path under `assets/`; confirm download link still resolves and PDF still readable | [ ] not started |
 | P2-10 | DevOps | `api-1.timemission.com` open CORS | If endpoint is PII-bound, narrow `Access-Control-Allow-Origin` to `https://timemission.com`; if not PII-bound, document acceptance with rationale in this row | [ ] not started |
@@ -103,7 +105,8 @@ Cross-links:
 2. All Host Dependencies above either Done or explicitly Deferred (with rationale logged in `STATE.md`).
 3. P2-6 brand compliance review signed off (or specific defects logged + resolved).
 4. Run [docs/cloudflare-preview-validation.md](./cloudflare-preview-validation.md) checklist on a real Cloudflare Pages preview deployment.
-5. Confirm GTM DebugView shows `web_vitals` events on homepage + one location page after consent grant.
-6. Confirm cookie banner appears on Antwerp; absent on Philadelphia (locked D-03 EU-only).
-7. Final rollback sanity: confirm [docs/rollback-runbook.md](./rollback-runbook.md) is current and the `pre-astro-migration-baseline` git tag exists.
-8. Cutover.
+5. Submit the contact form and a newsletter form on preview; confirm Turnstile renders, both submissions redirect to `/contact-thank-you`, and the configured inboxes receive the emails.
+6. Confirm GTM DebugView shows `web_vitals` events on homepage + one location page after consent grant.
+7. Confirm cookie banner appears on Antwerp; absent on Philadelphia (locked D-03 EU-only).
+8. Final rollback sanity: confirm [docs/rollback-runbook.md](./rollback-runbook.md) is current and the `pre-astro-migration-baseline` git tag exists.
+9. Cutover.

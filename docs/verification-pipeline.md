@@ -30,6 +30,8 @@ Order is fixed in `scripts/lib/verify-pipeline.cjs` and must not be reordered ca
 | 18 | `npm run check:nap-parity` | NAP / schema vs location data | VER-02 |
 | 19 | `npm run test:smoke` | Playwright: smoke flows (`site.spec.js`) + visual baselines (`visual.spec.js`, **VER-04**) | VER-02, VER-04 |
 
+`npm run check` includes Vitest coverage for the Cloudflare Pages Functions form handler and source-markup assertions that prevent Netlify form attributes from returning. Runtime delivery still requires preview testing with real Pages Function secrets and inbox confirmation.
+
 ## Aliases
 
 - **`verify:phase7`** — Compatibility alias to **`verify`** (historical Phase 7 gate name retained for operator familiarity).

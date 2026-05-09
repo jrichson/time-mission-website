@@ -31,7 +31,7 @@ Set these in Railway:
 - `PAYLOAD_ALLOWED_ORIGINS` — optional comma-separated browser origins allowed to call the CMS API with cookies. `PAYLOAD_SERVER_URL` is always included.
 - `PAYLOAD_PUBLIC_SITE_ORIGIN` — optional public Astro/Cloudflare origin used by CMS previews to load `/assets/...` images. Set this to your current Pages preview/custom domain while `timemission.com` is not live.
 - `PAYLOAD_ENABLE_GRAPHQL` — optional. Defaults to `false`; the public site uses REST.
-- `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` — same value you use for “Deploy hook” in Cloudflare Pages.
+- `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` — leave unset for the current Wrangler Direct Upload launch path. Set it only after you add a separate CI/direct-upload automation endpoint; otherwise CMS saves cannot safely trigger the public static deploy.
 
 Production schema changes are handled by committed Payload migrations. `npm start` runs `payload migrate` before `next start`, so a fresh Railway Postgres database gets the required tables automatically. `PAYLOAD_DB_PUSH` is only useful in local/dev mode; Payload's Postgres adapter does not push schema in `NODE_ENV=production`.
 
@@ -47,9 +47,9 @@ If an email invite is marked `failed`, check SMTP env vars and create a new invi
 
 ## Webhook
 
-Saving a **published** landing (or unpublishing / deleting one that was published) triggers a POST to redeploy the static site.
+Saving a **published** landing (or unpublishing / deleting one that was published) triggers a POST to redeploy the static site only when `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` is configured.
 
-Marketing should expect **minutes** of delay (Payload save → hook → CI build → upload), not instant publishes.
+For this launch, the public site is deployed by Wrangler Direct Upload, so leave the hook unset and run the static deploy manually after CMS content changes. Marketing should expect **minutes** of delay once a future hook-backed CI path exists (Payload save → hook → CI build → upload), not instant publishes.
 
 ## Astro / Cloudflare Pages build
 
