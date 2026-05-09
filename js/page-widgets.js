@@ -172,6 +172,10 @@
         var pointsEl = document.getElementById('pointsCounter');
         var pointsWrap = document.getElementById('pointsWrap');
         if (!pointsEl) return;
+        if (prefersReducedMotion()) {
+            pointsEl.textContent = '1,200';
+            return;
+        }
 
         var currentScore = 0;
         var hitValues = [50, 100, 75, 150, 200, 100, 250, 50, 125, 100];

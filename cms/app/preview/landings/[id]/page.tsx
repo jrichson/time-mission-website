@@ -22,26 +22,26 @@ const DEFAULT_TEMPLATE: LandingTemplate = 'campaign';
 
 const templateMeta: Record<LandingTemplate, { label: string; headline: string; secondaryHref: string; secondaryLabel: string }> = {
   campaign: {
-    label: 'Simple Campaign',
-    headline: 'Make the first click count',
+    label: 'Campaign page',
+    headline: 'Check the customer promise',
     secondaryHref: '/admin/collections/landings',
-    secondaryLabel: 'Back to landings',
+    secondaryLabel: 'Back to landing pages',
   },
   group_event: {
-    label: 'Group Event',
-    headline: 'Built for groups that want more than a reservation',
+    label: 'Group event page',
+    headline: 'Confirm the group offer',
     secondaryHref: '/groups',
-    secondaryLabel: 'Explore events',
+    secondaryLabel: 'View group events',
   },
   location_promo: {
-    label: 'Location Promo',
-    headline: 'A venue-first way to sell the mission',
+    label: 'Location page',
+    headline: 'Confirm the venue story',
     secondaryHref: '/locations',
     secondaryLabel: 'View locations',
   },
   coming_soon: {
-    label: 'Coming Soon',
-    headline: 'Get ready before the doors open',
+    label: 'Coming soon page',
+    headline: 'Build interest before launch',
     secondaryHref: '/locations',
     secondaryLabel: 'View locations',
   },
@@ -129,16 +129,19 @@ export default async function LandingPreviewPage({ params }: PageProps) {
     label: doc.content?.primaryCtaLabel || 'Book now',
   };
   const secondaryHref = publicPathURL(meta.secondaryHref);
+  const statusCopy = doc.published
+    ? 'Published in the CMS. It appears publicly after the next approved site deploy.'
+    : 'Draft in the CMS. Publish it when the page is ready for the next site deploy.';
 
   return (
     <main className={`${styles.previewPage} ${templateClasses[template]}`}>
       <div className={styles.previewBar}>
         <div>
-          <span className={styles.previewEyebrow}>CMS preview</span>
-          <p>{doc.published ? 'Published landing page' : 'Unpublished landing page'}</p>
+          <span className={styles.previewEyebrow}>Landing preview</span>
+          <p>{statusCopy}</p>
         </div>
         <a className={styles.previewAdminLink} href={`/admin/collections/landings/${doc.id}`}>
-          Edit page
+          Edit landing page
         </a>
       </div>
 
@@ -165,14 +168,14 @@ export default async function LandingPreviewPage({ params }: PageProps) {
 
       <section className={styles.proofSection}>
         <div className={styles.sectionHeader}>
-          <span className={styles.templateBadge}>Template guide</span>
+          <span className={styles.templateBadge}>Preview checklist</span>
           <h2>{meta.headline}</h2>
-          <p>{doc.seo?.metaDescription}</p>
+          <p>{doc.seo?.metaDescription || 'Review the headline, call to action, and proof points before this page goes live.'}</p>
         </div>
         <div className={styles.proofGrid}>
           {bullets.slice(0, 3).map((bullet, index) => (
             <article className={styles.proofCard} key={`${bullet}-${index}`}>
-              <span>Proof {String(index + 1).padStart(2, '0')}</span>
+              <span>Visitor reason {String(index + 1).padStart(2, '0')}</span>
               <h3>{bullet}</h3>
             </article>
           ))}
@@ -186,8 +189,8 @@ export default async function LandingPreviewPage({ params }: PageProps) {
           style={{ backgroundImage: `url("${heroImage}")` }}
         />
         <div className={styles.splitCopy}>
-          <span className={styles.templateBadge}>Page structure</span>
-          <h2>{template === 'coming_soon' ? 'Opening momentum, captured early' : 'A landing page with the site rhythm baked in'}</h2>
+          <span className={styles.templateBadge}>Customer journey</span>
+          <h2>{template === 'coming_soon' ? 'Give visitors a reason to come back' : 'Show visitors why this offer is worth booking'}</h2>
           <ul>
             {bullets.map((bullet, index) => (
               <li key={`${bullet}-detail-${index}`}>{bullet}</li>
