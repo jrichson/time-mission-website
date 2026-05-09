@@ -1,6 +1,5 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
 const { extractHeadMetadata, readDistRouteHtml } = require('./lib/rendered-page-contract');
 
 const root = path.resolve(__dirname, '..');
@@ -19,8 +18,6 @@ function resolveRobotsForRoute(canonicalPath, table) {
   }
   return 'index,follow';
 }
-
-const ASTRO_RENDERED_OUTPUT_FILES = loadAstroRenderedOutputFilesSet(root);
 
 const routesData = loadJson('src/data/routes.json');
 const seoRoutes = loadJson('src/data/site/seo-routes.json');
@@ -42,11 +39,7 @@ if (!fs.existsSync(distDir)) {
   process.exit(1);
 }
 
-const astroRoutes = routesData.routes.filter((r) =>
-  ASTRO_RENDERED_OUTPUT_FILES.has(r.outputFile.replace(/^\//, '')),
-);
-
-for (const route of astroRoutes) {
+for (const route of routesData.routes) {
   const cp = route.canonicalPath;
   const { outFile, exists, html } = readDistRouteHtml(root, route);
   if (!exists) {
@@ -81,4 +74,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`SEO output check passed for ${astroRoutes.length} Astro-rendered routes.`);
+console.log(`SEO output check passed for ${routesData.routes.length} public routes.`);

@@ -56,6 +56,9 @@ for (const p of canonicalPaths) {
     if (v.includes('<') || v.includes('>') || v.includes('</script>') || v.includes('\u0000')) {
       errors.push(`${p}: ${field} contains forbidden characters`);
     }
+    if (/&(?:amp|quot|apos|lt|gt|#\d+|#x[0-9a-f]+);/i.test(v)) {
+      errors.push(`${p}: ${field} must use raw text, not pre-encoded HTML entities`);
+    }
   }
   for (const imgField of ['ogImage', 'twitterImage']) {
     const v = e[imgField];

@@ -20,6 +20,7 @@ function resolveRobotsForRoute(canonicalPath, table) {
 
 const routes = loadJson('src/data/routes.json');
 const robotsFile = loadJson('src/data/site/seo-robots.json');
+const distDir = path.join(root, 'dist');
 
 if (!Array.isArray(robotsFile.rules) || robotsFile.rules.length === 0) {
   errors.push('seo-robots.json: rules must be non-empty array');
@@ -71,6 +72,27 @@ for (const p of sitemapTrue) {
   const resolved = resolveRobotsForRoute(p, robotsFile);
   if (resolved.startsWith('noindex')) {
     errors.push(`noindex resolved for sitemap-eligible route: ${p}`);
+  }
+}
+
+if (fs.existsSync(distDir)) {
+  for (const route of routes.routes) {
+    const distPath = path.join(distDir, route.outputFile);
+    if (!fs.existsSync(distPath)) continue;
+
+    const html = fs.readFileSync(distPath, 'utf8');
+    const robotsMeta = html.match(/<meta\s+[^>]*name=["']robots["'][^>]*>/i);
+    if (!robotsMeta) {
+      errors.push(`${route.outputFile}: missing rendered robots meta`);
+      continue;
+    }
+
+    const contentMatch = robotsMeta[0].match(/\bcontent\s*=\s*["']([^"']+)["']/i);
+    const actual = contentMatch ? contentMatch[1] : '';
+    const expected = resolveRobotsForRoute(route.canonicalPath, robotsFile);
+    if (actual !== expected) {
+      errors.push(`${route.outputFile}: robots meta mismatch (got ${actual || 'empty'}, expected ${expected})`);
+    }
   }
 }
 

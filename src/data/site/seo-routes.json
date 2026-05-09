@@ -31,7 +31,7 @@
   },
   "/groups/birthdays": {
     "title": "Birthday Parties | Time Mission",
-    "description": "Host an unforgettable birthday party at Time Mission. Private missions, party hosts, and space for cake, we handle the setup so you can just show up and celebrate.",
+    "description": "Host an unforgettable birthday party at Time Mission with private missions, party hosts, and space for cake. We handle setup so you can celebrate.",
     "ogImage": "/assets/photos/TM-Groups.jpg",
     "twitterImage": "/assets/photos/TM-Groups.jpg"
   },
@@ -42,7 +42,7 @@
     "twitterImage": "/assets/photos/groups/corporate-events.jpg"
   },
   "/groups/field-trips": {
-    "title": "Field Trips &amp; School Groups | Time Mission",
+    "title": "Field Trips & School Groups | Time Mission",
     "description": "Book a Time Mission field trip. 25+ interactive missions that turn physics, problem-solving, and teamwork into an adventure. Weekday group rates, ages 6+.",
     "ogImage": "/assets/photos/groups/field-trips.jpg",
     "twitterImage": "/assets/photos/groups/field-trips.jpg"
@@ -54,8 +54,8 @@
     "twitterImage": "/assets/photos/groups/holiday-parties.jpg"
   },
   "/groups/private-events": {
-    "title": "Private Events &amp; Venue Buyouts | Time Mission",
-    "description": "Buy out a Time Mission location for your private event. Full-venue access, 25+ interactive missions, custom configurations, and scalable capacity for milestone celebrations.",
+    "title": "Private Events & Venue Buyouts | Time Mission",
+    "description": "Buy out a Time Mission location for a private event with full-venue access, 25+ interactive missions, custom configurations, and scalable capacity.",
     "ogImage": "/assets/photos/venue/_Time-Mission_0024.jpg",
     "twitterImage": "/assets/photos/venue/_Time-Mission_0024.jpg"
   },
@@ -97,7 +97,7 @@
   },
   "/houston": {
     "title": "Time Mission Houston – Coming Soon to Texas",
-    "description": "Time Mission is bringing 25+ immersive mission rooms to Houston, Texas for birthdays, corporate offsites, and groups of 2–5. Sign up for early-access pricing and opening updates.",
+    "description": "Time Mission is bringing 25+ immersive mission rooms to Houston, Texas for birthdays, corporate offsites, and groups of 2–5. Get opening updates.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
@@ -133,19 +133,19 @@
   },
   "/orland-park": {
     "title": "Time Mission Orland Park – Coming Soon to the Chicago Area",
-    "description": "Time Mission is opening a second Chicago-area location in Orland Park, IL with 25+ themed missions for groups, birthdays, and corporate events. Get notified when bookings open.",
+    "description": "Time Mission is opening in Orland Park, IL with 25+ themed missions for groups, birthdays, and corporate events. Get notified when bookings open.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
   "/dallas": {
     "title": "Time Mission Dallas – Coming Soon to Texas",
-    "description": "Time Mission is bringing 25+ immersive challenge rooms to Dallas, Texas — for teams of 2–5 with packages for birthdays, corporate outings, and private events. Reserve your spot.",
+    "description": "Time Mission is bringing 25+ immersive challenge rooms to Dallas, Texas for teams of 2–5, birthdays, corporate outings, and private events. Reserve your spot.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
   "/brussels": {
     "title": "Time Mission Brussels – Coming Soon to Belgium",
-    "description": "Time Mission is expanding to Brussels — joining our Antwerp venue with 25+ immersive missions for groups, families, and corporate teams across Belgium. Sign up for opening updates.",
+    "description": "Time Mission is expanding to Brussels with 25+ immersive missions for groups, families, and corporate teams across Belgium. Get opening updates.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
@@ -181,7 +181,7 @@
   },
   "/licensing": {
     "title": "Licensing & Franchise | Time Mission",
-    "description": "Bring Time Mission to your market. Corporate offices in Cranston, RI and Nuenen, Netherlands. Download the brochure or contact us for licensing and franchise opportunities.",
+    "description": "Bring Time Mission to your market. Corporate offices in Cranston, RI and Nuenen, Netherlands. Download the brochure or contact us for licensing opportunities.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
