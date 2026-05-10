@@ -379,6 +379,14 @@
     display: flex;
 }
 
+.location-dropdown.navigating {
+    cursor: progress;
+}
+
+.location-dropdown.navigating a {
+    pointer-events: none;
+}
+
 /* Location overlay header (logo + close) */
 .location-dropdown-header {
     display: flex;

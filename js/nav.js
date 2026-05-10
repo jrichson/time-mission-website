@@ -183,7 +183,14 @@
                     return;
                 }
 
-                // Desktop (or coming-soon on any width): close overlay and let the browser follow href.
+                // Same-window location navigation: keep the overlay covering the old page
+                // until the destination loads so users do not see a selected-location flash.
+                if (cityName && isSameWindowNavigationClick(e, link)) {
+                    locationOverlay.classList.add('navigating');
+                    return;
+                }
+
+                // Non-location overlay links or modifier clicks: close overlay and let the browser follow href.
                 closeLocationOverlay();
             });
         });
@@ -191,6 +198,13 @@
 
     function getLocationSlug(link) {
         return (link.getAttribute('href') || '').replace(/^\//, '').replace(/\.html$/, '');
+    }
+
+    function isSameWindowNavigationClick(event, link) {
+        if (!link || event.defaultPrevented || event.button !== 0) return false;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+        const target = (link.getAttribute('target') || '').toLowerCase();
+        return !target || target === '_self';
     }
 
     function setMultilineText(el, value) {

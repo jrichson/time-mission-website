@@ -157,6 +157,23 @@ test('location selection persists canonical slug', async ({ page, isMobile }) =>
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
 });
 
+test('location navigation keeps picker overlay covering old page while destination loads', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'desktop-only transition path');
+
+  await page.goto('/');
+  await page.locator('#locationBtn').click();
+  await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
+
+  const className = await page.locator('#locationDropdown a[data-city="Philadelphia"]').evaluate((el) => {
+    el.addEventListener('click', (event) => event.preventDefault(), { once: true });
+    el.click();
+    return document.getElementById('locationDropdown')?.className || '';
+  });
+  expect(className).toContain('open');
+  expect(className).toContain('navigating');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+});
+
 test('faq accordion exposes keyboard accessible controls', async ({ page }) => {
   await page.goto('/faq');
 
