@@ -55,12 +55,66 @@
             color: var(--white);
         }
 
-        .geo-answer-inner p {
+        .geo-answer-lead {
             max-width: 860px;
             color: var(--white-soft);
             font-size: 1rem;
             line-height: 1.8;
+            margin: 0 0 1rem;
+        }
+
+        .geo-disclosure {
+            max-width: 860px;
             margin: 0 0 1.75rem;
+        }
+
+        .geo-disclosure summary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--orange);
+            cursor: pointer;
+            font-family: var(--tech);
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            line-height: 1.5;
+            list-style: none;
+            text-transform: uppercase;
+        }
+
+        .geo-disclosure summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .geo-disclosure summary::after {
+            content: '+';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1rem;
+            height: 1rem;
+            border: 1px solid rgba(255, 107, 44, 0.45);
+            border-radius: 50%;
+            font-family: var(--body);
+            font-size: 0.8rem;
+            line-height: 1;
+        }
+
+        .geo-disclosure[open] summary::after {
+            content: '-';
+        }
+
+        .geo-disclosure summary:focus-visible {
+            outline: 2px solid var(--orange);
+            outline-offset: 4px;
+        }
+
+        .geo-disclosure p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            margin: 1rem 0 0;
         }
 
         .location-status-table-wrap {
@@ -436,7 +490,8 @@
             .geo-answer-section {
                 padding: 2rem 1rem 0.5rem;
             }
-            .geo-answer-inner p {
+            .geo-answer-lead,
+            .geo-disclosure p {
                 font-size: 0.95rem;
                 line-height: 1.7;
             }

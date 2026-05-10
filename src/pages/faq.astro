@@ -42,7 +42,11 @@ const faqAnswer = geoAnswerBlocks.blocks.faq;
             <div class="faq-answer-summary-inner reveal">
                 <div class="section-badge">Before You Visit</div>
                 <h2 id="faq-answer-summary-title">{faqAnswer.heading}</h2>
-                <p>{faqAnswer.text}</p>
+                <p class="geo-answer-lead">{faqAnswer.summary}</p>
+                <details class="geo-disclosure">
+                    <summary>Read the full pre-visit guidance</summary>
+                    <p>{faqAnswer.text}</p>
+                </details>
             </div>
         </section>
         {

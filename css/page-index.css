@@ -455,6 +455,59 @@
             color: var(--white);
         }
 
+        .geo-disclosure {
+            max-width: 700px;
+            margin: 1rem auto 0;
+        }
+
+        .geo-disclosure summary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--orange);
+            cursor: pointer;
+            font-family: var(--tech);
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            line-height: 1.5;
+            list-style: none;
+            text-transform: uppercase;
+        }
+
+        .geo-disclosure summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .geo-disclosure summary::after {
+            content: '+';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1rem;
+            height: 1rem;
+            border: 1px solid rgba(255, 107, 44, 0.45);
+            border-radius: 50%;
+            font-family: var(--body);
+            font-size: 0.8rem;
+            line-height: 1;
+        }
+
+        .geo-disclosure[open] summary::after {
+            content: '-';
+        }
+
+        .geo-disclosure summary:focus-visible {
+            outline: 2px solid var(--orange);
+            outline-offset: 4px;
+        }
+
+        .welcome-geo-disclosure .welcome-text {
+            margin: 1rem 0 0;
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+
         /* ==========================================
            STATS SECTION OPTIONS - Choose one!
            Current: Option B (Animated Counter Wheels)

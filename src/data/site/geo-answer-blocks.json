@@ -3,31 +3,37 @@
     "whatIsTimeMission": {
       "heading": "What is Time Mission?",
       "publicPath": "/",
+      "summary": "Time Mission is an indoor challenge-room attraction where teams of 2 to 5 players move through short physical, logic, skill, and coordination missions instead of one long escape-room scenario.",
       "text": "Time Mission is a live, team-based entertainment experience where groups of two to five players move through 25 or more short mission rooms during a timed session. Each room is a self-contained challenge lasting about one to five minutes, so players can choose the order, replay favorites, and build a score across the venue. The format blends escape-room puzzles, arcade-style scoring, physical tasks, and cooperative problem solving without locking a group into one long scenario. Sessions are sold in 60, 90, or 120 minute lengths, with most groups completing 15 to 20 missions in a 90 minute visit. Time Mission works for families, friends, birthdays, team outings, field trips, date nights, and private events because different rooms test speed, strength, skill, memory, logic, and coordination. The experience is designed so mixed-ability groups can contribute in different ways rather than relying on one kind of player."
     },
     "missions": {
       "heading": "How do Time Mission rooms work?",
       "publicPath": "/missions",
+      "summary": "Time Mission rooms are fast, replayable challenges that let teams try physical, logic, skill, and coordination missions in any order while building a score across the venue.",
       "text": "Time Mission mission rooms are short, challenge-based environments where teams move through quick physical, logic, skill, and coordination tests instead of staying in one escape room for a full hour. Each room is designed for repeat play: players can try a challenge, learn the pattern, improve their score, and continue to another room. The format works for first-time visitors, families, date nights, friend groups, school groups, and team events because the missions vary in intensity and difficulty. Some challenges reward communication, some reward timing, and others reward observation or problem-solving. Sessions are booked by location, and team size, age rules, accessibility details, and available packages can vary by venue. The easiest way to choose is to start with your nearest Time Mission location, review the current mission lineup, and reserve a session online today."
     },
     "groups": {
       "heading": "What group events can Time Mission host?",
       "publicPath": "/groups",
+      "summary": "Time Mission works for birthdays, corporate outings, school trips, private events, and holidays because larger parties can split into teams and compete across many short challenge rooms.",
       "text": "Time Mission is built for group entertainment because every session separates larger parties into teams of two to five players, then lets those teams compete across many short rooms instead of waiting on a single attraction. Birthday parties can combine mission play with location-specific party rooms, cake, food, or add-ons where available. Corporate teams can book casual group tickets for offsites or request full-venue buyouts with catering, custom run-of-show options, and branded signage depending on the venue. School field trips can use missions for physics, logic, problem solving, teamwork, and social-emotional learning, with weekday availability and chaperone guidance. Private events and holiday parties can scale from small teams to buyouts, with exact capacity, catering, extended hours, and pricing confirmed by the selected location. The format works especially well when groups want active competition without a long rules briefing."
     },
     "locations": {
       "heading": "Where is Time Mission located?",
       "publicPath": "/locations",
+      "summary": "Time Mission location pages separate open venues from upcoming markets, so guests can find the right city page for tickets, group packages, directions, and current contact details.",
       "text": "Time Mission currently serves guests through open entertainment venues and announced expansion markets. The Philadelphia location is open for booking and provides the clearest public venue details, including address, hours, tickets, group events, and mission information. Additional city pages identify planned or coming-soon markets so guests and search systems can distinguish active venues from expansion pages. For the most accurate booking information, start on the official Locations page, choose the city nearest you, and use that location page for tickets, group packages, directions, and contact details. Location status matters: open venues should be treated as playable destinations, while coming-soon pages are informational until Time Mission publishes booking details online. This structure helps families, friend groups, corporate teams, schools, and event planners find the right city page without confusing future locations for currently operating venues."
     },
     "faq": {
       "heading": "What should I know before visiting Time Mission?",
       "publicPath": "/faq",
+      "summary": "Book through the venue location page, wear comfortable clothing and closed-toe shoes, review the age/team rules, and use group-event pages for parties or private events.",
       "text": "Before visiting Time Mission, guests should book through the location page for the venue they plan to attend and review that page for current hours, ticket options, and group packages. Mission sessions are built for teams, repeat attempts, and a mix of physical, skill, logic, and coordination challenges. Age rules are important: younger players may need an adult present, while older children and teens can often participate more independently depending on the venue policy. Comfortable clothing and closed-toe shoes are recommended because several missions involve movement, balance, or fast reactions. Larger groups can usually split into teams, rotate through missions, and compare scores. For birthdays, corporate events, school trips, or private events, use the group-event pages or contact form so Time Mission can match the visit format to the group size and occasion beforehand."
     },
     "pricing": {
       "heading": "How does Time Mission pricing work?",
       "publicPath": "/pricing.md",
+      "summary": "Use the selected venue checkout for exact prices because tickets, packages, session lengths, group quotes, and gift card options vary by location and event type.",
       "text": "Time Mission pricing should be treated as location-specific and checkout-specific rather than a single universal ticket price. Standard admission depends on the selected venue, date, session length, party size, and available packages, so the live booking flow for each open location is the authoritative source for exact prices. Sessions are available in 60, 90, or 120 minute lengths, and advance booking is recommended because online checkout guarantees the selected time when inventory is available. Larger groups can book group tickets online, while custom events, party rooms, buyouts, catering, extended hours, and branded experiences require a quote. Military guests can receive 10 percent off with a valid military ID, but that discount is walk-in only because the ID must be verified in person. Gift cards never expire and can be used for admission, parties, corporate events, and merchandise."
     }
   }

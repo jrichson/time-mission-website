@@ -160,11 +160,64 @@
             margin: 0 0 1rem;
         }
 
-        .geo-answer-inner p {
+        .geo-answer-lead {
             color: var(--white-soft);
             font-size: 1rem;
             line-height: 1.8;
+            margin: 0 0 1rem;
+        }
+
+        .geo-disclosure {
             margin: 0;
+        }
+
+        .geo-disclosure summary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--orange);
+            cursor: pointer;
+            font-family: var(--tech);
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            line-height: 1.5;
+            list-style: none;
+            text-transform: uppercase;
+        }
+
+        .geo-disclosure summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .geo-disclosure summary::after {
+            content: '+';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1rem;
+            height: 1rem;
+            border: 1px solid rgba(255, 107, 44, 0.45);
+            border-radius: 50%;
+            font-family: var(--body);
+            font-size: 0.8rem;
+            line-height: 1;
+        }
+
+        .geo-disclosure[open] summary::after {
+            content: '-';
+        }
+
+        .geo-disclosure summary:focus-visible {
+            outline: 2px solid var(--orange);
+            outline-offset: 4px;
+        }
+
+        .geo-disclosure p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            margin: 1rem 0 0;
         }
 
         /* ==========================================
@@ -465,7 +518,8 @@
             .geo-answer-inner {
                 padding: 2rem 0;
             }
-            .geo-answer-inner p {
+            .geo-answer-lead,
+            .geo-disclosure p {
                 font-size: 0.95rem;
                 line-height: 1.7;
             }
@@ -1091,7 +1145,11 @@
         <div class="geo-answer-inner reveal">
             <div class="section-badge">Mission Format</div>
             <h2 id="missions-answer-title">How do Time Mission rooms work?</h2>
-            <p>Time Mission mission rooms are short, challenge-based environments where teams move through quick physical, logic, skill, and coordination tests instead of staying in one escape room for a full hour. Each room is designed for repeat play: players can try a challenge, learn the pattern, improve their score, and continue to another room. The format works for first-time visitors, families, date nights, friend groups, school groups, and team events because the missions vary in intensity and difficulty. Some challenges reward communication, some reward timing, and others reward observation or problem-solving. Sessions are booked by location, and team size, age rules, accessibility details, and available packages can vary by venue. The easiest way to choose is to start with your nearest Time Mission location, review the current mission lineup, and reserve a session online today.</p>
+            <p class="geo-answer-lead">Time Mission rooms are fast, replayable challenges that let teams try physical, logic, skill, and coordination missions in any order while building a score across the venue.</p>
+            <details class="geo-disclosure">
+                <summary>Read the full mission-room guidance</summary>
+                <p>Time Mission mission rooms are short, challenge-based environments where teams move through quick physical, logic, skill, and coordination tests instead of staying in one escape room for a full hour. Each room is designed for repeat play: players can try a challenge, learn the pattern, improve their score, and continue to another room. The format works for first-time visitors, families, date nights, friend groups, school groups, and team events because the missions vary in intensity and difficulty. Some challenges reward communication, some reward timing, and others reward observation or problem-solving. Sessions are booked by location, and team size, age rules, accessibility details, and available packages can vary by venue. The easiest way to choose is to start with your nearest Time Mission location, review the current mission lineup, and reserve a session online today.</p>
+            </details>
         </div>
     </section>
 

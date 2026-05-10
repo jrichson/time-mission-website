@@ -45,8 +45,14 @@
             <div class="section-badge">ABOUT US</div>
             <h2 class="section-title">WHAT IS TIME MISSION?</h2>
             <p class="welcome-text">
-                Time Mission is a live, team-based entertainment experience where groups of two to five players move through 25 or more short mission rooms during a timed session. Each room is a self-contained challenge lasting about one to five minutes, so players can choose the order, replay favorites, and build a score across the venue. The format blends escape-room puzzles, arcade-style scoring, physical tasks, and cooperative problem solving without locking a group into one long scenario. Sessions are sold in 60, 90, or 120 minute lengths, with most groups completing 15 to 20 missions in a 90 minute visit. Time Mission works for families, friends, birthdays, team outings, field trips, date nights, and private events because different rooms test speed, strength, skill, memory, logic, and coordination. The experience is designed so mixed-ability groups can contribute in different ways rather than relying on one kind of player.
+                Time Mission is an indoor challenge-room attraction where teams of 2 to 5 players move through short physical, logic, skill, and coordination missions instead of one long escape-room scenario.
             </p>
+            <details class="geo-disclosure welcome-geo-disclosure">
+                <summary>Read the full Time Mission overview</summary>
+                <p class="welcome-text">
+                Time Mission is a live, team-based entertainment experience where groups of two to five players move through 25 or more short mission rooms during a timed session. Each room is a self-contained challenge lasting about one to five minutes, so players can choose the order, replay favorites, and build a score across the venue. The format blends escape-room puzzles, arcade-style scoring, physical tasks, and cooperative problem solving without locking a group into one long scenario. Sessions are sold in 60, 90, or 120 minute lengths, with most groups completing 15 to 20 missions in a 90 minute visit. Time Mission works for families, friends, birthdays, team outings, field trips, date nights, and private events because different rooms test speed, strength, skill, memory, logic, and coordination. The experience is designed so mixed-ability groups can contribute in different ways rather than relying on one kind of player.
+                </p>
+            </details>
             <a href="/about" class="btn-secondary welcome-learn-desktop" style="margin-top: 1.5rem;">Learn About Time Mission</a>
         </div>
     </section>

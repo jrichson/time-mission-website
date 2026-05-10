@@ -140,11 +140,64 @@
             margin: 0 0 1rem;
         }
 
-        .geo-answer-inner p {
+        .geo-answer-lead {
             color: var(--white-soft);
             font-size: 1rem;
             line-height: 1.8;
+            margin: 0 0 1rem;
+        }
+
+        .geo-disclosure {
             margin: 0;
+        }
+
+        .geo-disclosure summary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--orange);
+            cursor: pointer;
+            font-family: var(--tech);
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            line-height: 1.5;
+            list-style: none;
+            text-transform: uppercase;
+        }
+
+        .geo-disclosure summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .geo-disclosure summary::after {
+            content: '+';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1rem;
+            height: 1rem;
+            border: 1px solid rgba(255, 107, 44, 0.45);
+            border-radius: 50%;
+            font-family: var(--body);
+            font-size: 0.8rem;
+            line-height: 1;
+        }
+
+        .geo-disclosure[open] summary::after {
+            content: '-';
+        }
+
+        .geo-disclosure summary:focus-visible {
+            outline: 2px solid var(--orange);
+            outline-offset: 4px;
+        }
+
+        .geo-disclosure p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            margin: 1rem 0 0;
         }
 
         .hero-cta {
@@ -987,7 +1040,8 @@
                 padding: 2rem 0;
             }
 
-            .geo-answer-inner p {
+            .geo-answer-lead,
+            .geo-disclosure p {
                 font-size: 0.95rem;
                 line-height: 1.7;
             }
@@ -1272,7 +1326,11 @@
         <div class="geo-answer-inner reveal">
             <div class="section-badge">Group Events</div>
             <h2 id="groups-answer-title">What group events can Time Mission host?</h2>
-            <p>Time Mission is built for group entertainment because every session separates larger parties into teams of two to five players, then lets those teams compete across many short rooms instead of waiting on a single attraction. Birthday parties can combine mission play with location-specific party rooms, cake, food, or add-ons where available. Corporate teams can book casual group tickets for offsites or request full-venue buyouts with catering, custom run-of-show options, and branded signage depending on the venue. School field trips can use missions for physics, logic, problem solving, teamwork, and social-emotional learning, with weekday availability and chaperone guidance. Private events and holiday parties can scale from small teams to buyouts, with exact capacity, catering, extended hours, and pricing confirmed by the selected location. The format works especially well when groups want active competition without a long rules briefing.</p>
+            <p class="geo-answer-lead">Time Mission works for birthdays, corporate outings, school trips, private events, and holidays because larger parties can split into teams and compete across many short challenge rooms.</p>
+            <details class="geo-disclosure">
+                <summary>Read the full group-event guidance</summary>
+                <p>Time Mission is built for group entertainment because every session separates larger parties into teams of two to five players, then lets those teams compete across many short rooms instead of waiting on a single attraction. Birthday parties can combine mission play with location-specific party rooms, cake, food, or add-ons where available. Corporate teams can book casual group tickets for offsites or request full-venue buyouts with catering, custom run-of-show options, and branded signage depending on the venue. School field trips can use missions for physics, logic, problem solving, teamwork, and social-emotional learning, with weekday availability and chaperone guidance. Private events and holiday parties can scale from small teams to buyouts, with exact capacity, catering, extended hours, and pricing confirmed by the selected location. The format works especially well when groups want active competition without a long rules briefing.</p>
+            </details>
         </div>
     </section>
 

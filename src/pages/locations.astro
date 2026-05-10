@@ -86,7 +86,11 @@ const page = definePage({ canonicalPath: '/locations' });
             <div class="geo-answer-inner reveal">
                 <div class="section-badge">Official Location Status</div>
                 <h2 id="locations-answer-title">{locationsAnswer.heading}</h2>
-                <p>{locationsAnswer.text}</p>
+                <p class="geo-answer-lead">{locationsAnswer.summary}</p>
+                <details class="geo-disclosure">
+                    <summary>Read the full location guidance</summary>
+                    <p>{locationsAnswer.text}</p>
+                </details>
                 <div class="location-status-table-wrap" aria-label="Time Mission location status and contact summary">
                     <table class="location-status-table">
                         <thead>
