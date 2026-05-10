@@ -10,7 +10,11 @@ function loadRouteRegistry(root) {
 
 function expectedSitemapUrls(registry) {
   const urls = [];
-  for (const route of registry.routes || []) {
+  const routes = [
+    ...(registry.routes || []),
+    ...(registry.machineReadableRoutes || []),
+  ];
+  for (const route of routes) {
     if (!route.sitemap) continue;
     const url = route.canonicalPath === '/'
       ? `${registry.baseUrl}/`

@@ -36,6 +36,77 @@
             margin: 0 auto;
         }
 
+        .geo-answer-section {
+            padding: 2rem 2rem 1rem;
+            background: var(--black);
+        }
+
+        .geo-answer-inner {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .geo-answer-inner h2 {
+            font-family: var(--display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.05;
+            letter-spacing: 0.02em;
+            margin: 0 0 1rem;
+            color: var(--white);
+        }
+
+        .geo-answer-inner p {
+            max-width: 860px;
+            color: var(--white-soft);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin: 0 0 1.75rem;
+        }
+
+        .location-status-table-wrap {
+            overflow-x: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .location-status-table {
+            width: 100%;
+            min-width: 760px;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            color: var(--gray);
+        }
+
+        .location-status-table th,
+        .location-status-table td {
+            padding: 0.85rem 0.75rem;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .location-status-table thead th {
+            font-family: var(--tech);
+            font-size: 0.7rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--orange);
+        }
+
+        .location-status-table tbody tr:last-child th,
+        .location-status-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .location-status-table a {
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .location-status-table a:hover {
+            color: var(--orange);
+        }
+
         /* Locations List */
         .locations-grid {
             padding: 2rem 2rem 6rem;
@@ -361,6 +432,13 @@
         @media (max-width: 600px) {
             .hero {
                 padding: 120px 1.5rem 3rem;
+            }
+            .geo-answer-section {
+                padding: 2rem 1rem 0.5rem;
+            }
+            .geo-answer-inner p {
+                font-size: 0.95rem;
+                line-height: 1.7;
             }
             .locations-grid {
                 padding: 2rem 1rem 5rem;

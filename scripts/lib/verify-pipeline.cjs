@@ -18,6 +18,8 @@ const VERIFY_STEPS = [
   ['check:sitemap-output', []],
   ['check:robots-ai', []],
   ['check:llms-txt', []],
+  ['check:geo-answer-blocks', []],
+  ['check:rsl', []],
   ['check:nap-parity', []],
   ['test:smoke', []],
 ];

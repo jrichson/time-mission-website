@@ -6,6 +6,7 @@ import { getPublishedLandings, landingCanonicalPath, landingShouldAppearInSitema
 export const prerender = true;
 
 type RoutesFile = typeof routes;
+type SitemapEntry = { canonicalPath: string; sitemap: boolean };
 
 function escapeXml(value: string): string {
     return value
@@ -23,9 +24,10 @@ export const GET: APIRoute = async () => {
 
     const items: string[] = [];
 
-    const registryUrls = (
-        (routes as RoutesFile).routes as Array<{ canonicalPath: string; sitemap: boolean }>
-    )
+    const machineReadableRoutes = (
+        routes as RoutesFile & { machineReadableRoutes?: SitemapEntry[] }
+    ).machineReadableRoutes || [];
+    const registryUrls = ([...(routes as RoutesFile).routes, ...machineReadableRoutes] as SitemapEntry[])
         .filter((r) => r.sitemap === true)
         .map((r) => {
             const path = r.canonicalPath === '/' ? '/' : r.canonicalPath;

@@ -18,6 +18,7 @@ const REQUIRED_BOTS = [
     'GPTBot',
     'OAI-SearchBot',
     'ChatGPT-User',
+    'Bingbot',
     'ClaudeBot',
     'Claude-User',
     'Claude-SearchBot',

@@ -60,7 +60,20 @@
       "rollerCheckoutUrl": "https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home",
       "navLabel": "IL - Mount Prospect",
       "mapUrl": "https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056",
-      "faqs": [],
+      "faqs": [
+        {
+          "q": "How do I book Time Mission Mount Prospect?",
+          "a": "Use the Mount Prospect location page or booking button for current ticket inventory, session lengths, package availability, and checkout-specific pricing. Advance online booking is recommended because walk-ins depend on availability."
+        },
+        {
+          "q": "What ages can play at Time Mission Mount Prospect?",
+          "a": "Time Mission is recommended for ages 6 and up. Kids 6-13 need an adult in the group, and ages 14+ can usually play on their own under the venue policy."
+        },
+        {
+          "q": "How many people can play together at Time Mission Mount Prospect?",
+          "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
+        }
+      ],
       "ticker": "ORLAND PARK, IL OPENING SOON!",
       "giftCardUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/giftcards",
       "countryCode": null,
@@ -131,7 +144,20 @@
       "rollerCheckoutUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
       "navLabel": "PA - Philadelphia",
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
-      "faqs": [],
+      "faqs": [
+        {
+          "q": "How do I book Time Mission Philadelphia?",
+          "a": "Use the Philadelphia location page or booking button for current ticket inventory, session lengths, package availability, and checkout-specific pricing. Advance online booking is recommended because walk-ins depend on availability."
+        },
+        {
+          "q": "What ages can play at Time Mission Philadelphia?",
+          "a": "Time Mission is recommended for ages 6 and up. Kids 6-13 need an adult in the group, and ages 14+ can usually play on their own under the venue policy."
+        },
+        {
+          "q": "How many people can play together at Time Mission Philadelphia?",
+          "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
+        }
+      ],
       "ticker": "SPRING BREAK AT TIME MISSION PHILADELPHIA",
       "giftCardUrl": "https://tickets.timemission.com/onlinecheckout/en-us/giftcards",
       "countryCode": null,
@@ -202,7 +228,20 @@
       "bookingUrl": "https://tickets.timemission.com/onlinecheckout/en-us/products",
       "navLabel": "NY - West Nyack",
       "mapUrl": "https://maps.google.com/?q=3532+Palisades+Center+Dr+West+Nyack+NY+10994",
-      "faqs": [],
+      "faqs": [
+        {
+          "q": "How do I book Time Mission West Nyack?",
+          "a": "Use the West Nyack location page or booking button for current ticket inventory, session lengths, package availability, and checkout-specific pricing. Advance online booking is recommended because walk-ins depend on availability."
+        },
+        {
+          "q": "What ages can play at Time Mission West Nyack?",
+          "a": "Time Mission is recommended for ages 6 and up. Kids 6-13 need an adult in the group, and ages 14+ can usually play on their own under the venue policy."
+        },
+        {
+          "q": "How many people can play together at Time Mission West Nyack?",
+          "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
+        }
+      ],
       "ticker": "SPRING BREAK AT TIME MISSION WEST NYACK",
       "giftCardUrl": "https://tickets.timemission.com/onlinecheckout/en-us/giftcards",
       "countryCode": null,
@@ -272,7 +311,20 @@
       "bookingUrl": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
       "navLabel": "RI - Lincoln",
       "mapUrl": "https://maps.google.com/?q=100+Higginson+Ave+Lincoln+RI+02865",
-      "faqs": [],
+      "faqs": [
+        {
+          "q": "How do I book Time Mission Lincoln?",
+          "a": "Use the Lincoln location page or booking button for current ticket inventory, session lengths, package availability, and checkout-specific pricing. Advance online booking is recommended because walk-ins depend on availability."
+        },
+        {
+          "q": "What ages can play at Time Mission Lincoln?",
+          "a": "Time Mission is recommended for ages 6 and up. Kids 6-13 need an adult in the group, and ages 14+ can usually play on their own under the venue policy."
+        },
+        {
+          "q": "How many people can play together at Time Mission Lincoln?",
+          "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
+        }
+      ],
       "ticker": "SPRING BREAK AT TIME MISSION LINCOLN",
       "giftCardUrl": "https://tickets.timemission.com/onlinecheckout/en-us/giftcards",
       "countryCode": null,
@@ -344,7 +396,20 @@
       "rollerCheckoutUrl": "https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home",
       "navLabel": "VA - Manassas",
       "mapUrl": "https://maps.google.com/?q=8300+Sudley+Rd+Manassas+VA+20109",
-      "faqs": [],
+      "faqs": [
+        {
+          "q": "How do I book Time Mission Manassas?",
+          "a": "Use the Manassas location page or booking button for current ticket inventory, session lengths, package availability, and checkout-specific pricing. Advance online booking is recommended because walk-ins depend on availability."
+        },
+        {
+          "q": "What ages can play at Time Mission Manassas?",
+          "a": "Time Mission is recommended for ages 6 and up. Kids 6-13 need an adult in the group, and ages 14+ can usually play on their own under the venue policy."
+        },
+        {
+          "q": "How many people can play together at Time Mission Manassas?",
+          "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
+        }
+      ],
       "ticker": "SPRING BREAK AT TIME MISSION MANASSAS",
       "giftCardUrl": "https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/giftcards",
       "countryCode": null,
@@ -449,7 +514,20 @@
       "bookingUrl": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
       "navLabel": "Belgium - Antwerp",
       "mapUrl": "https://maps.google.com/?q=Michiganstraat+1+Antwerp+2030+Belgium",
-      "faqs": [],
+      "faqs": [
+        {
+          "q": "How do I book Time Mission Antwerp?",
+          "a": "Use the Antwerp location page or booking button for current ticket inventory, session lengths, package availability, and checkout-specific pricing. Advance online booking is recommended because walk-ins depend on availability."
+        },
+        {
+          "q": "What ages can play at Time Mission Antwerp?",
+          "a": "Time Mission is recommended for ages 6 and up. Kids 6-13 need an adult in the group, and ages 14+ can usually play on their own under the venue policy."
+        },
+        {
+          "q": "How many people can play together at Time Mission Antwerp?",
+          "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
+        }
+      ],
       "ticker": "SPRING BREAK AT TIME MISSION ANTWERP",
       "giftCardUrl": "mailto:info@experience-factory.com?subject=Time%20Mission%20Antwerp%20Gift%20Card",
       "countryCode": null,

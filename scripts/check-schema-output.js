@@ -82,6 +82,9 @@ for (const route of schemaRoutes) {
     if (has('EntertainmentBusiness')) errors.push(`${outFile}: unexpected EntertainmentBusiness`);
     if (types.filter((t) => t === 'Organization').length !== 1) errors.push(`${outFile}: expected Organization only`);
   }
+  if (cp === '/') {
+    if (!has('ImageObject')) errors.push(`${outFile}: missing ImageObject for primary hero media`);
+  }
 
   // Pages that must emit BreadcrumbList (legal pages + nav pages with breadcrumb schema)
   const BREADCRUMB_REQUIRED_PATHS = new Set([
@@ -196,6 +199,17 @@ for (const route of schemaRoutes) {
       if (sourceLoc && typeof sourceLoc.alternateName === 'string' && sourceLoc.alternateName.trim()) {
         if (b.alternateName !== sourceLoc.alternateName) {
           errors.push(`${outFile}: alternateName drift — emitted='${b.alternateName}' source='${sourceLoc.alternateName}' (slug=${slugFromCp})`);
+        }
+      }
+    }
+    if (sourceLoc && Array.isArray(sourceLoc.faqs) && sourceLoc.faqs.length > 0) {
+      const faqNodes = findNodesByType(graph, 'FAQPage');
+      if (faqNodes.length !== 1) {
+        errors.push(`${outFile}: expected one FAQPage for open location ${slugFromCp}`);
+      } else {
+        const mainLen = faqNodes[0]?.mainEntity?.length;
+        if (mainLen !== sourceLoc.faqs.length) {
+          errors.push(`${outFile}: location FAQPage mainEntity length ${mainLen}, expected ${sourceLoc.faqs.length} (slug=${slugFromCp})`);
         }
       }
     }

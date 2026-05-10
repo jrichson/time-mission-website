@@ -32,6 +32,8 @@
     "check:sitemap-output": "node scripts/check-sitemap-output.js",
     "check:robots-ai": "node scripts/check-robots-ai-bots.js",
     "check:llms-txt": "node scripts/check-llms-txt.js",
+    "check:geo-answer-blocks": "node scripts/check-geo-answer-blocks.js",
+    "check:rsl": "node scripts/check-rsl.js",
     "check:nap-parity": "node scripts/check-nap-parity.js",
     "check:astro-dist": "node scripts/check-astro-dist-manifest.js",
     "check:csp-hashes": "node scripts/check-csp-hashes.js",

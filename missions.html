@@ -138,6 +138,35 @@
             animation: fadeInUp 0.6s ease 0.2s both;
         }
 
+        .geo-answer-section {
+            padding: 3rem 2rem;
+            background: var(--black);
+        }
+
+        .geo-answer-inner {
+            max-width: 920px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 2.5rem 0;
+        }
+
+        .geo-answer-inner h2 {
+            font-family: var(--display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.05;
+            letter-spacing: 0.02em;
+            color: var(--white);
+            margin: 0 0 1rem;
+        }
+
+        .geo-answer-inner p {
+            color: var(--white-soft);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin: 0;
+        }
+
         /* ==========================================
            FILTER TABS
            ========================================== */
@@ -429,6 +458,16 @@
             .hero {
                 min-height: 60vh;
                 padding: 8rem 1.5rem 3rem;
+            }
+            .geo-answer-section {
+                padding: 2rem 1rem;
+            }
+            .geo-answer-inner {
+                padding: 2rem 0;
+            }
+            .geo-answer-inner p {
+                font-size: 0.95rem;
+                line-height: 1.7;
             }
             .portals-section {
                 padding: 3rem 1rem 4rem;
@@ -869,7 +908,7 @@
         }
     </style>
     <!-- JSON-LD -->
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://timemission.com/#organization","name":"Time Mission","url":"https://timemission.com","logo":"https://timemission.com/assets/logo/TM_Favicon.png","sameAs":["https://www.instagram.com/timemission/","https://www.tiktok.com/@timemissionhq","https://www.facebook.com/TimeMissionHQ/","https://www.linkedin.com/company/timemission-corp"]},{"@type":"ImageObject","@id":"https://timemission.com/missions#primaryimage","url":"https://timemission.com/assets/photos/experiences/experiences-hero.jpg","name":"Time Mission mission rooms","caption":"Players competing in Time Mission challenge rooms"}]}</script>
     <!-- JSON-LD -->
 <style>
 /* Touch-only devices: nullify footer hover styles so iOS does not require a double-tap */
@@ -1045,6 +1084,14 @@
                 </a>
                 <a href="/faq" class="btn-secondary">FAQs</a>
             </div>
+        </div>
+    </section>
+
+    <section class="geo-answer-section" aria-labelledby="missions-answer-title">
+        <div class="geo-answer-inner reveal">
+            <div class="section-badge">Mission Format</div>
+            <h2 id="missions-answer-title">How do Time Mission rooms work?</h2>
+            <p>Time Mission mission rooms are short, challenge-based environments where teams move through quick physical, logic, skill, and coordination tests instead of staying in one escape room for a full hour. Each room is designed for repeat play: players can try a challenge, learn the pattern, improve their score, and continue to another room. The format works for first-time visitors, families, date nights, friend groups, school groups, and team events because the missions vary in intensity and difficulty. Some challenges reward communication, some reward timing, and others reward observation or problem-solving. Sessions are booked by location, and team size, age rules, accessibility details, and available packages can vary by venue. The easiest way to choose is to start with your nearest Time Mission location, review the current mission lineup, and reserve a session online today.</p>
         </div>
     </section>
 

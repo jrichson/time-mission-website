@@ -6,6 +6,7 @@ import { serviceNode } from './service';
 import { breadcrumbNode, type Crumb } from './breadcrumb';
 import { localBusinessNode } from './localBusiness';
 import { faqPageNode, type FaqItem } from './faqPage';
+import { homeHeroMediaNodes } from './media';
 
 interface Graph {
     '@context': 'https://schema.org';
@@ -22,7 +23,7 @@ export function serializeGraph(graph: Graph): string {
 }
 
 export function buildHomeGraph(): Graph {
-    return withContext([organizationNode(), websiteNode()]);
+    return withContext([organizationNode(), websiteNode(), ...homeHeroMediaNodes()]);
 }
 
 export function buildSimpleGraph(crumbs?: Crumb[]): Graph {

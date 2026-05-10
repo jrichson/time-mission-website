@@ -3,6 +3,26 @@
   "_meta": {
     "dynamicLandingPrefix": "/c"
   },
+  "machineReadableRoutes": [
+    {
+      "id": "llms",
+      "canonicalPath": "/llms.txt",
+      "outputFile": "llms.txt",
+      "sitemap": true
+    },
+    {
+      "id": "ai-context",
+      "canonicalPath": "/ai-context.md",
+      "outputFile": "ai-context.md",
+      "sitemap": true
+    },
+    {
+      "id": "pricing-md",
+      "canonicalPath": "/pricing.md",
+      "outputFile": "pricing.md",
+      "sitemap": true
+    }
+  ],
   "routes": [
     {
       "id": "home",

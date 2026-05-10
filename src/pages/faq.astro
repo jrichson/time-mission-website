@@ -3,11 +3,13 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import Faq from '../components/Faq.astro';
 import faqs from '../data/site/faqs.json';
+import geoAnswerBlocks from '../data/site/geo-answer-blocks.json';
 import faqFooter from '../partials/faq-footer.frag.txt?raw';
 import { buildFaqGraph, serializeGraph } from '../lib/schema/graph';
 
 const ld = serializeGraph(buildFaqGraph());
 const page = definePage({ canonicalPath: '/faq' });
+const faqAnswer = geoAnswerBlocks.blocks.faq;
 ---
 
 <SiteLayout
@@ -34,6 +36,13 @@ const page = definePage({ canonicalPath: '/faq' });
                     Everything you need to know before your Time Mission adventure. Can't find what you're looking for?
                     Contact us directly.
                 </p>
+            </div>
+        </section>
+        <section class="faq-answer-summary" aria-labelledby="faq-answer-summary-title">
+            <div class="faq-answer-summary-inner reveal">
+                <div class="section-badge">Before You Visit</div>
+                <h2 id="faq-answer-summary-title">{faqAnswer.heading}</h2>
+                <p>{faqAnswer.text}</p>
             </div>
         </section>
         {

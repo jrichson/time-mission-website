@@ -27,8 +27,10 @@ Order is fixed in `scripts/lib/verify-pipeline.cjs` and must not be reordered ca
 | 15 | `npm run check:sitemap-output` | Generated sitemap vs routes | VER-02 |
 | 16 | `npm run check:robots-ai` | `robots.txt` AI crawler rules | VER-02 |
 | 17 | `npm run check:llms-txt` | `llms.txt` output | VER-02 |
-| 18 | `npm run check:nap-parity` | NAP / schema vs location data | VER-02 |
-| 19 | `npm run test:smoke` | Playwright: smoke flows (`site.spec.js`) + visual baselines (`visual.spec.js`, **VER-04**) | VER-02, VER-04 |
+| 18 | `npm run check:geo-answer-blocks` | Visible 134-167 word GEO answer blocks plus primary media schema | VER-02 |
+| 19 | `npm run check:rsl` | RSL license file, `robots.txt` License directive, and built `_headers` license discovery | VER-02 |
+| 20 | `npm run check:nap-parity` | NAP / schema vs location data | VER-02 |
+| 21 | `npm run test:smoke` | Playwright: smoke flows (`site.spec.js`) + visual baselines (`visual.spec.js`, **VER-04**) | VER-02, VER-04 |
 
 `npm run check` includes Vitest coverage for the Cloudflare Pages Functions form handler and source-markup assertions that prevent Netlify form attributes from returning. Runtime delivery still requires preview testing with real Pages Function secrets and inbox confirmation.
 

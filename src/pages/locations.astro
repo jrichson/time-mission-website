@@ -4,6 +4,7 @@ import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
 import type { LocationRecord } from '../data/locations';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+import geoAnswerBlocks from '../data/site/geo-answer-blocks.json';
 
 const US_ORDER = [
     'mount-prospect',
@@ -24,6 +25,8 @@ function orderLocs(region: string, slugOrder: string[]) {
 
 const usLocs = orderLocs('us', US_ORDER);
 const euLocs = orderLocs('europe', EU_ORDER);
+const listedLocs = [...usLocs, ...euLocs];
+const locationsAnswer = geoAnswerBlocks.blocks.locations;
 
 function formatAddress(loc: LocationRecord) {
     const a = loc.address;
@@ -35,6 +38,14 @@ function stateBadge(loc: LocationRecord) {
     if (loc.address.state && loc.address.state.trim()) return loc.address.state;
     if (loc.region === 'europe') return 'BE';
     return '--';
+}
+
+function statusLabel(loc: LocationRecord) {
+    return loc.status === 'open' ? 'Open for booking' : 'Coming soon';
+}
+
+function contactLabel(loc: LocationRecord) {
+    return [loc.contact.phone, loc.contact.email].filter(Boolean).join(' / ') || 'Not yet listed';
 }
 
 const ld = serializeGraph(
@@ -68,6 +79,40 @@ const page = definePage({ canonicalPath: '/locations' });
                 <p class="hero-subtitle">
                     Time Mission is expanding across the globe. Find a location near you and start your adventure.
                 </p>
+            </div>
+        </section>
+
+        <section class="geo-answer-section" aria-labelledby="locations-answer-title">
+            <div class="geo-answer-inner reveal">
+                <div class="section-badge">Official Location Status</div>
+                <h2 id="locations-answer-title">{locationsAnswer.heading}</h2>
+                <p>{locationsAnswer.text}</p>
+                <div class="location-status-table-wrap" aria-label="Time Mission location status and contact summary">
+                    <table class="location-status-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Location</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Contact</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                listedLocs.map((loc) => (
+                                    <tr>
+                                        <th scope="row">
+                                            <a href={`/${loc.slug}`}>{loc.shortName}</a>
+                                        </th>
+                                        <td>{statusLabel(loc)}</td>
+                                        <td>{formatAddress(loc) || loc.address.city}</td>
+                                        <td>{contactLabel(loc)}</td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 

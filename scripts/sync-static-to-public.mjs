@@ -50,6 +50,7 @@ const mandatoryFiles = [
   '_headers.tmpl',
   '_redirects',
   'robots.txt',
+  'license.xml',
   '404.html',
 ];
 
