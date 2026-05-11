@@ -6,6 +6,7 @@ import {
     validatedCmsOriginBase,
 } from './cms-origin';
 import type { PayloadLandingSurface } from './landing-contract';
+import type { PayloadLandingSourceChannel } from './landing-contract';
 export {
     DEFAULT_LANDING_TEMPLATE,
     LANDING_TEMPLATE_OPTIONS,
@@ -30,6 +31,7 @@ export {
 export type { PayloadLandingSurface } from './landing-contract';
 export type { PayloadLandingArchetype } from './landing-contract';
 export type { PayloadLandingLaunchState } from './landing-contract';
+export type { PayloadLandingSourceChannel } from './landing-contract';
 export type { PayloadLandingTemplate } from './landing-contract';
 
 const DEFAULT_ORIGIN_KEYS = ['PAYLOAD_CMS_ORIGIN', 'PAYLOAD_PUBLIC_CMS_ORIGIN'] as const;
@@ -76,6 +78,14 @@ export interface PayloadLandingDoc {
         primaryCtaLabel?: string;
         ctaSurface?: PayloadLandingSurface;
         ctaExternalUrl?: string | null;
+    };
+    brief?: {
+        sourceChannel?: PayloadLandingSourceChannel | string | null;
+        sourceName?: string | null;
+        sourceUrl?: string | null;
+        sourcePromise?: string | null;
+        visitorIntent?: string | null;
+        successMetric?: string | null;
     };
     strategy?: {
         audience?: string | null;

@@ -182,6 +182,14 @@ export interface Landing {
    * If off, page is still built but omitted from sitemap.xml.
    */
   includeInSitemap?: boolean | null;
+  brief?: {
+    sourceChannel?: ('paid_ad' | 'organic_social' | 'email' | 'local_search' | 'partner' | 'internal' | 'other') | null;
+    sourceName?: string | null;
+    sourceUrl?: string | null;
+    sourcePromise?: string | null;
+    visitorIntent?: string | null;
+    successMetric?: string | null;
+  };
   seo: {
     /**
      * <title> and og:title
@@ -408,6 +416,16 @@ export interface LandingsSelect<T extends boolean = true> {
   template?: T;
   published?: T;
   includeInSitemap?: T;
+  brief?:
+    | T
+    | {
+        sourceChannel?: T;
+        sourceName?: T;
+        sourceUrl?: T;
+        sourcePromise?: T;
+        visitorIntent?: T;
+        successMetric?: T;
+      };
   seo?:
     | T
     | {

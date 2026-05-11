@@ -11,7 +11,7 @@ const quickLinks = [
   {
     href: '/admin/collections/landings',
     label: 'Landing Pages',
-    description: 'Create campaign pages at /c/{page-url}, preview them, and publish when they are ready.',
+    description: 'Create campaign pages from a real brief, preview the public result, and publish when approved.',
   },
   {
     href: '/admin/collections/user-invites',
@@ -25,23 +25,23 @@ const landingActions = [
     href: '/admin/collections/landings/create?template=paid_social_campaign',
     label: 'Create Paid/Social Campaign',
     meta: 'Ad or social campaign',
-    description: 'Match the source promise, keep one booking-first action, and use concrete proof.',
+    description: 'Use when there is an actual ad, post, email, or seasonal offer that needs a matching destination.',
   },
   {
     href: '/admin/collections/landings/create?template=local_venue_city',
     label: 'Create Local Venue/City Landing',
     meta: 'Local venue or city campaign',
-    description: 'Make the place feel real with venue proof, city context, and launch-state-aware CTAs.',
+    description: 'Use for a city, venue opening, local SEO push, or place-specific offer with real location context.',
   },
   {
     href: '/admin/collections/landings/create?template=group_event',
     label: 'Create Group/Event Landing',
     meta: 'Group or event landing',
-    description: 'Reassure the planner, reduce logistics anxiety, and route high-touch inquiries clearly.',
+    description: 'Use when an event buyer or planner needs a page tied to a specific group use case.',
   },
 ];
 
-const workflowSteps = ['Choose the marketing job', 'Fill guided fields', 'Preview the page', 'Publish and deploy'];
+const workflowSteps = ['Capture the brief', 'Choose the landing shape', 'Write page copy from the brief', 'Preview, publish, and deploy'];
 
 export default function Home() {
   return (
@@ -51,7 +51,7 @@ export default function Home() {
           <p className={styles.kicker}>Time Mission CMS</p>
           <h1 id="cms-home-title">Keep the site current without touching code</h1>
           <p className={styles.lede}>
-            Update existing pages, launch campaign landings, preview work, and invite approved
+            Update existing pages, build campaign landings from a brief, preview work, and invite approved
             editors from one operator console.
           </p>
           <div className={styles.actions}>
@@ -81,10 +81,10 @@ export default function Home() {
       <section className={styles.landingBuilder} aria-labelledby="landing-builder-title">
         <div className={styles.sectionIntro}>
           <p className={styles.kicker}>Landing builder</p>
-          <h2 id="landing-builder-title">Start with the page goal</h2>
+          <h2 id="landing-builder-title">Start with the campaign brief</h2>
           <p>
-            Pick the landing type before writing copy. Each template keeps the page aligned with
-            Time Mission&apos;s brand and the visitor&apos;s decision path.
+            Do not start from a blank template. Capture the source, visitor intent, and success metric
+            first, then choose the landing shape that fits the job.
           </p>
         </div>
         <div className={styles.landingGrid}>

@@ -19,6 +19,7 @@ export const metadata = {
 type PayloadLandingArchetype = 'paid_social_campaign' | 'local_venue_city' | 'group_event';
 type PayloadLandingSurface = 'book_panel' | 'missions' | 'groups' | 'contact' | 'gift_cards' | 'external';
 type PayloadLandingLaunchState = 'open' | 'coming_soon';
+type PayloadLandingSourceChannel = 'paid_ad' | 'organic_social' | 'email' | 'local_search' | 'partner' | 'internal' | 'other';
 
 const templateMeta: Record<PayloadLandingArchetype, { headline: string; journeyHeading: string; secondaryHref: string; secondaryLabel: string; }> = {
   paid_social_campaign: {
@@ -45,6 +46,16 @@ const templateClasses: Record<PayloadLandingArchetype, string> = {
   paid_social_campaign: styles.campaignTemplate,
   group_event: styles.groupEventTemplate,
   local_venue_city: styles.locationPromoTemplate,
+};
+
+const sourceChannelLabels: Record<PayloadLandingSourceChannel, string> = {
+  email: 'Email',
+  internal: 'Internal campaign',
+  local_search: 'Local search / SEO',
+  organic_social: 'Organic social',
+  other: 'Other',
+  paid_ad: 'Paid ad',
+  partner: 'Partner / referral',
 };
 
 type PageProps = {
@@ -140,7 +151,11 @@ function landingBullets(doc: Landing): string[] {
 function landingReviewWarningsForDoc(doc: Landing): string[] {
   const warnings: string[] = [];
   const bullets = doc.content?.bullets?.filter((bullet) => String(bullet?.text || '').trim()).length ?? 0;
+  const sourcePromise = String(doc.brief?.sourcePromise || '').trim();
+  const visitorIntent = String(doc.brief?.visitorIntent || '').trim();
 
+  if (!sourcePromise) warnings.push('Add the source promise from the ad, post, email, search query, or campaign request.');
+  if (!visitorIntent) warnings.push('Add the visitor intent so the page copy is tied to a real decision path.');
   if (!doc.content?.subheadline) warnings.push('Add a subheadline so visitors understand the offer before they choose.');
   if (bullets < 3) warnings.push('Add at least three concrete proof points.');
   if (doc.content?.ctaSurface === 'external' && !doc.content.ctaExternalUrl) warnings.push('Add the external CTA URL before publishing.');
@@ -177,6 +192,7 @@ export default async function LandingPreviewPage({ params }: PageProps) {
   const doc = await loadLanding(id);
   const template = landingArchetypeForDoc(doc);
   const launchState = landingLaunchStateForDoc(doc);
+  const brief = doc.brief || {};
   const meta = templateMeta[template];
   const bullets = landingBullets(doc);
   const heroImage = publicAssetURL(doc.seo?.ogImage);
@@ -184,6 +200,8 @@ export default async function LandingPreviewPage({ params }: PageProps) {
   const publicUrl = publicPathURL(publicPath);
   const ctaModel = landingCtaForDoc(doc);
   const warnings = landingReviewWarningsForDoc(doc);
+  const sourceChannel = (brief.sourceChannel || 'paid_ad') as PayloadLandingSourceChannel;
+  const sourceLabel = sourceChannelLabels[sourceChannel] || 'Campaign source';
   const cta = {
     href: publicPathURL(ctaModel.primaryHref),
     label: doc.content?.primaryCtaLabel || 'Book now',
@@ -227,6 +245,31 @@ export default async function LandingPreviewPage({ params }: PageProps) {
           <span>Launch state</span>
           <strong>{launchState === 'coming_soon' ? 'Coming soon' : 'Open for booking'}</strong>
         </div>
+      </section>
+
+      <section className={styles.briefPanel} aria-labelledby="campaign-brief-title">
+        <div>
+          <span className={styles.previewEyebrow}>Campaign brief</span>
+          <h2 id="campaign-brief-title">{brief.sourceName || sourceLabel}</h2>
+          <p>
+            {brief.sourcePromise ||
+              'Add the real ad, post, email, search query, or campaign request that sent this visitor here.'}
+          </p>
+        </div>
+        <dl>
+          <div>
+            <dt>Source</dt>
+            <dd>{sourceLabel}</dd>
+          </div>
+          <div>
+            <dt>Visitor intent</dt>
+            <dd>{brief.visitorIntent || 'Not defined yet'}</dd>
+          </div>
+          <div>
+            <dt>Success metric</dt>
+            <dd>{brief.successMetric || 'Not defined yet'}</dd>
+          </div>
+        </dl>
       </section>
 
       {warnings.length ? (

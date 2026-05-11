@@ -38,12 +38,14 @@ const bullets = Array.isArray(c.bullets) ? c.bullets.map((b) => String(b?.text |
 const proofItems = bullets.length
     ? bullets.slice(0, 6)
     : ['25+ interactive mission rooms', 'Team-based scoring', 'Built for every age and group size'];
+const brief = doc.brief || {};
 const strategy = doc.strategy || {};
 const paidSocial = doc.paidSocial || {};
 const localVenue = doc.localVenue || {};
 const groupEvent = doc.groupEvent || {};
 const proofIntro =
     strategy.proofAngle ||
+    brief.visitorIntent ||
     (template === 'group_event'
         ? groupEvent.plannerReassurance || 'Proof that the group experience is easy to plan and worth showing up for.'
         : template === 'local_venue_city'
@@ -82,9 +84,9 @@ const finalHeading =
 const finalCopy =
     template === 'group_event'
         ? groupEvent.logisticsNote || 'Bring the crew. We will handle the missions, scoring, and momentum.'
-        : launchState === 'coming_soon'
-            ? localVenue.openingNote || landingHead.metaDescription
-            : landingHead.metaDescription;
+    : launchState === 'coming_soon'
+        ? localVenue.openingNote || landingHead.metaDescription
+        : brief.sourcePromise || landingHead.metaDescription;
 
 const jsonLd = {
     '@context': 'https://schema.org',

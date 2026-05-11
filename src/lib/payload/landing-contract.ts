@@ -23,6 +23,15 @@ export type PayloadLandingTemplate = PayloadLandingArchetype | PayloadLandingLeg
 
 export type PayloadLandingLaunchState = 'open' | 'coming_soon';
 
+export type PayloadLandingSourceChannel =
+    | 'paid_ad'
+    | 'organic_social'
+    | 'email'
+    | 'local_search'
+    | 'partner'
+    | 'internal'
+    | 'other';
+
 export const DEFAULT_LANDING_ARCHETYPE: PayloadLandingArchetype = 'paid_social_campaign';
 export const DEFAULT_LANDING_TEMPLATE: PayloadLandingArchetype = DEFAULT_LANDING_ARCHETYPE;
 
@@ -71,6 +80,14 @@ export interface PayloadLandingContractDoc {
         primaryCtaLabel?: string | null;
         ctaSurface?: PayloadLandingSurface | null;
         ctaExternalUrl?: string | null;
+    };
+    brief?: {
+        sourceChannel?: PayloadLandingSourceChannel | string | null;
+        sourceName?: string | null;
+        sourceUrl?: string | null;
+        sourcePromise?: string | null;
+        visitorIntent?: string | null;
+        successMetric?: string | null;
     };
     strategy?: {
         audience?: string | null;
@@ -210,7 +227,11 @@ function defaultCtaSurfaceForDoc(doc: PayloadLandingContractDoc): PayloadLanding
 export function landingReviewWarningsForDoc(doc: PayloadLandingContractDoc): string[] {
     const warnings: string[] = [];
     const bullets = doc.content?.bullets?.filter((bullet) => String(bullet?.text || '').trim()).length ?? 0;
+    const sourcePromise = String(doc.brief?.sourcePromise || '').trim();
+    const visitorIntent = String(doc.brief?.visitorIntent || '').trim();
 
+    if (!sourcePromise) warnings.push('Add the source promise from the ad, post, email, search query, or campaign request.');
+    if (!visitorIntent) warnings.push('Add the visitor intent so the page copy is tied to a real decision path.');
     if (!doc.content?.subheadline) warnings.push('Add a subheadline so visitors understand the offer before they choose.');
     if (bullets < 3) warnings.push('Add at least three concrete proof points.');
     if (doc.content?.ctaSurface === 'external' && !doc.content.ctaExternalUrl) warnings.push('Add the external CTA URL before publishing.');

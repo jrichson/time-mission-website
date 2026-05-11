@@ -20,6 +20,9 @@ describe('Payload public landing renderer', () => {
       'tm-landing-main--paid_social_campaign',
       'tm-landing-main--local_venue_city',
       'tm-landing-main--group_event',
+      'doc.brief || {}',
+      'brief.visitorIntent',
+      'brief.sourcePromise',
       'data-tm-landing-primary',
       'data-link-path={cta.linkPath}',
     ]) {

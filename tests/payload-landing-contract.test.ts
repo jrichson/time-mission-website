@@ -4,6 +4,7 @@ import {
   landingCtaForDoc,
   landingDocLooksRenderable,
   landingLaunchStateForDoc,
+  landingReviewWarningsForDoc,
   landingShouldAppearInSitemap,
   landingTemplateForDoc,
   landingTemplateLabel,
@@ -83,5 +84,32 @@ describe('Payload landing contract', () => {
     })).toBe('coming_soon');
     expect(landingTemplateLabel('paid_social_campaign')).toBe('Paid/Social Campaign');
     expect(landingTemplateLabel('local_venue_city')).toBe('Local Venue/City');
+  });
+
+  it('ties review warnings to the campaign brief', () => {
+    expect(landingReviewWarningsForDoc(baseDoc)).toEqual(expect.arrayContaining([
+      'Add the source promise from the ad, post, email, search query, or campaign request.',
+      'Add the visitor intent so the page copy is tied to a real decision path.',
+    ]));
+
+    const warnings = landingReviewWarningsForDoc({
+      ...baseDoc,
+      brief: {
+        sourcePromise: 'A spring break ad promised active indoor competition for teens.',
+        visitorIntent: 'Parents are deciding whether this is a good spring break outing.',
+      },
+      content: {
+        ...baseDoc.content,
+        subheadline: 'Play 25+ mission rooms in one visit.',
+        bullets: [
+          { text: '25+ mission rooms' },
+          { text: 'Teams of 2-5' },
+          { text: '60, 90, and 120 minute sessions' },
+        ],
+      },
+    });
+
+    expect(warnings).not.toContain('Add the source promise from the ad, post, email, search query, or campaign request.');
+    expect(warnings).not.toContain('Add the visitor intent so the page copy is tied to a real decision path.');
   });
 });

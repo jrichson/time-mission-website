@@ -138,7 +138,7 @@ export const Landings = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'template', 'published', 'content.ctaSurface', 'updatedAt'],
     description:
-      'Guided campaign, local venue, and group/event pages rendered under /c/{page-url}. Choose the marketing job, fill the guided fields, save, then preview before publishing.',
+      'Campaign, local venue, and group/event pages rendered under /c/{page-url}. Start with the real campaign brief, then write the page copy and preview before publishing.',
     preview: landingPreviewPath,
   },
   access: {
@@ -184,7 +184,7 @@ export const Landings = {
       admin: {
         position: 'sidebar',
         description:
-          `Pick the marketing job first. Paid/social is booking-first, local venue/city is place-first, and group/event is planner-first. Legacy values normalize internally: ${legacyTemplateNote}.`,
+          `Choose the landing shape after the brief is clear. Paid/social is booking-first, local venue/city is place-first, and group/event is planner-first. Legacy values normalize internally: ${legacyTemplateNote}.`,
       },
     },
     {
@@ -206,12 +206,72 @@ export const Landings = {
       },
     },
     {
+      name: 'brief',
+      type: 'group',
+      label: 'Campaign brief',
+      admin: {
+        description:
+          'Anchor the landing page to the request that created it. This prevents strategy, copy, and proof points from living in a vacuum.',
+      },
+      fields: [
+        {
+          name: 'sourceChannel',
+          type: 'select',
+          defaultValue: 'paid_ad',
+          options: [
+            { label: 'Paid ad', value: 'paid_ad' },
+            { label: 'Organic social', value: 'organic_social' },
+            { label: 'Email', value: 'email' },
+            { label: 'Local search / SEO', value: 'local_search' },
+            { label: 'Partner / referral', value: 'partner' },
+            { label: 'Internal campaign', value: 'internal' },
+            { label: 'Other', value: 'other' },
+          ],
+          admin: { description: 'Where is the visitor coming from before this landing page?' },
+        },
+        {
+          name: 'sourceName',
+          type: 'text',
+          maxLength: 120,
+          admin: { description: 'Name the actual source. Example: Meta spring break ad, birthdays email, Houston launch post.' },
+        },
+        {
+          name: 'sourceUrl',
+          type: 'text',
+          maxLength: 2048,
+          admin: { description: 'Optional https link to the ad, post, email preview, campaign doc, or source page.' },
+          validate: (val) => {
+            if (val == null || val === '') return true;
+            return validateHttpsUrl(val, 'Source/reference URL');
+          },
+        },
+        {
+          name: 'sourcePromise',
+          type: 'textarea',
+          maxLength: 280,
+          admin: { description: 'What did the source promise before the visitor clicked? The landing headline should match this closely.' },
+        },
+        {
+          name: 'visitorIntent',
+          type: 'textarea',
+          maxLength: 240,
+          admin: { description: 'What is the visitor likely trying to decide or accomplish when they arrive?' },
+        },
+        {
+          name: 'successMetric',
+          type: 'text',
+          maxLength: 120,
+          admin: { description: 'How will this page be judged? Example: bookings, event inquiries, waitlist/contact submissions, gift-card clicks.' },
+        },
+      ],
+    },
+    {
       name: 'strategy',
       type: 'group',
       label: 'Marketing strategy',
       admin: {
         description:
-          'Editor guidance for the page promise. Keep this practical: who it is for, why they should care, and what proof makes the claim believable.',
+          'Translate the brief into page strategy: who it is for, why they should care, and what proof makes the claim believable.',
       },
       fields: [
         {
@@ -355,7 +415,7 @@ export const Landings = {
           type: 'text',
           required: true,
           maxLength: 160,
-          admin: { description: 'Lead with the promise. Paid/social pages should match the ad or post that sent the visitor here.' },
+          admin: { description: 'Lead with the promise. This should closely match the campaign brief source promise.' },
         },
         {
           name: 'subheadline',
