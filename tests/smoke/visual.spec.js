@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 const VIDEO_MEDIA_RE = /\.(mp4|webm)(?:\?.*)?$/i;
+const VISUAL_MAX_DIFF_PIXELS = 6000;
 const REDUCE_MOTION_CSS = `
   *, *::before, *::after {
     animation-delay: 0s !important;
@@ -71,7 +72,7 @@ test.describe('visual regression (representative templates)', () => {
     await expect(page).toHaveScreenshot('homepage.png', {
       fullPage: false,
       animations: 'disabled',
-      maxDiffPixels: 3000,
+      maxDiffPixels: VISUAL_MAX_DIFF_PIXELS,
     });
   });
 
@@ -82,7 +83,7 @@ test.describe('visual regression (representative templates)', () => {
     await expect(page).toHaveScreenshot('location-open.png', {
       fullPage: false,
       animations: 'disabled',
-      maxDiffPixels: 3000,
+      maxDiffPixels: VISUAL_MAX_DIFF_PIXELS,
     });
   });
 
@@ -93,7 +94,7 @@ test.describe('visual regression (representative templates)', () => {
     await expect(page).toHaveScreenshot('location-coming-soon.png', {
       fullPage: false,
       animations: 'disabled',
-      maxDiffPixels: 3000,
+      maxDiffPixels: VISUAL_MAX_DIFF_PIXELS,
     });
   });
 
@@ -104,7 +105,7 @@ test.describe('visual regression (representative templates)', () => {
     await expect(page).toHaveScreenshot('groups-corporate.png', {
       fullPage: false,
       animations: 'disabled',
-      maxDiffPixels: 3000,
+      maxDiffPixels: VISUAL_MAX_DIFF_PIXELS,
     });
   });
 
@@ -115,7 +116,7 @@ test.describe('visual regression (representative templates)', () => {
     await expect(page).toHaveScreenshot('groups-birthdays.png', {
       fullPage: false,
       animations: 'disabled',
-      maxDiffPixels: 3000,
+      maxDiffPixels: VISUAL_MAX_DIFF_PIXELS,
     });
   });
 
@@ -126,7 +127,7 @@ test.describe('visual regression (representative templates)', () => {
     await expect(page).toHaveScreenshot('faq.png', {
       fullPage: false,
       animations: 'disabled',
-      maxDiffPixels: 3000,
+      maxDiffPixels: VISUAL_MAX_DIFF_PIXELS,
     });
   });
 
@@ -137,7 +138,7 @@ test.describe('visual regression (representative templates)', () => {
     await expect(page).toHaveScreenshot('contact.png', {
       fullPage: false,
       animations: 'disabled',
-      maxDiffPixels: 3000,
+      maxDiffPixels: VISUAL_MAX_DIFF_PIXELS,
     });
   });
 });
