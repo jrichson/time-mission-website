@@ -173,7 +173,7 @@ export interface Landing {
   /**
    * Layout guide inspired by existing Time Mission pages. Use Preview after saving to see it on Railway.
    */
-  template: 'campaign' | 'group_event' | 'location_promo' | 'coming_soon';
+  template: 'campaign' | 'paid_social_campaign' | 'group_event' | 'location_promo' | 'local_venue_city' | 'coming_soon';
   /**
    * When checked, this page is included in the public site build.
    */
@@ -217,6 +217,30 @@ export interface Landing {
      * https://... when CTA surface is External
      */
     ctaExternalUrl?: string | null;
+  };
+  strategy?: {
+    audience?: string | null;
+    campaignGoal?: string | null;
+    offerType?: string | null;
+    locationOrCity?: string | null;
+    eventType?: string | null;
+    launchState?: ('open' | 'coming_soon') | null;
+    proofAngle?: string | null;
+    ctaIntent?: string | null;
+  };
+  paidSocial?: {
+    sourcePromise?: string | null;
+    frictionReducer?: string | null;
+  };
+  localVenue?: {
+    cityProof?: string | null;
+    venueConfidence?: string | null;
+    openingNote?: string | null;
+  };
+  groupEvent?: {
+    plannerReassurance?: string | null;
+    groupSize?: string | null;
+    logisticsNote?: string | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -408,6 +432,38 @@ export interface LandingsSelect<T extends boolean = true> {
         primaryCtaLabel?: T;
         ctaSurface?: T;
         ctaExternalUrl?: T;
+      };
+  strategy?:
+    | T
+    | {
+        audience?: T;
+        campaignGoal?: T;
+        offerType?: T;
+        locationOrCity?: T;
+        eventType?: T;
+        launchState?: T;
+        proofAngle?: T;
+        ctaIntent?: T;
+      };
+  paidSocial?:
+    | T
+    | {
+        sourcePromise?: T;
+        frictionReducer?: T;
+      };
+  localVenue?:
+    | T
+    | {
+        cityProof?: T;
+        venueConfidence?: T;
+        openingNote?: T;
+      };
+  groupEvent?:
+    | T
+    | {
+        plannerReassurance?: T;
+        groupSize?: T;
+        logisticsNote?: T;
       };
   updatedAt?: T;
   createdAt?: T;

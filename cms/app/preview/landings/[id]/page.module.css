@@ -45,6 +45,13 @@
   backdrop-filter: blur(16px);
 }
 
+.previewActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .previewBar p {
   margin: 2px 0 0;
   color: var(--preview-muted);
@@ -86,6 +93,64 @@
 .secondaryAction:focus-visible {
   outline: 2px solid var(--preview-accent);
   outline-offset: 3px;
+}
+
+.statusPanel,
+.warningPanel {
+  display: grid;
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  border: 1px solid var(--preview-line);
+  background: rgba(13, 13, 13, 0.86);
+}
+
+.statusPanel {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+}
+
+.statusPanel div {
+  min-height: 94px;
+  background: rgba(247, 242, 235, 0.045);
+  padding: 18px;
+}
+
+.statusPanel span {
+  display: block;
+  color: var(--preview-muted);
+  font-size: 12px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.statusPanel strong {
+  display: block;
+  margin-top: 10px;
+  color: var(--preview-text);
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.warningPanel {
+  gap: 12px;
+  margin-top: 16px;
+  border-color: rgba(255, 122, 47, 0.48);
+  padding: 20px;
+}
+
+.warningPanel h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+.warningPanel ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--preview-muted-strong);
+  line-height: 1.5;
 }
 
 .hero {
@@ -267,6 +332,10 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .statusPanel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .hero h1 {
     font-size: 3.25rem;
   }
@@ -285,6 +354,14 @@
 
   .previewAdminLink {
     width: 100%;
+  }
+
+  .previewActions {
+    width: 100%;
+  }
+
+  .statusPanel {
+    grid-template-columns: 1fr;
   }
 
   .hero {

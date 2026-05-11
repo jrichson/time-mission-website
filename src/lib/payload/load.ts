@@ -9,11 +9,14 @@ import type { PayloadLandingSurface } from './landing-contract';
 export {
     DEFAULT_LANDING_TEMPLATE,
     LANDING_TEMPLATE_OPTIONS,
+    landingArchetypeForDoc,
     landingCanonicalPath,
     landingCtaForDoc,
     landingDistOutputCandidates,
     landingDocLooksRenderable,
     landingHeadForDoc,
+    landingLaunchStateForDoc,
+    landingReviewWarningsForDoc,
     landingShouldAppearInSitemap,
     landingTemplateForDoc,
     landingTemplateLabel,
@@ -25,6 +28,8 @@ export {
     sitePagePathIsValid,
 } from './site-page-contract';
 export type { PayloadLandingSurface } from './landing-contract';
+export type { PayloadLandingArchetype } from './landing-contract';
+export type { PayloadLandingLaunchState } from './landing-contract';
 export type { PayloadLandingTemplate } from './landing-contract';
 
 const DEFAULT_ORIGIN_KEYS = ['PAYLOAD_CMS_ORIGIN', 'PAYLOAD_PUBLIC_CMS_ORIGIN'] as const;
@@ -71,6 +76,30 @@ export interface PayloadLandingDoc {
         primaryCtaLabel?: string;
         ctaSurface?: PayloadLandingSurface;
         ctaExternalUrl?: string | null;
+    };
+    strategy?: {
+        audience?: string | null;
+        campaignGoal?: string | null;
+        offerType?: string | null;
+        locationOrCity?: string | null;
+        eventType?: string | null;
+        launchState?: string | null;
+        proofAngle?: string | null;
+        ctaIntent?: string | null;
+    };
+    paidSocial?: {
+        sourcePromise?: string | null;
+        frictionReducer?: string | null;
+    };
+    localVenue?: {
+        cityProof?: string | null;
+        venueConfidence?: string | null;
+        openingNote?: string | null;
+    };
+    groupEvent?: {
+        plannerReassurance?: string | null;
+        groupSize?: string | null;
+        logisticsNote?: string | null;
     };
 }
 

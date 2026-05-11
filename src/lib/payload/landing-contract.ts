@@ -9,50 +9,53 @@ export type PayloadLandingSurface =
     | 'gift_cards'
     | 'external';
 
-export type PayloadLandingTemplate =
+export type PayloadLandingArchetype =
+    | 'paid_social_campaign'
+    | 'local_venue_city'
+    | 'group_event';
+
+export type PayloadLandingLegacyTemplate =
     | 'campaign'
-    | 'group_event'
     | 'location_promo'
     | 'coming_soon';
 
-export const DEFAULT_LANDING_TEMPLATE: PayloadLandingTemplate = 'campaign';
+export type PayloadLandingTemplate = PayloadLandingArchetype | PayloadLandingLegacyTemplate;
+
+export type PayloadLandingLaunchState = 'open' | 'coming_soon';
+
+export const DEFAULT_LANDING_ARCHETYPE: PayloadLandingArchetype = 'paid_social_campaign';
+export const DEFAULT_LANDING_TEMPLATE: PayloadLandingArchetype = DEFAULT_LANDING_ARCHETYPE;
 
 export const LANDING_TEMPLATE_OPTIONS: Array<{
-    value: PayloadLandingTemplate;
+    value: PayloadLandingArchetype;
     label: string;
     source: string;
     summary: string;
 }> = [
     {
-        value: 'campaign',
-        label: 'Simple Campaign',
-        source: '/c/{slug}',
-        summary: 'Focused hero, short proof points, and one primary CTA.',
+        value: 'paid_social_campaign',
+        label: 'Paid/Social Campaign',
+        source: 'Ads, social posts, email, and seasonal offers',
+        summary: 'Fast promise match, short proof, and one booking-first action.',
     },
     {
         value: 'group_event',
         label: 'Group Event',
         source: '/groups/birthdays and /groups/corporate',
-        summary: 'Photo-led hero, feature cards, and event-planning proof points.',
+        summary: 'Planner reassurance, logistics proof, and inquiry-first conversion.',
     },
     {
-        value: 'location_promo',
-        label: 'Location Promo',
+        value: 'local_venue_city',
+        label: 'Local Venue/City',
         source: '/philadelphia, /mount-prospect, and /houston',
         summary: 'Venue-forward layout for local offers, openings, and city campaigns.',
-    },
-    {
-        value: 'coming_soon',
-        label: 'Coming Soon',
-        source: '/dallas and /brussels',
-        summary: 'Launch-waitlist style for future cities and early-access campaigns.',
     },
 ];
 
 export interface PayloadLandingContractDoc {
     slug?: string | null;
     template?: PayloadLandingTemplate | string | null;
-    includeInSitemap?: boolean;
+    includeInSitemap?: boolean | null;
     seo?: {
         metaTitle?: string | null;
         metaDescription?: string | null;
@@ -63,9 +66,21 @@ export interface PayloadLandingContractDoc {
     };
     content?: {
         headline?: string | null;
+        subheadline?: string | null;
+        bullets?: Array<{ text?: string | null }> | null;
         primaryCtaLabel?: string | null;
         ctaSurface?: PayloadLandingSurface | null;
         ctaExternalUrl?: string | null;
+    };
+    strategy?: {
+        audience?: string | null;
+        campaignGoal?: string | null;
+        offerType?: string | null;
+        locationOrCity?: string | null;
+        eventType?: string | null;
+        launchState?: PayloadLandingLaunchState | string | null;
+        proofAngle?: string | null;
+        ctaIntent?: string | null;
     };
 }
 
@@ -85,15 +100,31 @@ export function slugIsValidForLanding(slug: string): boolean {
     return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
 }
 
-export function landingTemplateForDoc(doc: PayloadLandingContractDoc): PayloadLandingTemplate {
-    const value = doc.template;
-    return LANDING_TEMPLATE_OPTIONS.some((option) => option.value === value)
-        ? (value as PayloadLandingTemplate)
-        : DEFAULT_LANDING_TEMPLATE;
+function landingArchetypeForValue(value: PayloadLandingContractDoc['template']): PayloadLandingArchetype {
+    if (value === 'group_event') return 'group_event';
+    if (value === 'local_venue_city' || value === 'location_promo' || value === 'coming_soon') {
+        return 'local_venue_city';
+    }
+    if (value === 'paid_social_campaign' || value === 'campaign') return 'paid_social_campaign';
+    return DEFAULT_LANDING_ARCHETYPE;
 }
 
-export function landingTemplateLabel(template: PayloadLandingTemplate): string {
-    return LANDING_TEMPLATE_OPTIONS.find((option) => option.value === template)?.label ?? 'Simple Campaign';
+export function landingArchetypeForDoc(doc: PayloadLandingContractDoc): PayloadLandingArchetype {
+    return landingArchetypeForValue(doc.template);
+}
+
+export function landingTemplateForDoc(doc: PayloadLandingContractDoc): PayloadLandingArchetype {
+    return landingArchetypeForDoc(doc);
+}
+
+export function landingLaunchStateForDoc(doc: PayloadLandingContractDoc): PayloadLandingLaunchState {
+    if (doc.template === 'coming_soon') return 'coming_soon';
+    return doc.strategy?.launchState === 'coming_soon' ? 'coming_soon' : 'open';
+}
+
+export function landingTemplateLabel(template: PayloadLandingTemplate | string | null | undefined): string {
+    const archetype = landingArchetypeForValue(template);
+    return LANDING_TEMPLATE_OPTIONS.find((option) => option.value === archetype)?.label ?? 'Paid/Social Campaign';
 }
 
 /** Minimum fields needed for Astro `c/[slug]` prerender — keep in sync with page template guards. */
@@ -127,7 +158,7 @@ export function landingShouldAppearInSitemap(doc: PayloadLandingContractDoc): bo
 
 export function landingCtaForDoc(doc: PayloadLandingContractDoc): LandingCtaModel {
     const content = doc.content || {};
-    const surface = (content.ctaSurface || 'book_panel') as PayloadLandingSurface;
+    const surface = (content.ctaSurface || defaultCtaSurfaceForDoc(doc)) as PayloadLandingSurface;
 
     if (surface === 'book_panel') {
         return {
@@ -168,6 +199,26 @@ export function landingCtaForDoc(doc: PayloadLandingContractDoc): LandingCtaMode
         bookTrigger: false,
         linkPath,
     };
+}
+
+function defaultCtaSurfaceForDoc(doc: PayloadLandingContractDoc): PayloadLandingSurface {
+    if (landingArchetypeForDoc(doc) === 'group_event') return 'contact';
+    if (landingLaunchStateForDoc(doc) === 'coming_soon') return 'contact';
+    return 'book_panel';
+}
+
+export function landingReviewWarningsForDoc(doc: PayloadLandingContractDoc): string[] {
+    const warnings: string[] = [];
+    const bullets = doc.content?.bullets?.filter((bullet) => String(bullet?.text || '').trim()).length ?? 0;
+
+    if (!doc.content?.subheadline) warnings.push('Add a subheadline so visitors understand the offer before they choose.');
+    if (bullets < 3) warnings.push('Add at least three concrete proof points.');
+    if (doc.content?.ctaSurface === 'external' && !doc.content.ctaExternalUrl) warnings.push('Add the external CTA URL before publishing.');
+    if (landingLaunchStateForDoc(doc) === 'coming_soon' && doc.content?.ctaSurface === 'book_panel') {
+        warnings.push('Coming-soon pages should use contact or updates language instead of immediate booking.');
+    }
+
+    return warnings;
 }
 
 export function landingDistOutputCandidates(root: string, prefix: string, slug: string): string[] {

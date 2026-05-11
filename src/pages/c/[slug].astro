@@ -3,11 +3,12 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import { definePage } from '../../lib/define-page';
 import {
     getPublishedLandings,
+    landingArchetypeForDoc,
     landingCtaForDoc,
     landingCanonicalPath,
     landingDocLooksRenderable,
     landingHeadForDoc,
-    landingTemplateForDoc,
+    landingLaunchStateForDoc,
     landingTemplateLabel,
     type PayloadLandingDoc,
 } from '../../lib/payload/load';
@@ -28,7 +29,8 @@ const page = definePage({ canonicalPath: landingCanonicalPath(doc.slug) });
 const landingHead = landingHeadForDoc(doc)!;
 const c = doc.content!;
 const cta = landingCtaForDoc(doc);
-const template = landingTemplateForDoc(doc);
+const template = landingArchetypeForDoc(doc);
+const launchState = landingLaunchStateForDoc(doc);
 const templateLabel = landingTemplateLabel(template);
 const heroImage = doc.seo?.ogImage || '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
 
@@ -36,6 +38,53 @@ const bullets = Array.isArray(c.bullets) ? c.bullets.map((b) => String(b?.text |
 const proofItems = bullets.length
     ? bullets.slice(0, 6)
     : ['25+ interactive mission rooms', 'Team-based scoring', 'Built for every age and group size'];
+const strategy = doc.strategy || {};
+const paidSocial = doc.paidSocial || {};
+const localVenue = doc.localVenue || {};
+const groupEvent = doc.groupEvent || {};
+const proofIntro =
+    strategy.proofAngle ||
+    (template === 'group_event'
+        ? groupEvent.plannerReassurance || 'Proof that the group experience is easy to plan and worth showing up for.'
+        : template === 'local_venue_city'
+            ? localVenue.venueConfidence || 'Proof that this is a real venue with a Time Mission experience worth visiting.'
+            : paidSocial.frictionReducer || 'Proof that the promise is easy to understand and simple to act on.');
+const detailHeading =
+    template === 'group_event'
+        ? 'A session built for your crew'
+        : launchState === 'coming_soon'
+            ? 'First in line for the next mission'
+            : template === 'local_venue_city'
+                ? 'A local reason to book the mission'
+                : 'Focused, fast, and easy to act on';
+const proofHeading =
+    template === 'group_event'
+        ? 'Built for groups that want more than a reservation'
+        : launchState === 'coming_soon'
+            ? 'Get ready before the doors open'
+            : template === 'local_venue_city'
+                ? 'A venue-first reason to visit'
+                : 'Make the first click count';
+const detailKicker =
+    template === 'group_event'
+        ? 'Planner Confidence'
+        : launchState === 'coming_soon'
+            ? 'Opening Updates'
+            : template === 'local_venue_city'
+                ? 'Local Campaign'
+                : 'Campaign Details';
+const finalHeading =
+    launchState === 'coming_soon'
+        ? 'Want opening updates?'
+        : template === 'group_event'
+            ? 'Ready to plan the event?'
+            : 'Ready to start?';
+const finalCopy =
+    template === 'group_event'
+        ? groupEvent.logisticsNote || 'Bring the crew. We will handle the missions, scoring, and momentum.'
+        : launchState === 'coming_soon'
+            ? localVenue.openingNote || landingHead.metaDescription
+            : landingHead.metaDescription;
 
 const jsonLd = {
     '@context': 'https://schema.org',
@@ -276,11 +325,15 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                 margin: 0 auto 1.5rem;
                 width: min(100%, 38rem);
             }
-            .tm-landing-main--location_promo .tm-landing-proof-card,
-            .tm-landing-main--coming_soon .tm-landing-proof-card {
+            .tm-landing-main--paid_social_campaign .tm-landing-proof-card,
+            .tm-landing-main--local_venue_city .tm-landing-proof-card,
+            .tm-landing-main--group_event .tm-landing-proof-card {
+                min-height: 11rem;
+            }
+            .tm-landing-main--local_venue_city .tm-landing-proof-card {
                 min-height: 8rem;
             }
-            .tm-landing-main--coming_soon .tm-landing-kicker {
+            .tm-landing-main--local_venue_city .tm-landing-kicker {
                 color: #ffd0b8;
             }
             @media (max-width: 840px) {
@@ -340,7 +393,7 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                         {
                             template === 'group_event' ? (
                                 <a class="tm-landing-secondary" href="/groups">Explore events</a>
-                            ) : template === 'location_promo' || template === 'coming_soon' ? (
+                            ) : template === 'local_venue_city' ? (
                                 <a class="tm-landing-secondary" href="/locations">View locations</a>
                             ) : null
                         }
@@ -354,15 +407,9 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                 <div class="tm-landing-section-head">
                     <p class="tm-landing-kicker">Why Time Mission</p>
                     <h2>
-                        {template === 'group_event'
-                            ? 'Built for groups that want more than a reservation'
-                            : template === 'coming_soon'
-                                ? 'Get ready before the doors open'
-                                : template === 'location_promo'
-                                    ? 'A venue-first way to sell the mission'
-                                    : 'Make the first click count'}
+                        {proofHeading}
                     </h2>
-                    <p>{landingHead.metaDescription}</p>
+                    <p>{proofIntro}</p>
                 </div>
                 <div class="tm-landing-proof-grid">
                     {
@@ -384,23 +431,9 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                 </div>
                 <div class="tm-landing-split-copy">
                     <p class="tm-landing-kicker">
-                        {template === 'group_event'
-                            ? 'What to Expect'
-                            : template === 'coming_soon'
-                                ? 'Opening Updates'
-                                : template === 'location_promo'
-                                    ? 'Local Campaign'
-                                    : 'Campaign Details'}
+                        {detailKicker}
                     </p>
-                    <h2>
-                        {template === 'group_event'
-                            ? 'A session built for your crew'
-                            : template === 'coming_soon'
-                                ? 'First in line for the next mission'
-                                : template === 'location_promo'
-                                    ? 'Give the city a reason to book'
-                                    : 'Focused, fast, and easy to act on'}
-                    </h2>
+                    <h2>{detailHeading}</h2>
                     {c.subheadline ? <p>{c.subheadline}</p> : null}
                     <ul class="tm-landing-bullets">
                         {proofItems.map((t) => <li>{t}</li>)}
@@ -411,8 +444,8 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
 
         <section class="tm-landing-final">
             <div class="tm-landing-shell">
-                <h2>{template === 'coming_soon' ? 'Want opening updates?' : 'Ready to start?'}</h2>
-                <p>{template === 'group_event' ? 'Bring the crew. We will handle the missions, scoring, and momentum.' : landingHead.metaDescription}</p>
+                <h2>{finalHeading}</h2>
+                <p>{finalCopy}</p>
                 <div class="tm-landing-cta-row">
                     {
                         cta.bookTrigger ? (

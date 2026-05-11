@@ -4,22 +4,36 @@ const assetPathUnsafeRegex = /[<>"'\\\s]/;
 const CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS = 15_000;
 const landingTemplateOptions = [
   {
-    label: 'Simple Campaign - focused /c page',
-    value: 'campaign',
+    label: 'Paid/Social Campaign - Ad or social campaign',
+    value: 'paid_social_campaign',
   },
   {
-    label: 'Group Event - like birthday and corporate pages',
+    label: 'Local Venue/City - Local venue or city campaign',
+    value: 'local_venue_city',
+  },
+  {
+    label: 'Group/Event - Group or event landing',
     value: 'group_event',
   },
+];
+
+const legacyLandingTemplateOptions = [
   {
-    label: 'Location Promo - like venue/city pages',
-    value: 'location_promo',
+    legacyValue: 'campaign',
+    mapsTo: 'paid_social_campaign',
   },
   {
-    label: 'Coming Soon - like future city pages',
-    value: 'coming_soon',
+    legacyValue: 'location_promo',
+    mapsTo: 'local_venue_city',
+  },
+  {
+    legacyValue: 'coming_soon',
+    mapsTo: 'local_venue_city',
   },
 ];
+const legacyTemplateNote = legacyLandingTemplateOptions
+  .map((option) => `${option.legacyValue} -> ${option.mapsTo}`)
+  .join(', ');
 
 function validateAssetPath(val) {
   if (typeof val !== 'string' || !val.startsWith('/assets/')) {
@@ -105,6 +119,14 @@ function landingPreviewPath(doc) {
   return `/preview/landings/${encodeURIComponent(String(doc.id))}`;
 }
 
+function templateIs(...templates) {
+  return (data, siblingData) => templates.includes(siblingData?.template ?? data?.template);
+}
+
+function launchStateIsComingSoon(data) {
+  return data?.template === 'coming_soon' || data?.strategy?.launchState === 'coming_soon';
+}
+
 export const Landings = {
   slug: 'landings',
   labels: {
@@ -114,8 +136,9 @@ export const Landings = {
   admin: {
     group: 'Pages',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'template', 'published', 'updatedAt'],
-    description: 'Campaign and promotional pages rendered under /c/{slug}.',
+    defaultColumns: ['title', 'slug', 'template', 'published', 'content.ctaSurface', 'updatedAt'],
+    description:
+      'Guided campaign, local venue, and group/event pages rendered under /c/{page-url}. Choose the marketing job, fill the guided fields, save, then preview before publishing.',
     preview: landingPreviewPath,
   },
   access: {
@@ -141,7 +164,8 @@ export const Landings = {
           required: true,
           unique: true,
           index: true,
-          admin: { description: 'URL segment: /c/{slug} (lowercase, hyphens only)' },
+          label: 'Page URL',
+          admin: { description: 'The public URL segment after /c/. Use lowercase words and hyphens, such as spring-break.' },
           validate: (val) => {
             if (typeof val !== 'string' || !slugRegex.test(val)) {
               return 'Slug must match ^[a-z0-9-]+$ (no leading/trailing hyphens)';
@@ -155,11 +179,12 @@ export const Landings = {
       name: 'template',
       type: 'select',
       required: true,
-      defaultValue: 'campaign',
+      defaultValue: 'paid_social_campaign',
       options: landingTemplateOptions,
       admin: {
         position: 'sidebar',
-        description: 'Layout guide inspired by existing Time Mission pages. Use Preview after saving to see it on Railway.',
+        description:
+          `Pick the marketing job first. Paid/social is booking-first, local venue/city is place-first, and group/event is planner-first. Legacy values normalize internally: ${legacyTemplateNote}.`,
       },
     },
     {
@@ -168,7 +193,7 @@ export const Landings = {
       defaultValue: false,
       admin: {
         position: 'sidebar',
-        description: 'When checked, this page is included in the public site build.',
+        description: 'When checked, this page can appear on the public site after the next approved deploy.',
       },
     },
     {
@@ -177,8 +202,71 @@ export const Landings = {
       defaultValue: true,
       admin: {
         position: 'sidebar',
-        description: 'If off, page is still built but omitted from sitemap.xml.',
+        description: 'If off, the page can still exist but will be omitted from sitemap.xml.',
       },
+    },
+    {
+      name: 'strategy',
+      type: 'group',
+      label: 'Marketing strategy',
+      admin: {
+        description:
+          'Editor guidance for the page promise. Keep this practical: who it is for, why they should care, and what proof makes the claim believable.',
+      },
+      fields: [
+        {
+          name: 'audience',
+          type: 'text',
+          maxLength: 120,
+          admin: { description: 'Who is this for? Example: parents planning teen birthdays, Friday-night friend groups, or corporate event buyers.' },
+        },
+        {
+          name: 'campaignGoal',
+          type: 'textarea',
+          maxLength: 240,
+          admin: { description: 'What behavior should this page drive? Example: book tickets, request event help, or join opening updates.' },
+        },
+        {
+          name: 'offerType',
+          type: 'text',
+          maxLength: 120,
+          admin: { description: 'The concrete offer or occasion. Example: spring break, grand opening, corporate team building, or birthday package.' },
+        },
+        {
+          name: 'locationOrCity',
+          type: 'text',
+          maxLength: 120,
+          admin: { description: 'Required for local venue/city pages. Example: Philadelphia, Houston, or Dallas.' },
+        },
+        {
+          name: 'eventType',
+          type: 'text',
+          maxLength: 120,
+          admin: { description: 'Required for group/event pages. Example: birthday, corporate outing, field trip, or private event.' },
+        },
+        {
+          name: 'launchState',
+          type: 'select',
+          defaultValue: 'open',
+          options: [
+            { label: 'Open for booking', value: 'open' },
+            { label: 'Coming soon', value: 'coming_soon' },
+          ],
+          admin: { description: 'Coming-soon pages should use contact or updates language instead of immediate booking.' },
+        },
+        {
+          name: 'proofAngle',
+          type: 'textarea',
+          maxLength: 240,
+          admin: { description: 'What makes the claim believable? Use real proof: venue photos, mission count, logistics, press, or planner confidence.' },
+        },
+        {
+          name: 'ctaIntent',
+          type: 'text',
+          maxLength: 120,
+          admin: { description: 'Plain-language next step. Example: Book tickets, request event help, view locations, or ask for opening updates.' },
+        },
+      ],
     },
     {
       name: 'seo',
@@ -190,13 +278,14 @@ export const Landings = {
           type: 'text',
           required: true,
           maxLength: 90,
-          admin: { description: '<title> and og:title' },
+          admin: { description: 'Browser title and social share title. Keep the core offer and Time Mission visible.' },
         },
         {
           name: 'metaDescription',
           type: 'textarea',
           required: true,
           maxLength: 220,
+          admin: { description: 'Short search/social summary. State who it is for, what they get, and why it is worth acting on.' },
         },
         {
           name: 'robots',
@@ -237,7 +326,8 @@ export const Landings = {
           name: 'ogImage',
           type: 'text',
           required: true,
-          admin: { description: 'Root-relative path, e.g. /assets/photos/...' },
+          label: 'Hero / social image',
+          admin: { description: 'Root-relative /assets/... path. Use real venue or experience photography, not abstract artwork.' },
           validate: validateAssetPath,
         },
         {
@@ -254,19 +344,41 @@ export const Landings = {
     {
       name: 'content',
       type: 'group',
-      label: 'Landing content (template v1)',
+      label: 'Shared landing content',
+      admin: {
+        description:
+          'These fields appear across all templates. Match the page headline to the visitor promise, use concrete proof points, and keep one clear primary action.',
+      },
       fields: [
-        { name: 'headline', type: 'text', required: true, maxLength: 160 },
-        { name: 'subheadline', type: 'textarea', maxLength: 360 },
+        {
+          name: 'headline',
+          type: 'text',
+          required: true,
+          maxLength: 160,
+          admin: { description: 'Lead with the promise. Paid/social pages should match the ad or post that sent the visitor here.' },
+        },
+        {
+          name: 'subheadline',
+          type: 'textarea',
+          maxLength: 360,
+          admin: { description: 'Reduce uncertainty. Explain the experience, occasion, or local reason to act in one or two sentences.' },
+        },
         {
           name: 'bullets',
           type: 'array',
           minRows: 0,
           maxRows: 12,
-          labels: { singular: 'Bullet', plural: 'Bullets' },
+          labels: { singular: 'Proof point', plural: 'Proof points' },
+          admin: { description: 'Use concrete reasons to believe: mission count, group fit, real logistics, location confidence, or planner reassurance.' },
           fields: [{ name: 'text', type: 'text', required: true, maxLength: 200 }],
         },
-        { name: 'primaryCtaLabel', type: 'text', required: true, maxLength: 80 },
+        {
+          name: 'primaryCtaLabel',
+          type: 'text',
+          required: true,
+          maxLength: 80,
+          admin: { description: 'Use a verb-first CTA. Examples: Book Now, Request Event Help, Visit Philadelphia, Ask About Opening Updates.' },
+        },
         {
           name: 'ctaSurface',
           type: 'select',
@@ -280,6 +392,10 @@ export const Landings = {
             { label: 'Gift cards', value: 'gift_cards' },
             { label: 'External URL', value: 'external' },
           ],
+          admin: {
+            description:
+              'Default guidance: paid/social and open local pages usually book; group/event and coming-soon pages usually contact.',
+          },
         },
         {
           name: 'ctaExternalUrl',
@@ -292,6 +408,93 @@ export const Landings = {
             if (siblingData?.ctaSurface !== 'external') return true;
             return validateHttpsUrl(val, 'External CTA');
           },
+        },
+      ],
+    },
+    {
+      name: 'paidSocial',
+      type: 'group',
+      label: 'Paid/social campaign guidance',
+      admin: {
+        condition: templateIs('paid_social_campaign', 'campaign'),
+        description:
+          'Ad or social campaign: hook fast, match the source promise, reduce activation energy, and avoid fake urgency.',
+      },
+      fields: [
+        {
+          name: 'sourcePromise',
+          type: 'textarea',
+          maxLength: 240,
+          admin: { description: 'What did the ad, post, or email promise before the visitor landed here?' },
+        },
+        {
+          name: 'frictionReducer',
+          type: 'textarea',
+          maxLength: 240,
+          admin: { description: 'What makes the first action easy? Example: quick booking, all ages, groups welcome, or no planning required.' },
+        },
+      ],
+    },
+    {
+      name: 'localVenue',
+      type: 'group',
+      label: 'Local venue/city guidance',
+      admin: {
+        condition: templateIs('local_venue_city', 'location_promo', 'coming_soon'),
+        description:
+          'Local venue or city campaign: make the place feel real, show venue confidence, and give local visitors a reason to act.',
+      },
+      fields: [
+        {
+          name: 'cityProof',
+          type: 'textarea',
+          maxLength: 240,
+          admin: { description: 'What local detail makes this page feel specific to the city or venue?' },
+        },
+        {
+          name: 'venueConfidence',
+          type: 'textarea',
+          maxLength: 240,
+          admin: { description: 'What reassures visitors this is a real, polished venue worth visiting?' },
+        },
+        {
+          name: 'openingNote',
+          type: 'textarea',
+          maxLength: 240,
+          admin: {
+            condition: launchStateIsComingSoon,
+            description: 'For coming-soon pages, explain what visitors can expect and how they can get updates.',
+          },
+        },
+      ],
+    },
+    {
+      name: 'groupEvent',
+      type: 'group',
+      label: 'Group/event guidance',
+      admin: {
+        condition: templateIs('group_event'),
+        description:
+          'Group or event landing: reassure the planner, reduce regret risk, and make logistics feel handled.',
+      },
+      fields: [
+        {
+          name: 'plannerReassurance',
+          type: 'textarea',
+          maxLength: 240,
+          admin: { description: 'What does the planner need to feel confident before contacting Time Mission?' },
+        },
+        {
+          name: 'groupSize',
+          type: 'text',
+          maxLength: 120,
+          admin: { description: 'Suggested group-size framing. Example: small crews, birthday groups, school groups, or full-venue buyouts.' },
+        },
+        {
+          name: 'logisticsNote',
+          type: 'textarea',
+          maxLength: 240,
+          admin: { description: 'Mention handled details where true: run-of-show, scoring, private space, catering, or event help.' },
         },
       ],
     },

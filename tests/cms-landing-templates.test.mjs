@@ -15,9 +15,22 @@ describe('CMS landing templates', () => {
     const collection = read('cms/collections/Landings.js');
     const migration = read('cms/migrations/20260508_213000_landing_templates.ts');
 
-    for (const template of ['campaign', 'group_event', 'location_promo', 'coming_soon']) {
+    for (const template of ['paid_social_campaign', 'local_venue_city', 'group_event']) {
       expect(collection).toContain(`value: '${template}'`);
       expect(migration).toContain(`'${template}'`);
+    }
+
+    for (const template of ['campaign', 'location_promo', 'coming_soon']) {
+      expect(collection).toContain(`legacyValue: '${template}'`);
+      expect(migration).toContain(`'${template}'`);
+    }
+
+    for (const guidance of [
+      'Ad or social campaign',
+      'Local venue or city campaign',
+      'Group or event landing',
+    ]) {
+      expect(collection).toContain(guidance);
     }
 
     expect(collection).toContain('preview: landingPreviewPath');
@@ -30,5 +43,9 @@ describe('CMS landing templates', () => {
     expect(previewRoute).toContain('payload.auth');
     expect(previewRoute).toContain('overrideAccess: false');
     expect(previewRoute).toContain('/admin/login?redirect=');
+    expect(previewRoute).toContain('Public path');
+    expect(previewRoute).toContain('Sitemap');
+    expect(previewRoute).toContain('Review warnings');
+    expect(previewRoute).toContain('landingReviewWarningsForDoc');
   });
 });

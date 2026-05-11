@@ -34,6 +34,7 @@
 }
 
 .hero,
+.landingBuilder,
 .quickLinks {
   position: relative;
   z-index: 1;
@@ -57,7 +58,8 @@
 }
 
 .kicker,
-.panelLabel {
+.panelLabel,
+.actionMeta {
   margin: 0 0 18px;
   color: var(--tm-cyan);
   font-size: 0.88rem;
@@ -80,6 +82,26 @@
   line-height: 1.6;
 }
 
+.sectionIntro {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.sectionIntro h2 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.3rem);
+  line-height: 1;
+}
+
+.sectionIntro p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--tm-muted);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -89,6 +111,7 @@
 
 .primaryAction,
 .secondaryAction,
+.landingAction,
 .quickLink {
   transition:
     border-color 160ms ease,
@@ -136,6 +159,7 @@
 
 .primaryAction:focus-visible,
 .secondaryAction:focus-visible,
+.landingAction:focus-visible,
 .quickLink:focus-visible {
   outline: 2px solid var(--tm-orange);
   outline-offset: 3px;
@@ -197,6 +221,57 @@
   padding: 14px;
 }
 
+.landingBuilder {
+  margin-top: 18px;
+  border: 1px solid var(--tm-line);
+  border-radius: 8px;
+  background: rgba(13, 13, 13, 0.78);
+  padding: 28px;
+}
+
+.landingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.landingAction {
+  display: grid;
+  min-height: 206px;
+  align-content: start;
+  border: 1px solid var(--tm-line);
+  border-radius: 8px;
+  background: rgba(5, 5, 5, 0.42);
+  color: var(--tm-text);
+  padding: 22px;
+  text-decoration: none;
+}
+
+.landingAction:hover {
+  border-color: var(--tm-line-strong);
+  background: var(--tm-orange-soft);
+  transform: translateY(-1px);
+}
+
+.actionMeta {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.landingAction strong {
+  display: block;
+  color: var(--tm-orange);
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.landingAction p {
+  margin: 14px 0 0;
+  color: var(--tm-muted);
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
 .quickLinks {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -241,6 +316,10 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .landingGrid {
+    grid-template-columns: 1fr;
+  }
+
   .heroCopy {
     min-height: auto;
     padding: 28px;
@@ -257,6 +336,16 @@
   .primaryAction,
   .secondaryAction {
     width: 100%;
+  }
+}
+
+@media (max-width: 580px) {
+  .quickLinks {
+    grid-template-columns: 1fr;
+  }
+
+  .landingBuilder {
+    padding: 22px;
   }
 }
 
@@ -318,12 +407,14 @@
 @media (prefers-reduced-motion: reduce) {
   .primaryAction,
   .secondaryAction,
+  .landingAction,
   .quickLink {
     transition: none;
   }
 
   .primaryAction:hover,
   .secondaryAction:hover,
+  .landingAction:hover,
   .quickLink:hover {
     transform: none;
   }

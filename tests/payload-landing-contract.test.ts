@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+  landingArchetypeForDoc,
   landingCtaForDoc,
   landingDocLooksRenderable,
+  landingLaunchStateForDoc,
   landingShouldAppearInSitemap,
   landingTemplateForDoc,
   landingTemplateLabel,
@@ -41,6 +43,20 @@ describe('Payload landing contract', () => {
       linkPath: '/tickets',
     });
 
+    expect(landingCtaForDoc({ ...baseDoc, template: 'group_event', content: { ...baseDoc.content } })).toMatchObject({
+      surface: 'contact',
+      primaryHref: '/contact',
+      bookTrigger: false,
+      linkPath: '/contact',
+    });
+
+    expect(landingCtaForDoc({ ...baseDoc, template: 'coming_soon', content: { ...baseDoc.content } })).toMatchObject({
+      surface: 'contact',
+      primaryHref: '/contact',
+      bookTrigger: false,
+      linkPath: '/contact',
+    });
+
     expect(landingCtaForDoc({
       ...baseDoc,
       content: { ...baseDoc.content, ctaSurface: 'gift_cards' },
@@ -53,9 +69,19 @@ describe('Payload landing contract', () => {
   });
 
   it('normalizes landing templates from the CMS model', () => {
-    expect(landingTemplateForDoc(baseDoc)).toBe('campaign');
-    expect(landingTemplateForDoc({ ...baseDoc, template: 'group_event' })).toBe('group_event');
-    expect(landingTemplateForDoc({ ...baseDoc, template: 'not-a-template' })).toBe('campaign');
-    expect(landingTemplateLabel('coming_soon')).toBe('Coming Soon');
+    expect(landingArchetypeForDoc(baseDoc)).toBe('paid_social_campaign');
+    expect(landingArchetypeForDoc({ ...baseDoc, template: 'campaign' })).toBe('paid_social_campaign');
+    expect(landingArchetypeForDoc({ ...baseDoc, template: 'group_event' })).toBe('group_event');
+    expect(landingArchetypeForDoc({ ...baseDoc, template: 'location_promo' })).toBe('local_venue_city');
+    expect(landingArchetypeForDoc({ ...baseDoc, template: 'coming_soon' })).toBe('local_venue_city');
+    expect(landingArchetypeForDoc({ ...baseDoc, template: 'not-a-template' })).toBe('paid_social_campaign');
+    expect(landingTemplateForDoc({ ...baseDoc, template: 'location_promo' })).toBe('local_venue_city');
+    expect(landingLaunchStateForDoc({ ...baseDoc, template: 'coming_soon' })).toBe('coming_soon');
+    expect(landingLaunchStateForDoc({
+      ...baseDoc,
+      strategy: { launchState: 'coming_soon' },
+    })).toBe('coming_soon');
+    expect(landingTemplateLabel('paid_social_campaign')).toBe('Paid/Social Campaign');
+    expect(landingTemplateLabel('local_venue_city')).toBe('Local Venue/City');
   });
 });
