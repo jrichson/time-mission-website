@@ -66,6 +66,7 @@ describe('CMS landing templates', () => {
     }
 
     expect(wizard).toContain('Landing launch wizard');
+    expect(wizard).toContain("export const dynamic = 'force-dynamic'");
     expect(wizard).toContain('createLandingDraft');
     expect(wizard).toContain("collection: 'landings'");
     expect(wizard).toContain('payload.auth');

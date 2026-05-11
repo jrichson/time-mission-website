@@ -6,6 +6,8 @@ import { getPayload } from 'payload';
 
 import styles from './page.module.css';
 
+export const dynamic = 'force-dynamic';
+
 type LandingTemplate = 'paid_social_campaign' | 'local_venue_city' | 'group_event';
 type SourceChannel = 'paid_ad' | 'organic_social' | 'email' | 'local_search' | 'partner' | 'internal' | 'other';
 type LaunchState = 'open' | 'coming_soon';
