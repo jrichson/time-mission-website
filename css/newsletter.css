@@ -32,7 +32,7 @@
     margin-bottom: 0.75rem;
 }
 
-.newsletter-section .newsletter-inner > p {
+.newsletter-section .newsletter-inner > p:not(.visually-hidden) {
     color: var(--gray);
     font-size: 1.1rem;
     line-height: 1.6;
@@ -180,7 +180,7 @@
         padding: 4rem 1rem;
     }
 
-    .newsletter-section .newsletter-inner > p {
+    .newsletter-section .newsletter-inner > p:not(.visually-hidden) {
         font-size: 0.95rem;
         margin-bottom: 1.5rem;
     }

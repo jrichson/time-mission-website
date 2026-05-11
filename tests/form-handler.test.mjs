@@ -22,6 +22,16 @@ function fetchOk(url) {
   return Promise.resolve(Response.json({ id: 'email-1' }));
 }
 
+function mockKv() {
+  const values = new Map();
+  return {
+    get: async (key) => values.get(key) ?? null,
+    put: async (key, value) => {
+      values.set(key, value);
+    },
+  };
+}
+
 function formRequest(path, body, headers = {}) {
   return new Request(`https://timemission.com${path}`, {
     body: new URLSearchParams(body),
@@ -107,6 +117,70 @@ describe('Cloudflare form handler', () => {
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       'https://api.resend.com/emails',
     ]);
+  });
+
+  it('rate limits repeated submissions before paid email delivery', async () => {
+    const calls = [];
+    const fetchImpl = (url, init) => {
+      calls.push({ init, url: String(url) });
+      return fetchOk(url);
+    };
+    const rateLimitedEnv = {
+      ...env,
+      FORM_RATE_LIMIT_IP_10M: '1',
+      FORM_RATE_LIMIT_IP_HOUR: '100',
+      FORM_RATE_LIMIT_EMAIL_HOUR: '100',
+      FORM_RATE_LIMIT_KV: mockKv(),
+    };
+    const headers = { 'cf-connecting-ip': '203.0.113.42' };
+    const body = {
+      'cf-turnstile-response': 'token',
+      email: 'guest@example.com',
+      location: 'houston',
+      message: 'Question about groups',
+      name: 'Guest',
+      subject: 'groups',
+    };
+
+    const first = await handleFormRequest({
+      env: rateLimitedEnv,
+      fetchImpl,
+      formType: 'contact',
+      request: formRequest('/api/contact', body, headers),
+    });
+    const second = await handleFormRequest({
+      env: rateLimitedEnv,
+      fetchImpl,
+      formType: 'contact',
+      request: formRequest('/api/contact', body, headers),
+    });
+
+    expect(first.status).toBe(200);
+    expect(second.status).toBe(429);
+    expect(await second.json()).toMatchObject({ ok: false });
+    expect(calls.map((call) => call.url)).toEqual([
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      'https://api.resend.com/emails',
+    ]);
+  });
+
+  it('rejects multipart submissions without parsing them', async () => {
+    const response = await handleFormRequest({
+      env,
+      fetchImpl: fetchOk,
+      formType: 'contact',
+      request: new Request('https://timemission.com/api/contact', {
+        body: new FormData(),
+        headers: {
+          accept: 'application/json',
+          origin: 'https://timemission.com',
+        },
+        method: 'POST',
+      }),
+    });
+
+    expect(response.status).toBe(415);
+    expect(await response.json()).toMatchObject({ ok: false });
   });
 
   it('fails closed when Turnstile is not configured', async () => {

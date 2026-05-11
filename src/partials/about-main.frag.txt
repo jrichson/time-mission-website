@@ -1,7 +1,7 @@
     <!-- Hero -->
     <section class="about-hero">
         <div class="about-hero-bg">
-            <picture><source srcset="/assets/photos/venue/_Time-Mission_0078.webp" type="image/webp"><img src="/assets/photos/venue/_Time-Mission_0078.jpg" alt="Time Mission venue" loading="eager" fetchpriority="high" decoding="async"></picture>
+            <picture><source srcset="/assets/photos/venue/_Time-Mission_0078-480.webp 480w, /assets/photos/venue/_Time-Mission_0078-800.webp 800w, /assets/photos/venue/_Time-Mission_0078-1200.webp 1200w, /assets/photos/venue/_Time-Mission_0078.webp 1920w" sizes="100vw" type="image/webp"><img src="/assets/photos/venue/_Time-Mission_0078.jpg" alt="Time Mission venue" loading="eager" fetchpriority="high" decoding="async"></picture>
         </div>
         <div class="about-hero-content reveal">
             <div class="section-badge">OUR STORY</div>
@@ -22,11 +22,11 @@
             </div>
             <div class="what-is-photo reveal" id="whatIsCarousel">
                 <div class="what-is-carousel">
-                    <picture><source srcset="/assets/photos/experiences/_Time-Mission_0321.webp" type="image/webp"><img src="/assets/photos/experiences/_Time-Mission_0321.jpg" alt="Players in a Time Mission challenge room" loading="lazy" decoding="async"></picture>
-                    <picture><source srcset="/assets/photos/experiences/_Time-Mission_0230.webp" type="image/webp"><img src="/assets/photos/experiences/_Time-Mission_0230.jpg" alt="Team competing in Time Mission" loading="lazy" decoding="async"></picture>
-                    <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix experience" loading="lazy" decoding="async"></picture>
-                    <picture><source srcset="/assets/photos/experiences/_Time-Mission_0450.webp" type="image/webp"><img src="/assets/photos/experiences/_Time-Mission_0450.jpg" alt="Players having fun at Time Mission" loading="lazy" decoding="async"></picture>
-                    <picture><source srcset="/assets/photos/experiences/Time-Mission_Big-Bang.webp" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang experience" loading="lazy" decoding="async"></picture>
+                    <picture><source srcset="/assets/photos/experiences/_Time-Mission_0321-480.webp 480w, /assets/photos/experiences/_Time-Mission_0321-800.webp 800w, /assets/photos/experiences/_Time-Mission_0321-1200.webp 1200w, /assets/photos/experiences/_Time-Mission_0321.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/_Time-Mission_0321.jpg" alt="Players in a Time Mission challenge room" loading="lazy" decoding="async"></picture>
+                    <picture><source srcset="/assets/photos/experiences/_Time-Mission_0230-480.webp 480w, /assets/photos/experiences/_Time-Mission_0230-800.webp 800w, /assets/photos/experiences/_Time-Mission_0230-1200.webp 1200w, /assets/photos/experiences/_Time-Mission_0230.webp 1280w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/_Time-Mission_0230.jpg" alt="Team competing in Time Mission" loading="lazy" decoding="async"></picture>
+                    <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp 480w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-800.webp 800w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Glitch-Matrix.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix experience" loading="lazy" decoding="async"></picture>
+                    <picture><source srcset="/assets/photos/experiences/_Time-Mission_0450-480.webp 480w, /assets/photos/experiences/_Time-Mission_0450-800.webp 800w, /assets/photos/experiences/_Time-Mission_0450-1200.webp 1200w, /assets/photos/experiences/_Time-Mission_0450.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/_Time-Mission_0450.jpg" alt="Players having fun at Time Mission" loading="lazy" decoding="async"></picture>
+                    <picture><source srcset="/assets/photos/experiences/Time-Mission_Big-Bang-480.webp 480w, /assets/photos/experiences/Time-Mission_Big-Bang-800.webp 800w, /assets/photos/experiences/Time-Mission_Big-Bang-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Big-Bang.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang experience" loading="lazy" decoding="async"></picture>
                 </div>
                 <div class="carousel-dots">
                     <button class="carousel-dot active" aria-label="Slide 1"></button>
@@ -80,7 +80,7 @@
     <!-- Before You Arrive, photo + overlapping card -->
     <section class="before-arrive">
         <div class="before-arrive-photo">
-            <picture><source srcset="/assets/photos/TM-Groups.webp" type="image/webp"><img src="/assets/photos/TM-Groups.jpg" alt="Players at Time Mission" loading="lazy" decoding="async"></picture>
+            <picture><source srcset="/assets/photos/TM-Groups-480.webp 480w, /assets/photos/TM-Groups-800.webp 800w, /assets/photos/TM-Groups-1200.webp 1200w, /assets/photos/TM-Groups.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img src="/assets/photos/TM-Groups.jpg" alt="Players at Time Mission" loading="lazy" decoding="async"></picture>
         </div>
         <div class="before-arrive-card">
             <div class="before-arrive-header reveal">

@@ -42,7 +42,7 @@ Use this checklist on a **Cloudflare Pages preview deployment** before promoting
 | Pages Functions uploaded | Deploy with `npm run deploy:pages` from repo root, then open the deployment details | `functions/` routes are included in the Wrangler deployment; dashboard drag-and-drop is not used for this release | `wrangler.toml`, `functions/api/contact.js`, `functions/api/newsletter.js` |
 | Contact form | Submit `/contact` with a valid Turnstile challenge | Redirects to `/contact-thank-you`; configured `CONTACT_TO_EMAIL` inbox receives a Resend email | `npm run test:unit` |
 | Newsletter form | Submit a representative newsletter form | Redirects to `/contact-thank-you`; configured `NEWSLETTER_TO_EMAIL` inbox receives a Resend email | `npm run test:unit` |
-| Form abuse controls | Submit without Turnstile token or with a filled honeypot in a controlled test | Missing Turnstile is rejected; honeypot submissions silently succeed without delivery | `tests/form-handler.test.mjs` |
+| Form abuse controls | Submit without Turnstile token, with a filled honeypot, and repeated requests from the same test IP in a controlled test | Missing Turnstile is rejected; honeypot submissions silently succeed without delivery; repeat requests hit `429`; Pages has `FORM_RATE_LIMIT_KV` bound for cross-isolate enforcement | `tests/form-handler.test.mjs` |
 
 ## Analytics and third parties
 

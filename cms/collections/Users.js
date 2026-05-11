@@ -1,6 +1,6 @@
 export const USER_COLLECTION = 'users';
 const isProduction = process.env.NODE_ENV === 'production';
-const INVITE_TOKEN_EXPIRATION_MS = 1000 * 60 * 60 * 24 * 7;
+const INVITE_TOKEN_EXPIRATION_MS = 1000 * 60 * 60 * 24;
 
 export function normalizeEmail(email) {
   return typeof email === 'string' ? email.trim().toLowerCase() : '';
@@ -14,6 +14,11 @@ function userRole(user) {
   return user?.role;
 }
 
+function isAdminOrEditor(user) {
+  const role = userRole(user);
+  return role === 'admin' || role === 'editor';
+}
+
 function isCMSUser(user) {
   if (!user || user.collection !== USER_COLLECTION) return false;
   return true;
@@ -22,8 +27,7 @@ function isCMSUser(user) {
 function canAccessAdmin({ req: { user } }) {
   if (!isCMSUser(user)) return false;
 
-  const role = userRole(user);
-  return role === 'admin' || role === 'editor' || role == null;
+  return isAdminOrEditor(user);
 }
 
 export function isOwner({ req: { user } }) {
@@ -86,7 +90,7 @@ function generatePasswordEmailHTML({ req, token, user }) {
     <p>Hello ${email},</p>
     <p>You have been invited to the Time Mission CMS, or a password reset was requested for your account.</p>
     <p><a href="${resetURL}">Set your password</a></p>
-    <p>This link expires in 7 days. If you were not expecting this email, you can ignore it.</p>
+    <p>This link expires in 24 hours. If you were not expecting this email, you can ignore it.</p>
   </body>
 </html>`;
 }

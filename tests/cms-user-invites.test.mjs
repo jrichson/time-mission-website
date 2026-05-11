@@ -110,7 +110,7 @@ describe('CMS user invites', () => {
       expect.objectContaining({
         collection: 'users',
         data: { email: 'new.user@example.com' },
-        expiration: 1000 * 60 * 60 * 24 * 7,
+        expiration: 1000 * 60 * 60 * 24,
         overrideAccess: true,
         req,
       }),
@@ -198,7 +198,7 @@ describe('CMS user invites', () => {
         collection: 'users',
         data: { email: 'new.user@example.com' },
         disableEmail: true,
-        expiration: 1000 * 60 * 60 * 24 * 7,
+        expiration: 1000 * 60 * 60 * 24,
         overrideAccess: true,
         req,
       }),
@@ -216,6 +216,25 @@ describe('CMS user invites', () => {
         id: 99,
       }),
     );
+  });
+
+  it('hides expired copyable invite links when records are read', () => {
+    const hook = UserInvites.hooks.afterRead[0];
+    const fresh = hook({
+      doc: {
+        inviteLink: 'https://cms.example.com/admin/reset/fresh-token',
+        linkCreatedAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+      },
+    });
+    const expired = hook({
+      doc: {
+        inviteLink: 'https://cms.example.com/admin/reset/expired-token',
+        linkCreatedAt: new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString(),
+      },
+    });
+
+    expect(fresh.inviteLink).toBe('https://cms.example.com/admin/reset/fresh-token');
+    expect(expired.inviteLink).toBeNull();
   });
 
   it('marks the invite as failed when SMTP delivery is not configured', async () => {

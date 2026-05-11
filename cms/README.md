@@ -16,7 +16,7 @@ PostgreSQL-backed Payload 3 admin for **existing pages** and **landing pages** c
 
 - **Existing Pages**: `path` matches a route-registry page such as `/`, `/about`, or `/groups/birthdays`. The production migration preloads one row per registered route. Published records override that page's SEO metadata at Astro build time.
 - **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Pick a template inspired by existing Time Mission pages, save, then use **Preview** in Payload to view the Railway-hosted saved preview. Enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
-- **User Invites**: owner-only records that create or update a CMS user, then either email a password setup link or create a copyable invite link. Use this instead of manually creating users with temporary passwords.
+- **User Invites**: owner-only records that create or update a CMS user, then either email a 24-hour password setup link or create a copyable 24-hour invite link. Use this instead of manually creating users with temporary passwords.
 
 ## Railway
 
@@ -40,7 +40,7 @@ Production schema changes are handled by committed Payload migrations. `npm star
 1. Log in as the account matching `CMS_OWNER_EMAIL`.
 2. Go to **Settings -> User Invites**.
 3. Create a new invite with the recipient email, role, and delivery method.
-4. Choose **Send email** to email the 7-day setup link, or **Create invite link** to generate a copyable link in the invite record.
+4. Choose **Send email** to email the 24-hour setup link, or **Create invite link** to generate a copyable link in the invite record.
 5. Payload creates the user if needed, then marks the invite as `sent`, `link_created`, or `failed`.
 
 If an email invite is marked `failed`, check SMTP env vars and create a new invite for the same email to resend. If you need to invite someone before SMTP is ready, use **Create invite link**.

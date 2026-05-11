@@ -41,6 +41,13 @@
             }
         }
 
+        .hero-bg picture,
+        .event-page-split-image picture {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
         .hero-bg img {
             width: 100%;
             height: 100%;

@@ -62,11 +62,15 @@ function userRole(user) {
   return user?.role;
 }
 
+function isAdminOrEditor(user) {
+  const role = userRole(user);
+  return role === 'admin' || role === 'editor';
+}
+
 function canManageSitePages({ req: { user } }) {
   if (!user || user.collection !== 'users') return false;
 
-  const role = userRole(user);
-  return role === 'admin' || role === 'editor' || role == null;
+  return isAdminOrEditor(user);
 }
 
 export const SitePages = {

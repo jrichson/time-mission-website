@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import { isOwner, normalizeEmail, USER_COLLECTION } from './Users.js';
 
 export const USER_INVITE_COLLECTION = 'user-invites';
-export const INVITE_TOKEN_EXPIRATION_MS = 1000 * 60 * 60 * 24 * 7;
+export const INVITE_TOKEN_EXPIRATION_MS = 1000 * 60 * 60 * 24;
 
 const SKIP_INVITE_CONTEXT = 'skipUserInviteProcessing';
 const DELIVERY_EMAIL = 'email';
@@ -137,6 +137,21 @@ function errorMessage(error) {
   return 'Unknown invite error';
 }
 
+function inviteLinkIsExpired(doc) {
+  if (!doc?.linkCreatedAt) return false;
+  const createdAt = new Date(doc.linkCreatedAt).getTime();
+  if (!Number.isFinite(createdAt)) return true;
+  return Date.now() - createdAt >= INVITE_TOKEN_EXPIRATION_MS;
+}
+
+function redactExpiredInviteLink({ doc }) {
+  if (!doc?.inviteLink || !inviteLinkIsExpired(doc)) return doc;
+  return {
+    ...doc,
+    inviteLink: null,
+  };
+}
+
 async function sendInviteAfterCreate({ doc, operation, req }) {
   if (operation !== 'create' || req.context?.[SKIP_INVITE_CONTEXT]) {
     return doc;
@@ -210,6 +225,7 @@ export const UserInvites = {
   hooks: {
     beforeValidate: [normalizeInviteEmail],
     afterChange: [sendInviteAfterCreate],
+    afterRead: [redactExpiredInviteLink],
   },
   fields: [
     {
@@ -283,7 +299,7 @@ export const UserInvites = {
       type: 'textarea',
       admin: {
         condition: (_, siblingData) => siblingData?.status === 'link_created',
-        description: 'Copy this link and send it privately. It expires 7 days after creation.',
+        description: 'Copy this link and send it privately. It expires 24 hours after creation and is hidden after expiry.',
         readOnly: true,
       },
     },

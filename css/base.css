@@ -45,15 +45,42 @@ body {
 }
 
 .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.ticket-panel-close,
+.game-popup-close,
+.game-popup-skip,
+.geo-disclosure summary,
+#cc-main .cm__btn,
+#cc-main .pm__btn,
+#cc-main .pm__close-btn {
+    min-width: 44px !important;
+    min-height: 44px !important;
+}
+
+.game-popup-skip,
+.geo-disclosure summary {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-popup-skip {
+    padding: 0.5rem 0.75rem;
+}
+
+.geo-disclosure summary {
+    padding-block: 0.35rem;
 }
 
 .skip-link {

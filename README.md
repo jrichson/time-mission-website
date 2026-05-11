@@ -41,7 +41,7 @@ npm run test:smoke
 - `_headers` contains Cloudflare Pages security headers and is generated from `_headers.tmpl` during `npm run build:astro`.
 - `_redirects` is written for Netlify/Cloudflare Pages style routing.
 - Contact and newsletter forms are handled by Cloudflare Pages Functions in `functions/api/`. Wrangler Direct Upload must be run from the repo root so the sibling `functions/` directory is uploaded with `dist/`.
-- Required Pages Function secrets: `FORM_EMAIL_API_KEY`, `FORM_FROM_EMAIL`, `CONTACT_TO_EMAIL`, `NEWSLETTER_TO_EMAIL`, `TURNSTILE_SECRET_KEY`. Required public build var: `PUBLIC_TURNSTILE_SITE_KEY`.
+- Required Pages Function secrets: `FORM_EMAIL_API_KEY`, `FORM_FROM_EMAIL`, `CONTACT_TO_EMAIL`, `NEWSLETTER_TO_EMAIL`, `TURNSTILE_SECRET_KEY`. Required public build var: `PUBLIC_TURNSTILE_SITE_KEY`. Recommended abuse-control binding: Cloudflare KV namespace bound as `FORM_RATE_LIMIT_KV`; optional limit overrides are `FORM_RATE_LIMIT_IP_10M`, `FORM_RATE_LIMIT_IP_HOUR`, and `FORM_RATE_LIMIT_EMAIL_HOUR`.
 
 ## Remaining Modernization Risks
 
