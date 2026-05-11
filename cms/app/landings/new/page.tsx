@@ -22,21 +22,33 @@ type PageProps = {
 
 const DEFAULT_HERO_IMAGE = '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
 
-const templateOptions: Array<{ value: LandingTemplate; label: string; help: string }> = [
+const templateOptions: Array<{
+  value: LandingTemplate;
+  label: string;
+  help: string;
+  bestFor: string;
+  creates: string[];
+}> = [
   {
     value: 'paid_social_campaign',
     label: 'Paid/Social Campaign',
     help: 'A matching destination for an ad, post, email, or seasonal offer.',
+    bestFor: 'One promise, one primary booking action, fast proof.',
+    creates: ['Campaign hero', 'Proof cards', 'Friction reducers', 'Booking CTA'],
   },
   {
     value: 'local_venue_city',
     label: 'Local Venue/City',
     help: 'A city, venue opening, local SEO push, or place-specific offer.',
+    bestFor: 'Place-first demand where the city or venue has to feel real.',
+    creates: ['City signal', 'Venue confidence', 'Launch-state copy', 'Local CTA'],
   },
   {
     value: 'group_event',
     label: 'Group/Event',
     help: 'A buyer or planner page for birthdays, corporate outings, schools, or private events.',
+    bestFor: 'Planner confidence, logistics reassurance, and inquiry-friendly conversion.',
+    creates: ['Planner promise', 'Logistics proof', 'Group-size framing', 'Inquiry CTA'],
   },
 ];
 
@@ -257,6 +269,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const selectedTemplate = landingTemplate(params.template || '');
   const error = errorCopy(params.error);
+  const selectedTemplateOption = templateOptions.find((option) => option.value === selectedTemplate) || templateOptions[0];
 
   return (
     <main className={styles.shell}>
@@ -269,9 +282,14 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             directly in preview.
           </p>
         </div>
-        <Link className={styles.secondaryLink} href="/admin/collections/landings">
-          Manage landing pages
-        </Link>
+        <aside className={styles.statusPanel} aria-label="Landing draft status">
+          <span>Draft only</span>
+          <strong>{selectedTemplateOption.label}</strong>
+          <p>Creates a saved CMS draft and opens preview before any public publish step.</p>
+          <Link className={styles.secondaryLink} href="/admin/collections/landings">
+            Manage landing pages
+          </Link>
+        </aside>
       </header>
 
       {error ? (
@@ -287,15 +305,30 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             <h2 id="shape-title">Choose the landing shape</h2>
             <p>The shape should follow the campaign job, not the other way around.</p>
           </div>
-          <div className={styles.optionGrid}>
-            {templateOptions.map((option) => (
-              <label className={styles.choice} key={option.value}>
-                <input defaultChecked={option.value === selectedTemplate} name="template" type="radio" value={option.value} />
-                <strong>{option.label}</strong>
-                <span>{option.help}</span>
-              </label>
-            ))}
-          </div>
+          <fieldset className={styles.templateFieldset}>
+            <legend className={styles.srOnly}>Landing shape</legend>
+            <div className={styles.optionGrid}>
+              {templateOptions.map((option) => (
+                <label className={styles.choice} key={option.value}>
+                  <input
+                    defaultChecked={option.value === selectedTemplate}
+                    name="template"
+                    type="radio"
+                    value={option.value}
+                  />
+                  <strong>{option.label}</strong>
+                  <span>{option.help}</span>
+                  <em>{option.bestFor}</em>
+                  <span className={styles.previewLabel}>Preview sections</span>
+                  <ul>
+                    {option.creates.map((section) => (
+                      <li key={section}>{section}</li>
+                    ))}
+                  </ul>
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </section>
 
         <section className={styles.panel} aria-labelledby="brief-title">
@@ -318,6 +351,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             <label>
               Source name
               <input maxLength={120} name="sourceName" placeholder="Meta spring break ad" required />
+              <span className={styles.fieldHelp}>The campaign, channel, request, or audience this page came from.</span>
             </label>
             <label>
               Page title
@@ -326,6 +360,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             <label>
               Page URL
               <input maxLength={80} name="slug" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="spring-break" required />
+              <span className={styles.fieldHelp}>Lowercase words and hyphens. The public path will be /c/page-url.</span>
             </label>
             <label className={styles.wide}>
               Source/reference URL
@@ -334,10 +369,12 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             <label className={styles.wide}>
               Source promise
               <textarea maxLength={280} name="sourcePromise" placeholder="What did the ad, post, email, search query, or request promise?" required />
+              <span className={styles.fieldHelp}>Keep this close to what the visitor already saw or asked for.</span>
             </label>
             <label className={styles.wide}>
               Visitor intent
               <textarea maxLength={240} name="visitorIntent" placeholder="What is this visitor trying to decide or accomplish?" required />
+              <span className={styles.fieldHelp}>This becomes guidance for the page copy and preview warnings.</span>
             </label>
             <label>
               Success metric
@@ -391,6 +428,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
                   </option>
                 ))}
               </select>
+              <span className={styles.fieldHelp}>Leave recommended unless the campaign has a specific conversion path.</span>
             </label>
             <label>
               Launch state
@@ -398,6 +436,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
                 <option value="open">Open for booking</option>
                 <option value="coming_soon">Coming soon</option>
               </select>
+              <span className={styles.fieldHelp}>Coming soon changes the default action away from booking.</span>
             </label>
             <label>
               Location or city

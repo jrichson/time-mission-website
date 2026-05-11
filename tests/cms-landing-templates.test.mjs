@@ -60,6 +60,7 @@ describe('CMS landing templates', () => {
   it('routes marketing landing creation through a brief-first wizard', () => {
     const home = read('cms/app/page.tsx');
     const wizard = read('cms/app/landings/new/page.tsx');
+    const collection = read('cms/collections/Landings.js');
     const payloadConfig = read('cms/payload.config.ts');
     const dashboardCard = read('cms/components/LandingWizardDashboard.tsx');
     const importMap = read('cms/app/(payload)/admin/importMap.js');
@@ -78,8 +79,12 @@ describe('CMS landing templates', () => {
     expect(wizard).toContain('visitorIntent');
     expect(wizard).toContain('redirect(`/preview/landings/${created.id}`)');
     expect(payloadConfig).toContain("beforeDashboard: ['/components/LandingWizardDashboard.tsx']");
-    expect(dashboardCard).toContain('Open landing wizard');
+    expect(collection).toContain("beforeList: ['/components/LandingWizardDashboard.tsx']");
+    expect(dashboardCard).toContain('Start brief');
     expect(dashboardCard).toContain('href="/landings/new"');
+    expect(dashboardCard).toContain('/landings/new?template=paid_social_campaign');
+    expect(dashboardCard).toContain('/landings/new?template=local_venue_city');
+    expect(dashboardCard).toContain('/landings/new?template=group_event');
     expect(importMap).toContain('/components/LandingWizardDashboard.tsx#default');
   });
 });

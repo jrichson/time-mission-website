@@ -55,11 +55,11 @@ export default function Home() {
             editors from one operator console.
           </p>
           <div className={styles.actions}>
-            <Link className={styles.primaryAction} href="/admin">
-              Open admin
+            <Link className={styles.primaryAction} href="/landings/new">
+              Start landing brief
             </Link>
-            <Link className={styles.secondaryAction} href="/admin/collections/landings">
-              Manage landing pages
+            <Link className={styles.secondaryAction} href="/admin">
+              Open admin
             </Link>
           </div>
         </div>
@@ -72,8 +72,8 @@ export default function Home() {
             ))}
           </ol>
           <p className={styles.panelNote}>
-            CMS saves do not automatically deploy the public site. Use the Cloudflare direct upload
-            process when changes are approved for launch.
+            CMS saves create drafts and previews first. Approved public changes still need a manual deploy before
+            visitors see them.
           </p>
         </aside>
       </section>

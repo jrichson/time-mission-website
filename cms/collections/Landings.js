@@ -137,6 +137,9 @@ export const Landings = {
     group: 'Pages',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'template', 'published', 'content.ctaSurface', 'updatedAt'],
+    components: {
+      beforeList: ['/components/LandingWizardDashboard.tsx'],
+    },
     description:
       'Campaign, local venue, and group/event pages rendered under /c/{page-url}. Use the Landing launch wizard for new drafts, then refine details here before publishing.',
     preview: landingPreviewPath,
