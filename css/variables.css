@@ -56,6 +56,14 @@
     --space-hero-top: clamp(7rem, 12vw, 10rem);
     --space-hero-bottom: clamp(3rem, 6vw, 4.5rem);
 
+    /* Interaction */
+    --target-min: 44px;
+    --target-comfortable: 48px;
+    --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+    --motion-fast: 0.2s;
+    --motion-standard: 0.3s;
+    --motion-slow: 0.6s;
+
     /* Fixed ticker bar content height (nav offset = this + safe-area-inset-top in nav.css) */
     --tm-ticker-height: 36px;
 

@@ -336,7 +336,7 @@
 
     <!-- Testimonials -->
     <section class="testimonials" id="reviews">
-        <div class="testimonials-scroll">
+        <div class="testimonials-scroll" tabindex="0" aria-label="Guest testimonials">
             <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
                 <p class="testimonial-text">“Had a great time with our 8-year-old. Games were fun and easy to understand. Staff was nice and helpful. Have been to a similar concept elsewhere and this one was much better.”</p>

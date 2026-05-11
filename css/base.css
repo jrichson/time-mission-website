@@ -61,15 +61,33 @@ body {
 .game-popup-close,
 .game-popup-skip,
 .geo-disclosure summary,
+.nav-logo,
+.btn-subscribe,
+.filter-tab,
+.event-type-cta,
+.event-type-learn-more,
+.event-info-body .btn-link,
+.footer-social a,
+.footer-legal a,
+.footer-link-button,
 #cc-main .cm__btn,
 #cc-main .pm__btn,
 #cc-main .pm__close-btn {
-    min-width: 44px !important;
-    min-height: 44px !important;
+    min-width: var(--target-min) !important;
+    min-height: var(--target-min) !important;
 }
 
 .game-popup-skip,
-.geo-disclosure summary {
+.geo-disclosure summary,
+.nav-logo,
+.btn-subscribe,
+.filter-tab,
+.event-type-cta,
+.event-type-learn-more,
+.event-info-body .btn-link,
+.footer-social a,
+.footer-legal a,
+.footer-link-button {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
@@ -101,6 +119,11 @@ body {
 
 .skip-link:focus {
     transform: translateY(0);
+}
+
+.testimonials-scroll:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 4px;
 }
 
 /* Noise texture overlay — used on all sub-pages */
@@ -164,8 +187,8 @@ body.has-noise::before {
     opacity: 0;
     transform: translateY(1.25rem);
     transition:
-        opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        opacity var(--motion-slow) var(--ease-standard),
+        transform var(--motion-slow) var(--ease-standard);
 }
 
 .reveal.visible {

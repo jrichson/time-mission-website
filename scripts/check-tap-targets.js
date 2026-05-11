@@ -25,12 +25,22 @@ const errors = [];
 const skipped = [];
 
 const REQUIRES_44PX = [
+    '.nav-logo',
     '.nav-menu-btn',
     '.location-btn',
     '.location-dropdown-close',
     '.mobile-menu-socials a',
     '.btn-secondary',
     '.mobile-menu-links a',
+    '.btn-subscribe',
+    '.filter-tab',
+    '.event-type-cta',
+    '.event-type-learn-more',
+    '.event-info-body .btn-link',
+    '.footer-social a',
+    '.footer-legal a',
+    '.footer-link-button',
+    '.footer-location-toggle',
 ];
 
 const REQUIRES_48PX = [
@@ -61,10 +71,26 @@ function listCssSources() {
 const cssSources = listCssSources();
 
 const REM_PX = 16;
+const CSS_VARS = new Map();
 
-function toPx(value) {
+for (const source of cssSources) {
+    const re = /(--[a-z0-9-]+)\s*:\s*([^;]+);/gi;
+    let match;
+    while ((match = re.exec(source.css)) !== null) {
+        CSS_VARS.set(match[1], match[2].trim());
+    }
+}
+
+function toPx(value, seen = new Set()) {
     if (!value) return null;
-    const trimmed = String(value).trim();
+    const trimmed = String(value).trim().replace(/\s*!important\s*$/i, '');
+    const varMatch = trimmed.match(/^var\(\s*(--[a-z0-9-]+)(?:\s*,\s*([^)]+))?\s*\)$/i);
+    if (varMatch) {
+        const name = varMatch[1];
+        if (seen.has(name)) return null;
+        seen.add(name);
+        return toPx(CSS_VARS.get(name) || varMatch[2], seen);
+    }
     const remMatch = trimmed.match(/^([\d.]+)\s*rem$/i);
     if (remMatch) return parseFloat(remMatch[1]) * REM_PX;
     const pxMatch = trimmed.match(/^([\d.]+)\s*px$/i);
@@ -76,7 +102,7 @@ function toPx(value) {
 
 function findAllRulesets(css, selector, fileName) {
     const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const re = new RegExp('(?:^|})[\\s\\n]*' + escaped + '\\s*[,{]', 'gm');
+    const re = new RegExp('(?:^|}|,)[\\s\\n]*' + escaped + '\\s*[,{]', 'gm');
     const results = [];
     let match;
     while ((match = re.exec(css)) !== null) {

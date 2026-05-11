@@ -50,7 +50,10 @@ html {
 
 .footer-social a {
     color: var(--gray);
-    transition: all 0.3s ease;
+    border-radius: 50%;
+    transition:
+        color var(--motion-standard) ease,
+        transform var(--motion-standard) ease;
 }
 
 @media (hover: hover) {
@@ -89,7 +92,7 @@ html {
     text-decoration: none;
     font-family: var(--body);
     font-size: 0.85rem;
-    transition: color 0.3s ease;
+    transition: color var(--motion-standard) ease;
 }
 
 @media (hover: hover) {
@@ -137,7 +140,9 @@ html {
     font-family: var(--body);
     font-size: 0.9rem;
     outline: none;
-    transition: all 0.3s ease;
+    transition:
+        border-color var(--motion-standard) ease,
+        box-shadow var(--motion-standard) ease;
 }
 
 .footer-newsletter .newsletter-form input:focus {
@@ -154,6 +159,10 @@ html {
 }
 
 .footer-newsletter .btn-subscribe {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--target-min);
     padding: 0.875rem 1.75rem;
     background: var(--gradient-primary);
     border: none;
@@ -165,7 +174,7 @@ html {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform var(--motion-standard) ease;
 }
 
 .footer-newsletter .btn-subscribe:hover {
@@ -213,7 +222,8 @@ html {
     color: var(--gray);
     text-decoration: none;
     font-size: 0.75rem;
-    transition: color 0.3s ease;
+    border-radius: 4px;
+    transition: color var(--motion-standard) ease;
 }
 
 @media (hover: hover) {
@@ -253,7 +263,8 @@ html {
     font-family: var(--body);
     font-size: 0.85rem;
     cursor: pointer;
-    transition: color 0.3s ease;
+    min-height: var(--target-min);
+    transition: color var(--motion-standard) ease;
 }
 
 @media (hover: hover) {
@@ -263,7 +274,7 @@ html {
 }
 
 .footer-location-toggle svg {
-    transition: transform 0.3s ease;
+    transition: transform var(--motion-standard) ease;
     color: rgba(255, 255, 255, 0.4);
 }
 
@@ -287,7 +298,7 @@ html {
     text-decoration: none;
     font-family: var(--body);
     font-size: 0.8rem;
-    transition: color 0.3s ease;
+    transition: color var(--motion-standard) ease;
 }
 
 @media (hover: hover) {
@@ -344,7 +355,7 @@ html {
     font-family: var(--body);
     font-size: 0.8rem;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color var(--motion-standard) ease;
 }
 
 .footer-loc-phone:hover {
@@ -376,7 +387,7 @@ html {
     font-family: var(--body);
     font-size: 0.8rem;
     text-decoration: none;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--motion-standard) ease;
 }
 
 .footer-loc-map:hover {
@@ -389,7 +400,7 @@ html {
     font-size: 0.75rem;
     text-decoration: none;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color var(--motion-standard) ease;
 }
 
 .footer-loc-change:hover {
@@ -457,6 +468,13 @@ html {
     .footer-newsletter .btn-subscribe {
         padding: 0.75rem 1rem;
         font-size: 0.8rem;
+    }
+
+    .footer-links a,
+    .footer-location-list a {
+        display: flex;
+        align-items: center;
+        min-height: var(--target-min);
     }
 
     .footer-bottom {

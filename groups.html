@@ -626,7 +626,9 @@
         .event-type-cta {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.4rem;
+            min-height: var(--target-min);
             padding: 0.65rem 1.1rem;
             border-radius: 100px;
             background: var(--gradient-primary);
@@ -638,7 +640,12 @@
             text-transform: uppercase;
             text-decoration: none;
             white-space: nowrap;
-            transition: all 0.3s ease;
+            transition:
+                transform var(--motion-standard) ease,
+                box-shadow var(--motion-standard) ease,
+                border-color var(--motion-standard) ease,
+                background var(--motion-standard) ease,
+                color var(--motion-standard) ease;
             box-shadow: 0 8px 24px rgba(239, 75, 35, 0.45);
             border: none;
             cursor: pointer;
@@ -695,8 +702,10 @@
             align-self: flex-start;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
             margin-top: auto;
+            min-height: var(--target-min);
             padding-top: 1rem;
             font-family: var(--tech);
             font-size: 0.78rem;
@@ -840,7 +849,9 @@
         .event-info-body .btn-link.btn-tickets {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
+            min-height: var(--target-min);
             background: none;
             border: none;
             border-radius: 0;
@@ -853,7 +864,7 @@
             text-decoration: none;
             text-transform: none;
             letter-spacing: normal;
-            transition: gap 0.3s ease;
+            transition: gap var(--motion-standard) ease;
         }
 
         .event-info-body .btn-link:hover,
@@ -1323,7 +1334,7 @@
     </section>
 
     <section class="geo-answer-section" aria-labelledby="groups-answer-title">
-        <div class="geo-answer-inner reveal">
+        <div class="geo-answer-inner">
             <div class="section-badge">Group Events</div>
             <h2 id="groups-answer-title">What group events can Time Mission host?</h2>
             <p class="geo-answer-lead">Time Mission works for birthdays, corporate outings, school trips, private events, and holidays because larger parties can split into teams and compete across many short challenge rooms.</p>

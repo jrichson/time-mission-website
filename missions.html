@@ -249,7 +249,9 @@
         .filter-tab {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.45rem;
+            min-height: var(--target-min);
             background: transparent;
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--gray);
@@ -259,7 +261,11 @@
             font-weight: 500;
             border-radius: 100px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition:
+                border-color var(--motion-standard) ease,
+                background var(--motion-standard) ease,
+                color var(--motion-standard) ease,
+                transform var(--motion-standard) ease;
         }
 
         .filter-tab svg {
@@ -1142,7 +1148,7 @@
     </section>
 
     <section class="geo-answer-section" aria-labelledby="missions-answer-title">
-        <div class="geo-answer-inner reveal">
+        <div class="geo-answer-inner">
             <div class="section-badge">Mission Format</div>
             <h2 id="missions-answer-title">How do Time Mission rooms work?</h2>
             <p class="geo-answer-lead">Time Mission rooms are fast, replayable challenges that let teams try physical, logic, skill, and coordination missions in any order while building a score across the venue.</p>

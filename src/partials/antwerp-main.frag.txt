@@ -336,7 +336,7 @@
 
     <!-- Testimonials -->
     <section class="testimonials" id="reviews">
-        <div class="testimonials-scroll">
+        <div class="testimonials-scroll" tabindex="0" aria-label="Guest testimonials">
             <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
                 <p class="testimonial-text">"Fantastisch concept! De hele familie was meteen verslaafd aan de uitdagingen. Er is echt niets vergelijkbaars in Antwerpen. Absolute aanrader!"</p>

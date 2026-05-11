@@ -78,7 +78,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+    transition:
+        background var(--motion-standard) ease,
+        border-color var(--motion-standard) ease,
+        backdrop-filter var(--motion-standard) ease;
 }
 
 .nav.scrolled {
@@ -92,6 +95,10 @@
     align-items: center;
     gap: 2rem;
     flex: 1;
+}
+
+.nav-logo {
+    border-radius: 4px;
 }
 
 .nav-logo img {
@@ -110,8 +117,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        min-width: 44px;
-        min-height: 44px;
+        min-width: var(--target-min);
+        min-height: var(--target-min);
         background: transparent;
         border: none;
         color: var(--white);
@@ -131,7 +138,9 @@
         width: 100%;
         height: 2px;
         background: var(--white);
-        transition: transform 0.3s ease, opacity 0.3s ease;
+        transition:
+            transform var(--motion-standard) ease,
+            opacity var(--motion-standard) ease;
         transform-origin: center;
     }
 
@@ -222,7 +231,7 @@
         font-weight: 400;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        transition: color 0.2s ease;
+        transition: color var(--motion-fast) ease;
     }
 
     .mobile-menu-links a:hover,
@@ -241,12 +250,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 44px;
-        height: 44px;
+        width: var(--target-min);
+        height: var(--target-min);
         border-radius: 50%;
         border: 1px solid rgba(255, 255, 255, 0.15);
         color: var(--white);
-        transition: border-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+        transition:
+            border-color var(--motion-standard) ease,
+            color var(--motion-standard) ease,
+            transform var(--motion-standard) ease;
     }
 
     .mobile-menu-socials a:hover {
@@ -302,7 +314,9 @@
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    transition:
+        color var(--motion-standard) ease,
+        text-shadow var(--motion-standard) ease;
 }
 
 .nav-links a:hover {
@@ -336,8 +350,8 @@
     cursor: pointer;
     position: relative;
     white-space: nowrap;
-    transition: transform 0.3s ease;
-    min-height: 44px;
+    transition: transform var(--motion-standard) ease;
+    min-height: var(--target-min);
 }
 
 .location-btn:hover {
@@ -348,7 +362,7 @@
     width: 16px;
     height: 16px;
     color: var(--orange);
-    transition: filter 0.3s ease;
+    transition: filter var(--motion-standard) ease;
 }
 
 .location-btn:hover svg:first-of-type {
@@ -417,8 +431,8 @@
     position: absolute;
     top: calc(52px + env(safe-area-inset-top, 0px));
     right: calc(2rem + env(safe-area-inset-right, 0px));
-    width: 44px;
-    height: 44px;
+    width: var(--target-min);
+    height: var(--target-min);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -427,7 +441,10 @@
     border-radius: 6px;
     color: var(--gray);
     cursor: pointer;
-    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    transition:
+        background var(--motion-standard) ease,
+        border-color var(--motion-standard) ease,
+        color var(--motion-standard) ease;
     font-size: 1.1rem;
     line-height: 1;
 }
@@ -542,7 +559,7 @@
     padding: 0;
     text-decoration: none;
     color: var(--white-soft, #ccc);
-    transition: color 0.2s;
+    transition: color var(--motion-fast) ease;
     border-radius: 0;
     background: none;
 }
@@ -633,7 +650,9 @@
     text-transform: uppercase;
     border-radius: 100px;
     box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        transform var(--motion-standard) ease,
+        box-shadow var(--motion-standard) ease;
 }
 
 .location-dropdown .location-info-page:hover {
@@ -658,7 +677,11 @@
     text-transform: uppercase;
     border-radius: 100px;
     border: 1px solid rgba(255, 255, 255, 0.25);
-    transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+    transition:
+        transform var(--motion-standard) ease,
+        border-color var(--motion-standard) ease,
+        color var(--motion-standard) ease,
+        background var(--motion-standard) ease;
 }
 
 .location-dropdown a.location-info-book:hover {
@@ -681,7 +704,9 @@
     text-transform: none;
     border-radius: 4px;
     border: 0;
-    transition: color 0.2s ease, opacity 0.2s ease;
+    transition:
+        color var(--motion-fast) ease,
+        opacity var(--motion-fast) ease;
 }
 
 .location-dropdown a.location-info-contact:hover {
@@ -709,7 +734,9 @@
 
 .location-dropdown .location-overlay-social a {
     color: var(--gray);
-    transition: color 0.3s ease, transform 0.3s ease;
+    transition:
+        color var(--motion-standard) ease,
+        transform var(--motion-standard) ease;
     display: flex;
     padding: 0;
     border-radius: 0;
@@ -759,7 +786,9 @@
     font-family: var(--body);
     font-size: 0.95rem;
     border-radius: 8px;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition:
+        background var(--motion-fast) ease,
+        color var(--motion-fast) ease;
 }
 
 .location-dropdown a:hover {
@@ -888,13 +917,15 @@
     background: var(--gradient-primary);
     color: var(--white);
     padding: 0.75rem 1.5rem;
-    min-height: 48px;
+    min-height: var(--target-comfortable);
     text-decoration: none;
     font-family: 'Monument Extended', 'Orbitron', sans-serif;
     font-size: 0.85rem;
     font-weight: 400;
     border-radius: 100px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        transform var(--motion-standard) ease,
+        box-shadow var(--motion-standard) ease;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     white-space: nowrap;
@@ -946,8 +977,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 44px;
-        min-height: 44px;
+        min-width: var(--target-min);
+        min-height: var(--target-min);
         padding: 0;
     }
 
@@ -959,7 +990,7 @@
 
     /* Compact tickets button — min touch target */
     .btn-tickets {
-        min-height: 44px;
+        min-height: var(--target-min);
         padding: 0.5rem 1rem;
         font-size: 0.75rem;
         white-space: nowrap;
@@ -1019,7 +1050,7 @@
     }
 
     .btn-tickets {
-        min-height: 48px; /* MUST stay ≥48 — check:tap-targets enforces */
+        min-height: var(--target-comfortable); /* MUST stay ≥48 — check:tap-targets enforces */
         padding: 0.5rem 0.85rem;
         font-size: 0.7rem;
         letter-spacing: 0.04em;

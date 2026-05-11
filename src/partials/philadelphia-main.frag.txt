@@ -336,7 +336,7 @@
 
     <!-- Testimonials -->
     <section class="testimonials" id="reviews">
-        <div class="testimonials-scroll">
+        <div class="testimonials-scroll" tabindex="0" aria-label="Guest testimonials">
             <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
                 <p class="testimonial-text">“We had an absolute blast. I felt like a kid again. What an awesome concept and the execution was fantastic! We went for a cousin reunion hangout.”</p>
