@@ -15,8 +15,19 @@ PostgreSQL-backed Payload 3 admin for **existing pages** and **landing pages** c
 ## Content model
 
 - **Existing Pages**: `path` matches a route-registry page such as `/`, `/about`, or `/groups/birthdays`. The production migration preloads one row per registered route. Published records override that page's SEO metadata at Astro build time.
-- **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Pick a template inspired by existing Time Mission pages, save, then use **Preview** in Payload to view the Railway-hosted saved preview. Enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
+- **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Start new pages from `/landings/new`, which captures the campaign brief and creates a draft. Refine the saved record in Payload, use **Preview** to review the Railway-hosted page, then enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
 - **User Invites**: owner-only records that create or update a CMS user, then either email a 24-hour password setup link or create a copyable 24-hour invite link. Use this instead of manually creating users with temporary passwords.
+
+## Landing launch workflow
+
+1. Marketing starts with a real source: ad, organic post, email, local SEO request, partner campaign, or event-sales need.
+2. Open `/landings/new` from the CMS home and choose the landing shape.
+3. Fill the campaign brief: source channel, source name, source promise, visitor intent, and success metric.
+4. Fill first-draft page copy: headline, subheadline, three proof points, CTA, launch state, image, and any location/event context.
+5. Submit the wizard. It creates a **draft** `Landing Page` record and redirects to `/preview/landings/{id}`.
+6. Review the preview warnings, then use **Edit landing page** for detailed Payload edits if needed.
+7. Check **Published** only after approval.
+8. Run the public Astro/Cloudflare deploy path. The page is live at `/c/{slug}` after the static site rebuild fetches published CMS landings.
 
 ## Railway
 

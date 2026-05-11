@@ -56,4 +56,22 @@ describe('CMS landing templates', () => {
     expect(previewRoute).toContain('Review warnings');
     expect(previewRoute).toContain('landingReviewWarningsForDoc');
   });
+
+  it('routes marketing landing creation through a brief-first wizard', () => {
+    const home = read('cms/app/page.tsx');
+    const wizard = read('cms/app/landings/new/page.tsx');
+
+    for (const template of ['paid_social_campaign', 'local_venue_city', 'group_event']) {
+      expect(home).toContain(`/landings/new?template=${template}`);
+    }
+
+    expect(wizard).toContain('Landing launch wizard');
+    expect(wizard).toContain('createLandingDraft');
+    expect(wizard).toContain("collection: 'landings'");
+    expect(wizard).toContain('payload.auth');
+    expect(wizard).toContain('overrideAccess: false');
+    expect(wizard).toContain('sourcePromise');
+    expect(wizard).toContain('visitorIntent');
+    expect(wizard).toContain('redirect(`/preview/landings/${created.id}`)');
+  });
 });

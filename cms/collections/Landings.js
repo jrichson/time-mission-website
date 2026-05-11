@@ -138,7 +138,7 @@ export const Landings = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'template', 'published', 'content.ctaSurface', 'updatedAt'],
     description:
-      'Campaign, local venue, and group/event pages rendered under /c/{page-url}. Start with the real campaign brief, then write the page copy and preview before publishing.',
+      'Campaign, local venue, and group/event pages rendered under /c/{page-url}. Use the Landing launch wizard for new drafts, then refine details here before publishing.',
     preview: landingPreviewPath,
   },
   access: {

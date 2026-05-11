@@ -22,19 +22,19 @@ const quickLinks = [
 
 const landingActions = [
   {
-    href: '/admin/collections/landings/create?template=paid_social_campaign',
+    href: '/landings/new?template=paid_social_campaign',
     label: 'Create Paid/Social Campaign',
     meta: 'Ad or social campaign',
     description: 'Use when there is an actual ad, post, email, or seasonal offer that needs a matching destination.',
   },
   {
-    href: '/admin/collections/landings/create?template=local_venue_city',
+    href: '/landings/new?template=local_venue_city',
     label: 'Create Local Venue/City Landing',
     meta: 'Local venue or city campaign',
     description: 'Use for a city, venue opening, local SEO push, or place-specific offer with real location context.',
   },
   {
-    href: '/admin/collections/landings/create?template=group_event',
+    href: '/landings/new?template=group_event',
     label: 'Create Group/Event Landing',
     meta: 'Group or event landing',
     description: 'Use when an event buyer or planner needs a page tied to a specific group use case.',
@@ -51,7 +51,7 @@ export default function Home() {
           <p className={styles.kicker}>Time Mission CMS</p>
           <h1 id="cms-home-title">Keep the site current without touching code</h1>
           <p className={styles.lede}>
-            Update existing pages, build campaign landings from a brief, preview work, and invite approved
+            Update existing pages, launch campaign landings through a brief-first wizard, preview work, and invite approved
             editors from one operator console.
           </p>
           <div className={styles.actions}>
