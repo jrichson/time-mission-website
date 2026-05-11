@@ -142,6 +142,7 @@ export default buildConfig({
       baseDir: dirname,
     },
     components: {
+      beforeDashboard: ['/components/LandingWizardDashboard.tsx'],
       graphics: {
         Icon: '/components/TimeMissionIcon.tsx',
         Logo: '/components/TimeMissionLogo.tsx',

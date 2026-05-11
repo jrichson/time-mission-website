@@ -178,6 +178,62 @@
     line-height: 1;
   }
 
+  .tm-landing-wizard-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 0 1.5rem;
+    border: 1px solid var(--tm-line-strong);
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, rgba(255, 107, 44, 0.14), rgba(0, 229, 255, 0.08)),
+      rgba(13, 13, 13, 0.88);
+    padding: 1.25rem;
+  }
+
+  .tm-landing-wizard-card__eyebrow {
+    margin: 0 0 0.45rem;
+    color: var(--tm-cyan);
+    font-size: 0.78rem;
+    font-weight: 850;
+    text-transform: uppercase;
+  }
+
+  .tm-landing-wizard-card h2 {
+    margin: 0;
+    font-size: clamp(1.45rem, 2.6vw, 2.25rem);
+    line-height: 1.05;
+  }
+
+  .tm-landing-wizard-card p:last-child {
+    max-width: 760px;
+    margin: 0.65rem 0 0;
+    color: var(--tm-muted);
+    line-height: 1.5;
+  }
+
+  .tm-landing-wizard-card__button {
+    display: inline-flex;
+    min-height: 44px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--tm-orange);
+    border-radius: 6px;
+    background: var(--tm-orange);
+    color: var(--tm-black);
+    font-weight: 850;
+    padding: 0 1rem;
+    text-decoration: none;
+  }
+
+  .tm-landing-wizard-card__button:hover,
+  .tm-landing-wizard-card__button:focus-visible {
+    background: #ff8a50;
+    color: var(--tm-black);
+  }
+
   .app-header,
   .nav-group,
   .collection-list__wrap,
@@ -259,5 +315,16 @@
   .toast,
   .popup__content {
     box-shadow: 0 18px 60px rgba(0, 0, 0, 0.36);
+  }
+
+  @media (max-width: 768px) {
+    .tm-landing-wizard-card {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .tm-landing-wizard-card__button {
+      width: 100%;
+    }
   }
 }
