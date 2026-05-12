@@ -1,0 +1,33 @@
+---
+import i18n from '../data/site/i18n.json';
+
+interface Props {
+    currentLang?: string;
+    placement?: 'desktop' | 'mobile';
+}
+
+const { currentLang = i18n.defaultLanguage, placement = 'desktop' } = Astro.props;
+const languages = i18n.languages;
+const currentCode = languages.some((lang) => lang.code === currentLang) ? currentLang : i18n.defaultLanguage;
+const switcherId = `language-select-${placement}`;
+const label = i18n.translations[currentCode]?.['language.label'] ?? i18n.translations[i18n.defaultLanguage]['language.label'];
+---
+
+<form class={`language-switcher language-switcher--${placement}`} data-language-switcher data-i18n-aria-label="language.label" aria-label={label}>
+    <label class="visually-hidden" for={switcherId} data-i18n="language.label">{label}</label>
+    <span class="language-switcher-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M3 12h18"></path>
+            <path d="M12 3c2.25 2.4 3.4 5.4 3.4 9s-1.15 6.6-3.4 9c-2.25-2.4-3.4-5.4-3.4-9S9.75 5.4 12 3z"></path>
+        </svg>
+    </span>
+    <select id={switcherId} name="language" data-language-select data-i18n-aria-label="language.label" aria-label={label}>
+        {languages.map((language) => (
+            <option value={language.code} selected={language.code === currentCode}>
+                {language.shortLabel}
+            </option>
+        ))}
+    </select>
+    <span class="language-switcher-status visually-hidden" data-language-status aria-live="polite"></span>
+</form>

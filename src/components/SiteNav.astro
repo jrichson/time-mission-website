@@ -1,4 +1,11 @@
 ---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+interface Props {
+    currentLang?: string;
+}
+
+const { currentLang = 'en' } = Astro.props;
 const tickerMessages = [
     'NEW LOCATIONS COMING SOON!',
     'NEW LOCATIONS COMING SOON!',
@@ -14,14 +21,14 @@ const tickerMessages = [
 <!-- Announcement Ticker -->
 <div class="ticker-bar">
     <div class="ticker-track">
-        {tickerMessages.map((m) => <span class="ticker-item">{m}</span>)}
+        {tickerMessages.map((m) => <span class="ticker-item" data-i18n="ticker.newLocations">{m}</span>)}
     </div>
 </div>
 
 <!-- Navigation -->
 <nav class="nav" id="nav">
     <div class="nav-left">
-        <button class="nav-menu-btn" aria-label="Open menu">
+        <button class="nav-menu-btn" aria-label="Open menu" data-i18n-aria-label="nav.openMenu">
             <div class="hamburger">
                 <span></span>
                 <span></span>
@@ -35,24 +42,25 @@ const tickerMessages = [
 
     <div class="nav-center">
         <ul class="nav-links">
-            <li><a href="/about">About</a></li>
-            <li><a href="/missions">Missions</a></li>
-            <li><a href="/groups">Groups</a></li>
-            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/about" data-i18n="nav.about">About</a></li>
+            <li><a href="/missions" data-i18n="nav.missions">Missions</a></li>
+            <li><a href="/groups" data-i18n="nav.groups">Groups</a></li>
+            <li><a href="/faq" data-i18n="nav.faq">FAQ</a></li>
         </ul>
     </div>
 
     <div class="nav-right">
-        <button class="location-btn" id="locationBtn" aria-label="Change location">
+        <LanguageSwitcher currentLang={currentLang} placement="desktop" />
+        <button class="location-btn" id="locationBtn" aria-label="Change location" data-i18n-aria-label="nav.changeLocation">
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
             </svg>
-            <span id="locationText">Select Location</span>
+            <span id="locationText" data-i18n="nav.selectLocation">Select Location</span>
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
                 <polyline points="6,9 12,15 18,9"></polyline>
             </svg>
         </button>
-        <a href="#" class="btn-tickets" data-tm-booking-trigger>Book Now</a>
+        <a href="#" class="btn-tickets" data-tm-booking-trigger data-i18n="nav.bookNow">Book Now</a>
     </div>
 </nav>

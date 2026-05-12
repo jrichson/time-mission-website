@@ -9,27 +9,27 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <div class="hero-eyebrow">
-                <span class="tagline-text" id="taglineText">Social Gaming Adventure</span>
+                <span class="tagline-text" id="taglineText" data-i18n="home.taglines">Social Gaming Adventure</span>
             </div>
             <h1 class="hero-title">
-                <span class="visually-hidden hero-h1-seo">Time Mission — 25+ Interactive Mission Rooms.</span>
-                <span class="line-1" aria-hidden="true">STEP INTO THE</span>
+                <span class="visually-hidden hero-h1-seo" data-i18n="home.hero.h1Seo">Time Mission — 25+ Interactive Mission Rooms.</span>
+                <span class="line-1" aria-hidden="true" data-i18n="home.hero.line1">STEP INTO THE</span>
                 <span class="line-2" aria-hidden="true" role="presentation"></span>
             </h1>
-            <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive missions. Test your speed, strength, skill, and&nbsp;smarts.</p>
+            <p class="hero-subtitle" data-i18n="home.hero.subtitle">Teams of 2-5 compete through 25+ immersive missions. Test your speed, strength, skill, and&nbsp;smarts.</p>
             <div class="hero-cta">
                 <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
-                    Book Now
+                    <span data-i18n="nav.bookNow">Book Now</span>
                     <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <a href="#experiences" class="btn-secondary">See Missions</a>
+                <a href="#experiences" class="btn-secondary" data-i18n="home.hero.seeMissions">See Missions</a>
             </div>
         </div>
         <div class="hero-scroll">
-            <span class="scroll-label">Scroll</span>
-            <span class="swipe-label">Swipe</span>
+            <span class="scroll-label" data-i18n="home.hero.scroll">Scroll</span>
+            <span class="swipe-label" data-i18n="home.hero.swipe">Swipe</span>
             <div class="scroll-indicator"></div>
             <div class="swipe-indicator">
                 <svg aria-hidden="true" focusable="false" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -42,18 +42,18 @@
     <!-- Welcome Section -->
     <section class="welcome" id="about">
         <div class="welcome-content reveal">
-            <div class="section-badge">ABOUT US</div>
-            <h2 class="section-title">WHAT IS TIME MISSION?</h2>
-            <p class="welcome-text">
+            <div class="section-badge" data-i18n="home.about.badge">ABOUT US</div>
+            <h2 class="section-title" data-i18n="home.about.title">WHAT IS TIME MISSION?</h2>
+            <p class="welcome-text" data-i18n="home.about.short">
                 Time Mission is an indoor challenge-room attraction where teams of 2 to 5 players move through short physical, logic, skill, and coordination missions instead of one long escape-room scenario.
             </p>
             <details class="geo-disclosure welcome-geo-disclosure">
-                <summary>Read the full Time Mission overview</summary>
-                <p class="welcome-text">
+                <summary data-i18n="home.about.summary">Read the full Time Mission overview</summary>
+                <p class="welcome-text" data-i18n="home.about.long">
                 Time Mission is a live, team-based entertainment experience where groups of two to five players move through 25 or more short mission rooms during a timed session. Each room is a self-contained challenge lasting about one to five minutes, so players can choose the order, replay favorites, and build a score across the venue. The format blends escape-room puzzles, arcade-style scoring, physical tasks, and cooperative problem solving without locking a group into one long scenario. Sessions are sold in 60, 90, or 120 minute lengths, with most groups completing 15 to 20 missions in a 90 minute visit. Time Mission works for families, friends, birthdays, team outings, field trips, date nights, and private events because different rooms test speed, strength, skill, memory, logic, and coordination. The experience is designed so mixed-ability groups can contribute in different ways rather than relying on one kind of player.
                 </p>
             </details>
-            <a href="/about" class="btn-secondary welcome-learn-desktop" style="margin-top: 1.5rem;">Learn About Time Mission</a>
+            <a href="/about" class="btn-secondary welcome-learn-desktop" style="margin-top: 1.5rem;" data-i18n="home.about.learn">Learn About Time Mission</a>
         </div>
     </section>
 
@@ -68,7 +68,7 @@
                     </svg>
                 </div>
                 <div class="stat-number">25+</div>
-                <div class="stat-label">Mission Rooms</div>
+                <div class="stat-label" data-i18n="home.stats.missionRooms">Mission Rooms</div>
             </div>
             <div class="stat-card reveal">
                 <div class="stat-icon">
@@ -80,7 +80,7 @@
                 <div class="stat-number stat-minutes">
                     <span class="minutes-counter" id="minutesCounter">60</span>
                 </div>
-                <div class="stat-label">Minutes of Play</div>
+                <div class="stat-label" data-i18n="home.stats.minutes">Minutes of Play</div>
             </div>
             <div class="stat-card reveal">
                 <div class="stat-icon">
@@ -92,7 +92,7 @@
                     </svg>
                 </div>
                 <div class="stat-number">2<span style="font-size: 0.5em; vertical-align: middle;">-</span>5</div>
-                <div class="stat-label">Players Per Team</div>
+                <div class="stat-label" data-i18n="home.stats.players">Players Per Team</div>
             </div>
             <div class="stat-card reveal">
                 <div class="stat-icon">
@@ -103,18 +103,18 @@
                 <div class="stat-number stat-points-wrap" id="pointsWrap">
                     <span class="points-counter" id="pointsCounter">0</span>
                 </div>
-                <div class="stat-label">Collect Points!</div>
+                <div class="stat-label" data-i18n="home.stats.points">Collect Points!</div>
             </div>
         </div>
-        <a href="/about" class="btn-secondary welcome-learn-mobile">Learn About Time Mission</a>
+        <a href="/about" class="btn-secondary welcome-learn-mobile" data-i18n="home.about.learn">Learn About Time Mission</a>
     </section>
 
     <!-- Experiences Section -->
     <section class="experiences" id="experiences">
         <div class="experiences-header reveal">
-            <div class="section-badge">THE MISSIONS</div>
-            <h2 class="section-title">Unlimited Ways to Play</h2>
-            <p class="welcome-text" style="max-width: 700px; margin: 0 auto;">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
+            <div class="section-badge" data-i18n="home.missions.badge">THE MISSIONS</div>
+            <h2 class="section-title" data-i18n="home.missions.title">Unlimited Ways to Play</h2>
+            <p class="welcome-text" style="max-width: 700px; margin: 0 auto;" data-i18n="home.missions.intro">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
         </div>
 
         <div class="experiences-scroll" id="experiencesScroll">
@@ -277,20 +277,20 @@
         </div>
 
         <div class="experiences-nav">
-            <button class="nav-arrow" id="prevBtn" aria-label="Previous experience">
+            <button class="nav-arrow" id="prevBtn" aria-label="Previous experience" data-i18n-aria-label="home.missions.previous">
                 <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M19 12H5M12 19l-7-7 7-7"/>
                 </svg>
             </button>
-            <a href="/missions" class="btn-secondary">View All</a>
-            <button class="nav-arrow" id="nextBtn" aria-label="Next experience">
+            <a href="/missions" class="btn-secondary" data-i18n="home.missions.viewAll">View All</a>
+            <button class="nav-arrow" id="nextBtn" aria-label="Next experience" data-i18n-aria-label="home.missions.next">
                 <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
             </button>
         </div>
         <div class="experiences-nav-mobile">
-            <a href="/missions" class="btn-secondary">View All Missions</a>
+            <a href="/missions" class="btn-secondary" data-i18n="home.missions.viewAllMissions">View All Missions</a>
         </div>
     </section>
 
@@ -300,40 +300,40 @@
             <picture><source srcset="/assets/photos/TM-Groups-480.webp 480w, /assets/photos/TM-Groups-800.webp 800w, /assets/photos/TM-Groups-1200.webp 1200w, /assets/photos/TM-Groups.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img src="/assets/photos/TM-Groups.jpg" alt="Group playing at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
         </div>
         <div class="groups-cta-card reveal">
-            <div class="section-badge">GROUPS & PARTIES</div>
-            <h2 class="section-title">CELEBRATE AT TIME&nbsp;MISSION</h2>
-            <p class="welcome-text">Birthdays, team outings, or just a crew ready to compete. We handle the setup so you can focus on the&nbsp;fun.</p>
+            <div class="section-badge" data-i18n="home.groups.badge">GROUPS & PARTIES</div>
+            <h2 class="section-title" data-i18n="home.groups.title">CELEBRATE AT TIME&nbsp;MISSION</h2>
+            <p class="welcome-text" data-i18n="home.groups.intro">Birthdays, team outings, or just a crew ready to compete. We handle the setup so you can focus on the&nbsp;fun.</p>
             <div class="groups-event-types">
                 <a href="/groups/birthdays" class="groups-event-type">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16h16"/><path d="M2 21h20"/><path d="M8 7V5a1 1 0 0 1 2 0v2"/><path d="M14 7V5a1 1 0 0 1 2 0v2"/><path d="M7 11V7"/><path d="M12 11V7"/><path d="M17 11V7"/></svg>
-                    <span>Birthdays</span>
+                    <span data-i18n="home.groups.birthdays">Birthdays</span>
                 </a>
                 <a href="/groups/corporate" class="groups-event-type">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2h8"/><path d="M9 2l-1 6a4 4 0 0 0 8 0l-1-6"/><path d="M12 12v8"/><path d="M8 22h8"/><circle cx="12" cy="5" r="0.5" fill="currentColor"/></svg>
-                    <span>Corporate</span>
+                    <span data-i18n="home.groups.corporate">Corporate</span>
                 </a>
                 <a href="/groups/field-trips" class="groups-event-type">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                    <span>Field Trips</span>
+                    <span data-i18n="home.groups.fieldTrips">Field Trips</span>
                 </a>
                 <a href="/groups/bachelor-ette" class="groups-event-type">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0L12 5.35l-.77-.77a5.41 5.41 0 1 0-7.65 7.65l8.42 8.42 8.42-8.42a5.41 5.41 0 0 0 0-7.65z"/></svg>
-                    <span>Bachelor/ette</span>
+                    <span data-i18n="home.groups.bachelor">Bachelor/ette</span>
                 </a>
                 <a href="/groups/private-events" class="groups-event-type">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h2"/><path d="M5 4v2"/><path d="M11.5 4l-.5 2"/><path d="M18 5h2"/><path d="M19 4v2"/><path d="M15 9l-1 1"/><path d="M18 13l2-.5"/><path d="M18 19h2"/><path d="M19 18v2"/><path d="M14 16.5l-6.5-6.5-4.4 9.6a1 1 0 0 0 1.3 1.3l9.6-4.4z"/></svg>
-                    <span>Private Events</span>
+                    <span data-i18n="home.groups.privateEvents">Private Events</span>
                 </a>
                 <a href="/groups/holidays" class="groups-event-type">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
-                    <span>Holidays</span>
+                    <span data-i18n="home.groups.holidays">Holidays</span>
                 </a>
             </div>
             <div class="groups-cta-buttons">
-                <a href="#" class="btn-group-tickets btn-tickets" data-tm-booking-trigger>Book Now
+                <a href="#" class="btn-group-tickets btn-tickets" data-tm-booking-trigger><span data-i18n="nav.bookNow">Book Now</span>
                     <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
-                <a href="/groups" class="btn-start-planning">Learn More
+                <a href="/groups" class="btn-start-planning"><span data-i18n="home.groups.learnMore">Learn More</span>
                     <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
             </div>
@@ -342,7 +342,7 @@
 
     <!-- Testimonials -->
     <section class="testimonials" id="reviews">
-        <div class="testimonials-scroll" tabindex="0" aria-label="Guest testimonials">
+        <div class="testimonials-scroll" tabindex="0" aria-label="Guest testimonials" data-i18n-aria-label="home.testimonials.label">
           <div class="testimonials-track">
             <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
@@ -377,44 +377,44 @@
     <!-- Mini FAQ -->
     <section class="mini-faq" id="faq" style="scroll-margin-top: 100px;">
         <div class="mini-faq-header reveal">
-            <div class="section-badge">GOT QUESTIONS?</div>
-            <h2 class="section-title">FREQUENTLY ASKED</h2>
+            <div class="section-badge" data-i18n="home.faq.badge">GOT QUESTIONS?</div>
+            <h2 class="section-title" data-i18n="home.faq.title">FREQUENTLY ASKED</h2>
         </div>
 
         <div class="mini-faq-grid">
             <div class="mini-faq-item">
                 <button type="button" id="mini-faq-btn-1" class="mini-faq-q" aria-expanded="false" aria-controls="mini-faq-panel-1">
-                    How long is a session?
+                    <span data-i18n="home.faq.session.q">How long is a session?</span>
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                 </button>
                 <div class="mini-faq-a" id="mini-faq-panel-1" role="region" aria-labelledby="mini-faq-btn-1">
-                    <p>Sessions are available in 60, 90, or 120 minute options. Choose the length that works best for your group, more time means more missions to conquer.</p>
+                    <p data-i18n="home.faq.session.a">Sessions are available in 60, 90, or 120 minute options. Choose the length that works best for your group, more time means more missions to conquer.</p>
                 </div>
             </div>
 
             <div class="mini-faq-item">
                 <button type="button" id="mini-faq-btn-2" class="mini-faq-q" aria-expanded="false" aria-controls="mini-faq-panel-2">
-                    What ages can play?
+                    <span data-i18n="home.faq.ages.q">What ages can play?</span>
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                 </button>
                 <div class="mini-faq-a" id="mini-faq-panel-2" role="region" aria-labelledby="mini-faq-btn-2">
-                    <p>The minimum age to enter Time Mission is 6 years old. Ages 6-13 must be accompanied by an adult. Ages 14+ can play on their own.</p>
+                    <p data-i18n="home.faq.ages.a">The minimum age to enter Time Mission is 6 years old. Ages 6-13 must be accompanied by an adult. Ages 14+ can play on their own.</p>
                 </div>
             </div>
 
             <div class="mini-faq-item">
                 <button type="button" id="mini-faq-btn-3" class="mini-faq-q" aria-expanded="false" aria-controls="mini-faq-panel-3">
-                    Do I need to book in advance?
+                    <span data-i18n="home.faq.booking.q">Do I need to book in advance?</span>
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                 </button>
                 <div class="mini-faq-a" id="mini-faq-panel-3" role="region" aria-labelledby="mini-faq-btn-3">
-                    <p>We recommend booking online to guarantee your spot, especially on weekends. Walk-ins are welcome based on availability.</p>
+                    <p data-i18n="home.faq.booking.a">We recommend booking online to guarantee your spot, especially on weekends. Walk-ins are welcome based on availability.</p>
                 </div>
             </div>
         </div>
 
         <div class="mini-faq-cta">
-            <a href="/faq" class="btn-see-all-faq">See All FAQs
+            <a href="/faq" class="btn-see-all-faq"><span data-i18n="home.faq.seeAll">See All FAQs</span>
                 <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
         </div>
@@ -426,10 +426,10 @@
             <picture><source srcset="/assets/photos/experiences/ready-to-play-480.webp 480w, /assets/photos/experiences/ready-to-play-800.webp 800w, /assets/photos/experiences/ready-to-play-1200.webp 1200w, /assets/photos/experiences/ready-to-play.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img src="/assets/photos/experiences/ready-to-play.jpg" alt="Time Mission venue" width="1920" height="1280" loading="lazy" decoding="async"></picture>
         </div>
         <div class="cta-content reveal">
-            <h2 class="cta-title">READY TO PLAY?</h2>
-            <p class="cta-text">Book your adventure today and discover why Time Mission is the ultimate social gaming experience.</p>
+            <h2 class="cta-title" data-i18n="home.cta.title">READY TO PLAY?</h2>
+            <p class="cta-text" data-i18n="home.cta.text">Book your adventure today and discover why Time Mission is the ultimate social gaming experience.</p>
             <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
-                Book Your Adventure
+                <span data-i18n="home.cta.bookAdventure">Book Your Adventure</span>
                 <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -440,8 +440,8 @@
     <!-- UGC Photo Grid -->
     <section class="ugc-grid">
         <div class="ugc-grid-header reveal">
-            <div class="section-badge">LET'S CONNECT</div>
-            <h2 class="section-title">FOLLOW THE MISSION</h2>
+            <div class="section-badge" data-i18n="home.social.badge">LET'S CONNECT</div>
+            <h2 class="section-title" data-i18n="home.social.title">FOLLOW THE MISSION</h2>
             <div class="ugc-socials">
                 <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
@@ -473,31 +473,32 @@
     <!-- Newsletter -->
     <section class="newsletter-section">
         <div class="newsletter-inner">
-            <h2>DON'T MISS A THING</h2>
-            <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
+            <h2 data-i18n="home.newsletter.title">DON'T MISS A THING</h2>
+            <p data-i18n="home.newsletter.text">Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
             <form name="newsletter" method="POST" action="/api/newsletter" data-tm-form="newsletter">
                 <input type="hidden" name="form-name" value="newsletter">
                 <p class="visually-hidden">
                     <label>Do not fill this out if you are human: <input name="bot-field"></label>
                 </p>
                 <div class="newsletter-form">
-                    <label class="visually-hidden" for="newsletter-given-name">First name</label>
-                    <input type="text" id="newsletter-given-name" name="given_name" placeholder="First Name" autocomplete="given-name" required>
-                    <label class="visually-hidden" for="newsletter-family-name">Last name</label>
-                    <input type="text" id="newsletter-family-name" name="family_name" placeholder="Last Name" autocomplete="family-name">
-                    <label class="visually-hidden" for="newsletter-email">Email</label>
-                    <input type="email" id="newsletter-email" name="email" placeholder="Email" class="full-width" autocomplete="email" required>
+                    <label class="visually-hidden" for="newsletter-given-name" data-i18n="home.newsletter.firstName">First name</label>
+                    <input type="text" id="newsletter-given-name" name="given_name" placeholder="First Name" data-i18n-placeholder="home.newsletter.firstNamePlaceholder" autocomplete="given-name" required>
+                    <label class="visually-hidden" for="newsletter-family-name" data-i18n="home.newsletter.lastName">Last name</label>
+                    <input type="text" id="newsletter-family-name" name="family_name" placeholder="Last Name" data-i18n-placeholder="home.newsletter.lastNamePlaceholder" autocomplete="family-name">
+                    <label class="visually-hidden" for="newsletter-email" data-i18n="home.newsletter.email">Email</label>
+                    <input type="email" id="newsletter-email" name="email" placeholder="Email" data-i18n-placeholder="home.newsletter.emailPlaceholder" class="full-width" autocomplete="email" required>
                 </div>
                 <label class="newsletter-consent">
                     <input type="checkbox" name="marketing_opt_in" value="yes" required>
-                    <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+                    <span data-i18n="home.newsletter.consent">I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
                 </label>
                 <div class="tm-turnstile" data-tm-turnstile></div>
-                <button type="submit" class="btn-subscribe">Sign Up</button>
+                <button type="submit" class="btn-subscribe" data-i18n="home.newsletter.submit">Sign Up</button>
                 <p class="newsletter-legal">
-                    By signing up, you agree to our
-                    <a href="/terms">Terms of Service</a> and
-                    <a href="/privacy">Privacy Policy</a>.
+                    <span data-i18n="home.newsletter.legalPrefix">By signing up, you agree to our</span>
+                    <a href="/terms" data-i18n="home.newsletter.terms">Terms of Service</a>
+                    <span data-i18n="home.newsletter.and">and</span>
+                    <a href="/privacy" data-i18n="home.newsletter.privacy">Privacy Policy</a>.
                 </p>
             </form>
         </div>

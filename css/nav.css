@@ -292,6 +292,25 @@
         border-radius: 100px;
         box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
     }
+
+    .mobile-menu-language {
+        display: flex;
+        justify-content: center;
+        padding-top: 1.5rem;
+    }
+
+    .language-switcher--desktop {
+        display: none;
+    }
+
+    .language-switcher--mobile {
+        display: inline-flex;
+    }
+
+    .language-switcher--mobile select {
+        min-width: 6rem;
+        text-align: center;
+    }
 }
 
 /* ---- Desktop Nav Links ---- */
@@ -335,6 +354,82 @@
     gap: 1.5rem;
     justify-content: flex-end;
     flex: 1;
+}
+
+.language-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: var(--target-min);
+    color: var(--white-soft, #e5e5e5);
+    position: relative;
+}
+
+.language-switcher-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--orange);
+    pointer-events: none;
+}
+
+.language-switcher-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.language-switcher select {
+    min-height: var(--target-min);
+    min-width: 4.25rem;
+    padding: 0 1.75rem 0 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 6px;
+    background: rgba(13, 13, 13, 0.72);
+    color: var(--white);
+    font-family: var(--tech);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    appearance: none;
+    background-image:
+        linear-gradient(45deg, transparent 50%, currentColor 50%),
+        linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position:
+        calc(100% - 13px) 50%,
+        calc(100% - 8px) 50%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    transition:
+        border-color var(--motion-fast) ease,
+        background var(--motion-fast) ease,
+        color var(--motion-fast) ease;
+}
+
+.language-switcher select:hover {
+    border-color: rgba(255, 107, 44, 0.55);
+    background-color: rgba(255, 107, 44, 0.08);
+}
+
+.mobile-menu-language,
+.language-switcher--mobile {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .language-switcher.language-switcher--desktop {
+        display: none;
+    }
+
+    .mobile-menu-language {
+        display: flex;
+        justify-content: center;
+        padding-top: 1.5rem;
+    }
+
+    .language-switcher.language-switcher--mobile {
+        display: inline-flex;
+    }
 }
 
 .location-btn {
@@ -1000,6 +1095,7 @@
 /* ---- Keyboard focus (visible only for keyboard / AT) ---- */
 .nav-menu-btn:focus-visible,
 .location-btn:focus-visible,
+.language-switcher select:focus-visible,
 .location-dropdown-close:focus-visible,
 .nav-links a:focus-visible,
 .btn-tickets:focus-visible,

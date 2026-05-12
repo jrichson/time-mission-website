@@ -63,6 +63,14 @@
      *                       location change via setEyebrowToLocation.
      * Returns: { setEyebrowToLocation(city: string): void }
      */
+    function getTranslatedArray(key, fallback) {
+        if (key && window.TMI18n && typeof window.TMI18n.t === 'function') {
+            var translated = window.TMI18n.t(key);
+            if (Array.isArray(translated) && translated.length) return translated;
+        }
+        return Array.isArray(fallback) ? fallback : [];
+    }
+
     function initTagline(taglines, opts) {
         var taglineElement = document.getElementById('taglineText');
         var noop = { setEyebrowToLocation: function () {} };
@@ -72,6 +80,9 @@
         var initialCity = opts && opts.initialCity ? opts.initialCity : null;
         var initialHoldMs = opts && typeof opts.initialHoldMs === 'number' ? opts.initialHoldMs : 3000;
         var mobileLocationHoldMs = opts && typeof opts.mobileLocationHoldMs === 'number' ? opts.mobileLocationHoldMs : 5000;
+        var translationKey = opts && opts.translationKey ? opts.translationKey : '';
+        var fallbackTaglines = taglines.slice();
+        taglines = getTranslatedArray(translationKey, fallbackTaglines);
 
         var currentTaglineIndex = 0;
         var isTyping = false;
@@ -99,6 +110,8 @@
 
         async function rotateTagline() {
             if (isTyping) return;
+            taglines = getTranslatedArray(translationKey, fallbackTaglines);
+            if (!taglines.length) return;
             isTyping = true;
 
             await deleteText();
@@ -134,12 +147,20 @@
             // Location pages always show location name first, then rotate.
             taglineElement.textContent = 'Time Mission ' + initialCity;
             taglineElement.classList.add('no-cursor');
+        } else if (taglines[0]) {
+            taglineElement.textContent = taglines[0];
         }
         if (reduceMotion) {
             taglineElement.classList.add('no-cursor');
         } else {
             setTimeout(startRotation, initialHoldMs);
         }
+
+        document.addEventListener('tm:language-changed', function () {
+            taglines = getTranslatedArray(translationKey, fallbackTaglines);
+            currentTaglineIndex = 0;
+            if (!initialCity && taglines[0]) taglineElement.textContent = taglines[0];
+        });
 
         return { setEyebrowToLocation: setEyebrowToLocation };
     }
@@ -913,7 +934,8 @@
         var tagline = initTagline(taglines, {
             initialCity: city,           // "Time Mission Philadelphia" held 3500ms before rotation
             initialHoldMs: 3500,
-            mobileLocationHoldMs: 5000
+            mobileLocationHoldMs: 5000,
+            translationKey: 'home.taglines'
         });
         window.updateEyebrowLocation = function (newCity) {
             tagline.setEyebrowToLocation(newCity);
@@ -943,7 +965,8 @@
         initTagline(taglines, {
             initialCity: null,
             initialHoldMs: 3000,
-            mobileLocationHoldMs: 5000
+            mobileLocationHoldMs: 5000,
+            translationKey: 'home.taglines'
         });
         window.updateEyebrowLocation = function () {};
 

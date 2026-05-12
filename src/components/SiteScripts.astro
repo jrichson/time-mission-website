@@ -1,5 +1,6 @@
 ---
 import { getPublicSiteContract } from '../lib/site-contract';
+import i18nData from '../data/site/i18n.json';
 import locationsData from '../../data/locations.json';
 
 const siteContract = getPublicSiteContract();
@@ -18,7 +19,11 @@ const formConfig = {
 <script is:inline define:vars={{ formConfig }}>
     window.__TM_FORM_CONFIG__ = formConfig;
 </script>
+<script is:inline define:vars={{ i18nData }}>
+    window.__TM_I18N__ = i18nData;
+</script>
 <script defer is:inline src="/js/site-progressive.js?v=1"></script>
+<script defer is:inline src="/js/language-switcher.js?v=1"></script>
 <script defer is:inline src="/js/consent-bridge.js?v=1"></script>
 <script defer is:inline src="/js/analytics.js?v=1"></script>
 <script defer is:inline src="/js/contact-form-analytics.js?v=1"></script>
