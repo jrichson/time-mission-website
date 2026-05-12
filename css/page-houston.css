@@ -1602,10 +1602,8 @@
             font-size: 2rem;
             margin-bottom: 0.75rem;
             letter-spacing: 0.25em;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #f9a41a;
+            text-shadow: 0 0 18px rgba(249, 164, 26, 0.18);
         }
 
         .testimonial-text {

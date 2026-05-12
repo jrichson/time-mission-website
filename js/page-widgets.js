@@ -590,22 +590,34 @@
             track.insertBefore(clone, track.firstChild);
         }
 
-        function getWidth() { return container.offsetWidth; }
+        function getWidth() {
+            return Math.round(container.getBoundingClientRect().width || container.offsetWidth || 0);
+        }
+
+        function normalizeIndex(index) {
+            return ((index % count) + count) % count;
+        }
 
         function setTransform(domIndex, animate) {
+            var width = getWidth();
+            if (width <= 0) return false;
             if (!animate) {
                 track.classList.add('no-transition');
             } else {
                 track.classList.remove('no-transition');
             }
-            track.style.transform = 'translateX(-' + (domIndex * getWidth()) + 'px)';
+            track.style.transform = 'translateX(-' + (domIndex * width) + 'px)';
             if (!animate) void track.offsetHeight; // force reflow for instant jump
+            return true;
         }
 
         // Animate to a logical index, then teleport if in clone zone
         function slideTo(index, animate) {
             current = index;
-            setTransform(offset + index, animate !== false);
+            if (!setTransform(offset + index, animate !== false)) {
+                current = normalizeIndex(index);
+                return;
+            }
 
             // If we landed in clone zone, schedule teleport after animation
             if (animate !== false && (index >= count || index < 0)) {
@@ -619,7 +631,7 @@
 
         function jumpTo(index) {
             current = index;
-            setTransform(offset + index, false);
+            return setTransform(offset + index, false);
         }
 
         function advance() { slideTo(current + 1, true); }
@@ -708,11 +720,22 @@
         // Pause on wheel
         container.addEventListener('wheel', pauseAndResume, { passive: true });
 
-        // Recalculate on resize
-        window.addEventListener('resize', function () { jumpTo(current); });
+        function syncLayout() { jumpTo(current); }
+
+        // Recalculate after viewport changes and after browser cache restores.
+        window.addEventListener('resize', syncLayout);
+        window.addEventListener('pageshow', syncLayout);
+        if ('ResizeObserver' in window) {
+            var resizeObserver = new ResizeObserver(syncLayout);
+            resizeObserver.observe(container);
+        }
 
         // Init
-        jumpTo(0);
+        if (!jumpTo(0)) {
+            requestAnimationFrame(syncLayout);
+            window.setTimeout(syncLayout, 250);
+            window.addEventListener('load', syncLayout, { once: true });
+        }
         if (!reduceMotion) startAuto();
     }
 

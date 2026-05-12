@@ -71,6 +71,41 @@ test('homepage loads core navigation and booking panel', async ({ page }) => {
   await expect(page.locator('#ticketClose')).toHaveAccessibleName(/close ticket panel/i);
 });
 
+test('homepage testimonial ratings stay visible after carousel hydration', async ({ page }) => {
+  await gotoHome(page);
+
+  const rating = page.locator('#reviews .testimonial-rating').first();
+  await expect(rating).toBeVisible();
+
+  const ratingState = await page.evaluate(() => {
+    const ratingEl = document.querySelector('#reviews .testimonial-rating');
+    const track = document.querySelector('#reviews .testimonials-track');
+    if (!ratingEl || !track) return null;
+
+    const ratingStyle = getComputedStyle(ratingEl);
+    const fillColor = ratingStyle.webkitTextFillColor || ratingStyle.color;
+    const transparentFill = fillColor === 'transparent' || fillColor === 'rgba(0, 0, 0, 0)';
+    const ratingRect = ratingEl.getBoundingClientRect();
+    const trackRect = track.getBoundingClientRect();
+
+    return {
+      text: ratingEl.textContent || '',
+      ratingHeight: ratingRect.height,
+      ratingWidth: ratingRect.width,
+      trackWidth: trackRect.width,
+      hasPaintBackground: ratingStyle.backgroundImage !== 'none',
+      transparentFill,
+    };
+  });
+
+  expect(ratingState).toBeTruthy();
+  expect(ratingState.text.trim().length).toBeGreaterThan(0);
+  expect(ratingState.ratingHeight).toBeGreaterThan(0);
+  expect(ratingState.ratingWidth).toBeGreaterThan(0);
+  expect(ratingState.trackWidth).toBeGreaterThan(0);
+  expect(ratingState.transparentFill && !ratingState.hasPaintBackground).toBe(false);
+});
+
 test('ticket panel options hydrate from location data', async ({ page }) => {
   await page.goto('/');
 
