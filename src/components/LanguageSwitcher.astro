@@ -3,7 +3,7 @@ import i18n from '../data/site/i18n.json';
 
 interface Props {
     currentLang?: string;
-    placement?: 'desktop' | 'mobile';
+    placement?: 'desktop' | 'mobile' | 'overlay';
 }
 
 const { currentLang = i18n.defaultLanguage, placement = 'desktop' } = Astro.props;

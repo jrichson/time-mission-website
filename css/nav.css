@@ -505,6 +505,16 @@
     margin-bottom: 1.5rem;
 }
 
+.location-dropdown-controls {
+    position: absolute;
+    top: calc(52px + env(safe-area-inset-top, 0px));
+    right: calc(2rem + env(safe-area-inset-right, 0px));
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 2;
+}
+
 .location-dropdown a.location-dropdown-logo {
     display: none;
     padding: 0;
@@ -542,6 +552,12 @@
         color var(--motion-standard) ease;
     font-size: 1.1rem;
     line-height: 1;
+}
+
+.location-dropdown-controls .location-dropdown-close {
+    position: static;
+    top: auto;
+    right: auto;
 }
 
 .location-dropdown-close:hover {
@@ -664,8 +680,7 @@
     background: none;
 }
 
-.location-dropdown a.location-info-address::after {
-    content: 'Get Directions \2197';
+.location-info-directions {
     display: block;
     margin-top: 0.35rem;
     font-size: 0.8rem;
@@ -695,7 +710,7 @@
     white-space: nowrap;
 }
 
-.location-dropdown a.location-info-address:hover::after {
+.location-dropdown a.location-info-address:hover .location-info-directions {
     opacity: 1;
 }
 

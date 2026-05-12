@@ -31,9 +31,65 @@
         };
     }
 
+    function formatTranslation(value, replacements) {
+        let output = String(value || '');
+        Object.keys(replacements || {}).forEach(function (key) {
+            output = output.replace(new RegExp('\\{' + key + '\\}', 'g'), replacements[key]);
+        });
+        return output;
+    }
+
+    function translate(key, fallback, replacements) {
+        let value = fallback;
+        if (window.TMI18n && typeof window.TMI18n.t === 'function') {
+            const translated = window.TMI18n.t(key);
+            if (typeof translated === 'string') value = translated;
+        }
+        return formatTranslation(value, replacements);
+    }
+
+    function translateHoursText(value) {
+        const raw = String(value || '');
+        if (!raw) return '';
+        if (raw === 'Coming Soon') return translate('location.comingSoon', 'Coming Soon');
+
+        const dayKeys = {
+            Mon: 'location.day.mon',
+            Tue: 'location.day.tue',
+            Wed: 'location.day.wed',
+            Thu: 'location.day.thu',
+            Fri: 'location.day.fri',
+            Sat: 'location.day.sat',
+            Sun: 'location.day.sun',
+        };
+        return raw.replace(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun):/gm, function (match, day) {
+            return translate(dayKeys[day], day) + ':';
+        });
+    }
+
+    function setAddressText(el, value, locationName) {
+        if (!el) return;
+        el.textContent = '';
+        String(value || '').split('\n').forEach(function (line, index) {
+            if (index > 0) el.appendChild(document.createElement('br'));
+            el.appendChild(document.createTextNode(line));
+        });
+        const directions = document.createElement('span');
+        directions.className = 'location-info-directions';
+        directions.setAttribute('data-i18n', 'location.getDirections');
+        directions.textContent = translate('location.getDirections', 'Get Directions ↗');
+        el.appendChild(directions);
+        el.setAttribute('aria-label', translate(
+            'location.getDirectionsTo',
+            'Get directions to {location}',
+            { location: locationName || translate('location.selectedLocation', 'your selected location') }
+        ));
+    }
+
     const menuBtn = document.querySelector('.nav-menu-btn');
     const mobileMenu = document.getElementById('mobileMenu');
     const navEl = document.getElementById('nav');
+    let activeLocationInfoRef = '';
 
     // Logo — if a location is saved, route home to that location's page.
     // Reads canonical slug via TM.getSavedSlug() so the legacy key is migrated
@@ -248,16 +304,19 @@
 
         const data = context.getInfoPanelView(locationRef);
         if (!data) return;
+        activeLocationInfoRef = locationRef;
 
         infoPanel.querySelector('.location-info-name').textContent = data.name;
         const addrEl = infoPanel.querySelector('.location-info-address');
-        setMultilineText(addrEl, data.addressText);
+        setAddressText(addrEl, data.addressText, data.name);
         addrEl.href = data.mapDirectionsUrl || '#';
         infoPanel.querySelector('.location-info-phone').textContent = data.phone;
-        setMultilineText(infoPanel.querySelector('.location-info-hours'), data.hoursText);
+        setMultilineText(infoPanel.querySelector('.location-info-hours'), translateHoursText(data.hoursText));
         var bookBtn = infoPanel.querySelector('.location-info-book');
         bookBtn.href = data.bookUrl || data.pageUrl || '#';
-        bookBtn.textContent = data.bookLabel || 'Book Now';
+        bookBtn.textContent = data.comingSoon
+            ? translate('location.signUp', 'Sign Up')
+            : translate('nav.bookNow', data.bookLabel || 'Book Now');
 
         renderMapEmbed(mapEl, data.mapEmbedUrl);
 
@@ -266,10 +325,14 @@
             pageTour.href = data.pageUrl;
             pageTour.hidden = !!data.comingSoon;
             var visitLabel = data.shortName || data.name;
-            pageTour.textContent = visitLabel ? 'Visit ' + visitLabel : 'Visit venue';
+            pageTour.textContent = visitLabel
+                ? translate('location.visitLocation', 'Visit {location}', { location: visitLabel })
+                : translate('location.visitVenue', 'Visit venue');
             pageTour.setAttribute(
                 'aria-label',
-                data.name ? 'Open venue landing page — ' + data.name : 'Open venue landing page'
+                data.name
+                    ? translate('location.openVenuePageName', 'Open venue landing page — {location}', { location: data.name })
+                    : translate('location.openVenuePage', 'Open venue landing page')
             );
         }
 
@@ -307,4 +370,8 @@
             }
         });
     }
+
+    document.addEventListener('tm:language-changed', function () {
+        if (activeLocationInfoRef) showLocationInfo(activeLocationInfoRef);
+    });
 })();

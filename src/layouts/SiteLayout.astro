@@ -76,7 +76,7 @@ const sitePageHead = landingHead ? null : sitePageHeadForDoc(await getPublishedS
             <slot name="nav">
                 <MobileMenu currentLang={lang} />
                 <SiteNav currentLang={lang} />
-                <LocationOverlay />
+                <LocationOverlay currentLang={lang} />
             </slot>
         </header>
         <main id="main" tabindex="-1">
