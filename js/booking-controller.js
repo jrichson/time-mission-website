@@ -469,7 +469,7 @@
                 groupType: panelIntent.groupType,
                 locationId: locSelect.value,
                 pageLocationSlug: pageLocationSlug,
-                preferLocationPageFlow: normalizeKind(panelIntent.kind) === 'tickets' && !pageLocationSlug,
+                preferLocationPageFlow: false,
             });
             // Coming-soon location-page flow: append ?book=1 if the resolved url is just /slug
             if (normalizeKind(panelIntent.kind) === 'tickets' && !pageLocationSlug && url && /^\//.test(url) && url.indexOf('?') === -1) {
@@ -477,6 +477,11 @@
             }
             ctaBtn.href = url || '#';
             ctaBtn.setAttribute('data-tm-booking-kind', panelIntent.kind);
+            if (loc && (loc.id || loc.slug)) {
+                ctaBtn.setAttribute('data-tm-location', loc.id || loc.slug);
+            } else {
+                ctaBtn.removeAttribute('data-tm-location');
+            }
             if (panelIntent.groupType) {
                 ctaBtn.setAttribute('data-tm-group-type', panelIntent.groupType);
             } else {

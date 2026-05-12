@@ -90,22 +90,35 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/orland-park?book=1');
 
   await page.locator('#ticketLocation').selectOption('manassas');
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/manassas?book=1');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'href',
+    'https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home'
+  );
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', 'manassas');
 });
 
-test('ticket panel Continue to Booking follows the selected booking handoff', async ({ page }) => {
+test('ticket panel Continue to Booking opens Roller checkout without a location-page hop', async ({ page }) => {
+  await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
+    await route.fulfill({
+      contentType: 'application/javascript',
+      body: 'window.RollerCheckout = { show: function () { window.__rollerCheckoutShown = true; } };',
+    });
+  });
+
   await gotoHome(page);
 
   await page.locator('.hero-cta .btn-tickets').click();
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
 
   await page.locator('#ticketLocation').selectOption('manassas');
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/manassas?book=1');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'href',
+    'https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home'
+  );
 
-  await Promise.all([
-    page.waitForURL(/\/manassas\?book=1/, { timeout: 5000 }),
-    page.locator('#ticketBookBtn').click(),
-  ]);
+  await page.locator('#ticketBookBtn').click();
+  await page.waitForFunction(() => window.__rollerCheckoutShown === true);
+  await expect(page).toHaveURL(/\/$/);
 });
 
 test('embedded site contract analytics slice matches analytics-labels.json', async ({ page }) => {
