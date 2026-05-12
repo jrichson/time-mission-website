@@ -42,6 +42,11 @@
         return /^(https?:|mailto:|tel:)/i.test(href);
     }
 
+    function isNavigableHref(href) {
+        var value = String(href || '').trim();
+        return !!value && value !== '#' && !/^javascript:/i.test(value);
+    }
+
     function locationForOptions(opts) {
         opts = opts || {};
         var locationId = normalizeLocation(opts.locationId || '');
@@ -280,6 +285,7 @@
         var handler = typeof opts.handler === 'function' ? opts.handler : function (event) {
             var btn = event.currentTarget;
             var href = btn.getAttribute('href');
+            var hasInitialHref = isNavigableHref(href);
             var kind = normalizeKind(btn.getAttribute('data-tm-booking-kind') || 'tickets');
             var groupType = normalizeGroupType(btn.getAttribute('data-tm-group-type') || btn.getAttribute('data-tm-page-group') || '');
             var locationId = normalizeLocation(btn.getAttribute('data-tm-location') || '');
@@ -288,7 +294,7 @@
                 pageLocationSlug: pageLocationSlug,
             });
 
-            if (kind !== 'tickets' || !isDirectBookingUrl(href)) {
+            if (kind !== 'tickets' || !hasInitialHref) {
                 var resolvedHref = getDestination({
                     kind: kind,
                     groupType: groupType,
@@ -299,14 +305,14 @@
                 if (resolvedHref) href = resolvedHref;
             }
 
-            if (shouldUseBriqWidget(loc, kind) && openPanel) {
+            if (!hasInitialHref && shouldUseBriqWidget(loc, kind) && openPanel) {
                 event.preventDefault();
                 if (setPanelIntent) setPanelIntent({ kind: kind, groupType: groupType });
                 openPanel(event);
                 return;
             }
 
-            if (isDirectBookingUrl(href)) {
+            if (hasInitialHref || (kind !== 'tickets' && isNavigableHref(href))) {
                 navigate({
                     source: 'direct_booking',
                     href: href,

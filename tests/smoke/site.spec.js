@@ -93,6 +93,21 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/manassas?book=1');
 });
 
+test('ticket panel Continue to Booking follows the selected booking handoff', async ({ page }) => {
+  await gotoHome(page);
+
+  await page.locator('.hero-cta .btn-tickets').click();
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+
+  await page.locator('#ticketLocation').selectOption('manassas');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/manassas?book=1');
+
+  await Promise.all([
+    page.waitForURL(/\/manassas\?book=1/, { timeout: 5000 }),
+    page.locator('#ticketBookBtn').click(),
+  ]);
+});
+
 test('embedded site contract analytics slice matches analytics-labels.json', async ({ page }) => {
   const labelsPath = path.join(REPO_ROOT, 'src', 'data', 'site', 'analytics-labels.json');
   const labels = JSON.parse(fs.readFileSync(labelsPath, 'utf8'));

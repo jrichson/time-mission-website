@@ -245,4 +245,56 @@ describe('browser architecture contracts', () => {
       preferLocationPageFlow: true,
     })).toBe('/manassas?book=1');
   });
+
+  it('booking click handler navigates synced panel hrefs but opens placeholder ticket triggers', async () => {
+    const { context, window } = createBrowserContext();
+    runScript('js/booking-controller.js', context);
+
+    function makeButton(attrs) {
+      let clickHandler = null;
+      const values = { ...attrs };
+      return {
+        className: 'btn-ticket-book',
+        getAttribute(name) { return values[name] ?? null; },
+        setAttribute(name, value) { values[name] = String(value); },
+        removeAttribute(name) { delete values[name]; },
+        addEventListener(type, handler) {
+          if (type === 'click') clickHandler = handler;
+        },
+        removeEventListener() {},
+        click() {
+          clickHandler({
+            currentTarget: this,
+            preventDefault() {},
+          });
+        },
+      };
+    }
+
+    const panelCta = makeButton({
+      href: '/manassas?book=1',
+      'data-tm-booking-kind': 'tickets',
+    });
+    let opened = 0;
+    window.TMBooking.attach(
+      { querySelectorAll: () => [panelCta] },
+      { openPanel: () => { opened += 1; } },
+    );
+    panelCta.click();
+    expect(window.location.href).toBe('/manassas?book=1');
+    expect(opened).toBe(0);
+
+    window.location.href = '';
+    const placeholder = makeButton({
+      href: '#',
+      'data-tm-booking-kind': 'tickets',
+    });
+    window.TMBooking.attach(
+      { querySelectorAll: () => [placeholder] },
+      { openPanel: () => { opened += 1; } },
+    );
+    placeholder.click();
+    expect(window.location.href).toBe('');
+    expect(opened).toBe(1);
+  });
 });
