@@ -95,6 +95,11 @@ module.exports = [
     chain: [
       {
         after: '/js/locations.js',
+        before: '/js/nav.js',
+        message: 'SiteScripts.astro must load nav.js after locations.js so location overlay previews have LocationContext',
+      },
+      {
+        after: '/js/locations.js',
         before: '/js/booking-controller.js',
         message: 'SiteScripts.astro must load booking-controller.js after locations.js',
       },
