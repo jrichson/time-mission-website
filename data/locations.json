@@ -58,6 +58,15 @@
       },
       "bookingUrl": "https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home",
+      "bookingProvider": "roller",
+      "groupFormUrls": {
+        "birthdays": "https://webforms.pipedrive.com/f/6xKWqqzjoNTaJIqvmk5k2tRDTavPGnfToLuCSJCsKNa5PmDkPpfEWTYgx2MiTMmQjp",
+        "corporate": "https://webforms.pipedrive.com/f/cB8Sz5ot9kA8JtNcE94AnSTFsbTniA4uo164AfyfQQiEUpFkQsd69VgGbk3YXE0syD",
+        "field-trips": "https://webforms.pipedrive.com/f/6xMNvdcgOovmw2sKGrNi5BlnYH2OZXFFQLriH93v2osZRKm2DjvgYS8uq1QWw3w8aT",
+        "bachelor-ette": "https://webforms.pipedrive.com/f/6xQQ09bcb0js1I6hTdbWpRqgTSmYVdcrOCpsxG2cNBy4N128E5YWrEQiPOyt66osEP",
+        "private-events": "https://webforms.pipedrive.com/f/6rEdb4VYmIPwozxhdVp2Ov6yH0IyqO72Q0Fh1CeXXrOriZh5762qatQSiEygGRMjYf",
+        "holidays": "https://webforms.pipedrive.com/f/6rGnRlGiXrnS1NPUnGIZGiMCYrvpr8NrD3AdFSYa2I6qPMyRLsVhIFNrf2JM3vwmJB"
+      },
       "navLabel": "IL - Mount Prospect",
       "mapUrl": "https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056",
       "faqs": [
@@ -76,6 +85,7 @@
       ],
       "ticker": "ORLAND PARK, IL OPENING SOON!",
       "giftCardUrl": "https://ecom.roller.app/timemissionmountprospect/onlinecheckout/en-us/giftcards",
+      "waiverUrl": "https://waiver.roller.app/TimeMissionManassasMall",
       "countryCode": null,
       "locale": null,
       "timeZone": null,
@@ -142,6 +152,15 @@
       },
       "bookingUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
+      "bookingProvider": "roller",
+      "groupFormUrls": {
+        "birthdays": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
+        "corporate": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
+        "field-trips": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
+        "bachelor-ette": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
+        "private-events": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
+        "holidays": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form"
+      },
       "navLabel": "PA - Philadelphia",
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
       "faqs": [
@@ -160,6 +179,7 @@
       ],
       "ticker": "SPRING BREAK AT TIME MISSION PHILADELPHIA",
       "giftCardUrl": "https://tickets.timemission.com/onlinecheckout/en-us/giftcards",
+      "waiverUrl": "https://waiver.roller.app/TimeMissionPhiladelphiaPA",
       "countryCode": null,
       "locale": null,
       "timeZone": null,
@@ -225,7 +245,26 @@
           "label": "10am - 8pm"
         }
       },
-      "bookingUrl": "https://tickets.timemission.com/onlinecheckout/en-us/products",
+      "bookingUrl": "https://timemission-palisades.briqbookings.com",
+      "bookingProvider": "briq",
+      "briqWidgetDomain": "timemission-palisades",
+      "briqWidget": {
+        "domain": "timemission-palisades",
+        "color1Base": "#FFBA00",
+        "color1Contrast": "#010437",
+        "color2Base": "#FFBA00",
+        "color2Contrast": "#010437",
+        "priceDisplay": "PerPerson",
+        "buttonText": "BOOK NOW"
+      },
+      "groupFormUrls": {
+        "birthdays": "https://timemission-palisades.briqbookings.com",
+        "corporate": "https://timemission-palisades.briqbookings.com",
+        "field-trips": "https://timemission-palisades.briqbookings.com",
+        "bachelor-ette": "https://timemission-palisades.briqbookings.com",
+        "private-events": "https://timemission-palisades.briqbookings.com",
+        "holidays": "https://timemission-palisades.briqbookings.com"
+      },
       "navLabel": "NY - West Nyack",
       "mapUrl": "https://maps.google.com/?q=3532+Palisades+Center+Dr+West+Nyack+NY+10994",
       "faqs": [
@@ -309,6 +348,15 @@
         }
       },
       "bookingUrl": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
+      "bookingProvider": "clubspeed",
+      "groupFormUrls": {
+        "birthdays": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
+        "corporate": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
+        "field-trips": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
+        "bachelor-ette": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
+        "private-events": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
+        "holidays": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959"
+      },
       "navLabel": "RI - Lincoln",
       "mapUrl": "https://maps.google.com/?q=100+Higginson+Ave+Lincoln+RI+02865",
       "faqs": [
@@ -394,6 +442,15 @@
       },
       "bookingUrl": "https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home",
+      "bookingProvider": "roller",
+      "groupFormUrls": {
+        "birthdays": "https://webforms.pipedrive.com/f/6N8EVdwKhZ3emAlRGdOmUEk7TYKvBJm0eSzDnHwSrtksQPBFv9MmERzqt5UAPZYMJZ",
+        "corporate": "https://webforms.pipedrive.com/f/64NrjaZAs4GrLYSqpDDV0mzG46uGMN5cXrzEoAIjKKghJOzCRVmfw4mWkghflYR3Qn",
+        "field-trips": "https://webforms.pipedrive.com/f/73R7nQP4WEUC6gSinuhaFxCQ1QY1csAtXLwP7HumWL1oK3juIbEGdnPMyK7hAxRsT9",
+        "bachelor-ette": "https://webforms.pipedrive.com/f/ckkQF1aDmukXN8ONLfXIm42jCyUsBrQWGu9ahvtP9APRYBFhRG3WIiWLoy60tEZXY7",
+        "private-events": "https://webforms.pipedrive.com/f/czKmvg7yJDn1vaeQPIzJlwA0gK4cMhBl3aSuQVpHJ8YsZ13BJFCk2xEKF301qR6KDF",
+        "holidays": "https://webforms.pipedrive.com/f/63f1HEKkrC42GkAS68wtfh9HcHWyi8c6TlESzmjbi3nKuXQ3xiIQXnr9WhZuTX5wlR"
+      },
       "navLabel": "VA - Manassas",
       "mapUrl": "https://maps.google.com/?q=8300+Sudley+Rd+Manassas+VA+20109",
       "faqs": [
@@ -412,6 +469,7 @@
       ],
       "ticker": "SPRING BREAK AT TIME MISSION MANASSAS",
       "giftCardUrl": "https://ecom.roller.app/timemissionmanassasmall/onlinecheckout/en-us/giftcards",
+      "waiverUrl": "https://waiver.roller.app/TimeMissionManassasMall",
       "countryCode": null,
       "locale": null,
       "timeZone": null,
@@ -512,6 +570,15 @@
         }
       },
       "bookingUrl": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
+      "bookingProvider": "experience-factory",
+      "groupFormUrls": {
+        "birthdays": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
+        "corporate": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
+        "field-trips": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
+        "bachelor-ette": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
+        "private-events": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
+        "holidays": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission"
+      },
       "navLabel": "Belgium - Antwerp",
       "mapUrl": "https://maps.google.com/?q=Michiganstraat+1+Antwerp+2030+Belgium",
       "faqs": [

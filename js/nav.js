@@ -216,34 +216,23 @@
                 const cityName = link.dataset.city;
                 const slug = getLocationSlug(link);
                 const narrowPicker = narrowPickerQuery.matches;
-                const isComingSoonLink = link.classList.contains('location-coming-soon');
-
                 if (cityName) {
                     const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
                     syncAllLocations(cityName, slug, overlayTrack);
-                    showLocationInfo(slug || cityName);
-                }
 
-                // Mobile narrow-picker (P0-7a): keep overlay open, reveal #locationInfo, scroll it into view.
-                // Coming-soon links bypass this and navigate normally so users still see the coming-soon page.
-                if (narrowPicker && slug && !isComingSoonLink) {
-                    e.preventDefault();
-                    // Stop bubble to overlay-background click handler which would call closeLocationOverlay()
-                    e.stopPropagation();
-                    const panel = document.getElementById('locationInfo');
-                    if (panel) {
-                        requestAnimationFrame(function () {
-                            panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        });
+                    if (slug && isSameWindowNavigationClick(e, link)) {
+                        if (narrowPicker) {
+                            closeLocationOverlay();
+                            locationOverlay.classList.add('navigating');
+                            return;
+                        }
+                        showLocationInfo(slug);
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return;
                     }
-                    return;
-                }
 
-                // Same-window location navigation: keep the overlay covering the old page
-                // until the destination loads so users do not see a selected-location flash.
-                if (cityName && isSameWindowNavigationClick(e, link)) {
-                    locationOverlay.classList.add('navigating');
-                    return;
+                    showLocationInfo(slug || cityName);
                 }
 
                 // Non-location overlay links or modifier clicks: close overlay and let the browser follow href.
@@ -319,22 +308,6 @@
             : translate('nav.bookNow', data.bookLabel || 'Book Now');
 
         renderMapEmbed(mapEl, data.mapEmbedUrl);
-
-        var pageTour = infoPanel.querySelector('.location-info-page');
-        if (pageTour && data.pageUrl) {
-            pageTour.href = data.pageUrl;
-            pageTour.hidden = !!data.comingSoon;
-            var visitLabel = data.shortName || data.name;
-            pageTour.textContent = visitLabel
-                ? translate('location.visitLocation', 'Visit {location}', { location: visitLabel })
-                : translate('location.visitVenue', 'Visit venue');
-            pageTour.setAttribute(
-                'aria-label',
-                data.name
-                    ? translate('location.openVenuePageName', 'Open venue landing page — {location}', { location: data.name })
-                    : translate('location.openVenuePage', 'Open venue landing page')
-            );
-        }
 
         if (empty) empty.style.display = 'none';
         details.style.display = 'block';

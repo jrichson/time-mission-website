@@ -108,6 +108,8 @@ export interface LandingCtaModel {
     linkPath: string;
 }
 
+const LANDING_URL_MAX_LENGTH = 2048;
+
 export function landingCanonicalPath(slug: string, prefix = '/c'): string {
     const p = prefix.startsWith('/') ? prefix : `/${prefix}`;
     return `${p}/${slug}`;
@@ -124,6 +126,19 @@ function landingArchetypeForValue(value: PayloadLandingContractDoc['template']):
     }
     if (value === 'paid_social_campaign' || value === 'campaign') return 'paid_social_campaign';
     return DEFAULT_LANDING_ARCHETYPE;
+}
+
+function safeExternalLandingHref(value: string | null | undefined): string | null {
+    const raw = typeof value === 'string' ? value.trim() : '';
+    if (!raw || raw.length > LANDING_URL_MAX_LENGTH || /[<>"'\\\s]/.test(raw)) return null;
+
+    try {
+        const url = new URL(raw);
+        if (url.protocol !== 'https:' || url.username || url.password) return null;
+        return url.toString();
+    } catch {
+        return null;
+    }
 }
 
 export function landingArchetypeForDoc(doc: PayloadLandingContractDoc): PayloadLandingArchetype {
@@ -203,7 +218,16 @@ export function landingCtaForDoc(doc: PayloadLandingContractDoc): LandingCtaMode
         };
     }
 
-    const primaryHref = content.ctaExternalUrl || '/missions';
+    const primaryHref = safeExternalLandingHref(content.ctaExternalUrl);
+    if (!primaryHref) {
+        return {
+            surface: 'missions',
+            primaryHref: '/missions',
+            bookTrigger: false,
+            linkPath: '/missions',
+        };
+    }
+
     let linkPath = '/';
     try {
         linkPath = new URL(primaryHref).pathname || '/';
@@ -234,7 +258,9 @@ export function landingReviewWarningsForDoc(doc: PayloadLandingContractDoc): str
     if (!visitorIntent) warnings.push('Add the visitor intent so the page copy is tied to a real decision path.');
     if (!doc.content?.subheadline) warnings.push('Add a subheadline so visitors understand the offer before they choose.');
     if (bullets < 3) warnings.push('Add at least three concrete proof points.');
-    if (doc.content?.ctaSurface === 'external' && !doc.content.ctaExternalUrl) warnings.push('Add the external CTA URL before publishing.');
+    if (doc.content?.ctaSurface === 'external' && !safeExternalLandingHref(doc.content.ctaExternalUrl)) {
+        warnings.push('Add a credential-free https external CTA URL before publishing.');
+    }
     if (landingLaunchStateForDoc(doc) === 'coming_soon' && doc.content?.ctaSurface === 'book_panel') {
         warnings.push('Coming-soon pages should use contact or updates language instead of immediate booking.');
     }

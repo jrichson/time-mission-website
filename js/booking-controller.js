@@ -29,9 +29,24 @@
         return (value || '').toLowerCase().trim().replace(/\s+/g, '-');
     }
 
+    function normalizeGroupType(value) {
+        return normalizeLocation(value).replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    }
+
+    function normalizeKind(value) {
+        return normalizeLocation(value || 'tickets');
+    }
+
     function isDirectBookingUrl(href) {
         if (!href || href === '#') return false;
         return /^(https?:|mailto:|tel:)/i.test(href);
+    }
+
+    function locationForOptions(opts) {
+        opts = opts || {};
+        var locationId = normalizeLocation(opts.locationId || '');
+        var pageLocationSlug = normalizeLocation(opts.pageLocationSlug || '');
+        return getLocation(locationId) || getLocation(pageLocationSlug) || getLocation(null);
     }
 
     function resolveOpenCheckoutUrl(loc) {
@@ -45,14 +60,20 @@
     function resolveLocationDestination(loc, options) {
         var opts = options || {};
         if (!loc) return '';
-        var kind = String(opts.kind || 'tickets').toLowerCase();
+        var kind = normalizeKind(opts.kind || 'tickets');
 
         if (kind === 'gift-cards' || kind === 'giftcards') {
             return loc.giftCardUrl || '';
         }
 
+        if (kind === 'waiver' || kind === 'waivers') {
+            return loc.waiverUrl || '';
+        }
+
         if (kind === 'groups') {
-            return loc.groupsUrl || '';
+            var groupType = normalizeGroupType(opts.groupType || opts.pageGroupType || '');
+            var groupUrls = loc.groupFormUrls || {};
+            return (groupType && groupUrls[groupType]) || groupUrls.default || loc.groupsUrl || '';
         }
 
         var slug = loc.slug || loc.id || normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
@@ -82,16 +103,20 @@
 
     function getDestination(options) {
         var opts = options || {};
-        var kind = String(opts.kind || 'tickets').toLowerCase();
+        var kind = normalizeKind(opts.kind || 'tickets');
         var locationId = normalizeLocation(opts.locationId || '');
         var pageLocationSlug = normalizeLocation(opts.pageLocationSlug || '');
         var preferLocationPageFlow = !!opts.preferLocationPageFlow;
 
-        var loc = getLocation(locationId) || getLocation(pageLocationSlug) || getLocation(null);
+        var loc = locationForOptions({
+            locationId: locationId,
+            pageLocationSlug: pageLocationSlug,
+        });
         if (!loc) return '';
 
         return resolveLocationDestination(loc, {
             kind: kind,
+            groupType: opts.groupType || opts.pageGroupType || '',
             locationId: locationId,
             pageLocationSlug: pageLocationSlug,
             preferLocationPageFlow: preferLocationPageFlow,
@@ -101,6 +126,70 @@
     /** RFC-10: canonical resolver alias. Thin wrapper over getDestination. */
     function resolve(opts) {
         return getDestination(opts);
+    }
+
+    function shouldUseRollerCheckout(loc, href, kind) {
+        if (!loc || normalizeKind(kind) !== 'tickets') return false;
+        var roller = (loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
+        return !!roller && href === roller;
+    }
+
+    function shouldUseBriqWidget(loc, kind) {
+        var bookingKind = normalizeKind(kind);
+        return !!(loc && (loc.briqWidget || loc.briqWidgetDomain) && (bookingKind === 'tickets' || bookingKind === 'groups'));
+    }
+
+    function loadRollerCheckout(loc, onReady, onError) {
+        var checkoutUrl = (loc && loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
+        if (!checkoutUrl) {
+            if (typeof onError === 'function') onError();
+            return;
+        }
+        var existing = document.getElementById('roller-checkout');
+        if (existing && existing.getAttribute('data-checkout') !== checkoutUrl && existing.parentNode) {
+            existing.parentNode.removeChild(existing);
+            existing = null;
+        }
+        if (existing && window.RollerCheckout && typeof window.RollerCheckout.show === 'function') {
+            onReady();
+            return;
+        }
+        if (existing) {
+            existing.addEventListener('load', onReady, { once: true });
+            existing.addEventListener('error', onError || function () {}, { once: true });
+            return;
+        }
+        var script = document.createElement('script');
+        script.id = 'roller-checkout';
+        script.src = 'https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js';
+        script.async = true;
+        script.setAttribute('data-checkout', checkoutUrl);
+        script.addEventListener('load', onReady, { once: true });
+        script.addEventListener('error', onError || function () {}, { once: true });
+        document.head.appendChild(script);
+    }
+
+    function showRollerCheckout(loc, fallback) {
+        loadRollerCheckout(
+            loc,
+            function () {
+                if (window.RollerCheckout && typeof window.RollerCheckout.show === 'function') {
+                    window.RollerCheckout.show();
+                    return;
+                }
+                if (typeof fallback === 'function') fallback();
+            },
+            fallback
+        );
+    }
+
+    function loadBriqWidgetScript() {
+        if (document.getElementById('briq-widget-script')) return;
+        var script = document.createElement('script');
+        script.id = 'briq-widget-script';
+        script.src = 'https://widgetcdn.briqbookings.com/widget/widget.js';
+        script.async = true;
+        document.head.appendChild(script);
     }
 
     function navigate(intent) {
@@ -117,11 +206,16 @@
             return false;
         }
 
+        var kind = normalizeKind(opts.kind || (opts.currentTarget && opts.currentTarget.getAttribute('data-tm-booking-kind')) || 'tickets');
         var source = String(opts.source || 'generic_cta');
         var locationSlug = normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
         var ctaId = opts.ctaId
             || (opts.currentTarget && opts.currentTarget.className && String(opts.currentTarget.className).split(' ')[0])
             || source;
+        var loc = locationForOptions({
+            locationId: opts.locationId || '',
+            pageLocationSlug: opts.pageLocationSlug || '',
+        });
 
         if (opts.event && typeof opts.event.preventDefault === 'function') opts.event.preventDefault();
 
@@ -143,10 +237,23 @@
             history.replaceState(null, '', window.location.pathname);
         }
 
+        if (!opts.deferUntilLoad && shouldUseRollerCheckout(loc, href, kind)) {
+            showRollerCheckout(loc, function () {
+                window.location.assign(href);
+            });
+            return true;
+        }
+
         if (opts.deferUntilLoad) {
             function doDeferredNav() {
                 setTimeout(function () {
-                    window.location.href = href;
+                    if (shouldUseRollerCheckout(loc, href, kind)) {
+                        showRollerCheckout(loc, function () {
+                            window.location.href = href;
+                        });
+                    } else {
+                        window.location.href = href;
+                    }
                 }, 300);
             }
             // TM.ready often resolves after fetch — after window "load" already fired.
@@ -168,14 +275,44 @@
         if (!root) return function () {};
         var selector = opts.selector || '[data-tm-booking-trigger]';
         var openPanel = typeof opts.openPanel === 'function' ? opts.openPanel : null;
+        var setPanelIntent = typeof opts.setPanelIntent === 'function' ? opts.setPanelIntent : null;
         var pageLocationSlug = opts.pageLocationSlug || '';
         var handler = typeof opts.handler === 'function' ? opts.handler : function (event) {
             var btn = event.currentTarget;
             var href = btn.getAttribute('href');
+            var kind = normalizeKind(btn.getAttribute('data-tm-booking-kind') || 'tickets');
+            var groupType = normalizeGroupType(btn.getAttribute('data-tm-group-type') || btn.getAttribute('data-tm-page-group') || '');
+            var locationId = normalizeLocation(btn.getAttribute('data-tm-location') || '');
+            var loc = locationForOptions({
+                locationId: locationId,
+                pageLocationSlug: pageLocationSlug,
+            });
+
+            if (kind !== 'tickets' || !isDirectBookingUrl(href)) {
+                var resolvedHref = getDestination({
+                    kind: kind,
+                    groupType: groupType,
+                    locationId: locationId,
+                    pageLocationSlug: pageLocationSlug,
+                    preferLocationPageFlow: kind === 'tickets' && !pageLocationSlug,
+                });
+                if (resolvedHref) href = resolvedHref;
+            }
+
+            if (shouldUseBriqWidget(loc, kind) && openPanel) {
+                event.preventDefault();
+                if (setPanelIntent) setPanelIntent({ kind: kind, groupType: groupType });
+                openPanel(event);
+                return;
+            }
+
             if (isDirectBookingUrl(href)) {
                 navigate({
                     source: 'direct_booking',
                     href: href,
+                    kind: kind,
+                    groupType: groupType,
+                    locationId: locationId,
                     pageLocationSlug: pageLocationSlug,
                     currentTarget: btn,
                     event: event,
@@ -184,6 +321,7 @@
             }
             if (openPanel) {
                 event.preventDefault();
+                if (setPanelIntent) setPanelIntent({ kind: kind, groupType: groupType });
                 openPanel(event);
             }
         };
@@ -229,11 +367,60 @@
         var panel       = panelEl                || document.getElementById('ticketPanel');
         var locSelect   = options.selectEl       || document.getElementById('ticketLocation');
         var ctaBtn      = options.ctaEl          || document.getElementById('ticketBookBtn');
+        var widgetEl    = options.widgetEl       || document.getElementById('ticketProviderWidget');
         var openPanel   = typeof options.openPanel === 'function' ? options.openPanel : null;
         var closePanel  = typeof options.closePanel === 'function' ? options.closePanel : null;
         var pageLocationSlug = normalizeLocation(options.pageLocationSlug || (document.body && document.body.dataset.location) || '');
+        var panelIntent = { kind: 'tickets', groupType: '' };
 
-        mountedPanel = { panelEl: panel, openPanel: openPanel, closePanel: closePanel };
+        function selectedLocation() {
+            return locationForOptions({
+                locationId: locSelect ? locSelect.value : '',
+                pageLocationSlug: pageLocationSlug,
+            });
+        }
+
+        function syncPanelCopy() {
+            if (!panel) return;
+            var title = panel.querySelector('#ticketPanelTitle');
+            var intro = panel.querySelector('#ticketPanelIntro');
+            var ctaText = panel.querySelector('#ticketBookBtnText');
+            var kind = normalizeKind(panelIntent.kind);
+            if (kind === 'groups') {
+                if (title) title.textContent = 'Plan Your Event';
+                if (intro) intro.textContent = 'Select your location and we will send you to the right event request form.';
+                if (ctaText) ctaText.textContent = 'Continue to Form';
+            } else if (kind === 'waiver' || kind === 'waivers') {
+                if (title) title.textContent = 'Complete Your Waiver';
+                if (intro) intro.textContent = 'Select your location and we will send you to the correct waiver provider when one is available.';
+                if (ctaText) ctaText.textContent = 'Continue to Waiver';
+            } else {
+                if (title) title.textContent = 'Book Your Adventure';
+                if (intro) intro.textContent = "Select your location and we'll take you to our booking system to choose your date and time.";
+                if (ctaText) ctaText.textContent = 'Continue to Booking';
+            }
+        }
+
+        function setPanelIntent(intent) {
+            var next = intent || {};
+            panelIntent = {
+                kind: normalizeKind(next.kind || 'tickets'),
+                groupType: normalizeGroupType(next.groupType || next.pageGroupType || ''),
+            };
+            syncPanelCopy();
+            syncCtaHref();
+        }
+
+        mountedPanel = {
+            panelEl: panel,
+            openPanel: function (detail) {
+                setPanelIntent(detail);
+                if (openPanel) openPanel(detail);
+                syncCtaHref();
+            },
+            closePanel: closePanel,
+            setPanelIntent: setPanelIntent,
+        };
 
         // Mark CTA button as a booking trigger so attach() owns its click.
         if (ctaBtn) {
@@ -241,21 +428,55 @@
             ctaBtn.removeAttribute('target');
         }
 
+        function renderBriqWidget(loc) {
+            if (!widgetEl) return;
+            widgetEl.textContent = '';
+            widgetEl.hidden = true;
+            if (ctaBtn) ctaBtn.hidden = false;
+            if (!shouldUseBriqWidget(loc, panelIntent.kind)) return;
+
+            var config = loc.briqWidget || {};
+            var domain = config.domain || loc.briqWidgetDomain;
+            if (!domain) return;
+            var widget = document.createElement('div');
+            widget.id = 'briq-widget';
+            widget.className = 'bw-widget';
+            widget.setAttribute('data-domain', domain);
+            widget.setAttribute('data-color-1-base', config.color1Base || '#FFBA00');
+            widget.setAttribute('data-color-1-contrast', config.color1Contrast || '#010437');
+            widget.setAttribute('data-color-2-base', config.color2Base || '#FFBA00');
+            widget.setAttribute('data-color-2-contrast', config.color2Contrast || '#010437');
+            widget.setAttribute('data-price-display', config.priceDisplay || 'PerPerson');
+            widget.setAttribute('data-button-text', config.buttonText || 'BOOK NOW');
+            widgetEl.appendChild(widget);
+            widgetEl.hidden = false;
+            if (ctaBtn) ctaBtn.hidden = true;
+            loadBriqWidgetScript();
+        }
+
         // Keep the CTA button's href in sync with the dropdown selection.
         function syncCtaHref() {
             if (!ctaBtn || !locSelect) return;
+            var loc = selectedLocation();
             var url = getDestination({
-                kind: 'tickets',
+                kind: panelIntent.kind,
+                groupType: panelIntent.groupType,
                 locationId: locSelect.value,
                 pageLocationSlug: pageLocationSlug,
-                preferLocationPageFlow: !pageLocationSlug,
+                preferLocationPageFlow: normalizeKind(panelIntent.kind) === 'tickets' && !pageLocationSlug,
             });
             // Coming-soon location-page flow: append ?book=1 if the resolved url is just /slug
-            if (!pageLocationSlug && url && /^\//.test(url) && url.indexOf('?') === -1) {
-                var loc = getLocation(locSelect.value);
+            if (normalizeKind(panelIntent.kind) === 'tickets' && !pageLocationSlug && url && /^\//.test(url) && url.indexOf('?') === -1) {
                 if (loc && loc.status === 'coming-soon') url += '?book=1';
             }
             ctaBtn.href = url || '#';
+            ctaBtn.setAttribute('data-tm-booking-kind', panelIntent.kind);
+            if (panelIntent.groupType) {
+                ctaBtn.setAttribute('data-tm-group-type', panelIntent.groupType);
+            } else {
+                ctaBtn.removeAttribute('data-tm-group-type');
+            }
+            renderBriqWidget(loc);
         }
 
         if (locSelect) {
@@ -282,6 +503,7 @@
             selector: '[data-tm-booking-trigger]',
             pageLocationSlug: pageLocationSlug,
             openPanel: openPanel,
+            setPanelIntent: setPanelIntent,
         });
 
         return { syncCtaHref: syncCtaHref };

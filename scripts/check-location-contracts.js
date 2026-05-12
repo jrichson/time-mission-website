@@ -88,6 +88,29 @@ function validateOpenLocation(location) {
       errors.push(`${id} rollerCheckoutUrl must be HTTPS`);
     }
   }
+  if (location.groupFormUrls != null) {
+    if (!location.groupFormUrls || typeof location.groupFormUrls !== 'object' || Array.isArray(location.groupFormUrls)) {
+      errors.push(`${id}: groupFormUrls must be an object when present`);
+    } else {
+      for (const [key, url] of Object.entries(location.groupFormUrls)) {
+        if (!/^[a-z0-9-]+$/.test(key)) {
+          errors.push(`${id}: groupFormUrls key ${key} must be kebab-case`);
+        }
+        assertSafeUrl(id, `groupFormUrls.${key}`, url);
+      }
+    }
+  }
+  if (location.waiverUrl) {
+    assertSafeUrl(id, 'waiverUrl', location.waiverUrl);
+  }
+  if (location.briqWidget != null) {
+    const widget = location.briqWidget;
+    if (!widget || typeof widget !== 'object' || Array.isArray(widget)) {
+      errors.push(`${id}: briqWidget must be an object when present`);
+    } else if (typeof widget.domain !== 'string' || !/^[a-z0-9-]+$/.test(widget.domain)) {
+      errors.push(`${id}: briqWidget.domain must be a safe slug`);
+    }
+  }
 }
 
 function validateComingSoonLocation(location) {

@@ -10,11 +10,11 @@
             </h1>
             <p class="hero-subtitle">Make the last night out legendary. 25+ head-to-head missions, team-based chaos, and a session that beats a bar crawl you'll forget by Saturday.</p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="bachelor-ette">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
-                <a href="/contact?type=bachelor-ette" class="btn-secondary">Inquire Now</a>
+                <a href="#" class="btn-secondary" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="bachelor-ette">Inquire Now</a>
             </div>
         </div>
     </section>
@@ -185,11 +185,11 @@
             <h2>Ready to <span class="highlight">level up</span> the night?</h2>
             <p class="event-page-cta-subtitle">Tell us the date, city, and crew size, we'll handle the rest.</p>
             <div class="event-page-cta-buttons">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="bachelor-ette">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
-                <a href="/contact?type=bachelor-ette" class="btn-secondary">Inquire Now</a>
+                <a href="#" class="btn-secondary" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="bachelor-ette">Inquire Now</a>
             </div>
 
             <div class="event-page-cross-sell-title">Other event types</div>

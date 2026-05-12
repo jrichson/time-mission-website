@@ -21,6 +21,8 @@ type PageProps = {
 };
 
 const DEFAULT_HERO_IMAGE = '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
+const ASSET_PATH_MAX_LENGTH = 512;
+const URL_MAX_LENGTH = 2048;
 
 const templateOptions: Array<{
   value: LandingTemplate;
@@ -123,7 +125,26 @@ function defaultCtaLabel(template: LandingTemplate, state: LaunchState): string 
 }
 
 function validAssetPath(value: string): boolean {
-  return value.startsWith('/assets/') && !value.includes('://') && !value.includes('..') && !/[<>"'\\\s]/.test(value);
+  return (
+    value.length > 0 &&
+    value.length <= ASSET_PATH_MAX_LENGTH &&
+    value.startsWith('/assets/') &&
+    !value.includes('://') &&
+    !value.includes('..') &&
+    !/[<>"'\\\s]/.test(value)
+  );
+}
+
+function validHttpsUrl(value: string): boolean {
+  if (!value) return true;
+  if (value.length > URL_MAX_LENGTH || /[<>"'\\\s]/.test(value)) return false;
+
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && !url.username && !url.password;
+  } catch {
+    return false;
+  }
 }
 
 async function requireCmsUser(redirectPath: string) {
@@ -149,6 +170,7 @@ async function createLandingDraft(formData: FormData) {
   const sourcePromise = formString(formData, 'sourcePromise');
   const visitorIntent = formString(formData, 'visitorIntent');
   const successMetric = formString(formData, 'successMetric');
+  const sourceUrl = formString(formData, 'sourceUrl');
   const proofPoints = ['proofPoint1', 'proofPoint2', 'proofPoint3']
     .map((key) => formString(formData, key))
     .filter(Boolean);
@@ -163,18 +185,26 @@ async function createLandingDraft(formData: FormData) {
   if (!validAssetPath(imagePath)) {
     redirect(wizardUrl(template, 'invalid-image-path'));
   }
+  if (!validHttpsUrl(sourceUrl)) {
+    redirect(wizardUrl(template, 'invalid-source-url'));
+  }
 
   const { payload, user } = await requireCmsUser('/landings/new');
-  const existing = await payload.find({
-    collection: 'landings',
-    depth: 0,
-    limit: 1,
-    overrideAccess: false,
-    user,
-    where: {
-      slug: { equals: slug },
-    },
-  });
+  const existing = await payload
+    .find({
+      collection: 'landings',
+      depth: 0,
+      limit: 1,
+      overrideAccess: false,
+      user,
+      where: {
+        slug: { equals: slug },
+      },
+    })
+    .catch((error: unknown) => {
+      console.error('[landings] draft slug lookup failed', error);
+      redirect(wizardUrl(template, 'lookup-failed'));
+    });
 
   if (existing.totalDocs > 0) {
     redirect(wizardUrl(template, 'slug-exists'));
@@ -184,63 +214,68 @@ async function createLandingDraft(formData: FormData) {
   const primaryCtaLabel = formString(formData, 'primaryCtaLabel') || defaultCtaLabel(template, state);
   const metaTitle = truncate(`${headline} | Time Mission`, 90);
   const metaDescription = truncate(subheadline || sourcePromise, 220);
-  const created = await payload.create({
-    collection: 'landings',
-    data: {
-      brief: {
-        sourceChannel: sourceChannel(formString(formData, 'sourceChannel')),
-        sourceName: formString(formData, 'sourceName'),
-        sourcePromise,
-        sourceUrl: formString(formData, 'sourceUrl'),
-        successMetric,
-        visitorIntent,
+  const created = await payload
+    .create({
+      collection: 'landings',
+      data: {
+        brief: {
+          sourceChannel: sourceChannel(formString(formData, 'sourceChannel')),
+          sourceName: formString(formData, 'sourceName'),
+          sourcePromise,
+          sourceUrl,
+          successMetric,
+          visitorIntent,
+        },
+        content: {
+          bullets: proofPoints.map((text) => ({ text })),
+          ctaSurface: selectedCtaSurface,
+          primaryCtaLabel,
+          subheadline,
+          headline,
+        },
+        groupEvent: {
+          groupSize: formString(formData, 'groupSize'),
+          logisticsNote: template === 'group_event' ? proofPoints[2] : '',
+          plannerReassurance: template === 'group_event' ? visitorIntent : '',
+        },
+        includeInSitemap: true,
+        localVenue: {
+          cityProof: template === 'local_venue_city' ? proofPoints[0] : '',
+          openingNote: state === 'coming_soon' ? subheadline : '',
+          venueConfidence: template === 'local_venue_city' ? proofPoints[1] : '',
+        },
+        paidSocial: {
+          frictionReducer: template === 'paid_social_campaign' ? visitorIntent : '',
+          sourcePromise: template === 'paid_social_campaign' ? sourcePromise : '',
+        },
+        published: false,
+        seo: {
+          metaDescription,
+          metaTitle,
+          ogImage: imagePath,
+          robots: 'index,follow',
+        },
+        slug,
+        strategy: {
+          audience: formString(formData, 'audience'),
+          campaignGoal: successMetric,
+          eventType: formString(formData, 'eventType'),
+          launchState: state,
+          locationOrCity: formString(formData, 'locationOrCity'),
+          offerType: formString(formData, 'offerType') || formString(formData, 'sourceName'),
+          proofAngle: proofPoints[0],
+          ctaIntent: primaryCtaLabel,
+        },
+        template,
+        title,
       },
-      content: {
-        bullets: proofPoints.map((text) => ({ text })),
-        ctaSurface: selectedCtaSurface,
-        primaryCtaLabel,
-        subheadline,
-        headline,
-      },
-      groupEvent: {
-        groupSize: formString(formData, 'groupSize'),
-        logisticsNote: template === 'group_event' ? proofPoints[2] : '',
-        plannerReassurance: template === 'group_event' ? visitorIntent : '',
-      },
-      includeInSitemap: true,
-      localVenue: {
-        cityProof: template === 'local_venue_city' ? proofPoints[0] : '',
-        openingNote: state === 'coming_soon' ? subheadline : '',
-        venueConfidence: template === 'local_venue_city' ? proofPoints[1] : '',
-      },
-      paidSocial: {
-        frictionReducer: template === 'paid_social_campaign' ? visitorIntent : '',
-        sourcePromise: template === 'paid_social_campaign' ? sourcePromise : '',
-      },
-      published: false,
-      seo: {
-        metaDescription,
-        metaTitle,
-        ogImage: imagePath,
-        robots: 'index,follow',
-      },
-      slug,
-      strategy: {
-        audience: formString(formData, 'audience'),
-        campaignGoal: successMetric,
-        eventType: formString(formData, 'eventType'),
-        launchState: state,
-        locationOrCity: formString(formData, 'locationOrCity'),
-        offerType: formString(formData, 'offerType') || formString(formData, 'sourceName'),
-        proofAngle: proofPoints[0],
-        ctaIntent: primaryCtaLabel,
-      },
-      template,
-      title,
-    },
-    overrideAccess: false,
-    user,
-  });
+      overrideAccess: false,
+      user,
+    })
+    .catch((error: unknown) => {
+      console.error('[landings] draft create failed', error);
+      redirect(wizardUrl(template, 'create-failed'));
+    });
 
   redirect(`/preview/landings/${created.id}`);
 }
@@ -248,7 +283,10 @@ async function createLandingDraft(formData: FormData) {
 function errorCopy(error: string | undefined): string | null {
   if (!error) return null;
   const messages: Record<string, string> = {
+    'create-failed': 'The CMS could not create the draft. Check the fields and try again.',
     'invalid-image-path': 'Use a root-relative image path under /assets/ with no spaces.',
+    'invalid-source-url': 'Use a credential-free https source URL, or leave it empty.',
+    'lookup-failed': 'The CMS could not check that page URL. Try again before creating the draft.',
     'missing-proof-points': 'Add at least three concrete proof points before creating the draft.',
     'missing-required-fields': 'Complete the required brief and first-draft fields.',
     'slug-exists': 'That page URL already exists. Choose a unique slug.',
@@ -350,39 +388,73 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             </label>
             <label>
               Source name
-              <input maxLength={120} name="sourceName" placeholder="Meta spring break ad" required />
+              <input dir="auto" maxLength={120} name="sourceName" placeholder="Meta spring break ad" required />
               <span className={styles.fieldHelp}>The campaign, channel, request, or audience this page came from.</span>
             </label>
             <label>
               Page title
-              <input maxLength={120} name="title" placeholder="Spring Break at Time Mission" required />
+              <input dir="auto" maxLength={120} name="title" placeholder="Spring Break at Time Mission" required />
             </label>
             <label>
               Page URL
-              <input maxLength={80} name="slug" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="spring-break" required />
+              <input
+                dir="ltr"
+                maxLength={80}
+                name="slug"
+                pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
+                placeholder="spring-break"
+                required
+              />
               <span className={styles.fieldHelp}>Lowercase words and hyphens. The public path will be /c/page-url.</span>
             </label>
             <label className={styles.wide}>
               Source/reference URL
-              <input name="sourceUrl" placeholder="https://..." type="url" />
+              <input
+                autoComplete="url"
+                dir="ltr"
+                maxLength={URL_MAX_LENGTH}
+                name="sourceUrl"
+                pattern="https://.*"
+                placeholder="https://..."
+                type="url"
+              />
+              <span className={styles.fieldHelp}>Optional. Use an https URL without usernames, passwords, or spaces.</span>
             </label>
             <label className={styles.wide}>
               Source promise
-              <textarea maxLength={280} name="sourcePromise" placeholder="What did the ad, post, email, search query, or request promise?" required />
+              <textarea
+                dir="auto"
+                maxLength={280}
+                name="sourcePromise"
+                placeholder="What did the ad, post, email, search query, or request promise?"
+                required
+              />
               <span className={styles.fieldHelp}>Keep this close to what the visitor already saw or asked for.</span>
             </label>
             <label className={styles.wide}>
               Visitor intent
-              <textarea maxLength={240} name="visitorIntent" placeholder="What is this visitor trying to decide or accomplish?" required />
+              <textarea
+                dir="auto"
+                maxLength={240}
+                name="visitorIntent"
+                placeholder="What is this visitor trying to decide or accomplish?"
+                required
+              />
               <span className={styles.fieldHelp}>This becomes guidance for the page copy and preview warnings.</span>
             </label>
             <label>
               Success metric
-              <input maxLength={120} name="successMetric" placeholder="Bookings, inquiries, waitlist submissions" required />
+              <input
+                dir="auto"
+                maxLength={120}
+                name="successMetric"
+                placeholder="Bookings, inquiries, waitlist submissions"
+                required
+              />
             </label>
             <label>
               Audience
-              <input maxLength={120} name="audience" placeholder="Parents, event planners, local friend groups" />
+              <input dir="auto" maxLength={120} name="audience" placeholder="Parents, event planners, local friend groups" />
             </label>
           </div>
         </section>
@@ -396,27 +468,39 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
           <div className={styles.fieldGrid}>
             <label className={styles.wide}>
               Headline
-              <input maxLength={160} name="headline" placeholder="Spring Break Missions Built for Active Groups" required />
+              <input
+                dir="auto"
+                maxLength={160}
+                name="headline"
+                placeholder="Spring Break Missions Built for Active Groups"
+                required
+              />
             </label>
             <label className={styles.wide}>
               Subheadline
-              <textarea maxLength={360} name="subheadline" placeholder="Explain the offer, occasion, or local reason to act in one or two sentences." required />
+              <textarea
+                dir="auto"
+                maxLength={360}
+                name="subheadline"
+                placeholder="Explain the offer, occasion, or local reason to act in one or two sentences."
+                required
+              />
             </label>
             <label>
               Proof point 1
-              <input maxLength={200} name="proofPoint1" placeholder="25+ interactive mission rooms" required />
+              <input dir="auto" maxLength={200} name="proofPoint1" placeholder="25+ interactive mission rooms" required />
             </label>
             <label>
               Proof point 2
-              <input maxLength={200} name="proofPoint2" placeholder="Teams of 2-5 compete together" required />
+              <input dir="auto" maxLength={200} name="proofPoint2" placeholder="Teams of 2-5 compete together" required />
             </label>
             <label>
               Proof point 3
-              <input maxLength={200} name="proofPoint3" placeholder="60, 90, and 120 minute sessions" required />
+              <input dir="auto" maxLength={200} name="proofPoint3" placeholder="60, 90, and 120 minute sessions" required />
             </label>
             <label>
               Primary CTA label
-              <input maxLength={80} name="primaryCtaLabel" placeholder="Book Now" />
+              <input dir="auto" maxLength={80} name="primaryCtaLabel" placeholder="Book Now" />
             </label>
             <label>
               CTA target
@@ -440,23 +524,30 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             </label>
             <label>
               Location or city
-              <input maxLength={120} name="locationOrCity" placeholder="Philadelphia, Houston, Dallas" />
+              <input dir="auto" maxLength={120} name="locationOrCity" placeholder="Philadelphia, Houston, Dallas" />
             </label>
             <label>
               Event type
-              <input maxLength={120} name="eventType" placeholder="Birthday, corporate outing, school trip" />
+              <input dir="auto" maxLength={120} name="eventType" placeholder="Birthday, corporate outing, school trip" />
             </label>
             <label>
               Offer type
-              <input maxLength={120} name="offerType" placeholder="Spring break, grand opening, team building" />
+              <input dir="auto" maxLength={120} name="offerType" placeholder="Spring break, grand opening, team building" />
             </label>
             <label>
               Group-size framing
-              <input maxLength={120} name="groupSize" placeholder="Small crews, school groups, full-venue buyouts" />
+              <input dir="auto" maxLength={120} name="groupSize" placeholder="Small crews, school groups, full-venue buyouts" />
             </label>
             <label className={styles.wide}>
               Hero / social image
-              <input name="ogImage" defaultValue={DEFAULT_HERO_IMAGE} pattern="/assets/.*" required />
+              <input
+                dir="ltr"
+                maxLength={ASSET_PATH_MAX_LENGTH}
+                name="ogImage"
+                defaultValue={DEFAULT_HERO_IMAGE}
+                pattern="/assets/.*"
+                required
+              />
             </label>
           </div>
         </section>

@@ -10,11 +10,11 @@
             </h1>
             <p class="hero-subtitle">Learning disguised as pure fun. 25+ interactive missions cover physics, problem-solving, and teamwork, all wrapped in an adventure kids actually want to talk about after.</p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="field-trips">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
-                <a href="/contact?type=field-trip" class="btn-secondary">Inquire Now</a>
+                <a href="#" class="btn-secondary" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="field-trips">Inquire Now</a>
             </div>
         </div>
     </section>
@@ -185,11 +185,11 @@
             <h2>Ready to book the <span class="highlight">next field trip?</span></h2>
             <p class="event-page-cta-subtitle">Send us your school, date, and grade level, we'll build a session your students won't forget.</p>
             <div class="event-page-cta-buttons">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="field-trips">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
-                <a href="/contact?type=field-trip" class="btn-secondary">Inquire Now</a>
+                <a href="#" class="btn-secondary" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="field-trips">Inquire Now</a>
             </div>
 
             <div class="event-page-cross-sell-title">Other event types</div>

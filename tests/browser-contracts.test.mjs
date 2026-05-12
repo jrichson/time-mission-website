@@ -108,6 +108,25 @@ function runScript(rel, context) {
 }
 
 describe('browser architecture contracts', () => {
+  it('real location data includes audit-provided booking, group form, widget, and waiver links', () => {
+    const doc = JSON.parse(fs.readFileSync(path.join(root, 'data', 'locations.json'), 'utf8'));
+    const byId = new Map((doc.locations || []).map((loc) => [loc.id, loc]));
+
+    expect(byId.get('manassas')?.groupFormUrls?.corporate)
+      .toBe('https://webforms.pipedrive.com/f/64NrjaZAs4GrLYSqpDDV0mzG46uGMN5cXrzEoAIjKKghJOzCRVmfw4mWkghflYR3Qn');
+    expect(byId.get('mount-prospect')?.groupFormUrls?.birthdays)
+      .toBe('https://webforms.pipedrive.com/f/6xKWqqzjoNTaJIqvmk5k2tRDTavPGnfToLuCSJCsKNa5PmDkPpfEWTYgx2MiTMmQjp');
+    expect(byId.get('philadelphia')?.groupFormUrls?.['private-events'])
+      .toBe('https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form');
+    expect(byId.get('west-nyack')?.briqWidget?.domain).toBe('timemission-palisades');
+    expect(byId.get('lincoln')?.groupFormUrls?.holidays)
+      .toBe('https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959');
+    expect(byId.get('antwerp')?.groupFormUrls?.['field-trips'])
+      .toBe('https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission');
+    expect(byId.get('manassas')?.waiverUrl).toBe('https://waiver.roller.app/TimeMissionManassasMall');
+    expect(byId.get('philadelphia')?.waiverUrl).toBe('https://waiver.roller.app/TimeMissionPhiladelphiaPA');
+  });
+
   it('TMConsent.update notifies document and window listeners with the same state', () => {
     const gtagCalls = [];
     const { context, window, document } = createBrowserContext({
@@ -180,7 +199,11 @@ describe('browser architecture contracts', () => {
             rollerCheckoutUrl: 'https://checkout.example/manassas',
             bookingUrl: 'https://fallback.example/manassas',
             giftCardUrl: 'https://gift.example/manassas',
-            groupsUrl: '/groups/private-events',
+            groupFormUrls: {
+              corporate: 'https://forms.example/manassas-corporate',
+              birthdays: 'https://forms.example/manassas-birthdays',
+            },
+            waiverUrl: 'https://waiver.example/manassas',
           },
           {
             id: 'houston',
@@ -188,7 +211,7 @@ describe('browser architecture contracts', () => {
             status: 'coming-soon',
             bookingUrl: 'https://fallback.example/houston',
             giftCardUrl: 'https://gift.example/houston',
-            groupsUrl: '/groups',
+            groupFormUrls: {},
           },
         ],
       },
@@ -205,6 +228,15 @@ describe('browser architecture contracts', () => {
       .toBe('https://checkout.example/manassas');
     expect(window.LocationContext.resolveBookingUrl('gift-cards', 'manassas'))
       .toBe('https://gift.example/manassas');
+    expect(window.TMBooking.getDestination({
+      kind: 'groups',
+      groupType: 'corporate',
+      locationId: 'manassas',
+    })).toBe('https://forms.example/manassas-corporate');
+    expect(window.LocationContext.resolveBookingUrl('groups', 'manassas', { groupType: 'birthdays' }))
+      .toBe('https://forms.example/manassas-birthdays');
+    expect(window.TMBooking.getDestination({ kind: 'waiver', locationId: 'manassas' }))
+      .toBe('https://waiver.example/manassas');
     expect(window.LocationContext.resolveBookingUrl('tickets', 'houston'))
       .toBe('/houston');
     expect(window.TMBooking.getDestination({

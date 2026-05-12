@@ -55,6 +55,14 @@ describe('CMS landing templates', () => {
     expect(previewRoute).toContain('Sitemap');
     expect(previewRoute).toContain('Review warnings');
     expect(previewRoute).toContain('landingReviewWarningsForDoc');
+    expect(previewRoute).toContain('safePublicAssetPath');
+    expect(previewRoute).toContain('safeExternalLandingHref');
+    expect(previewRoute).toContain('missing-page-url');
+    expect(previewRoute).toContain('Use a root-relative /assets/... hero image path.');
+    expect(previewRoute).toContain('data-preview-section="paid-social-proof"');
+    expect(previewRoute).toContain('data-preview-section="local-venue-signal"');
+    expect(previewRoute).toContain('data-preview-section="group-planner-reassurance"');
+    expect(previewRoute).toContain('Book tickets instead');
   });
 
   it('routes marketing landing creation through a brief-first wizard', () => {
@@ -75,6 +83,10 @@ describe('CMS landing templates', () => {
     expect(wizard).toContain("collection: 'landings'");
     expect(wizard).toContain('payload.auth');
     expect(wizard).toContain('overrideAccess: false');
+    expect(wizard).toContain('validHttpsUrl');
+    expect(wizard).toContain('invalid-source-url');
+    expect(wizard).toContain('lookup-failed');
+    expect(wizard).toContain('create-failed');
     expect(wizard).toContain('sourcePromise');
     expect(wizard).toContain('visitorIntent');
     expect(wizard).toContain('redirect(`/preview/landings/${created.id}`)');
@@ -86,5 +98,22 @@ describe('CMS landing templates', () => {
     expect(dashboardCard).toContain('/landings/new?template=local_venue_city');
     expect(dashboardCard).toContain('/landings/new?template=group_event');
     expect(importMap).toContain('/components/LandingWizardDashboard.tsx#default');
+  });
+
+  it('hardens CMS landing surfaces against unsafe URLs and long text', () => {
+    const wizard = read('cms/app/landings/new/page.tsx');
+    const wizardStyles = read('cms/app/landings/new/page.module.css');
+    const previewRoute = read('cms/app/preview/landings/[id]/page.tsx');
+    const previewStyles = read('cms/app/preview/landings/[id]/page.module.css');
+
+    expect(wizard).toContain('!url.username && !url.password');
+    expect(wizard).toContain('maxLength={URL_MAX_LENGTH}');
+    expect(wizard).toContain('dir="auto"');
+    expect(previewRoute).toContain('publicAssetWasRepaired');
+    expect(previewRoute).toContain('reviewWarnings.unshift');
+    expect(wizardStyles).toContain('overflow-wrap: anywhere');
+    expect(wizardStyles).toContain('hyphens: auto');
+    expect(previewStyles).toContain('overflow-wrap: anywhere');
+    expect(previewStyles).toContain('hyphens: auto');
   });
 });

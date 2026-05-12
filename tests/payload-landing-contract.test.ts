@@ -51,6 +51,13 @@ describe('Payload landing contract', () => {
       linkPath: '/contact',
     });
 
+    expect(landingCtaForDoc({ ...baseDoc, template: 'local_venue_city', content: { ...baseDoc.content } })).toMatchObject({
+      surface: 'book_panel',
+      primaryHref: '#tickets',
+      bookTrigger: true,
+      linkPath: '/tickets',
+    });
+
     expect(landingCtaForDoc({ ...baseDoc, template: 'coming_soon', content: { ...baseDoc.content } })).toMatchObject({
       surface: 'contact',
       primaryHref: '/contact',
@@ -66,6 +73,34 @@ describe('Payload landing contract', () => {
       primaryHref: '/gift-cards',
       bookTrigger: false,
       linkPath: '/gift-cards',
+    });
+
+    expect(landingCtaForDoc({
+      ...baseDoc,
+      content: {
+        ...baseDoc.content,
+        ctaSurface: 'external',
+        ctaExternalUrl: 'https://partner.example/special-offer?utm=landing',
+      },
+    })).toMatchObject({
+      surface: 'external',
+      primaryHref: 'https://partner.example/special-offer?utm=landing',
+      bookTrigger: false,
+      linkPath: '/special-offer',
+    });
+
+    expect(landingCtaForDoc({
+      ...baseDoc,
+      content: {
+        ...baseDoc.content,
+        ctaSurface: 'external',
+        ctaExternalUrl: 'javascript:alert(1)',
+      },
+    })).toMatchObject({
+      surface: 'missions',
+      primaryHref: '/missions',
+      bookTrigger: false,
+      linkPath: '/missions',
     });
   });
 
@@ -111,5 +146,14 @@ describe('Payload landing contract', () => {
 
     expect(warnings).not.toContain('Add the source promise from the ad, post, email, search query, or campaign request.');
     expect(warnings).not.toContain('Add the visitor intent so the page copy is tied to a real decision path.');
+
+    expect(landingReviewWarningsForDoc({
+      ...baseDoc,
+      content: {
+        ...baseDoc.content,
+        ctaSurface: 'external',
+        ctaExternalUrl: 'http://example.com',
+      },
+    })).toContain('Add a credential-free https external CTA URL before publishing.');
   });
 });

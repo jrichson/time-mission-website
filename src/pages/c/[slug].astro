@@ -27,66 +27,45 @@ export async function getStaticPaths() {
 const { doc } = Astro.props as { doc: PayloadLandingDoc };
 const page = definePage({ canonicalPath: landingCanonicalPath(doc.slug) });
 const landingHead = landingHeadForDoc(doc)!;
-const c = doc.content!;
+const content = doc.content!;
 const cta = landingCtaForDoc(doc);
 const template = landingArchetypeForDoc(doc);
 const launchState = landingLaunchStateForDoc(doc);
 const templateLabel = landingTemplateLabel(template);
 const heroImage = doc.seo?.ogImage || '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
 
-const bullets = Array.isArray(c.bullets) ? c.bullets.map((b) => String(b?.text || '').trim()).filter(Boolean) : [];
+const bullets = Array.isArray(content.bullets)
+    ? content.bullets.map((b) => String(b?.text || '').trim()).filter(Boolean)
+    : [];
 const proofItems = bullets.length
     ? bullets.slice(0, 6)
     : ['25+ interactive mission rooms', 'Team-based scoring', 'Built for every age and group size'];
+const topProof = proofItems.slice(0, 3);
 const brief = doc.brief || {};
 const strategy = doc.strategy || {};
 const paidSocial = doc.paidSocial || {};
 const localVenue = doc.localVenue || {};
 const groupEvent = doc.groupEvent || {};
-const proofIntro =
-    strategy.proofAngle ||
-    brief.visitorIntent ||
-    (template === 'group_event'
-        ? groupEvent.plannerReassurance || 'Proof that the group experience is easy to plan and worth showing up for.'
-        : template === 'local_venue_city'
-            ? localVenue.venueConfidence || 'Proof that this is a real venue with a Time Mission experience worth visiting.'
-            : paidSocial.frictionReducer || 'Proof that the promise is easy to understand and simple to act on.');
-const detailHeading =
-    template === 'group_event'
-        ? 'A session built for your crew'
-        : launchState === 'coming_soon'
-            ? 'First in line for the next mission'
-            : template === 'local_venue_city'
-                ? 'A local reason to book the mission'
-                : 'Focused, fast, and easy to act on';
-const proofHeading =
-    template === 'group_event'
-        ? 'Built for groups that want more than a reservation'
-        : launchState === 'coming_soon'
-            ? 'Get ready before the doors open'
-            : template === 'local_venue_city'
-                ? 'A venue-first reason to visit'
-                : 'Make the first click count';
-const detailKicker =
-    template === 'group_event'
-        ? 'Planner Confidence'
-        : launchState === 'coming_soon'
-            ? 'Opening Updates'
-            : template === 'local_venue_city'
-                ? 'Local Campaign'
-                : 'Campaign Details';
-const finalHeading =
-    launchState === 'coming_soon'
-        ? 'Want opening updates?'
-        : template === 'group_event'
-            ? 'Ready to plan the event?'
-            : 'Ready to start?';
-const finalCopy =
-    template === 'group_event'
-        ? groupEvent.logisticsNote || 'Bring the crew. We will handle the missions, scoring, and momentum.'
-    : launchState === 'coming_soon'
-        ? localVenue.openingNote || landingHead.metaDescription
-        : brief.sourcePromise || landingHead.metaDescription;
+const headline = content.headline || doc.title || landingHead.metaTitle;
+const subheadline = content.subheadline || landingHead.metaDescription;
+const sourcePromise = brief.sourcePromise || paidSocial.sourcePromise || subheadline;
+const visitorIntent = brief.visitorIntent || 'Visitors are deciding whether Time Mission fits this occasion.';
+const paidFriction = paidSocial.frictionReducer || visitorIntent;
+const locationName = strategy.locationOrCity || brief.sourceName || doc.title || 'your city';
+const cityProof = localVenue.cityProof || strategy.proofAngle || topProof[0] || 'Local visitors get a real Time Mission venue experience.';
+const venueConfidence =
+    localVenue.venueConfidence || topProof[1] || 'Real venue photography, clear booking paths, and proven mission rooms build confidence.';
+const openingNote =
+    localVenue.openingNote || 'Join updates now, then come back when this location is ready for missions.';
+const eventType = strategy.eventType || strategy.offerType || 'group event';
+const groupSize = groupEvent.groupSize || strategy.audience || 'Small crews, birthday groups, school groups, and full-venue buyouts';
+const plannerReassurance =
+    groupEvent.plannerReassurance || visitorIntent || 'A planner can quickly see what the group gets and what Time Mission handles.';
+const logisticsNote =
+    groupEvent.logisticsNote || 'Bring the crew. Time Mission handles the missions, scoring, and momentum.';
+const localFinalCopy = launchState === 'coming_soon' ? openingNote : sourcePromise;
+const groupFinalCopy = groupEvent.logisticsNote || 'Tell us what you are planning and we will point you to the right event path.';
+const showGroupBookingSecondary = template === 'group_event' && !cta.bookTrigger && launchState !== 'coming_soon';
 
 const jsonLd = {
     '@context': 'https://schema.org',
@@ -109,22 +88,24 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
             body.tm-landing-body {
                 --tm-landing-accent: var(--orange, #ff6b2c);
                 --tm-landing-black: #050508;
-                --tm-landing-panel: #101014;
+                --tm-landing-panel: #111116;
+                --tm-landing-panel-raised: #18181e;
                 --tm-landing-line: rgba(255, 255, 255, 0.14);
+                --tm-landing-line-strong: rgba(255, 107, 44, 0.42);
+                --tm-landing-muted: rgba(255, 255, 255, 0.72);
+                --tm-landing-text: rgba(255, 255, 255, 0.94);
             }
             .tm-landing-main {
-                color: var(--white, #fff);
+                color: var(--tm-landing-text);
                 font-family: var(--body, 'DM Sans', sans-serif);
-                background: var(--tm-landing-black);
+                background:
+                    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+                    var(--tm-landing-black);
+                background-size: 80px 80px, 80px 80px, auto;
             }
-            .tm-landing-hero {
-                position: relative;
-                min-height: 70vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                overflow: hidden;
-                padding: clamp(7rem, 12vw, 9rem) 1.5rem clamp(3rem, 7vw, 5rem);
+            .tm-landing-main--coming-soon {
+                --tm-landing-accent: #ffd0b8;
             }
             .tm-landing-shell {
                 position: relative;
@@ -132,10 +113,13 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                 width: min(100%, 74rem);
                 margin: 0 auto;
             }
-            .tm-landing-hero-copy {
-                width: min(100%, 48rem);
-                margin: 0 auto;
-                text-align: center;
+            .tm-landing-hero {
+                position: relative;
+                display: grid;
+                min-height: 72vh;
+                align-items: end;
+                overflow: hidden;
+                padding: clamp(7rem, 12vw, 10rem) 1.5rem clamp(3.5rem, 8vw, 6rem);
             }
             .tm-landing-hero-media {
                 position: absolute;
@@ -146,50 +130,77 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                 content: '';
                 position: absolute;
                 inset: 0;
-                background: linear-gradient(180deg, rgba(5, 5, 8, 0.38), rgba(5, 5, 8, 0.68) 58%, var(--tm-landing-black));
+                background:
+                    linear-gradient(90deg, rgba(5, 5, 8, 0.86), rgba(5, 5, 8, 0.42) 56%, rgba(5, 5, 8, 0.72)),
+                    linear-gradient(180deg, rgba(5, 5, 8, 0.18), rgba(5, 5, 8, 0.76) 72%, var(--tm-landing-black));
             }
             .tm-landing-hero-media img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
                 object-position: center 42%;
-                opacity: 0.68;
+                opacity: 0.74;
+            }
+            .tm-landing-hero-copy {
+                width: min(100%, 49rem);
+            }
+            .tm-landing-main--paid_social_campaign .tm-landing-hero-copy {
+                width: min(100%, 49rem);
+            }
+            .tm-landing-main--local_venue_city .tm-landing-hero-copy {
+                width: min(100%, 55rem);
+            }
+            .tm-landing-main--group_event .tm-landing-hero-copy {
+                width: min(100%, 53rem);
+            }
+            .tm-landing-kicker,
+            .tm-landing-proof-number,
+            .tm-landing-micro-label {
+                color: var(--tm-landing-accent);
+                font-family: var(--tech, 'Orbitron', sans-serif);
+                font-size: 0.75rem;
+                font-weight: 800;
+                letter-spacing: 0;
+                text-transform: uppercase;
             }
             .tm-landing-kicker {
                 display: inline-flex;
-                align-items: center;
                 min-height: 2rem;
-                padding: 0.35rem 0.75rem;
-                border: 1px solid rgba(255, 255, 255, 0.18);
+                align-items: center;
+                border: 1px solid var(--tm-landing-line);
                 border-radius: 999px;
-                background: rgba(5, 5, 8, 0.62);
-                font-size: 0.72rem;
-                letter-spacing: 0.14em;
-                text-transform: uppercase;
-                color: var(--tm-landing-accent);
-                font-family: var(--tech, 'Orbitron', sans-serif);
+                background: rgba(5, 5, 8, 0.64);
                 margin: 0 0 1rem;
+                padding: 0.35rem 0.75rem;
             }
-            .tm-landing-headline {
+            .tm-landing-headline,
+            .tm-landing-section-head h2,
+            .tm-landing-split-copy h2,
+            .tm-landing-final h2,
+            .tm-landing-planner h2,
+            .tm-landing-place h2 {
                 font-family: var(--display, 'Bebas Neue', sans-serif);
-                font-size: clamp(3rem, 8vw, 6rem);
-                line-height: 0.94;
-                margin: 0 0 1rem;
+                letter-spacing: 0;
                 text-wrap: balance;
             }
+            .tm-landing-headline {
+                max-width: 13ch;
+                margin: 0 0 1rem;
+                font-size: clamp(3.25rem, 8vw, 6.4rem);
+                line-height: 0.92;
+            }
             .tm-landing-sub {
-                width: min(100%, 42rem);
+                width: min(100%, 43rem);
+                margin: 0 0 1.75rem;
+                color: var(--tm-landing-muted);
                 font-size: clamp(1rem, 2vw, 1.22rem);
                 line-height: 1.65;
-                color: rgba(255, 255, 255, 0.78);
-                margin: 0 auto 1.75rem;
             }
             .tm-landing-actions,
             .tm-landing-cta-row {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 0.85rem;
-                justify-content: center;
             }
             .tm-landing-cta,
             .tm-landing-secondary {
@@ -200,22 +211,22 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                 border-radius: 999px;
                 padding: 0.85rem 1.35rem;
                 font-size: 0.9rem;
-                font-weight: 700;
-                letter-spacing: 0.04em;
-                text-transform: uppercase;
+                font-weight: 800;
                 text-decoration: none;
+                text-transform: uppercase;
                 cursor: pointer;
+                touch-action: manipulation;
             }
             .tm-landing-cta {
-                background: var(--gradient-primary, linear-gradient(135deg, #ff7a00, #ff3d00));
-                color: #fff;
                 border: 0;
-                box-shadow: 0 0 24px rgba(255, 106, 0, 0.34);
+                background: var(--gradient-primary, linear-gradient(135deg, #f9a41a, #ef4b23));
+                color: #160804;
+                box-shadow: 0 0 24px rgba(255, 106, 0, 0.28);
             }
             .tm-landing-secondary {
-                color: #fff;
                 border: 1px solid rgba(255, 255, 255, 0.24);
                 background: rgba(255, 255, 255, 0.04);
+                color: #fff;
             }
             .tm-landing-cta:focus-visible,
             .tm-landing-secondary:focus-visible {
@@ -224,123 +235,166 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
             }
             .tm-landing-proof,
             .tm-landing-split,
-            .tm-landing-final {
+            .tm-landing-final,
+            .tm-landing-place,
+            .tm-landing-planner {
                 padding: clamp(3.5rem, 8vw, 6rem) 1.5rem;
             }
-            .tm-landing-proof {
-                background: var(--tm-landing-black);
-            }
             .tm-landing-section-head {
-                width: min(100%, 46rem);
-                margin: 0 auto 2rem;
-                text-align: center;
+                width: min(100%, 48rem);
+                margin: 0 0 2rem;
             }
             .tm-landing-section-head h2,
             .tm-landing-split-copy h2,
-            .tm-landing-final h2 {
-                font-family: var(--display, 'Bebas Neue', sans-serif);
-                font-size: clamp(2.4rem, 5vw, 4rem);
-                line-height: 0.98;
+            .tm-landing-final h2,
+            .tm-landing-planner h2,
+            .tm-landing-place h2 {
                 margin: 0 0 0.8rem;
-                text-wrap: balance;
+                font-size: clamp(2.4rem, 5vw, 4.3rem);
+                line-height: 0.98;
             }
             .tm-landing-section-head p,
             .tm-landing-split-copy p,
-            .tm-landing-final p {
-                color: rgba(255, 255, 255, 0.7);
+            .tm-landing-final p,
+            .tm-landing-place p,
+            .tm-landing-planner p {
+                color: var(--tm-landing-muted);
                 line-height: 1.65;
-                margin: 0;
             }
-            .tm-landing-proof-grid {
+            .tm-landing-proof-grid,
+            .tm-landing-place-grid,
+            .tm-landing-planner-grid {
                 display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
                 gap: 1rem;
             }
-            .tm-landing-proof-card {
-                min-height: 11rem;
+            .tm-landing-proof-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+            .tm-landing-proof-card,
+            .tm-landing-place-card,
+            .tm-landing-planner-card,
+            .tm-landing-friction-panel {
                 border: 1px solid var(--tm-landing-line);
                 border-radius: 8px;
+                background: rgba(255, 255, 255, 0.045);
+            }
+            .tm-landing-proof-card {
+                min-height: 10.5rem;
                 padding: 1.25rem;
-                background: rgba(255, 255, 255, 0.04);
             }
             .tm-landing-proof-number {
                 display: block;
                 margin-bottom: 1rem;
-                color: var(--tm-landing-accent);
-                font-family: var(--tech, 'Orbitron', sans-serif);
-                font-size: 0.75rem;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
             }
-            .tm-landing-proof-card h3 {
+            .tm-landing-proof-card h3,
+            .tm-landing-place-card h3,
+            .tm-landing-planner-card h3 {
                 margin: 0;
                 font-size: 1.05rem;
                 line-height: 1.35;
             }
-            .tm-landing-split {
+            .tm-landing-proof-card p,
+            .tm-landing-place-card p,
+            .tm-landing-planner-card p {
+                margin: 0.75rem 0 0;
+                color: var(--tm-landing-muted);
+                line-height: 1.55;
+            }
+            .tm-landing-friction {
                 background: var(--tm-landing-panel);
             }
+            .tm-landing-friction-grid,
             .tm-landing-split-grid {
                 display: grid;
                 grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
                 gap: clamp(1.5rem, 5vw, 4rem);
                 align-items: center;
             }
-            .tm-landing-split-image {
+            .tm-landing-friction-panel {
+                padding: clamp(1.4rem, 3vw, 2rem);
+            }
+            .tm-landing-friction-panel p {
+                color: var(--tm-landing-muted);
+                line-height: 1.65;
+            }
+            .tm-landing-media-frame {
                 aspect-ratio: 4 / 3;
                 overflow: hidden;
-                border-radius: 8px;
                 border: 1px solid var(--tm-landing-line);
+                border-radius: 8px;
             }
-            .tm-landing-split-image img {
+            .tm-landing-media-frame img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
             }
-            .tm-landing-bullets {
-                list-style: none;
-                padding: 0;
+            .tm-landing-bullets,
+            .tm-landing-checklist {
                 margin: 1.5rem 0 0;
+                padding: 0;
+                list-style: none;
             }
-            .tm-landing-bullets li {
+            .tm-landing-bullets li,
+            .tm-landing-checklist li {
                 position: relative;
-                padding-left: 1.35rem;
                 margin-bottom: 0.65rem;
-                line-height: 1.45;
+                padding-left: 1.35rem;
                 color: rgba(255, 255, 255, 0.82);
+                line-height: 1.45;
             }
-            .tm-landing-bullets li::before {
+            .tm-landing-bullets li::before,
+            .tm-landing-checklist li::before {
                 content: '';
                 position: absolute;
-                left: 0;
                 top: 0.55rem;
+                left: 0;
                 width: 0.45rem;
                 height: 0.45rem;
                 border-radius: 50%;
                 background: var(--tm-landing-accent);
             }
-            .tm-landing-final {
-                text-align: center;
+            .tm-landing-place {
+                background: var(--tm-landing-panel);
+            }
+            .tm-landing-place-grid {
+                grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 0.9fr));
+                align-items: stretch;
+            }
+            .tm-landing-place-card,
+            .tm-landing-planner-card {
+                min-height: 13rem;
+                padding: 1.25rem;
+            }
+            .tm-landing-place-card--lead {
+                min-height: 18rem;
+                background: rgba(255, 107, 44, 0.1);
+            }
+            .tm-landing-split {
                 background: var(--tm-landing-black);
             }
+            .tm-landing-planner-grid {
+                grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 0.9fr));
+            }
+            .tm-landing-planner-card--lead {
+                background: rgba(255, 107, 44, 0.1);
+            }
+            .tm-landing-final {
+                background: var(--tm-landing-panel);
+                text-align: center;
+            }
             .tm-landing-final p {
+                width: min(100%, 39rem);
                 margin: 0 auto 1.5rem;
-                width: min(100%, 38rem);
             }
-            .tm-landing-main--paid_social_campaign .tm-landing-proof-card,
-            .tm-landing-main--local_venue_city .tm-landing-proof-card,
-            .tm-landing-main--group_event .tm-landing-proof-card {
-                min-height: 11rem;
-            }
-            .tm-landing-main--local_venue_city .tm-landing-proof-card {
-                min-height: 8rem;
-            }
-            .tm-landing-main--local_venue_city .tm-landing-kicker {
-                color: #ffd0b8;
+            .tm-landing-final .tm-landing-cta-row {
+                justify-content: center;
             }
             @media (max-width: 840px) {
                 .tm-landing-proof-grid,
-                .tm-landing-split-grid {
+                .tm-landing-friction-grid,
+                .tm-landing-split-grid,
+                .tm-landing-place-grid,
+                .tm-landing-planner-grid {
                     grid-template-columns: 1fr;
                 }
                 .tm-landing-hero {
@@ -350,22 +404,54 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                     font-size: clamp(2.75rem, 14vw, 4.4rem);
                 }
             }
+            @media (max-width: 520px) {
+                .tm-landing-hero,
+                .tm-landing-proof,
+                .tm-landing-split,
+                .tm-landing-final,
+                .tm-landing-place,
+                .tm-landing-planner {
+                    padding-inline: 1rem;
+                }
+                .tm-landing-actions,
+                .tm-landing-cta-row {
+                    flex-direction: column;
+                }
+                .tm-landing-cta,
+                .tm-landing-secondary {
+                    width: 100%;
+                }
+                .tm-landing-headline {
+                    line-height: 1;
+                }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .tm-landing-cta,
+                .tm-landing-secondary {
+                    transition: none;
+                }
+            }
         </style>
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={jsonLdEmbed} />
     </Fragment>
 
-    <main class:list={['tm-landing-main', `tm-landing-main--${template}`]} id="main">
-        <section class="tm-landing-hero">
+    <main
+        class:list={['tm-landing-main', `tm-landing-main--${template}`, { 'tm-landing-main--coming-soon': launchState === 'coming_soon' }]}
+        id="main"
+    >
+        <section class:list={['tm-landing-hero', `tm-landing-hero--${template}`]} data-landing-section={`${template}-hero`}>
             <div class="tm-landing-hero-media" aria-hidden="true">
                 <img src={heroImage} alt="" width="1920" height="1280" loading="eager" decoding="async" />
             </div>
             <div class="tm-landing-shell">
                 <div class="tm-landing-hero-copy">
-                    <p class="tm-landing-kicker">{templateLabel}</p>
-                    <h1 class="tm-landing-headline">{c.headline}</h1>
-                    {c.subheadline ? <p class="tm-landing-sub">{c.subheadline}</p> : null}
+                    <p class="tm-landing-kicker">
+                        {template === 'local_venue_city' ? locationName : templateLabel}
+                    </p>
+                    <h1 class="tm-landing-headline">{headline}</h1>
+                    <p class="tm-landing-sub">{subheadline}</p>
                     <div class="tm-landing-actions">
                         {
                             cta.bookTrigger ? (
@@ -376,8 +462,9 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                                     data-tm-landing-primary
                                     data-link-path={cta.linkPath}
                                     data-cta-surface={cta.surface}
+                                    data-landing-cta-slot="hero"
                                 >
-                                    {c.primaryCtaLabel}
+                                    {content.primaryCtaLabel}
                                 </button>
                             ) : (
                                 <a
@@ -386,14 +473,19 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                                     data-tm-landing-primary
                                     data-link-path={cta.linkPath}
                                     data-cta-surface={cta.surface}
+                                    data-landing-cta-slot="hero"
                                     {...cta.surface === 'external' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
                                 >
-                                    {c.primaryCtaLabel}
+                                    {content.primaryCtaLabel}
                                 </a>
                             )
                         }
                         {
-                            template === 'group_event' ? (
+                            showGroupBookingSecondary ? (
+                                <button type="button" class="tm-landing-secondary" data-tm-booking-trigger>
+                                    Book tickets instead
+                                </button>
+                            ) : template === 'group_event' ? (
                                 <a class="tm-landing-secondary" href="/groups">Explore events</a>
                             ) : template === 'local_venue_city' ? (
                                 <a class="tm-landing-secondary" href="/locations">View locations</a>
@@ -404,63 +496,166 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
             </div>
         </section>
 
-        <section class="tm-landing-proof">
-            <div class="tm-landing-shell">
-                <div class="tm-landing-section-head">
-                    <p class="tm-landing-kicker">Why Time Mission</p>
-                    <h2>
-                        {proofHeading}
-                    </h2>
-                    <p>{proofIntro}</p>
-                </div>
-                <div class="tm-landing-proof-grid">
-                    {
-                        proofItems.slice(0, 3).map((item, index) => (
-                            <article class="tm-landing-proof-card">
-                                <span class="tm-landing-proof-number">Proof {String(index + 1).padStart(2, '0')}</span>
-                                <h3>{item}</h3>
-                            </article>
-                        ))
-                    }
-                </div>
-            </div>
-        </section>
+        {
+            template === 'paid_social_campaign' ? (
+                <>
+                    <section class="tm-landing-proof tm-landing-campaign-proof" data-landing-section="paid-social-proof">
+                        <div class="tm-landing-shell">
+                            <div class="tm-landing-section-head">
+                                <p class="tm-landing-kicker">Campaign Match</p>
+                                <h2>Make the first click count</h2>
+                                <p>{sourcePromise}</p>
+                            </div>
+                            <div class="tm-landing-proof-grid">
+                                {topProof.map((item, index) => (
+                                    <article class="tm-landing-proof-card">
+                                        <span class="tm-landing-proof-number">Proof {String(index + 1).padStart(2, '0')}</span>
+                                        <h3>{item}</h3>
+                                    </article>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
 
-        <section class="tm-landing-split">
-            <div class="tm-landing-shell tm-landing-split-grid">
-                <div class="tm-landing-split-image">
-                    <img src={heroImage} alt="" width="1400" height="1050" loading="lazy" decoding="async" />
-                </div>
-                <div class="tm-landing-split-copy">
-                    <p class="tm-landing-kicker">
-                        {detailKicker}
-                    </p>
-                    <h2>{detailHeading}</h2>
-                    {c.subheadline ? <p>{c.subheadline}</p> : null}
-                    <ul class="tm-landing-bullets">
-                        {proofItems.map((t) => <li>{t}</li>)}
-                    </ul>
-                </div>
-            </div>
-        </section>
+                    <section class="tm-landing-proof tm-landing-friction" data-landing-section="paid-friction-reducer">
+                        <div class="tm-landing-shell tm-landing-friction-grid">
+                            <div class="tm-landing-friction-panel">
+                                <p class="tm-landing-micro-label">Friction reducer</p>
+                                <h2>Focused, fast, and easy to act on</h2>
+                                <p>{paidFriction}</p>
+                                <ul class="tm-landing-checklist">
+                                    {proofItems.map((item) => <li>{item}</li>)}
+                                </ul>
+                            </div>
+                            <div class="tm-landing-media-frame">
+                                <img src={heroImage} alt="" width="1400" height="1050" loading="lazy" decoding="async" />
+                            </div>
+                        </div>
+                    </section>
+                </>
+            ) : template === 'local_venue_city' ? (
+                <>
+                    <section class="tm-landing-place" data-landing-section="local-venue-signal">
+                        <div class="tm-landing-shell">
+                            <div class="tm-landing-place-grid">
+                                <article class="tm-landing-place-card tm-landing-place-card--lead">
+                                    <span class="tm-landing-micro-label">Local signal</span>
+                                    <h2>{locationName}</h2>
+                                    <p>{cityProof}</p>
+                                </article>
+                                <article class="tm-landing-place-card">
+                                    <span class="tm-landing-micro-label">Venue confidence</span>
+                                    <h3>Feels real before they book</h3>
+                                    <p>{venueConfidence}</p>
+                                </article>
+                                <article class="tm-landing-place-card">
+                                    <span class="tm-landing-micro-label">{launchState === 'coming_soon' ? 'Opening state' : 'Next step'}</span>
+                                    <h3>{launchState === 'coming_soon' ? 'Get updates first' : 'Book this location'}</h3>
+                                    <p>{launchState === 'coming_soon' ? openingNote : sourcePromise}</p>
+                                </article>
+                            </div>
+                        </div>
+                    </section>
 
-        <section class="tm-landing-final">
+                    <section class="tm-landing-split" data-landing-section="local-confidence">
+                        <div class="tm-landing-shell tm-landing-split-grid">
+                            <div class="tm-landing-media-frame">
+                                <img src={heroImage} alt="" width="1400" height="1050" loading="lazy" decoding="async" />
+                            </div>
+                            <div class="tm-landing-split-copy">
+                                <p class="tm-landing-kicker">Venue Confidence</p>
+                                <h2>{launchState === 'coming_soon' ? 'Get ready before the doors open' : 'A local reason to book the mission'}</h2>
+                                <p>{venueConfidence}</p>
+                                <ul class="tm-landing-bullets">
+                                    {proofItems.map((item) => <li>{item}</li>)}
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                </>
+            ) : (
+                <>
+                    <section class="tm-landing-planner" data-landing-section="group-planner-reassurance">
+                        <div class="tm-landing-shell">
+                            <div class="tm-landing-planner-grid">
+                                <article class="tm-landing-planner-card tm-landing-planner-card--lead">
+                                    <span class="tm-landing-micro-label">Planner promise</span>
+                                    <h2>{eventType}</h2>
+                                    <p>{plannerReassurance}</p>
+                                </article>
+                                <article class="tm-landing-planner-card">
+                                    <span class="tm-landing-micro-label">Group size</span>
+                                    <h3>Built for the crew you are bringing</h3>
+                                    <p>{groupSize}</p>
+                                </article>
+                                <article class="tm-landing-planner-card">
+                                    <span class="tm-landing-micro-label">Logistics</span>
+                                    <h3>Make planning feel handled</h3>
+                                    <p>{logisticsNote}</p>
+                                </article>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="tm-landing-proof" data-landing-section="group-proof">
+                        <div class="tm-landing-shell">
+                            <div class="tm-landing-section-head">
+                                <p class="tm-landing-kicker">Group Confidence</p>
+                                <h2>Built for groups that want more than a reservation</h2>
+                                <p>{strategy.proofAngle || plannerReassurance}</p>
+                            </div>
+                            <div class="tm-landing-proof-grid">
+                                {topProof.map((item, index) => (
+                                    <article class="tm-landing-proof-card">
+                                        <span class="tm-landing-proof-number">Reason {String(index + 1).padStart(2, '0')}</span>
+                                        <h3>{item}</h3>
+                                    </article>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </>
+            )
+        }
+
+        <section class="tm-landing-final" data-landing-section={`${template}-final-cta`}>
             <div class="tm-landing-shell">
-                <h2>{finalHeading}</h2>
-                <p>{finalCopy}</p>
+                <p class="tm-landing-kicker">
+                    {launchState === 'coming_soon' ? 'Opening Updates' : template === 'group_event' ? 'Event Next Step' : 'Ready'}
+                </p>
+                <h2>
+                    {launchState === 'coming_soon'
+                        ? 'Want opening updates?'
+                        : template === 'group_event'
+                            ? 'Ready to plan the event?'
+                            : 'Ready to start?'}
+                </h2>
+                <p>{template === 'group_event' ? groupFinalCopy : template === 'local_venue_city' ? localFinalCopy : sourcePromise}</p>
                 <div class="tm-landing-cta-row">
                     {
                         cta.bookTrigger ? (
-                            <button type="button" class="tm-landing-cta" data-tm-booking-trigger>
-                                {c.primaryCtaLabel}
+                            <button
+                                type="button"
+                                class="tm-landing-cta"
+                                data-tm-booking-trigger
+                                data-tm-landing-primary
+                                data-link-path={cta.linkPath}
+                                data-cta-surface={cta.surface}
+                                data-landing-cta-slot="final"
+                            >
+                                {content.primaryCtaLabel}
                             </button>
                         ) : (
                             <a
                                 href={cta.primaryHref}
                                 class="tm-landing-cta"
+                                data-tm-landing-primary
+                                data-link-path={cta.linkPath}
+                                data-cta-surface={cta.surface}
+                                data-landing-cta-slot="final"
                                 {...cta.surface === 'external' ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
                             >
-                                {c.primaryCtaLabel}
+                                {content.primaryCtaLabel}
                             </a>
                         )
                     }
@@ -472,14 +667,16 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
     <Fragment slot="after-site-scripts">
         <script is:inline define:vars={{ slug: doc.slug }}>
             (function () {
-                var el = document.querySelector('[data-tm-landing-primary]');
-                if (!el) return;
-                el.addEventListener('click', function () {
-                    if (!window.TMAnalytics || typeof window.TMAnalytics.track !== 'function') return;
-                    var path = el.getAttribute('data-link-path') || window.location.pathname;
-                    window.TMAnalytics.track('cta_click', {
-                        cta_id: 'landing_primary_' + slug,
-                        link_path: path,
+                var els = document.querySelectorAll('[data-tm-landing-primary]');
+                if (!els.length) return;
+                els.forEach(function (el) {
+                    el.addEventListener('click', function () {
+                        if (!window.TMAnalytics || typeof window.TMAnalytics.track !== 'function') return;
+                        var path = el.getAttribute('data-link-path') || window.location.pathname;
+                        window.TMAnalytics.track('cta_click', {
+                            cta_id: 'landing_primary_' + slug,
+                            link_path: path,
+                        });
                     });
                 });
             })();

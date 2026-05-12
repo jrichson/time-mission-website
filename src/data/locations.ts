@@ -29,11 +29,24 @@ export interface LocationRecord {
     hours: Record<string, LocationDayHours>;
     bookingUrl: string;
     rollerCheckoutUrl?: string;
+    bookingProvider?: 'roller' | 'briq' | 'clubspeed' | 'experience-factory';
+    briqWidgetDomain?: string;
+    briqWidget?: {
+        domain: string;
+        color1Base: string;
+        color1Contrast: string;
+        color2Base: string;
+        color2Contrast: string;
+        priceDisplay: string;
+        buttonText: string;
+    };
+    groupFormUrls?: Record<string, string>;
     navLabel: string;
     mapUrl: string;
     faqs: unknown[];
     ticker: string;
     giftCardUrl: string;
+    waiverUrl?: string;
     countryCode: string | null;
     locale: string | null;
     timeZone: string | null;

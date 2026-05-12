@@ -163,6 +163,22 @@
     height: 18px;
 }
 
+.ticket-provider-widget {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 186, 0, 0.28);
+    border-radius: 12px;
+}
+
+.ticket-provider-widget[hidden] {
+    display: none;
+}
+
+.ticket-provider-widget .bw-widget {
+    min-height: 52px;
+}
+
 .ticket-panel-info {
     margin-top: 2rem;
     padding-top: 2rem;

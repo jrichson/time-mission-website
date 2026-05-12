@@ -11,6 +11,7 @@
         <p>Time Mission guests may be asked to complete a venue waiver before participating. Requirements can vary by location, group type, and local operator.</p>
         <p>For the fastest arrival, contact your selected location before your visit if you have questions about minors, guardians, accessibility accommodations, or group paperwork.</p>
         <div class="waiver-actions">
+            <a href="#" data-tm-booking-trigger data-tm-booking-kind="waiver">Complete Waiver</a>
             <a href="/contact">Contact a Location</a>
             <a href="/faq">Read FAQ</a>
         </div>

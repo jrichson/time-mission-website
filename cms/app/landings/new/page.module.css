@@ -20,6 +20,7 @@
   background-size: auto, 48px 48px, 48px 48px, auto;
   color: var(--tm-text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  overflow-x: clip;
   padding: 48px 24px 72px;
 }
 
@@ -35,6 +36,20 @@
   grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
   gap: 24px;
   margin-bottom: 24px;
+}
+
+.header > div,
+.statusPanel,
+.panel,
+.panelIntro,
+.choice,
+.fieldGrid label,
+.fieldHelp,
+.footer p,
+.error {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 .header h1 {
@@ -110,7 +125,9 @@
   border-radius: 6px;
   font-size: 0.95rem;
   font-weight: 800;
+  text-align: center;
   text-decoration: none;
+  white-space: normal;
 }
 
 .secondaryLink {
@@ -255,6 +272,15 @@
   padding: 5px 8px;
 }
 
+.choice li,
+.choice span,
+.choice em,
+.choice strong,
+.statusPanel strong,
+.statusPanel p {
+  overflow-wrap: anywhere;
+}
+
 .fieldGrid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -282,6 +308,7 @@
 .form select,
 .form textarea {
   width: 100%;
+  min-width: 0;
   min-height: 46px;
   box-sizing: border-box;
   border: 1px solid var(--tm-line);

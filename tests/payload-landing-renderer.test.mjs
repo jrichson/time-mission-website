@@ -20,11 +20,19 @@ describe('Payload public landing renderer', () => {
       'tm-landing-main--paid_social_campaign',
       'tm-landing-main--local_venue_city',
       'tm-landing-main--group_event',
+      'data-landing-section="paid-social-proof"',
+      'data-landing-section="paid-friction-reducer"',
+      'data-landing-section="local-venue-signal"',
+      'data-landing-section="local-confidence"',
+      'data-landing-section="group-planner-reassurance"',
+      'data-landing-section="group-proof"',
+      'Book tickets instead',
       'doc.brief || {}',
       'brief.visitorIntent',
       'brief.sourcePromise',
       'data-tm-landing-primary',
       'data-link-path={cta.linkPath}',
+      'document.querySelectorAll',
     ]) {
       expect(renderer).toContain(marker);
     }

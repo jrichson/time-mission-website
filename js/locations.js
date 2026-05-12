@@ -383,6 +383,8 @@
             // Tickets / Book Now buttons — update href
             if (loc && loc.bookingUrl) {
                 document.querySelectorAll('.btn-tickets, .btn-book-now, [data-tm-booking]').forEach(el => {
+                    const bookingKind = (el.getAttribute('data-tm-booking-kind') || 'tickets').toLowerCase();
+                    if (bookingKind !== 'tickets') return;
                     el.href = loc.bookingUrl;
                 });
             }
@@ -631,21 +633,28 @@
         clear() {
             if (typeof TM.clear === 'function') TM.clear();
         },
-        resolveBookingUrl(kind, id) {
+        resolveBookingUrl(kind, id, opts) {
             const loc = id ? (typeof TM.get === 'function' ? TM.get(id) : null) : TM.current;
             if (!loc) return '';
+            const options = opts || {};
             const bookingKind = String(kind || 'tickets').toLowerCase();
             if (window.TMBooking && typeof window.TMBooking.resolveLocationDestination === 'function') {
                 return window.TMBooking.resolveLocationDestination(loc, {
                     kind: bookingKind,
                     locationId: id || (loc && (loc.id || loc.slug)) || '',
+                    groupType: options.groupType || options.pageGroupType || '',
                 });
             }
             if (bookingKind === 'gift-cards' || bookingKind === 'giftcards') {
                 return loc.giftCardUrl || '';
             }
+            if (bookingKind === 'waiver' || bookingKind === 'waivers') {
+                return loc.waiverUrl || '';
+            }
             if (bookingKind === 'groups') {
-                return loc.groupsUrl || '';
+                const groupType = String(options.groupType || options.pageGroupType || '').toLowerCase().trim().replace(/\s+/g, '-');
+                const groupUrls = loc.groupFormUrls || {};
+                return (groupType && groupUrls[groupType]) || groupUrls.default || loc.groupsUrl || '';
             }
             if (loc.status === 'coming-soon') {
                 return '/' + (loc.slug || loc.id || '');

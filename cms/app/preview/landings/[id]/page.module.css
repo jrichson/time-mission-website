@@ -17,6 +17,7 @@
   background: var(--preview-bg);
   color: var(--preview-text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  overflow-x: clip;
 }
 
 .campaignTemplate,
@@ -43,6 +44,24 @@
   background: rgba(5, 5, 5, 0.92);
   padding: 12px 24px;
   backdrop-filter: blur(16px);
+}
+
+.previewBar > div,
+.previewActions,
+.statusPanel div,
+.briefPanel,
+.briefPanel > div,
+.briefPanel dl,
+.briefPanel dl div,
+.warningPanel,
+.heroContent,
+.sectionHeader,
+.proofCard,
+.previewCopyPanel,
+.splitCopy {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 .previewActions {
@@ -79,7 +98,9 @@
   padding: 0 18px;
   font-size: 14px;
   font-weight: 750;
+  text-align: center;
   text-decoration: none;
+  white-space: normal;
 }
 
 .previewAdminLink,
@@ -235,17 +256,20 @@
 .templateBadge {
   display: inline-flex;
   min-height: 32px;
+  max-width: 100%;
   align-items: center;
   border: 1px solid var(--preview-line);
   border-radius: 999px;
   background: rgba(5, 5, 5, 0.62);
   padding: 0 12px;
+  white-space: normal;
 }
 
 .hero h1 {
   margin: 18px 0 16px;
   font-size: 5.5rem;
   line-height: 0.94;
+  overflow-wrap: anywhere;
   text-wrap: balance;
 }
 
@@ -273,7 +297,8 @@
 }
 
 .proofSection,
-.splitSection {
+.splitSection,
+.previewTemplateBlock {
   padding: clamp(56px, 8vw, 96px) 24px;
 }
 
@@ -317,6 +342,88 @@
   margin: 22px 0 0;
   font-size: 20px;
   line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.proofCard h2 {
+  margin: 18px 0 12px;
+  font-size: 3.1rem;
+  line-height: 0.98;
+}
+
+.proofCard p {
+  margin: 14px 0 0;
+  color: var(--preview-muted);
+  line-height: 1.55;
+}
+
+.previewTemplateBlock {
+  display: grid;
+  gap: clamp(28px, 5vw, 56px);
+}
+
+.previewSplit,
+.locationGrid {
+  display: grid;
+  width: min(100%, 1120px);
+  gap: clamp(18px, 4vw, 40px);
+  margin: 0 auto;
+}
+
+.previewSplit {
+  grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr);
+  align-items: center;
+}
+
+.locationGrid {
+  grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 0.9fr));
+}
+
+.leadCard {
+  background: rgba(255, 122, 47, 0.1);
+}
+
+.previewCopyPanel {
+  border: 1px solid var(--preview-line);
+  border-radius: 8px;
+  background: var(--preview-panel-soft);
+  padding: clamp(22px, 4vw, 32px);
+}
+
+.previewCopyPanel h2 {
+  margin: 16px 0 12px;
+  font-size: 3.35rem;
+  line-height: 0.98;
+}
+
+.previewCopyPanel p,
+.previewCopyPanel li {
+  color: var(--preview-muted);
+  line-height: 1.6;
+}
+
+.previewCopyPanel ul {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.previewCopyPanel li {
+  position: relative;
+  padding-left: 22px;
+}
+
+.previewCopyPanel li::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--preview-accent);
 }
 
 .splitSection {
@@ -373,6 +480,11 @@
   }
 
   .splitSection {
+    grid-template-columns: 1fr;
+  }
+
+  .previewSplit,
+  .locationGrid {
     grid-template-columns: 1fr;
   }
 
@@ -446,7 +558,8 @@
   }
 
   .proofSection,
-  .splitSection {
+  .splitSection,
+  .previewTemplateBlock {
     padding: 44px 16px;
   }
 
@@ -460,7 +573,9 @@
   }
 
   .sectionHeader h2,
-  .splitCopy h2 {
+  .splitCopy h2,
+  .previewCopyPanel h2,
+  .proofCard h2 {
     font-size: 2rem;
     line-height: 1.05;
   }

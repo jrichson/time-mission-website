@@ -152,26 +152,57 @@ test('location selection persists canonical slug', async ({ page, isMobile }) =>
   await page.locator('#locationBtn').click();
   await page.locator('#locationDropdown a[data-city="Philadelphia"]').click();
 
-  await page.waitForURL(/\/philadelphia$/);
+  await expect(page).toHaveURL(/\/$/);
   await expect(page.locator('#locationText')).toContainText('Philadelphia');
+  await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
 });
 
-test('location navigation keeps picker overlay covering old page while destination loads', async ({ page, isMobile }) => {
-  test.skip(isMobile, 'desktop-only transition path');
+test('desktop location click keeps picker open and renders address map preview', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'desktop-only preview path');
 
   await page.goto('/');
   await page.locator('#locationBtn').click();
   await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
 
-  const className = await page.locator('#locationDropdown a[data-city="Philadelphia"]').evaluate((el) => {
-    el.addEventListener('click', (event) => event.preventDefault(), { once: true });
-    el.click();
-    return document.getElementById('locationDropdown')?.className || '';
-  });
+  await page.locator('#locationDropdown a[data-city="Philadelphia"]').click();
+  const className = await page.locator('#locationDropdown').evaluate((el) => el.className || '');
   expect(className).toContain('open');
-  expect(className).toContain('navigating');
+  expect(className).not.toContain('navigating');
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('#locationInfo .location-info-name')).toContainText('Philadelphia');
+  await expect(page.locator('#locationInfo .location-info-address')).toContainText('1530 Chestnut Street');
+  await expect(page.locator('#locationMap iframe')).toHaveAttribute('src', /google\.com\/maps/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+});
+
+test('group CTAs resolve to audit-provided form URLs for the selected location', async ({ page }) => {
+  await page.goto('/groups/corporate');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  const href = await page.evaluate(() => {
+    return window.TMBooking.getDestination({
+      kind: 'groups',
+      groupType: 'corporate',
+      locationId: 'manassas',
+    });
+  });
+
+  expect(href).toBe('https://webforms.pipedrive.com/f/64NrjaZAs4GrLYSqpDDV0mzG46uGMN5cXrzEoAIjKKghJOzCRVmfw4mWkghflYR3Qn');
+});
+
+test('West Nyack ticket panel renders Briq widget config from the audit', async ({ page }) => {
+  await page.goto('/');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  await page.evaluate(() => {
+    window.TM.select('west-nyack');
+    window.TMBooking.open({ kind: 'tickets' });
+  });
+
+  const widget = page.locator('#ticketProviderWidget .bw-widget');
+  await expect(widget).toHaveAttribute('data-domain', 'timemission-palisades');
+  await expect(widget).toHaveAttribute('data-button-text', 'BOOK NOW');
 });
 
 test('faq accordion exposes keyboard accessible controls', async ({ page }) => {
@@ -277,21 +308,17 @@ test('legacy .html URLs are served or redirected (preview vs production redirect
 test.describe('Mobile location selector (P0-7a)', () => {
   test.skip(({ isMobile }) => !isMobile, 'mobile-only test');
 
-  test('tapping a location link keeps overlay open and reveals info panel', async ({ page }) => {
+  test('tapping a location link opens the venue page without a second tap', async ({ page }) => {
     await page.goto('/');
-    // Open the location overlay
     await page.locator('#locationBtn').first().click();
     await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
 
-    // Tap the Philadelphia link inside the overlay
     const philly = page.locator('#locationDropdown a[href*="philadelphia"]').first();
     await philly.tap();
 
-    // Assertion 1: location-info panel is visible
-    await expect(page.locator('#locationInfo')).toBeVisible();
-
-    // Assertion 2: overlay did NOT auto-close (still has .open class)
-    await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
+    await expect(page).toHaveURL(/\/philadelphia$/);
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+    await expect(page.locator('#locationDropdown')).not.toHaveClass(/open/);
   });
 });
 
