@@ -2,7 +2,7 @@
     <div class="ticket-overlay" id="ticketOverlay"></div>
     <div class="ticket-panel" id="ticketPanel">
         <div class="ticket-panel-header">
-            <h3>Book Your Adventure</h3>
+            <h3 id="ticketPanelTitle">Book Your Adventure</h3>
             <button class="ticket-panel-close" id="ticketClose" aria-label="Close ticket panel">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -11,27 +11,31 @@
             </button>
         </div>
         <div class="ticket-panel-content">
-            <p>Select your location and we'll take you to our booking system to choose your date and time.</p>
+            <p id="ticketPanelIntro">Select your location and we'll take you to our booking system to choose your date and time.</p>
 
             <div class="ticket-location-select">
                 <label for="ticketLocation">Choose Location</label>
                 <select id="ticketLocation">
-                    <option value="philadelphia">Philadelphia</option>
                     <option value="mount-prospect">Mount Prospect</option>
+                    <option value="philadelphia">Philadelphia</option>
                     <option value="west-nyack">West Nyack</option>
                     <option value="lincoln">Lincoln</option>
-                    <option value="houston">Houston (Marq'E)</option>
                     <option value="manassas">Manassas</option>
-                    <option value="antwerp">Antwerp (Belgium)</option>
+                    <option value="houston">Houston (Coming Soon)</option>
+                    <option value="antwerp">Antwerp</option>
+                    <option value="orland-park">Orland Park (Coming Soon)</option>
+                    <option value="brussels">Brussels (Coming Soon)</option>
+                    <option value="dallas">Dallas (Coming Soon)</option>
                 </select>
             </div>
 
             <a href="#" class="btn-ticket-book" id="ticketBookBtn" target="_blank" rel="noopener noreferrer">
-                Continue to Booking
+                <span id="ticketBookBtnText">Continue to Booking</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                 </svg>
             </a>
+            <div class="ticket-provider-widget" id="ticketProviderWidget" hidden></div>
 
             <div class="ticket-panel-info">
                 <h4>QUICK INFO</h4>
