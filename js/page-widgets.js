@@ -921,6 +921,13 @@
         heroVideoEl.preload = 'none';
 
         runAfterFirstPaint(function () {
+            heroVideoEl.querySelectorAll('source[data-src]').forEach(function (source) {
+                if (!source.getAttribute('src')) source.setAttribute('src', source.getAttribute('data-src'));
+                if (source.hasAttribute('data-media') && !source.hasAttribute('media')) {
+                    source.setAttribute('media', source.getAttribute('data-media'));
+                }
+            });
+
             var attempted = false;
             function kickHeroPlayback() {
                 if (attempted) return;

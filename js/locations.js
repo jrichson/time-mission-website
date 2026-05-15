@@ -2,8 +2,8 @@
  * Time Mission — Location Manager
  * Handles location data loading, persistence (localStorage), and DOM updates.
  *
- * Data is provided synchronously via `window.TM_DATA` (inlined by
- * src/components/SiteScripts.astro before this script tag). No fetch.
+ * Data is provided by `/data/locations.json`, with `window.TM_DATA` kept as a
+ * backwards-compatible escape hatch for test fixtures and file previews.
  *
  * Usage:
  *   <script src="js/locations.js"></script>
@@ -223,10 +223,8 @@
         }
     }
 
-    // RFC #11: data is provided synchronously via window.TM_DATA (inlined by
-    // src/components/SiteScripts.astro). TM.ready resolves after init has
-    // loaded data and applied URL/page context, so consumers do not race the
-    // selected location.
+    // RFC #11: TM.ready resolves after init has loaded data and applied
+    // URL/page context, so consumers do not race the selected location.
     let _readyResolve = function () {};
     let _readyResolved = false;
     const _readyPromise = new Promise(function (resolve) {
@@ -253,14 +251,24 @@
         /** Resolves after location data and page/current-location state are applied. */
         ready: _readyPromise,
 
-        /** Load locations data from synchronous window.TM_DATA injection */
+        /** Load locations data from shared JSON, preserving the TM.ready contract. */
         async load() {
-            const data = (typeof window !== 'undefined' && window.TM_DATA) || null;
+            let data = (typeof window !== 'undefined' && window.TM_DATA) || null;
+            if (!data && typeof fetch === 'function') {
+                const url = (typeof window !== 'undefined' && window.__TM_DATA_URL__) || '/data/locations.json';
+                try {
+                    const response = await fetch(url, { credentials: 'same-origin' });
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    data = await response.json();
+                } catch (e) {
+                    console.warn('TM Locations: failed to load ' + url, e);
+                }
+            }
             if (data && Array.isArray(data.locations)) {
                 TM.locations = data.locations;
             } else {
-                // Defensive: matches the pre-RFC fetch-failure path
-                console.warn('TM Locations: window.TM_DATA missing — locations unavailable');
+                // Defensive: matches the pre-RFC fetch-failure path.
+                console.warn('TM Locations: locations data unavailable');
                 TM.locations = [];
             }
             maybeTrackSiteContractStale();

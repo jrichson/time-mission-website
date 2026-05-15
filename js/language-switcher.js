@@ -7,6 +7,34 @@
     var defaultLanguage = config.defaultLanguage || (languages[0] && languages[0].code) || 'en';
     var storageKey = config.storageKey || 'tm_language';
     var currentLanguage = defaultLanguage;
+    var readyResolve = function () {};
+    var readyPromise = new Promise(function (resolve) {
+        readyResolve = resolve;
+    });
+
+    function applyConfig(nextConfig) {
+        if (!nextConfig || typeof nextConfig !== 'object') return;
+        config = nextConfig;
+        languages = Array.isArray(config.languages) ? config.languages : [];
+        translations = config.translations || {};
+        defaultLanguage = config.defaultLanguage || (languages[0] && languages[0].code) || 'en';
+        storageKey = config.storageKey || 'tm_language';
+        currentLanguage = defaultLanguage;
+        if (window.TMI18n) window.TMI18n.languages = languages.slice();
+    }
+
+    async function loadConfig() {
+        if (config && Array.isArray(config.languages) && config.languages.length) return;
+        if (typeof fetch !== 'function') return;
+        var url = window.__TM_I18N_URL__ || '/data/i18n.json';
+        try {
+            var response = await fetch(url, { credentials: 'same-origin' });
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            applyConfig(await response.json());
+        } catch (e) {
+            console.warn('TM i18n: failed to load ' + url, e);
+        }
+    }
 
     function findLanguage(code) {
         if (!code) return null;
@@ -123,25 +151,28 @@
         }));
     }
 
-    function init() {
+    async function boot() {
+        await loadConfig();
         document.querySelectorAll('[data-language-select]').forEach(function (select) {
             select.addEventListener('change', function () {
                 setLanguage(select.value);
             });
         });
         setLanguage(getInitialLanguage(), { persist: false });
+        readyResolve();
     }
 
     window.TMI18n = {
         t: translate,
         setLanguage: setLanguage,
         getLanguage: function () { return currentLanguage; },
-        languages: languages.slice()
+        languages: languages.slice(),
+        ready: readyPromise
     };
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init, { once: true });
+        document.addEventListener('DOMContentLoaded', boot, { once: true });
     } else {
-        init();
+        boot();
     }
 })();

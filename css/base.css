@@ -18,6 +18,34 @@
     font-style: normal;
     font-display: swap;
 }
+@font-face {
+    font-family: 'Bebas Neue';
+    src: url('../assets/fonts/BebasNeue-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../assets/fonts/DMSans-Normal.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../assets/fonts/DMSans-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Orbitron';
+    src: url('../assets/fonts/Orbitron-Variable.woff2') format('woff2');
+    font-weight: 400 900;
+    font-style: normal;
+    font-display: swap;
+}
 
 /* Reset */
 * {

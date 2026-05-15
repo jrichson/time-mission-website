@@ -1,10 +1,7 @@
 ---
 import { getPublicSiteContract } from '../lib/site-contract';
-import i18nData from '../data/site/i18n.json';
-import locationsData from '../../data/locations.json';
 
 const siteContract = getPublicSiteContract();
-const tmData = locationsData;
 const formConfig = {
     turnstileSiteKey: String(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '').trim(),
 };
@@ -13,14 +10,10 @@ const formConfig = {
 <script is:inline define:vars={{ siteContract }}>
     window.__TM_SITE_CONTRACT__ = siteContract;
 </script>
-<script is:inline define:vars={{ tmData }}>
-    window.TM_DATA = tmData;
-</script>
 <script is:inline define:vars={{ formConfig }}>
     window.__TM_FORM_CONFIG__ = formConfig;
-</script>
-<script is:inline define:vars={{ i18nData }}>
-    window.__TM_I18N__ = i18nData;
+    window.__TM_DATA_URL__ = '/data/locations.json';
+    window.__TM_I18N_URL__ = '/data/i18n.json';
 </script>
 <script defer is:inline src="/js/site-progressive.js?v=1"></script>
 <script defer is:inline src="/js/language-switcher.js?v=1"></script>
@@ -33,9 +26,51 @@ const formConfig = {
 <script defer is:inline src="/js/booking-controller.js?v=5"></script>
 <script defer is:inline src="/js/ticket-panel.js?v=6"></script>
 <script defer is:inline src="/js/a11y.js"></script>
-<link rel="stylesheet" href="/css/cookieconsent.css">
-<link rel="stylesheet" href="/css/cookie-consent.css">
-<script defer is:inline src="/js/cookieconsent.umd.js"></script>
-<script defer is:inline src="/js/cookie-consent.js?v=1"></script>
+<script is:inline>
+    (function () {
+        function getProfile() {
+            try {
+                return (window.__TM_TAGGING_CONFIG__ || {}).consent_profile || 'global_strict';
+            } catch (e) {
+                return 'global_strict';
+            }
+        }
+        function appendStyle(href) {
+            if (document.querySelector('link[href="' + href + '"]')) return;
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            document.head.appendChild(link);
+        }
+        function appendScript(src, onload) {
+            if (document.querySelector('script[src="' + src + '"]')) {
+                if (onload) onload();
+                return;
+            }
+            var script = document.createElement('script');
+            script.src = src;
+            script.defer = true;
+            if (onload) script.addEventListener('load', onload, { once: true });
+            document.body.appendChild(script);
+        }
+        function loadConsentUi() {
+            if (getProfile() === 'us_open') return;
+            appendStyle('/css/cookieconsent.css');
+            appendStyle('/css/cookie-consent.css');
+            appendScript('/js/cookieconsent.umd.js', function () {
+                appendScript('/js/cookie-consent.js?v=1');
+            });
+        }
+        function schedule() {
+            if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(loadConsentUi, { timeout: 2200 });
+            } else {
+                window.setTimeout(loadConsentUi, 1200);
+            }
+        }
+        if (document.readyState === 'complete') schedule();
+        else window.addEventListener('load', schedule, { once: true });
+    })();
+</script>
 <script defer is:inline src="/js/web-vitals.iife.js"></script>
 <script defer is:inline src="/js/web-vitals-rum.js?v=1"></script>
