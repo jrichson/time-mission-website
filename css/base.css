@@ -97,6 +97,234 @@ body {
     padding: 0.5rem 0.75rem;
 }
 
+#cc-main input[type='checkbox'],
+#cc-main input[type='radio'] {
+    min-width: 24px !important;
+    min-height: 24px !important;
+}
+
+#cc-main input[type='text'],
+#cc-main input[type='email'] {
+    min-height: var(--target-min) !important;
+}
+
+#cc-main,
+#cc-main .cm,
+#cc-main .pm,
+#cc-main .cm-wrapper,
+#cc-main .pm-wrapper {
+    max-width: 100vw !important;
+    overflow-x: clip !important;
+}
+
+#cc-main .cm {
+    width: min(24rem, calc(100vw - 1rem)) !important;
+}
+
+#cc-main .pm {
+    width: min(43rem, calc(100vw - 1rem)) !important;
+}
+
+.experiences {
+    max-width: 100vw !important;
+    overflow-x: clip !important;
+    contain: layout paint;
+}
+
+.experiences-scroll {
+    max-width: none !important;
+    width: max-content;
+    contain: layout paint;
+}
+
+.experience-card {
+    flex-basis: clamp(260px, 78vw, 350px) !important;
+    height: clamp(360px, 112vw, 480px) !important;
+    border-radius: 12px !important;
+    animation: none !important;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+}
+
+.experience-card:hover {
+    box-shadow:
+        0 18px 42px rgba(0, 0, 0, 0.45),
+        0 0 28px rgba(255, 107, 44, 0.18) !important;
+}
+
+.hero,
+.hero-video-container,
+.cta-section,
+.cta-content,
+.page-header,
+.event-types,
+.event-info,
+.faq,
+.inquiry-section,
+.event-type-photo,
+.event-page-cta-inner,
+.event-page-cross-sell-grid {
+    max-width: 100% !important;
+    overflow-x: clip !important;
+}
+
+.hero-video-container {
+    contain: paint;
+}
+
+.page-header::before {
+    max-width: 100vw !important;
+}
+
+.cta-content,
+.event-page-cta-inner,
+.event-page-cross-sell-grid,
+.event-type-card,
+.section-title,
+.cta-title,
+.hero-title {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.cta-text,
+.cta-content p,
+.gift-card-info p,
+.gift-card-location-hint,
+.event-page-cta-subtitle {
+    max-width: 48rem !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.event-page-cross-sell-grid {
+    max-width: 68.75rem !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.cta-content .btn-primary,
+.cta-content .btn-tickets,
+.final-cta .btn-primary,
+.final-cta .btn-tickets,
+.event-page-cta-buttons .btn-primary,
+.event-page-cta-buttons .btn-secondary {
+    max-width: 100% !important;
+    white-space: normal !important;
+    text-align: center;
+    justify-content: center;
+    line-height: 1.2;
+}
+
+.event-type-actions {
+    width: auto !important;
+    max-width: calc(100% - 1rem) !important;
+    flex-wrap: wrap !important;
+}
+
+.event-type-cta {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.ticket-panel {
+    width: min(360px, 100vw) !important;
+    right: max(-360px, -100vw) !important;
+    transform: translateX(0) !important;
+    transition:
+        right var(--motion-slow) var(--ease-standard),
+        visibility var(--motion-slow) var(--ease-standard) !important;
+}
+
+.ticket-panel:not(.active) {
+    display: none !important;
+}
+
+.ticket-panel.active {
+    display: block !important;
+    right: 0 !important;
+    transform: translateX(0) !important;
+}
+
+@media (max-width: 480px) {
+    .experiences-scroll {
+        gap: 1rem !important;
+        padding-inline: 1rem !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .experiences-scroll {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        overflow-x: auto !important;
+        transform: none !important;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .experience-card {
+        scroll-snap-align: center;
+    }
+
+    .experience-card[aria-hidden='true'] {
+        display: none !important;
+    }
+
+    .experience-card:nth-of-type(n + 2),
+    .testimonials-track .testimonial-card:nth-of-type(n + 2),
+    .testimonials-scroll > .testimonial-card:nth-of-type(n + 2) {
+        display: none !important;
+    }
+
+    .testimonials-scroll,
+    .testimonials-track {
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow-x: clip !important;
+        transform: none !important;
+    }
+
+    .testimonial-card {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .ticket-panel {
+        width: 100vw !important;
+    }
+
+    .page-header::before {
+        width: 100vw !important;
+        height: 100vw !important;
+    }
+
+    .cta-content {
+        margin-left: 1rem !important;
+        margin-right: 1rem !important;
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+    }
+
+    .event-type-actions {
+        left: 0.75rem !important;
+        right: 0.75rem !important;
+        max-width: none !important;
+        transform: translateY(0) !important;
+    }
+
+    .event-type-card:hover .event-type-actions {
+        transform: translateY(0) !important;
+    }
+
+    .event-type-cta {
+        flex: 1 1 8rem !important;
+        padding-inline: 0.75rem !important;
+    }
+}
+
 .geo-disclosure summary {
     padding-block: 0.35rem;
 }

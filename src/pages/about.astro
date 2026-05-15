@@ -3,9 +3,9 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import aboutMain from '../partials/about-main.frag.txt?raw';
 import aboutFooter from '../partials/about-footer.frag.txt?raw';
-import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 
-const ld = serializeGraph(buildHomeGraph());
+const ld = serializeGraph(buildSimpleGraph());
 const page = definePage({ canonicalPath: '/about' });
 ---
 

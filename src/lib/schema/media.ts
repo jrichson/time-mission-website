@@ -17,6 +17,7 @@ export interface VideoObjectNode {
     description: string;
     thumbnailUrl: string;
     contentUrl: string;
+    uploadDate: string;
 }
 
 function absoluteUrl(pathOrUrl: string): string {
@@ -47,6 +48,7 @@ export function videoObjectNode(opts: {
     description: string;
     thumbnailUrl: string;
     contentUrl: string;
+    uploadDate: string;
 }): VideoObjectNode {
     return {
         '@type': 'VideoObject',
@@ -55,6 +57,7 @@ export function videoObjectNode(opts: {
         description: opts.description,
         thumbnailUrl: absoluteUrl(opts.thumbnailUrl),
         contentUrl: absoluteUrl(opts.contentUrl),
+        uploadDate: opts.uploadDate,
     };
 }
 
@@ -80,6 +83,7 @@ export function homeHeroMediaNodes(): Array<ImageObjectNode | VideoObjectNode> {
                     'Hero video showing the active indoor Time Mission experience with teams moving through challenge rooms.',
                 thumbnailUrl: '/assets/video/hero-poster.jpg',
                 contentUrl: `${mediaBase}/assets/video/hero-bg-web.mp4`,
+                uploadDate: '2026-05-09',
             }),
         );
     }

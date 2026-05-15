@@ -15,7 +15,7 @@
 
         .page-subtitle {
             font-size: 1.1rem;
-            color: var(--gray);
+            color: rgba(255, 255, 255, 0.76);
             line-height: 1.8;
             max-width: 600px;
             margin: 0 auto;
@@ -32,6 +32,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
+            min-width: 0;
         }
 
         /* Contact Form */
@@ -40,6 +41,8 @@
             border: 1px solid rgba(255, 107, 44, 0.15);
             border-radius: 20px;
             padding: 2.5rem;
+            min-width: 0;
+            overflow-x: clip;
         }
 
         .contact-form-card h3 {
@@ -50,7 +53,7 @@
         }
 
         .contact-form-card > p {
-            color: var(--gray);
+            color: rgba(255, 255, 255, 0.76);
             margin-bottom: 2rem;
         }
 
@@ -101,7 +104,7 @@
 
         .form-group input::placeholder,
         .form-group textarea::placeholder {
-            color: var(--gray);
+            color: rgba(255, 255, 255, 0.76);
         }
 
         .form-group select {
@@ -173,7 +176,7 @@
         }
 
         .locations-info > p {
-            color: var(--gray);
+            color: rgba(255, 255, 255, 0.76);
             margin-bottom: 1rem;
         }
 
@@ -313,7 +316,7 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            color: var(--gray);
+            color: rgba(255, 255, 255, 0.76);
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -334,7 +337,7 @@
         }
 
         .ticket-panel-content p {
-            color: var(--gray);
+            color: rgba(255, 255, 255, 0.76);
             margin-bottom: 2rem;
             line-height: 1.6;
         }
@@ -465,7 +468,9 @@
             .page-header { padding: 100px 1rem 2rem; }
             .section-title { font-size: 2rem; }
             .page-subtitle { font-size: 0.95rem; line-height: 1.6; }
-            .contact-form, .contact-section { padding-left: 1rem; padding-right: 1rem; }
+            .contact-section { padding-left: 1rem; padding-right: 1rem; }
+            .contact-form-card { padding: 1.35rem 1rem; }
+            .contact-form { padding-left: 0; padding-right: 0; }
             .form-group input, .form-group textarea { padding: 0.75rem 0.9rem; font-size: 0.95rem; }
             .btn-submit { min-height: 44px; font-size: 0.85rem; padding: 0.85rem 1.5rem; }
         }

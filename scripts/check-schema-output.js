@@ -84,6 +84,16 @@ for (const route of schemaRoutes) {
   }
   if (cp === '/') {
     if (!has('ImageObject')) errors.push(`${outFile}: missing ImageObject for primary hero media`);
+    for (const video of findNodesByType(graph, 'VideoObject')) {
+      if (typeof video.uploadDate !== 'string' || !video.uploadDate.trim()) {
+        errors.push(`${outFile}: VideoObject missing uploadDate`);
+      }
+    }
+  }
+  if (cp === '/about') {
+    if (has('ImageObject') || has('VideoObject')) {
+      errors.push(`${outFile}: about page should not emit homepage media schema`);
+    }
   }
 
   // Pages that must emit BreadcrumbList (legal pages + nav pages with breadcrumb schema)

@@ -1,5 +1,5 @@
 # Time Mission — robots.txt
-License: https://timemission.com/license.xml
+# License: https://timemission.com/license.xml
 
 User-agent: *
 Allow: /

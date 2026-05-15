@@ -41,11 +41,19 @@ function stateBadge(loc: LocationRecord) {
 }
 
 function statusLabel(loc: LocationRecord) {
-    return loc.status === 'open' ? 'Open for booking' : 'Coming soon';
+    return isBookableLocation(loc) ? 'Now booking' : 'Coming soon';
 }
 
 function contactLabel(loc: LocationRecord) {
     return [loc.contact.phone, loc.contact.email].filter(Boolean).join(' / ') || 'Not yet listed';
+}
+
+function isBookableLocation(loc: LocationRecord) {
+    return Boolean(String(loc.rollerCheckoutUrl || loc.bookingUrl || '').trim());
+}
+
+function isLeadOnlyComingSoon(loc: LocationRecord) {
+    return loc.status === 'coming-soon' && !isBookableLocation(loc);
 }
 
 const ld = serializeGraph(
@@ -131,14 +139,14 @@ const page = definePage({ canonicalPath: '/locations' });
                                 class:list={[
                                     'loc-row',
                                     'reveal',
-                                    { 'is-coming-soon': loc.status === 'coming-soon' },
+                                    { 'is-coming-soon': isLeadOnlyComingSoon(loc) },
                                 ]}
                             >
                                 <span class="loc-state">{stateBadge(loc)}</span>
                                 <div class="loc-body">
                                     <div class="loc-name">
                                         {loc.shortName}
-                                        {loc.status === 'coming-soon' ? (
+                                        {isLeadOnlyComingSoon(loc) ? (
                                             <span class="loc-coming-soon-tag">Coming Soon</span>
                                         ) : null}
                                     </div>
@@ -168,14 +176,14 @@ const page = definePage({ canonicalPath: '/locations' });
                                 class:list={[
                                     'loc-row',
                                     'reveal',
-                                    { 'is-coming-soon': loc.status === 'coming-soon' },
+                                    { 'is-coming-soon': isLeadOnlyComingSoon(loc) },
                                 ]}
                             >
                                 <span class="loc-state">{stateBadge(loc)}</span>
                                 <div class="loc-body">
                                     <div class="loc-name">
                                         {loc.shortName}
-                                        {loc.status === 'coming-soon' ? (
+                                        {isLeadOnlyComingSoon(loc) ? (
                                             <span class="loc-coming-soon-tag">Coming Soon</span>
                                         ) : null}
                                     </div>

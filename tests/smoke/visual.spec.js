@@ -87,11 +87,11 @@ test.describe('visual regression (representative templates)', () => {
     });
   });
 
-  test('coming-soon location (Houston)', async ({ page }) => {
+  test('bookable launch location (Houston)', async ({ page }) => {
     await page.goto('/houston');
     await expect(page).toHaveTitle(/Houston/i);
     await stabilizeForScreenshot(page);
-    await expect(page).toHaveScreenshot('location-coming-soon.png', {
+    await expect(page).toHaveScreenshot('location-bookable-houston.png', {
       fullPage: false,
       animations: 'disabled',
       maxDiffPixels: VISUAL_MAX_DIFF_PIXELS,
