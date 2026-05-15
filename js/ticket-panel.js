@@ -51,10 +51,11 @@
 
     function openTicketPanel(e) {
         if (e && typeof e.preventDefault === 'function') e.preventDefault();
-        // Pre-select saved location, if any
+        // Pre-select saved/current location, falling back to the location page itself.
         var current = (window.TM && window.TM.current) || null;
-        if (current && (current.id || current.slug) && ticketLocSel) {
-            ticketLocSel.value = (current.id || current.slug || '').toLowerCase().trim().replace(/\s+/g, '-');
+        var activeLocation = (current && (current.id || current.slug)) || pageLocation;
+        if (activeLocation && ticketLocSel) {
+            ticketLocSel.value = String(activeLocation).toLowerCase().trim().replace(/\s+/g, '-');
         }
         ticketPanel.classList.add('active');
         if (ticketOverlay) ticketOverlay.classList.add('active');

@@ -209,8 +209,16 @@ describe('browser architecture contracts', () => {
             id: 'houston',
             slug: 'houston',
             status: 'coming-soon',
-            bookingUrl: 'https://fallback.example/houston',
+            bookingUrl: 'https://checkout.example/houston',
+            rollerCheckoutUrl: 'https://checkout.example/houston',
             giftCardUrl: 'https://gift.example/houston',
+            groupFormUrls: {},
+          },
+          {
+            id: 'dallas',
+            slug: 'dallas',
+            status: 'coming-soon',
+            bookingUrl: '',
             groupFormUrls: {},
           },
         ],
@@ -238,7 +246,11 @@ describe('browser architecture contracts', () => {
     expect(window.TMBooking.getDestination({ kind: 'waiver', locationId: 'manassas' }))
       .toBe('https://waiver.example/manassas');
     expect(window.LocationContext.resolveBookingUrl('tickets', 'houston'))
-      .toBe('/houston');
+      .toBe('https://checkout.example/houston');
+    expect(window.TMBooking.getDestination({ kind: 'groups', locationId: 'houston' }))
+      .toBe('https://checkout.example/houston');
+    expect(window.LocationContext.resolveBookingUrl('tickets', 'dallas'))
+      .toBe('/dallas#newsletter');
     expect(window.TMBooking.getDestination({
       kind: 'tickets',
       locationId: 'manassas',

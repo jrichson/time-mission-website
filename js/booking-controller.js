@@ -55,42 +55,64 @@
     }
 
     function resolveOpenCheckoutUrl(loc) {
-        if (!loc || loc.status === 'coming-soon') return '';
+        if (!loc) return '';
         var roller = (loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
         if (roller !== '') return roller;
         var booking = (loc.bookingUrl && String(loc.bookingUrl).trim()) || '';
         return booking;
     }
 
+    function isBookableLocation(loc) {
+        return !!resolveOpenCheckoutUrl(loc);
+    }
+
+    function isLeadOnlyComingSoon(loc) {
+        return !!(loc && loc.status === 'coming-soon' && !isBookableLocation(loc));
+    }
+
+    function resolveComingSoonLeadUrl(loc, fallbackSlug) {
+        var slug = (loc && (loc.slug || loc.id)) || fallbackSlug || '';
+        return slug ? '/' + slug + '#newsletter' : '/locations#newsletter';
+    }
+
     function resolveLocationDestination(loc, options) {
         var opts = options || {};
         if (!loc) return '';
         var kind = normalizeKind(opts.kind || 'tickets');
+        var slug = loc.slug || loc.id || normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
+
+        var checkoutUrl = resolveOpenCheckoutUrl(loc);
+        var bookable = !!checkoutUrl;
 
         if (kind === 'gift-cards' || kind === 'giftcards') {
+            if (loc.giftCardUrl) return loc.giftCardUrl;
+            if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);
             return loc.giftCardUrl || '';
         }
 
         if (kind === 'waiver' || kind === 'waivers') {
+            if (loc.waiverUrl) return loc.waiverUrl;
+            if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);
             return loc.waiverUrl || '';
         }
 
         if (kind === 'groups') {
             var groupType = normalizeGroupType(opts.groupType || opts.pageGroupType || '');
             var groupUrls = loc.groupFormUrls || {};
-            return (groupType && groupUrls[groupType]) || groupUrls.default || loc.groupsUrl || '';
-        }
-
-        var slug = loc.slug || loc.id || normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
-        if (loc.status === 'coming-soon') {
-            return slug ? '/' + slug : '';
+            var groupUrl = (groupType && groupUrls[groupType]) || groupUrls.default || loc.groupsUrl || '';
+            if (groupUrl) return groupUrl;
+            if (bookable) return checkoutUrl;
+            if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);
+            return '';
         }
 
         if (opts.preferLocationPageFlow && slug) {
             return '/' + slug + '?book=1';
         }
 
-        return resolveOpenCheckoutUrl(loc);
+        if (bookable) return checkoutUrl;
+        if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);
+        return '';
     }
 
     function tmTrack(key, payload) {
@@ -379,6 +401,15 @@
         var pageLocationSlug = normalizeLocation(options.pageLocationSlug || (document.body && document.body.dataset.location) || '');
         var panelIntent = { kind: 'tickets', groupType: '' };
 
+        if (locSelect && locSelect.options && pageLocationSlug) {
+            for (var i = 0; i < locSelect.options.length; i++) {
+                if (normalizeLocation(locSelect.options[i].value) === pageLocationSlug) {
+                    locSelect.value = locSelect.options[i].value;
+                    break;
+                }
+            }
+        }
+
         function selectedLocation() {
             return locationForOptions({
                 locationId: locSelect ? locSelect.value : '',
@@ -386,13 +417,17 @@
             });
         }
 
-        function syncPanelCopy() {
+        function syncPanelCopy(loc) {
             if (!panel) return;
             var title = panel.querySelector('#ticketPanelTitle');
             var intro = panel.querySelector('#ticketPanelIntro');
             var ctaText = panel.querySelector('#ticketBookBtnText');
             var kind = normalizeKind(panelIntent.kind);
-            if (kind === 'groups') {
+            if ((kind === 'tickets' || kind === 'groups') && isLeadOnlyComingSoon(loc)) {
+                if (title) title.textContent = 'Get Location Updates';
+                if (intro) intro.textContent = 'Select a coming-soon location and sign up for launch news, early access, and opening offers.';
+                if (ctaText) ctaText.textContent = 'Sign Up for Updates';
+            } else if (kind === 'groups') {
                 if (title) title.textContent = 'Plan Your Event';
                 if (intro) intro.textContent = 'Select your location and we will send you to the right event request form.';
                 if (ctaText) ctaText.textContent = 'Continue to Form';
@@ -413,7 +448,6 @@
                 kind: normalizeKind(next.kind || 'tickets'),
                 groupType: normalizeGroupType(next.groupType || next.pageGroupType || ''),
             };
-            syncPanelCopy();
             syncCtaHref();
         }
 
@@ -464,6 +498,7 @@
         function syncCtaHref() {
             if (!ctaBtn || !locSelect) return;
             var loc = selectedLocation();
+            syncPanelCopy(loc);
             var url = getDestination({
                 kind: panelIntent.kind,
                 groupType: panelIntent.groupType,
@@ -472,7 +507,7 @@
                 preferLocationPageFlow: false,
             });
             // Coming-soon location-page flow: append ?book=1 if the resolved url is just /slug
-            if (normalizeKind(panelIntent.kind) === 'tickets' && !pageLocationSlug && url && /^\//.test(url) && url.indexOf('?') === -1) {
+            if (normalizeKind(panelIntent.kind) === 'tickets' && !pageLocationSlug && url && /^\//.test(url) && url.indexOf('?') === -1 && url.indexOf('#') === -1) {
                 if (loc && loc.status === 'coming-soon') url += '?book=1';
             }
             ctaBtn.href = url || '#';

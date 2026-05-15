@@ -5,7 +5,7 @@ import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
 import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
 
-const slug = 'houston';
+const slug = 'orland-park';
 const location = allLocations.find((l) => l.slug === slug);
 if (!location) throw new Error(`${slug} missing from src/data/locations`);
 

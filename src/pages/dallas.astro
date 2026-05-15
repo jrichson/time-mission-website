@@ -5,7 +5,7 @@ import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
 import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
 
-const slug = 'houston';
+const slug = 'dallas';
 const location = allLocations.find((l) => l.slug === slug);
 if (!location) throw new Error(`${slug} missing from src/data/locations`);
 
@@ -19,17 +19,14 @@ const ld = serializeGraph(
     ]),
 );
 const market = [location.address.city, location.address.state || location.address.country].filter(Boolean).join(', ');
-const isBookable = Boolean(location.rollerCheckoutUrl || location.bookingUrl);
-const pageTitle = `${location.name} | ${isBookable ? 'Now Booking' : 'Coming Soon'}`;
-const pageDescription = isBookable
-    ? `${location.name} is now booking${market ? ` in ${market}` : ''}. Reserve tickets for 25+ immersive mission rooms.`
-    : `${location.name} is coming soon${market ? ` in ${market}` : ''}. Sign up for launch updates, early access, and opening offers.`;
+const pageTitle = `${location.name} | Coming Soon`;
+const pageDescription = `${location.name} is coming soon${market ? ` in ${market}` : ''}. Sign up for launch updates, early access, and opening offers.`;
 const pageInit = {
     mode: 'city',
     config: {
         city: location.shortName,
         taglines: [
-            isBookable ? 'Now Booking' : 'Coming Soon',
+            'Coming Soon',
             'Social Gaming Adventure',
             'Family Game Night on Steroids',
             'Birthday Parties, Leveled Up',
@@ -46,10 +43,10 @@ const pageInit = {
     title={pageTitle}
     description={pageDescription}
     bodyDataLocation={location.slug}
-    bookingCtaHref={isBookable ? '#' : '#newsletter'}
-    bookingCtaLabel={isBookable ? 'Book Now' : 'Sign Up'}
-    bookingCtaIsBookingTrigger={isBookable}
-    bookingCtaI18n={isBookable ? 'nav.bookNow' : ''}
+    bookingCtaHref="#newsletter"
+    bookingCtaLabel="Sign Up"
+    bookingCtaIsBookingTrigger={false}
+    bookingCtaI18n=""
 >
     <Fragment slot="head-extra">
         <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" />

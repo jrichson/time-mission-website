@@ -1,0 +1,71 @@
+---
+import { allLocations } from '../data/locations';
+import { applyTmMediaBase } from '../lib/tm-media';
+import comingSoonMainRaw from '../partials/houston-main.frag.txt?raw';
+
+interface Props {
+    slug: string;
+}
+
+const { slug } = Astro.props;
+const location = allLocations.find((l) => l.slug === slug);
+if (!location) throw new Error(`${slug} missing from src/data/locations`);
+if (location.status !== 'coming-soon') {
+    throw new Error(`${slug} is not configured as a coming-soon location`);
+}
+
+function escapeHtml(value: unknown) {
+    return String(value ?? '').replace(/[&<>"']/g, (char) => {
+        const entities: Record<string, string> = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+        };
+        return entities[char] || char;
+    });
+}
+
+function replaceToken(source: string, token: string, value: unknown) {
+    return source.replaceAll(`{{${token}}}`, escapeHtml(value));
+}
+
+function replaceRawToken(source: string, token: string, value: string) {
+    return source.replaceAll(`{{${token}}}`, value);
+}
+
+const checkoutUrl = String(location.rollerCheckoutUrl || location.bookingUrl || '').trim();
+const isBookable = checkoutUrl !== '';
+const primaryCtaLabel = isBookable ? 'Book Now' : 'Sign Up For Location Updates';
+const primaryCtaHref = isBookable ? checkoutUrl : '#newsletter';
+const primaryCtaClass = isBookable ? 'btn-location-book' : 'btn-location-lead';
+const primaryCtaAttrs = isBookable
+    ? `data-tm-booking-trigger="" data-tm-booking-kind="tickets" data-tm-location="${escapeHtml(location.slug)}"`
+    : '';
+const pageStatusLabel = isBookable ? 'Booking Now' : 'Coming Soon';
+const bookingFaqQuestion = isBookable ? 'Can I book now?' : 'When can I book?';
+const bookingFaqAnswer = isBookable
+    ? `Yes. Online booking is available for ${location.shortName}. Use Book Now to choose your date and time through our secure checkout.`
+    : 'Booking opens closer to launch. Join the location list and we will send opening updates, early access, and first ticket alerts.';
+const finalCtaTitle = isBookable ? 'BOOK YOUR MISSION' : 'GET FIRST ACCESS';
+const finalCtaText = isBookable
+    ? `Tickets for ${location.shortName} are available now. Choose your date, rally your team, and get ready to play.`
+    : `Join the ${location.shortName} list for launch news, early access, and opening offers.`;
+
+let comingSoonMain = applyTmMediaBase(comingSoonMainRaw);
+comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_NAME', location.name);
+comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_SHORT_NAME', location.shortName);
+comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_SLUG', location.slug);
+comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_PAGE_STATUS_LABEL', pageStatusLabel);
+comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_LABEL', primaryCtaLabel);
+comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_HREF', primaryCtaHref);
+comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_CLASS', primaryCtaClass);
+comingSoonMain = replaceRawToken(comingSoonMain, 'PRIMARY_CTA_ATTRS', primaryCtaAttrs);
+comingSoonMain = replaceToken(comingSoonMain, 'BOOKING_FAQ_QUESTION', bookingFaqQuestion);
+comingSoonMain = replaceToken(comingSoonMain, 'BOOKING_FAQ_ANSWER', bookingFaqAnswer);
+comingSoonMain = replaceToken(comingSoonMain, 'FINAL_CTA_TITLE', finalCtaTitle);
+comingSoonMain = replaceToken(comingSoonMain, 'FINAL_CTA_TEXT', finalCtaText);
+---
+
+<div set:html={comingSoonMain} />

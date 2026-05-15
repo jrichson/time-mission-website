@@ -12,7 +12,9 @@ export function ticketPanelSelectOptions(locations: LocationRecord[]): TicketPan
         value: loc.id,
         label:
             (loc.shortName || loc.name || loc.id) +
-            (loc.status === 'coming-soon' ? ' (Coming Soon)' : ''),
+            (loc.status === 'coming-soon'
+                ? (loc.rollerCheckoutUrl || loc.bookingUrl ? ' (Booking Now)' : ' (Coming Soon)')
+                : ''),
         status: loc.status || 'open',
     }));
 }

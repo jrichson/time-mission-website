@@ -116,7 +116,7 @@ function validateOpenLocation(location) {
 function validateComingSoonLocation(location) {
   const id = location.id;
   if (location.bookingUrl && String(location.bookingUrl).trim() !== '') {
-    errors.push(`${id} is coming soon but has bookingUrl`);
+    assertSafeUrl(id, 'bookingUrl', location.bookingUrl, { allowMailtoBooking: true });
   }
   if (location.mapUrl && String(location.mapUrl).trim() !== '') {
     assertSafeUrl(id, 'mapUrl', location.mapUrl, { allowMailto: false });

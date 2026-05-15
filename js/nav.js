@@ -221,14 +221,8 @@
                     syncAllLocations(cityName, slug, overlayTrack);
 
                     if (slug && isSameWindowNavigationClick(e, link)) {
-                        if (narrowPicker) {
-                            closeLocationOverlay();
-                            locationOverlay.classList.add('navigating');
-                            return;
-                        }
-                        showLocationInfo(slug);
-                        e.preventDefault();
-                        e.stopPropagation();
+                        closeLocationOverlay();
+                        locationOverlay.classList.add('navigating');
                         return;
                     }
 

@@ -18,6 +18,10 @@ interface Props {
     robots?: string;
     bodyDataLocation?: string;
     bodyClass?: string;
+    bookingCtaHref?: string;
+    bookingCtaLabel?: string;
+    bookingCtaIsBookingTrigger?: boolean;
+    bookingCtaI18n?: string;
     landingHead?: import('../lib/seo/catalog').LandingHeadInput | null;
     lang?: string;
     /** Optional YYYY-MM-DD override; otherwise resolved from git mtime of the page source file. */
@@ -38,6 +42,10 @@ const {
     robots,
     bodyDataLocation,
     bodyClass,
+    bookingCtaHref = '#',
+    bookingCtaLabel = 'Book Now',
+    bookingCtaIsBookingTrigger = true,
+    bookingCtaI18n = 'nav.bookNow',
     landingHead,
     lang = 'en',
     lastUpdated,
@@ -74,8 +82,20 @@ const sitePageHead = landingHead ? null : sitePageHeadForDoc(await getPublishedS
         <header role="banner">
             <slot name="pre-nav" />
             <slot name="nav">
-                <MobileMenu currentLang={lang} />
-                <SiteNav currentLang={lang} />
+                <MobileMenu
+                    currentLang={lang}
+                    bookingCtaHref={bookingCtaHref}
+                    bookingCtaLabel={bookingCtaLabel}
+                    bookingCtaIsBookingTrigger={bookingCtaIsBookingTrigger}
+                    bookingCtaI18n={bookingCtaI18n}
+                />
+                <SiteNav
+                    currentLang={lang}
+                    bookingCtaHref={bookingCtaHref}
+                    bookingCtaLabel={bookingCtaLabel}
+                    bookingCtaIsBookingTrigger={bookingCtaIsBookingTrigger}
+                    bookingCtaI18n={bookingCtaI18n}
+                />
                 <LocationOverlay currentLang={lang} />
             </slot>
         </header>

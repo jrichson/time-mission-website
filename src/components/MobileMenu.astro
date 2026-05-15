@@ -4,9 +4,23 @@ import nav from '../data/site/navigation.json';
 
 interface Props {
     currentLang?: string;
+    bookingCtaHref?: string;
+    bookingCtaLabel?: string;
+    bookingCtaIsBookingTrigger?: boolean;
+    bookingCtaI18n?: string;
 }
 
-const { currentLang = 'en' } = Astro.props;
+const {
+    currentLang = 'en',
+    bookingCtaHref = '#',
+    bookingCtaLabel = 'Book Now',
+    bookingCtaIsBookingTrigger = true,
+    bookingCtaI18n = 'nav.bookNow',
+} = Astro.props;
+const bookingCtaAttrs = {
+    ...(bookingCtaIsBookingTrigger ? { 'data-tm-booking-trigger': '' } : {}),
+    ...(bookingCtaI18n ? { 'data-i18n': bookingCtaI18n } : {}),
+};
 
 const navTranslationKeys: Record<string, string> = {
     '/about': 'nav.about',
@@ -43,6 +57,6 @@ const navTranslationKeys: Record<string, string> = {
         </a>
     </div>
     <div class="mobile-menu-cta">
-        <a href="#" class="btn-tickets" data-tm-booking-trigger data-i18n="nav.bookNow">Book Now</a>
+        <a href={bookingCtaHref} class="btn-tickets" {...bookingCtaAttrs}>{bookingCtaLabel}</a>
     </div>
 </div>

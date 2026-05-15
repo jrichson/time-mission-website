@@ -122,7 +122,16 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await expect(options).toHaveCount(expectedCount);
 
   await page.locator('#ticketLocation').selectOption('orland-park');
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/orland-park?book=1');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'href',
+    'https://book.orlandpark.timemission.com/timemissionorlandpark/onlinecheckout/en-us/home'
+  );
+
+  await page.locator('#ticketLocation').selectOption('houston');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'href',
+    'https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home'
+  );
 
   await page.locator('#ticketLocation').selectOption('manassas');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
@@ -204,7 +213,7 @@ test('open location ?book=1 navigates to https checkout', async ({ page }) => {
   expect(firstHttps.url()).not.toContain('book=1');
 });
 
-test('location selection persists canonical slug', async ({ page, isMobile }) => {
+test('desktop location selection opens the selected venue page', async ({ page, isMobile }) => {
   // Desktop-only: this flow uses the desktop `#locationBtn` in the nav.
   // Mobile location selection lives inside the hamburger menu and is covered
   // by the dedicated `Mobile location selector (P0-7a)` describe block below.
@@ -215,20 +224,20 @@ test('location selection persists canonical slug', async ({ page, isMobile }) =>
   await page.locator('#locationBtn').click();
   await page.locator('#locationDropdown a[data-city="Philadelphia"]').click();
 
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/philadelphia$/);
   await expect(page.locator('#locationText')).toContainText('Philadelphia');
-  await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
+  await expect(page.locator('#locationDropdown')).not.toHaveClass(/open/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
 });
 
-test('desktop location click keeps picker open and renders address map preview', async ({ page, isMobile }) => {
+test('desktop location hover renders address map preview before selection', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop-only preview path');
 
   await page.goto('/');
   await page.locator('#locationBtn').click();
   await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
 
-  await page.locator('#locationDropdown a[data-city="Philadelphia"]').click();
+  await page.locator('#locationDropdown a[data-city="Philadelphia"]').hover();
   const className = await page.locator('#locationDropdown').evaluate((el) => el.className || '');
   expect(className).toContain('open');
   expect(className).not.toContain('navigating');
@@ -236,7 +245,32 @@ test('desktop location click keeps picker open and renders address map preview',
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Philadelphia');
   await expect(page.locator('#locationInfo .location-info-address')).toContainText('1530 Chestnut Street');
   await expect(page.locator('#locationMap iframe')).toHaveAttribute('src', /google\.com\/maps/);
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
+});
+
+test('location page drives nav state and ticket panel default location', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+  });
+
+  await page.goto('/philadelphia');
+  await expect(page.locator('#locationText')).toContainText('Philadelphia');
+  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
+    'href',
+    'https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home'
+  );
+
+  await page.evaluate(() => window.TMBooking.open({ kind: 'tickets' }));
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#ticketLocation')).toHaveValue('philadelphia');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'href',
+    'https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home'
+  );
 });
 
 test('group CTAs resolve to audit-provided form URLs for the selected location', async ({ page }) => {

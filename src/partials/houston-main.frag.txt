@@ -9,17 +9,17 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <div class="hero-eyebrow">
-                <span class="tagline-text no-cursor" id="taglineText">Time Mission Houston</span>
+                <span class="tagline-text no-cursor" id="taglineText">{{LOCATION_NAME}}</span>
             </div>
             <h1 class="hero-title">
-                <span class="visually-hidden hero-h1-seo">Time Mission Houston — 25+ Interactive Mission Rooms Coming Soon.</span>
+                <span class="visually-hidden hero-h1-seo">{{LOCATION_NAME}} — 25+ Interactive Mission Rooms {{LOCATION_PAGE_STATUS_LABEL}}.</span>
                 <span class="line-1" aria-hidden="true">STEP INTO THE</span>
                 <span class="line-2" aria-hidden="true" role="presentation"></span>
             </h1>
             <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive missions. Test your speed, strength, skill, and&nbsp;smarts.</p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
-                    Book Now
+                <a href="{{PRIMARY_CTA_HREF}}" class="btn-primary {{PRIMARY_CTA_CLASS}}" {{PRIMARY_CTA_ATTRS}}>
+                    {{PRIMARY_CTA_LABEL}}
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
@@ -337,7 +337,7 @@
                 <p class="testimonial-text">"My son's birthday party was absolutely epic! The staff was amazing and all the kids had an incredible time. Highly recommend for any celebration."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Jennifer L.</span>
-                    <span class="author-location">Houston</span>
+                    <span class="author-location">{{LOCATION_SHORT_NAME}}</span>
                 </div>
             </div>
 
@@ -346,7 +346,7 @@
                 <p class="testimonial-text">"We brought our youth group of 20 and everyone was completely engaged the entire time. It's rare to find something that works for all age groups this well."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Marcus T.</span>
-                    <span class="author-location">Houston</span>
+                    <span class="author-location">{{LOCATION_SHORT_NAME}}</span>
                 </div>
             </div>
 
@@ -355,7 +355,7 @@
                 <p class="testimonial-text">"Way more fun than we expected. The missions are creative and the whole vibe is electric. Already told all our friends they need to check it out."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Daniela R.</span>
-                    <span class="author-location">Houston</span>
+                    <span class="author-location">{{LOCATION_SHORT_NAME}}</span>
                 </div>
             </div>
         </div>
@@ -391,11 +391,11 @@
 
             <div class="mini-faq-item">
                 <button class="mini-faq-q">
-                    Do I need to book in advance?
+                    {{BOOKING_FAQ_QUESTION}}
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                 </button>
                 <div class="mini-faq-a">
-                    <p>We recommend booking online to guarantee your spot, especially on weekends. Walk-ins are welcome based on availability.</p>
+                    <p>{{BOOKING_FAQ_ANSWER}}</p>
                 </div>
             </div>
         </div>
@@ -413,10 +413,10 @@
             <picture><source srcset="/assets/photos/experiences/ready-to-play-480.webp 480w, /assets/photos/experiences/ready-to-play-800.webp 800w, /assets/photos/experiences/ready-to-play-1200.webp 1200w, /assets/photos/experiences/ready-to-play.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img src="/assets/photos/experiences/ready-to-play.jpg" alt="Time Mission venue" width="1920" height="1280" loading="lazy" decoding="async"></picture>
         </div>
         <div class="cta-content reveal">
-            <h2 class="cta-title">READY TO PLAY?</h2>
-            <p class="cta-text">Book your adventure today and discover why Time Mission is the ultimate social gaming experience.</p>
-            <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger>
-                Book Your Adventure
+            <h2 class="cta-title">{{FINAL_CTA_TITLE}}</h2>
+            <p class="cta-text">{{FINAL_CTA_TEXT}}</p>
+            <a href="{{PRIMARY_CTA_HREF}}" class="btn-primary {{PRIMARY_CTA_CLASS}}" {{PRIMARY_CTA_ATTRS}}>
+                {{PRIMARY_CTA_LABEL}}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -458,12 +458,14 @@
     </section>
 
     <!-- Newsletter -->
-    <section class="newsletter-section">
+    <section class="newsletter-section" id="newsletter">
         <div class="newsletter-inner">
             <h2>DON'T MISS A THING</h2>
             <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
             <form name="newsletter" method="POST" action="/api/newsletter" data-tm-form="newsletter">
                 <input type="hidden" name="form-name" value="newsletter">
+                <input type="hidden" name="location_interest" value="{{LOCATION_SHORT_NAME}}">
+                <input type="hidden" name="location_slug" value="{{LOCATION_SLUG}}">
                 <p class="visually-hidden">
                     <label>Do not fill this out if you are human: <input name="bot-field"></label>
                 </p>
