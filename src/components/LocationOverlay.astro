@@ -9,6 +9,12 @@ interface Props {
 const { currentLang = 'en' } = Astro.props;
 const usLocations = allLocations.filter((l) => l.region === 'us');
 const euLocations = allLocations.filter((l) => l.region === 'europe');
+
+function locationHref(loc: (typeof allLocations)[number]) {
+    return loc.region === 'europe'
+        ? loc.externalUrl || `https://timemission.eu/${loc.slug}`
+        : `/${loc.slug}`;
+}
 ---
 
 <!-- Full-screen Location Overlay -->
@@ -29,8 +35,9 @@ const euLocations = allLocations.filter((l) => l.region === 'europe');
                 <div class="location-group-title" data-i18n="location.unitedStates">United States</div>
                 {usLocations.map((loc) => (
                     <a
-                        href={`/${loc.slug}`}
+                        href={locationHref(loc)}
                         data-city={loc.shortName}
+                        data-tm-location-slug={loc.slug}
                         class={loc.status === 'coming-soon' ? 'location-coming-soon' : undefined}
                     >
                         {loc.navLabel}
@@ -42,8 +49,9 @@ const euLocations = allLocations.filter((l) => l.region === 'europe');
                 <div class="location-group-title" data-i18n="location.europe">Europe</div>
                 {euLocations.map((loc) => (
                     <a
-                        href={`/${loc.slug}`}
+                        href={locationHref(loc)}
                         data-city={loc.shortName}
+                        data-tm-location-slug={loc.slug}
                         class={loc.status === 'coming-soon' ? 'location-coming-soon' : undefined}
                     >
                         {loc.navLabel}

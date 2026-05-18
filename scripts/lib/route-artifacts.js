@@ -9,19 +9,27 @@ function loadRouteRegistry(root) {
 }
 
 function expectedSitemapUrls(registry) {
-  const urls = [];
+  return sitemapEntries(registry).map((entry) => entry.url);
+}
+
+function publicUrlForCanonical(registry, canonicalPath) {
+  const baseUrl = String((registry && registry.baseUrl) || '').replace(/\/+$/, '');
+  const canonical = normalizeCanonicalPath(canonicalPath || '/');
+  return canonical === '/' ? `${baseUrl}/` : `${baseUrl}${canonical}`;
+}
+
+function sitemapEntries(registry) {
   const routes = [
-    ...(registry.routes || []),
-    ...(registry.machineReadableRoutes || []),
+    ...((registry && registry.routes) || []),
+    ...((registry && registry.machineReadableRoutes) || []),
   ];
-  for (const route of routes) {
-    if (!route.sitemap) continue;
-    const url = route.canonicalPath === '/'
-      ? `${registry.baseUrl}/`
-      : `${registry.baseUrl}${route.canonicalPath}`;
-    urls.push(url);
-  }
-  return urls;
+  return routes
+    .filter((route) => route.sitemap)
+    .map((route) => ({
+      route,
+      canonicalPath: normalizeCanonicalPath(route.canonicalPath || ''),
+      url: publicUrlForCanonical(registry, route.canonicalPath),
+    }));
 }
 
 function compileRouteContract(registry) {
@@ -92,8 +100,19 @@ function compilePublicUrlSurface(registry) {
     aliases: registry.aliases || [],
     canonicalPaths,
     routeByCanonical,
+    sitemapEntries: sitemapEntries(registry),
     redirectPairs: expectedRedirectPairs(registry),
     dynamicLandingPrefix: normalizeDynamicLandingPrefix(registry),
+    publicUrlFor(canonicalPath) {
+      return publicUrlForCanonical(registry, canonicalPath);
+    },
+    outputFileFor(canonicalPath) {
+      const normalized = normalizeCanonicalPath(canonicalPath);
+      return contract.canonicalToOutput.get(normalized) || '';
+    },
+    routeFor(canonicalPath) {
+      return routeByCanonical.get(normalizeCanonicalPath(canonicalPath)) || null;
+    },
     isKnownCanonical(value) {
       const normalized = normalizeCanonicalPath(value);
       return canonicalPaths.has(normalized) || isDynamicLandingPath(registry, normalized);
@@ -212,6 +231,8 @@ module.exports = {
   expectedSitemapUrls,
   compileRouteContract,
   compilePublicUrlSurface,
+  publicUrlForCanonical,
+  sitemapEntries,
   expectedRedirectPairs,
   normalizeDynamicLandingPrefix,
   isDynamicLandingPath,

@@ -40,6 +40,10 @@
         if (!options.length) return;
         var prev = ticketLocSel.value;
         ticketLocSel.textContent = '';
+        var placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Select a location';
+        ticketLocSel.appendChild(placeholder);
         options.forEach(function (entry) {
             var opt = document.createElement('option');
             opt.value = entry.value;

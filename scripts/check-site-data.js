@@ -76,6 +76,15 @@ if (!nav || !footer || !labels) {
 }
 
 for (const href of [...collectHrefsNav(nav), ...collectHrefsFooter(footer)]) {
+  if (href.startsWith('https://')) {
+    try {
+      const url = new URL(href);
+      if (url.protocol !== 'https:') errors.push(`href must use HTTPS: ${href}`);
+    } catch (e) {
+      errors.push(`href must be a valid HTTPS URL: ${href}`);
+    }
+    continue;
+  }
   if (!href.startsWith('/')) {
     errors.push(`href must be internal path: ${href}`);
     continue;

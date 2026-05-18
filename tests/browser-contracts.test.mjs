@@ -123,6 +123,8 @@ describe('browser architecture contracts', () => {
       .toBe('https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959');
     expect(byId.get('antwerp')?.groupFormUrls?.['field-trips'])
       .toBe('https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission');
+    expect(byId.get('antwerp')?.externalUrl).toBe('https://timemission.eu/antwerp');
+    expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu/brussels');
     expect(byId.get('manassas')?.waiverUrl).toBe('https://waiver.roller.app/TimeMissionManassasMall');
     expect(byId.get('philadelphia')?.waiverUrl).toBe('https://waiver.roller.app/TimeMissionPhiladelphiaPA');
   });
@@ -215,6 +217,16 @@ describe('browser architecture contracts', () => {
             groupFormUrls: {},
           },
           {
+            id: 'antwerp',
+            slug: 'antwerp',
+            status: 'open',
+            externalUrl: 'https://timemission.eu/antwerp',
+            bookingUrl: 'https://experience.example/antwerp',
+            groupFormUrls: {
+              corporate: 'https://experience.example/antwerp-corporate',
+            },
+          },
+          {
             id: 'dallas',
             slug: 'dallas',
             status: 'coming-soon',
@@ -232,6 +244,12 @@ describe('browser architecture contracts', () => {
 
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'manassas' }))
       .toBe('https://checkout.example/manassas');
+    expect(window.TMBooking.resolveIntent({ kind: 'tickets', locationId: 'manassas' }))
+      .toMatchObject({
+        href: 'https://checkout.example/manassas',
+        presentation: 'roller',
+        usesRollerCheckout: true,
+      });
     expect(window.LocationContext.resolveBookingUrl('tickets', 'manassas'))
       .toBe('https://checkout.example/manassas');
     expect(window.LocationContext.resolveBookingUrl('gift-cards', 'manassas'))
@@ -249,8 +267,24 @@ describe('browser architecture contracts', () => {
       .toBe('https://checkout.example/houston');
     expect(window.TMBooking.getDestination({ kind: 'groups', locationId: 'houston' }))
       .toBe('https://checkout.example/houston');
+    expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'antwerp' }))
+      .toBe('https://timemission.eu/antwerp');
+    expect(window.TMBooking.resolveIntent({ kind: 'tickets', locationId: 'antwerp' }))
+      .toMatchObject({
+        href: 'https://timemission.eu/antwerp',
+        presentation: 'external-site',
+        externalLocationSite: true,
+      });
+    expect(window.LocationContext.resolveBookingUrl('groups', 'antwerp', { groupType: 'corporate' }))
+      .toBe('https://timemission.eu/antwerp');
     expect(window.LocationContext.resolveBookingUrl('tickets', 'dallas'))
       .toBe('/dallas#newsletter');
+    expect(window.LocationContext.getLocationView('dallas'))
+      .toMatchObject({
+        bookUrl: '/dallas#newsletter',
+        bookLabel: 'Sign Up',
+        comingSoon: true,
+      });
     expect(window.TMBooking.getDestination({
       kind: 'tickets',
       locationId: 'manassas',
@@ -258,7 +292,7 @@ describe('browser architecture contracts', () => {
     })).toBe('/manassas?book=1');
   });
 
-  it('booking click handler navigates synced panel hrefs but opens placeholder ticket triggers', async () => {
+  it('booking click handler prompts for tickets without a selected location but still navigates non-ticket links', async () => {
     const { context, window } = createBrowserContext();
     runScript('js/booking-controller.js', context);
 
@@ -283,30 +317,30 @@ describe('browser architecture contracts', () => {
       };
     }
 
-    const panelCta = makeButton({
-      href: '/manassas?book=1',
+    const ticketCta = makeButton({
+      href: '#',
+      'data-tm-booking-url': 'https://checkout.example/manassas',
       'data-tm-booking-kind': 'tickets',
     });
     let opened = 0;
     window.TMBooking.attach(
-      { querySelectorAll: () => [panelCta] },
+      { querySelectorAll: () => [ticketCta] },
       { openPanel: () => { opened += 1; } },
     );
-    panelCta.click();
-    expect(window.location.href).toBe('/manassas?book=1');
-    expect(opened).toBe(0);
+    ticketCta.click();
+    expect(window.location.href).toBe('');
+    expect(opened).toBe(1);
 
-    window.location.href = '';
-    const placeholder = makeButton({
-      href: '#',
-      'data-tm-booking-kind': 'tickets',
+    const waiverCta = makeButton({
+      href: '/waiver',
+      'data-tm-booking-kind': 'waiver',
     });
     window.TMBooking.attach(
-      { querySelectorAll: () => [placeholder] },
+      { querySelectorAll: () => [waiverCta] },
       { openPanel: () => { opened += 1; } },
     );
-    placeholder.click();
-    expect(window.location.href).toBe('');
+    waiverCta.click();
+    expect(window.location.href).toBe('/waiver');
     expect(opened).toBe(1);
   });
 });

@@ -573,6 +573,7 @@
         }
       },
       "bookingUrl": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
+      "externalUrl": "https://timemission.eu/antwerp",
       "bookingProvider": "experience-factory",
       "groupFormUrls": {
         "birthdays": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
@@ -665,6 +666,7 @@
       },
       "hours": {},
       "bookingUrl": "",
+      "externalUrl": "https://timemission.eu/brussels",
       "navLabel": "BE - Brussels",
       "mapUrl": "https://maps.google.com/?q=Av.+Imp%C3%A9ratrice+Charlotte+1020+Bruxelles+Belgium",
       "faqs": [],

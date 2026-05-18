@@ -28,6 +28,7 @@ export interface LocationRecord {
     };
     hours: Record<string, LocationDayHours>;
     bookingUrl: string;
+    externalUrl?: string;
     rollerCheckoutUrl?: string;
     bookingProvider?: 'roller' | 'briq' | 'clubspeed' | 'experience-factory';
     briqWidgetDomain?: string;

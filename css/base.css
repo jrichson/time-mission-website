@@ -199,6 +199,16 @@ body {
     contain: paint;
 }
 
+.hero-video-container video {
+    background: transparent;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.hero-video-container.is-video-ready video {
+    opacity: 1;
+}
+
 .page-header::before {
     max-width: 100vw !important;
 }

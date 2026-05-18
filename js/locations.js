@@ -122,69 +122,101 @@
         return (loc.bookingUrl && String(loc.bookingUrl).trim()) || '';
     }
 
+    function getExternalLocationUrl(loc) {
+        return (loc && loc.externalUrl && String(loc.externalUrl).trim()) || '';
+    }
+
     function isBookableLocation(loc) {
         return !!resolveOpenCheckoutUrl(loc);
     }
 
-    function getInfoPanelView(id) {
+    function addressTextForLocation(loc) {
+        if (!loc || !loc.address) return '';
+        const parts = [];
+        if (loc.address.line1) parts.push(loc.address.line1);
+        if (loc.address.line2) parts.push(loc.address.line2);
+        let cityLine = '';
+        if (loc.address.city) cityLine += loc.address.city;
+        if (loc.address.state) cityLine += (cityLine ? ', ' : '') + loc.address.state;
+        if (loc.address.zip) cityLine += (cityLine ? ' ' : '') + loc.address.zip;
+        if (cityLine) parts.push(cityLine);
+        return parts.join('\n');
+    }
+
+    function hoursTextForLocation(loc) {
+        if (!loc || !loc.hours) return loc && loc.status === 'coming-soon' ? 'Coming Soon' : '';
+        const labels = { mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun' };
+        const order = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+        const lines = [];
+        order.forEach((day) => {
+            if (loc.hours[day] && loc.hours[day].label) {
+                lines.push(labels[day] + ': ' + loc.hours[day].label);
+            }
+        });
+        return lines.join('\n') || (loc.status === 'coming-soon' ? 'Coming Soon' : '');
+    }
+
+    function leadUrlForLocation(loc, slug, externalUrl, pageUrl) {
+        if (externalUrl) return externalUrl;
+        if (loc && loc.status === 'coming-soon' && !isBookableLocation(loc)) {
+            return pageUrl ? pageUrl + '#newsletter' : '/locations#newsletter';
+        }
+        return '#';
+    }
+
+    function getLocationView(id) {
         const loc = resolveLocationRef(id);
         if (!loc) return null;
         const slug = loc.slug || loc.id || normalizeLocationId(id);
         const mapQuery = getMapQuery(loc);
-        const pageUrl = slug ? '/' + slug : '/';
+        const externalUrl = getExternalLocationUrl(loc);
+        const pageUrl = externalUrl || (slug ? '/' + slug : '/');
         const comingSoon = loc.status === 'coming-soon';
         const bookable = isBookableLocation(loc);
-        const leadUrl = comingSoon && !bookable ? pageUrl + '#newsletter' : pageUrl + '?book=1';
-        const addressText = (function () {
-            if (!loc.address) return '';
-            const parts = [];
-            if (loc.address.line1) parts.push(loc.address.line1);
-            if (loc.address.line2) parts.push(loc.address.line2);
-            let cityLine = '';
-            if (loc.address.city) cityLine += loc.address.city;
-            if (loc.address.state) cityLine += (cityLine ? ', ' : '') + loc.address.state;
-            if (loc.address.zip) cityLine += (cityLine ? ' ' : '') + loc.address.zip;
-            if (cityLine) parts.push(cityLine);
-            return parts.join('\n');
-        })();
-        const hoursText = (function () {
-            if (!loc.hours) return comingSoon ? 'Coming Soon' : '';
-            const labels = { mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun' };
-            const order = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-            const lines = [];
-            order.forEach((day) => {
-                if (loc.hours[day] && loc.hours[day].label) {
-                    lines.push(labels[day] + ': ' + loc.hours[day].label);
-                }
-            });
-            return lines.join('\n') || (comingSoon ? 'Coming Soon' : '');
-        })();
+        const bookingUrl = resolveOpenCheckoutUrl(loc);
+        const leadUrl = leadUrlForLocation(loc, slug, externalUrl, pageUrl);
         return {
+            id: loc.id || slug,
+            slug: slug,
+            raw: loc,
             name: loc.shortName || loc.name || '',
-            addressText: addressText,
+            fullName: loc.name || loc.shortName || '',
+            addressText: addressTextForLocation(loc),
             phone: (loc.contact && loc.contact.phone) || '',
-            hoursText: hoursText,
+            hoursText: hoursTextForLocation(loc),
             pageUrl: pageUrl,
             bookUrl: leadUrl,
-            bookLabel: bookable || !comingSoon ? 'Book Now' : 'Sign Up',
+            bookingUrl: externalUrl ? '' : bookingUrl,
+            checkoutUrl: bookingUrl,
+            externalUrl: externalUrl,
+            bookLabel: externalUrl ? 'Visit EU Site' : (bookable || !comingSoon ? 'Book Now' : 'Sign Up'),
             mapQuery: mapQuery,
             mapDirectionsUrl: mapQuery ? 'https://www.google.com/maps/dir/?api=1&destination=' + mapQuery : '',
             mapEmbedUrl: mapQuery ? 'https://www.google.com/maps?q=' + mapQuery + '&output=embed&z=12' : '',
             comingSoon: comingSoon && !bookable,
+            status: loc.status || 'open',
             bookable: bookable,
+            locationId: loc.id || slug,
         };
+    }
+
+    function getInfoPanelView(id) {
+        return getLocationView(id);
     }
 
     function listTicketOptions() {
         // Labels/order must match src/lib/ticket-options.ts (ticketPanelSelectOptions).
-        return TM.locations.map((loc) => ({
-            value: loc.id,
-            label: (loc.shortName || loc.name || loc.id)
-                + (loc.status === 'coming-soon'
-                    ? (isBookableLocation(loc) ? ' (Booking Now)' : ' (Coming Soon)')
-                    : ''),
-            status: loc.status || 'open',
-        }));
+        return TM.locations.map((loc) => {
+            const view = getLocationView(loc.id || loc.slug);
+            return {
+                value: loc.id,
+                label: (view ? view.name : (loc.shortName || loc.name || loc.id))
+                    + (loc.status === 'coming-soon'
+                        ? (view && view.bookable ? ' (Booking Now)' : ' (Coming Soon)')
+                        : ''),
+                status: loc.status || 'open',
+            };
+        });
     }
 
     /** Must match src/lib/locations-fingerprint.ts (locationsFingerprintFromRecords). */
@@ -419,17 +451,28 @@
                 // Otherwise leave whatever the page HTML set
             }
 
-            // Tickets / Book Now buttons — update href
-            if (loc && (isBookableLocation(loc) || loc.status === 'coming-soon')) {
+            // Tickets / Book Now buttons — update location-scoped booking intent.
+            const locView = loc ? getLocationView(loc.id || loc.slug) : null;
+            if (loc && locView && (locView.bookable || loc.status === 'coming-soon')) {
                 document.querySelectorAll('.btn-tickets, .btn-book-now, [data-tm-booking]').forEach(el => {
                     const bookingKind = (el.getAttribute('data-tm-booking-kind') || 'tickets').toLowerCase();
                     if (bookingKind !== 'tickets') return;
-                    const checkoutUrl = resolveOpenCheckoutUrl(loc);
-                    if (checkoutUrl) {
-                        el.href = checkoutUrl;
+                    el.setAttribute('data-tm-booking-trigger', '');
+                    el.setAttribute('data-tm-booking-kind', 'tickets');
+                    el.setAttribute('data-tm-location', locView.locationId || '');
+                    el.removeAttribute('target');
+                    el.removeAttribute('rel');
+                    if (locView.externalUrl) {
+                        el.href = locView.externalUrl;
+                        el.removeAttribute('data-tm-booking-url');
+                    } else if (locView.checkoutUrl) {
+                        el.href = '#';
+                        el.setAttribute('data-tm-booking-url', locView.checkoutUrl);
                     } else if (loc.status === 'coming-soon') {
-                        const slug = loc.slug || loc.id || '';
-                        el.href = slug ? '/' + slug + '#newsletter' : '/locations#newsletter';
+                        el.href = locView.bookUrl && locView.bookUrl !== '#'
+                            ? locView.bookUrl
+                            : '/locations#newsletter';
+                        el.removeAttribute('data-tm-booking-url');
                     }
                 });
             }
@@ -679,6 +722,9 @@
         listTicketOptions() {
             return listTicketOptions();
         },
+        getLocationView(id) {
+            return getLocationView(id);
+        },
         getInfoPanelView(id) {
             return getInfoPanelView(id);
         },
@@ -691,8 +737,10 @@
         resolveBookingUrl(kind, id, opts) {
             const loc = id ? (typeof TM.get === 'function' ? TM.get(id) : null) : TM.current;
             if (!loc) return '';
+            const view = getLocationView(id || loc.id || loc.slug);
             const options = opts || {};
             const bookingKind = String(kind || 'tickets').toLowerCase();
+            if (view && view.externalUrl) return view.externalUrl;
             if (window.TMBooking && typeof window.TMBooking.resolveLocationDestination === 'function') {
                 return window.TMBooking.resolveLocationDestination(loc, {
                     kind: bookingKind,
@@ -700,20 +748,22 @@
                     groupType: options.groupType || options.pageGroupType || '',
                 });
             }
-            const checkoutUrl = resolveOpenCheckoutUrl(loc);
+            const checkoutUrl = view ? view.checkoutUrl : resolveOpenCheckoutUrl(loc);
             if (bookingKind === 'gift-cards' || bookingKind === 'giftcards') {
                 if (loc.giftCardUrl) return loc.giftCardUrl;
                 if (loc.status === 'coming-soon') {
-                    const slug = loc.slug || loc.id || '';
-                    return slug ? '/' + slug + '#newsletter' : '/locations#newsletter';
+                    return view && view.bookUrl && view.bookUrl !== '#'
+                        ? view.bookUrl
+                        : '/locations#newsletter';
                 }
                 return '';
             }
             if (bookingKind === 'waiver' || bookingKind === 'waivers') {
                 if (loc.waiverUrl) return loc.waiverUrl;
                 if (loc.status === 'coming-soon') {
-                    const slug = loc.slug || loc.id || '';
-                    return slug ? '/' + slug + '#newsletter' : '/locations#newsletter';
+                    return view && view.bookUrl && view.bookUrl !== '#'
+                        ? view.bookUrl
+                        : '/locations#newsletter';
                 }
                 return '';
             }
@@ -724,15 +774,17 @@
                 if (groupUrl) return groupUrl;
                 if (checkoutUrl) return checkoutUrl;
                 if (loc.status === 'coming-soon') {
-                    const slug = loc.slug || loc.id || '';
-                    return slug ? '/' + slug + '#newsletter' : '/locations#newsletter';
+                    return view && view.bookUrl && view.bookUrl !== '#'
+                        ? view.bookUrl
+                        : '/locations#newsletter';
                 }
                 return '';
             }
             if (checkoutUrl) return checkoutUrl;
             if (loc.status === 'coming-soon') {
-                const slug = loc.slug || loc.id || '';
-                return slug ? '/' + slug + '#newsletter' : '/locations#newsletter';
+                return view && view.bookUrl && view.bookUrl !== '#'
+                    ? view.bookUrl
+                    : '/locations#newsletter';
             }
             return '';
         },

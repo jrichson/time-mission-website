@@ -10,7 +10,14 @@ const { currentLang = i18n.defaultLanguage, placement = 'desktop' } = Astro.prop
 const languages = i18n.languages;
 const currentCode = languages.some((lang) => lang.code === currentLang) ? currentLang : i18n.defaultLanguage;
 const switcherId = `language-select-${placement}`;
-const label = i18n.translations[currentCode]?.['language.label'] ?? i18n.translations[i18n.defaultLanguage]['language.label'];
+const translations = i18n.translations as unknown as Record<string, Record<string, unknown>>;
+const activeLabel = translations[currentCode]?.['language.label'];
+const defaultLabel = translations[i18n.defaultLanguage]?.['language.label'];
+const label = typeof activeLabel === 'string'
+    ? activeLabel
+    : typeof defaultLabel === 'string'
+        ? defaultLabel
+        : 'Language';
 ---
 
 <form class={`language-switcher language-switcher--${placement}`} data-language-switcher data-i18n-aria-label="language.label" aria-label={label}>

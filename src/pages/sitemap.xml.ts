@@ -2,11 +2,9 @@ import type { APIRoute } from 'astro';
 import routes from '../data/routes.json';
 import { cmsBuildStrict } from '../lib/payload/cms-origin';
 import { getPublishedLandings, landingCanonicalPath, landingShouldAppearInSitemap } from '../lib/payload/load';
+import { dynamicLandingPrefix, publicUrlForPath, registrySitemapUrls, type PublicUrlRegistry } from '../lib/public-url-surface';
 
 export const prerender = true;
-
-type RoutesFile = typeof routes;
-type SitemapEntry = { canonicalPath: string; sitemap: boolean };
 
 function escapeXml(value: string): string {
     return value
@@ -18,31 +16,18 @@ function escapeXml(value: string): string {
 }
 
 export const GET: APIRoute = async () => {
-    const baseUrl = (routes as RoutesFile).baseUrl as string;
-    const meta = (routes as RoutesFile & { _meta?: { dynamicLandingPrefix?: string } })._meta;
-    const landingPrefix = meta?.dynamicLandingPrefix || '/c';
+    const registry = routes as PublicUrlRegistry;
+    const landingPrefix = dynamicLandingPrefix(registry);
 
     const items: string[] = [];
-
-    const machineReadableRoutes = (
-        routes as RoutesFile & { machineReadableRoutes?: SitemapEntry[] }
-    ).machineReadableRoutes || [];
-    const registryUrls = ([...(routes as RoutesFile).routes, ...machineReadableRoutes] as SitemapEntry[])
-        .filter((r) => r.sitemap === true)
-        .map((r) => {
-            const path = r.canonicalPath === '/' ? '/' : r.canonicalPath;
-            return path === '/' ? `${baseUrl}/` : `${baseUrl}${path}`;
-        });
-    items.push(...registryUrls);
+    items.push(...registrySitemapUrls(registry));
 
     try {
         const landings = await getPublishedLandings();
-        const prefix = landingPrefix.startsWith('/') ? landingPrefix : `/${landingPrefix}`;
         for (const doc of landings) {
             if (!landingShouldAppearInSitemap(doc)) continue;
-            const cp = landingCanonicalPath(doc.slug, prefix);
-            const loc = `${baseUrl}${cp}`;
-            items.push(loc);
+            const cp = landingCanonicalPath(doc.slug, landingPrefix);
+            items.push(publicUrlForPath(cp, registry));
         }
     } catch (e) {
         if (cmsBuildStrict()) throw e;

@@ -65,9 +65,23 @@ test('homepage loads core navigation and booking panel', async ({ page }) => {
   expect(heroContract.line1Visible).toBe(true);
   expect(heroContract.line2Visible).toBe(true);
 
+  const heroMedia = await page.locator('.hero-video-container').evaluate((el) => {
+    const video = el.querySelector('video');
+    return {
+      backgroundImage: getComputedStyle(el).backgroundImage,
+      videoOpacity: video ? getComputedStyle(video).opacity : '',
+      videoReady: el.classList.contains('is-video-ready'),
+    };
+  });
+  expect(heroMedia.backgroundImage).toContain('hero-poster.jpg');
+  expect(heroMedia.videoReady).toBe(false);
+  expect(heroMedia.videoOpacity).toBe('0');
+
   await page.locator('.hero-cta .btn-tickets').click();
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
   await expect(page.locator('#ticketLocation')).toBeVisible();
+  await expect(page.locator('#ticketLocation')).toHaveValue('');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('#ticketClose')).toHaveAccessibleName(/close ticket panel/i);
 });
 
@@ -106,6 +120,18 @@ test('homepage testimonial ratings stay visible after carousel hydration', async
   expect(ratingState.transparentFill && !ratingState.hasPaintBackground).toBe(false);
 });
 
+test('language switcher changes visible navigation text', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'desktop language switcher path; mobile menu uses same runtime');
+
+  await gotoHome(page);
+  await expect.poll(() => page.evaluate(() => Boolean(window.__TM_I18N__?.translations?.es))).toBe(true);
+
+  await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
+  await expect(page.locator('.nav-links a[href="/about"]')).toHaveText('Acerca de');
+  await expect.poll(() => page.evaluate(() => document.documentElement.lang)).toBe('es');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
+});
+
 test('ticket panel options hydrate from location data', async ({ page }) => {
   await page.goto('/');
 
@@ -119,26 +145,46 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await page.locator('.hero-cta .btn-tickets').click();
 
   const options = page.locator('#ticketLocation option');
-  await expect(options).toHaveCount(expectedCount);
+  await expect(options).toHaveCount(expectedCount + 1);
+  await expect(options.first()).toHaveText('Select a location');
 
   await page.locator('#ticketLocation').selectOption('orland-park');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
     'href',
+    '#'
+  );
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'data-tm-booking-url',
     'https://book.orlandpark.timemission.com/timemissionorlandpark/onlinecheckout/en-us/home'
   );
 
   await page.locator('#ticketLocation').selectOption('houston');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
     'href',
+    '#'
+  );
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'data-tm-booking-url',
     'https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home'
   );
 
   await page.locator('#ticketLocation').selectOption('manassas');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
     'href',
+    '#'
+  );
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'data-tm-booking-url',
     'https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home'
   );
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', 'manassas');
+
+  await page.locator('#ticketLocation').selectOption('antwerp');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'href',
+    'https://timemission.eu/antwerp'
+  );
+  await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url');
 });
 
 test('ticket panel Continue to Booking opens Roller checkout without a location-page hop', async ({ page }) => {
@@ -157,6 +203,10 @@ test('ticket panel Continue to Booking opens Roller checkout without a location-
   await page.locator('#ticketLocation').selectOption('manassas');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
     'href',
+    '#'
+  );
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'data-tm-booking-url',
     'https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home'
   );
 
@@ -196,21 +246,16 @@ test('embedded site contract locationsFingerprint matches data/locations.json ro
   expect(got.length).toBe(8);
 });
 
-test('open location ?book=1 navigates to https checkout', async ({ page }) => {
-  // BOOK-04: assert outbound navigation targets https checkout — do not require
-  // third-party page load (TLS / corporate proxies may yield chrome-error).
-  const checkoutNav = page.waitForRequest(
-    (req) => {
-      const url = req.url();
-      return req.isNavigationRequest() && url.startsWith('https://') && !url.includes('127.0.0.1');
-    },
-    { timeout: 15_000 }
-  );
-
+test('open location ?book=1 opens embedded checkout without offsite navigation', async ({ page }) => {
+  await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
+    await route.fulfill({
+      contentType: 'application/javascript',
+      body: 'window.RollerCheckout = { show: function () { window.__rollerCheckoutShown = true; } };',
+    });
+  });
   await page.goto('/philadelphia?book=1');
-  const firstHttps = await checkoutNav;
-  expect(firstHttps.url()).toMatch(/^https:\/\//);
-  expect(firstHttps.url()).not.toContain('book=1');
+  await page.waitForFunction(() => window.__rollerCheckoutShown === true);
+  await expect(page).toHaveURL(/\/philadelphia$/);
 });
 
 test('desktop location selection opens the selected venue page', async ({ page, isMobile }) => {
@@ -261,21 +306,55 @@ test('location page drives nav state and ticket panel default location', async (
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
     'href',
+    '#'
+  );
+  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
+    'data-tm-booking-url',
     'https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home'
   );
+  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('data-tm-location', 'philadelphia');
 
   await page.evaluate(() => window.TMBooking.open({ kind: 'tickets' }));
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
   await expect(page.locator('#ticketLocation')).toHaveValue('philadelphia');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
     'href',
+    '#'
+  );
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'data-tm-booking-url',
     'https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home'
   );
 });
 
+test('non-Roller ticket booking opens an embedded booking frame', async ({ page }) => {
+  await page.route('https://bookings.clubspeed.com/**', async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>ClubSpeed booking</title><main>Booking</main>',
+    });
+  });
+
+  await page.goto('/lincoln');
+  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('lincoln');
+
+  await page.locator('.nav-right .btn-tickets').click();
+  await expect(page.locator('.booking-frame-overlay')).toHaveClass(/active/);
+  await expect(page.locator('.booking-frame')).toHaveAttribute('src', /bookings\.clubspeed\.com/);
+  await expect(page).toHaveURL(/\/lincoln$/);
+});
+
 test('group CTAs resolve to audit-provided form URLs for the selected location', async ({ page }) => {
+  await page.route('https://webforms.pipedrive.com/**', async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>Group inquiry</title><main>Group inquiry</main>',
+    });
+  });
+
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+  const expectedHref = 'https://webforms.pipedrive.com/f/64NrjaZAs4GrLYSqpDDV0mzG46uGMN5cXrzEoAIjKKghJOzCRVmfw4mWkghflYR3Qn';
 
   const href = await page.evaluate(() => {
     return window.TMBooking.getDestination({
@@ -285,7 +364,21 @@ test('group CTAs resolve to audit-provided form URLs for the selected location',
     });
   });
 
-  expect(href).toBe('https://webforms.pipedrive.com/f/64NrjaZAs4GrLYSqpDDV0mzG46uGMN5cXrzEoAIjKKghJOzCRVmfw4mWkghflYR3Qn');
+  expect(href).toBe(expectedHref);
+
+  await page.locator('[data-tm-booking-kind="groups"][data-tm-group-type="corporate"]').first().click();
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#ticketLocation')).toHaveValue('');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('aria-disabled', 'true');
+
+  await page.locator('#ticketLocation').selectOption('manassas');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '#');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-booking-url', expectedHref);
+
+  await page.locator('#ticketBookBtn').click();
+  await expect(page.locator('.booking-frame-overlay')).toHaveClass(/active/);
+  await expect(page.locator('.booking-frame')).toHaveAttribute('src', expectedHref);
+  await expect(page).toHaveURL(/\/groups\/corporate$/);
 });
 
 test('West Nyack ticket panel renders Briq widget config from the audit', async ({ page }) => {

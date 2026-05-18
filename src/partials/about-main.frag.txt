@@ -134,7 +134,7 @@
             <div class="section-badge">READY?</div>
             <h2 class="section-title">BOOK YOUR ADVENTURE</h2>
             <p>Gather your team, pick your location, and step into the ultimate social gaming&nbsp;experience.</p>
-            <a href="#" class="btn-primary btn-book-now">
+            <a href="#" class="btn-primary btn-book-now" data-tm-booking-trigger data-tm-booking-kind="tickets">
                 Book Now
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>

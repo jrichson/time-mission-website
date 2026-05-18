@@ -153,10 +153,18 @@
 
     async function boot() {
         await loadConfig();
-        document.querySelectorAll('[data-language-select]').forEach(function (select) {
-            select.addEventListener('change', function () {
-                setLanguage(select.value);
+        document.querySelectorAll('[data-language-switcher]').forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
             });
+        });
+        document.querySelectorAll('[data-language-select]').forEach(function (select) {
+            function handleLanguageSelection() {
+                if (select.value === currentLanguage) return;
+                setLanguage(select.value);
+            }
+            select.addEventListener('change', handleLanguageSelection);
+            select.addEventListener('input', handleLanguageSelection);
         });
         setLanguage(getInitialLanguage(), { persist: false });
         readyResolve();

@@ -159,6 +159,18 @@
     box-shadow: 0 10px 30px rgba(239, 75, 35, 0.5);
 }
 
+.btn-ticket-book.is-disabled,
+.btn-ticket-book[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.62;
+    box-shadow: none;
+}
+
+.btn-ticket-book.is-disabled:hover,
+.btn-ticket-book[aria-disabled="true"]:hover {
+    transform: none;
+}
+
 .btn-ticket-book svg {
     width: 18px;
     height: 18px;
@@ -178,6 +190,99 @@
 
 .ticket-provider-widget .bw-widget {
     min-height: 52px;
+}
+
+.booking-frame-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+    background: rgba(0, 0, 0, 0.82);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.booking-frame-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.booking-frame-overlay[hidden] {
+    display: none;
+}
+
+.booking-frame-modal {
+    display: flex;
+    flex-direction: column;
+    width: min(1120px, 100%);
+    height: min(780px, calc(100dvh - 2rem));
+    max-height: calc(100dvh - 2rem);
+    overflow: hidden;
+    background: var(--black);
+    border: 1px solid rgba(255, 107, 44, 0.35);
+    border-radius: 8px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+}
+
+.booking-frame-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+    background: var(--dark);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.booking-frame-header h3 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--white);
+}
+
+.booking-frame-close {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    color: var(--white);
+    cursor: pointer;
+}
+
+.booking-frame-close:hover {
+    background: rgba(255, 107, 44, 0.18);
+    border-color: rgba(255, 107, 44, 0.5);
+}
+
+.booking-frame-close:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+}
+
+.booking-frame-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+.booking-frame {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    border: 0;
+    background: #fff;
 }
 
 .ticket-panel-info {
@@ -216,6 +321,19 @@
     .ticket-panel {
         width: 100vw;
     }
+
+    .booking-frame-overlay {
+        padding: 0;
+    }
+
+    .booking-frame-modal {
+        width: 100vw;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+    }
 }
 
 .ticket-panel-close:focus-visible,
@@ -227,5 +345,10 @@
 @media (prefers-reduced-motion: reduce) {
     .btn-ticket-book:hover {
         transform: none;
+    }
+
+    .booking-frame-overlay,
+    .hero-video-container video {
+        transition: none;
     }
 }

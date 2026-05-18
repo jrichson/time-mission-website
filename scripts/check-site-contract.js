@@ -50,6 +50,20 @@ const fpFromJson = locationsFingerprintFromRecords(locDoc.locations || []);
 if (publicContract.locationsFingerprint !== fpFromJson) {
   errors.push('locationsFingerprint must match data/locations.json roster (see locations-fingerprint.ts)');
 }
+const locationIds = (locDoc.locations || []).map((loc) => loc.id);
+if (JSON.stringify(publicContract.locationIds) !== JSON.stringify(locationIds)) {
+  errors.push('public site contract locationIds must match data/locations.json order');
+}
+const externalLocationIds = (locDoc.locations || []).filter((loc) => loc.externalUrl).map((loc) => loc.id);
+if (JSON.stringify(publicContract.externalLocationIds) !== JSON.stringify(externalLocationIds)) {
+  errors.push('public site contract externalLocationIds must match data/locations.json externalUrl rows');
+}
+if (!publicContract.booking || publicContract.booking.locationPromptRequired !== true) {
+  errors.push('public site contract must mark booking.locationPromptRequired=true');
+}
+if (!publicContract.runtime || publicContract.runtime.locationChangeEvent !== 'tm:location-changed') {
+  errors.push('public site contract must publish the location change event name');
+}
 
 const ticketPanelPath = path.join(root, 'src', 'components', 'TicketPanel.astro');
 const ticketPanelSrc = fs.readFileSync(ticketPanelPath, 'utf8');
@@ -92,6 +106,9 @@ if (siteContractSrc && !siteContractSrc.includes('analytics-labels.json')) {
 }
 if (siteContractSrc && !siteContractSrc.includes('fingerprintAnalyticsLabels')) {
   errors.push('site-contract.ts must call fingerprintAnalyticsLabels for public analytics fingerprint');
+}
+if (siteContractSrc && !siteContractSrc.includes('externalLocationIds')) {
+  errors.push('site-contract.ts must publish externalLocationIds for booking/location runtime checks');
 }
 
 if (

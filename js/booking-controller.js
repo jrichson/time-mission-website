@@ -47,6 +47,24 @@
         return !!value && value !== '#' && !/^javascript:/i.test(value);
     }
 
+    function getBookingHref(btn) {
+        if (!btn || typeof btn.getAttribute !== 'function') return '';
+        return btn.getAttribute('data-tm-booking-url') || btn.getAttribute('href') || '';
+    }
+
+    function isExternalHttpUrl(href) {
+        return /^https?:\/\//i.test(String(href || '').trim());
+    }
+
+    function isTicketKind(kind) {
+        return normalizeKind(kind) === 'tickets';
+    }
+
+    function shouldUseBookingFrame(kind, href) {
+        var normalizedKind = normalizeKind(kind);
+        return isExternalHttpUrl(href) && (normalizedKind === 'tickets' || normalizedKind === 'groups');
+    }
+
     function locationForOptions(opts) {
         opts = opts || {};
         var locationId = normalizeLocation(opts.locationId || '');
@@ -60,6 +78,15 @@
         if (roller !== '') return roller;
         var booking = (loc.bookingUrl && String(loc.bookingUrl).trim()) || '';
         return booking;
+    }
+
+    function getExternalLocationUrl(loc) {
+        return (loc && loc.externalUrl && String(loc.externalUrl).trim()) || '';
+    }
+
+    function isLocationExternalSiteUrl(loc, href) {
+        var externalUrl = getExternalLocationUrl(loc);
+        return !!externalUrl && String(href || '').trim() === externalUrl;
     }
 
     function isBookableLocation(loc) {
@@ -80,6 +107,8 @@
         if (!loc) return '';
         var kind = normalizeKind(opts.kind || 'tickets');
         var slug = loc.slug || loc.id || normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
+        var externalUrl = getExternalLocationUrl(loc);
+        if (externalUrl) return externalUrl;
 
         var checkoutUrl = resolveOpenCheckoutUrl(loc);
         var bookable = !!checkoutUrl;
@@ -130,29 +159,170 @@
 
     function getDestination(options) {
         var opts = options || {};
-        var kind = normalizeKind(opts.kind || 'tickets');
-        var locationId = normalizeLocation(opts.locationId || '');
-        var pageLocationSlug = normalizeLocation(opts.pageLocationSlug || '');
-        var preferLocationPageFlow = !!opts.preferLocationPageFlow;
-
-        var loc = locationForOptions({
-            locationId: locationId,
-            pageLocationSlug: pageLocationSlug,
-        });
-        if (!loc) return '';
-
-        return resolveLocationDestination(loc, {
-            kind: kind,
+        return resolveBookingIntent({
+            kind: opts.kind || 'tickets',
             groupType: opts.groupType || opts.pageGroupType || '',
-            locationId: locationId,
-            pageLocationSlug: pageLocationSlug,
-            preferLocationPageFlow: preferLocationPageFlow,
-        });
+            locationId: opts.locationId || '',
+            pageLocationSlug: opts.pageLocationSlug || '',
+            preferLocationPageFlow: !!opts.preferLocationPageFlow,
+            resolveHref: true,
+        }).href;
     }
 
     /** RFC-10: canonical resolver alias. Thin wrapper over getDestination. */
     function resolve(opts) {
         return getDestination(opts);
+    }
+
+    function bookingPresentationFor(loc, kind, href) {
+        if (!isNavigableHref(href)) return 'panel';
+        if (isLocationExternalSiteUrl(loc, href)) return 'external-site';
+        if (isTicketKind(kind) && shouldUseRollerCheckout(loc, href, kind)) return 'roller';
+        if (shouldUseBookingFrame(kind, href)) return 'iframe';
+        return 'link';
+    }
+
+    function resolveBookingIntent(options) {
+        var opts = options || {};
+        var currentTarget = opts.currentTarget || null;
+        var kind = normalizeKind(
+            opts.kind
+            || (currentTarget && currentTarget.getAttribute('data-tm-booking-kind'))
+            || 'tickets'
+        );
+        var groupType = normalizeGroupType(
+            opts.groupType
+            || opts.pageGroupType
+            || (currentTarget && (currentTarget.getAttribute('data-tm-group-type') || currentTarget.getAttribute('data-tm-page-group')))
+            || ''
+        );
+        var locationId = normalizeLocation(
+            opts.locationId
+            || (currentTarget && currentTarget.getAttribute('data-tm-location'))
+            || ''
+        );
+        var pageLocationSlug = normalizeLocation(opts.pageLocationSlug || '');
+        var loc = locationForOptions({
+            locationId: locationId,
+            pageLocationSlug: pageLocationSlug,
+        });
+        var href = String(opts.href || '').trim();
+        if (!href && currentTarget) href = getBookingHref(currentTarget);
+
+        if (loc && opts.resolveHref !== false && (isTicketKind(kind) || !isNavigableHref(href))) {
+            var resolvedHref = resolveLocationDestination(loc, {
+                kind: kind,
+                groupType: groupType,
+                locationId: locationId,
+                pageLocationSlug: pageLocationSlug,
+                preferLocationPageFlow: !!opts.preferLocationPageFlow,
+            });
+            if (resolvedHref) href = resolvedHref;
+        }
+
+        var locationSlug = normalizeLocation(
+            locationId
+            || pageLocationSlug
+            || (loc && (loc.id || loc.slug))
+            || ''
+        );
+        var presentation = bookingPresentationFor(loc, kind, href);
+        return {
+            kind: kind,
+            groupType: groupType,
+            locationId: locationId,
+            pageLocationSlug: pageLocationSlug,
+            location: loc,
+            locationSlug: locationSlug,
+            href: href,
+            hasHref: isNavigableHref(href),
+            presentation: presentation,
+            usesBookingFrame: presentation === 'iframe',
+            usesRollerCheckout: presentation === 'roller',
+            externalLocationSite: presentation === 'external-site',
+        };
+    }
+
+    function panelCopyForIntent(loc, intent) {
+        var kind = normalizeKind((intent && intent.kind) || 'tickets');
+        if (!loc) {
+            return {
+                title: 'Choose Your Location',
+                intro: 'Select a location and we will show the right booking option.',
+                cta: 'Select Location First',
+            };
+        }
+        if (getExternalLocationUrl(loc)) {
+            return {
+                title: 'Time Mission Europe',
+                intro: 'Continue to the EU-hosted site for this location.',
+                cta: 'Visit EU Site',
+            };
+        }
+        if ((kind === 'tickets' || kind === 'groups') && isLeadOnlyComingSoon(loc)) {
+            return {
+                title: 'Get Location Updates',
+                intro: 'Select a coming-soon location and sign up for launch news, early access, and opening offers.',
+                cta: 'Sign Up for Updates',
+            };
+        }
+        if (kind === 'groups') {
+            return {
+                title: 'Plan Your Event',
+                intro: 'Select your location and we will send you to the right event request form.',
+                cta: 'Continue to Form',
+            };
+        }
+        if (kind === 'waiver' || kind === 'waivers') {
+            return {
+                title: 'Complete Your Waiver',
+                intro: 'Select your location and we will send you to the correct waiver provider when one is available.',
+                cta: 'Continue to Waiver',
+            };
+        }
+        return {
+            title: 'Book Your Adventure',
+            intro: "Select your location and we'll take you to our booking system to choose your date and time.",
+            cta: 'Continue to Booking',
+        };
+    }
+
+    function syncCtaElementToIntent(ctaBtn, intent) {
+        if (!ctaBtn) return;
+        if (!intent || !intent.location) {
+            ctaBtn.href = '#';
+            ctaBtn.removeAttribute('data-tm-booking-url');
+            ctaBtn.removeAttribute('data-tm-location');
+            ctaBtn.removeAttribute('data-tm-group-type');
+            ctaBtn.setAttribute('data-tm-booking-kind', intent ? intent.kind : 'tickets');
+            ctaBtn.setAttribute('aria-disabled', 'true');
+            if (ctaBtn.classList) ctaBtn.classList.add('is-disabled');
+            return;
+        }
+
+        ctaBtn.removeAttribute('aria-disabled');
+        if (ctaBtn.classList) ctaBtn.classList.remove('is-disabled');
+        if (intent.externalLocationSite) {
+            ctaBtn.href = intent.href;
+            ctaBtn.removeAttribute('data-tm-booking-url');
+        } else if (intent.usesBookingFrame || intent.usesRollerCheckout) {
+            ctaBtn.href = '#';
+            ctaBtn.setAttribute('data-tm-booking-url', intent.href);
+        } else {
+            ctaBtn.href = intent.href || '#';
+            ctaBtn.removeAttribute('data-tm-booking-url');
+        }
+        ctaBtn.setAttribute('data-tm-booking-kind', intent.kind);
+        if (intent.location && (intent.location.id || intent.location.slug)) {
+            ctaBtn.setAttribute('data-tm-location', intent.location.id || intent.location.slug);
+        } else {
+            ctaBtn.removeAttribute('data-tm-location');
+        }
+        if (intent.groupType) {
+            ctaBtn.setAttribute('data-tm-group-type', intent.groupType);
+        } else {
+            ctaBtn.removeAttribute('data-tm-group-type');
+        }
     }
 
     function shouldUseRollerCheckout(loc, href, kind) {
@@ -219,11 +389,95 @@
         document.head.appendChild(script);
     }
 
+    var bookingFrame = null;
+
+    function closeBookingFrame() {
+        if (!bookingFrame) return;
+        bookingFrame.overlay.classList.remove('active');
+        bookingFrame.overlay.hidden = true;
+        bookingFrame.iframe.src = 'about:blank';
+        document.body.style.overflow = '';
+    }
+
+    function ensureBookingFrame() {
+        if (bookingFrame) return bookingFrame;
+
+        var overlay = document.createElement('div');
+        overlay.className = 'booking-frame-overlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-labelledby', 'bookingFrameTitle');
+        overlay.hidden = true;
+
+        var modal = document.createElement('div');
+        modal.className = 'booking-frame-modal';
+
+        var header = document.createElement('div');
+        header.className = 'booking-frame-header';
+
+        var title = document.createElement('h3');
+        title.id = 'bookingFrameTitle';
+        title.textContent = 'Complete Your Booking';
+
+        var close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'booking-frame-close';
+        close.setAttribute('aria-label', 'Close booking');
+        close.innerHTML = '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+
+        var iframe = document.createElement('iframe');
+        iframe.className = 'booking-frame';
+        iframe.title = 'Time Mission booking';
+        iframe.loading = 'eager';
+        iframe.referrerPolicy = 'no-referrer-when-downgrade';
+        iframe.setAttribute('allow', 'payment *; fullscreen');
+
+        header.appendChild(title);
+        header.appendChild(close);
+        modal.appendChild(header);
+        modal.appendChild(iframe);
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        overlay.addEventListener('click', function (event) {
+            if (event.target === overlay) closeBookingFrame();
+        });
+        close.addEventListener('click', closeBookingFrame);
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && !overlay.hidden) closeBookingFrame();
+        });
+
+        bookingFrame = {
+            overlay: overlay,
+            title: title,
+            close: close,
+            iframe: iframe,
+        };
+        return bookingFrame;
+    }
+
+    function showBookingFrame(loc, href) {
+        if (!isExternalHttpUrl(href)) return false;
+        var frame = ensureBookingFrame();
+        var name = (loc && (loc.shortName || loc.name)) || 'Time Mission';
+        frame.title.textContent = 'Book ' + name;
+        frame.iframe.src = href;
+        frame.overlay.hidden = false;
+        frame.overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        try {
+            frame.close.focus({ preventScroll: true });
+        } catch (e) {
+            frame.close.focus();
+        }
+        return true;
+    }
+
     function navigate(intent) {
         var opts = intent || {};
         var href = opts.href;
         if (!href && opts.currentTarget && typeof opts.currentTarget.getAttribute === 'function') {
-            href = opts.currentTarget.getAttribute('href');
+            href = getBookingHref(opts.currentTarget);
         }
         if (!href || href === '#') {
             if (typeof opts.openPanel === 'function') {
@@ -233,16 +487,23 @@
             return false;
         }
 
-        var kind = normalizeKind(opts.kind || (opts.currentTarget && opts.currentTarget.getAttribute('data-tm-booking-kind')) || 'tickets');
+        var resolvedIntent = resolveBookingIntent({
+            href: href,
+            kind: opts.kind,
+            groupType: opts.groupType || opts.pageGroupType || '',
+            locationId: opts.locationId || '',
+            pageLocationSlug: opts.pageLocationSlug || '',
+            currentTarget: opts.currentTarget || null,
+            resolveHref: false,
+        });
+        var loc = resolvedIntent.location;
+        var kind = resolvedIntent.kind;
+        href = resolvedIntent.href;
         var source = String(opts.source || 'generic_cta');
-        var locationSlug = normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
+        var locationSlug = resolvedIntent.locationSlug;
         var ctaId = opts.ctaId
             || (opts.currentTarget && opts.currentTarget.className && String(opts.currentTarget.className).split(' ')[0])
             || source;
-        var loc = locationForOptions({
-            locationId: opts.locationId || '',
-            pageLocationSlug: opts.pageLocationSlug || '',
-        });
 
         if (opts.event && typeof opts.event.preventDefault === 'function') opts.event.preventDefault();
 
@@ -264,20 +525,34 @@
             history.replaceState(null, '', window.location.pathname);
         }
 
-        if (!opts.deferUntilLoad && shouldUseRollerCheckout(loc, href, kind)) {
+        if (resolvedIntent.externalLocationSite) {
+            window.location.assign(href);
+            return true;
+        }
+
+        if (!opts.deferUntilLoad && resolvedIntent.usesRollerCheckout) {
             showRollerCheckout(loc, function () {
-                window.location.assign(href);
+                showBookingFrame(loc, href);
             });
+            return true;
+        }
+
+        if (!opts.deferUntilLoad && resolvedIntent.usesBookingFrame) {
+            showBookingFrame(loc, href);
             return true;
         }
 
         if (opts.deferUntilLoad) {
             function doDeferredNav() {
                 setTimeout(function () {
-                    if (shouldUseRollerCheckout(loc, href, kind)) {
+                    if (resolvedIntent.externalLocationSite) {
+                        window.location.assign(href);
+                    } else if (resolvedIntent.usesRollerCheckout) {
                         showRollerCheckout(loc, function () {
-                            window.location.href = href;
+                            showBookingFrame(loc, href);
                         });
+                    } else if (resolvedIntent.usesBookingFrame) {
+                        showBookingFrame(loc, href);
                     } else {
                         window.location.href = href;
                     }
@@ -306,28 +581,42 @@
         var pageLocationSlug = opts.pageLocationSlug || '';
         var handler = typeof opts.handler === 'function' ? opts.handler : function (event) {
             var btn = event.currentTarget;
-            var href = btn.getAttribute('href');
+            var href = getBookingHref(btn);
             var hasInitialHref = isNavigableHref(href);
-            var kind = normalizeKind(btn.getAttribute('data-tm-booking-kind') || 'tickets');
-            var groupType = normalizeGroupType(btn.getAttribute('data-tm-group-type') || btn.getAttribute('data-tm-page-group') || '');
-            var locationId = normalizeLocation(btn.getAttribute('data-tm-location') || '');
-            var loc = locationForOptions({
-                locationId: locationId,
+            var intent = resolveBookingIntent({
+                href: href,
+                currentTarget: btn,
                 pageLocationSlug: pageLocationSlug,
+                resolveHref: false,
             });
+            var kind = intent.kind;
+            var groupType = intent.groupType;
+            var locationId = intent.locationId;
+            var loc = intent.location;
 
-            if (kind !== 'tickets' || !hasInitialHref) {
-                var resolvedHref = getDestination({
+            if (isTicketKind(kind) && !loc && openPanel) {
+                event.preventDefault();
+                if (setPanelIntent) setPanelIntent({ kind: kind, groupType: groupType });
+                openPanel(event);
+                return;
+            }
+
+            if (isTicketKind(kind) || !hasInitialHref) {
+                intent = resolveBookingIntent({
+                    href: href,
                     kind: kind,
                     groupType: groupType,
                     locationId: locationId,
                     pageLocationSlug: pageLocationSlug,
-                    preferLocationPageFlow: kind === 'tickets' && !pageLocationSlug,
+                    preferLocationPageFlow: false,
+                    resolveHref: true,
                 });
-                if (resolvedHref) href = resolvedHref;
+                loc = intent.location;
+                if (intent.href) href = intent.href;
+                hasInitialHref = isNavigableHref(href);
             }
 
-            if (!hasInitialHref && shouldUseBriqWidget(loc, kind) && openPanel) {
+            if (isTicketKind(kind) && shouldUseBriqWidget(loc, kind) && openPanel) {
                 event.preventDefault();
                 if (setPanelIntent) setPanelIntent({ kind: kind, groupType: groupType });
                 openPanel(event);
@@ -353,6 +642,30 @@
                 openPanel(event);
             }
         };
+
+        if (typeof root.addEventListener === 'function') {
+            var delegatedHandler = function (event) {
+                var target = event.target && event.target.closest ? event.target.closest(selector) : null;
+                if (!target) return;
+                if (root !== document && typeof root.contains === 'function' && !root.contains(target)) return;
+                handler({
+                    currentTarget: target,
+                    target: event.target,
+                    button: event.button,
+                    metaKey: event.metaKey,
+                    ctrlKey: event.ctrlKey,
+                    shiftKey: event.shiftKey,
+                    altKey: event.altKey,
+                    defaultPrevented: event.defaultPrevented,
+                    preventDefault: function () { event.preventDefault(); },
+                    stopPropagation: function () { event.stopPropagation(); },
+                });
+            };
+            root.addEventListener('click', delegatedHandler);
+            return function detach() {
+                root.removeEventListener('click', delegatedHandler);
+            };
+        }
 
         var buttons = Array.prototype.slice.call(root.querySelectorAll(selector));
         buttons.forEach(function (button) {
@@ -422,24 +735,10 @@
             var title = panel.querySelector('#ticketPanelTitle');
             var intro = panel.querySelector('#ticketPanelIntro');
             var ctaText = panel.querySelector('#ticketBookBtnText');
-            var kind = normalizeKind(panelIntent.kind);
-            if ((kind === 'tickets' || kind === 'groups') && isLeadOnlyComingSoon(loc)) {
-                if (title) title.textContent = 'Get Location Updates';
-                if (intro) intro.textContent = 'Select a coming-soon location and sign up for launch news, early access, and opening offers.';
-                if (ctaText) ctaText.textContent = 'Sign Up for Updates';
-            } else if (kind === 'groups') {
-                if (title) title.textContent = 'Plan Your Event';
-                if (intro) intro.textContent = 'Select your location and we will send you to the right event request form.';
-                if (ctaText) ctaText.textContent = 'Continue to Form';
-            } else if (kind === 'waiver' || kind === 'waivers') {
-                if (title) title.textContent = 'Complete Your Waiver';
-                if (intro) intro.textContent = 'Select your location and we will send you to the correct waiver provider when one is available.';
-                if (ctaText) ctaText.textContent = 'Continue to Waiver';
-            } else {
-                if (title) title.textContent = 'Book Your Adventure';
-                if (intro) intro.textContent = "Select your location and we'll take you to our booking system to choose your date and time.";
-                if (ctaText) ctaText.textContent = 'Continue to Booking';
-            }
+            var copy = panelCopyForIntent(loc, panelIntent);
+            if (title) title.textContent = copy.title;
+            if (intro) intro.textContent = copy.intro;
+            if (ctaText) ctaText.textContent = copy.cta;
         }
 
         function setPanelIntent(intent) {
@@ -466,6 +765,7 @@
         if (ctaBtn) {
             ctaBtn.setAttribute('data-tm-booking-trigger', '');
             ctaBtn.removeAttribute('target');
+            ctaBtn.removeAttribute('rel');
         }
 
         function renderBriqWidget(loc) {
@@ -499,29 +799,27 @@
             if (!ctaBtn || !locSelect) return;
             var loc = selectedLocation();
             syncPanelCopy(loc);
-            var url = getDestination({
+            if (!loc) {
+                syncCtaElementToIntent(ctaBtn, {
+                    kind: panelIntent.kind,
+                    groupType: panelIntent.groupType,
+                    location: null,
+                });
+                renderBriqWidget(null);
+                return;
+            }
+            if (!locSelect.value && (loc.id || loc.slug)) {
+                locSelect.value = loc.id || loc.slug;
+            }
+            var intent = resolveBookingIntent({
                 kind: panelIntent.kind,
                 groupType: panelIntent.groupType,
                 locationId: locSelect.value,
                 pageLocationSlug: pageLocationSlug,
                 preferLocationPageFlow: false,
+                resolveHref: true,
             });
-            // Coming-soon location-page flow: append ?book=1 if the resolved url is just /slug
-            if (normalizeKind(panelIntent.kind) === 'tickets' && !pageLocationSlug && url && /^\//.test(url) && url.indexOf('?') === -1 && url.indexOf('#') === -1) {
-                if (loc && loc.status === 'coming-soon') url += '?book=1';
-            }
-            ctaBtn.href = url || '#';
-            ctaBtn.setAttribute('data-tm-booking-kind', panelIntent.kind);
-            if (loc && (loc.id || loc.slug)) {
-                ctaBtn.setAttribute('data-tm-location', loc.id || loc.slug);
-            } else {
-                ctaBtn.removeAttribute('data-tm-location');
-            }
-            if (panelIntent.groupType) {
-                ctaBtn.setAttribute('data-tm-group-type', panelIntent.groupType);
-            } else {
-                ctaBtn.removeAttribute('data-tm-group-type');
-            }
+            syncCtaElementToIntent(ctaBtn, intent);
             renderBriqWidget(loc);
         }
 
@@ -623,6 +921,7 @@
         attach: attach,
         getDestination: getDestination,
         resolveLocationDestination: resolveLocationDestination,
+        resolveIntent: resolveBookingIntent,
         navigate: navigate,
         isDirectBookingUrl: isDirectBookingUrl,
         open: open,

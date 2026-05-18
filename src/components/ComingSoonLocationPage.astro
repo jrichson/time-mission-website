@@ -38,10 +38,10 @@ function replaceRawToken(source: string, token: string, value: string) {
 const checkoutUrl = String(location.rollerCheckoutUrl || location.bookingUrl || '').trim();
 const isBookable = checkoutUrl !== '';
 const primaryCtaLabel = isBookable ? 'Book Now' : 'Sign Up For Location Updates';
-const primaryCtaHref = isBookable ? checkoutUrl : '#newsletter';
+const primaryCtaHref = isBookable ? '#' : '#newsletter';
 const primaryCtaClass = isBookable ? 'btn-location-book' : 'btn-location-lead';
 const primaryCtaAttrs = isBookable
-    ? `data-tm-booking-trigger="" data-tm-booking-kind="tickets" data-tm-location="${escapeHtml(location.slug)}"`
+    ? `data-tm-booking-trigger="" data-tm-booking-kind="tickets" data-tm-location="${escapeHtml(location.slug)}" data-tm-booking-url="${escapeHtml(checkoutUrl)}"`
     : '';
 const pageStatusLabel = isBookable ? 'Booking Now' : 'Coming Soon';
 const bookingFaqQuestion = isBookable ? 'Can I book now?' : 'When can I book?';

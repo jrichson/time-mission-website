@@ -4,7 +4,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {
   loadRouteRegistry,
-  compileRouteContract,
   compilePublicUrlSurface,
   verifySitemapXml,
 } = require('./lib/route-artifacts');
@@ -230,8 +229,8 @@ function validateSitemap(registry, errors) {
     return;
   }
   const xml = fs.readFileSync(sitemapPath, 'utf8');
-  const contract = compileRouteContract(registry);
-  const result = verifySitemapXml(xml, contract);
+  const surface = compilePublicUrlSurface(registry);
+  const result = verifySitemapXml(xml, surface);
   result.errors.forEach((error) => {
     errors.push(error.replace(/^Sitemap\s/, 'sitemap '));
   });
@@ -352,9 +351,10 @@ function validateDist(registry, errors) {
 
   const surface = compilePublicUrlSurface(registry);
   for (const route of surface.routes) {
-    const target = path.join(distRoot, route.outputFile);
+    const outputFile = surface.outputFileFor(route.canonicalPath) || route.outputFile;
+    const target = path.join(distRoot, outputFile);
     if (!fs.existsSync(target)) {
-      errors.push(`missing dist output for ${route.canonicalPath}: dist/${route.outputFile}`);
+      errors.push(`missing dist output for ${route.canonicalPath}: dist/${outputFile}`);
     }
   }
 

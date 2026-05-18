@@ -906,12 +906,18 @@
     function initHeroVideo() {
         var heroVideoEl = document.getElementById('heroVideo');
         if (!heroVideoEl) return;
+        var heroVideoShell = heroVideoEl.closest ? heroVideoEl.closest('.hero-video-container') : null;
+
+        function revealHeroVideo() {
+            if (heroVideoShell) heroVideoShell.classList.add('is-video-ready');
+        }
 
         if (shouldLimitAutoplayMedia()) {
             heroVideoEl.removeAttribute('autoplay');
             heroVideoEl.removeAttribute('loop');
             heroVideoEl.preload = 'none';
             heroVideoEl.pause();
+            if (heroVideoShell) heroVideoShell.classList.remove('is-video-ready');
             return;
         }
 
@@ -932,7 +938,7 @@
             function kickHeroPlayback() {
                 if (attempted) return;
                 attempted = true;
-                heroVideoEl.play().catch(function () {});
+                heroVideoEl.play().then(revealHeroVideo).catch(function () {});
             }
 
             heroVideoEl.preload = 'metadata';
@@ -943,6 +949,7 @@
             } else {
                 heroVideoEl.addEventListener('loadeddata', kickHeroPlayback, { once: true });
                 heroVideoEl.addEventListener('canplay', kickHeroPlayback, { once: true });
+                heroVideoEl.addEventListener('playing', revealHeroVideo, { once: true });
             }
         });
     }

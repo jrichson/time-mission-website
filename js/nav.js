@@ -208,6 +208,7 @@
         locationLinks.forEach(link => {
             // Show info panel on hover (desktop) and click
             link.addEventListener('mouseenter', () => {
+                if (narrowPickerQuery.matches) return;
                 const slug = getLocationSlug(link);
                 if (slug) showLocationInfo(slug);
             });
@@ -236,6 +237,7 @@
     }
 
     function getLocationSlug(link) {
+        if (link && link.dataset && link.dataset.tmLocationSlug) return link.dataset.tmLocationSlug;
         return (link.getAttribute('href') || '').replace(/^\//, '').replace(/\.html$/, '');
     }
 
@@ -296,10 +298,36 @@
         infoPanel.querySelector('.location-info-phone').textContent = data.phone;
         setMultilineText(infoPanel.querySelector('.location-info-hours'), translateHoursText(data.hoursText));
         var bookBtn = infoPanel.querySelector('.location-info-book');
-        bookBtn.href = data.bookUrl || data.pageUrl || '#';
-        bookBtn.textContent = data.comingSoon
-            ? translate('location.signUp', 'Sign Up')
-            : translate('nav.bookNow', data.bookLabel || 'Book Now');
+        if (bookBtn) {
+            bookBtn.textContent = data.externalUrl
+                ? translate('location.visitEuSite', data.bookLabel || 'Visit EU Site')
+                : data.comingSoon
+                ? translate('location.signUp', 'Sign Up')
+                : translate('nav.bookNow', data.bookLabel || 'Book Now');
+            bookBtn.removeAttribute('target');
+            bookBtn.removeAttribute('rel');
+            if (data.externalUrl) {
+                bookBtn.href = data.externalUrl;
+                bookBtn.removeAttribute('data-tm-booking-trigger');
+                bookBtn.removeAttribute('data-tm-booking-kind');
+                bookBtn.removeAttribute('data-tm-location');
+                bookBtn.removeAttribute('data-tm-booking-url');
+            } else if (data.bookingUrl) {
+                bookBtn.href = '#';
+                bookBtn.setAttribute('data-tm-booking-trigger', '');
+                bookBtn.setAttribute('data-tm-booking-kind', 'tickets');
+                bookBtn.setAttribute('data-tm-location', data.locationId || normalizeLocation(locationRef));
+                bookBtn.setAttribute('data-tm-booking-url', data.bookingUrl);
+            } else {
+                bookBtn.href = data.bookUrl || data.pageUrl || '#';
+                bookBtn.removeAttribute('data-tm-booking-url');
+                if (data.comingSoon) {
+                    bookBtn.removeAttribute('data-tm-booking-trigger');
+                    bookBtn.removeAttribute('data-tm-booking-kind');
+                    bookBtn.removeAttribute('data-tm-location');
+                }
+            }
+        }
 
         renderMapEmbed(mapEl, data.mapEmbedUrl);
 

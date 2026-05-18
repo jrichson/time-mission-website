@@ -23,11 +23,12 @@ const ticketOptions = ticketPanelSelectOptions(allLocations);
         <div class="ticket-location-select">
             <label for="ticketLocation">Choose Location</label>
             <select id="ticketLocation">
+                <option value="">Select a location</option>
                 {ticketOptions.map((opt) => <option value={opt.value}>{opt.label}</option>)}
             </select>
         </div>
 
-        <a href="#" class="btn-ticket-book" id="ticketBookBtn" target="_blank" rel="noopener noreferrer">
+        <a href="#" class="btn-ticket-book" id="ticketBookBtn">
             <span id="ticketBookBtnText">Continue to Booking</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7"></path>
