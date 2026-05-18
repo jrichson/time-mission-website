@@ -204,6 +204,98 @@
         return getLocationView(id);
     }
 
+    function normalizeBookingKind(value) {
+        return String(value || 'tickets').toLowerCase().trim().replace(/\s+/g, '-');
+    }
+
+    function normalizeGroupType(value) {
+        return String(value || '').toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    }
+
+    function resolveBookingUrlForLocation(loc, kind, id, opts) {
+        if (!loc) return '';
+        const view = getLocationView(id || loc.id || loc.slug);
+        const options = opts || {};
+        const bookingKind = normalizeBookingKind(kind);
+        if (view && view.externalUrl) return view.externalUrl;
+        if (window.TMBooking && typeof window.TMBooking.resolveLocationDestination === 'function') {
+            return window.TMBooking.resolveLocationDestination(loc, {
+                kind: bookingKind,
+                locationId: id || (loc && (loc.id || loc.slug)) || '',
+                groupType: options.groupType || options.pageGroupType || '',
+            });
+        }
+        const checkoutUrl = view ? view.checkoutUrl : resolveOpenCheckoutUrl(loc);
+        if (bookingKind === 'gift-cards' || bookingKind === 'giftcards') {
+            if (loc.giftCardUrl) return loc.giftCardUrl;
+            if (loc.status === 'coming-soon') return view && view.bookUrl && view.bookUrl !== '#' ? view.bookUrl : '/locations#newsletter';
+            return '';
+        }
+        if (bookingKind === 'waiver' || bookingKind === 'waivers') {
+            if (loc.waiverUrl) return loc.waiverUrl;
+            if (loc.status === 'coming-soon') return view && view.bookUrl && view.bookUrl !== '#' ? view.bookUrl : '/locations#newsletter';
+            return '';
+        }
+        if (bookingKind === 'groups') {
+            const groupType = normalizeGroupType(options.groupType || options.pageGroupType || '');
+            const groupUrls = loc.groupFormUrls || {};
+            const groupUrl = (groupType && groupUrls[groupType]) || groupUrls.default || loc.groupsUrl || '';
+            if (groupUrl) return groupUrl;
+            if (checkoutUrl) return checkoutUrl;
+            if (loc.status === 'coming-soon') return view && view.bookUrl && view.bookUrl !== '#' ? view.bookUrl : '/locations#newsletter';
+            return '';
+        }
+        if (checkoutUrl) return checkoutUrl;
+        if (loc.status === 'coming-soon') return view && view.bookUrl && view.bookUrl !== '#' ? view.bookUrl : '/locations#newsletter';
+        return '';
+    }
+
+    function getBookingCtaView(kind, id, opts) {
+        const loc = id ? resolveLocationRef(id) : TM.current;
+        const bookingKind = normalizeBookingKind(kind);
+        const options = opts || {};
+        const locationId = loc ? (loc.id || loc.slug || normalizeLocationId(id)) : normalizeLocationId(id);
+        const url = resolveBookingUrlForLocation(loc, bookingKind, locationId, options);
+        const externalUrl = loc ? getExternalLocationUrl(loc) : '';
+        const isExternalLocation = Boolean(externalUrl && url === externalUrl);
+        const isFrameKind = bookingKind === 'tickets' || bookingKind === 'groups';
+        const usesBookingFrame = /^https?:\/\//i.test(url) && isFrameKind && !isExternalLocation;
+        return {
+            kind: bookingKind,
+            groupType: normalizeGroupType(options.groupType || options.pageGroupType || ''),
+            locationId: locationId || '',
+            href: usesBookingFrame ? '#' : (url || '#'),
+            bookingUrl: usesBookingFrame ? url : '',
+            url: url,
+            trigger: usesBookingFrame,
+            externalLocation: isExternalLocation,
+            disabled: !loc || !url || url === '#',
+        };
+    }
+
+    function applyBookingCtaView(el, cta) {
+        if (!el || !cta) return;
+        el.href = cta.href || '#';
+        el.removeAttribute('target');
+        el.removeAttribute('rel');
+        if (cta.trigger) {
+            el.setAttribute('data-tm-booking-trigger', '');
+            el.setAttribute('data-tm-booking-kind', cta.kind);
+            if (cta.locationId) el.setAttribute('data-tm-location', cta.locationId);
+            else el.removeAttribute('data-tm-location');
+            if (cta.groupType) el.setAttribute('data-tm-group-type', cta.groupType);
+            else el.removeAttribute('data-tm-group-type');
+            if (cta.bookingUrl) el.setAttribute('data-tm-booking-url', cta.bookingUrl);
+            else el.removeAttribute('data-tm-booking-url');
+            return;
+        }
+        el.removeAttribute('data-tm-booking-trigger');
+        el.removeAttribute('data-tm-booking-kind');
+        el.removeAttribute('data-tm-location');
+        el.removeAttribute('data-tm-group-type');
+        el.removeAttribute('data-tm-booking-url');
+    }
+
     function listTicketOptions() {
         // Labels/order must match src/lib/ticket-options.ts (ticketPanelSelectOptions).
         return TM.locations.map((loc) => {
@@ -457,23 +549,7 @@
                 document.querySelectorAll('.btn-tickets, .btn-book-now, [data-tm-booking]').forEach(el => {
                     const bookingKind = (el.getAttribute('data-tm-booking-kind') || 'tickets').toLowerCase();
                     if (bookingKind !== 'tickets') return;
-                    el.setAttribute('data-tm-booking-trigger', '');
-                    el.setAttribute('data-tm-booking-kind', 'tickets');
-                    el.setAttribute('data-tm-location', locView.locationId || '');
-                    el.removeAttribute('target');
-                    el.removeAttribute('rel');
-                    if (locView.externalUrl) {
-                        el.href = locView.externalUrl;
-                        el.removeAttribute('data-tm-booking-url');
-                    } else if (locView.checkoutUrl) {
-                        el.href = '#';
-                        el.setAttribute('data-tm-booking-url', locView.checkoutUrl);
-                    } else if (loc.status === 'coming-soon') {
-                        el.href = locView.bookUrl && locView.bookUrl !== '#'
-                            ? locView.bookUrl
-                            : '/locations#newsletter';
-                        el.removeAttribute('data-tm-booking-url');
-                    }
+                    applyBookingCtaView(el, getBookingCtaView('tickets', locView.locationId || loc.id || loc.slug));
                 });
             }
 
@@ -728,6 +804,9 @@
         getInfoPanelView(id) {
             return getInfoPanelView(id);
         },
+        getBookingCtaView(kind, id, opts) {
+            return getBookingCtaView(kind, id, opts);
+        },
         select(id, opts) {
             if (typeof TM.select === 'function') TM.select(id, opts);
         },
@@ -736,57 +815,7 @@
         },
         resolveBookingUrl(kind, id, opts) {
             const loc = id ? (typeof TM.get === 'function' ? TM.get(id) : null) : TM.current;
-            if (!loc) return '';
-            const view = getLocationView(id || loc.id || loc.slug);
-            const options = opts || {};
-            const bookingKind = String(kind || 'tickets').toLowerCase();
-            if (view && view.externalUrl) return view.externalUrl;
-            if (window.TMBooking && typeof window.TMBooking.resolveLocationDestination === 'function') {
-                return window.TMBooking.resolveLocationDestination(loc, {
-                    kind: bookingKind,
-                    locationId: id || (loc && (loc.id || loc.slug)) || '',
-                    groupType: options.groupType || options.pageGroupType || '',
-                });
-            }
-            const checkoutUrl = view ? view.checkoutUrl : resolveOpenCheckoutUrl(loc);
-            if (bookingKind === 'gift-cards' || bookingKind === 'giftcards') {
-                if (loc.giftCardUrl) return loc.giftCardUrl;
-                if (loc.status === 'coming-soon') {
-                    return view && view.bookUrl && view.bookUrl !== '#'
-                        ? view.bookUrl
-                        : '/locations#newsletter';
-                }
-                return '';
-            }
-            if (bookingKind === 'waiver' || bookingKind === 'waivers') {
-                if (loc.waiverUrl) return loc.waiverUrl;
-                if (loc.status === 'coming-soon') {
-                    return view && view.bookUrl && view.bookUrl !== '#'
-                        ? view.bookUrl
-                        : '/locations#newsletter';
-                }
-                return '';
-            }
-            if (bookingKind === 'groups') {
-                const groupType = String(options.groupType || options.pageGroupType || '').toLowerCase().trim().replace(/\s+/g, '-');
-                const groupUrls = loc.groupFormUrls || {};
-                const groupUrl = (groupType && groupUrls[groupType]) || groupUrls.default || loc.groupsUrl || '';
-                if (groupUrl) return groupUrl;
-                if (checkoutUrl) return checkoutUrl;
-                if (loc.status === 'coming-soon') {
-                    return view && view.bookUrl && view.bookUrl !== '#'
-                        ? view.bookUrl
-                        : '/locations#newsletter';
-                }
-                return '';
-            }
-            if (checkoutUrl) return checkoutUrl;
-            if (loc.status === 'coming-soon') {
-                return view && view.bookUrl && view.bookUrl !== '#'
-                    ? view.bookUrl
-                    : '/locations#newsletter';
-            }
-            return '';
+            return resolveBookingUrlForLocation(loc, kind, id, opts);
         },
         subscribe(listener) {
             if (typeof listener !== 'function') return function () {};

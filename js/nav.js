@@ -299,6 +299,9 @@
         setMultilineText(infoPanel.querySelector('.location-info-hours'), translateHoursText(data.hoursText));
         var bookBtn = infoPanel.querySelector('.location-info-book');
         if (bookBtn) {
+            var ctaView = typeof context.getBookingCtaView === 'function'
+                ? context.getBookingCtaView('tickets', data.locationId || locationRef)
+                : null;
             bookBtn.textContent = data.externalUrl
                 ? translate('location.visitEuSite', data.bookLabel || 'Visit EU Site')
                 : data.comingSoon
@@ -306,12 +309,21 @@
                 : translate('nav.bookNow', data.bookLabel || 'Book Now');
             bookBtn.removeAttribute('target');
             bookBtn.removeAttribute('rel');
-            if (data.externalUrl) {
-                bookBtn.href = data.externalUrl;
-                bookBtn.removeAttribute('data-tm-booking-trigger');
-                bookBtn.removeAttribute('data-tm-booking-kind');
-                bookBtn.removeAttribute('data-tm-location');
-                bookBtn.removeAttribute('data-tm-booking-url');
+            if (ctaView) {
+                bookBtn.href = ctaView.href || '#';
+                if (ctaView.trigger) {
+                    bookBtn.setAttribute('data-tm-booking-trigger', '');
+                    bookBtn.setAttribute('data-tm-booking-kind', ctaView.kind || 'tickets');
+                    bookBtn.setAttribute('data-tm-location', ctaView.locationId || normalizeLocation(locationRef));
+                    if (ctaView.bookingUrl) bookBtn.setAttribute('data-tm-booking-url', ctaView.bookingUrl);
+                    else bookBtn.removeAttribute('data-tm-booking-url');
+                } else {
+                    bookBtn.removeAttribute('data-tm-booking-trigger');
+                    bookBtn.removeAttribute('data-tm-booking-kind');
+                    bookBtn.removeAttribute('data-tm-location');
+                    bookBtn.removeAttribute('data-tm-group-type');
+                    bookBtn.removeAttribute('data-tm-booking-url');
+                }
             } else if (data.bookingUrl) {
                 bookBtn.href = '#';
                 bookBtn.setAttribute('data-tm-booking-trigger', '');
@@ -325,6 +337,7 @@
                     bookBtn.removeAttribute('data-tm-booking-trigger');
                     bookBtn.removeAttribute('data-tm-booking-kind');
                     bookBtn.removeAttribute('data-tm-location');
+                    bookBtn.removeAttribute('data-tm-group-type');
                 }
             }
         }

@@ -252,6 +252,13 @@ describe('browser architecture contracts', () => {
       });
     expect(window.LocationContext.resolveBookingUrl('tickets', 'manassas'))
       .toBe('https://checkout.example/manassas');
+    expect(window.LocationContext.getBookingCtaView('tickets', 'manassas'))
+      .toMatchObject({
+        href: '#',
+        bookingUrl: 'https://checkout.example/manassas',
+        trigger: true,
+        externalLocation: false,
+      });
     expect(window.LocationContext.resolveBookingUrl('gift-cards', 'manassas'))
       .toBe('https://gift.example/manassas');
     expect(window.TMBooking.getDestination({
@@ -277,8 +284,21 @@ describe('browser architecture contracts', () => {
       });
     expect(window.LocationContext.resolveBookingUrl('groups', 'antwerp', { groupType: 'corporate' }))
       .toBe('https://timemission.eu/antwerp');
+    expect(window.LocationContext.getBookingCtaView('tickets', 'antwerp'))
+      .toMatchObject({
+        href: 'https://timemission.eu/antwerp',
+        bookingUrl: '',
+        trigger: false,
+        externalLocation: true,
+      });
     expect(window.LocationContext.resolveBookingUrl('tickets', 'dallas'))
       .toBe('/dallas#newsletter');
+    expect(window.LocationContext.getBookingCtaView('tickets', 'dallas'))
+      .toMatchObject({
+        href: '/dallas#newsletter',
+        bookingUrl: '',
+        trigger: false,
+      });
     expect(window.LocationContext.getLocationView('dallas'))
       .toMatchObject({
         bookUrl: '/dallas#newsletter',

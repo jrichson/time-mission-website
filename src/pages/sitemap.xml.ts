@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import routes from '../data/routes.json';
 import { cmsBuildStrict } from '../lib/payload/cms-origin';
 import { getPublishedLandings, landingCanonicalPath, landingShouldAppearInSitemap } from '../lib/payload/load';
-import { dynamicLandingPrefix, publicUrlForPath, registrySitemapUrls, type PublicUrlRegistry } from '../lib/public-url-surface';
+import { compilePublicUrlSurface, type PublicUrlRegistry } from '../lib/public-url-surface';
 
 export const prerender = true;
 
@@ -16,18 +16,17 @@ function escapeXml(value: string): string {
 }
 
 export const GET: APIRoute = async () => {
-    const registry = routes as PublicUrlRegistry;
-    const landingPrefix = dynamicLandingPrefix(registry);
+    const surface = compilePublicUrlSurface(routes as PublicUrlRegistry);
 
     const items: string[] = [];
-    items.push(...registrySitemapUrls(registry));
+    items.push(...surface.sitemapUrls);
 
     try {
         const landings = await getPublishedLandings();
         for (const doc of landings) {
             if (!landingShouldAppearInSitemap(doc)) continue;
-            const cp = landingCanonicalPath(doc.slug, landingPrefix);
-            items.push(publicUrlForPath(cp, registry));
+            const cp = landingCanonicalPath(doc.slug, surface.dynamicLandingPrefix);
+            items.push(surface.publicUrlFor(cp));
         }
     } catch (e) {
         if (cmsBuildStrict()) throw e;

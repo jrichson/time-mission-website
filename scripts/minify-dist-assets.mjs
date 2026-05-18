@@ -14,8 +14,7 @@ import path from 'node:path';
 import url from 'node:url';
 import * as esbuild from 'esbuild';
 import {
-    FINDER_DUPLICATE_DIR_RE,
-    FINDER_DUPLICATE_FILE_RE,
+    isFinderDuplicateName,
 } from './lib/cloudflare-artifact-policy.mjs';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
@@ -41,7 +40,7 @@ async function findDuplicateDirs(dir) {
     for (const entry of entries) {
         if (!entry.isDirectory()) continue;
         const full = path.join(dir, entry.name);
-        if (FINDER_DUPLICATE_DIR_RE.test(entry.name)) {
+        if (isFinderDuplicateName(entry.name)) {
             out.push(full);
             continue;
         }
@@ -77,12 +76,12 @@ async function removeFinderDuplicates(files) {
     let removedFiles = 0;
     for (const f of files) {
         const parts = path.relative(distDir, f).split(path.sep);
-        const duplicateDirIndex = parts.findIndex((part, index) => index < parts.length - 1 && FINDER_DUPLICATE_DIR_RE.test(part));
+        const duplicateDirIndex = parts.findIndex((part, index) => index < parts.length - 1 && isFinderDuplicateName(part));
         if (duplicateDirIndex !== -1) {
             duplicateDirs.add(path.join(distDir, ...parts.slice(0, duplicateDirIndex + 1)));
             continue;
         }
-        if (FINDER_DUPLICATE_FILE_RE.test(f)) {
+        if (isFinderDuplicateName(path.basename(f))) {
             await fs.unlink(f);
             removedFiles += 1;
         }

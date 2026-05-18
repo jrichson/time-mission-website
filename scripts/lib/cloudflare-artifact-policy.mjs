@@ -29,3 +29,24 @@ export function shouldExcludeArtifactPath(relPath) {
     || /(?:^|\/)[^/]*\s[0-9]+(?:\/|$)/i.test(normalized)
     || /\s[0-9]+\.[a-z0-9]+$/i.test(normalized);
 }
+
+export function planRequiredArtifacts() {
+  return {
+    rootFiles: [...MANDATORY_ROOT_FILES],
+    assetDirs: [...MANDATORY_ASSET_DIRS],
+    requiredDataFiles: ['data/locations.json'],
+  };
+}
+
+export function planVideoArtifacts({ mediaBase = '', availableFiles = [] } = {}) {
+  const hostedExternally = Boolean(String(mediaBase || '').trim());
+  const available = new Set(availableFiles);
+  return {
+    hostedExternally,
+    removeFromBundle: hostedExternally ? [...OFFLOADED_MP4_FILES] : [],
+    requiredInBundle: hostedExternally ? [] : [...OFFLOADED_MP4_FILES],
+    missingFromBundle: hostedExternally
+      ? []
+      : OFFLOADED_MP4_FILES.filter((name) => !available.has(name)),
+  };
+}

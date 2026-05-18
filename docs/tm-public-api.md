@@ -28,6 +28,7 @@ Defined in `js/locations.js`. Notable methods:
 - `TM.clear()`, `TM.restore()`
 - `TM.listTicketOptions()` — ticket panel `<option>` data; **must match** `src/lib/ticket-options.ts` (`ticketPanelSelectOptions`).
 - `window.LocationContext.getLocationView(id)` — stable location view data for overlay/footer/ticket surfaces.
+- `window.LocationContext.getBookingCtaView(kind, id, opts?)` — stable CTA view data for location-scoped booking links.
 
 ## `window.TMBooking`
 
