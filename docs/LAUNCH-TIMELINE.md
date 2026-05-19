@@ -70,7 +70,7 @@
 
 ## PHASE 1: Framework Migration
 **Dates:** March 31 – April 11 (2 weeks)
-**Owner:** Jefferson (with Claude Code)
+**Owner:** Jefferson
 **Dependency:** None — can start immediately
 
 This is the foundation. Everything else is harder without it.
@@ -155,7 +155,7 @@ This is the foundation. Everything else is harder without it.
 
 ## PHASE 4: SEO
 **Dates:** April 14 – April 25 (2 weeks, parallel with CMS)
-**Owner:** Jefferson (with Claude Code) + Ryan for strategy
+**Owner:** Jefferson + Ryan for strategy
 **Dependency:** Framework migration complete
 
 | Task | Est. Time | Date | Owner |

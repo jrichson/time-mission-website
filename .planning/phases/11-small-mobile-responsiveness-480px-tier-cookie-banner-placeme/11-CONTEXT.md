@@ -17,7 +17,7 @@ This phase closes the launch-blocking responsive gap diagnosed during Phase 10 U
 
 **Out-of-scope (defer / not applicable):**
 - Pages not yet migrated to Astro: brussels, dallas, gift-cards, lincoln, manassas, missions, mount-prospect, orland-park, west-nyack. The Phase 10 UAT root_cause listed 15 partials but 9 of them don't exist as `*-inline.raw.css.txt` files yet because the corresponding `.astro` pages haven't been created. Those pages will get their ≤480 tier when they're migrated in a later phase.
-- Fluid typography via `clamp()` — explicitly rejected by Phase 10 diagnosis (visual-parity risk per project CLAUDE.md, no size tokens exist to retrofit, tap-target precision concerns).
+- Fluid typography via `clamp()` — explicitly rejected by Phase 10 diagnosis (visual-parity risk per project project guidance, no size tokens exist to retrofit, tap-target precision concerns).
 - New design tokens for fluid size scale.
 - Banner copy/JS/markup changes (vanilla-cookieconsent gate behavior in `js/cookie-consent.js` stays untouched).
 - `.btn-tickets` minimum size changes (already meets ≥48px desktop / ≥44px mobile from Phase 10 — verify only).
@@ -30,7 +30,7 @@ This phase closes the launch-blocking responsive gap diagnosed during Phase 10 U
 ### Approach (locked by Phase 10 diagnosis)
 
 - **D-A1: Per-element `@media (max-width: 480px)` rules** — every affected element gets an explicit ≤480px rule. Mirror the pattern already shipped in `index-inline.raw.css.txt`, `antwerp-inline.raw.css.txt`, `philadelphia-inline.raw.css.txt`. NO `clamp()` typography refactor.
-- **D-A2: Visual parity is the design contract** — per CLAUDE.md project constraint. Changes are responsive resizing only. No copy edits, no color changes, no animation changes.
+- **D-A2: Visual parity is the design contract** — per project guidance project constraint. Changes are responsive resizing only. No copy edits, no color changes, no animation changes.
 - **D-A3: Tap targets stay ≥44px** — every reduced button/link must keep `min-height: 44px` (and 48px for `.btn-tickets`). `npm run check:tap-targets` must continue exiting 0.
 - **D-A4: Use existing CSS files** — no new CSS files for the responsive tier. Add the `@media` block at the end of each file that needs it.
 
@@ -78,7 +78,7 @@ This phase closes the launch-blocking responsive gap diagnosed during Phase 10 U
 - **Wave 2 (sequential after wave 1):** Playwright smoke assertion at 375×667 — depends on the CSS work being in place to not produce flake.
 - **Wave 3:** ROADMAP goal/requirements update + verification chain (`npm run verify`).
 
-### Claude's Discretion
+### Planner Discretion
 
 - Exact pixel/rem values inside each `@media (max-width: 480px)` block — pick sensible numbers that mirror the index/antwerp/philly precedent. Document any non-obvious reduction with a brief WHY comment if it isn't a straight pattern match.
 - Which exact 3–4 pages to assert in the smoke test (index + antwerp are mandatory; pick 1–2 more from faq/locations/about/contact).
@@ -101,8 +101,8 @@ This phase closes the launch-blocking responsive gap diagnosed during Phase 10 U
 - `src/partials/philadelphia-inline.raw.css.txt` — full location-page treatment.
 
 ### Project constraints
-- `CLAUDE.md` (root) — visual parity rule; static-site conventions; tap-target script `npm run check:tap-targets`.
-- `.claude/CLAUDE.md` — design token sources (`css/variables.css` for `--orange`, `--display`, `--body`).
+- `project guidance` (root) — visual parity rule; static-site conventions; tap-target script `npm run check:tap-targets`.
+- `local tooling/project guidance` — design token sources (`css/variables.css` for `--orange`, `--display`, `--body`).
 - `playwright.config.js` — `mobile` project (Pixel 5 = 393×851) is already wired; add new viewport in test override rather than as a new project unless the planner decides otherwise.
 
 ### Verification surface

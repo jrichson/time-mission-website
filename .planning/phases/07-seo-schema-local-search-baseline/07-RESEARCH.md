@@ -32,7 +32,7 @@
 - **D-12:** `robots.txt` should explicitly allow major AI crawlers where acceptable (e.g. GPTBot, Google-Extended, Perplexity) — exact `User-agent` tokens are planner-verified against current vendor names at implementation time.
 - **D-13:** Answer-first content work in Phase 7 = short internal review document listing gaps and opportunities — no mandatory thin-page rewrites.
 
-### Claude's Discretion
+### Planner Discretion
 - Exact SEO catalog schema, helper API on `SiteHead`, sitemap endpoint shape, FAQPage eligibility per location, depth of secondary NAP checks, and precise `robots.txt` / `llms.txt` prose — bounded by decisions above.
 
 ### Deferred Ideas (OUT OF SCOPE)
@@ -53,9 +53,9 @@
 | **SEO-06** | GEO/AI-search readiness reviewed: answer-first opportunities, AI crawler policy, optional `llms.txt` | "GEO/AI baseline" section, `robots.txt` AI-bot table, `llms.txt` format spec, GEO review doc template |
 </phase_requirements>
 
-## Project Constraints (from CLAUDE.md / AGENTS.md)
+## Project Constraints (from project guidance)
 
-CLAUDE.md and AGENTS.md scope GitNexus tooling. Two directives are operationally relevant for Phase 7:
+project guidance scope GitNexus tooling. Two directives are operationally relevant for Phase 7:
 
 - **Pre-edit impact analysis:** Before editing `SiteHead.astro`, `SiteLayout.astro`, `scripts/check-sitemap.js`, `scripts/check-route-contract.js`, run `gitnexus_impact({target, direction: "upstream"})`. These files are central — D-1 callers include every migrated `src/pages/*.astro`, `verify:phase*` scripts, and `_redirects` consumers.
 - **Pre-commit detect_changes:** Run `gitnexus_detect_changes()` before every commit to confirm the change set is scoped to SEO/sitemap/schema/`robots.txt`/`llms.txt` and not bleeding into Phase 8 territory or unrelated runtime files.

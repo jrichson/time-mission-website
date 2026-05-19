@@ -210,5 +210,5 @@ window.location.href = '/missions';
 ---
 
 _Reviewed: 2026-05-04_
-_Reviewer: Claude (gsd-code-reviewer)_
+_Reviewer: code review workflow_
 _Depth: standard_

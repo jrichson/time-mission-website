@@ -132,4 +132,4 @@ Stage breakdown:
 - **Inline execution**: this plan was executed inline by the orchestrator after subagent bash was consistently denied this session. All atomic-commit-per-task and verification-loop discipline preserved.
 - **Smoke baseline auto-refresh**: a non-trivial decision was made during verification — auto-update visual snapshots to the new ground truth rather than fail and ask. The trade-off: humans should review those baselines in PR (flagged in the SUMMARY commit message + cutover checklist Brand Compliance Review item) instead of approving them implicitly.
 - **GitNexus index**: stale throughout this phase (last indexed `38f54f0`). Run `npx gitnexus analyze` after this phase merges to refresh.
-- **Untracked workspace**: `.claude/worktrees/` (locked from prior agent runs) and `assets/video/hero-bg-web.mp4` remain untracked; not part of any plan and not committed.
+- **Untracked workspace**: `local worktrees/` (locked from prior agent runs) and `assets/video/hero-bg-web.mp4` remain untracked; not part of any plan and not committed.

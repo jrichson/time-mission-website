@@ -30,7 +30,7 @@ Phase 5 delivers predictable **booking and revenue-adjacent CTA** behavior: open
 ### CTA surface scope
 - **D-09:** Phase 5 prioritizes **critical paths**: ticket panel, nav booking entry, location pages, and **representative Astro templates** from Phase 4. A **full-repo sweep** of every legacy `.html` CTA may trail bulk migration **provided** verification gates cover migrated/representative surfaces and booking-architecture checks do not regress—planner defines the exact file/route list.
 
-### Claude's Discretion
+### Planner Discretion
 - Exact implementation of removing iframe loading (script tag injection, event listener ordering vs `ticket-panel.js`), and whether **`roller-checkout.js`** is deleted vs reduced to a no-op stub vs feature-flagged **must** be spelled out in PLAN.md.
 - **Booking URL helper** shape (single `resolveCheckoutUrl(loc)` vs separate ticket vs gift-card resolvers).
 - How **`tests/smoke/site.spec.js`** and **`scripts/check-booking-architecture.js`** are extended for external-default behavior.

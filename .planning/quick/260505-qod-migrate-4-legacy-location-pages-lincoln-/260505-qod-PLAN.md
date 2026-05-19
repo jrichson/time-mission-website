@@ -92,12 +92,12 @@ Output: 4 new `src/pages/*.astro` wrappers + 12 new `src/partials/*` fragment fi
 </objective>
 
 <execution_context>
-@$HOME/.claude/get-shit-done/workflows/execute-plan.md
+@$HOME/planning/workflows/execute-plan.md
 </execution_context>
 
 <context>
 @.planning/STATE.md
-@CLAUDE.md
+@project guidance
 @src/pages/antwerp.astro
 @src/pages/houston.astro
 @src/pages/philadelphia.astro
@@ -296,11 +296,11 @@ The after.frag should contain ONLY the single inline `<script>...</script>` bloc
        - `bodyDataLocation={<slug>.slug}` is required (matches the legacy `<body data-location="<slug>">`).
        - Repeat for mount-prospect / manassas / west-nyack with the obvious substitutions.
 
-    6. **Do NOT modify** lincoln.html / mount-prospect.html / manassas.html / west-nyack.html at the repo root. Precedent: antwerp.html / houston.html / philadelphia.html all still exist alongside their `.astro` wrappers (verified — see `<legacy_boundaries>` line counts and `src/pages/{antwerp,houston,philadelphia}.astro`). The `_redirects` file already maps the legacy `.html` paths to canonical paths and the route registry is already aware (routes.json lines 178–217). Touching the legacy `.html` files would explode the diff and risk reverting unrelated work in the dirty worktree (per CLAUDE.md project notes).
+    6. **Do NOT modify** lincoln.html / mount-prospect.html / manassas.html / west-nyack.html at the repo root. Precedent: antwerp.html / houston.html / philadelphia.html all still exist alongside their `.astro` wrappers (verified — see `<legacy_boundaries>` line counts and `src/pages/{antwerp,houston,philadelphia}.astro`). The `_redirects` file already maps the legacy `.html` paths to canonical paths and the route registry is already aware (routes.json lines 178–217). Touching the legacy `.html` files would explode the diff and risk reverting unrelated work in the dirty worktree (per project guidance project notes).
 
     7. **Do NOT modify** `src/data/routes.json`, `_redirects`, `sitemap.xml`, `data/locations.json`, `scripts/check-route-contract.js`, or `scripts/sync-static-to-public.mjs`. All four slugs are already registered. The wrapper takes over the `outputFile` rendering; nothing else changes.
 
-    8. **Self-check before declaring done** (per CLAUDE.md GitNexus rules): run `gitnexus_impact({target: "buildLocationGraph", direction: "upstream"})` once before the first wrapper write, and `gitnexus_detect_changes({scope: "staged"})` after staging — confirm scope is limited to the 16 listed `files_modified` paths (4 new pages + 12 new partials).
+    8. **Self-check before declaring done** (per project guidance GitNexus rules): run `gitnexus_impact({target: "buildLocationGraph", direction: "upstream"})` once before the first wrapper write, and `gitnexus_detect_changes({scope: "staged"})` after staging — confirm scope is limited to the 16 listed `files_modified` paths (4 new pages + 12 new partials).
   </action>
   <verify>
     <automated>
@@ -381,7 +381,7 @@ All commands must exit 0. Especially watch for:
 - `npm run build:astro && npm run check:routes -- --dist` exits 0.
 - `npm run verify:phase10` exits 0 (cutover gate stays green).
 - Legacy `lincoln.html`, `mount-prospect.html`, `manassas.html`, `west-nyack.html` at repo root are byte-identical to pre-task state.
-- `git status --short` shows only the 16 new files staged plus this PLAN.md plus the eventual SUMMARY.md (no unrelated worktree sweep — the dirty-worktree caveat from CLAUDE.md is honored).
+- `git status --short` shows only the 16 new files staged plus this PLAN.md plus the eventual SUMMARY.md (no unrelated worktree sweep — the dirty-worktree caveat from project guidance is honored).
 - A single commit (or one commit per slug — both reviewable) lands the migration; commit message scoped (`feat(astro-migration):` or `chore(astro-migration):`).
 </success_criteria>
 

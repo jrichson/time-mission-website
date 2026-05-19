@@ -16,9 +16,9 @@
 | Single TS/JSON registry generates `_redirects` | Machine-readable SOT; scripts generate/validate | |
 | Astro `src/pages` primary | Build output drives truth; registry only legacy pairs | |
 | Hybrid + allowlist | Explicit contract + rare hand rules | |
-| Claude/planner discretion | Optimize for maintainability and ROUTE-04 | ✓ |
+| Planner discretion | Optimize for maintainability and ROUTE-04 | ✓ |
 
-**User's choice:** Claude/planner discretion (with constraints in CONTEXT: machine-readable SOT, generate/validate redirects, drift must fail builds).
+**User's choice:** Planner discretion (with constraints in CONTEXT: machine-readable SOT, generate/validate redirects, drift must fail builds).
 
 **Notes:** Prior work locked `astro.config.mjs` output shape in Phase 1.
 
@@ -31,9 +31,9 @@
 | Aliases on canonical routes | Same registry, alias keys | |
 | Separate merged section/file | Still validated | |
 | Manual `_redirects` for shortcuts in Phase 2 | Automate `.html`→clean only for pages | |
-| Claude discretion | Simplest path meeting ROUTE-02/04 | ✓ |
+| Planner discretion | Simplest path meeting ROUTE-02/04 | ✓ |
 
-**User's choice:** Claude/planner discretion (shortcuts must be covered by drift checks; targets migrate toward clean paths).
+**User's choice:** Planner discretion (shortcuts must be covered by drift checks; targets migrate toward clean paths).
 
 ---
 
@@ -44,7 +44,7 @@
 | Enforce `dist/` first | Fix sources gradually | |
 | Update links in touched files only | Incremental | |
 | Full-repo sweep within Phase 2 | Source uses clean URLs broadly | ✓ |
-| Claude discretion | Balance ROUTE-03 vs churn | |
+| Planner discretion | Balance ROUTE-03 vs churn | |
 
 **User's choice:** Full-repo sweep of internal hrefs to clean URLs in Phase 2 scope.
 
@@ -57,13 +57,13 @@
 | Preserve queries; keep current 302 where 302 | Document + test | |
 | Preserve queries; normalize 301 where safe | | |
 | Minimal — avoid loops wrong targets | Host-dependent doc | |
-| Claude discretion — document Cloudflare behavior | ✓ |
+| Planner discretion — document Cloudflare behavior | ✓ |
 
-**User's choice:** Claude/planner discretion with mandatory short behavior note for query, fragment, and status policy.
+**User's choice:** Planner discretion with mandatory short behavior note for query, fragment, and status policy.
 
 ---
 
-## Claude's Discretion
+## Planner Discretion
 
 - Registry file layout, generate vs validate-only for `_redirects`, integration with `check-internal-links`.
 

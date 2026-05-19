@@ -38,7 +38,7 @@ Phase 4 delivers shared Astro components and representative page templates so th
 ### Verification expectations (phase-internal)
 - **D-11:** Phase 4 work should integrate with existing **`npm run check`** mentality: extend or add checks so **chrome/ticket markup** cannot drift unnoticed (exact mechanism left to planner—may extend `check-components`-style validation to Astro output or source components).
 
-### Claude's Discretion
+### Planner Discretion
 - Exact file names under `src/components/` vs `src/layouts/`, number of layouts (one vs segmented), and migration ordering of representative pages versus secondary pages **within Phase 4 scope**.
 - Tactical choice between scoped CSS migration vs retaining a single shared page stylesheet where parity is faster to guarantee.
 - How to automate drift detection (AST, HTML snapshot, selective string checks) **as long as** COMP-02/COMP-03 intent is satisfied.

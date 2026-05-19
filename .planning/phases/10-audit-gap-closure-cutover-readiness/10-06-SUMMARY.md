@@ -145,4 +145,4 @@ Manual smoke (deferred to cutover-checklist tracked in plan 10-07):
 - **`.location-btn` gap discovered by validator**: not in the original CONTEXT.md item 3.4 spot-check list; surfaced because the desktop ruleset had no sizing declarations. Patched in the same Task 3 commit.
 - **Validator scope limitation**: `.btn-secondary` and `.btn-primary` only exist in page inline CSS partials. Per UI-SPEC line 642-660 the validator scope is shared CSS only; page-local enforcement would require a different validator (e.g., scan `src/partials/*-inline.raw.css.txt`). Flagged as informational skip notes; not a phase blocker.
 - **Stale GitNexus index**: not refreshed during this wave; should run `npx gitnexus analyze` at phase close.
-- **Untracked workspace**: `.claude/worktrees/` and `assets/video/hero-bg-web.mp4` remain untracked from prior agent runs; not part of this plan and not committed.
+- **Untracked workspace**: `local worktrees/` and `assets/video/hero-bg-web.mp4` remain untracked from prior agent runs; not part of this plan and not committed.

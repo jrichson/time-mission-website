@@ -10,7 +10,7 @@ Generate WebP companions for the 24 experience JPGs that lack one (per t7n resea
 
 ## Strategy
 1. `cwebp -q 78` per JPG → matching `.webp` in same directory
-2. Find every `<picture><img src="<dir>/<base>.jpg" ...>` in source files (root *.html, locations/*.html, src/partials/*-main.frag.txt) — exclude dist/, public/, _archive/, .claude/worktrees/, ads/
+2. Find every `<picture><img src="<dir>/<base>.jpg" ...>` in source files (root *.html, locations/*.html, src/partials/*-main.frag.txt) — exclude dist/, public/, _archive/, local worktrees/, ads/
 3. Inject `<source srcset="<dir>/<base>.webp" type="image/webp">` between `<picture>` and `<img>`
 
 ## Verify

@@ -43,7 +43,7 @@ Phase 6 delivers a **GTM-first**, **privacy-conscious** measurement foundation: 
 ### ROLLER / cross-domain (ANLY-06)
 - **D-16:** Deliver **operator-facing documentation** (extend **`docs/roller-booking-launch-checklist.md`** or sibling doc) for **cross-domain measurement**, GA4 **referral exclusion**, and **linker** considerations—**no** PII in examples.
 
-### Claude's Discretion
+### Planner Discretion
 - **`event_id` generation** (UUID v4 vs deterministic hash), file placement (`js/analytics.js` vs `src/lib` compiled), and whether **`track` is an inline script** vs bundled island.
 - Exact **list of Google hostnames** in CSP after research.
 - **Playwright** assertions for dataLayer (level of strictness).

@@ -80,7 +80,7 @@ One-liner: Renamed Antwerp to "Time Mission Antwerp" with legacy "Experience Fac
   - If source data declares `alternateName`, the emitted JSON-LD must match (drift detection).
 - `antwerp.html`: hand-authored inline LocalBusiness JSON-LD now declares `name: "Time Mission Antwerp"` and `alternateName: "Experience Factory Antwerp"` (legacy static page is not yet emitted through the Astro schema module — patched directly at source).
 
-## GitNexus impact analysis (per CLAUDE.md)
+## GitNexus impact analysis (per project guidance)
 
 Index was fresh (last commit 135bb23) at the start of execution. CLI invocations:
 

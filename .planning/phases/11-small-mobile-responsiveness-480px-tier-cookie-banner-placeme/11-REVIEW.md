@@ -156,5 +156,5 @@ The responsive CSS work (≤480px blocks across shared CSS and partials) is clea
 ---
 
 _Reviewed: 2026-05-05_
-_Reviewer: Claude (gsd-code-reviewer)_
+_Reviewer: code review workflow_
 _Depth: standard_

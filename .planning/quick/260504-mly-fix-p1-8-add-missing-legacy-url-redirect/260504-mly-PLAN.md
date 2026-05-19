@@ -51,13 +51,13 @@ Output: Updated `_redirects` (12 new rules) + new section in `docs/redirect-map.
 </objective>
 
 <execution_context>
-@$HOME/.claude/get-shit-done/workflows/execute-plan.md
-@$HOME/.claude/get-shit-done/templates/summary.md
+@$HOME/planning/workflows/execute-plan.md
+@$HOME/planning/templates/summary.md
 </execution_context>
 
 <context>
 @.planning/STATE.md
-@./CLAUDE.md
+@./project guidance
 @_redirects
 @docs/redirect-map.md
 @scripts/check-route-contract.js
@@ -83,7 +83,7 @@ If a Phase 10 follow-up wants to assert these legacy paths are *required* (not o
 </rationale>
 
 <gitnexus_note>
-Per CLAUDE.md GSD enforcement: this is a config-file edit (`_redirects` is plain text consumed by the host), not a symbol edit. No functions, classes, or methods are touched. `gitnexus_impact` is not applicable.
+Per project guidance GSD enforcement: this is a config-file edit (`_redirects` is plain text consumed by the host), not a symbol edit. No functions, classes, or methods are touched. `gitnexus_impact` is not applicable.
 
 After edits, run `gitnexus_detect_changes()` to confirm scope is limited to `_redirects` + `docs/redirect-map.md` (zero symbol changes expected).
 </gitnexus_note>

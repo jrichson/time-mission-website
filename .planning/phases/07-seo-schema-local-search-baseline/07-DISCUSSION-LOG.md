@@ -59,7 +59,7 @@
 
 ---
 
-## Claude's Discretion
+## Planner Discretion
 
 Catalog schema layout, `SiteHead` helper shape, sitemap endpoint implementation, FAQPage eligibility per location, secondary NAP check depth, exact `User-agent` strings.
 

@@ -137,4 +137,4 @@ The ROADMAP goal text says "6 page-local partials" but Plan 11-02 expanded scope
 ---
 
 _Verified: 2026-05-05T19:00:00Z_
-_Verifier: Claude (gsd-verifier)_
+_Verifier: verification workflow_

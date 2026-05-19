@@ -8,17 +8,17 @@
 ## User Constraints (from CONTEXT.md)
 
 ### Locked Decisions
-- **D-01:** **Claude / planner discretion** for the exact registry format and file layout, with these constraints: there must be a **machine-readable** representation of (a) canonical clean paths and (b) legacy sources (at minimum every legacy `.html` path that must map to a canonical). It must be possible to **generate or validate** `_redirects` (and future sitemap/schema consumers) from this representation without hand-copying every row ad hoc.
+- **D-01:** **Planner discretion** for the exact registry format and file layout, with these constraints: there must be a **machine-readable** representation of (a) canonical clean paths and (b) legacy sources (at minimum every legacy `.html` path that must map to a canonical). It must be possible to **generate or validate** `_redirects` (and future sitemap/schema consumers) from this representation without hand-copying every row ad hoc.
 - **D-02:** Validation (ROUTE-04) must fail if **built output**, **registry**, or **`_redirects`** disagree on a public URL mapping—planner defines the comparison surface (e.g. `dist/` HTML, link checker, redirect table).
 - **D-03:** Astro remains configured with `build.format: 'file'` and `trailingSlash: 'never'` (Phase 1); Phase 2 **does not** change that shape—only enforces the contract end-to-end.
-- **D-04:** **Claude / planner discretion** for whether shortcuts live as **aliases inside the same registry object** vs a **merged second list** concatenated into deploy `_redirects`—constraints: shortcuts must be **included in drift detection** (no untracked orphan rules that bypass checks), and **targets must eventually be clean canonical paths**, not `.html` files once those pages migrate.
+- **D-04:** **Planner discretion** for whether shortcuts live as **aliases inside the same registry object** vs a **merged second list** concatenated into deploy `_redirects`—constraints: shortcuts must be **included in drift detection** (no untracked orphan rules that bypass checks), and **targets must eventually be clean canonical paths**, not `.html` files once those pages migrate.
 - **D-05:** Until all pages emit clean URLs from Astro, intermediary targets may still point at `.html` **only if** tracked and scheduled for removal in a later phase; prefer moving shortcut targets to clean paths in Phase 2 when the destination exists.
 - **D-06:** Phase 2 includes a **full-repository sweep** of internal `href`/`src` references that should be first-party navigation (within scope defined by planners: typically `href` to same-site HTML paths) so **source-authored links use clean canonical paths**, not `.html` URLs—aligned with ROUTE-03.
 - **D-07:** **Sitemap** (`sitemap.xml`): Phase 1 copied it unchanged; Phase 2 must either **update it to list only clean canonical URLs** or introduce **generated sitemap from registry/build**—planner chooses minimal path that satisfies ROUTE-03 (no `.html` in sitemap entries for migrated routes).
-- **D-08:** **Claude / planner discretion** on implementation specifics; **documentation requirement**: Phase 2 deliverables include a short **redirect behavior note** covering (1) whether query strings are preserved when legacy URLs redirect to clean paths on the static host, (2) that URL **fragments (`#...`)** are not sent to the server and what that means for rules like `groups.html#birthday`, and (3) **HTTP status** policy (e.g. keep **302** for intentionally temporary routes vs **301** for permanent moves) when targets move from `.html` to clean paths.
+- **D-08:** **Planner discretion** on implementation specifics; **documentation requirement**: Phase 2 deliverables include a short **redirect behavior note** covering (1) whether query strings are preserved when legacy URLs redirect to clean paths on the static host, (2) that URL **fragments (`#...`)** are not sent to the server and what that means for rules like `groups.html#birthday`, and (3) **HTTP status** policy (e.g. keep **302** for intentionally temporary routes vs **301** for permanent moves) when targets move from `.html` to clean paths.
 - **D-09:** Do not introduce **redirect chains** that harm SEO or analytics: legacy → clean should be **one hop** where the platform allows (per ROUTE-02).
 
-### Claude's Discretion
+### Planner Discretion
 - Exact schema for the route registry file(s), choice of `generate` vs `validate-only` for `_redirects`, and how to integrate with existing `scripts/check-internal-links.js` and future checks.
 - Whether to add a small **allowlist** for edge-case redirects that cannot be expressed in the registry yet—if used, it must be explicit and reviewed.
 - Cloudflare-specific subtleties after reading current `docs/redirect-map.md` and host docs.
@@ -41,24 +41,24 @@
 
 ## Summary
 
-Phase 2 should make a route registry the authored source of truth for public canonical paths, legacy `.html` sources, and marketing shortcut aliases. [VERIFIED: `02-CONTEXT.md`] The most conservative implementation is a machine-readable JSON registry under `src/data/routes.json`, a small Node validation script under `scripts/check-route-contract.js`, and a redirect generation or validation step that keeps `_redirects`, `sitemap.xml`, source links, canonical tags, and JSON-LD URLs in lockstep. [VERIFIED: repository conventions in `CLAUDE.md`, `scripts/check-*.js`] [ASSUMED]
+Phase 2 should make a route registry the authored source of truth for public canonical paths, legacy `.html` sources, and marketing shortcut aliases. [VERIFIED: `02-CONTEXT.md`] The most conservative implementation is a machine-readable JSON registry under `src/data/routes.json`, a small Node validation script under `scripts/check-route-contract.js`, and a redirect generation or validation step that keeps `_redirects`, `sitemap.xml`, source links, canonical tags, and JSON-LD URLs in lockstep. [VERIFIED: repository conventions in `project guidance`, `scripts/check-*.js`] [ASSUMED]
 
 Cloudflare Pages is the primary host model for this project, and its documented serving behavior directly supports the selected Astro file output shape: matching `.html` assets are served at extensionless URLs, and `.html` requests are redirected to extensionless counterparts. [CITED: https://developers.cloudflare.com/pages/configuration/serving-pages/] Astro docs confirm that `build.format: 'file'` generates page HTML files and that `trailingSlash` controls URL formatting semantics. [CITED: Astro docs via Context7 `/withastro/docs`] Netlify is only a compatibility reference here; its Pretty URLs and trailing-slash normalization differ enough that the redirect behavior note must distinguish Cloudflare from Netlify. [CITED: https://docs.netlify.com/manage/routing/redirects/redirect-options/]
 
 **Primary recommendation:** Use `src/data/routes.json` as the route registry, validate `_redirects` rather than generating it in the first pass, then optionally add generation once drift checks are green. [ASSUMED]
 
-## Project Constraints (from CLAUDE.md)
+## Project Constraints (from project guidance)
 
-- Use GitNexus to understand code and assess blast radius before edits to functions, classes, or methods; run `gitnexus_impact` before modifying symbols and warn on HIGH/CRITICAL risk. [VERIFIED: `CLAUDE.md`]
-- Run `gitnexus_detect_changes()` before committing code changes. [VERIFIED: `CLAUDE.md`]
-- Keep the migration parity-first; do not introduce a redesign. [VERIFIED: `CLAUDE.md`]
-- Preserve static output suitable for Cloudflare Pages-style hosting. [VERIFIED: `CLAUDE.md`]
-- Canonical URLs are extensionless with no trailing slash, and `.html` URLs must redirect without loops. [VERIFIED: `CLAUDE.md`]
-- Keep SEO metadata, sitemap entries, canonicals, internal links, structured data, and crawler policy coherent during migration. [VERIFIED: `CLAUDE.md`]
-- `npm run verify` or its Astro equivalent remains the cutover gate. [VERIFIED: `CLAUDE.md`]
-- The worktree is dirty; planned edits must stay scoped and must not revert unrelated changes. [VERIFIED: `CLAUDE.md`]
-- New structural checks should be small Node scripts named `scripts/check-*.js`, collect all failures into `errors`, print each failure, and exit non-zero. [VERIFIED: `CLAUDE.md`]
-- JavaScript validation scripts use CommonJS, 2-space indentation, semicolons, and Node built-ins. [VERIFIED: `CLAUDE.md`]
+- Use GitNexus to understand code and assess blast radius before edits to functions, classes, or methods; run `gitnexus_impact` before modifying symbols and warn on HIGH/CRITICAL risk. [VERIFIED: `project guidance`]
+- Run `gitnexus_detect_changes()` before committing code changes. [VERIFIED: `project guidance`]
+- Keep the migration parity-first; do not introduce a redesign. [VERIFIED: `project guidance`]
+- Preserve static output suitable for Cloudflare Pages-style hosting. [VERIFIED: `project guidance`]
+- Canonical URLs are extensionless with no trailing slash, and `.html` URLs must redirect without loops. [VERIFIED: `project guidance`]
+- Keep SEO metadata, sitemap entries, canonicals, internal links, structured data, and crawler policy coherent during migration. [VERIFIED: `project guidance`]
+- `npm run verify` or its Astro equivalent remains the cutover gate. [VERIFIED: `project guidance`]
+- The worktree is dirty; planned edits must stay scoped and must not revert unrelated changes. [VERIFIED: `project guidance`]
+- New structural checks should be small Node scripts named `scripts/check-*.js`, collect all failures into `errors`, print each failure, and exit non-zero. [VERIFIED: `project guidance`]
+- JavaScript validation scripts use CommonJS, 2-space indentation, semicolons, and Node built-ins. [VERIFIED: `project guidance`]
 
 ## Standard Stack
 
@@ -69,7 +69,7 @@ Cloudflare Pages is the primary host model for this project, and its documented 
 | Astro | 6.1.10 | Static build and file-based route output. [VERIFIED: `npm view astro version`, local `npx astro --version`] | Existing Phase 1 dependency and config already use Astro static output. [VERIFIED: `package.json`, `astro.config.mjs`] |
 | Node.js | v22.13.1 local | Runs validation scripts and build helpers. [VERIFIED: local shell `node --version`] | Existing repository checks are Node CommonJS scripts. [VERIFIED: `scripts/check-internal-links.js`, `scripts/check-sitemap.js`] |
 | npm | 11.7.0 local | Runs package scripts and verifies registry versions. [VERIFIED: local shell `npm --version`] | Existing quality gates are npm scripts. [VERIFIED: `package.json`] |
-| Cloudflare Pages `_redirects` | N/A | Static-host redirect table. [CITED: https://developers.cloudflare.com/pages/configuration/redirects/] | Project host model is Cloudflare Pages-style static hosting. [VERIFIED: `CLAUDE.md`, `_redirects`] |
+| Cloudflare Pages `_redirects` | N/A | Static-host redirect table. [CITED: https://developers.cloudflare.com/pages/configuration/redirects/] | Project host model is Cloudflare Pages-style static hosting. [VERIFIED: `project guidance`, `_redirects`] |
 
 ### Supporting
 
@@ -109,7 +109,7 @@ docs/
 └── redirect-behavior.md         # Host behavior note required by D-08
 ```
 
-This structure follows existing repository conventions for data files, CommonJS validation scripts, and docs. [VERIFIED: `CLAUDE.md`, `scripts/check-*.js`, `docs/redirect-map.md`]
+This structure follows existing repository conventions for data files, CommonJS validation scripts, and docs. [VERIFIED: `project guidance`, `scripts/check-*.js`, `docs/redirect-map.md`]
 
 ### Pattern 1: Registry Object Per Public Page
 
@@ -205,10 +205,10 @@ This is a migration phase because it changes public URL contracts, redirect beha
 
 | Category | Items Found | Action Required |
 |---|---|---|
-| Stored data | No database or persisted application datastore is used by the static site. [VERIFIED: `CLAUDE.md`] Browser `localStorage` stores location keys, not route keys. [VERIFIED: `CLAUDE.md`] | No data migration for route names. Preserve `?book=1` behavior for later booking phase awareness. [VERIFIED: BOOK-04] |
+| Stored data | No database or persisted application datastore is used by the static site. [VERIFIED: `project guidance`] Browser `localStorage` stores location keys, not route keys. [VERIFIED: `project guidance`] | No data migration for route names. Preserve `?book=1` behavior for later booking phase awareness. [VERIFIED: BOOK-04] |
 | Live service config | Cloudflare Pages deployment settings may include custom domain, Pages redirects behavior, preview behavior, and cache rules outside git. [CITED: https://developers.cloudflare.com/pages/configuration/serving-pages/] [ASSUMED] | Document Cloudflare preview checks; do not assume local Python tests prove production redirects. [ASSUMED] |
-| OS-registered state | None found for URL routing; no launchd/systemd/pm2 state is described in project docs. [VERIFIED: `CLAUDE.md`, `PROJECT.md`] | None. |
-| Secrets/env vars | No route-related secrets or env vars detected in project docs; root site has no runtime env system. [VERIFIED: `CLAUDE.md`] | None. |
+| OS-registered state | None found for URL routing; no launchd/systemd/pm2 state is described in project docs. [VERIFIED: `project guidance`, `PROJECT.md`] | None. |
+| Secrets/env vars | No route-related secrets or env vars detected in project docs; root site has no runtime env system. [VERIFIED: `project guidance`] | None. |
 | Build artifacts | `public/` and `dist/` contain copied `_redirects`, `sitemap.xml`, `404.html`, and assets from Phase 1 sync/build. [VERIFIED: `scripts/sync-static-to-public.mjs`, `scripts/check-astro-dist-manifest.js`, current glob results] | Regenerate `public/` and `dist/` via `npm run build:astro`; do not manually patch built files. [VERIFIED: `package.json`] |
 
 ## Common Pitfalls
@@ -285,7 +285,7 @@ for (const route of routes) {
 }
 ```
 
-This follows the repository's validation convention of accumulating all failures before exiting. [VERIFIED: `scripts/check-internal-links.js`, `CLAUDE.md`]
+This follows the repository's validation convention of accumulating all failures before exiting. [VERIFIED: `scripts/check-internal-links.js`, `project guidance`]
 
 ### Astro Output Contract
 
@@ -400,9 +400,9 @@ Cloudflare Pages `_redirects` rows are `[source] [destination] [code?]`; status 
 
 | ASVS Category | Applies | Standard Control |
 |---|---|---|
-| V2 Authentication | No [VERIFIED: static public site has no auth in `CLAUDE.md`] | N/A |
-| V3 Session Management | No [VERIFIED: static public site has no sessions in `CLAUDE.md`] | N/A |
-| V4 Access Control | No [VERIFIED: static public site has no protected routes in `CLAUDE.md`] | N/A |
+| V2 Authentication | No [VERIFIED: static public site has no auth in `project guidance`] | N/A |
+| V3 Session Management | No [VERIFIED: static public site has no sessions in `project guidance`] | N/A |
+| V4 Access Control | No [VERIFIED: static public site has no protected routes in `project guidance`] | N/A |
 | V5 Input Validation | Yes [VERIFIED: route registry and redirect data are inputs to validation scripts] | Strict route schema checks in Node; reject malformed paths, `.html` canonicals, trailing-slash canonicals, duplicate sources, and redirect loops. [ASSUMED] |
 | V6 Cryptography | No [VERIFIED: no crypto in route phase scope] | N/A |
 
@@ -432,7 +432,7 @@ Cloudflare Pages `_redirects` rows are `[source] [destination] [code?]`; status 
 - `gitnexus_impact` on `stripQueryAndHash` returned LOW risk with one direct file-level caller in `scripts/check-internal-links.js`. [VERIFIED: GitNexus MCP impact]
 - `gitnexus_impact` on `walk` returned LOW risk with one direct file-level caller in `scripts/check-internal-links.js`. [VERIFIED: GitNexus MCP impact]
 - `gitnexus_impact` on `check-sitemap.js` and `check-internal-links.js` as files returned LOW risk and no process impact. [VERIFIED: GitNexus MCP impact]
-- GitNexus did not find `check-astro-dist-manifest.js` or `sync-static-to-public.mjs`, likely because the index predates Phase 1 file additions or does not include those files. [VERIFIED: GitNexus MCP impact errors] The planner should run `npx gitnexus analyze` if GitNexus warns stale during implementation. [VERIFIED: `CLAUDE.md`]
+- GitNexus did not find `check-astro-dist-manifest.js` or `sync-static-to-public.mjs`, likely because the index predates Phase 1 file additions or does not include those files. [VERIFIED: GitNexus MCP impact errors] The planner should run `npx gitnexus analyze` if GitNexus warns stale during implementation. [VERIFIED: `project guidance`]
 
 ## Sources
 
@@ -441,7 +441,7 @@ Cloudflare Pages `_redirects` rows are `[source] [destination] [code?]`; status 
 - `.planning/phases/02-route-registry-clean-url-contract/02-CONTEXT.md` - phase decisions and boundaries. [VERIFIED]
 - `.planning/REQUIREMENTS.md` - ROUTE-01 through ROUTE-04. [VERIFIED]
 - `.planning/ROADMAP.md` - Phase 2 goal and success criteria. [VERIFIED]
-- `CLAUDE.md` - project constraints, GitNexus rules, code style, validation patterns. [VERIFIED]
+- `project guidance` - project constraints, GitNexus rules, code style, validation patterns. [VERIFIED]
 - `astro.config.mjs` - current `site`, `output`, `trailingSlash`, and `build.format`. [VERIFIED]
 - `package.json` - scripts and dependency versions. [VERIFIED]
 - `scripts/check-internal-links.js`, `scripts/check-sitemap.js`, `scripts/check-astro-dist-manifest.js`, `scripts/sync-static-to-public.mjs` - validation/build patterns. [VERIFIED]

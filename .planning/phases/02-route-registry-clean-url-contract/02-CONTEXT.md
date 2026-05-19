@@ -14,12 +14,12 @@ Phase 2 delivers a single enforceable URL contract for the migrated Astro static
 ## Implementation Decisions
 
 ### Route registry & redirect generation
-- **D-01:** **Claude / planner discretion** for the exact registry format and file layout, with these constraints: there must be a **machine-readable** representation of (a) canonical clean paths and (b) legacy sources (at minimum every legacy `.html` path that must map to a canonical). It must be possible to **generate or validate** `_redirects` (and future sitemap/schema consumers) from this representation without hand-copying every row ad hoc.
+- **D-01:** **Planner discretion** for the exact registry format and file layout, with these constraints: there must be a **machine-readable** representation of (a) canonical clean paths and (b) legacy sources (at minimum every legacy `.html` path that must map to a canonical). It must be possible to **generate or validate** `_redirects` (and future sitemap/schema consumers) from this representation without hand-copying every row ad hoc.
 - **D-02:** Validation (ROUTE-04) must fail if **built output**, **registry**, or **`_redirects`** disagree on a public URL mapping—planner defines the comparison surface (e.g. `dist/` HTML, link checker, redirect table).
 - **D-03:** Astro remains configured with `build.format: 'file'` and `trailingSlash: 'never'` (Phase 1); Phase 2 **does not** change that shape—only enforces the contract end-to-end.
 
 ### Marketing & slug shortcuts
-- **D-04:** **Claude / planner discretion** for whether shortcuts live as **aliases inside the same registry object** vs a **merged second list** concatenated into deploy `_redirects`—constraints: shortcuts must be **included in drift detection** (no untracked orphan rules that bypass checks), and **targets must eventually be clean canonical paths**, not `.html` files once those pages migrate.
+- **D-04:** **Planner discretion** for whether shortcuts live as **aliases inside the same registry object** vs a **merged second list** concatenated into deploy `_redirects`—constraints: shortcuts must be **included in drift detection** (no untracked orphan rules that bypass checks), and **targets must eventually be clean canonical paths**, not `.html` files once those pages migrate.
 - **D-05:** Until all pages emit clean URLs from Astro, intermediary targets may still point at `.html` **only if** tracked and scheduled for removal in a later phase; prefer moving shortcut targets to clean paths in Phase 2 when the destination exists.
 
 ### Internal links & sitemap
@@ -27,10 +27,10 @@ Phase 2 delivers a single enforceable URL contract for the migrated Astro static
 - **D-07:** **Sitemap** (`sitemap.xml`): Phase 1 copied it unchanged; Phase 2 must either **update it to list only clean canonical URLs** or introduce **generated sitemap from registry/build**—planner chooses minimal path that satisfies ROUTE-03 (no `.html` in sitemap entries for migrated routes).
 
 ### Redirect fidelity (query, hash, status)
-- **D-08:** **Claude / planner discretion** on implementation specifics; **documentation requirement**: Phase 2 deliverables include a short **redirect behavior note** covering (1) whether query strings are preserved when legacy URLs redirect to clean paths on the static host, (2) that URL **fragments (`#...`)** are not sent to the server and what that means for rules like `groups.html#birthday`, and (3) **HTTP status** policy (e.g. keep **302** for intentionally temporary routes vs **301** for permanent moves) when targets move from `.html` to clean paths.
+- **D-08:** **Planner discretion** on implementation specifics; **documentation requirement**: Phase 2 deliverables include a short **redirect behavior note** covering (1) whether query strings are preserved when legacy URLs redirect to clean paths on the static host, (2) that URL **fragments (`#...`)** are not sent to the server and what that means for rules like `groups.html#birthday`, and (3) **HTTP status** policy (e.g. keep **302** for intentionally temporary routes vs **301** for permanent moves) when targets move from `.html` to clean paths.
 - **D-09:** Do not introduce **redirect chains** that harm SEO or analytics: legacy → clean should be **one hop** where the platform allows (per ROUTE-02).
 
-### Claude's Discretion
+### Planner Discretion
 - Exact schema for the route registry file(s), choice of `generate` vs `validate-only` for `_redirects`, and how to integrate with existing `scripts/check-internal-links.js` and future checks.
 - Whether to add a small **allowlist** for edge-case redirects that cannot be expressed in the registry yet—if used, it must be explicit and reviewed.
 - Cloudflare-specific subtleties after reading current `docs/redirect-map.md` and host docs.

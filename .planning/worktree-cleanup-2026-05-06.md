@@ -1,6 +1,6 @@
 # Worktree cleanup forensics — 2026-05-06
 
-**Operator:** Claude Code (gsd/v1.0-milestone branch, post-RFC #12 ship)
+**Operator:** development support (gsd/v1.0-milestone branch, post-RFC #12 ship)
 **Reason:** 13 stale agent worktrees from prior gsd-quick / gsd-execute-phase runs occupying ~5.7 GB; locks preventing accidental cleanup; user authorized destruction.
 **Pre-cleanup disk usage:** 5.7G
 **HEAD before cleanup:** dce8bcfe445a7d9d8aac64859fae5d4897e24d35 (gsd/v1.0-milestone)
@@ -9,19 +9,19 @@
 
 ```
 /Users/arisimon/Desktop/coding-files/time-mission-website                                            dce8bcf [gsd/v1.0-milestone]
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-a087005137bd6801d  8f69576 [worktree-agent-a087005137bd6801d] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-a3039e08c7a0e40e9  7240619 [worktree-agent-a3039e08c7a0e40e9] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-a36324b4410297029  3e53692 [worktree-agent-a36324b4410297029] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-a55f70176e73d84b6  7f3dcd7 [worktree-agent-a55f70176e73d84b6] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-a57a240854fc4b657  293a97b [worktree-agent-a57a240854fc4b657] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-a715ad63fa4c94376  1709ff8 [worktree-agent-a715ad63fa4c94376] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-a7b546d11fab82df2  8ba675e [worktree-agent-a7b546d11fab82df2] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-a89054e230a938358  b4c52e9 [worktree-agent-a89054e230a938358] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-a895a2b2ab20ad1bb  305c745 [worktree-agent-a895a2b2ab20ad1bb] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-abb58d21e47ca03b8  e1412c5 [worktree-agent-abb58d21e47ca03b8] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-aea1d38f40d1c0a41  e16bb23 [worktree-agent-aea1d38f40d1c0a41] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-aea33e29f40e86e09  697917a [worktree-agent-aea33e29f40e86e09] locked
-/Users/arisimon/Desktop/coding-files/time-mission-website/.claude/worktrees/agent-af8f53600e57c4c48  773621c [worktree-agent-af8f53600e57c4c48] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-a087005137bd6801d  8f69576 [worktree-agent-a087005137bd6801d] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-a3039e08c7a0e40e9  7240619 [worktree-agent-a3039e08c7a0e40e9] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-a36324b4410297029  3e53692 [worktree-agent-a36324b4410297029] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-a55f70176e73d84b6  7f3dcd7 [worktree-agent-a55f70176e73d84b6] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-a57a240854fc4b657  293a97b [worktree-agent-a57a240854fc4b657] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-a715ad63fa4c94376  1709ff8 [worktree-agent-a715ad63fa4c94376] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-a7b546d11fab82df2  8ba675e [worktree-agent-a7b546d11fab82df2] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-a89054e230a938358  b4c52e9 [worktree-agent-a89054e230a938358] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-a895a2b2ab20ad1bb  305c745 [worktree-agent-a895a2b2ab20ad1bb] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-abb58d21e47ca03b8  e1412c5 [worktree-agent-abb58d21e47ca03b8] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-aea1d38f40d1c0a41  e16bb23 [worktree-agent-aea1d38f40d1c0a41] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-aea33e29f40e86e09  697917a [worktree-agent-aea33e29f40e86e09] locked
+/Users/arisimon/Desktop/coding-files/time-mission-website/local worktrees/agent-af8f53600e57c4c48  773621c [worktree-agent-af8f53600e57c4c48] locked
 ```
 
 ## Per-worktree analysis

@@ -55,14 +55,14 @@ Output: One Antwerp data rename + one new optional schema field + one new valida
 </objective>
 
 <execution_context>
-@$HOME/.claude/get-shit-done/workflows/execute-plan.md
-@$HOME/.claude/get-shit-done/templates/summary.md
+@$HOME/planning/workflows/execute-plan.md
+@$HOME/planning/templates/summary.md
 </execution_context>
 
 <context>
 @.planning/STATE.md
 @.planning/phases/10-audit-gap-closure-cutover-readiness/10-CONTEXT.md
-@./CLAUDE.md
+@./project guidance
 @src/data/locations.ts
 @src/lib/schema/localBusiness.ts
 @data/locations.json
@@ -167,7 +167,7 @@ Other open locations confirmed already starting with "Time Mission " (no edits n
 </interfaces>
 
 <gitnexus_protocol>
-**MANDATORY per CLAUDE.md** — before editing any function/symbol, the executor MUST:
+**MANDATORY per project guidance** — before editing any function/symbol, the executor MUST:
 
 1. Run `gitnexus_impact({target: "localBusinessNode", direction: "upstream"})` and report blast radius (callers, processes, risk level). Stop and warn user if HIGH/CRITICAL is reported.
 2. Run `gitnexus_impact({target: "LocationRecord", direction: "upstream"})` because the interface is being extended — same protocol.
@@ -185,7 +185,7 @@ If GitNexus reports the index is stale at any point, run `npx gitnexus analyze` 
   <name>Task 1: Extend LocationRecord and LocalBusinessNode types with optional alternateName</name>
   <files>src/data/locations.ts, src/lib/schema/localBusiness.ts</files>
   <action>
-Step 1 — GitNexus impact analysis (per CLAUDE.md):
+Step 1 — GitNexus impact analysis (per project guidance):
 - Run `gitnexus_impact({target: "LocationRecord", direction: "upstream"})` and report blast radius. Adding an OPTIONAL field is structurally additive (low risk), but report findings to the user. Stop and ask if HIGH/CRITICAL is reported.
 - Run `gitnexus_impact({target: "localBusinessNode", direction: "upstream"})` and report blast radius. The function signature is unchanged; only the return shape gains an optional property. Report findings.
 - Run `gitnexus_impact({target: "LocalBusinessNode", direction: "upstream"})` to surface any consumer that destructures the interface shape.
@@ -316,7 +316,7 @@ Step 4 — Run the full verify chain:
 
 If `npm run build` is not the right Astro build script, inspect `package.json` and use the documented build command. If `dist/` already contains stale output from before the data change, rebuild before running `check-schema-output.js`.
 
-Step 5 — Self-check (per CLAUDE.md):
+Step 5 — Self-check (per project guidance):
 - Run `gitnexus_detect_changes({scope: "all"})` to verify only the four files in `files_modified` changed.
 - Report blast radius and detect_changes findings to the user before considering the task complete.
   </action>
@@ -352,7 +352,7 @@ Step 5 — Self-check (per CLAUDE.md):
 4. `scripts/check-schema-output.js` permanently locks the contract: any future regression where an open location's `name` does not start with "Time Mission ", or where source `alternateName` drifts from emitted JSON-LD, breaks `npm run verify`.
 5. `npm run verify` exits 0 end-to-end.
 6. No other location data, no other source files, and no unrelated tests are touched.
-7. GitNexus impact and detect_changes were run as required by `./CLAUDE.md`.
+7. GitNexus impact and detect_changes were run as required by `./project guidance`.
 </success_criteria>
 
 <output>

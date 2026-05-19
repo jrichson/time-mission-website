@@ -61,12 +61,12 @@ Visual parity preserved everywhere else.
 </objective>
 
 <execution_context>
-@$HOME/.claude/get-shit-done/workflows/execute-plan.md
-@$HOME/.claude/get-shit-done/templates/summary.md
+@$HOME/planning/workflows/execute-plan.md
+@$HOME/planning/templates/summary.md
 </execution_context>
 
 <context>
-@CLAUDE.md
+@project guidance
 @.planning/STATE.md
 @js/nav.js
 @src/components/LocationOverlay.astro
@@ -140,7 +140,7 @@ removed; the row's existing `gap: 0.75rem` handles spacing.
 </interfaces>
 
 <gitnexus>
-Per project CLAUDE.md, before editing showLocationInfo run:
+Per project project guidance, before editing showLocationInfo run:
 - `gitnexus_impact({target: "showLocationInfo", direction: "upstream"})` and report blast radius.
 After edits, run:
 - `gitnexus_detect_changes({scope: "all"})` to verify scope matches expected files.

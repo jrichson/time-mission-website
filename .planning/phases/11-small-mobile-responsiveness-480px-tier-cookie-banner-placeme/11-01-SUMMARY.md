@@ -18,7 +18,7 @@ key_files:
     - css/base.css
     - css/newsletter.css
 decisions:
-  - "Per-element 480px rules (no clamp()) per D-A1 — visual-parity constraint from CLAUDE.md"
+  - "Per-element 480px rules (no clamp()) per D-A1 — visual-parity constraint from project guidance"
   - "min-height: 48px preserved on .btn-tickets in ≤480 override per D-A3 tap-target floor"
   - "All blocks appended at file end per D-A4 — no new CSS files"
 metrics:

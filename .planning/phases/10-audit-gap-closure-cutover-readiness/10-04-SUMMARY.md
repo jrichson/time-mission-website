@@ -70,7 +70,7 @@ This is a deliberate contract update, not a regression — the prior shape was l
   - Builds expected `<html lang>` from the location's `hreflang` field (else `'en'`).
   - Asserts the dist HTML matches.
   - Asserts the file does NOT emit `<link rel="alternate" hreflang=`.
-- CommonJS, error-collection pattern, `process.exit(1)` on failure (matches `scripts/check-*.js` conventions per CLAUDE.md).
+- CommonJS, error-collection pattern, `process.exit(1)` on failure (matches `scripts/check-*.js` conventions per project guidance).
 
 Wired into `scripts/verify-site-output.mjs` between `check:img-alt-axe` and `check:sitemap-output`, and added to `package.json` as `npm run check:hreflang-cluster`.
 
@@ -107,4 +107,4 @@ Wired into `scripts/verify-site-output.mjs` between `check:img-alt-axe` and `che
 - **Inline execution**: The initially-spawned `gsd-executor` subagent failed at startup with repeated bash permission denials and aborted before creating its worktree. To unblock the wave, the orchestrator executed the plan inline on the main branch. All atomic-commit-per-task and verification-loop discipline preserved; only the worktree-isolation step was skipped.
 - **Locations contract update** is recorded above and matches the locked D-02 wording. If the upstream `data/locations.json` schema docs (out-of-tree) still describe the array shape, they should be updated accordingly during phase verification or a follow-up doc pass.
 - **GitNexus impact analysis**: did not run live during inline execution because the index was already stale (last indexed `38f54f0`, several commits behind). The pre-edit risk profile of `SiteLayout.astro` (HIGH; 22 routes consume it) was honored manually — only additive prop changes, default preserves behavior, no breaking signature changes. `npx gitnexus analyze` should run at phase close.
-- An untracked `.claude/worktrees/` and `assets/video/hero-bg-web.mp4` exist in the working tree from prior agents/runtime; not part of this plan and not committed.
+- An untracked `local worktrees/` and `assets/video/hero-bg-web.mp4` exist in the working tree from prior agents/runtime; not part of this plan and not committed.

@@ -97,5 +97,5 @@ blocked: 0
     - "Optional: add @media (max-width: 480px) tier to css/base.css (.page-header padding-top reduction)"
     - "Add @media (max-width: 480px) tier to 15 page-local partials following the index/philadelphia/antwerp pattern (hero h1, .cta-row → column stack + 100% width, multi-column grids → 1fr)"
     - "Add Playwright smoke assertion at viewport 375×667 for 3-4 representative pages (no horizontal scroll, footer-legal wraps, .location-btn = 44×44)"
-    - "Approach: per-element @media (max-width: 480px) rules — NOT clamp() typography refactor (visual-parity risk per CLAUDE.md; no size tokens exist to retrofit; tap-target precision concerns)"
+    - "Approach: per-element @media (max-width: 480px) rules — NOT clamp() typography refactor (visual-parity risk per project guidance; no size tokens exist to retrofit; tap-target precision concerns)"
   debug_session: "(inline diagnosis from gsd-debugger agent — see commit 92703d2 → diagnose run 2026-05-05)"

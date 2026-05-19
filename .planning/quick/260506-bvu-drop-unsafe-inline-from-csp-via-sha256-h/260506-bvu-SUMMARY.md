@@ -58,7 +58,7 @@ metrics:
 
 ### Task 1 — Extract SiteScripts.astro inline blocks to js/site-progressive.js (54074aa)
 
-- Created `js/site-progressive.js` with reveal-observer + footer-location-toggle IIFEs (4-space indent, file-level JSDoc per CLAUDE.md conventions)
+- Created `js/site-progressive.js` with reveal-observer + footer-location-toggle IIFEs (4-space indent, file-level JSDoc per project guidance conventions)
 - Removed two `<script is:inline>` blocks from `SiteScripts.astro`
 - Replaced with `<script defer is:inline src="/js/site-progressive.js?v=1">`
 - Inline non-src non-JSON-LD script count per page: **5 → 3** (analytics-labels, consent-bootstrap, site-contract)

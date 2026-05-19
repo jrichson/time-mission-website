@@ -150,7 +150,7 @@ No new threat surface introduced. All `set:html` content is from committed `*-ma
 
 ## GitNexus Impact
 
-CLAUDE.md requires `gitnexus_impact` before editing indexed symbols. The MCP tools were invoked via the hook system. Files modified:
+project guidance requires `gitnexus_impact` before editing indexed symbols. The MCP tools were invoked via the hook system. Files modified:
 
 - `src/pages/privacy.astro` — LOW risk; only import path changed (per-page CSS → shared CSS), no functional change
 - `scripts/check-schema-output.js` — LOW risk; additive change only (new Set entries), no existing logic modified

@@ -218,7 +218,7 @@
 
 ---
 
-## Claude's Discretion
+## Planner Discretion
 
 - Exact artifact filenames and manifest schema.
 - Exact preview server implementation, as long as it validates Astro `dist/`.

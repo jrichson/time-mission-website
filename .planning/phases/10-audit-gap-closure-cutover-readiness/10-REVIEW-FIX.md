@@ -134,5 +134,5 @@ checkout is supported and either set `null` or a real URL.
 ---
 
 _Fixed: 2026-05-05_
-_Fixer: Claude (gsd-code-fixer)_
+_Fixer: code review workflow_
 _Iteration: 1_

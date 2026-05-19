@@ -59,7 +59,7 @@
 
 ---
 
-## Claude's Discretion
+## Planner Discretion
 
 - URL precedence finalized in PLAN if data audit suggests a different rule.
 - iframe removal mechanics and script deletion vs stub.

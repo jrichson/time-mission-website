@@ -22,9 +22,9 @@
 
 ---
 
-## Claude's Discretion
+## Planner Discretion
 
-- `event_id` algorithm, `track()` file layout, CSP hostname list, Playwright depth — see **Claude's Discretion** in `06-CONTEXT.md`.
+- `event_id` algorithm, `track()` file layout, CSP hostname list, Playwright depth — see **Planner Discretion** in `06-CONTEXT.md`.
 
 ## Deferred Ideas
 

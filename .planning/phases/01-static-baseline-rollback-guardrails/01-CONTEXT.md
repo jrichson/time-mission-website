@@ -44,7 +44,7 @@ Phase 1 establishes a minimal Astro static build that can be built and previewed
 - **D-20:** Baseline artifacts are required for Phase 1 completion: screenshots/notes, full SEO inventory, lightweight performance baseline, and rollback runbook.
 - **D-21:** If current verification fails before Astro changes, fix failures that are in scope. If a failure is pre-existing or outside Phase 1 scope, document it and get explicit acceptance before proceeding.
 
-### Claude's Discretion
+### Planner Discretion
 - The planner may choose the exact artifact filenames and manifest schema for baseline evidence, SEO inventory, performance notes, and rollback documentation as long as the required evidence is readable and referenced by later phases.
 - The planner may choose the preview command/server implementation for the minimal Astro output, provided it validates `dist/` rather than only source files.
 

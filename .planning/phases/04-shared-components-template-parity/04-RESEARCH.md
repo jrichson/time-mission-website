@@ -42,7 +42,7 @@ The single biggest landmine is **Astro's default treatment of `<script>` and `<s
 - **D-10 (golden references):** Each template acts as the golden reference for QA, smoke tests, and bulk migration. Patterns established here extend to remaining pages.
 - **D-11 (verification expectations):** Phase 4 work integrates with existing `npm run check` mentality. Extend or add checks so chrome/ticket markup cannot drift unnoticed (mechanism left to planner).
 
-### Claude's Discretion
+### Planner Discretion
 
 - Exact file names under `src/components/` vs `src/layouts/`, number of layouts (one vs segmented), and migration ordering of representative pages versus secondary pages within Phase 4 scope.
 - Tactical choice between scoped CSS migration vs retaining a single shared page stylesheet where parity is faster to guarantee.
@@ -55,7 +55,7 @@ The single biggest landmine is **Astro's default treatment of `<script>` and `<s
 - **Phase 7:** JSON-LD/metadata generation sophistication beyond parity ports of existing head/meta.
 - **Bulk conversion** of all legacy `.html` files after representatives. Phase 4 caps at representative templates + shared components, not 100% page count migrated.
 
-## Project Constraints (from CLAUDE.md / AGENTS.md)
+## Project Constraints (from project guidance)
 
 GitNexus rules apply to any change that touches existing JavaScript symbols (`openTicketPanel`, `closeTicketPanel`, `syncBookingBtn`, `syncLocationOptions`, `getBookingUrl`, `getLocationPage`, `showLocationInfo`, `syncAllLocations`, etc.):
 

@@ -787,7 +787,7 @@ Already done. `check-schema-output.js` already validates. If `npm run check:sche
 
 ---
 
-## Project Constraints (from CLAUDE.md)
+## Project Constraints (from project guidance)
 
 - **GitNexus impact analysis is mandatory before editing any indexed symbol.** `SiteLayout.astro`, `SiteHead.astro`, `js/nav.js`, `scripts/verify-site-output.mjs`, `scripts/check-schema-output.js` are all indexed. Run `gitnexus_impact()` before touching each.
 - **Visual parity is the design contract.** `SiteLayout.astro` landmark changes must not alter visual output (landmarks are semantic, not visual — but `<main>` with `display: block` could shift layout if `<body>` previously treated children as direct flex children).

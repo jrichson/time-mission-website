@@ -75,8 +75,8 @@ inline set:html injections. After a fresh build the remaining inline inventory i
 </objective>
 
 <execution_context>
-@$HOME/.claude/get-shit-done/workflows/execute-plan.md
-@$HOME/.claude/get-shit-done/templates/summary.md
+@$HOME/planning/workflows/execute-plan.md
+@$HOME/planning/templates/summary.md
 </execution_context>
 
 <context>
@@ -159,7 +159,7 @@ Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' h
 
 **Step 1: Create js/site-progressive.js**
 
-Create new file `js/site-progressive.js` containing the two IIFE bodies extracted verbatim from SiteScripts.astro lines 10-31. Use 4-space indentation per CLAUDE.md browser-script convention. File-level comment explaining what it does:
+Create new file `js/site-progressive.js` containing the two IIFE bodies extracted verbatim from SiteScripts.astro lines 10-31. Use 4-space indentation per project guidance browser-script convention. File-level comment explaining what it does:
 
 ```javascript
 /**
@@ -580,7 +580,7 @@ Then run `npm run test:smoke` — all existing tests + new csp.spec.js tests mus
 | T-bvu-02 | Tampering | Stale dist/_headers after content change | mitigate | check:csp-hashes CI gate recomputes hashes on every `npm run check` run; hash drift caught before deploy |
 | T-bvu-03 | Elevation of Privilege | unsafe-inline inadvertently reintroduced | mitigate | check-csp-hashes.js fails on any unsafe-inline in dist/_headers; wired into npm run check |
 | T-bvu-04 | Denial of Service | CSP blocks legitimate scripts (hash mismatch post-deploy) | accept | Rollback: add unsafe-inline back to _headers.tmpl and re-run injector. Risk is low given injector auto-computes from built output. |
-| T-bvu-05 | Information Disclosure | __TM_TAGGING_CONFIG__ or __TM_SITE_CONTRACT__ content in inline script | accept | These are already public-facing (in browser source); hashing only pins the exact bytes, does not hide them. No PII per CLAUDE.md constraint. |
+| T-bvu-05 | Information Disclosure | __TM_TAGGING_CONFIG__ or __TM_SITE_CONTRACT__ content in inline script | accept | These are already public-facing (in browser source); hashing only pins the exact bytes, does not hide them. No PII per project guidance constraint. |
 | T-bvu-06 | Tampering | Finder duplicate HTML files (.html with spaces) included in hash scan | mitigate | Explicit exclusion filter in both injector and check script (filename contains space) |
 </threat_model>
 

@@ -36,7 +36,7 @@ Phase 7 delivers **coherent SEO, structured data, sitemap, local signals, and GE
 - **D-12:** **`robots.txt`** should **explicitly allow major AI crawlers** where acceptable for a public marketing site (e.g. GPTBot, Google-Extended, Perplexity — **exact `User-agent` tokens** are **planner-verified** against current vendor names at implementation time).
 - **D-13:** **Answer-first content** work in Phase 7 = **short internal review document** listing gaps and opportunities — **no mandatory** thin-page rewrites as part of Phase 7 unless already covered elsewhere.
 
-### Claude's Discretion
+### Planner Discretion
 - Exact SEO catalog schema, helper API on `SiteHead`, sitemap endpoint shape, FAQPage eligibility per location, depth of secondary NAP checks, and precise `robots.txt`/`llms.txt` prose — bounded by decisions above.
 
 ### Folded Todos

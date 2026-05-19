@@ -37,5 +37,5 @@ status: all_fixed
 ---
 
 _Fixed: 2026-05-05T13:25:30Z_
-_Fixer: Claude (gsd-code-fixer)_
+_Fixer: code review workflow_
 _Iteration: 1_

@@ -112,4 +112,4 @@ No blocking gaps. All artifacts exist, are substantive, and are wired correctly.
 ---
 
 _Verified: 2026-05-06T09:55:00Z_
-_Verifier: Claude (gsd-verifier)_
+_Verifier: verification workflow_
