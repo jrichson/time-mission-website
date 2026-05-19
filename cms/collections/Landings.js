@@ -168,7 +168,7 @@ export const Landings = {
           unique: true,
           index: true,
           label: 'Page URL',
-          admin: { description: 'The public URL segment after /c/. Use lowercase words and hyphens, such as spring-break.' },
+          admin: { description: 'The public URL segment after /c/. Use lowercase words and hyphens, such as summer-adventures.' },
           validate: (val) => {
             if (typeof val !== 'string' || !slugRegex.test(val)) {
               return 'Slug must match ^[a-z0-9-]+$ (no leading/trailing hyphens)';
@@ -236,7 +236,7 @@ export const Landings = {
           name: 'sourceName',
           type: 'text',
           maxLength: 120,
-          admin: { description: 'Name the actual source. Example: Meta spring break ad, birthdays email, Houston launch post.' },
+          admin: { description: 'Name the actual source. Example: Meta summer campaign, birthdays email, Houston launch post.' },
         },
         {
           name: 'sourceUrl',
@@ -293,7 +293,7 @@ export const Landings = {
           name: 'offerType',
           type: 'text',
           maxLength: 120,
-          admin: { description: 'The concrete offer or occasion. Example: spring break, grand opening, corporate team building, or birthday package.' },
+          admin: { description: 'The concrete offer or occasion. Example: summer outing, grand opening, corporate team building, or birthday package.' },
         },
         {
           name: 'locationOrCity',

@@ -18,7 +18,7 @@ describe('Payload existing-page contract', () => {
   it('accepts clean existing-page paths and rejects landing-page paths', () => {
     expect(sitePagePathIsValid('/')).toBe(true);
     expect(sitePagePathIsValid('/groups/birthdays')).toBe(true);
-    expect(sitePagePathIsValid('/c/spring-break')).toBe(false);
+    expect(sitePagePathIsValid('/c/summer-adventures')).toBe(false);
     expect(sitePagePathIsValid('/Bad Slug')).toBe(false);
   });
 

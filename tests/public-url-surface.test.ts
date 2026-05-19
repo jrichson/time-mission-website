@@ -29,7 +29,7 @@ describe('Public URL Surface', () => {
     expect(surface.publicUrlFor('/philadelphia')).toBe('https://timemission.com/philadelphia');
     expect(surface.outputFileFor('/philadelphia')).toBe('philadelphia.html');
     expect(surface.isKnownCanonical('/philadelphia')).toBe(true);
-    expect(surface.isKnownCanonical('/c/spring-break-offer')).toBe(true);
+    expect(surface.isKnownCanonical('/c/summer-adventures-offer')).toBe(true);
     expect(surface.isKnownCanonical('/unknown-page')).toBe(false);
   });
 

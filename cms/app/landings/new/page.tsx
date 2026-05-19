@@ -388,12 +388,12 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             </label>
             <label>
               Source name
-              <input dir="auto" maxLength={120} name="sourceName" placeholder="Meta spring break ad" required />
+              <input dir="auto" maxLength={120} name="sourceName" placeholder="Meta summer campaign" required />
               <span className={styles.fieldHelp}>The campaign, channel, request, or audience this page came from.</span>
             </label>
             <label>
               Page title
-              <input dir="auto" maxLength={120} name="title" placeholder="Spring Break at Time Mission" required />
+              <input dir="auto" maxLength={120} name="title" placeholder="Summer Adventures at Time Mission" required />
             </label>
             <label>
               Page URL
@@ -402,7 +402,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
                 maxLength={80}
                 name="slug"
                 pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
-                placeholder="spring-break"
+                placeholder="summer-adventures"
                 required
               />
               <span className={styles.fieldHelp}>Lowercase words and hyphens. The public path will be /c/page-url.</span>
@@ -472,7 +472,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
                 dir="auto"
                 maxLength={160}
                 name="headline"
-                placeholder="Spring Break Missions Built for Active Groups"
+                placeholder="Summer Adventures Built for Active Groups"
                 required
               />
             </label>
@@ -532,7 +532,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             </label>
             <label>
               Offer type
-              <input dir="auto" maxLength={120} name="offerType" placeholder="Spring break, grand opening, team building" />
+              <input dir="auto" maxLength={120} name="offerType" placeholder="Summer outing, grand opening, team building" />
             </label>
             <label>
               Group-size framing

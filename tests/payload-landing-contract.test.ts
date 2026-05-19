@@ -11,14 +11,14 @@ import {
 } from '../src/lib/payload/landing-contract';
 
 const baseDoc = {
-  slug: 'spring-break',
+  slug: 'summer-adventures',
   seo: {
-    metaTitle: 'Spring Break at Time Mission',
-    metaDescription: 'Plan a spring break visit.',
+    metaTitle: 'Summer Adventures at Time Mission',
+    metaDescription: 'Plan an active summer visit.',
     ogImage: '/assets/og.jpg',
   },
   content: {
-    headline: 'Spring Break Mission Rooms',
+    headline: 'Summer Mission Adventures',
     primaryCtaLabel: 'Book now',
   },
 };
@@ -130,8 +130,8 @@ describe('Payload landing contract', () => {
     const warnings = landingReviewWarningsForDoc({
       ...baseDoc,
       brief: {
-        sourcePromise: 'A spring break ad promised active indoor competition for teens.',
-        visitorIntent: 'Parents are deciding whether this is a good spring break outing.',
+        sourcePromise: 'A summer campaign promised active indoor competition for teens.',
+        visitorIntent: 'Parents are deciding whether this is a good summer outing.',
       },
       content: {
         ...baseDoc.content,
