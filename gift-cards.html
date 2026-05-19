@@ -798,7 +798,7 @@
                         </button>
                         <div class="footer-location-list">
                             <a href="https://timemission.eu/antwerp">Antwerp</a>
-                            <a href="https://timemission.eu/brussels" class="coming-soon" style="opacity:0.7;display:inline-flex;align-items:center;gap:0.4rem;">Brussels <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                            <a href="/brussels" class="coming-soon" style="opacity:0.7;display:inline-flex;align-items:center;gap:0.4rem;">Brussels <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
                         </div>
                     </div>
                 </div>
@@ -922,7 +922,21 @@
             });
         });
     </script>
-    <script defer src="js/nav.js?v=4"></script>
+    <script>
+        window.__TM_FORM_CONFIG__ = window.__TM_FORM_CONFIG__ || {};
+        window.__TM_DATA_URL__ = "/data/locations.json";
+        window.__TM_I18N_URL__ = "/data/i18n.json";
+    </script>
+    <script defer src="js/site-progressive.js?v=1"></script>
+    <script defer src="js/language-switcher.js?v=3"></script>
+    <script defer src="js/consent-bridge.js?v=1"></script>
+    <script defer src="js/analytics.js?v=1"></script>
+    <script defer src="js/booking-journey.js?v=2"></script>
+    <script defer src="js/location-catalog-view.js?v=2"></script>
+    <script defer src="js/locations.js?v=17"></script>
+    <script defer src="js/nav.js?v=10"></script>
+    <script defer src="js/booking-controller.js?v=9"></script>
+    <script defer src="js/ticket-panel.js?v=8"></script>
     <script>
     document.querySelectorAll('.footer-location-toggle').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -930,21 +944,11 @@
         });
     });
     </script>
-    <script src="js/booking-journey.js?v=2"></script>
-    <script src="js/location-catalog-view.js?v=2"></script>
-    <script src="js/locations.js?v=17"></script>
-    <script src="js/booking-controller.js?v=9"></script>
-    <script src="js/ticket-panel.js?v=8"></script>
     <script>
-    // Gift-card Buy CTAs, route to the selected location's gift card checkout.
-    // If no location is selected, open the location overlay so the user can pick one.
     (function () {
         var btns = Array.prototype.slice.call(document.querySelectorAll('.btn-gift-card, [data-gift="1"]'));
         var hint = document.getElementById('giftCardLocationHint');
         if (!btns.length) return;
-        var btn = btns[0]; // back-compat so the rest of the closure still compiles
-
-        function titleCase(s) { return s.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); }
 
         function setAll(href, disabled) {
             btns.forEach(function (b) {
@@ -960,8 +964,6 @@
         }
 
         function applySelectedLocation() {
-            // Prefer TM.current (also populated by the file:// fallback) over
-            // TM.get(slug) which only works once locations.json has loaded.
             var loc = (window.TM && window.TM.current) || null;
             if (!loc) {
                 var slug = '';
@@ -971,8 +973,6 @@
                 }
             }
             if (!loc) return false;
-            // Blank gift-card URLs are intentional audit decisions: keep the
-            // CTA visible but disabled instead of falling back to checkout.
             var url = loc.giftCardUrl || '';
             if (!url) {
                 if (hint) hint.textContent = 'Gift cards are not available for ' + (loc.shortName || loc.name) + ' yet.';
@@ -1019,11 +1019,9 @@
             });
         });
 
-        // Wait for TM (locations.js) to finish loading, then apply
         if (window.TM && window.TM.ready && window.TM.ready.then) {
             window.TM.ready.then(applySelectedLocation);
         } else {
-            // Fallback: poll briefly until TM is attached
             var tries = 0;
             var iv = setInterval(function () {
                 tries++;
@@ -1036,7 +1034,6 @@
             }, 100);
         }
 
-        // Re-apply when user changes location via the overlay
         document.addEventListener('tm:location-changed', applySelectedLocation);
     })();
 
@@ -1093,7 +1090,7 @@
                 <div class="location-group">
                     <div class="location-group-title">Europe</div>
                     <a href="https://timemission.eu/antwerp" data-city="Antwerp">BE - Antwerp</a>
-                    <a href="https://timemission.eu/brussels" data-city="Brussels" class="location-coming-soon">BE - Brussels <span class="coming-soon-tag">Coming Soon</span></a>
+                    <a href="/brussels" data-city="Brussels" class="location-coming-soon">BE - Brussels <span class="coming-soon-tag">Coming Soon</span></a>
                 </div>
             </div>
             <div class="location-overlay-divider"></div>
@@ -1136,6 +1133,6 @@
         </div>
     </div>
 
-        <script src="js/a11y.js"></script>
+        <script defer src="js/a11y.js"></script>
 </body>
 </html>

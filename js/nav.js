@@ -5,15 +5,17 @@
 
 (function() {
     function normalizeLocation(value) {
-        if (window.TM && typeof window.TM.normalizeSlug === 'function') {
-            return window.TM.normalizeSlug(value);
+        const context = getLocationContext();
+        if (context && typeof context.normalizeSlug === 'function') {
+            return context.normalizeSlug(value);
         }
         return (value || '').toLowerCase().trim().replace(/\s+/g, '-');
     }
 
     function pathIsHomeIndex() {
-        if (window.TM && typeof window.TM.isIndexPath === 'function') {
-            return window.TM.isIndexPath();
+        const context = getLocationContext();
+        if (context && typeof context.isIndexPath === 'function') {
+            return context.isIndexPath();
         }
         const p = window.location.pathname;
         return p === '/' || p.endsWith('/index.html') || p.endsWith('/index.htm');
@@ -25,6 +27,12 @@
         return {
             ready: window.TM.ready,
             getCurrent: function() { return window.TM.current || null; },
+            getSavedSlug: typeof window.TM.getSavedSlug === 'function' ? window.TM.getSavedSlug.bind(window.TM) : function () { return ''; },
+            getOverlayView: typeof window.TM.getOverlayView === 'function' ? window.TM.getOverlayView.bind(window.TM) : null,
+            applyBookingCtaView: typeof window.TM.applyBookingCtaView === 'function' ? window.TM.applyBookingCtaView.bind(window.TM) : null,
+            normalizeSlug: typeof window.TM.normalizeSlug === 'function' ? window.TM.normalizeSlug.bind(window.TM) : null,
+            isIndexPath: typeof window.TM.isIndexPath === 'function' ? window.TM.isIndexPath.bind(window.TM) : null,
+            subscribe: typeof window.TM.onChange === 'function' ? window.TM.onChange.bind(window.TM) : null,
             select: function (slug, opts) {
                 if (typeof window.TM.select === 'function') window.TM.select(slug, opts);
             }
@@ -36,10 +44,6 @@
             return window.TMI18n.text(key, fallback, replacements);
         }
         let value = fallback;
-        if (window.TMI18n && typeof window.TMI18n.t === 'function') {
-            const translated = window.TMI18n.t(key);
-            if (typeof translated === 'string') value = translated;
-        }
         Object.keys(replacements || {}).forEach(function (token) {
             value = String(value || '').replace(new RegExp('\\{' + token + '\\}', 'g'), replacements[token]);
         });
@@ -84,46 +88,20 @@
         ));
     }
 
-    function applyBookingCta(el, cta) {
-        if (!el || !cta) return;
-        el.href = cta.href || '#';
-        el.removeAttribute('target');
-        el.removeAttribute('rel');
-        if (cta.trigger) {
-            el.setAttribute('data-tm-booking-trigger', '');
-            el.setAttribute('data-tm-booking-kind', cta.kind || 'tickets');
-            if (cta.locationId) el.setAttribute('data-tm-location', cta.locationId);
-            else el.removeAttribute('data-tm-location');
-            if (cta.groupType) el.setAttribute('data-tm-group-type', cta.groupType);
-            else el.removeAttribute('data-tm-group-type');
-            if (cta.bookingUrl) el.setAttribute('data-tm-booking-url', cta.bookingUrl);
-            else el.removeAttribute('data-tm-booking-url');
-            return;
-        }
-        el.removeAttribute('data-tm-booking-trigger');
-        el.removeAttribute('data-tm-booking-kind');
-        el.removeAttribute('data-tm-location');
-        el.removeAttribute('data-tm-group-type');
-        el.removeAttribute('data-tm-booking-url');
-    }
-
     const menuBtn = document.querySelector('.nav-menu-btn');
     const mobileMenu = document.getElementById('mobileMenu');
     const navEl = document.getElementById('nav');
     let activeLocationInfoRef = '';
 
-    // Logo — if a location is saved, route home to that location's page.
-    // Reads canonical slug via TM.getSavedSlug() so the legacy key is migrated
-    // once and we never duplicate the storage-key knowledge here (RFC #11).
     document.querySelectorAll('.nav-logo, .location-dropdown-logo').forEach(logo => {
         logo.addEventListener('click', function (e) {
             const context = getLocationContext();
             const current = context && typeof context.getCurrent === 'function' ? context.getCurrent() : null;
             let slug = (current && (current.slug || current.id)) || '';
-            if (!slug && window.TM && typeof window.TM.getSavedSlug === 'function') {
-                slug = window.TM.getSavedSlug();
+            if (!slug && context && typeof context.getSavedSlug === 'function') {
+                slug = context.getSavedSlug();
             }
-            if (!slug) return; // no location — let the default index.html link work
+            if (!slug) return;
             e.preventDefault();
             const inSubdir = window.location.pathname.includes('/locations/') || window.location.pathname.includes('/groups/');
             window.location.href = (inSubdir ? '../' : '/') + slug;
@@ -154,10 +132,6 @@
         });
     }
 
-    // Helper to sync all location displays. RFC #11: nav no longer writes
-    // localStorage directly — TM.select is the sole writer of the canonical
-    // 'tm_location' key. The legacy 'timeMissionLocation' key is migrate-only
-    // (TM.getSavedSlug / TM.restore heal it once and remove it).
     function syncAllLocations(city, slug, selectOpts) {
         const normalized = normalizeLocation(slug || city);
         const mainLocText = document.getElementById('locationText');
@@ -324,7 +298,9 @@
         var bookBtn = infoPanel.querySelector('.location-info-book');
         if (bookBtn) {
             bookBtn.textContent = translate(overlayView.bookLabelKey, overlayView.bookLabelFallback);
-            applyBookingCta(bookBtn, overlayView.cta);
+            if (context && typeof context.applyBookingCtaView === 'function') {
+                context.applyBookingCtaView(bookBtn, overlayView.cta);
+            }
         }
 
         renderMapEmbed(mapEl, data.mapEmbedUrl);
@@ -349,11 +325,8 @@
         });
     }
 
-    // RFC #11: Subscribe to TM changes to keep nav dropdown in sync.
-    // Additive to the existing tm:location-changed CustomEvent path, not a
-    // replacement — both deliver after TM.select runs.
-    if (window.TM && typeof window.TM.onChange === 'function') {
-        window.TM.onChange(function (loc) {
+    if (navLoadContext && typeof navLoadContext.subscribe === 'function') {
+        navLoadContext.subscribe(function (loc) {
             const mainLocText = document.getElementById('locationText');
             if (mainLocText && loc && (loc.shortName || loc.name)) {
                 mainLocText.textContent = loc.shortName || loc.name;

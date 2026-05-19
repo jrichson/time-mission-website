@@ -97,10 +97,46 @@ for (const relPath of ['gift-cards.html', 'groups.html', 'missions.html']) {
   const htmlPath = path.join(root, relPath);
   if (!fs.existsSync(htmlPath)) continue;
   const html = fs.readFileSync(htmlPath, 'utf8');
+  const bySlug = new Map((locDoc.locations || []).map((loc) => [loc.slug || loc.id, loc]));
   for (const slug of ['antwerp', 'brussels']) {
-    if (html.includes(`href="/${slug}"`)) {
-      errors.push(`${relPath}: Europe location links must point to https://timemission.eu/${slug}`);
+    const loc = bySlug.get(slug);
+    if (loc && loc.externalUrl && html.includes(`href="/${slug}"`)) {
+      errors.push(`${relPath}: ${slug} link must point to ${loc.externalUrl}`);
     }
+    if (loc && !loc.externalUrl && html.includes(`href="https://timemission.eu/${slug}"`)) {
+      errors.push(`${relPath}: ${slug} link must stay local because no live externalUrl is configured`);
+    }
+  }
+}
+
+for (const relPath of ['groups.html', 'public/groups.html']) {
+  const htmlPath = path.join(root, relPath);
+  if (!fs.existsSync(htmlPath)) continue;
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  for (const groupType of ['birthdays', 'corporate', 'field-trips', 'bachelor-ette', 'private-events', 'holidays']) {
+    if (!html.includes(`data-tm-booking-kind="groups" data-tm-group-type="${groupType}"`)) {
+      errors.push(`${relPath}: ${groupType} card CTAs must resolve through the selected location group form`);
+    }
+  }
+  if (html.includes('href="/contact?type=event" class="event-type-cta')) {
+    errors.push(`${relPath}: event card CTAs must open the booking panel instead of bypassing location-aware group forms`);
+  }
+}
+
+for (const relPath of ['gift-cards.html', 'groups.html', 'missions.html', 'public/gift-cards.html', 'public/groups.html', 'public/missions.html']) {
+  const htmlPath = path.join(root, relPath);
+  if (!fs.existsSync(htmlPath)) continue;
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  for (const scriptName of ['booking-journey.js', 'location-catalog-view.js', 'locations.js', 'booking-controller.js', 'ticket-panel.js']) {
+    if (!html.includes(`js/${scriptName}`)) {
+      errors.push(`${relPath}: legacy static runtime must include ${scriptName}`);
+    }
+  }
+  if (html.indexOf('js/booking-journey.js') > html.indexOf('js/locations.js')) {
+    errors.push(`${relPath}: booking journey must load before locations.js`);
+  }
+  if (html.indexOf('js/booking-controller.js') > html.indexOf('js/ticket-panel.js')) {
+    errors.push(`${relPath}: booking controller must load before ticket-panel.js`);
   }
 }
 

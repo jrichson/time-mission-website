@@ -1,12 +1,18 @@
 ---
 import { getPublicSiteContract } from '../lib/site-contract';
-import { publicRuntimeScripts, versionedRuntimeSrc } from '../lib/public-runtime-contract';
+import { lazyRuntimeScripts, publicRuntimeScripts, versionedRuntimeSrc } from '../lib/public-runtime-contract';
 import i18nConfig from '../data/site/i18n.json';
+import { compileLanguageSurface, type I18nCatalog } from '../lib/i18n-surface';
 
 const siteContract = getPublicSiteContract();
 const formConfig = {
     turnstileSiteKey: String(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '').trim(),
 };
+const languageRuntimeConfig = compileLanguageSurface(i18nConfig as I18nCatalog).toRuntimeConfig();
+const lazyRuntimeConfig = lazyRuntimeScripts.map((script) => ({
+    ...script,
+    src: versionedRuntimeSrc(script),
+}));
 ---
 
 <script is:inline define:vars={{ siteContract }}>
@@ -17,20 +23,28 @@ const formConfig = {
     window.__TM_DATA_URL__ = '/data/locations.json';
     window.__TM_I18N_URL__ = '/data/i18n.json';
 </script>
-<script is:inline define:vars={{ i18nConfig }}>
-    window.__TM_I18N__ = i18nConfig;
+<script is:inline define:vars={{ languageRuntimeConfig }}>
+    window.__TM_I18N__ = languageRuntimeConfig;
 </script>
 {publicRuntimeScripts.map((script) => (
     <script defer is:inline src={versionedRuntimeSrc(script)}></script>
 ))}
-<script is:inline>
+<script is:inline define:vars={{ lazyRuntimeConfig }}>
     (function () {
+        var lazyScripts = lazyRuntimeConfig || [];
+
         function scheduleIdle(callback, timeout) {
             if ('requestIdleCallback' in window) {
                 window.requestIdleCallback(callback, { timeout: timeout || 1800 });
             } else {
                 window.setTimeout(callback, Math.min(timeout || 1200, 1200));
             }
+        }
+        function getLazyScript(id) {
+            for (var i = 0; i < lazyScripts.length; i += 1) {
+                if (lazyScripts[i].id === id) return lazyScripts[i];
+            }
+            return null;
         }
         function getProfile() {
             try {
@@ -57,12 +71,16 @@ const formConfig = {
             if (onload) script.addEventListener('load', onload, { once: true });
             document.body.appendChild(script);
         }
+        function appendLazyScript(id, onload) {
+            var script = getLazyScript(id);
+            if (script) appendScript(script.src, onload);
+        }
         function loadConsentUi() {
             if (getProfile() === 'us_open') return;
             appendStyle('/css/cookieconsent.css');
             appendStyle('/css/cookie-consent.css');
-            appendScript('/js/cookieconsent.umd.js', function () {
-                appendScript('/js/cookie-consent.js?v=1');
+            appendLazyScript('cookieconsent', function () {
+                appendLazyScript('cookieConsent');
             });
         }
         function schedule() {
@@ -78,20 +96,20 @@ const formConfig = {
         scheduleIdle(function () {
             var path = window.location.pathname || '';
             if (document.querySelector('form.contact-form') || path.indexOf('contact-thank-you') !== -1) {
-                appendScript('/js/contact-form-analytics.js?v=1');
+                appendLazyScript('contactFormAnalytics');
             }
             if (
                 window.__TM_FORM_CONFIG__ &&
                 window.__TM_FORM_CONFIG__.turnstileSiteKey &&
                 document.querySelector('[data-tm-turnstile]')
             ) {
-                appendScript('/js/form-protection.js?v=1');
+                appendLazyScript('formProtection');
             }
         }, 1400);
 
         scheduleIdle(function () {
-            appendScript('/js/web-vitals.iife.js', function () {
-                appendScript('/js/web-vitals-rum.js?v=1');
+            appendLazyScript('webVitalsLibrary', function () {
+                appendLazyScript('webVitalsRum');
             });
         }, 2500);
     })();

@@ -19,6 +19,35 @@
         document.head.appendChild(script);
     }
 
+    function normalizeLocation(value) {
+        return String(value || '').trim().toLowerCase().replace(/\s+/g, '-');
+    }
+
+    function currentLocationSlug() {
+        if (window.TM) {
+            var current = window.TM.current || null;
+            var currentSlug = current && (current.slug || current.id);
+            if (currentSlug) return normalizeLocation(currentSlug);
+            if (typeof window.TM.getSavedSlug === 'function') {
+                var saved = window.TM.getSavedSlug();
+                if (saved) return normalizeLocation(saved);
+            }
+        }
+        return 'general';
+    }
+
+    function ensureNewsletterLocation(form) {
+        if (!form || form.getAttribute('data-tm-form') !== 'newsletter') return;
+        var input = form.querySelector('input[name="location"]');
+        if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'location';
+            form.insertBefore(input, form.firstElementChild || null);
+        }
+        input.value = currentLocationSlug();
+    }
+
     function prepareWidget(container) {
         if (!container || container.getAttribute('data-tm-turnstile-ready') === '1') return;
         container.classList.add('cf-turnstile');
@@ -38,9 +67,19 @@
 
     function init() {
         var containers = document.querySelectorAll('[data-tm-turnstile]');
-        if (!containers.length) return;
-        containers.forEach(prepareWidget);
-        loadTurnstile();
+        document.querySelectorAll('form[data-tm-form="newsletter"]').forEach(function (form) {
+            ensureNewsletterLocation(form);
+            form.addEventListener('submit', function () {
+                ensureNewsletterLocation(form);
+            });
+        });
+        document.addEventListener('tm:location-changed', function () {
+            document.querySelectorAll('form[data-tm-form="newsletter"]').forEach(ensureNewsletterLocation);
+        });
+        if (containers.length) {
+            containers.forEach(prepareWidget);
+            loadTurnstile();
+        }
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

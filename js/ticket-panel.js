@@ -14,10 +14,6 @@
         if (window.TMI18n && typeof window.TMI18n.text === 'function') {
             return window.TMI18n.text(key, fallback);
         }
-        if (window.TMI18n && typeof window.TMI18n.t === 'function') {
-            var translated = window.TMI18n.t(key);
-            if (typeof translated === 'string') return translated;
-        }
         return fallback;
     }
 
@@ -26,6 +22,7 @@
         if (!window.TM) return null;
         return {
             ready: window.TM.ready,
+            getCurrent: function () { return window.TM.current || null; },
             listTicketOptions: null,
         };
     }
@@ -68,7 +65,8 @@
 
     function openTicketPanel(e) {
         if (e && typeof e.preventDefault === 'function') e.preventDefault();
-        var current = (window.TM && window.TM.current) || null;
+        var context = getLocationContext();
+        var current = context && typeof context.getCurrent === 'function' ? context.getCurrent() : null;
         var activeLocation = (current && (current.id || current.slug)) || pageLocation;
         if (activeLocation && ticketLocSel) {
             ticketLocSel.value = String(activeLocation).toLowerCase().trim().replace(/\s+/g, '-');

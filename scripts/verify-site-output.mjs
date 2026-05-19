@@ -11,17 +11,19 @@ import path from 'node:path';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const require = createRequire(import.meta.url);
-const { VERIFY_STEPS } = require('./lib/verify-pipeline.cjs');
+const {
+  VERIFY_STEPS,
+  VERIFY_SUCCESS_MESSAGE,
+  resolveNpmStep,
+} = require('./lib/verify-pipeline.cjs');
 
 /**
  * @param {string} script npm script name from package.json
  * @param {string[]} forwarded extra argv after script name (e.g. `--`, `--dist`)
  */
 function runNpm(script, forwarded = []) {
-  const isWin = process.platform === 'win32';
-  const cmd = isWin ? 'npm.cmd' : 'npm';
-  const argv = ['run', script, ...forwarded];
-  const result = spawnSync(cmd, argv, {
+  const { command, args } = resolveNpmStep([script, forwarded], process.platform);
+  const result = spawnSync(command, args, {
     stdio: 'inherit',
     cwd: root,
     env: process.env,
@@ -43,5 +45,5 @@ for (const [name, extra] of VERIFY_STEPS) {
 }
 
 console.log('');
-console.log('verify-site-output.mjs: all steps passed.');
+console.log(VERIFY_SUCCESS_MESSAGE);
 process.exit(0);

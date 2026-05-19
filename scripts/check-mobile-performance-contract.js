@@ -65,6 +65,11 @@ runCheck({
       }
     }
 
+    const landingPage = read('src/pages/c/[slug].astro');
+    if (!/<img[^>]+src=\{heroImage\}[^>]+loading="eager"[^>]+fetchpriority="high"/.test(landingPage)) {
+      errors.push('src/pages/c/[slug].astro: landing hero image must be eager and fetchpriority="high"');
+    }
+
     const pagesDir = path.join(root, 'src', 'pages');
     for (const file of fs.readdirSync(pagesDir).filter((name) => name.endsWith('.astro'))) {
       const rel = path.join('src', 'pages', file);
@@ -95,8 +100,12 @@ runCheck({
         errors.push(`SiteScripts.astro must lazy-load ${src} instead of eager global defer loading`);
       }
     }
-    for (const needle of ['scheduleIdle', "appendScript('/js/web-vitals.iife.js'", "appendScript('/js/web-vitals-rum.js?v=1'"]) {
+    for (const needle of ['scheduleIdle', "appendLazyScript('webVitalsLibrary'", "appendLazyScript('webVitalsRum'"]) {
       if (!siteScripts.includes(needle)) errors.push(`SiteScripts.astro missing lazy script marker: ${needle}`);
+    }
+    const runtimeContract = read('src/lib/public-runtime-contract.ts');
+    for (const src of ['/js/web-vitals.iife.js', '/js/web-vitals-rum.js', '/js/contact-form-analytics.js', '/js/form-protection.js']) {
+      if (!runtimeContract.includes(src)) errors.push(`public-runtime-contract.ts missing lazy runtime script: ${src}`);
     }
 
     const widgets = read('js/page-widgets.js');

@@ -36,6 +36,7 @@ export interface LanguageSurface {
     translate(key: string, code?: string | null): TranslationValue | null;
     translateString(key: string, code?: string | null): string | null;
     missingTranslationKeysFor(code: string): string[];
+    toRuntimeConfig(): I18nCatalog;
 }
 
 const defaultCatalog = i18nCatalog as I18nCatalog;
@@ -108,6 +109,14 @@ export function compileLanguageSurface(catalog: I18nCatalog = defaultCatalog): L
             const language = languageOrDefault(code);
             const active = language ? translations[language.code] || {} : {};
             return translationKeys.filter((key) => !Object.prototype.hasOwnProperty.call(active, key));
+        },
+        toRuntimeConfig(): I18nCatalog {
+            return {
+                defaultLanguage,
+                storageKey: catalog.storageKey || 'tm_language',
+                languages,
+                translations,
+            };
         },
     };
 }

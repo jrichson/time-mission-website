@@ -443,7 +443,7 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
     >
         <section class:list={['tm-landing-hero', `tm-landing-hero--${template}`]} data-landing-section={`${template}-hero`}>
             <div class="tm-landing-hero-media" aria-hidden="true">
-                <img src={heroImage} alt="" width="1920" height="1280" loading="eager" decoding="async" />
+                <img src={heroImage} alt="" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="async" />
             </div>
             <div class="tm-landing-shell">
                 <div class="tm-landing-hero-copy">

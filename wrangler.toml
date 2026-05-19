@@ -20,3 +20,13 @@ compatibility_date = "2026-05-09"
 
 # Wrangler Direct Upload deploys `dist/` and, when run from this repo root, also uploads
 # the sibling `functions/` directory for Pages Functions.
+#
+# Form archive setup:
+#   1. npx wrangler d1 create time-mission-forms
+#   2. Add the returned database_id below and uncomment the d1_databases block.
+#   3. npx wrangler d1 migrations apply time-mission-forms --remote
+#
+[[d1_databases]]
+binding = "FORM_SUBMISSIONS_DB"
+database_name = "time-mission-forms"
+database_id = "fc789ec5-2697-4dad-9934-6f67786641c9"

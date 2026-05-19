@@ -11,6 +11,7 @@ const usLocations = allLocations.filter((l) => l.region === 'us');
 const euLocations = allLocations.filter((l) => l.region === 'europe');
 
 function locationHref(loc: (typeof allLocations)[number]) {
+    if (loc.status === 'coming-soon') return `/${loc.slug}`;
     return loc.region === 'europe'
         ? loc.externalUrl || `https://timemission.eu/${loc.slug}`
         : `/${loc.slug}`;

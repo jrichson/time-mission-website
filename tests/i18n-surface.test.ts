@@ -43,4 +43,15 @@ describe('Language Surface', () => {
     expect(defaultLanguageSurface.languageCodes).toEqual(catalog.languages.map((language) => language.code));
     expect(defaultLanguageSurface.translateString('language.label', 'en')).toBe('Language');
   });
+
+  it('emits the runtime config consumed by the public language switcher', () => {
+    const runtimeConfig = compileLanguageSurface(catalog).toRuntimeConfig();
+
+    expect(runtimeConfig).toMatchObject({
+      defaultLanguage: 'en',
+      storageKey: 'tm_language',
+    });
+    expect(runtimeConfig.languages.map((language) => language.code)).toEqual(['en', 'es']);
+    expect(runtimeConfig.translations.es['booking.chooseLocation.title']).toBeTruthy();
+  });
 });

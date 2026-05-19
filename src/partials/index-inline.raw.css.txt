@@ -90,6 +90,12 @@
             transform: translate(-50%, -50%);
             pointer-events: none;
             object-fit: cover;
+            opacity: 0;
+            transition: opacity 180ms ease;
+        }
+
+        .hero-video-container.is-video-ready video {
+            opacity: 1;
         }
 
         /* Hide native play button (shows on iOS Low Power Mode) */

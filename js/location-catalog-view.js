@@ -23,11 +23,47 @@
         if (window.TMI18n && typeof window.TMI18n.text === 'function') {
             return window.TMI18n.text(key, fallback);
         }
-        if (window.TMI18n && typeof window.TMI18n.t === 'function') {
-            var translated = window.TMI18n.t(key);
-            if (typeof translated === 'string') return translated;
-        }
         return fallback;
+    }
+
+    function renderAddressLines(container, addr) {
+        if (!container) return;
+        container.textContent = '';
+        if (!addr) return;
+        var parts = [];
+        if (addr.line1) parts.push(addr.line1);
+        if (addr.line2) parts.push(addr.line2);
+        var cityLine = '';
+        if (addr.city) cityLine += addr.city;
+        if (addr.state) cityLine += ', ' + addr.state;
+        if (addr.zip) cityLine += ' ' + addr.zip;
+        if (cityLine) parts.push(cityLine);
+        parts.forEach(function (part, idx) {
+            container.appendChild(document.createTextNode(part));
+            if (idx < parts.length - 1) container.appendChild(document.createElement('br'));
+        });
+    }
+
+    function renderHoursTable(container, hours) {
+        if (!container) return;
+        container.textContent = '';
+        if (!hours) return;
+        var dayLabels = {
+            mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday',
+            thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday'
+        };
+        dayOrder.forEach(function (day) {
+            if (!hours[day] || !hours[day].label) return;
+            var row = document.createElement('div');
+            row.className = 'footer-hours-row';
+            var dayEl = document.createElement('span');
+            dayEl.textContent = dayLabels[day];
+            var timeEl = document.createElement('span');
+            timeEl.textContent = hours[day].label;
+            row.appendChild(dayEl);
+            row.appendChild(timeEl);
+            container.appendChild(row);
+        });
     }
 
     function addressTextForLocation(loc) {
@@ -186,14 +222,89 @@
         });
     }
 
+    function updateTestimonials(loc) {
+        var cards = document.querySelectorAll('.testimonial-card');
+        if (!cards.length) return;
+
+        var hasLocationData = Array.prototype.slice.call(cards).some(function (card) {
+            return card.dataset.location;
+        });
+        if (!hasLocationData) {
+            cards.forEach(function (card) {
+                var authorLoc = card.querySelector('.author-location');
+                if (authorLoc) {
+                    card.dataset.location = authorLoc.textContent.replace('—', '').replace('–', '').trim().toLowerCase();
+                }
+            });
+        }
+
+        if (!loc) {
+            cards.forEach(function (card) { card.style.display = ''; });
+            return;
+        }
+
+        var selectedCity = String(loc.shortName || '').toLowerCase();
+        var hasVisible = false;
+        cards.forEach(function (card) {
+            var visible = (card.dataset.location || '').toLowerCase() === selectedCity;
+            card.style.display = visible ? '' : 'none';
+            hasVisible = hasVisible || visible;
+        });
+        if (!hasVisible) cards.forEach(function (card) { card.style.display = ''; });
+    }
+
+    function updateFooterLocation(loc) {
+        var locationsColumn = document.querySelector('.footer-locations-column');
+        if (!locationsColumn) return;
+
+        var dropdown = locationsColumn.querySelector('.footer-locations-dropdown');
+        var infoPanel = locationsColumn.querySelector('.footer-location-info');
+
+        if (!loc) {
+            if (infoPanel) {
+                var existingAddress = infoPanel.querySelector('.footer-loc-address');
+                if (existingAddress && existingAddress.textContent.trim()) return;
+            }
+            if (dropdown) dropdown.style.display = '';
+            if (infoPanel) infoPanel.style.display = 'none';
+            return;
+        }
+
+        if (dropdown) dropdown.style.display = 'none';
+        if (!infoPanel) return;
+
+        infoPanel.style.display = '';
+        var nameEl = infoPanel.querySelector('.footer-loc-name');
+        var addrEl = infoPanel.querySelector('.footer-loc-address');
+        var phoneEl = infoPanel.querySelector('.footer-loc-phone');
+        var hoursEl = infoPanel.querySelector('.footer-loc-hours');
+        var mapEl = infoPanel.querySelector('.footer-loc-map');
+
+        if (nameEl) nameEl.textContent = loc.name || loc.shortName || '';
+        renderAddressLines(addrEl, loc.address);
+        if (phoneEl && loc.contact && loc.contact.phone) {
+            phoneEl.textContent = loc.contact.phone;
+            phoneEl.href = 'tel:' + loc.contact.phone.replace(/[^\d+]/g, '');
+        }
+        renderHoursTable(hoursEl, loc.hours);
+        if (mapEl) {
+            mapEl.href = loc.mapUrl || '#';
+            mapEl.style.display = loc.mapUrl ? '' : 'none';
+        }
+    }
+
     window.TMLocationViews = {
         getLocationView: getLocationView,
         addressTextForLocation: addressTextForLocation,
         hoursTextForLocation: hoursTextForLocation,
         getMapQuery: getMapQuery,
+        renderAddressLines: renderAddressLines,
+        renderHoursTable: renderHoursTable,
         getBookingCtaView: getBookingCtaView,
         getOverlayView: getOverlayView,
         applyBookingCtaView: applyBookingCtaView,
         listTicketOptions: listTicketOptions,
+        updateTestimonials: updateTestimonials,
+        updateFooterLocation: updateFooterLocation,
     };
 })();

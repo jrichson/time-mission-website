@@ -1083,7 +1083,7 @@
                 <div class="location-group">
                     <div class="location-group-title">Europe</div>
                     <a href="https://timemission.eu/antwerp" data-city="Antwerp">BE - Antwerp</a>
-                    <a href="https://timemission.eu/brussels" data-city="Brussels" class="location-coming-soon">BE - Brussels <span class="coming-soon-tag">Coming Soon</span></a>
+                    <a href="/brussels" data-city="Brussels" class="location-coming-soon">BE - Brussels <span class="coming-soon-tag">Coming Soon</span></a>
                 </div>
             </div>
             <div class="location-overlay-divider"></div>
@@ -1876,7 +1876,7 @@
                         </button>
                         <div class="footer-location-list">
                             <a href="https://timemission.eu/antwerp">Antwerp</a>
-                            <a href="https://timemission.eu/brussels" class="coming-soon" style="opacity:0.7;display:inline-flex;align-items:center;gap:0.4rem;">Brussels <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
+                            <a href="/brussels" class="coming-soon" style="opacity:0.7;display:inline-flex;align-items:center;gap:0.4rem;">Brussels <span class="coming-soon-tag" style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,107,44,0.18);color:#ff6b2c;padding:0.15rem 0.5rem;border-radius:100px;white-space:nowrap;">Coming Soon</span></a>
                         </div>
                     </div>
                 </div>
@@ -1968,8 +1968,21 @@
             </div>
         </div>
     </div>
-
-    <script defer src="js/nav.js?v=4"></script>
+    <script>
+        window.__TM_FORM_CONFIG__ = window.__TM_FORM_CONFIG__ || {};
+        window.__TM_DATA_URL__ = "/data/locations.json";
+        window.__TM_I18N_URL__ = "/data/i18n.json";
+    </script>
+    <script defer src="js/site-progressive.js?v=1"></script>
+    <script defer src="js/language-switcher.js?v=3"></script>
+    <script defer src="js/consent-bridge.js?v=1"></script>
+    <script defer src="js/analytics.js?v=1"></script>
+    <script defer src="js/booking-journey.js?v=2"></script>
+    <script defer src="js/location-catalog-view.js?v=2"></script>
+    <script defer src="js/locations.js?v=17"></script>
+    <script defer src="js/nav.js?v=10"></script>
+    <script defer src="js/booking-controller.js?v=9"></script>
+    <script defer src="js/ticket-panel.js?v=8"></script>
     <script>
     // Footer location toggles
     document.querySelectorAll('.footer-location-toggle').forEach(btn => {
@@ -2045,9 +2058,6 @@
             });
         });
 
-    </script>
-    <script src="js/locations.js?v=9"></script>
-    <script src="js/ticket-panel.js?v=4"></script>
-    <script src="js/a11y.js"></script>
+    </script>    <script defer src="js/a11y.js"></script>
 </body>
 </html>

@@ -52,7 +52,7 @@
             if (!response.ok) throw new Error('HTTP ' + response.status);
             applyConfig(await response.json());
         } catch (e) {
-            console.warn('TM i18n: failed to load ' + url, e);
+            if (window.__TM_DEBUG__) window.__TM_LAST_I18N_ERROR__ = e;
         }
     }
 

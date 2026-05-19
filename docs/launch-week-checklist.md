@@ -160,6 +160,8 @@ Set these before preview sign-off:
 - [ ] `CONTACT_TO_EMAIL`
 - [ ] `NEWSLETTER_TO_EMAIL`
 - [ ] `TURNSTILE_SECRET_KEY`
+- [ ] D1 database created for form submissions and bound as `FORM_SUBMISSIONS_DB`
+- [ ] D1 migration applied: `npx wrangler d1 migrations apply time-mission-forms --remote`
 - [ ] KV namespace bound as `FORM_RATE_LIMIT_KV`
 - [ ] Optional: `FORM_RATE_LIMIT_IP_10M`
 - [ ] Optional: `FORM_RATE_LIMIT_IP_HOUR`

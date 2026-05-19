@@ -2,8 +2,8 @@
  * Time Mission — Location Manager
  * Handles location data loading, persistence (localStorage), and DOM updates.
  *
- * Data is provided by `/data/locations.json`, with `window.TM_DATA` kept as a
- * backwards-compatible escape hatch for test fixtures and file previews.
+ * Data is provided by `/data/locations.json`; tests and file previews may set
+ * `window.TM_DATA`.
  *
  * Usage:
  *   <script src="js/locations.js"></script>
@@ -15,14 +15,12 @@
  *   TM.select(id, opts?)   — set active location by id; optional opts.cta_id for analytics
  *   TM.clear()             — clear selected location
  *   TM.restore()           — restore from localStorage; migrates legacy key once
- *   TM.ready               — Promise.resolve() (kept for backward compat with .then consumers)
- *   TM.getSavedSlug()      — sync read of canonical persisted slug; heals legacy key once
+ *   TM.ready               — resolves after location data is loaded
+ *   TM.getSavedSlug()      — sync read of the persisted slug
  *   TM.onChange(callback)  — subscribe to select/clear/restore; returns unsubscribe fn
  *
- * SINGLE-WRITER INVARIANT (RFC #11):
- *   Only this file may call localStorage.setItem('tm_location', ...) or
- *   localStorage.setItem('timeMissionLocation', ...). Enforced at CI by
- *   scripts/check-locations-architecture.js.
+ * Only this file writes location storage keys. scripts/check-locations-architecture.js
+ * enforces that rule.
  */
 
 (function () {
@@ -34,47 +32,6 @@
     const LocationViews = window.TMLocationViews;
     if (!BookingJourney) throw new Error('TMBookingJourney must load before locations.js');
     if (!LocationViews) throw new Error('TMLocationViews must load before locations.js');
-
-    function renderAddressLines(container, addr) {
-        if (!container) return;
-        container.textContent = '';
-        if (!addr) return;
-        const parts = [];
-        if (addr.line1) parts.push(addr.line1);
-        if (addr.line2) parts.push(addr.line2);
-        let cityLine = '';
-        if (addr.city) cityLine += addr.city;
-        if (addr.state) cityLine += ', ' + addr.state;
-        if (addr.zip) cityLine += ' ' + addr.zip;
-        if (cityLine) parts.push(cityLine);
-        parts.forEach((part, idx) => {
-            container.appendChild(document.createTextNode(part));
-            if (idx < parts.length - 1) container.appendChild(document.createElement('br'));
-        });
-    }
-
-    function renderHoursTable(container, hours) {
-        if (!container) return;
-        container.textContent = '';
-        if (!hours) return;
-        const dayLabels = {
-            mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday',
-            thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday'
-        };
-        const dayOrder = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-        for (const day of dayOrder) {
-            if (!hours[day] || !hours[day].label) continue;
-            const row = document.createElement('div');
-            row.className = 'footer-hours-row';
-            const dayEl = document.createElement('span');
-            dayEl.textContent = dayLabels[day];
-            const timeEl = document.createElement('span');
-            timeEl.textContent = hours[day].label;
-            row.appendChild(dayEl);
-            row.appendChild(timeEl);
-            container.appendChild(row);
-        }
-    }
 
     function normalizeLocationId(value) {
         return BookingJourney.normalizeLocation(value);
@@ -173,8 +130,6 @@
         }
     }
 
-    // RFC #11: TM.ready resolves after init has loaded data and applied
-    // URL/page context, so consumers do not race the selected location.
     let _readyResolve = function () {};
     let _readyResolved = false;
     const _readyPromise = new Promise(function (resolve) {
@@ -198,10 +153,8 @@
         _pendingSelectOpts: null,
         _changeListeners: [],
 
-        /** Resolves after location data and page/current-location state are applied. */
         ready: _readyPromise,
 
-        /** Load locations data from shared JSON, preserving the TM.ready contract. */
         async load() {
             let data = (typeof window !== 'undefined' && window.TM_DATA) || null;
             if (!data && typeof fetch === 'function') {
@@ -211,14 +164,12 @@
                     if (!response.ok) throw new Error('HTTP ' + response.status);
                     data = await response.json();
                 } catch (e) {
-                    console.warn('TM Locations: failed to load ' + url, e);
+                    if (window.__TM_DEBUG__) window.__TM_LAST_LOCATION_ERROR__ = e;
                 }
             }
             if (data && Array.isArray(data.locations)) {
                 TM.locations = data.locations;
             } else {
-                // Defensive: matches the pre-RFC fetch-failure path.
-                console.warn('TM Locations: locations data unavailable');
                 TM.locations = [];
             }
             maybeTrackSiteContractStale();
@@ -239,18 +190,14 @@
             return TM.locations.filter(loc => loc.region === region);
         },
 
-        /** Canonical slug normalization (aligned with `id` / `slug` keys) */
         normalizeSlug(value) {
             return normalizeLocationId(value);
         },
 
-        /** Current URL is the marketing homepage */
         isIndexPath() {
             return isIndexPage();
         },
 
-        /** Sync read of the canonical persisted slug. Heals legacy
-         *  'timeMissionLocation' key once by writing canonical + removing legacy. */
         getSavedSlug() {
             try {
                 const saved = localStorage.getItem(STORAGE_KEY);
@@ -258,7 +205,6 @@
                 const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
                 if (!legacy) return '';
                 const slug = normalizeLocationId(legacy);
-                // Migrate-once: write canonical, delete legacy permanently.
                 try {
                     localStorage.setItem(STORAGE_KEY, slug);
                     localStorage.removeItem(LEGACY_STORAGE_KEY);
@@ -267,7 +213,6 @@
             } catch (e) { return ''; }
         },
 
-        /** Subscribe to location changes (select/clear/restore). Returns unsubscribe. */
         onChange(callback) {
             if (typeof callback !== 'function') return function () {};
             TM._changeListeners.push(callback);
@@ -283,9 +228,7 @@
             }
         },
 
-        /** Select a location and persist */
         select(id, opts) {
-            // If data hasn't loaded yet, queue the selection
             if (TM.locations.length === 0) {
                 TM._pendingSelect = id;
                 TM._pendingSelectOpts = opts || null;
@@ -311,7 +254,6 @@
             }
         },
 
-        /** Clear selected location */
         clear() {
             TM.current = null;
             try {
@@ -321,7 +263,6 @@
             TM._emitChange();
         },
 
-        /** Restore location from localStorage; migrates legacy key once. */
         restore() {
             try {
                 let saved = localStorage.getItem(STORAGE_KEY);
@@ -329,7 +270,6 @@
                     const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
                     if (legacy) {
                         saved = normalizeLocationId(legacy);
-                        // Migrate-once heal: write canonical, remove legacy permanently.
                         try {
                             localStorage.setItem(STORAGE_KEY, saved);
                             localStorage.removeItem(LEGACY_STORAGE_KEY);
@@ -343,7 +283,6 @@
                         TM._emitChange();
                         return;
                     }
-                    // Saved slug doesn't match any location (data drift) — clear silently.
                     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
                 }
             } catch (e) { /* localStorage unavailable */ }
@@ -353,23 +292,18 @@
             }
         },
 
-        /** Update all DOM elements that depend on location */
         updateDOM() {
             const loc = TM.current;
 
-            // Nav location text — only update if we have data or a location set
             const locationText = document.getElementById('locationText');
             if (locationText) {
                 if (loc) {
                     locationText.textContent = loc.shortName;
                 } else if (TM.locations.length > 0) {
-                    // Only reset to default if we have loaded data (not on file:// failures)
                     locationText.textContent = 'Select Location';
                 }
-                // Otherwise leave whatever the page HTML set
             }
 
-            // Tickets / Book Now buttons — update location-scoped booking intent.
             const locView = loc ? getLocationView(loc.id || loc.slug) : null;
             if (loc && locView && (locView.bookable || loc.status === 'coming-soon')) {
                 document.querySelectorAll('.btn-tickets, .btn-book-now').forEach(el => {
@@ -379,7 +313,6 @@
                 });
             }
 
-            // Nav logo — route home to the selected location's page
             if (loc && loc.slug) {
                 const inSubdir = window.location.pathname.includes('/locations/') || window.location.pathname.includes('/groups/');
                 const homePath = (inSubdir ? '../' : '/') + loc.slug;
@@ -388,7 +321,6 @@
                 });
             }
 
-            // Ticker bar — match the selected location's ticker message
             if (loc && loc.ticker) {
                 document.querySelectorAll('.ticker-track').forEach(track => {
                     const items = track.querySelectorAll('.ticker-item');
@@ -396,7 +328,6 @@
                 });
             }
 
-            // Location-specific text content — [data-tm-field]
             if (loc) {
                 document.querySelectorAll('[data-tm-field]').forEach(el => {
                     const field = el.dataset.tmField;
@@ -406,7 +337,6 @@
                     }
                 });
 
-                // Location-specific href — [data-tm-href]
                 document.querySelectorAll('[data-tm-href]').forEach(el => {
                     const field = el.dataset.tmHref;
                     const value = resolveField(loc, field);
@@ -414,7 +344,6 @@
                 });
             }
 
-            // Active state in location dropdowns (support both data-tm-location and data-city)
             document.querySelectorAll('[data-tm-location]').forEach(el => {
                 el.classList.toggle('active', loc && el.dataset.tmLocation === loc.id);
             });
@@ -423,105 +352,18 @@
                 el.classList.toggle('active', loc && cityVal === loc.id);
             });
 
-            // Testimonials — filter by location
             TM.updateTestimonials();
-
-            // Footer — show location info when selected
             TM.updateFooterLocation();
         },
 
-        /** Filter testimonial cards to show only matching location */
         updateTestimonials() {
-            const loc = TM.current;
-            const cards = document.querySelectorAll('.testimonial-card');
-            if (!cards.length) return;
-
-            // Check if any cards have location data attributes
-            const hasLocationData = Array.from(cards).some(c => c.dataset.location);
-            if (!hasLocationData) {
-                // Fall back: check author-location text
-                cards.forEach(card => {
-                    const authorLoc = card.querySelector('.author-location');
-                    if (authorLoc) {
-                        const locText = authorLoc.textContent.replace('—', '').replace('–', '').trim().toLowerCase();
-                        card.dataset.location = locText;
-                    }
-                });
-            }
-
-            if (!loc) {
-                // No location selected — show all
-                cards.forEach(card => { card.style.display = ''; });
-                return;
-            }
-
-            const selectedCity = loc.shortName.toLowerCase();
-            let hasVisible = false;
-            cards.forEach(card => {
-                const cardCity = (card.dataset.location || '').toLowerCase();
-                if (cardCity === selectedCity) {
-                    card.style.display = '';
-                    hasVisible = true;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            // If no testimonials match this location, show all (better than empty)
-            if (!hasVisible) {
-                cards.forEach(card => { card.style.display = ''; });
-            }
+            LocationViews.updateTestimonials(TM.current);
         },
 
-        /** Show location info in footer when a location is selected */
         updateFooterLocation() {
-            const loc = TM.current;
-            const locationsColumn = document.querySelector('.footer-locations-column');
-            if (!locationsColumn) return;
-
-            const dropdown = locationsColumn.querySelector('.footer-locations-dropdown');
-            const infoPanel = locationsColumn.querySelector('.footer-location-info');
-
-            if (!loc) {
-                // If the info panel already has hardcoded content (location pages), leave it alone
-                if (infoPanel) {
-                    const addrEl = infoPanel.querySelector('.footer-loc-address');
-                    if (addrEl && addrEl.textContent.trim()) return;
-                }
-
-                // No location — show dropdown, hide info
-                if (dropdown) dropdown.style.display = '';
-                if (infoPanel) infoPanel.style.display = 'none';
-                return;
-            }
-
-            // Hide dropdown, show info
-            if (dropdown) dropdown.style.display = 'none';
-
-            if (infoPanel) {
-                infoPanel.style.display = '';
-
-                const nameEl = infoPanel.querySelector('.footer-loc-name');
-                const addrEl = infoPanel.querySelector('.footer-loc-address');
-                const phoneEl = infoPanel.querySelector('.footer-loc-phone');
-                const hoursEl = infoPanel.querySelector('.footer-loc-hours');
-                const mapEl = infoPanel.querySelector('.footer-loc-map');
-
-                if (nameEl) nameEl.textContent = loc.name || loc.shortName || '';
-                if (addrEl) renderAddressLines(addrEl, loc.address);
-                if (phoneEl && loc.contact && loc.contact.phone) {
-                    phoneEl.textContent = loc.contact.phone;
-                    phoneEl.href = 'tel:' + loc.contact.phone.replace(/[^\d+]/g, '');
-                }
-                if (hoursEl) renderHoursTable(hoursEl, loc.hours);
-                if (mapEl) {
-                    mapEl.href = loc.mapUrl || '#';
-                    mapEl.style.display = loc.mapUrl ? '' : 'none';
-                }
-            }
+            LocationViews.updateFooterLocation(TM.current);
         },
 
-        /** Get today's hours for the current location */
         getTodayHours() {
             if (!TM.current || !TM.current.hours) return null;
             const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -529,7 +371,6 @@
             return TM.current.hours[today] || null;
         },
 
-        /** Check if the current location is open right now (needs structured open/close; label-only hours return null) */
         isOpenNow() {
             const hours = TM.getTodayHours();
             if (!hours || typeof hours.open !== 'string' || typeof hours.close !== 'string') return null;
@@ -545,12 +386,10 @@
         }
     };
 
-    /** Resolve a dot-notation field path on an object */
     function resolveField(obj, path) {
         return path.split('.').reduce((o, key) => (o && o[key] !== undefined ? o[key] : undefined), obj);
     }
 
-    /** Initialize on DOM ready */
     async function init() {
         await TM.load();
         const pageLocationSlug = getPageLocationSlug();
@@ -566,7 +405,6 @@
             TM.restore();
         }
 
-        // Process any pending selection (from location pages that called select before load)
         if (TM._pendingSelect) {
             const pendingId = TM._pendingSelect;
             const pendingOpts = TM._pendingSelectOpts;
@@ -577,7 +415,6 @@
 
         TM.updateDOM();
 
-        // Wire up location dropdown links in nav (both attribute types)
         document.querySelectorAll('[data-tm-location]').forEach(el => {
             el.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -585,8 +422,6 @@
             });
         });
 
-        // Wire up "Change Location" link in footer info panel — opens the
-        // full-screen location picker overlay so the user can select a new one.
         document.querySelectorAll('.footer-loc-change').forEach(el => {
             el.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -595,7 +430,6 @@
                 if (!overlay) return;
                 overlay.classList.add('open');
                 if (navEl) navEl.classList.add('location-open');
-                // Defer scroll lock so it doesn't interrupt the overlay's fade-in
                 requestAnimationFrame(() => requestAnimationFrame(() => {
                     document.body.style.overflow = 'hidden';
                 }));
@@ -605,7 +439,6 @@
         markReady();
     }
 
-    // Expose globally
     const CHANGE_EVENT = 'tm:location-changed';
     const LocationContext = {
         ready: TM.ready,
@@ -621,6 +454,15 @@
         get(id) {
             return typeof TM.get === 'function' ? TM.get(id) : null;
         },
+        normalizeSlug(value) {
+            return normalizeLocationId(value);
+        },
+        isIndexPath() {
+            return isIndexPage();
+        },
+        getSavedSlug() {
+            return typeof TM.getSavedSlug === 'function' ? TM.getSavedSlug() : '';
+        },
         listTicketOptions() {
             return listTicketOptions();
         },
@@ -629,6 +471,12 @@
         },
         getOverlayView(id, opts) {
             return getOverlayView(id, opts);
+        },
+        getBookingCtaView(kind, id, opts) {
+            return getBookingCtaView(kind, id, opts);
+        },
+        applyBookingCtaView(el, cta) {
+            applyBookingCtaView(el, cta);
         },
         select(id, opts) {
             if (typeof TM.select === 'function') TM.select(id, opts);

@@ -6,7 +6,7 @@ For fast iteration without a build, use **`npm run verify:sources`** ( **`npm ru
 
 ## Canonical chain: `npm run verify`
 
-Order is fixed in `scripts/lib/verify-pipeline.cjs` and must not be reordered casually: dist validators assume `dist/` already exists.
+Order is fixed in `scripts/lib/cloudflare-artifact-contract.cjs` and exposed through `scripts/lib/verify-pipeline.cjs`; do not reorder casually because dist validators assume `dist/` already exists.
 
 | Step | Command | Purpose | Requirements |
 |------|---------|---------|----------------|

@@ -4,6 +4,8 @@ const RATE_LIMIT_KEY_VERSION = 'v1';
 const RATE_LIMIT_MEMORY_MAX_KEYS = 5000;
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const RESEND_EMAIL_URL = 'https://api.resend.com/emails';
+const KLAVIYO_SUBSCRIBE_URL = 'https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/';
+const KLAVIYO_REVISION = '2026-04-15';
 
 const DEFAULT_ALLOWED_ORIGINS = [
   'https://timemission.com',
@@ -62,6 +64,21 @@ function envList(value) {
 
 function splitEmails(value) {
   return envList(value).filter((email) => EMAIL_RE.test(email));
+}
+
+function envKeySuffix(value) {
+  return normalizeText(value, 120)
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
+function locationSpecificEnv(env, prefix, location, fallbackKey) {
+  const suffix = envKeySuffix(location);
+  if (suffix && stringValue(env[`${prefix}_${suffix}`]).trim()) {
+    return stringValue(env[`${prefix}_${suffix}`]).trim();
+  }
+  return stringValue(env[fallbackKey]).trim();
 }
 
 function readPositiveInteger(value, fallback) {
@@ -302,6 +319,7 @@ export function validateNewsletterSubmission(raw) {
     email: normalizeEmail(raw.email),
     familyName: normalizeText(raw.family_name, 120),
     givenName: normalizeText(raw.given_name, 120),
+    location: normalizeText(raw.location || raw.selected_location || 'general', 120) || 'general',
     marketingOptIn: optInIsChecked(raw.marketing_opt_in),
   };
 
@@ -379,6 +397,7 @@ function newsletterEmail(data) {
     '',
     `Name: ${fullName}`,
     `Email: ${data.email}`,
+    `Location: ${data.location}`,
     'Marketing opt-in: yes',
   ].join('\n');
 
@@ -386,6 +405,7 @@ function newsletterEmail(data) {
     <h2>New Time Mission newsletter signup</h2>
     <p><strong>Name:</strong> ${htmlEscape(fullName)}</p>
     <p><strong>Email:</strong> ${htmlEscape(data.email)}</p>
+    <p><strong>Location:</strong> ${htmlEscape(data.location)}</p>
     <p><strong>Marketing opt-in:</strong> yes</p>
   `;
 
@@ -400,11 +420,11 @@ function newsletterEmail(data) {
 async function sendResendEmail({ env, fetchImpl, formType, message }) {
   const apiKey = stringValue(env.FORM_EMAIL_API_KEY).trim();
   const from = stringValue(env.FORM_FROM_EMAIL).trim();
-  const recipients = splitEmails(
+  const recipients = splitEmails(message.to || (
     formType === 'newsletter'
       ? env.NEWSLETTER_TO_EMAIL || env.CONTACT_TO_EMAIL
-      : env.CONTACT_TO_EMAIL,
-  );
+      : env.CONTACT_TO_EMAIL
+  ));
 
   if (!apiKey) throw new FormError('Email delivery is not configured.', 500);
   if (!from || !EMAIL_RE.test(from.replace(/^.*<(.+)>$/, '$1'))) {
@@ -432,6 +452,170 @@ async function sendResendEmail({ env, fetchImpl, formType, message }) {
 
   if (!response.ok) {
     throw new FormError('Email delivery failed.', 502);
+  }
+}
+
+function contactRecipientsFor(env, data) {
+  const locationRecipients = locationSpecificEnv(env, 'CONTACT_TO_EMAIL', data.location, 'CONTACT_TO_EMAIL');
+  return splitEmails(locationRecipients);
+}
+
+function archiveBinding(env) {
+  const db = env.FORM_SUBMISSIONS_DB || env.FORM_ARCHIVE_DB;
+  if (db && typeof db.prepare === 'function') return db;
+  return null;
+}
+
+function formArchiveRequired(env) {
+  return stringValue(env.FORM_ARCHIVE_REQUIRED).trim() !== '0';
+}
+
+function requestSourceUrl(request) {
+  const referer = normalizeText(request.headers.get('referer'), 1000);
+  return referer || request.url;
+}
+
+function userAgent(request) {
+  return normalizeText(request.headers.get('user-agent'), 1000);
+}
+
+function payloadForArchive(formType, data) {
+  if (formType === 'newsletter') {
+    return {
+      email: data.email,
+      familyName: data.familyName,
+      givenName: data.givenName,
+      location: data.location,
+      marketingOptIn: data.marketingOptIn,
+    };
+  }
+
+  return {
+    email: data.email,
+    location: data.location,
+    message: data.message,
+    name: data.name,
+    subject: data.subject,
+  };
+}
+
+async function archiveFormSubmission({ data, env, formType, request }) {
+  const db = archiveBinding(env);
+  if (!db) {
+    if (formArchiveRequired(env)) {
+      throw new FormError('Form archive is not configured.', 500);
+    }
+    return;
+  }
+
+  const name = formType === 'newsletter'
+    ? [data.givenName, data.familyName].filter(Boolean).join(' ')
+    : data.name;
+  const payload = payloadForArchive(formType, data);
+  const ip = clientIp(request);
+  const ipHash = ip ? await hashRateLimitIdentifier(ip) : '';
+
+  await db.prepare(`
+    INSERT INTO form_submissions (
+      id,
+      form_type,
+      name,
+      email,
+      location,
+      subject,
+      message,
+      marketing_opt_in,
+      ip_hash,
+      user_agent,
+      source_url,
+      payload_json
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).bind(
+    crypto.randomUUID(),
+    formType,
+    name || null,
+    data.email,
+    data.location || null,
+    formType === 'contact' ? data.subject : null,
+    formType === 'contact' ? data.message : null,
+    formType === 'newsletter' && data.marketingOptIn ? 1 : 0,
+    ipHash || null,
+    userAgent(request) || null,
+    requestSourceUrl(request),
+    JSON.stringify(payload),
+  ).run();
+}
+
+function klaviyoListIdFor(env, data) {
+  return locationSpecificEnv(env, 'KLAVIYO_LIST_ID', data.location, 'KLAVIYO_LIST_ID');
+}
+
+async function sendKlaviyoNewsletterSubscription({ data, env, fetchImpl }) {
+  const apiKey = stringValue(env.KLAVIYO_API_KEY).trim();
+  if (!apiKey) return;
+
+  const listId = klaviyoListIdFor(env, data);
+  const fullName = [data.givenName, data.familyName].filter(Boolean).join(' ');
+  const profileAttributes = {
+    email: data.email,
+    subscriptions: {
+      email: {
+        marketing: {
+          consent: 'SUBSCRIBED',
+        },
+      },
+    },
+    properties: {
+      source: 'time-mission-website',
+      location: data.location,
+    },
+  };
+
+  if (data.givenName) profileAttributes.first_name = data.givenName;
+  if (data.familyName) profileAttributes.last_name = data.familyName;
+  if (fullName) profileAttributes.properties.full_name = fullName;
+
+  const relationships = listId
+    ? {
+        list: {
+          data: {
+            id: listId,
+            type: 'list',
+          },
+        },
+      }
+    : undefined;
+
+  const payload = {
+    data: {
+      type: 'profile-subscription-bulk-create-job',
+      attributes: {
+        profiles: {
+          data: [
+            {
+              type: 'profile',
+              attributes: profileAttributes,
+            },
+          ],
+        },
+      },
+      ...(relationships ? { relationships } : {}),
+    },
+  };
+
+  const response = await fetchImpl(KLAVIYO_SUBSCRIBE_URL, {
+    body: JSON.stringify(payload),
+    headers: {
+      authorization: `Klaviyo-API-Key ${apiKey}`,
+      accept: 'application/vnd.api+json',
+      'content-type': 'application/vnd.api+json',
+      revision: stringValue(env.KLAVIYO_REVISION).trim() || KLAVIYO_REVISION,
+    },
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    throw new FormError('Newsletter subscription failed.', 502);
   }
 }
 
@@ -486,9 +670,17 @@ export async function handleFormRequest({
       ? validateNewsletterSubmission(raw)
       : validateContactSubmission(raw);
     await assertEmailRateLimit({ email: data.email, env, formType });
+    await archiveFormSubmission({ data, env, formType, request });
 
     const message = formType === 'newsletter' ? newsletterEmail(data) : contactEmail(data);
+    if (formType === 'contact') {
+      const recipients = contactRecipientsFor(env, data);
+      if (recipients.length > 0) message.to = recipients.join(',');
+    }
 
+    if (formType === 'newsletter') {
+      await sendKlaviyoNewsletterSubscription({ data, env, fetchImpl });
+    }
     await sendResendEmail({ env, fetchImpl, formType, message });
     return successResponse(request, asJSON);
   } catch (error) {

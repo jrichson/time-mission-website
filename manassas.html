@@ -110,6 +110,12 @@
             transform: translate(-50%, -50%);
             pointer-events: none;
             object-fit: cover;
+            opacity: 0;
+            transition: opacity 180ms ease;
+        }
+
+        .hero-video-container.is-video-ready video {
+            opacity: 1;
         }
 
         /* Hide native play button (shows on iOS Low Power Mode) */
@@ -3105,7 +3111,7 @@
             <div class="section-badge">ABOUT US</div>
             <h2 class="section-title" style="white-space: nowrap;">WHAT IS TIME MISSION?</h2>
             <p class="welcome-text">
-                Step into a real-life video game where behind every door is a new surprise. One ticket unlocks every mission, so race the clock to play them all or run your favorites over and over. Built for every age 6+ and every skill level. Game&nbsp;on!
+                Step into a real-life video game where behind every door is a new surprise. One ticket unlocks every mission, so race the clock to play them all or run your favorites over and over. Built for every age 6 to 106 and every skill level. Game&nbsp;on!
             </p>
             <a href="/about" class="btn-secondary welcome-learn-desktop" style="margin-top: 1.5rem;">Learn About Time Mission</a>
         </div>

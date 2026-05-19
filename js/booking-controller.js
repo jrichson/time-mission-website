@@ -1,8 +1,6 @@
 // ==========================================
 // BOOKING CONTROLLER
-// Single canonical booking gateway (RFC-10).
-// All booking URL math, analytics tracking, panel mount, and the ?book=1
-// auto-redirect live here on window.TMBooking.
+// Booking gateway for URL resolution, analytics, the panel mount, and ?book=1.
 // ==========================================
 (function () {
     'use strict';
@@ -31,10 +29,6 @@
     function translate(key, fallback) {
         if (window.TMI18n && typeof window.TMI18n.text === 'function') {
             return window.TMI18n.text(key, fallback);
-        }
-        if (window.TMI18n && typeof window.TMI18n.t === 'function') {
-            var translated = window.TMI18n.t(key);
-            if (typeof translated === 'string') return translated;
         }
         return fallback;
     }
@@ -76,7 +70,6 @@
         }).href;
     }
 
-    /** RFC-10: canonical resolver alias. Thin wrapper over getDestination. */
     function resolve(opts) {
         return getDestination(opts);
     }
@@ -575,17 +568,8 @@
         };
     }
 
-    // -----------------------------------------------------------------
-    // RFC-10: Panel mount + open + auto-redirect (centralized in TMBooking)
-    // -----------------------------------------------------------------
-
     var mountedPanel = null;
 
-    /**
-     * Programmatic ticket-panel open. Looks for a registered panel mount; if
-     * none, dispatches a CustomEvent('tm:booking:open') so panel impls can
-     * listen and open without TMBooking importing UI code.
-     */
     function open(opts) {
         var detail = opts || {};
         if (mountedPanel && typeof mountedPanel.openPanel === 'function') {
@@ -595,11 +579,6 @@
         document.dispatchEvent(new CustomEvent('tm:booking:open', { detail: detail }));
     }
 
-    /**
-     * Wire a panel DOM (selectEl, ctaBtn, etc.) to TMBooking handlers.
-     * panelEl optional — auto-discovers via #ticketPanel/#ticketLocation/#ticketBookBtn
-     * if absent. Returns a small handle for callers (mainly { syncCtaHref }).
-     */
     function mount(panelEl, opts) {
         var options = opts || {};
         var panel       = panelEl                || document.getElementById('ticketPanel');
@@ -657,14 +636,12 @@
             setPanelIntent: setPanelIntent,
         };
 
-        // Mark CTA button as a booking trigger so attach() owns its click.
         if (ctaBtn) {
             ctaBtn.setAttribute('data-tm-booking-trigger', '');
             ctaBtn.removeAttribute('target');
             ctaBtn.removeAttribute('rel');
         }
 
-        // Keep the CTA button's href in sync with the dropdown selection.
         function syncCtaHref() {
             if (!ctaBtn || !locSelect) return;
             var loc = selectedLocation();
@@ -704,7 +681,6 @@
 
         document.addEventListener('tm:language-changed', syncCtaHref);
 
-        // Defer the initial sync until TM data is hydrated.
         var ctx = (window.LocationContext || (window.TM && { ready: window.TM.ready })) || null;
         if (ctx && ctx.ready && typeof ctx.ready.then === 'function') {
             ctx.ready.then(syncCtaHref);
@@ -712,8 +688,6 @@
             syncCtaHref();
         }
 
-        // attach() binds [data-tm-booking-trigger] click delegation, so the CTA
-        // button now flows through navigate() automatically. Don't add a second handler.
         attach(document, {
             selector: '[data-tm-booking-trigger]',
             pageLocationSlug: pageLocationSlug,
@@ -761,16 +735,11 @@
         awaitTMReady(Date.now() + 1000);
     }
 
-    // Auto-boot on script load (defer is set on the <script>, so DOM is ready).
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', scheduleAutoRedirect);
     } else {
         scheduleAutoRedirect();
     }
-
-    // -----------------------------------------------------------------
-    // Public surface
-    // -----------------------------------------------------------------
 
     window.BookingController = {
         attach: attach,
@@ -788,7 +757,6 @@
         mount: mount,
     };
 
-    /** Supported extension surface for new features (see docs/tm-public-api.md). */
     window.TMFacade = {
         get TM() {
             return window.TM;

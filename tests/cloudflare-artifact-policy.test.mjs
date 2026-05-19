@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
   OFFLOADED_MP4_FILES,
+  VERIFY_STEPS,
+  VERIFY_SUCCESS_MESSAGE,
+  formatNpmStep,
   isFinderDuplicateName,
   planRequiredArtifacts,
   planVideoArtifacts,
+  resolveNpmStep,
   shouldExcludeArtifactPath,
 } from '../scripts/lib/cloudflare-artifact-policy.mjs';
 
@@ -14,6 +18,18 @@ describe('Cloudflare Artifact policy', () => {
       assetDirs: expect.arrayContaining(['assets', 'css', 'js', 'data']),
       requiredDataFiles: ['data/locations.json'],
     });
+  });
+
+  it('owns the verify pipeline order used for Pages readiness', () => {
+    expect(VERIFY_STEPS[0][0]).toBe('check');
+    expect(VERIFY_STEPS[1][0]).toBe('build:astro');
+    expect(VERIFY_STEPS.at(-1)[0]).toBe('test:smoke');
+    expect(formatNpmStep(VERIFY_STEPS[0])).toBe('npm run check');
+    expect(resolveNpmStep(VERIFY_STEPS[0], 'win32')).toEqual({
+      command: 'npm.cmd',
+      args: ['run', 'check'],
+    });
+    expect(VERIFY_SUCCESS_MESSAGE).toBe('verify-site-output.mjs: all steps passed.');
   });
 
   it('keeps large MP4 files out of the Pages bundle when media is hosted externally', () => {
