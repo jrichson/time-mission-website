@@ -37,6 +37,14 @@
         return normalizeLocation(value || 'tickets');
     }
 
+    function translate(key, fallback) {
+        if (window.TMI18n && typeof window.TMI18n.t === 'function') {
+            var translated = window.TMI18n.t(key);
+            if (typeof translated === 'string') return translated;
+        }
+        return fallback;
+    }
+
     function isDirectBookingUrl(href) {
         if (!href || href === '#') return false;
         return /^(https?:|mailto:|tel:)/i.test(href);
@@ -247,43 +255,43 @@
         var kind = normalizeKind((intent && intent.kind) || 'tickets');
         if (!loc) {
             return {
-                title: 'Choose Your Location',
-                intro: 'Select a location and we will show the right booking option.',
-                cta: 'Select Location First',
+                title: translate('booking.chooseLocation.title', 'Choose Your Location'),
+                intro: translate('booking.chooseLocation.intro', 'Select a location and we will show the right booking option.'),
+                cta: translate('booking.chooseLocation.cta', 'Select Location First'),
             };
         }
         if (getExternalLocationUrl(loc)) {
             return {
-                title: 'Time Mission Europe',
-                intro: 'Continue to the EU-hosted site for this location.',
-                cta: 'Visit EU Site',
+                title: translate('booking.eu.title', 'Time Mission Europe'),
+                intro: translate('booking.eu.intro', 'Continue to the EU-hosted site for this location.'),
+                cta: translate('booking.eu.cta', 'Visit EU Site'),
             };
         }
         if ((kind === 'tickets' || kind === 'groups') && isLeadOnlyComingSoon(loc)) {
             return {
-                title: 'Get Location Updates',
-                intro: 'Select a coming-soon location and sign up for launch news, early access, and opening offers.',
-                cta: 'Sign Up for Updates',
+                title: translate('booking.updates.title', 'Get Location Updates'),
+                intro: translate('booking.updates.intro', 'Select a coming-soon location and sign up for launch news, early access, and opening offers.'),
+                cta: translate('booking.updates.cta', 'Sign Up for Updates'),
             };
         }
         if (kind === 'groups') {
             return {
-                title: 'Plan Your Event',
-                intro: 'Select your location and we will send you to the right event request form.',
-                cta: 'Continue to Form',
+                title: translate('booking.groups.title', 'Plan Your Event'),
+                intro: translate('booking.groups.intro', 'Select your location and we will send you to the right event request form.'),
+                cta: translate('booking.groups.cta', 'Continue to Form'),
             };
         }
         if (kind === 'waiver' || kind === 'waivers') {
             return {
-                title: 'Complete Your Waiver',
-                intro: 'Select your location and we will send you to the correct waiver provider when one is available.',
-                cta: 'Continue to Waiver',
+                title: translate('booking.waiver.title', 'Complete Your Waiver'),
+                intro: translate('booking.waiver.intro', 'Select your location and we will send you to the correct waiver provider when one is available.'),
+                cta: translate('booking.waiver.cta', 'Continue to Waiver'),
             };
         }
         return {
-            title: 'Book Your Adventure',
-            intro: "Select your location and we'll take you to our booking system to choose your date and time.",
-            cta: 'Continue to Booking',
+            title: translate('booking.title.default', 'Book Your Adventure'),
+            intro: translate('booking.intro.default', "Select your location and we'll take you to our booking system to choose your date and time."),
+            cta: translate('booking.cta.default', 'Continue to Booking'),
         };
     }
 
@@ -417,17 +425,17 @@
 
         var title = document.createElement('h3');
         title.id = 'bookingFrameTitle';
-        title.textContent = 'Complete Your Booking';
+        title.textContent = translate('booking.frame.title', 'Complete Your Booking');
 
         var close = document.createElement('button');
         close.type = 'button';
         close.className = 'booking-frame-close';
-        close.setAttribute('aria-label', 'Close booking');
+        close.setAttribute('aria-label', translate('booking.frame.close', 'Close booking'));
         close.innerHTML = '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
 
         var iframe = document.createElement('iframe');
         iframe.className = 'booking-frame';
-        iframe.title = 'Time Mission booking';
+        iframe.title = translate('booking.frame.iframeTitle', 'Time Mission booking');
         iframe.loading = 'eager';
         iframe.referrerPolicy = 'no-referrer-when-downgrade';
         iframe.setAttribute('allow', 'payment *; fullscreen');
@@ -453,6 +461,11 @@
             close: close,
             iframe: iframe,
         };
+        document.addEventListener('tm:language-changed', function () {
+            title.textContent = translate('booking.frame.title', 'Complete Your Booking');
+            close.setAttribute('aria-label', translate('booking.frame.close', 'Close booking'));
+            iframe.title = translate('booking.frame.iframeTitle', 'Time Mission booking');
+        });
         return bookingFrame;
     }
 
@@ -787,7 +800,7 @@
             widget.setAttribute('data-color-2-base', config.color2Base || '#FFBA00');
             widget.setAttribute('data-color-2-contrast', config.color2Contrast || '#010437');
             widget.setAttribute('data-price-display', config.priceDisplay || 'PerPerson');
-            widget.setAttribute('data-button-text', config.buttonText || 'BOOK NOW');
+            widget.setAttribute('data-button-text', config.buttonText || translate('nav.bookNow', 'Book Now').toUpperCase());
             widgetEl.appendChild(widget);
             widgetEl.hidden = false;
             if (ctaBtn) ctaBtn.hidden = true;
@@ -832,6 +845,8 @@
                 });
             });
         }
+
+        document.addEventListener('tm:language-changed', syncCtaHref);
 
         // Defer the initial sync until TM data is hydrated.
         var ctx = (window.LocationContext || (window.TM && { ready: window.TM.ready })) || null;

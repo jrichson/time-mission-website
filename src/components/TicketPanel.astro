@@ -9,8 +9,8 @@ const ticketOptions = ticketPanelSelectOptions(allLocations);
 <div class="ticket-overlay" id="ticketOverlay"></div>
 <div class="ticket-panel" id="ticketPanel">
     <div class="ticket-panel-header">
-        <h3 id="ticketPanelTitle">Book Your Adventure</h3>
-        <button class="ticket-panel-close" id="ticketClose" aria-label="Close ticket panel">
+        <h3 id="ticketPanelTitle" data-i18n="booking.title.default">Book Your Adventure</h3>
+        <button class="ticket-panel-close" id="ticketClose" aria-label="Close ticket panel" data-i18n-aria-label="booking.close">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -18,18 +18,18 @@ const ticketOptions = ticketPanelSelectOptions(allLocations);
         </button>
     </div>
     <div class="ticket-panel-content">
-        <p id="ticketPanelIntro">Select your location and we'll take you to our booking system to choose your date and time.</p>
+        <p id="ticketPanelIntro" data-i18n="booking.intro.default">Select your location and we'll take you to our booking system to choose your date and time.</p>
 
         <div class="ticket-location-select">
-            <label for="ticketLocation">Choose Location</label>
+            <label for="ticketLocation" data-i18n="booking.locationLabel">Choose Location</label>
             <select id="ticketLocation">
-                <option value="">Select a location</option>
+                <option value="" data-i18n="booking.locationPlaceholder">Select a location</option>
                 {ticketOptions.map((opt) => <option value={opt.value}>{opt.label}</option>)}
             </select>
         </div>
 
         <a href="#" class="btn-ticket-book" id="ticketBookBtn">
-            <span id="ticketBookBtnText">Continue to Booking</span>
+            <span id="ticketBookBtnText" data-i18n="booking.cta.default">Continue to Booking</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
@@ -37,13 +37,13 @@ const ticketOptions = ticketPanelSelectOptions(allLocations);
         <div class="ticket-provider-widget" id="ticketProviderWidget" hidden></div>
 
         <div class="ticket-panel-info">
-            <h4>QUICK INFO</h4>
+            <h4 data-i18n="booking.quickInfo">QUICK INFO</h4>
             <div class="ticket-info-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"></circle>
                     <path d="M12 6v6l4 2"></path>
                 </svg>
-                <span>Sessions last approximately 60-120 minutes</span>
+                <span data-i18n="booking.info.sessions">Sessions last approximately 60-120 minutes</span>
             </div>
             <div class="ticket-info-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -51,7 +51,7 @@ const ticketOptions = ticketPanelSelectOptions(allLocations);
                     <circle cx="9" cy="7" r="4"></circle>
                     <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
                 </svg>
-                <span>Teams of 2-5 players per mission</span>
+                <span data-i18n="booking.info.players">Teams of 2-5 players per mission</span>
             </div>
             <div class="ticket-info-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -60,7 +60,7 @@ const ticketOptions = ticketPanelSelectOptions(allLocations);
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
-                <span>Advance booking recommended</span>
+                <span data-i18n="booking.info.advance">Advance booking recommended</span>
             </div>
         </div>
     </div>

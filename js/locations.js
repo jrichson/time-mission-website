@@ -76,6 +76,14 @@
         return String(value || '').toLowerCase().trim().replace(/\s+/g, '-');
     }
 
+    function translate(key, fallback) {
+        if (window.TMI18n && typeof window.TMI18n.t === 'function') {
+            const translated = window.TMI18n.t(key);
+            if (typeof translated === 'string') return translated;
+        }
+        return fallback;
+    }
+
     /** Homepage paths where we skip auto-restore of saved location */
     function isIndexPage() {
         const pathname = window.location.pathname;
@@ -297,15 +305,17 @@
     }
 
     function listTicketOptions() {
-        // Labels/order must match src/lib/ticket-options.ts (ticketPanelSelectOptions).
+        // Order/status must match src/lib/ticket-options.ts; labels localize status suffixes at runtime.
         return TM.locations.map((loc) => {
             const view = getLocationView(loc.id || loc.slug);
+            const statusSuffix = loc.status === 'coming-soon'
+                ? ' (' + (view && view.bookable
+                    ? translate('booking.status.bookingNow', 'Booking Now')
+                    : translate('location.comingSoon', 'Coming Soon')) + ')'
+                : '';
             return {
                 value: loc.id,
-                label: (view ? view.name : (loc.shortName || loc.name || loc.id))
-                    + (loc.status === 'coming-soon'
-                        ? (view && view.bookable ? ' (Booking Now)' : ' (Coming Soon)')
-                        : ''),
+                label: (view ? view.name : (loc.shortName || loc.name || loc.id)) + statusSuffix,
                 status: loc.status || 'open',
             };
         });

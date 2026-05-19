@@ -15,6 +15,14 @@
 
     if (!ticketPanel || !ticketLocSel) return;
 
+    function translate(key, fallback) {
+        if (window.TMI18n && typeof window.TMI18n.t === 'function') {
+            var translated = window.TMI18n.t(key);
+            if (typeof translated === 'string') return translated;
+        }
+        return fallback;
+    }
+
     function getLocationContext() {
         if (window.LocationContext) return window.LocationContext;
         if (!window.TM) return null;
@@ -31,9 +39,15 @@
             options = context.listTicketOptions();
         } else if (window.TM && Array.isArray(window.TM.locations)) {
             options = window.TM.locations.map(function (loc) {
+                var suffix = '';
+                if (loc.status === 'coming-soon') {
+                    suffix = loc.rollerCheckoutUrl || loc.bookingUrl
+                        ? ' (' + translate('booking.status.bookingNow', 'Booking Now') + ')'
+                        : ' (' + translate('location.comingSoon', 'Coming Soon') + ')';
+                }
                 return {
                     value: loc.id,
-                    label: loc.shortName + (loc.status === 'coming-soon' ? ' (Coming Soon)' : ''),
+                    label: loc.shortName + suffix,
                 };
             });
         }
@@ -42,7 +56,8 @@
         ticketLocSel.textContent = '';
         var placeholder = document.createElement('option');
         placeholder.value = '';
-        placeholder.textContent = 'Select a location';
+        placeholder.setAttribute('data-i18n', 'booking.locationPlaceholder');
+        placeholder.textContent = translate('booking.locationPlaceholder', 'Select a location');
         ticketLocSel.appendChild(placeholder);
         options.forEach(function (entry) {
             var opt = document.createElement('option');
@@ -119,6 +134,8 @@
         // window.TM.ready guard (booking-policies.cjs requires the literal string)
         ctx.ready.then(syncLocationOptions);
     }
+
+    document.addEventListener('tm:language-changed', syncLocationOptions);
 
     // No public ticket-panel global — booking surface lives on window.TMBooking.
 })();

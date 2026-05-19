@@ -130,6 +130,14 @@ test('language switcher changes visible navigation text', async ({ page, isMobil
   await expect(page.locator('.nav-links a[href="/about"]')).toHaveText('Acerca de');
   await expect.poll(() => page.evaluate(() => document.documentElement.lang)).toBe('es');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
+
+  await page.locator('.hero-cta .btn-tickets').click();
+  await expect(page.locator('#ticketPanelTitle')).toHaveText('Elige tu ubicación');
+  await expect(page.locator('#ticketPanelIntro')).toHaveText('Selecciona una ubicación y te mostraremos la opción de reserva correcta.');
+  await expect(page.locator('label[for="ticketLocation"]')).toHaveText('Elegir ubicación');
+  await expect(page.locator('#ticketLocation option').first()).toHaveText('Selecciona una ubicación');
+  await expect(page.locator('#ticketBookBtnText')).toHaveText('Selecciona una ubicación primero');
+  await expect(page.locator('.ticket-panel-info h4')).toHaveText('INFORMACIÓN RÁPIDA');
 });
 
 test('ticket panel options hydrate from location data', async ({ page }) => {
@@ -279,8 +287,10 @@ test('desktop location hover renders address map preview before selection', asyn
   test.skip(isMobile, 'desktop-only preview path');
 
   await page.goto('/');
+  await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
   await page.locator('#locationBtn').click();
   await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
+  await expect(page.locator('#locationDropdown .location-dropdown-title')).toHaveText('Selecciona tu ubicación');
 
   await page.locator('#locationDropdown a[data-city="Philadelphia"]').hover();
   const className = await page.locator('#locationDropdown').evaluate((el) => el.className || '');
@@ -289,6 +299,9 @@ test('desktop location hover renders address map preview before selection', asyn
   await expect(page).toHaveURL(/\/$/);
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Philadelphia');
   await expect(page.locator('#locationInfo .location-info-address')).toContainText('1530 Chestnut Street');
+  await expect(page.locator('#locationInfo .location-info-directions')).toContainText('Cómo llegar');
+  await expect(page.locator('#locationInfo .location-info-hours')).toContainText('Lun:');
+  await expect(page.locator('#locationInfo .location-info-book')).toContainText('Reservar ahora');
   await expect(page.locator('#locationMap iframe')).toHaveAttribute('src', /google\.com\/maps/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });
