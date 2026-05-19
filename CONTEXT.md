@@ -8,8 +8,9 @@
 - **Public URL Surface**: the canonical set of public paths, redirect sources, sitemap URLs, dynamic landing paths, and output files that preserve SEO and deploy behavior.
 - **Cloudflare Artifact**: the static output prepared for Cloudflare Pages, including copied public assets, generated headers, redirects, sitemap output, and large-media offload rules.
 - **Landing Page Contract**: the renderable content rules for campaign landing pages, including launch state, CTA behavior, SEO head fields, sitemap eligibility, and editor warnings.
+- **Language Surface**: the public-site translation catalog and runtime rules that resolve language codes, fall back to the default language, update visible copy, and keep language switcher controls in sync.
 
 ## Operational Priority
 
-- Launch-week architecture work should favor the Public site, Booking Journey, Location Catalog, Public URL Surface, and Cloudflare Artifact.
+- Launch-week architecture work should favor the Public site, Booking Journey, Location Catalog, Public URL Surface, Cloudflare Artifact, and Language Surface.
 - CMS editor/operator cleanup is lower priority unless it blocks publishing or deploy ownership.

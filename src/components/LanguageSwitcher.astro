@@ -1,5 +1,6 @@
 ---
 import i18n from '../data/site/i18n.json';
+import { compileLanguageSurface, type I18nCatalog } from '../lib/i18n-surface';
 
 interface Props {
     currentLang?: string;
@@ -8,16 +9,10 @@ interface Props {
 
 const { currentLang = i18n.defaultLanguage, placement = 'desktop' } = Astro.props;
 const languages = i18n.languages;
-const currentCode = languages.some((lang) => lang.code === currentLang) ? currentLang : i18n.defaultLanguage;
+const languageSurface = compileLanguageSurface(i18n as I18nCatalog);
+const currentCode = languageSurface.resolveLanguage(currentLang)?.code || languageSurface.defaultLanguage;
 const switcherId = `language-select-${placement}`;
-const translations = i18n.translations as unknown as Record<string, Record<string, unknown>>;
-const activeLabel = translations[currentCode]?.['language.label'];
-const defaultLabel = translations[i18n.defaultLanguage]?.['language.label'];
-const label = typeof activeLabel === 'string'
-    ? activeLabel
-    : typeof defaultLabel === 'string'
-        ? defaultLabel
-        : 'Language';
+const label = languageSurface.translateString('language.label', currentCode) || 'Language';
 ---
 
 <form class={`language-switcher language-switcher--${placement}`} data-language-switcher data-i18n-aria-label="language.label" aria-label={label}>

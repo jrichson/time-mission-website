@@ -73,6 +73,10 @@ function createBrowserContext(extraWindow = {}) {
     },
     history: { replaceState() {} },
     matchMedia() { return { matches: false }; },
+    navigator: {
+      language: 'en-US',
+      languages: ['en-US'],
+    },
     requestAnimationFrame(cb) { cb(); },
     setTimeout,
     clearTimeout,
@@ -99,6 +103,7 @@ function createBrowserContext(extraWindow = {}) {
     Promise,
     Date,
     URL,
+    navigator: window.navigator,
   };
   return { context, window, document };
 }
@@ -362,5 +367,77 @@ describe('browser architecture contracts', () => {
     waiverCta.click();
     expect(window.location.href).toBe('/waiver');
     expect(opened).toBe(1);
+  });
+
+  it('TMI18n resolves fallback language codes and keeps switcher controls in sync', async () => {
+    let changeHandler = null;
+    const select = {
+      value: 'en',
+      addEventListener(type, handler) {
+        if (type === 'change') changeHandler = handler;
+      },
+    };
+    const navLabel = {
+      textContent: 'About',
+      getAttribute(name) { return name === 'data-i18n' ? 'nav.about' : null; },
+    };
+    const status = { textContent: '' };
+    const form = { addEventListener() {} };
+    const { context, window, document } = createBrowserContext({
+      __TM_I18N__: {
+        defaultLanguage: 'en',
+        storageKey: 'tm_language',
+        languages: [
+          { code: 'en', htmlLang: 'en', label: 'English', nativeLabel: 'English', shortLabel: 'EN' },
+          { code: 'es', htmlLang: 'es', label: 'Spanish', nativeLabel: 'Espanol', shortLabel: 'ES' },
+          { code: 'nl-BE', htmlLang: 'nl-BE', label: 'Dutch', nativeLabel: 'Nederlands', shortLabel: 'NL' },
+        ],
+        translations: {
+          en: {
+            'language.label': 'Language',
+            'language.changed': 'Language set to {language}',
+            'nav.about': 'About',
+          },
+          es: {
+            'language.label': 'Idioma',
+            'language.changed': 'Idioma cambiado a {language}',
+            'nav.about': 'Acerca de',
+          },
+          'nl-BE': {
+            'language.label': 'Taal',
+            'language.changed': 'Taal ingesteld op {language}',
+            'nav.about': 'Over',
+          },
+        },
+      },
+    });
+    document.documentElement = { lang: 'en', dataset: {} };
+    document.querySelectorAll = (selector) => {
+      if (selector === '[data-language-switcher]') return [form];
+      if (selector === '[data-language-select]') return [select];
+      if (selector === '[data-i18n]') return [navLabel];
+      if (selector === '[data-language-status]') return [status];
+      return [];
+    };
+
+    const seen = [];
+    document.addEventListener('tm:language-changed', (event) => seen.push(event.detail.language));
+    runScript('js/language-switcher.js', context);
+    await window.TMI18n.ready;
+
+    select.value = 'es';
+    changeHandler();
+
+    expect(window.TMI18n.getLanguage()).toBe('es');
+    expect(window.TMI18n.getLanguageView().nativeLabel).toBe('Espanol');
+    expect(window.TMI18n.getLanguageView('nl').code).toBe('nl-BE');
+    expect(window.TMI18n.getSupportedLanguages().map((language) => language.code)).toEqual(['en', 'es', 'nl-BE']);
+    expect(document.documentElement.lang).toBe('es');
+    expect(document.documentElement.dataset.tmLanguage).toBe('es');
+    expect(navLabel.textContent).toBe('Acerca de');
+    expect(status.textContent).toBe('Idioma cambiado a Espanol');
+    expect(select.value).toBe('es');
+    expect(window.localStorage.getItem('tm_language')).toBe('es');
+    expect(seen).toContain('es');
   });
 });

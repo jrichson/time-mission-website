@@ -12,6 +12,26 @@
         readyResolve = resolve;
     });
 
+    function normalizeLanguageCode(code) {
+        return String(code || '').trim().toLowerCase();
+    }
+
+    function languageBase(code) {
+        return normalizeLanguageCode(code).split('-')[0];
+    }
+
+    function languageView(language) {
+        if (!language) return null;
+        var label = translate('language.label', language.code);
+        return {
+            code: language.code,
+            htmlLang: language.htmlLang || language.code,
+            label: typeof label === 'string' ? label : (language.label || language.code),
+            nativeLabel: language.nativeLabel || language.label || language.code,
+            shortLabel: language.shortLabel || String(language.code).toUpperCase()
+        };
+    }
+
     function applyConfig(nextConfig) {
         if (!nextConfig || typeof nextConfig !== 'object') return;
         config = nextConfig;
@@ -38,13 +58,13 @@
 
     function findLanguage(code) {
         if (!code) return null;
-        var normalized = String(code).trim().toLowerCase();
+        var normalized = normalizeLanguageCode(code);
         for (var i = 0; i < languages.length; i += 1) {
-            if (languages[i].code.toLowerCase() === normalized) return languages[i];
+            if (normalizeLanguageCode(languages[i].code) === normalized) return languages[i];
         }
-        var base = normalized.split('-')[0];
+        var base = languageBase(normalized);
         for (var j = 0; j < languages.length; j += 1) {
-            if (languages[j].code.toLowerCase().split('-')[0] === base) return languages[j];
+            if (languageBase(languages[j].code) === base) return languages[j];
         }
         return null;
     }
@@ -125,10 +145,10 @@
     }
 
     function updateStatus() {
-        var language = findLanguage(currentLanguage);
-        if (!language) return;
+        var view = languageView(findLanguage(currentLanguage));
+        if (!view) return;
         var message = translate('language.changed') || 'Language set to {language}';
-        message = message.replace('{language}', language.nativeLabel || language.label || language.code);
+        message = message.replace('{language}', view.nativeLabel || view.label || view.code);
         document.querySelectorAll('[data-language-status]').forEach(function (status) {
             status.textContent = message;
         });
@@ -173,6 +193,8 @@
     window.TMI18n = {
         t: translate,
         setLanguage: setLanguage,
+        getLanguageView: function (code) { return languageView(findLanguage(code || currentLanguage)); },
+        getSupportedLanguages: function () { return languages.map(languageView).filter(Boolean); },
         getLanguage: function () { return currentLanguage; },
         languages: languages.slice(),
         ready: readyPromise
