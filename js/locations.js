@@ -78,6 +78,7 @@
             locationId: locationId,
             groupType: options.groupType || options.pageGroupType || '',
             pageGroupType: options.pageGroupType || '',
+            pageLocationSlug: options.pageLocationSlug || '',
         });
     }
 
@@ -306,10 +307,13 @@
 
             const locView = loc ? getLocationView(loc.id || loc.slug) : null;
             if (loc && locView && (locView.bookable || loc.status === 'coming-soon')) {
+                const pageLocationSlug = getPageLocationSlug();
                 document.querySelectorAll('.btn-tickets, .btn-book-now').forEach(el => {
                     const bookingKind = (el.getAttribute('data-tm-booking-kind') || 'tickets').toLowerCase();
                     if (bookingKind !== 'tickets') return;
-                    applyBookingCtaView(el, getBookingCtaView('tickets', locView.locationId || loc.id || loc.slug));
+                    applyBookingCtaView(el, getBookingCtaView('tickets', locView.locationId || loc.id || loc.slug, {
+                        pageLocationSlug: pageLocationSlug,
+                    }));
                 });
             }
 

@@ -22,6 +22,74 @@
         return /^https?:\/\//i.test(String(href || '').trim());
     }
 
+    function getCurrentSearch() {
+        return (window.location && window.location.search) || '';
+    }
+
+    function isTrackingParam(name) {
+        var key = String(name || '').toLowerCase();
+        return /^utm_[a-z0-9_]+$/.test(key)
+            || key === 'gclid'
+            || key === 'gbraid'
+            || key === 'wbraid'
+            || key === 'fbclid'
+            || key === 'msclkid'
+            || key === 'ttclid'
+            || key === 'twclid'
+            || key === 'li_fat_id'
+            || key === 'mc_cid'
+            || key === 'mc_eid'
+            || key === 'irclickid'
+            || key === 'srsltid';
+    }
+
+    function collectTrackingParams(search) {
+        var params = [];
+        var raw = String(search || '');
+        if (raw.charAt(0) === '?') raw = raw.slice(1);
+        if (!raw) return params;
+        new URLSearchParams(raw).forEach(function (value, name) {
+            if (!isTrackingParam(name)) return;
+            params.push({
+                name: name,
+                value: value,
+            });
+        });
+        return params;
+    }
+
+    function appendTrackingParams(href, options) {
+        var opts = options || {};
+        var value = String(href || '').trim();
+        if (!value) return value;
+        if (!isExternalHttpUrl(value) && !opts.includeInternal) return value;
+        var tracking = collectTrackingParams(opts.search || getCurrentSearch());
+        if (!tracking.length) return value;
+
+        var hash = '';
+        var hashIndex = value.indexOf('#');
+        if (hashIndex !== -1) {
+            hash = value.slice(hashIndex);
+            value = value.slice(0, hashIndex);
+        }
+
+        var queryIndex = value.indexOf('?');
+        var base = queryIndex === -1 ? value : value.slice(0, queryIndex);
+        var params = new URLSearchParams(queryIndex === -1 ? '' : value.slice(queryIndex + 1));
+        var existing = {};
+        params.forEach(function (_value, name) {
+            existing[String(name || '').toLowerCase()] = true;
+        });
+        tracking.forEach(function (param) {
+            var key = String(param.name || '').toLowerCase();
+            if (existing[key]) return;
+            params.append(param.name, param.value);
+            existing[key] = true;
+        });
+        var query = params.toString();
+        return base + (query ? '?' + query : '') + hash;
+    }
+
     function getBookingHref(el) {
         if (!el || typeof el.getAttribute !== 'function') return '';
         return el.getAttribute('data-tm-booking-url') || el.getAttribute('href') || '';
@@ -44,6 +112,17 @@
 
     function isLeadOnlyComingSoon(loc) {
         return !!(loc && loc.status === 'coming-soon' && !isBookableLocation(loc));
+    }
+
+    function isBriqWidgetLocation(loc) {
+        return !!(loc && loc.bookingProvider === 'briq' && loc.briqWidget);
+    }
+
+    function isSameLocationPage(loc, pageLocationSlug) {
+        var pageSlug = normalizeLocation(pageLocationSlug || '');
+        if (!loc || !pageSlug) return false;
+        return pageSlug === normalizeLocation(loc.slug || '')
+            || pageSlug === normalizeLocation(loc.id || '');
     }
 
     function resolveComingSoonLeadUrl(loc, fallbackSlug) {
@@ -79,7 +158,13 @@
 
         var externalUrl = getExternalLocationUrl(loc);
         if (externalUrl) return externalUrl;
-        if (opts.preferLocationPageFlow && slug) return '/' + slug + '?book=1';
+        if (isBriqWidgetLocation(loc)) {
+            if (isSameLocationPage(loc, opts.pageLocationSlug)) return '#briq-widget-container';
+            return slug ? appendTrackingParams('/' + slug + '?book=1', { includeInternal: true }) : checkoutUrl;
+        }
+        if (opts.preferLocationPageFlow && slug) {
+            return appendTrackingParams('/' + slug + '?book=1', { includeInternal: true });
+        }
         if (bookable) return checkoutUrl;
         if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);
         return '';
@@ -96,7 +181,7 @@
 
     function shouldUseBookingFrame(kind, href) {
         var normalizedKind = normalizeKind(kind);
-        return isExternalHttpUrl(href) && (normalizedKind === 'tickets' || normalizedKind === 'groups');
+        return isExternalHttpUrl(href) && normalizedKind === 'groups';
     }
 
     function shouldUseRollerCheckout(loc, href, kind) {
@@ -105,8 +190,23 @@
         return !!roller && href === roller;
     }
 
-    function bookingPresentationFor(loc, kind, href) {
+    function shouldUseBriqWidget(loc, href, kind, pageLocationSlug) {
+        return normalizeKind(kind) === 'tickets'
+            && isBriqWidgetLocation(loc)
+            && isSameLocationPage(loc, pageLocationSlug)
+            && String(href || '').trim() === '#briq-widget-container';
+    }
+
+    function shouldAppendTrackingForPresentation(presentation) {
+        return presentation === 'link'
+            || presentation === 'external-site'
+            || presentation === 'iframe';
+    }
+
+    function bookingPresentationFor(loc, kind, href, options) {
+        var opts = options || {};
         if (!isNavigableHref(href)) return 'panel';
+        if (shouldUseBriqWidget(loc, href, kind, opts.pageLocationSlug)) return 'briq-widget';
         if (isLocationExternalSiteUrl(loc, href)) return 'external-site';
         if (isTicketKind(kind) && shouldUseRollerCheckout(loc, href, kind)) return 'roller';
         if (shouldUseBookingFrame(kind, href)) return 'iframe';
@@ -154,7 +254,12 @@
             || (loc && (loc.id || loc.slug))
             || ''
         );
-        var presentation = bookingPresentationFor(loc, kind, href);
+        var presentation = bookingPresentationFor(loc, kind, href, {
+            pageLocationSlug: pageLocationSlug,
+        });
+        if (shouldAppendTrackingForPresentation(presentation)) {
+            href = appendTrackingParams(href);
+        }
         return {
             kind: kind,
             groupType: groupType,
@@ -167,6 +272,7 @@
             presentation: presentation,
             usesBookingFrame: presentation === 'iframe',
             usesRollerCheckout: presentation === 'roller',
+            usesBriqWidget: presentation === 'briq-widget',
             externalLocationSite: presentation === 'external-site',
         };
     }
@@ -183,7 +289,7 @@
             location: loc || null,
             resolveHref: true,
         });
-        var trigger = intent.usesBookingFrame || intent.usesRollerCheckout;
+        var trigger = intent.usesBookingFrame || intent.usesRollerCheckout || intent.usesBriqWidget;
         return {
             kind: intent.kind,
             groupType: intent.groupType,
@@ -208,11 +314,17 @@
         if (resolved.externalLocationSite || resolved.presentation === 'external-site') {
             return { type: 'external-site', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
         }
+        if (!opts.deferUntilLoad && (resolved.usesBriqWidget || resolved.presentation === 'briq-widget')) {
+            return { type: 'briq-widget', href: href, shouldPreventDefault: true, trackCheckout: false };
+        }
         if (!opts.deferUntilLoad && (resolved.usesRollerCheckout || resolved.presentation === 'roller')) {
             return { type: 'roller', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
         }
         if (!opts.deferUntilLoad && (resolved.usesBookingFrame || resolved.presentation === 'iframe')) {
             return { type: 'iframe', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
+        }
+        if (opts.deferUntilLoad && (resolved.usesBriqWidget || resolved.presentation === 'briq-widget')) {
+            return { type: 'deferred-briq-widget', href: href, shouldPreventDefault: true, trackCheckout: false };
         }
         if (opts.deferUntilLoad && (resolved.usesRollerCheckout || resolved.presentation === 'roller')) {
             return { type: 'deferred-roller', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
@@ -252,7 +364,7 @@
             attrs.href = resolved.href || '#';
             return attrs;
         }
-        if (resolved.usesBookingFrame || resolved.usesRollerCheckout) {
+        if (resolved.usesBookingFrame || resolved.usesRollerCheckout || resolved.usesBriqWidget) {
             attrs.href = '#';
             attrs.bookingUrl = resolved.href || '';
             attrs.trigger = true;
@@ -269,6 +381,7 @@
         isNavigableHref: isNavigableHref,
         isExternalHttpUrl: isExternalHttpUrl,
         getBookingHref: getBookingHref,
+        appendTrackingParams: appendTrackingParams,
         resolveOpenCheckoutUrl: resolveOpenCheckoutUrl,
         getExternalLocationUrl: getExternalLocationUrl,
         isBookableLocation: isBookableLocation,

@@ -35,7 +35,7 @@ Defined in `js/booking-controller.js`. Use for programmatic booking navigation a
 
 - `TMBooking.resolveIntent(opts)` — returns the booking decision for a location/kind/group combination, including `href`, `presentation`, and provider flags.
 - `TMBooking.getDestination(opts)` — returns only the destination URL from the same decision logic.
-- `TMBooking.navigate(intent)` — tracks and performs the selected presentation: iframe, Roller iframe, EU outbound link, or normal internal link.
+- `TMBooking.navigate(intent)` — tracks and performs the selected presentation: Briq widget, Roller iframe, group iframe, EU outbound link, external provider link, or normal internal link.
 
 ## `window.TMI18n`
 

@@ -876,7 +876,7 @@
         document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
             anchor.addEventListener('click', function (e) {
                 var href = this.getAttribute('href') || '';
-                if (href === '#' || href === '#!') return;
+                if (href === '#' || href === '#!' || href.charAt(0) !== '#') return;
                 e.preventDefault();
                 var target = document.querySelector(href);
                 if (target) {

@@ -23,6 +23,18 @@ async function gotoHome(page) {
   });
 }
 
+async function stubBriqWidgetScript(page) {
+  const briqScript = { requests: 0 };
+  await page.route('https://widgetcdn.briqbookings.com/widget/widget.js', async (route) => {
+    briqScript.requests += 1;
+    await route.fulfill({
+      contentType: 'application/javascript',
+      body: '',
+    });
+  });
+  return briqScript;
+}
+
 /** Wait for GTM bootstrap push, then read `consent_profile` from `tm_tagging_config`. */
 async function readTaggingConsentProfile(page) {
   await page.waitForFunction(() => Array.isArray(window.dataLayer) && window.dataLayer.length > 0);
@@ -341,7 +353,7 @@ test('location page drives nav state and ticket panel default location', async (
   );
 });
 
-test('non-Roller ticket booking opens an embedded booking frame', async ({ page }) => {
+test('non-Roller external ticket booking leaves through the provider URL', async ({ page }) => {
   await page.route('https://bookings.clubspeed.com/**', async (route) => {
     await route.fulfill({
       contentType: 'text/html',
@@ -353,9 +365,7 @@ test('non-Roller ticket booking opens an embedded booking frame', async ({ page 
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('lincoln');
 
   await page.locator('.nav-right .btn-tickets').click();
-  await expect(page.locator('.booking-frame-overlay')).toHaveClass(/active/);
-  await expect(page.locator('.booking-frame')).toHaveAttribute('src', /bookings\.clubspeed\.com/);
-  await expect(page).toHaveURL(/\/lincoln$/);
+  await expect(page).toHaveURL(/https:\/\/bookings\.clubspeed\.com\/R1\/R1LINCOLN/);
 });
 
 test('group CTAs resolve to audit-provided form URLs for the selected location', async ({ page }) => {
@@ -484,24 +494,44 @@ test('waiver panel disables Houston and Orland Park without waiver fallbacks', a
   }
 });
 
-test('West Nyack ticket panel opens Briq checkout in the booking frame', async ({ page }) => {
-  await page.goto('/');
+test('West Nyack routes generic booking to the venue page with tracking params', async ({ page }) => {
+  const briqScript = await stubBriqWidgetScript(page);
+
+  await page.goto('/?utm_source=paid&utm_campaign=spring&fbclid=fb123');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+  expect(briqScript.requests).toBe(0);
 
   await page.evaluate(() => {
     window.TM.select('west-nyack');
     window.TMBooking.open({ kind: 'tickets' });
   });
 
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '#');
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
-    'data-tm-booking-url',
-    'https://timemission-palisades.briqbookings.com'
-  );
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/west-nyack?book=1&utm_source=paid&utm_campaign=spring&fbclid=fb123');
+  await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
 
   await page.locator('#ticketBookBtn').click();
-  await expect(page.locator('.booking-frame-overlay')).toHaveClass(/active/);
-  await expect(page.locator('.booking-frame')).toHaveAttribute('src', 'https://timemission-palisades.briqbookings.com');
+  await expect(page).toHaveURL(/\/west-nyack\?utm_source=paid&utm_campaign=spring&fbclid=fb123$/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#briq-widget-container')).toBeVisible();
+  await expect(page.locator('#briq-widget')).toHaveAttribute('data-domain', 'timemission-palisades');
+  await expect(page.locator('#briq-widget')).toHaveAttribute('data-button-text', 'BOOK NOW');
+  await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
+  expect(briqScript.requests).toBeGreaterThan(0);
+});
+
+test('West Nyack location page opens the Briq widget instead of an iframe', async ({ page }) => {
+  const briqScript = await stubBriqWidgetScript(page);
+
+  await page.goto('/west-nyack');
+  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('west-nyack');
+  expect(briqScript.requests).toBeGreaterThan(0);
+
+  await page.locator('.nav-right .btn-tickets').click();
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#briq-widget-container')).toBeVisible();
+  await expect(page.locator('#briq-widget')).toHaveAttribute('data-domain', 'timemission-palisades');
+  await expect(page.locator('#briq-widget')).toHaveAttribute('data-color-1-base', '#FFBA00');
+  await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
 });
 
 test('faq accordion exposes keyboard accessible controls', async ({ page }) => {

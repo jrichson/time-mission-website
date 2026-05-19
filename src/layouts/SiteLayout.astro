@@ -6,6 +6,7 @@ import LocationOverlay from '../components/LocationOverlay.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import TicketPanel from '../components/TicketPanel.astro';
 import SiteScripts from '../components/SiteScripts.astro';
+import { allLocations } from '../data/locations';
 import { resolveLastUpdated } from '../lib/last-updated';
 import { getPublishedSitePage, sitePageHeadForDoc } from '../lib/payload/load';
 
@@ -58,6 +59,10 @@ const lastUpdatedInfo = resolveLastUpdated({
     sourceFile: sourcePageUrl,
 });
 const sitePageHead = landingHead ? null : sitePageHeadForDoc(await getPublishedSitePage(canonicalPath));
+const pageLocation = bodyDataLocation
+    ? allLocations.find((loc) => loc.id === bodyDataLocation || loc.slug === bodyDataLocation)
+    : null;
+const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocation.briqWidget;
 ---
 
 <!DOCTYPE html>
@@ -74,6 +79,17 @@ const sitePageHead = landingHead ? null : sitePageHeadForDoc(await getPublishedS
             lastUpdatedIso={lastUpdatedInfo.iso}
         />
         <slot name="head-extra" />
+        {loadsBriqWidget && (
+            <script language="javascript" is:inline>
+                ;(function (d, t){
+                    var s = d.createElement(t)
+                    s.async = true
+                    s.src = 'https://widgetcdn.briqbookings.com/widget/widget.js'
+                    var r = d.getElementsByTagName(t)[0]
+                    r.parentNode.insertBefore(s, r)
+                })(document, 'script')
+            </script>
+        )}
         <slot name="page-style" />
         <slot name="json-ld" />
     </head>
@@ -110,7 +126,7 @@ const sitePageHead = landingHead ? null : sitePageHeadForDoc(await getPublishedS
         <aside class="page-last-updated" aria-label="Page freshness">
             <time datetime={lastUpdatedInfo.iso}>{lastUpdatedInfo.human}</time>
         </aside>
-        <TicketPanel />
+        <TicketPanel pageLocationSlug={bodyDataLocation} />
         <SiteScripts />
         <slot name="after-site-scripts" />
     </body>

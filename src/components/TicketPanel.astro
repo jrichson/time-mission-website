@@ -2,7 +2,16 @@
 import { allLocations } from '../data/locations';
 import { ticketPanelSelectOptions } from '../lib/site-contract';
 
+interface Props {
+    pageLocationSlug?: string;
+}
+
+const { pageLocationSlug = '' } = Astro.props;
 const ticketOptions = ticketPanelSelectOptions(allLocations);
+const pageLocation = pageLocationSlug
+    ? allLocations.find((loc) => loc.id === pageLocationSlug || loc.slug === pageLocationSlug)
+    : null;
+const briqWidget = pageLocation?.bookingProvider === 'briq' ? pageLocation.briqWidget : null;
 ---
 
 <!-- Ticket Popup Panel -->
@@ -34,6 +43,22 @@ const ticketOptions = ticketPanelSelectOptions(allLocations);
                 <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
         </a>
+
+        {briqWidget && (
+            <div id="briq-widget-container" class="ticket-provider-widget" hidden>
+                <div
+                    id="briq-widget"
+                    class="bw-widget"
+                    data-domain={briqWidget.domain}
+                    data-color-1-base={briqWidget.color1Base}
+                    data-color-1-contrast={briqWidget.color1Contrast}
+                    data-color-2-base={briqWidget.color2Base}
+                    data-color-2-contrast={briqWidget.color2Contrast}
+                    data-price-display={briqWidget.priceDisplay}
+                    data-button-text={briqWidget.buttonText}
+                ></div>
+            </div>
+        )}
 
         <div class="ticket-panel-info">
             <h4 data-i18n="booking.quickInfo">QUICK INFO</h4>

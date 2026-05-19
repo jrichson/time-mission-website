@@ -58,6 +58,17 @@
         return url;
     }
 
+    function cleanBookParamFromCurrentUrl() {
+        if (!history.replaceState || !window.location || window.location.search.indexOf('book=1') === -1) return;
+        var params = new URLSearchParams(window.location.search);
+        params.delete('book');
+        var nextSearch = params.toString();
+        var nextUrl = window.location.pathname
+            + (nextSearch ? '?' + nextSearch : '')
+            + (window.location.hash || '');
+        history.replaceState(null, '', nextUrl);
+    }
+
     function getDestination(options) {
         var opts = options || {};
         return resolveBookingIntent({
@@ -166,6 +177,13 @@
                 cta: translate('booking.groups.cta', 'Continue to Form'),
             };
         }
+        if (intent && intent.usesBriqWidget && loc) {
+            return {
+                title: 'Book ' + (loc.shortName || loc.name || 'West Nyack'),
+                intro: 'Choose your date, time, and ticket options for this location.',
+                cta: translate('booking.cta.default', 'Book Now'),
+            };
+        }
         if (kind === 'waiver' || kind === 'waivers') {
             return {
                 title: translate('booking.waiver.title', 'Complete Your Waiver'),
@@ -270,6 +288,49 @@
     }
 
     var bookingFrame = null;
+    var mountedPanel = null;
+
+    function getBriqWidgetContainer() {
+        return document.getElementById('briq-widget-container');
+    }
+
+    function hideBriqWidget() {
+        var container = getBriqWidgetContainer();
+        if (!container) return;
+        container.hidden = true;
+        container.classList.remove('active');
+    }
+
+    function showBriqWidget(loc) {
+        var container = getBriqWidgetContainer();
+        var widget = document.getElementById('briq-widget');
+        if (!container || !widget) return false;
+        if (loc && loc.briqWidget && loc.briqWidget.domain && widget.getAttribute('data-domain') !== loc.briqWidget.domain) {
+            var slug = loc.slug || loc.id || '';
+            if (slug) {
+                window.location.assign(BookingJourney.appendTrackingParams('/' + slug + '?book=1', { includeInternal: true }));
+                return true;
+            }
+            return false;
+        }
+        container.hidden = false;
+        container.classList.add('active');
+        container.scrollIntoView({ block: 'nearest' });
+        return true;
+    }
+
+    function openMountedTicketPanel(loc) {
+        if (!mountedPanel) return;
+        mountedPanel.openPanel({
+            kind: 'tickets',
+            locationId: loc && (loc.id || loc.slug) || '',
+        });
+    }
+
+    function openBriqWidget(loc) {
+        openMountedTicketPanel(loc);
+        showBriqWidget(loc);
+    }
 
     function closeBookingFrame() {
         if (!bookingFrame) return;
@@ -360,15 +421,17 @@
 
     function executeNavigationAction(action, loc, options) {
         var opts = options || {};
-        if (opts.cleanBookParam && history.replaceState) {
-            history.replaceState(null, '', window.location.pathname);
-        }
+        if (opts.cleanBookParam) cleanBookParamFromCurrentUrl();
 
         if (action.type === 'panel') {
             return false;
         }
         if (action.type === 'external-site') {
             window.location.assign(action.href);
+            return true;
+        }
+        if (action.type === 'briq-widget') {
+            openBriqWidget(loc);
             return true;
         }
         if (action.type === 'roller') {
@@ -382,7 +445,9 @@
         if (action.type.indexOf('deferred-') === 0) {
             function doDeferredNav() {
                 setTimeout(function () {
-                    if (action.type === 'deferred-roller') {
+                    if (action.type === 'deferred-briq-widget') {
+                        openBriqWidget(loc);
+                    } else if (action.type === 'deferred-roller') {
                         showRollerCheckout(loc, function () { showBookingFrame(loc, action.href); });
                     } else if (action.type === 'deferred-iframe') {
                         showBookingFrame(loc, action.href);
@@ -420,7 +485,7 @@
         var targetLocationId = opts.locationId
             || (opts.currentTarget && typeof opts.currentTarget.getAttribute === 'function' && opts.currentTarget.getAttribute('data-tm-location'))
             || '';
-        var targetPageLocationSlug = opts.pageLocationSlug || '';
+        var targetPageLocationSlug = opts.pageLocationSlug || (document.body && document.body.dataset.location) || '';
         var outcome = BookingJourney.resolveOutcome({
             href: href,
             kind: opts.kind,
@@ -568,11 +633,9 @@
         };
     }
 
-    var mountedPanel = null;
-
     function open(opts) {
         var detail = opts || {};
-        if (mountedPanel && typeof mountedPanel.openPanel === 'function') {
+        if (mountedPanel) {
             mountedPanel.openPanel(detail);
             return;
         }
@@ -646,6 +709,7 @@
             if (!ctaBtn || !locSelect) return;
             var loc = selectedLocation();
             if (!loc) {
+                hideBriqWidget();
                 syncPanelCopy(loc);
                 syncCtaElementToIntent(ctaBtn, {
                     kind: panelIntent.kind,
@@ -654,6 +718,7 @@
                 });
                 return;
             }
+            hideBriqWidget();
             if (!locSelect.value && (loc.id || loc.slug)) {
                 locSelect.value = loc.id || loc.slug;
             }
@@ -716,6 +781,7 @@
                 ctaId: 'book_param_auto',
                 href: href,
                 locationId: pageLocationSlug,
+                pageLocationSlug: pageLocationSlug,
                 cleanBookParam: true,
                 deferUntilLoad: true,
             });

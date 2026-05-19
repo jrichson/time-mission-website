@@ -30,7 +30,7 @@ export interface SiteContractSnapshot {
     booking: {
         ticketOptionIds: string[];
         externalLocationIds: string[];
-        iframeKinds: ['tickets', 'groups'];
+        iframeKinds: Array<'groups'>;
     };
     analytics: typeof analyticsLabels;
     runtime: {
@@ -65,7 +65,7 @@ export function compileSiteContract(mode: SiteContractMode): SiteContractSnapsho
         booking: {
             ticketOptionIds: options.map((option) => option.value),
             externalLocationIds,
-            iframeKinds: ['tickets', 'groups'],
+            iframeKinds: ['groups'],
         },
         analytics: analyticsLabels,
         runtime: {
@@ -88,7 +88,7 @@ export interface PublicSiteContract {
     ticketOptionCount: number;
     ticketOptionIds: string[];
     booking: {
-        iframeKinds: ['tickets', 'groups'];
+        iframeKinds: Array<'groups'>;
         locationPromptRequired: true;
     };
     /** Hash of sorted id:status roster; client recomputes from fetched locations.json after load(). */

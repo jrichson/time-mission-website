@@ -545,7 +545,7 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const href = this.getAttribute('href') || '';
-                if (href === '#' || href === '#!') return;
+                if (href === '#' || href === '#!' || href.charAt(0) !== '#') return;
                 e.preventDefault();
                 const target = document.querySelector(href);
                 if (target) {
@@ -751,4 +751,3 @@
         startAuto();
     })();
     </script>
-    

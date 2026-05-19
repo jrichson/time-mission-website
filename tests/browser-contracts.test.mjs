@@ -106,6 +106,7 @@ function createBrowserContext(extraWindow = {}) {
     Promise,
     Date,
     URL,
+    URLSearchParams,
     navigator: window.navigator,
   };
   return { context, window, document };
@@ -237,6 +238,18 @@ describe('browser architecture contracts', () => {
             },
           },
           {
+            id: 'west-nyack',
+            slug: 'west-nyack',
+            status: 'open',
+            bookingProvider: 'briq',
+            bookingUrl: 'https://timemission-palisades.briqbookings.com',
+            briqWidget: {
+              domain: 'timemission-palisades',
+            },
+            giftCardUrl: 'https://timemission-palisades.briqbookings.com',
+            groupFormUrls: {},
+          },
+          {
             id: 'dallas',
             slug: 'dallas',
             status: 'coming-soon',
@@ -318,6 +331,30 @@ describe('browser architecture contracts', () => {
         trigger: false,
         externalLocation: true,
       });
+    expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'west-nyack' }))
+      .toBe('/west-nyack?book=1');
+    expect(window.TMBooking.resolveIntent({ kind: 'tickets', locationId: 'west-nyack' }))
+      .toMatchObject({
+        href: '/west-nyack?book=1',
+        presentation: 'link',
+        usesBriqWidget: false,
+      });
+    expect(window.TMBooking.resolveIntent({
+      kind: 'tickets',
+      locationId: 'west-nyack',
+      pageLocationSlug: 'west-nyack',
+    }))
+      .toMatchObject({
+        href: '#briq-widget-container',
+        presentation: 'briq-widget',
+        usesBriqWidget: true,
+      });
+    expect(window.LocationContext.getOverlayView('west-nyack').cta)
+      .toMatchObject({
+        href: '/west-nyack?book=1',
+        bookingUrl: '',
+        trigger: false,
+      });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'dallas' }))
       .toBe('/dallas#newsletter');
     expect(window.TMBooking.getDestination({ kind: 'groups', groupType: 'corporate', locationId: 'dallas' }))
@@ -343,6 +380,51 @@ describe('browser architecture contracts', () => {
       locationId: 'manassas',
       preferLocationPageFlow: true,
     })).toBe('/manassas?book=1');
+  });
+
+  it('booking destinations preserve marketing params on external and provider-page links', async () => {
+    const { context, window } = createBrowserContext({
+      TM_DATA: {
+        locations: [
+          {
+            id: 'lincoln',
+            slug: 'lincoln',
+            status: 'open',
+            bookingUrl: 'https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959',
+            giftCardUrl: '',
+            groupFormUrls: {},
+          },
+          {
+            id: 'west-nyack',
+            slug: 'west-nyack',
+            status: 'open',
+            bookingProvider: 'briq',
+            bookingUrl: 'https://timemission-palisades.briqbookings.com',
+            briqWidget: { domain: 'timemission-palisades' },
+            giftCardUrl: '',
+            groupFormUrls: {},
+          },
+        ],
+      },
+    });
+    window.location.search = '?utm_source=paid&utm_campaign=spring&gclid=abc123&book=1';
+
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    runScript('js/locations.js', context);
+    runScript('js/booking-controller.js', context);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'lincoln' }))
+      .toBe('https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959&utm_source=paid&utm_campaign=spring&gclid=abc123');
+    expect(window.TMBooking.resolveIntent({ kind: 'tickets', locationId: 'lincoln' }))
+      .toMatchObject({
+        presentation: 'link',
+        usesBookingFrame: false,
+      });
+    expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'west-nyack' }))
+      .toBe('/west-nyack?book=1&utm_source=paid&utm_campaign=spring&gclid=abc123');
   });
 
   it('runtime group, gift-card, and waiver routing follows the audit fixture', async () => {
