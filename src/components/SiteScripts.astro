@@ -23,8 +23,6 @@ const formConfig = {
 <script defer is:inline src="/js/language-switcher.js?v=1"></script>
 <script defer is:inline src="/js/consent-bridge.js?v=1"></script>
 <script defer is:inline src="/js/analytics.js?v=1"></script>
-<script defer is:inline src="/js/contact-form-analytics.js?v=1"></script>
-<script defer is:inline src="/js/form-protection.js?v=1"></script>
 <script defer is:inline src="/js/locations.js?v=14"></script>
 <script defer is:inline src="/js/nav.js?v=8"></script>
 <script defer is:inline src="/js/booking-controller.js?v=6"></script>
@@ -32,6 +30,13 @@ const formConfig = {
 <script defer is:inline src="/js/a11y.js"></script>
 <script is:inline>
     (function () {
+        function scheduleIdle(callback, timeout) {
+            if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(callback, { timeout: timeout || 1800 });
+            } else {
+                window.setTimeout(callback, Math.min(timeout || 1200, 1200));
+            }
+        }
         function getProfile() {
             try {
                 return (window.__TM_TAGGING_CONFIG__ || {}).consent_profile || 'global_strict';
@@ -74,7 +79,25 @@ const formConfig = {
         }
         if (document.readyState === 'complete') schedule();
         else window.addEventListener('load', schedule, { once: true });
+
+        scheduleIdle(function () {
+            var path = window.location.pathname || '';
+            if (document.querySelector('form.contact-form') || path.indexOf('contact-thank-you') !== -1) {
+                appendScript('/js/contact-form-analytics.js?v=1');
+            }
+            if (
+                window.__TM_FORM_CONFIG__ &&
+                window.__TM_FORM_CONFIG__.turnstileSiteKey &&
+                document.querySelector('[data-tm-turnstile]')
+            ) {
+                appendScript('/js/form-protection.js?v=1');
+            }
+        }, 1400);
+
+        scheduleIdle(function () {
+            appendScript('/js/web-vitals.iife.js', function () {
+                appendScript('/js/web-vitals-rum.js?v=1');
+            });
+        }, 2500);
     })();
 </script>
-<script defer is:inline src="/js/web-vitals.iife.js"></script>
-<script defer is:inline src="/js/web-vitals-rum.js?v=1"></script>

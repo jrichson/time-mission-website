@@ -151,13 +151,22 @@
 
     // Navigation scroll effect
     if (navEl) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navEl.classList.add('scrolled');
-            } else {
-                navEl.classList.remove('scrolled');
+        let scrollTicking = false;
+        let navScrolled = navEl.classList.contains('scrolled');
+        function syncNavScrollState() {
+            const shouldBeScrolled = window.scrollY > 50;
+            if (shouldBeScrolled !== navScrolled) {
+                navScrolled = shouldBeScrolled;
+                navEl.classList.toggle('scrolled', shouldBeScrolled);
             }
-        });
+            scrollTicking = false;
+        }
+        window.addEventListener('scroll', () => {
+            if (scrollTicking) return;
+            scrollTicking = true;
+            requestAnimationFrame(syncNavScrollState);
+        }, { passive: true });
+        syncNavScrollState();
     }
 
     // Location overlay toggle and selection

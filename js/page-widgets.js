@@ -49,6 +49,30 @@
         }
     }
 
+    function runWhenVisible(element, onEnter, onExit, rootMargin) {
+        if (!element || typeof onEnter !== 'function') return null;
+        if (!('IntersectionObserver' in window)) {
+            onEnter();
+            return null;
+        }
+        var wasVisible = false;
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    if (!wasVisible) {
+                        wasVisible = true;
+                        onEnter();
+                    }
+                } else if (wasVisible) {
+                    wasVisible = false;
+                    if (typeof onExit === 'function') onExit();
+                }
+            });
+        }, { rootMargin: rootMargin || '200px 0px', threshold: 0.01 });
+        observer.observe(element);
+        return observer;
+    }
+
     // ==========================================================================
     // Shared widget primitives — closure-scoped, not exported
     // ==========================================================================
@@ -173,6 +197,7 @@
         if (!minutesEl) return;
         var minuteValues = [60, 90, 120];
         var minuteIndex = 0;
+        var timer = null;
 
         function cycleMinutes() {
             minutesEl.classList.add('fade-out');
@@ -183,7 +208,12 @@
             }, 400);
         }
 
-        setInterval(cycleMinutes, 2500);
+        function startCycler() {
+            if (timer) return;
+            timer = setInterval(cycleMinutes, 2500);
+        }
+
+        runWhenVisible(minutesEl, startCycler, null, '120px 0px');
     }
 
     // ==========================================
@@ -201,6 +231,7 @@
         var currentScore = 0;
         var hitValues = [50, 100, 75, 150, 200, 100, 250, 50, 125, 100];
         var hitIndex = 0;
+        var timer = null;
 
         function spawnHitPoint(value) {
             if (!pointsWrap) return;
@@ -253,7 +284,12 @@
             spawnHitPoint(value);
         }
 
-        setInterval(addPoints, 1800);
+        function startCounter() {
+            if (timer) return;
+            timer = setInterval(addPoints, 1800);
+        }
+
+        runWhenVisible(pointsEl, startCounter, null, '120px 0px');
     }
 
     // ==========================================
@@ -324,8 +360,19 @@
                 animationId = requestAnimationFrame(autoScroll);
             }
 
-            if (!reduceMotion) {
+            function startAutoScroll() {
+                if (animationId || reduceMotion) return;
                 animationId = requestAnimationFrame(autoScroll);
+            }
+
+            function stopAutoScroll() {
+                if (!animationId) return;
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+
+            if (!reduceMotion) {
+                runWhenVisible(scrollEl, startAutoScroll, stopAutoScroll, '250px 0px');
             }
 
             // Hover: pause auto-scroll (desktop)
@@ -544,18 +591,23 @@
         }
 
         function startAuto() {
+            if (timer) clearInterval(timer);
             timer = setInterval(function () { goTo(current + 1); }, 4000);
         }
 
+        function stopAuto() {
+            if (timer) { clearInterval(timer); timer = null; }
+        }
+
         // Pause on interaction, resume after
-        scroll.addEventListener('touchstart', function () { clearInterval(timer); }, { passive: true });
+        scroll.addEventListener('touchstart', stopAuto, { passive: true });
         scroll.addEventListener('touchend', function () {
             // Sync current index to nearest card after swipe
             current = Math.round(scroll.scrollLeft / scroll.offsetWidth);
             if (!reduceMotion) startAuto();
         }, { passive: true });
 
-        if (!reduceMotion) startAuto();
+        if (!reduceMotion) runWhenVisible(scroll, startAuto, stopAuto, '200px 0px');
     }
 
     // ==========================================
@@ -736,7 +788,7 @@
             window.setTimeout(syncLayout, 250);
             window.addEventListener('load', syncLayout, { once: true });
         }
-        if (!reduceMotion) startAuto();
+        if (!reduceMotion) runWhenVisible(container, startAuto, stopAuto, '200px 0px');
     }
 
     // ==========================================
@@ -789,14 +841,18 @@
         logosContainer.addEventListener('mouseenter', function () { tickerPaused = true; });
         logosContainer.addEventListener('mouseleave', function () { tickerPaused = false; });
 
-        // Start after a short delay to let images load
-        window.addEventListener('load', function () {
-            halfWidth = getHalfWidth();
-            tickerRaf = requestAnimationFrame(tickerLoop);
-        });
+        function startTicker() {
+            if (tickerRaf) return;
+            tickerRaf = requestAnimationFrame(initTicker);
+        }
 
-        // Fallback: start immediately too
-        requestAnimationFrame(initTicker);
+        function stopTicker() {
+            if (!tickerRaf) return;
+            cancelAnimationFrame(tickerRaf);
+            tickerRaf = null;
+        }
+
+        runWhenVisible(logosContainer, startTicker, stopTicker, '200px 0px');
     }
 
     // ==========================================
