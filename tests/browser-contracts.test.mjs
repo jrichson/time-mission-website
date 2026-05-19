@@ -390,7 +390,6 @@ describe('browser architecture contracts', () => {
         languages: [
           { code: 'en', htmlLang: 'en', label: 'English', nativeLabel: 'English', shortLabel: 'EN' },
           { code: 'es', htmlLang: 'es', label: 'Spanish', nativeLabel: 'Espanol', shortLabel: 'ES' },
-          { code: 'nl-BE', htmlLang: 'nl-BE', label: 'Dutch', nativeLabel: 'Nederlands', shortLabel: 'NL' },
         ],
         translations: {
           en: {
@@ -402,11 +401,6 @@ describe('browser architecture contracts', () => {
             'language.label': 'Idioma',
             'language.changed': 'Idioma cambiado a {language}',
             'nav.about': 'Acerca de',
-          },
-          'nl-BE': {
-            'language.label': 'Taal',
-            'language.changed': 'Taal ingesteld op {language}',
-            'nav.about': 'Over',
           },
         },
       },
@@ -430,8 +424,8 @@ describe('browser architecture contracts', () => {
 
     expect(window.TMI18n.getLanguage()).toBe('es');
     expect(window.TMI18n.getLanguageView().nativeLabel).toBe('Espanol');
-    expect(window.TMI18n.getLanguageView('nl').code).toBe('nl-BE');
-    expect(window.TMI18n.getSupportedLanguages().map((language) => language.code)).toEqual(['en', 'es', 'nl-BE']);
+    expect(window.TMI18n.getLanguageView('nl')).toBeNull();
+    expect(window.TMI18n.getSupportedLanguages().map((language) => language.code)).toEqual(['en', 'es']);
     expect(document.documentElement.lang).toBe('es');
     expect(document.documentElement.dataset.tmLanguage).toBe('es');
     expect(navLabel.textContent).toBe('Acerca de');

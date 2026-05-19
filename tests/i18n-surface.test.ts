@@ -14,13 +14,19 @@ describe('Language Surface', () => {
 
     expect(surface.defaultLanguage).toBe('en');
     expect(surface.storageKey).toBe('tm_language');
-    expect(surface.resolveLanguage('nl')).toMatchObject({ code: 'nl-BE' });
     expect(surface.getLanguageView('es-MX')).toMatchObject({
       code: 'es',
       htmlLang: 'es',
     });
-    expect(surface.translateString('nav.about', 'fr-CA')).toBe('À propos');
+    expect(surface.resolveLanguage('nl')).toBeNull();
+    expect(surface.translateString('nav.about', 'fr-CA')).toBe('About');
     expect(surface.translateString('missing.key', 'es')).toBeNull();
+  });
+
+  it('only exposes English and Spanish as public switcher options for the US launch', () => {
+    const surface = compileLanguageSurface(catalog);
+
+    expect(surface.languageCodes).toEqual(['en', 'es']);
   });
 
   it('keeps every configured language aligned with default translation keys', () => {

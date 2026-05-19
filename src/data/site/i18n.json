@@ -15,20 +15,6 @@
       "label": "Spanish",
       "nativeLabel": "Español",
       "shortLabel": "ES"
-    },
-    {
-      "code": "fr",
-      "htmlLang": "fr",
-      "label": "French",
-      "nativeLabel": "Français",
-      "shortLabel": "FR"
-    },
-    {
-      "code": "nl-BE",
-      "htmlLang": "nl-BE",
-      "label": "Dutch (Belgium)",
-      "nativeLabel": "Nederlands",
-      "shortLabel": "NL"
     }
   ],
   "translations": {
