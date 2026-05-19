@@ -270,7 +270,7 @@ npm run typecheck
 npm run build
 ```
 
-Before committing implementation changes, GitNexus change detection should confirm that affected symbols and flows match the expected CMS landing, preview, and public renderer scope.
+Before committing implementation changes, review the affected files and flows to confirm they match the expected CMS landing, preview, and public renderer scope.
 
 ## Rollout Plan
 

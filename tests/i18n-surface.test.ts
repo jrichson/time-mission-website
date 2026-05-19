@@ -27,6 +27,7 @@ describe('Language Surface', () => {
     const surface = compileLanguageSurface(catalog);
 
     expect(surface.languageCodes).toEqual(['en', 'es']);
+    expect(Object.keys(catalog.translations).sort()).toEqual(['en', 'es']);
   });
 
   it('keeps every configured language aligned with default translation keys', () => {

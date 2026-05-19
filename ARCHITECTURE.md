@@ -1,6 +1,6 @@
 # Time Mission Website Architecture
 
-Generated from the GitNexus knowledge graph for `time-mission-website`.
+Architecture review snapshot for `time-mission-website`.
 
 Index snapshot:
 
@@ -19,7 +19,7 @@ The current implementation has three main architectural forces:
 - **Shared browser behavior:** JavaScript in `js/locations.js`, `js/ticket-panel.js`, `js/nav.js`, `js/a11y.js`, and `js/roller-checkout.js` adds stateful behavior after page load.
 - **Data-driven location state:** `data/locations.json` feeds location selection, footer contact details, booking links, map links, gift card URLs, and coming-soon behavior.
 
-GitNexus currently identifies one primary functional cluster, `Js`, because the execution graph is dominated by browser JavaScript flows. Static HTML, CSS, data, redirects, and verification scripts remain important architectural areas even when they do not appear as separate symbol clusters in the graph.
+The current implementation has one primary runtime cluster, `Js`, because the public behavior is dominated by browser JavaScript flows. Static HTML, CSS, data, redirects, and verification scripts remain important architectural areas even when they are not represented as runtime modules.
 
 ## Architecture Diagram
 
@@ -89,7 +89,7 @@ Its responsibilities are:
 - Update nav text, booking links, footer contact details, hours, ticker messaging, testimonials, and active location UI.
 - Emit `tm:location-changed` when a location is selected.
 
-GitNexus traces show this as a central execution hub for page personalization.
+The location manager is the central execution hub for page personalization.
 
 ### Ticket Panel And Booking Flow
 
@@ -131,7 +131,7 @@ Primary files:
 - `js/nav.js`
 - `js/a11y.js`
 
-These scripts provide supporting behavior around site navigation, mobile menus, location dropdowns, focus handling, keyboard support, and accessibility improvements. They are part of the browser behavior layer but were not among the top GitNexus process traces.
+These scripts provide supporting behavior around site navigation, mobile menus, location dropdowns, focus handling, keyboard support, and accessibility improvements.
 
 ### Data And Hosting Configuration
 
@@ -165,7 +165,7 @@ The verification layer guards location data contracts, sitemap coverage, duplica
 
 ## Key Execution Flows
 
-GitNexus detected 12 execution flows. The top five traces are below.
+The most important execution flows are below.
 
 ### 1. BookOrOpenPanel To NormalizeLocation
 
@@ -252,7 +252,7 @@ This flow personalizes testimonial content based on the selected location state.
 
 ## Additional Detected Flows
 
-GitNexus also detected these flows:
+Additional connected flows:
 
 - `Init → GetFocusable`
 - `Clear → FormatAddress`
@@ -282,4 +282,4 @@ The planned Astro migration should preserve these boundaries while replacing dup
 - Replace ad hoc `.html` URL construction with a route helper that can emit canonical clean URLs and legacy redirects.
 - Move shared nav, footer, location picker, and ticket panel markup into Astro components while keeping browser behavior explicit.
 - Keep outbound booking attribution and ROLLER checkout behavior separate: the marketing site should track booking intent, while ROLLER/GTM should own checkout-step and purchase events.
-- Retain Playwright and static verification as migration gates for the location and booking flows identified by GitNexus.
+- Retain Playwright and static verification as migration gates for the location and booking flows.

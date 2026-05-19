@@ -1,12 +1,10 @@
 # CMS Landing Template Redesign Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** Build guided CMS landing archetypes with editor prompts, actual previews, and matching public `/c/{slug}` renderers for paid/social, local venue/city, and group/event pages.
 
 **Architecture:** Keep Payload `landings` as the source of truth. Add shared compatibility helpers in `src/lib/payload/landing-contract.ts`, mirror the runtime shape in `src/lib/payload/load.ts`, update the CMS collection/home/preview surfaces, and refactor the Astro landing page into archetype-aware rendering while preserving legacy template values.
 
-**Tech Stack:** Payload 3, Next 16 CMS app, Astro 6 public site, TypeScript, Vitest, GitNexus.
+**Tech Stack:** Payload 3, Next 16 CMS app, Astro 6 public site, TypeScript, Vitest.
 
 ---
 
@@ -190,9 +188,9 @@ npm run build
 
 Expected: pass, unless blocked by missing local CMS environment. If blocked, record the exact blocker.
 
-- [x] **Step 4: Run GitNexus change detection**
+- [x] **Step 4: Review affected change scope**
 
-Run staged/all change detection before commit and confirm the affected scope is CMS landings, preview, and public renderer.
+Review staged/all changes before commit and confirm the affected scope is CMS landings, preview, and public renderer.
 
 - [x] **Step 5: Commit implementation**
 

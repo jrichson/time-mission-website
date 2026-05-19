@@ -93,6 +93,17 @@ if (!siteContractSrc.includes('locationsFingerprint')) {
   errors.push('site-contract.ts must embed locationsFingerprint in PublicSiteContract');
 }
 
+for (const relPath of ['gift-cards.html', 'groups.html', 'missions.html']) {
+  const htmlPath = path.join(root, relPath);
+  if (!fs.existsSync(htmlPath)) continue;
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  for (const slug of ['antwerp', 'brussels']) {
+    if (html.includes(`href="/${slug}"`)) {
+      errors.push(`${relPath}: Europe location links must point to https://timemission.eu/${slug}`);
+    }
+  }
+}
+
 const analyticsJson = fs.readFileSync(analyticsPath, 'utf8');
 let analyticsParsed;
 try {
