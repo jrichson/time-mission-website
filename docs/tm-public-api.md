@@ -13,7 +13,7 @@ Single entry for editors and integrations:
 | `TMAnalytics`         | `track(eventKey, params)` — normalized, non-PII GTM queue (see `analytics-labels.json`). |
 | `BookingController`   | Lower-level attachment helper (legacy name); prefer `TMBooking` for navigation decisions. |
 
-Getters resolve at access time so load order (`locations.js` after `booking-controller.js` / `analytics.js`) stays valid.
+Getters resolve at access time so `TMFacade` can point at modules loaded earlier or later in the browser script chain.
 
 ## `window.TM` (locations)
 
@@ -28,15 +28,22 @@ Defined in `js/locations.js`. Notable methods:
 - `TM.clear()`, `TM.restore()`
 - `TM.listTicketOptions()` — ticket panel `<option>` data; **must match** `src/lib/ticket-options.ts` (`ticketPanelSelectOptions`).
 - `window.LocationContext.getLocationView(id)` — stable location view data for overlay/footer/ticket surfaces.
-- `window.LocationContext.getBookingCtaView(kind, id, opts?)` — stable CTA view data for location-scoped booking links.
 
 ## `window.TMBooking`
 
-Defined in `js/booking-controller.js`. Use for programmatic booking navigation and panel coordination. Destination rules are owned here; `LocationContext.resolveBookingUrl()` delegates to this gateway after the script is loaded.
+Defined in `js/booking-controller.js`. Use for programmatic booking navigation and panel coordination.
 
 - `TMBooking.resolveIntent(opts)` — returns the booking decision for a location/kind/group combination, including `href`, `presentation`, and provider flags.
 - `TMBooking.getDestination(opts)` — returns only the destination URL from the same decision logic.
 - `TMBooking.navigate(intent)` — tracks and performs the selected presentation: iframe, Roller iframe, EU outbound link, or normal internal link.
+
+## `window.TMI18n`
+
+Defined in `js/language-switcher.js`. Static copy still uses `data-i18n` attributes.
+
+- `TMI18n.t(key, lang?)` — raw translation lookup.
+- `TMI18n.text(key, fallback, replacements?)` — string fallback plus `{token}` formatting for dynamic browser copy.
+- `TMI18n.array(key, fallback)` — array fallback for rotating browser copy.
 
 ## `window.TMAnalytics`
 

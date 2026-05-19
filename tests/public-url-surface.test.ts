@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { createRequire } from 'node:module';
 import routes from '../src/data/routes.json';
 import {
   compilePublicUrlSurface,
@@ -10,6 +11,15 @@ import {
 } from '../src/lib/public-url-surface';
 
 const registry = routes as PublicUrlRegistry;
+const require = createRequire(import.meta.url);
+const routeArtifacts = require('../scripts/lib/route-artifacts.js') as {
+  compilePublicUrlSurface(input: PublicUrlRegistry): {
+    sitemapUrls: string[];
+    redirectPairs: Array<{ source: string; target: string; status: number }>;
+    outputFileFor(pathname: string): string;
+    isKnownCanonical(pathname: string): boolean;
+  };
+};
 
 describe('Public URL Surface', () => {
   it('resolves canonical URLs, dynamic landing paths, and output files from one surface', () => {
@@ -35,5 +45,15 @@ describe('Public URL Surface', () => {
     expect(dynamicLandingPrefix(registry)).toBe('/c');
     expect(isDynamicLandingPath('/c/team-night', registry)).toBe(true);
     expect(isDynamicLandingPath('/c/team/night', registry)).toBe(false);
+  });
+
+  it('keeps script route artifacts aligned with the typed Public URL Surface', () => {
+    const typedSurface = compilePublicUrlSurface(registry);
+    const scriptSurface = routeArtifacts.compilePublicUrlSurface(registry);
+
+    expect(scriptSurface.sitemapUrls).toEqual(typedSurface.sitemapUrls);
+    expect(scriptSurface.redirectPairs).toEqual(typedSurface.redirectPairs);
+    expect(scriptSurface.outputFileFor('/philadelphia')).toBe(typedSurface.outputFileFor('/philadelphia'));
+    expect(scriptSurface.isKnownCanonical('/c/team-night')).toBe(typedSurface.isKnownCanonical('/c/team-night'));
   });
 });

@@ -124,6 +124,28 @@
         return Object.prototype.hasOwnProperty.call(fallback, key) ? fallback[key] : null;
     }
 
+    function translateText(key, fallback, langCode) {
+        var value = translate(key, langCode);
+        return typeof value === 'string' ? value : fallback;
+    }
+
+    function formatText(value, replacements) {
+        var output = String(value || '');
+        Object.keys(replacements || {}).forEach(function (key) {
+            output = output.replace(new RegExp('\\{' + key + '\\}', 'g'), replacements[key]);
+        });
+        return output;
+    }
+
+    function text(key, fallback, replacements, langCode) {
+        return formatText(translateText(key, fallback, langCode), replacements);
+    }
+
+    function array(key, fallback, langCode) {
+        var value = translate(key, langCode);
+        return Array.isArray(value) && value.length ? value : (Array.isArray(fallback) ? fallback : []);
+    }
+
     function applyTextTranslations() {
         document.querySelectorAll('[data-i18n]').forEach(function (el) {
             var value = translate(el.getAttribute('data-i18n'));
@@ -192,6 +214,8 @@
 
     window.TMI18n = {
         t: translate,
+        text: text,
+        array: array,
         setLanguage: setLanguage,
         getLanguageView: function (code) { return languageView(findLanguage(code || currentLanguage)); },
         getSupportedLanguages: function () { return languages.map(languageView).filter(Boolean); },

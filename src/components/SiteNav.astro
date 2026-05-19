@@ -17,7 +17,7 @@ const {
     bookingCtaI18n = 'nav.bookNow',
 } = Astro.props;
 const bookingCtaAttrs = {
-    ...(bookingCtaIsBookingTrigger ? { 'data-tm-booking-trigger': '' } : {}),
+    ...(bookingCtaIsBookingTrigger ? { 'data-tm-booking-trigger': '', 'data-tm-booking-kind': 'tickets' } : {}),
     ...(bookingCtaI18n ? { 'data-i18n': bookingCtaI18n } : {}),
 };
 const tickerMessages = [

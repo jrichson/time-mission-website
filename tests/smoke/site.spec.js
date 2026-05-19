@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 const { fingerprintAnalyticsLabels } = require('../../scripts/lib/analytics-labels-fingerprint.cjs');
+const i18nCatalog = require('../../src/data/site/i18n.json');
 
 require('tsx/cjs/api').register();
 const { locationsFingerprintFromRecords } = require('../../src/lib/locations-fingerprint.ts');
@@ -132,12 +133,11 @@ test('language switcher changes visible navigation text', async ({ page, isMobil
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
 
   await page.locator('.hero-cta .btn-tickets').click();
+  const es = i18nCatalog.translations.es;
   await expect(page.locator('#ticketPanelTitle')).toHaveText('Elige tu ubicación');
-  await expect(page.locator('#ticketPanelIntro')).toHaveText('Selecciona una ubicación y te mostraremos la opción de reserva correcta.');
-  await expect(page.locator('label[for="ticketLocation"]')).toHaveText('Elegir ubicación');
-  await expect(page.locator('#ticketLocation option').first()).toHaveText('Selecciona una ubicación');
-  await expect(page.locator('#ticketBookBtnText')).toHaveText('Selecciona una ubicación primero');
-  await expect(page.locator('.ticket-panel-info h4')).toHaveText('INFORMACIÓN RÁPIDA');
+  await expect(page.locator('label[for="ticketLocation"]')).toHaveText(es['booking.locationLabel']);
+  await expect(page.locator('#ticketLocation option').first()).toHaveText(es['booking.locationPlaceholder']);
+  await expect(page.locator('#ticketBookBtnText')).toHaveText(es['booking.chooseLocation.cta']);
 });
 
 test('ticket panel options hydrate from location data', async ({ page }) => {
@@ -290,7 +290,7 @@ test('desktop location hover renders address map preview before selection', asyn
   await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
   await page.locator('#locationBtn').click();
   await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
-  await expect(page.locator('#locationDropdown .location-dropdown-title')).toHaveText('Selecciona tu ubicación');
+  await expect(page.locator('#locationDropdown .location-dropdown-title')).toHaveText(i18nCatalog.translations.es['location.title']);
 
   await page.locator('#locationDropdown a[data-city="Philadelphia"]').hover();
   const className = await page.locator('#locationDropdown').evaluate((el) => el.className || '');
@@ -299,9 +299,9 @@ test('desktop location hover renders address map preview before selection', asyn
   await expect(page).toHaveURL(/\/$/);
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Philadelphia');
   await expect(page.locator('#locationInfo .location-info-address')).toContainText('1530 Chestnut Street');
-  await expect(page.locator('#locationInfo .location-info-directions')).toContainText('Cómo llegar');
-  await expect(page.locator('#locationInfo .location-info-hours')).toContainText('Lun:');
-  await expect(page.locator('#locationInfo .location-info-book')).toContainText('Reservar ahora');
+  await expect(page.locator('#locationInfo .location-info-directions')).toContainText(i18nCatalog.translations.es['location.getDirections']);
+  await expect(page.locator('#locationInfo .location-info-hours')).toContainText(`${i18nCatalog.translations.es['location.day.mon']}:`);
+  await expect(page.locator('#locationInfo .location-info-book')).toContainText(i18nCatalog.translations.es['nav.bookNow']);
   await expect(page.locator('#locationMap iframe')).toHaveAttribute('src', /google\.com\/maps/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });

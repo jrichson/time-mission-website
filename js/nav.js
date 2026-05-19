@@ -31,21 +31,19 @@
         };
     }
 
-    function formatTranslation(value, replacements) {
-        let output = String(value || '');
-        Object.keys(replacements || {}).forEach(function (key) {
-            output = output.replace(new RegExp('\\{' + key + '\\}', 'g'), replacements[key]);
-        });
-        return output;
-    }
-
     function translate(key, fallback, replacements) {
+        if (window.TMI18n && typeof window.TMI18n.text === 'function') {
+            return window.TMI18n.text(key, fallback, replacements);
+        }
         let value = fallback;
         if (window.TMI18n && typeof window.TMI18n.t === 'function') {
             const translated = window.TMI18n.t(key);
             if (typeof translated === 'string') value = translated;
         }
-        return formatTranslation(value, replacements);
+        Object.keys(replacements || {}).forEach(function (token) {
+            value = String(value || '').replace(new RegExp('\\{' + token + '\\}', 'g'), replacements[token]);
+        });
+        return value;
     }
 
     function translateHoursText(value) {
@@ -84,6 +82,29 @@
             'Get directions to {location}',
             { location: locationName || translate('location.selectedLocation', 'your selected location') }
         ));
+    }
+
+    function applyBookingCta(el, cta) {
+        if (!el || !cta) return;
+        el.href = cta.href || '#';
+        el.removeAttribute('target');
+        el.removeAttribute('rel');
+        if (cta.trigger) {
+            el.setAttribute('data-tm-booking-trigger', '');
+            el.setAttribute('data-tm-booking-kind', cta.kind || 'tickets');
+            if (cta.locationId) el.setAttribute('data-tm-location', cta.locationId);
+            else el.removeAttribute('data-tm-location');
+            if (cta.groupType) el.setAttribute('data-tm-group-type', cta.groupType);
+            else el.removeAttribute('data-tm-group-type');
+            if (cta.bookingUrl) el.setAttribute('data-tm-booking-url', cta.bookingUrl);
+            else el.removeAttribute('data-tm-booking-url');
+            return;
+        }
+        el.removeAttribute('data-tm-booking-trigger');
+        el.removeAttribute('data-tm-booking-kind');
+        el.removeAttribute('data-tm-location');
+        el.removeAttribute('data-tm-group-type');
+        el.removeAttribute('data-tm-booking-url');
     }
 
     const menuBtn = document.querySelector('.nav-menu-btn');
@@ -287,17 +308,11 @@
         const details = infoPanel.querySelector('.location-info-details');
         const mapEl = document.getElementById('locationMap');
         const context = getLocationContext();
-        if (!context || typeof context.getInfoPanelView !== 'function' || !details) {
-            // getInfoPanelView missing — LocationContext not fully initialized yet.
-            // Surface this in dev so the silent-empty-panel symptom is debuggable.
-            if (context && typeof context.getInfoPanelView !== 'function') {
-                console.warn('nav.js: showLocationInfo skipped — context.getInfoPanelView is not a function');
-            }
-            return;
-        }
+        if (!context || typeof context.getOverlayView !== 'function' || !details) return;
 
-        const data = context.getInfoPanelView(locationRef);
-        if (!data) return;
+        const overlayView = context.getOverlayView(locationRef);
+        if (!overlayView || !overlayView.location) return;
+        const data = overlayView.location;
         activeLocationInfoRef = locationRef;
 
         infoPanel.querySelector('.location-info-name').textContent = data.name;
@@ -308,47 +323,8 @@
         setMultilineText(infoPanel.querySelector('.location-info-hours'), translateHoursText(data.hoursText));
         var bookBtn = infoPanel.querySelector('.location-info-book');
         if (bookBtn) {
-            var ctaView = typeof context.getBookingCtaView === 'function'
-                ? context.getBookingCtaView('tickets', data.locationId || locationRef)
-                : null;
-            bookBtn.textContent = data.externalUrl
-                ? translate('location.visitEuSite', data.bookLabel || 'Visit EU Site')
-                : data.comingSoon
-                ? translate('location.signUp', 'Sign Up')
-                : translate('nav.bookNow', data.bookLabel || 'Book Now');
-            bookBtn.removeAttribute('target');
-            bookBtn.removeAttribute('rel');
-            if (ctaView) {
-                bookBtn.href = ctaView.href || '#';
-                if (ctaView.trigger) {
-                    bookBtn.setAttribute('data-tm-booking-trigger', '');
-                    bookBtn.setAttribute('data-tm-booking-kind', ctaView.kind || 'tickets');
-                    bookBtn.setAttribute('data-tm-location', ctaView.locationId || normalizeLocation(locationRef));
-                    if (ctaView.bookingUrl) bookBtn.setAttribute('data-tm-booking-url', ctaView.bookingUrl);
-                    else bookBtn.removeAttribute('data-tm-booking-url');
-                } else {
-                    bookBtn.removeAttribute('data-tm-booking-trigger');
-                    bookBtn.removeAttribute('data-tm-booking-kind');
-                    bookBtn.removeAttribute('data-tm-location');
-                    bookBtn.removeAttribute('data-tm-group-type');
-                    bookBtn.removeAttribute('data-tm-booking-url');
-                }
-            } else if (data.bookingUrl) {
-                bookBtn.href = '#';
-                bookBtn.setAttribute('data-tm-booking-trigger', '');
-                bookBtn.setAttribute('data-tm-booking-kind', 'tickets');
-                bookBtn.setAttribute('data-tm-location', data.locationId || normalizeLocation(locationRef));
-                bookBtn.setAttribute('data-tm-booking-url', data.bookingUrl);
-            } else {
-                bookBtn.href = data.bookUrl || data.pageUrl || '#';
-                bookBtn.removeAttribute('data-tm-booking-url');
-                if (data.comingSoon) {
-                    bookBtn.removeAttribute('data-tm-booking-trigger');
-                    bookBtn.removeAttribute('data-tm-booking-kind');
-                    bookBtn.removeAttribute('data-tm-location');
-                    bookBtn.removeAttribute('data-tm-group-type');
-                }
-            }
+            bookBtn.textContent = translate(overlayView.bookLabelKey, overlayView.bookLabelFallback);
+            applyBookingCta(bookBtn, overlayView.cta);
         }
 
         renderMapEmbed(mapEl, data.mapEmbedUrl);

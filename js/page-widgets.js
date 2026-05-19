@@ -1,21 +1,3 @@
-// js/page-widgets.js
-// RFC #12 — shared widget module behind a single TMPage facade.
-// Replaces 8 per-page scripts (page-{philadelphia,houston,west-nyack,manassas,
-// lincoln,mount-prospect,antwerp,index}-after.js, ~3,900 LoC of effective
-// duplication) with one IIFE.
-//
-// Public surface:
-//   window.TMPage.initCity({ city, taglines, gamePopup? })
-//   window.TMPage.initIndex({ taglines, heroVideo?, gamePopup? })
-//
-// Internally registers window.updateEyebrowLocation (consumed by js/nav.js).
-// initCity registers the real handler; initIndex registers a no-op stub so
-// nav.js never branches per page.
-//
-// Behavioral parity with the deleted source files is the contract — timing
-// constants, easing functions, and momentum decay are copied verbatim. See
-// the source files in git history at HEAD~1 for byte-level reference.
-
 (function () {
     'use strict';
 
@@ -88,6 +70,9 @@
      * Returns: { setEyebrowToLocation(city: string): void }
      */
     function getTranslatedArray(key, fallback) {
+        if (key && window.TMI18n && typeof window.TMI18n.array === 'function') {
+            return window.TMI18n.array(key, fallback);
+        }
         if (key && window.TMI18n && typeof window.TMI18n.t === 'function') {
             var translated = window.TMI18n.t(key);
             if (Array.isArray(translated) && translated.length) return translated;
@@ -1010,87 +995,54 @@
         });
     }
 
-    // ==========================================================================
-    // Public surface — TMPage facade
-    // ==========================================================================
-
-    function initCity(config) {
-        if (!config || typeof config !== 'object') return;
-        var city = config.city || '';
+    function initCommonPage(config, options) {
+        var opts = options || {};
         var taglines = Array.isArray(config.taglines) ? config.taglines : [];
-        var heroVideo = config.heroVideo !== false;
-        var gamePopup = config.gamePopup === true;
-
-        if (heroVideo) initHeroVideo();
-
-        // initTagline returns { setEyebrowToLocation } so we can register the nav.js hook.
+        if (config.heroVideo !== false) initHeroVideo();
         var tagline = initTagline(taglines, {
-            initialCity: city,           // "Time Mission Philadelphia" held 3500ms before rotation
-            initialHoldMs: 3500,
+            initialCity: opts.initialCity || null,
+            initialHoldMs: opts.initialHoldMs || 3000,
             mobileLocationHoldMs: 5000,
             translationKey: 'home.taglines'
         });
-        window.updateEyebrowLocation = function (newCity) {
-            tagline.setEyebrowToLocation(newCity);
-        };
+        window.updateEyebrowLocation = opts.updateEyebrow === false
+            ? function () {}
+            : function (newCity) { tagline.setEyebrowToLocation(newCity); };
 
         initMinutesCycler();
         initPointsCounter();
         initExperiencesCarousel();
         initMiniFaq();
-        initTestimonialsSimple();    // CITY variant
+        if (opts.testimonials === 'transform') initTestimonialsTransform();
+        else initTestimonialsSimple();
         initPressTicker();
         initRevealOnScroll();
         initSmoothScroll();
-        initGamePopup(gamePopup);
+        initGamePopup(config.gamePopup === true);
+    }
+
+    function initCity(config) {
+        if (!config || typeof config !== 'object') return;
+        initCommonPage(config, {
+            initialCity: config.city || '',
+            initialHoldMs: 3500,
+            testimonials: 'simple',
+            updateEyebrow: true,
+        });
     }
 
     function initIndex(config) {
         if (!config || typeof config !== 'object') return;
-        var taglines = Array.isArray(config.taglines) ? config.taglines : [];
-        var heroVideo = config.heroVideo !== false;   // default true
-        var gamePopup = config.gamePopup === true;
-
-        if (heroVideo) initHeroVideo();
-
-        // No initialCity — index does not show "Time Mission <City>" hold.
-        // initIndex registers a no-op so nav.js never branches per page.
-        initTagline(taglines, {
+        initCommonPage(config, {
             initialCity: null,
             initialHoldMs: 3000,
-            mobileLocationHoldMs: 5000,
-            translationKey: 'home.taglines'
+            testimonials: 'transform',
+            updateEyebrow: false,
         });
-        window.updateEyebrowLocation = function () {};
-
-        initMinutesCycler();
-        initPointsCounter();
-        initExperiencesCarousel();
-        initMiniFaq();
-        initTestimonialsTransform();   // INDEX variant — heavyweight transform carousel
-        initPressTicker();
-        initRevealOnScroll();
-        initSmoothScroll();
-        initGamePopup(gamePopup);
     }
 
     window.TMPage = { initCity: initCity, initIndex: initIndex };
 
-    // ==========================================================================
-    // Auto-init from inline config — handles the defer/inline ordering case.
-    //
-    // Pattern: each Astro page sets a synchronous `window.__TM_PAGE_INIT__`
-    // before the deferred `page-widgets.js` script tag is parsed. Because
-    // synchronous inline scripts always execute in document order before any
-    // deferred external script, the config is guaranteed to be set by the
-    // time this IIFE runs.
-    //
-    // Schema:
-    //   window.__TM_PAGE_INIT__ = { mode: 'city' | 'index', config: {...} };
-    //
-    // The TMPage.initCity / TMPage.initIndex methods remain available for any
-    // non-deferred caller (e.g., future programmatic re-init, tests).
-    // ==========================================================================
     var pageInit = window.__TM_PAGE_INIT__;
     if (pageInit && typeof pageInit === 'object') {
         if (pageInit.mode === 'city') {

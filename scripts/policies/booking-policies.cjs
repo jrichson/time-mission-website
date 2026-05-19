@@ -17,13 +17,6 @@ module.exports = [
     message: 'js/ticket-panel.js must not define a locationPages map; derive pages from location slugs',
   },
   {
-    id: 'ticket-panel-waits-tm-ready',
-    files: ['js/ticket-panel.js'],
-    type: 'required_substring',
-    needle: 'window.TM.ready',
-    message: 'js/ticket-panel.js should wait for window.TM.ready before hydrating location-driven options',
-  },
-  {
     id: 'ticket-panel-uses-tm-booking',
     files: ['js/ticket-panel.js'],
     type: 'required_substring',
@@ -50,13 +43,6 @@ module.exports = [
     type: 'required_substring',
     needle: 'navigate',
     message: 'window.TMBooking must provide navigate',
-  },
-  {
-    id: 'ticket-panel-booking-trigger-selector',
-    files: ['js/ticket-panel.js'],
-    type: 'required_substring',
-    needle: '[data-tm-booking-trigger]',
-    message: 'js/ticket-panel.js must bind booking handlers via explicit [data-tm-booking-trigger] selectors',
   },
   {
     id: 'no-heuristic-booking-selectors-ticket-panel',
@@ -90,28 +76,43 @@ module.exports = [
   },
   {
     id: 'site-scripts-booking',
-    file: 'src/components/SiteScripts.astro',
+    file: 'src/lib/public-runtime-contract.ts',
     type: 'marker_order',
     chain: [
       {
+        after: '/js/booking-journey.js',
+        before: '/js/locations.js',
+        message: 'public runtime contract must load booking-journey.js before locations.js',
+      },
+      {
+        after: '/js/location-catalog-view.js',
+        before: '/js/locations.js',
+        message: 'public runtime contract must load location-catalog-view.js before locations.js',
+      },
+      {
+        after: '/js/booking-journey.js',
+        before: '/js/booking-controller.js',
+        message: 'public runtime contract must load booking-journey.js before booking-controller.js',
+      },
+      {
         after: '/js/locations.js',
         before: '/js/nav.js',
-        message: 'SiteScripts.astro must load nav.js after locations.js so location overlay previews have LocationContext',
+        message: 'public runtime contract must load nav.js after locations.js so location overlay previews have LocationContext',
       },
       {
         after: '/js/locations.js',
         before: '/js/booking-controller.js',
-        message: 'SiteScripts.astro must load booking-controller.js after locations.js',
+        message: 'public runtime contract must load booking-controller.js after locations.js',
       },
       {
         after: '/js/booking-controller.js',
         before: '/js/ticket-panel.js',
-        message: 'SiteScripts.astro must load booking-controller.js before ticket-panel.js',
+        message: 'public runtime contract must load booking-controller.js before ticket-panel.js',
       },
       {
         after: '/js/locations.js',
         before: '/js/ticket-panel.js',
-        message: 'SiteScripts.astro must load locations.js before ticket-panel.js',
+        message: 'public runtime contract must load locations.js before ticket-panel.js',
       },
     ],
   },

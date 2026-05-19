@@ -8,12 +8,12 @@ Phase 5 operator reference for BOOK-01 / D-04: where booking intent is triggered
 
 | Surface | Selector / element | Behavior | Same-tab? |
 |---------|-------------------|----------|-----------|
-| Hero primary tickets | `.hero-cta .btn-tickets` | `bookOrOpenPanel` | Yes (`location.assign` for `https:`) |
-| Nav / mirrored booking CTAs | `.btn-tickets`, `.btn-book-now`, roller/tickets href buttons (see `ticket-panel.js` query) | `bookOrOpenPanel` | Yes |
-| Ticket panel Continue | `#ticketBookBtn` | Dedicated listener (`location.href`) | Yes |
-| Location overlay Book Now | `.location-info-book` | Native `<a>` from `nav.js` (`href = pageUrl + '?book=1'` for open venues) | Yes (no `_blank` in script) |
-| Location page inline Book CTAs | Authored anchors | Native navigation / ticket-panel rules | Yes unless legacy markup adds `target="_blank"` (audit if added later) |
+| Hero primary tickets | `.hero-cta .btn-tickets` | Prompts for location when needed, then uses the selected venue's booking destination | Yes; checkout providers render in the booking frame when supported |
+| Nav / mirrored booking CTAs | `.btn-tickets`, `.btn-book-now`, `[data-tm-booking-trigger]` | Uses the active or page location to choose the correct tickets, group, gift card, or waiver destination | Yes; provider URLs stay in the booking frame unless the Location Catalog marks an EU external site |
+| Ticket panel Continue | `#ticketBookBtn` | Keeps the destination synchronized with the selected dropdown location | Yes; provider URLs stay in the booking frame |
+| Location overlay Book Now | `.location-info-book` | Uses the previewed location, including coming-soon and EU behavior | Yes; EU locations intentionally navigate to `timemission.eu` |
+| Location page inline Book CTAs | Authored anchors | `TMBooking.attach` / authored internal paths | Yes unless legacy markup adds `target="_blank"` (audit if added later) |
 
 ## Coming-soon
 
-Overlay and ticket flow use Sign Up / internal paths — no external checkout URL from `getBookingUrl` for coming-soon locations.
+Lead-only locations use Sign Up / internal paths. Coming-soon locations with a provider URL can still render a booking frame.

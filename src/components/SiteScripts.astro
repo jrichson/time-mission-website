@@ -1,5 +1,6 @@
 ---
 import { getPublicSiteContract } from '../lib/site-contract';
+import { publicRuntimeScripts, versionedRuntimeSrc } from '../lib/public-runtime-contract';
 import i18nConfig from '../data/site/i18n.json';
 
 const siteContract = getPublicSiteContract();
@@ -19,15 +20,9 @@ const formConfig = {
 <script is:inline define:vars={{ i18nConfig }}>
     window.__TM_I18N__ = i18nConfig;
 </script>
-<script defer is:inline src="/js/site-progressive.js?v=1"></script>
-<script defer is:inline src="/js/language-switcher.js?v=1"></script>
-<script defer is:inline src="/js/consent-bridge.js?v=1"></script>
-<script defer is:inline src="/js/analytics.js?v=1"></script>
-<script defer is:inline src="/js/locations.js?v=14"></script>
-<script defer is:inline src="/js/nav.js?v=8"></script>
-<script defer is:inline src="/js/booking-controller.js?v=6"></script>
-<script defer is:inline src="/js/ticket-panel.js?v=6"></script>
-<script defer is:inline src="/js/a11y.js"></script>
+{publicRuntimeScripts.map((script) => (
+    <script defer is:inline src={versionedRuntimeSrc(script)}></script>
+))}
 <script is:inline>
     (function () {
         function scheduleIdle(callback, timeout) {

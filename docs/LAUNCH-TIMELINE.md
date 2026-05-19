@@ -9,7 +9,7 @@
 
 | Person | Role | Responsibilities |
 |--------|------|-----------------|
-| **Jefferson** | Site owner / vibe-coder | Design, content, frontend code, coordination |
+| **Jefferson** | Site owner / frontend coordinator | Design, content, frontend code, coordination |
 | **Ari** | Agency developer | CMS, analytics, framework migration, technical integration |
 | **Ryan / New Epoche** | Google / ads | GA4, Google Ads, Search Console, pixel strategy |
 | **TM Owners** | DNS / hosting | Domain control, DNS switch, hosting account ownership |

@@ -242,6 +242,8 @@ describe('browser architecture contracts', () => {
       },
     });
 
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
     runScript('js/locations.js', context);
     runScript('js/booking-controller.js', context);
     await Promise.resolve();
@@ -255,27 +257,31 @@ describe('browser architecture contracts', () => {
         presentation: 'roller',
         usesRollerCheckout: true,
       });
-    expect(window.LocationContext.resolveBookingUrl('tickets', 'manassas'))
+    expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'manassas' }))
       .toBe('https://checkout.example/manassas');
-    expect(window.LocationContext.getBookingCtaView('tickets', 'manassas'))
+    expect(window.LocationContext.getOverlayView('manassas').cta)
       .toMatchObject({
         href: '#',
         bookingUrl: 'https://checkout.example/manassas',
         trigger: true,
         externalLocation: false,
       });
-    expect(window.LocationContext.resolveBookingUrl('gift-cards', 'manassas'))
+    expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'manassas' }))
       .toBe('https://gift.example/manassas');
     expect(window.TMBooking.getDestination({
       kind: 'groups',
       groupType: 'corporate',
       locationId: 'manassas',
     })).toBe('https://forms.example/manassas-corporate');
-    expect(window.LocationContext.resolveBookingUrl('groups', 'manassas', { groupType: 'birthdays' }))
+    expect(window.TMBooking.getDestination({
+      kind: 'groups',
+      groupType: 'birthdays',
+      locationId: 'manassas',
+    }))
       .toBe('https://forms.example/manassas-birthdays');
     expect(window.TMBooking.getDestination({ kind: 'waiver', locationId: 'manassas' }))
       .toBe('https://waiver.example/manassas');
-    expect(window.LocationContext.resolveBookingUrl('tickets', 'houston'))
+    expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'houston' }))
       .toBe('https://checkout.example/houston');
     expect(window.TMBooking.getDestination({ kind: 'groups', locationId: 'houston' }))
       .toBe('https://checkout.example/houston');
@@ -287,18 +293,22 @@ describe('browser architecture contracts', () => {
         presentation: 'external-site',
         externalLocationSite: true,
       });
-    expect(window.LocationContext.resolveBookingUrl('groups', 'antwerp', { groupType: 'corporate' }))
+    expect(window.TMBooking.getDestination({
+      kind: 'groups',
+      groupType: 'corporate',
+      locationId: 'antwerp',
+    }))
       .toBe('https://timemission.eu/antwerp');
-    expect(window.LocationContext.getBookingCtaView('tickets', 'antwerp'))
+    expect(window.LocationContext.getOverlayView('antwerp').cta)
       .toMatchObject({
         href: 'https://timemission.eu/antwerp',
         bookingUrl: '',
         trigger: false,
         externalLocation: true,
       });
-    expect(window.LocationContext.resolveBookingUrl('tickets', 'dallas'))
+    expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'dallas' }))
       .toBe('/dallas#newsletter');
-    expect(window.LocationContext.getBookingCtaView('tickets', 'dallas'))
+    expect(window.LocationContext.getOverlayView('dallas').cta)
       .toMatchObject({
         href: '/dallas#newsletter',
         bookingUrl: '',
@@ -319,6 +329,7 @@ describe('browser architecture contracts', () => {
 
   it('booking click handler prompts for tickets without a selected location but still navigates non-ticket links', async () => {
     const { context, window } = createBrowserContext();
+    runScript('js/booking-journey.js', context);
     runScript('js/booking-controller.js', context);
 
     function makeButton(attrs) {
@@ -426,6 +437,9 @@ describe('browser architecture contracts', () => {
     expect(window.TMI18n.getLanguageView().nativeLabel).toBe('Espanol');
     expect(window.TMI18n.getLanguageView('nl')).toBeNull();
     expect(window.TMI18n.getSupportedLanguages().map((language) => language.code)).toEqual(['en', 'es']);
+    expect(window.TMI18n.array('home.taglines', ['Fallback'])).toEqual(['Fallback']);
+    expect(window.TMI18n.text('language.changed', 'Language set to {language}', { language: 'Espanol' }))
+      .toBe('Idioma cambiado a Espanol');
     expect(document.documentElement.lang).toBe('es');
     expect(document.documentElement.dataset.tmLanguage).toBe('es');
     expect(navLabel.textContent).toBe('Acerca de');
