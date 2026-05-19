@@ -145,6 +145,13 @@
         el.href = cta.href || '#';
         el.removeAttribute('target');
         el.removeAttribute('rel');
+        if (cta.disabled) {
+            el.setAttribute('aria-disabled', 'true');
+            if (el.classList) el.classList.add('is-disabled');
+        } else {
+            el.removeAttribute('aria-disabled');
+            if (el.classList) el.classList.remove('is-disabled');
+        }
         if (cta.trigger) {
             el.setAttribute('data-tm-booking-trigger', '');
             el.setAttribute('data-tm-booking-kind', cta.kind || 'tickets');

@@ -217,6 +217,20 @@
             box-shadow: 0 15px 40px rgba(239, 75, 35, 0.5);
         }
 
+        .btn-primary.is-disabled,
+        .btn-primary[aria-disabled="true"] {
+            cursor: not-allowed;
+            opacity: 0.55;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-primary.is-disabled:hover,
+        .btn-primary[aria-disabled="true"]:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
         .btn-primary svg {
             width: 18px;
             height: 18px;
@@ -916,8 +930,11 @@
         });
     });
     </script>
-    <script src="js/locations.js?v=9"></script>
-    <script src="js/ticket-panel.js?v=4"></script>
+    <script src="js/booking-journey.js?v=2"></script>
+    <script src="js/location-catalog-view.js?v=2"></script>
+    <script src="js/locations.js?v=17"></script>
+    <script src="js/booking-controller.js?v=9"></script>
+    <script src="js/ticket-panel.js?v=8"></script>
     <script>
     // Gift-card Buy CTAs, route to the selected location's gift card checkout.
     // If no location is selected, open the location overlay so the user can pick one.
@@ -929,8 +946,17 @@
 
         function titleCase(s) { return s.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); }
 
-        function setAll(href) {
-            btns.forEach(function (b) { b.setAttribute('href', href); });
+        function setAll(href, disabled) {
+            btns.forEach(function (b) {
+                b.setAttribute('href', href || '#');
+                if (disabled) {
+                    b.setAttribute('aria-disabled', 'true');
+                    b.classList.add('is-disabled');
+                } else {
+                    b.removeAttribute('aria-disabled');
+                    b.classList.remove('is-disabled');
+                }
+            });
         }
 
         function applySelectedLocation() {
@@ -945,16 +971,15 @@
                 }
             }
             if (!loc) return false;
-            // Route to the location's gift-card checkout; fall back to the
-            // regular tickets/booking URL (same Roller link used by the Tickets
-            // button) when no gift-card URL exists for this location.
-            var url = loc.giftCardUrl || loc.bookingUrl || '';
+            // Blank gift-card URLs are intentional audit decisions: keep the
+            // CTA visible but disabled instead of falling back to checkout.
+            var url = loc.giftCardUrl || '';
             if (!url) {
-                if (hint) hint.textContent = 'Gift cards for ' + (loc.shortName || loc.name) + ' are coming soon, contact us to arrange one.';
-                setAll('contact.html?subject=gift-card');
+                if (hint) hint.textContent = 'Gift cards are not available for ' + (loc.shortName || loc.name) + ' yet.';
+                setAll('#', true);
                 return true;
             }
-            setAll(url);
+            setAll(url, false);
             if (/^mailto:/i.test(url)) {
                 if (hint) hint.textContent = 'Email ' + (loc.shortName || loc.name) + ' directly for a gift card.';
             } else {
@@ -974,6 +999,10 @@
 
         btns.forEach(function (b) {
             b.addEventListener('click', function (e) {
+                if (b.getAttribute('aria-disabled') === 'true') {
+                    e.preventDefault();
+                    return;
+                }
                 var href = b.getAttribute('href');
                 if (!href || href === '#') {
                     e.preventDefault();

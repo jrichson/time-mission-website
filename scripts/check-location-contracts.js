@@ -59,6 +59,21 @@ function validateIntlFields(location) {
   }
 }
 
+function validateGroupFormUrls(location) {
+  const id = location.id || '(unknown)';
+  if (location.groupFormUrls == null) return;
+  if (!location.groupFormUrls || typeof location.groupFormUrls !== 'object' || Array.isArray(location.groupFormUrls)) {
+    errors.push(`${id}: groupFormUrls must be an object when present`);
+    return;
+  }
+  for (const [key, url] of Object.entries(location.groupFormUrls)) {
+    if (!/^[a-z0-9-]+$/.test(key)) {
+      errors.push(`${id}: groupFormUrls key ${key} must be kebab-case`);
+    }
+    assertSafeUrl(id, `groupFormUrls.${key}`, url);
+  }
+}
+
 function validateOpenLocation(location) {
   const id = location.id;
   requireString(location, 'bookingUrl', location.bookingUrl);
@@ -68,8 +83,9 @@ function validateOpenLocation(location) {
   assertSafeUrl(id, 'mapUrl', location.mapUrl);
   requireString(location, 'contact.phone', location.contact && location.contact.phone);
   requireString(location, 'contact.email', location.contact && location.contact.email);
-  requireString(location, 'giftCardUrl', location.giftCardUrl);
-  if (location.giftCardUrl) {
+  if (typeof location.giftCardUrl !== 'string') {
+    errors.push(`${id}: giftCardUrl must be a string; use empty string when unavailable`);
+  } else if (location.giftCardUrl.trim()) {
     assertSafeUrl(id, 'giftCardUrl', location.giftCardUrl, { allowMailto: true });
   }
   const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
@@ -88,18 +104,7 @@ function validateOpenLocation(location) {
       errors.push(`${id} rollerCheckoutUrl must be HTTPS`);
     }
   }
-  if (location.groupFormUrls != null) {
-    if (!location.groupFormUrls || typeof location.groupFormUrls !== 'object' || Array.isArray(location.groupFormUrls)) {
-      errors.push(`${id}: groupFormUrls must be an object when present`);
-    } else {
-      for (const [key, url] of Object.entries(location.groupFormUrls)) {
-        if (!/^[a-z0-9-]+$/.test(key)) {
-          errors.push(`${id}: groupFormUrls key ${key} must be kebab-case`);
-        }
-        assertSafeUrl(id, `groupFormUrls.${key}`, url);
-      }
-    }
-  }
+  validateGroupFormUrls(location);
   if (location.waiverUrl) {
     assertSafeUrl(id, 'waiverUrl', location.waiverUrl);
   }
@@ -124,6 +129,7 @@ function validateComingSoonLocation(location) {
   if (location.giftCardUrl && String(location.giftCardUrl).trim() !== '') {
     assertSafeUrl(id, 'giftCardUrl', location.giftCardUrl, { allowMailto: true });
   }
+  validateGroupFormUrls(location);
   if (location.rollerCheckoutUrl && String(location.rollerCheckoutUrl).trim() !== '') {
     if (!/^https:\/\//.test(location.rollerCheckoutUrl)) {
       errors.push(`${id} rollerCheckoutUrl must be HTTPS`);

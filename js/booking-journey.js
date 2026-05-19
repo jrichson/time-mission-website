@@ -56,21 +56,16 @@
         if (!loc) return '';
         var kind = normalizeKind(opts.kind || 'tickets');
         var slug = loc.slug || loc.id || normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
-        var externalUrl = getExternalLocationUrl(loc);
-        if (externalUrl) return externalUrl;
-
         var checkoutUrl = resolveOpenCheckoutUrl(loc);
         var bookable = !!checkoutUrl;
 
         if (kind === 'gift-cards' || kind === 'giftcards') {
             if (loc.giftCardUrl) return loc.giftCardUrl;
-            if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);
             return '';
         }
 
         if (kind === 'waiver' || kind === 'waivers') {
             if (loc.waiverUrl) return loc.waiverUrl;
-            if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);
             return '';
         }
 
@@ -79,11 +74,11 @@
             var groupUrls = loc.groupFormUrls || {};
             var groupUrl = (groupType && groupUrls[groupType]) || groupUrls.default || loc.groupsUrl || '';
             if (groupUrl) return groupUrl;
-            if (bookable) return checkoutUrl;
-            if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);
             return '';
         }
 
+        var externalUrl = getExternalLocationUrl(loc);
+        if (externalUrl) return externalUrl;
         if (opts.preferLocationPageFlow && slug) return '/' + slug + '?book=1';
         if (bookable) return checkoutUrl;
         if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);
@@ -198,7 +193,7 @@
             url: intent.href,
             trigger: trigger,
             externalLocation: intent.externalLocationSite,
-            disabled: !loc || !intent.href || intent.href === '#',
+            disabled: !loc || !intent.hasHref,
             presentation: intent.presentation,
         };
     }
@@ -228,6 +223,15 @@
         return { type: opts.deferUntilLoad ? 'deferred-link' : 'link', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
     }
 
+    function resolveOutcome(options, actionOptions) {
+        var intent = resolveIntent(options || {});
+        return {
+            intent: intent,
+            cta: ctaAttributesForIntent(intent),
+            action: resolveNavigationAction(intent, actionOptions || {}),
+        };
+    }
+
     function ctaAttributesForIntent(intent) {
         var resolved = intent || {};
         var attrs = {
@@ -236,13 +240,14 @@
             kind: normalizeKind(resolved.kind || 'tickets'),
             locationId: '',
             groupType: normalizeGroupType(resolved.groupType || ''),
-            disabled: !resolved.location,
+            disabled: !resolved.location || !resolved.hasHref,
             trigger: false,
             externalLocation: !!resolved.externalLocationSite,
         };
         if (!resolved.location) return attrs;
-        attrs.disabled = false;
+        attrs.disabled = !resolved.hasHref;
         attrs.locationId = (resolved.location && (resolved.location.id || resolved.location.slug)) || resolved.locationId || '';
+        if (!resolved.hasHref) return attrs;
         if (resolved.externalLocationSite) {
             attrs.href = resolved.href || '#';
             return attrs;
@@ -273,6 +278,7 @@
         resolveIntent: resolveIntent,
         resolveCtaView: resolveCtaView,
         resolveNavigationAction: resolveNavigationAction,
+        resolveOutcome: resolveOutcome,
         ctaAttributesForIntent: ctaAttributesForIntent,
     };
 })();

@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { fingerprintAnalyticsLabels } = require('../../scripts/lib/analytics-labels-fingerprint.cjs');
 const i18nCatalog = require('../../src/data/site/i18n.json');
+const formsLinksAudit = require('../fixtures/forms-links-audit.json');
 
 require('tsx/cjs/api').register();
 const { locationsFingerprintFromRecords } = require('../../src/lib/locations-fingerprint.ts');
@@ -394,7 +395,96 @@ test('group CTAs resolve to audit-provided form URLs for the selected location',
   await expect(page).toHaveURL(/\/groups\/corporate$/);
 });
 
-test('West Nyack ticket panel renders Briq widget config from the audit', async ({ page }) => {
+test('legacy groups cards open the selected location event form in an iframe', async ({ page }) => {
+  await page.route('https://forms.roller.app/**', async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>Philadelphia event form</title><main>Event form</main>',
+    });
+  });
+
+  await page.goto('/groups.html');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+  await page.evaluate(() => window.TM.select('philadelphia'));
+
+  const expectedHref = 'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form';
+  await page
+    .locator('.event-type-actions [data-tm-booking-kind="groups"][data-tm-group-type="corporate"]')
+    .first()
+    .click();
+
+  await expect(page.locator('.booking-frame-overlay')).toHaveClass(/active/);
+  await expect(page.locator('.booking-frame')).toHaveAttribute('src', expectedHref);
+  await expect(page).toHaveURL(/\/groups\.html$/);
+});
+
+test('Houston and Orland Park group CTAs resolve to audit-approved forms', async ({ page }) => {
+  await page.goto('/groups/corporate');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  const houstonCorporate = await page.evaluate(() => window.TMBooking.getDestination({
+    kind: 'groups',
+    groupType: 'corporate',
+    locationId: 'houston',
+  }));
+  expect(houstonCorporate).toBe(formsLinksAudit.groups.houston.corporate);
+
+  const orlandPrivateEvents = await page.evaluate(() => window.TMBooking.getDestination({
+    kind: 'groups',
+    groupType: 'private-events',
+    locationId: 'orland-park',
+  }));
+  expect(orlandPrivateEvents).toBe(formsLinksAudit.groups['orland-park']['private-events']);
+});
+
+test('Dallas group CTAs stay disabled when the audit has blank group rows', async ({ page }) => {
+  await page.goto('/groups/corporate');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  await page.evaluate(() => window.TMBooking.open({ kind: 'groups', groupType: 'corporate' }));
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await page.locator('#ticketLocation').selectOption('dallas');
+
+  await expect(page.locator('#ticketPanelTitle')).toContainText('Group Requests Unavailable');
+  await expect(page.locator('#ticketPanelIntro')).toContainText('Dallas');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('aria-disabled', 'true');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', 'dallas');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-group-type', 'corporate');
+  await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
+  await page.locator('#ticketBookBtn').evaluate((button) => button.click());
+  await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
+});
+
+test('gift card page disables locations with blank gift-card audit rows', async ({ page }) => {
+  await page.goto('/gift-cards');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  for (const locationId of ['antwerp', 'houston', 'dallas']) {
+    await page.evaluate((id) => window.TM.select(id), locationId);
+    await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('aria-disabled', 'true');
+    await expect(page.locator('#giftCardLocationHint')).toContainText('not available');
+  }
+});
+
+test('waiver panel disables Houston and Orland Park without waiver fallbacks', async ({ page }) => {
+  await page.goto('/waiver');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  await page.evaluate(() => window.TMBooking.open({ kind: 'waiver' }));
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+
+  for (const locationId of ['houston', 'orland-park']) {
+    await page.locator('#ticketLocation').selectOption(locationId);
+    await expect(page.locator('#ticketPanelTitle')).toContainText('Waiver Unavailable');
+    await expect(page.locator('#ticketBookBtn')).toHaveAttribute('aria-disabled', 'true');
+    await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', locationId);
+    await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
+    await page.locator('#ticketBookBtn').evaluate((button) => button.click());
+    await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
+  }
+});
+
+test('West Nyack ticket panel opens Briq checkout in the booking frame', async ({ page }) => {
   await page.goto('/');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
@@ -403,9 +493,15 @@ test('West Nyack ticket panel renders Briq widget config from the audit', async 
     window.TMBooking.open({ kind: 'tickets' });
   });
 
-  const widget = page.locator('#ticketProviderWidget .bw-widget');
-  await expect(widget).toHaveAttribute('data-domain', 'timemission-palisades');
-  await expect(widget).toHaveAttribute('data-button-text', 'BOOK NOW');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '#');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
+    'data-tm-booking-url',
+    'https://timemission-palisades.briqbookings.com'
+  );
+
+  await page.locator('#ticketBookBtn').click();
+  await expect(page.locator('.booking-frame-overlay')).toHaveClass(/active/);
+  await expect(page.locator('.booking-frame')).toHaveAttribute('src', 'https://timemission-palisades.briqbookings.com');
 });
 
 test('faq accordion exposes keyboard accessible controls', async ({ page }) => {

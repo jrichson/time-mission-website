@@ -6,6 +6,9 @@ import { describe, expect, it } from 'vitest';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
+const formsLinksAudit = JSON.parse(
+  fs.readFileSync(path.join(root, 'tests', 'fixtures', 'forms-links-audit.json'), 'utf8'),
+);
 
 function readScript(rel) {
   return fs.readFileSync(path.join(root, rel), 'utf8');
@@ -113,25 +116,27 @@ function runScript(rel, context) {
 }
 
 describe('browser architecture contracts', () => {
-  it('real location data includes audit-provided booking, group form, widget, and waiver links', () => {
+  it('real location data matches approved forms and links audit decisions', () => {
     const doc = JSON.parse(fs.readFileSync(path.join(root, 'data', 'locations.json'), 'utf8'));
     const byId = new Map((doc.locations || []).map((loc) => [loc.id, loc]));
 
-    expect(byId.get('manassas')?.groupFormUrls?.corporate)
-      .toBe('https://webforms.pipedrive.com/f/64NrjaZAs4GrLYSqpDDV0mzG46uGMN5cXrzEoAIjKKghJOzCRVmfw4mWkghflYR3Qn');
-    expect(byId.get('mount-prospect')?.groupFormUrls?.birthdays)
-      .toBe('https://webforms.pipedrive.com/f/6xKWqqzjoNTaJIqvmk5k2tRDTavPGnfToLuCSJCsKNa5PmDkPpfEWTYgx2MiTMmQjp');
-    expect(byId.get('philadelphia')?.groupFormUrls?.['private-events'])
-      .toBe('https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form');
+    for (const [locationId, groupUrls] of Object.entries(formsLinksAudit.groups)) {
+      const actual = byId.get(locationId)?.groupFormUrls || {};
+      for (const groupType of formsLinksAudit.groupTypes) {
+        expect(actual[groupType] || '').toBe(groupUrls[groupType]);
+      }
+    }
+
+    for (const [locationId, expectedUrl] of Object.entries(formsLinksAudit.giftCards)) {
+      expect(byId.get(locationId)?.giftCardUrl || '').toBe(expectedUrl);
+    }
+
+    for (const [locationId, expectedUrl] of Object.entries(formsLinksAudit.waivers)) {
+      expect(byId.get(locationId)?.waiverUrl || '').toBe(expectedUrl);
+    }
+
     expect(byId.get('west-nyack')?.briqWidget?.domain).toBe('timemission-palisades');
-    expect(byId.get('lincoln')?.groupFormUrls?.holidays)
-      .toBe('https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959');
-    expect(byId.get('antwerp')?.groupFormUrls?.['field-trips'])
-      .toBe('https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission');
     expect(byId.get('antwerp')?.externalUrl).toBe('https://timemission.eu/antwerp');
-    expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu/brussels');
-    expect(byId.get('manassas')?.waiverUrl).toBe('https://waiver.roller.app/TimeMissionManassasMall');
-    expect(byId.get('philadelphia')?.waiverUrl).toBe('https://waiver.roller.app/TimeMissionPhiladelphiaPA');
   });
 
   it('TMConsent.update notifies document and window listeners with the same state', () => {
@@ -218,7 +223,7 @@ describe('browser architecture contracts', () => {
             status: 'coming-soon',
             bookingUrl: 'https://checkout.example/houston',
             rollerCheckoutUrl: 'https://checkout.example/houston',
-            giftCardUrl: 'https://gift.example/houston',
+            giftCardUrl: '',
             groupFormUrls: {},
           },
           {
@@ -236,6 +241,7 @@ describe('browser architecture contracts', () => {
             slug: 'dallas',
             status: 'coming-soon',
             bookingUrl: '',
+            giftCardUrl: '',
             groupFormUrls: {},
           },
         ],
@@ -284,7 +290,11 @@ describe('browser architecture contracts', () => {
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'houston' }))
       .toBe('https://checkout.example/houston');
     expect(window.TMBooking.getDestination({ kind: 'groups', locationId: 'houston' }))
-      .toBe('https://checkout.example/houston');
+      .toBe('');
+    expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'houston' }))
+      .toBe('');
+    expect(window.TMBooking.getDestination({ kind: 'waiver', locationId: 'houston' }))
+      .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'antwerp' }))
       .toBe('https://timemission.eu/antwerp');
     expect(window.TMBooking.resolveIntent({ kind: 'tickets', locationId: 'antwerp' }))
@@ -298,7 +308,9 @@ describe('browser architecture contracts', () => {
       groupType: 'corporate',
       locationId: 'antwerp',
     }))
-      .toBe('https://timemission.eu/antwerp');
+      .toBe('https://experience.example/antwerp-corporate');
+    expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'antwerp' }))
+      .toBe('');
     expect(window.LocationContext.getOverlayView('antwerp').cta)
       .toMatchObject({
         href: 'https://timemission.eu/antwerp',
@@ -308,6 +320,12 @@ describe('browser architecture contracts', () => {
       });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'dallas' }))
       .toBe('/dallas#newsletter');
+    expect(window.TMBooking.getDestination({ kind: 'groups', groupType: 'corporate', locationId: 'dallas' }))
+      .toBe('');
+    expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'dallas' }))
+      .toBe('');
+    expect(window.TMBooking.getDestination({ kind: 'waiver', locationId: 'dallas' }))
+      .toBe('');
     expect(window.LocationContext.getOverlayView('dallas').cta)
       .toMatchObject({
         href: '/dallas#newsletter',
@@ -325,6 +343,38 @@ describe('browser architecture contracts', () => {
       locationId: 'manassas',
       preferLocationPageFlow: true,
     })).toBe('/manassas?book=1');
+  });
+
+  it('runtime group, gift-card, and waiver routing follows the audit fixture', async () => {
+    const doc = JSON.parse(fs.readFileSync(path.join(root, 'data', 'locations.json'), 'utf8'));
+    const { context, window } = createBrowserContext({
+      TM_DATA: doc,
+    });
+
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    runScript('js/locations.js', context);
+    runScript('js/booking-controller.js', context);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    for (const [locationId, groupUrls] of Object.entries(formsLinksAudit.groups)) {
+      for (const groupType of formsLinksAudit.groupTypes) {
+        expect(window.TMBooking.getDestination({
+          kind: 'groups',
+          groupType,
+          locationId,
+        })).toBe(groupUrls[groupType]);
+      }
+    }
+
+    for (const [locationId, expectedUrl] of Object.entries(formsLinksAudit.giftCards)) {
+      expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId })).toBe(expectedUrl);
+    }
+
+    for (const [locationId, expectedUrl] of Object.entries(formsLinksAudit.waivers)) {
+      expect(window.TMBooking.getDestination({ kind: 'waiver', locationId })).toBe(expectedUrl);
+    }
   });
 
   it('booking click handler prompts for tickets without a selected location but still navigates non-ticket links', async () => {
