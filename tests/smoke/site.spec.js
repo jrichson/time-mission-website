@@ -408,6 +408,7 @@ test('desktop location hover renders address map preview before selection', asyn
   await expect(page.locator('#locationInfo .location-info-directions')).toContainText(i18nCatalog.translations.es['location.getDirections']);
   await expect(page.locator('#locationInfo .location-info-hours')).toContainText(`${i18nCatalog.translations.es['location.day.mon']}:`);
   await expect(page.locator('#locationInfo .location-info-book')).toContainText(i18nCatalog.translations.es['nav.bookNow']);
+  await expect(page.locator('#locationInfo .location-info-contact')).toHaveCount(0);
   await expect(page.locator('#locationMap iframe')).toHaveAttribute('src', /google\.com\/maps/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });

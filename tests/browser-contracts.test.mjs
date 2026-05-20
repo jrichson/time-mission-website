@@ -505,7 +505,7 @@ describe('browser architecture contracts', () => {
       createAnchor('/about'),
       createAnchor('/groups/corporate?utm_source=test#details'),
       createAnchor('/philadelphia'),
-      createAnchor('/contact', { className: 'location-info-contact' }),
+      createAnchor('/contact'),
       createAnchor('/mount-prospect', { closestSelectors: ['.footer-location-list'] }),
       createAnchor('https://example.com/about'),
       createAnchor('mailto:hello@example.com'),
