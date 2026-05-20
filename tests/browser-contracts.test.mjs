@@ -118,6 +118,38 @@ function runScript(rel, context) {
   vm.runInNewContext(readScript(rel), context, { filename: rel });
 }
 
+function createAnchor(href, options = {}) {
+  const attrs = new Map(Object.entries(options.attrs || {}));
+  attrs.set('href', href);
+  const classes = new Set(String(options.className || '').split(/\s+/).filter(Boolean));
+  const closestSelectors = new Set(options.closestSelectors || []);
+  return {
+    dataset: options.dataset || {},
+    style: {},
+    href,
+    textContent: options.textContent || '',
+    classList: {
+      contains(name) {
+        return classes.has(name);
+      },
+    },
+    getAttribute(name) {
+      return attrs.has(name) ? attrs.get(name) : null;
+    },
+    setAttribute(name, value) {
+      attrs.set(name, String(value));
+      if (name === 'href') this.href = String(value);
+    },
+    hasAttribute(name) {
+      return attrs.has(name);
+    },
+    closest(selector) {
+      return closestSelectors.has(selector) ? this : null;
+    },
+    addEventListener() {},
+  };
+}
+
 describe('browser architecture contracts', () => {
   it('real location data matches approved forms and links audit decisions', () => {
     const doc = JSON.parse(fs.readFileSync(path.join(root, 'data', 'locations.json'), 'utf8'));
@@ -436,6 +468,125 @@ describe('browser architecture contracts', () => {
     expect(window.TM.current?.id).toBe('philadelphia');
     expect(window.LocationContext.getCurrent()?.id).toBe('philadelphia');
     expect(window.localStorage.getItem('tm_location')).toBe('philadelphia');
+  });
+
+  it('location-prefixed shared pages select the location from the URL', async () => {
+    const { context, window } = createBrowserContext({
+      TM_DATA: {
+        locations: [
+          {
+            id: 'mount-prospect',
+            slug: 'mount-prospect',
+            name: 'Time Mission Mount Prospect',
+            shortName: 'Mount Prospect',
+            status: 'open',
+            bookingUrl: 'https://book.mountprospect.timemission.com',
+            rollerCheckoutUrl: 'https://book.mountprospect.timemission.com',
+            groupFormUrls: {},
+          },
+        ],
+      },
+    });
+    window.location.pathname = '/mount-prospect/about';
+
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    runScript('js/locations.js', context);
+    await window.TM.ready;
+
+    expect(window.TM.current?.id).toBe('mount-prospect');
+    expect(window.localStorage.getItem('tm_location')).toBe('mount-prospect');
+  });
+
+  it('navigation links carry the selected location through shared pages', async () => {
+    let subscriber = null;
+    const anchors = [
+      createAnchor('/', { className: 'nav-logo' }),
+      createAnchor('/about'),
+      createAnchor('/groups/corporate?utm_source=test#details'),
+      createAnchor('/philadelphia'),
+      createAnchor('/contact', { className: 'location-info-contact' }),
+      createAnchor('/mount-prospect', { closestSelectors: ['.footer-location-list'] }),
+      createAnchor('https://example.com/about'),
+      createAnchor('mailto:hello@example.com'),
+    ];
+    const { context, window, document } = createBrowserContext({
+      TM: {
+        ready: Promise.resolve(),
+        current: {
+          id: 'mount-prospect',
+          slug: 'mount-prospect',
+          shortName: 'Mount Prospect',
+        },
+        locations: [
+          { id: 'mount-prospect', slug: 'mount-prospect', shortName: 'Mount Prospect' },
+          { id: 'philadelphia', slug: 'philadelphia', shortName: 'Philadelphia' },
+        ],
+        normalizeSlug(value) {
+          return String(value || '').toLowerCase().trim().replace(/\s+/g, '-');
+        },
+        onChange(callback) {
+          subscriber = callback;
+          return function unsubscribe() {};
+        },
+      },
+    });
+    window.location.origin = 'https://timemission.com';
+    document.querySelectorAll = (selector) => (selector === 'a[href]' ? anchors : []);
+
+    runScript('js/nav.js', context);
+    await Promise.resolve();
+
+    expect(anchors[0].getAttribute('href')).toBe('/mount-prospect');
+    expect(anchors[1].getAttribute('href')).toBe('/mount-prospect/about');
+    expect(anchors[2].getAttribute('href')).toBe('/mount-prospect/groups/corporate?utm_source=test#details');
+    expect(anchors[3].getAttribute('href')).toBe('/philadelphia');
+    expect(anchors[4].getAttribute('href')).toBe('/mount-prospect/contact');
+    expect(anchors[5].getAttribute('href')).toBe('/mount-prospect');
+    expect(anchors[6].getAttribute('href')).toBe('https://example.com/about');
+    expect(anchors[7].getAttribute('href')).toBe('mailto:hello@example.com');
+
+    window.TM.current = { id: 'houston', slug: 'houston', shortName: 'Houston' };
+    window.TM.locations.push({ id: 'houston', slug: 'houston', shortName: 'Houston' });
+    subscriber(window.TM.current);
+
+    expect(anchors[0].getAttribute('href')).toBe('/houston');
+    expect(anchors[1].getAttribute('href')).toBe('/houston/about');
+    expect(anchors[2].getAttribute('href')).toBe('/houston/groups/corporate?utm_source=test#details');
+  });
+
+  it('navigation links still scope when nav.js loads before locations.js', async () => {
+    const anchors = [
+      createAnchor('/'),
+      createAnchor('/about'),
+    ];
+    const { context, window, document } = createBrowserContext();
+    window.location.origin = 'https://timemission.com';
+    document.querySelectorAll = (selector) => (selector === 'a[href]' ? anchors : []);
+
+    runScript('js/nav.js', context);
+    expect(anchors[0].getAttribute('href')).toBe('/');
+
+    window.TM = {
+      current: {
+        id: 'west-nyack',
+        slug: 'west-nyack',
+        shortName: 'West Nyack',
+      },
+      locations: [
+        { id: 'west-nyack', slug: 'west-nyack', shortName: 'West Nyack' },
+      ],
+      normalizeSlug(value) {
+        return String(value || '').toLowerCase().trim().replace(/\s+/g, '-');
+      },
+    };
+    document.dispatchEvent({
+      type: 'tm:locations-ready',
+      detail: window.TM.current,
+    });
+
+    expect(anchors[0].getAttribute('href')).toBe('/west-nyack');
+    expect(anchors[1].getAttribute('href')).toBe('/west-nyack/about');
   });
 
   it('booking destinations preserve marketing params on external links and keep Briq local', async () => {

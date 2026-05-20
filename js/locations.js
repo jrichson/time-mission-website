@@ -143,8 +143,33 @@
         _readyResolve();
     }
 
+    function compactLocationSlug(value) {
+        try {
+            value = decodeURIComponent(String(value || ''));
+        } catch (e) {
+            value = String(value || '');
+        }
+        return value.toLowerCase().trim().replace(/\.html$/i, '').replace(/-/g, '');
+    }
+
+    function getUrlLocationSlug() {
+        const firstSegment = ((window.location && window.location.pathname) || '')
+            .split('/')
+            .filter(Boolean)[0] || '';
+        if (!firstSegment || !TM.locations.length) return '';
+        const compactSegment = compactLocationSlug(firstSegment);
+        const loc = TM.locations.find((entry) => {
+            return compactLocationSlug(entry.id) === compactSegment
+                || compactLocationSlug(entry.slug) === compactSegment
+                || compactLocationSlug(entry.shortName) === compactSegment
+                || compactLocationSlug(entry.name) === compactSegment;
+        });
+        return loc ? normalizeLocationId(loc.id || loc.slug || firstSegment) : '';
+    }
+
     function getPageLocationSlug() {
-        return normalizeLocationId((document.body && document.body.dataset.location) || '');
+        const bodySlug = normalizeLocationId((document.body && document.body.dataset.location) || '');
+        return bodySlug || getUrlLocationSlug();
     }
 
     const TM = {
@@ -410,6 +435,7 @@
         }
 
         TM.updateDOM();
+        document.dispatchEvent(new CustomEvent('tm:locations-ready', { detail: TM.current }));
 
         document.querySelectorAll('[data-tm-location]').forEach(el => {
             el.addEventListener('click', (e) => {

@@ -1008,7 +1008,7 @@ test.describe('Mobile location selector (P0-7a)', () => {
 
     await page.locator('.nav-logo').first().tap();
 
-    await expect(page).toHaveURL(/\/$/);
+    await expect(page).toHaveURL(/\/philadelphia$/);
     await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
     await expect(page.locator('#locationText')).toContainText('Philadelphia');

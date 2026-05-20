@@ -5,6 +5,7 @@ import {
   locationRouteEntries,
   resolveLocationCanonicalPath,
   resolveLocationRedirectUrl,
+  resolveLocationRouteRequest,
 } from '../functions/_shared/location-route-normalizer.mjs';
 
 describe('location route normalizer', () => {
@@ -34,12 +35,32 @@ describe('location route normalizer', () => {
     expect(resolveLocationRedirectUrl('https://timemission.com/Marq-E?utm_source=test'))
       .toBe('https://timemission.com/houston?utm_source=test');
     expect(resolveLocationRedirectUrl('https://timemission.com/WestNyack/corporate-events?x=1'))
-      .toBe('https://timemission.com/west-nyack/corporate-events?x=1');
+      .toBe('https://timemission.com/west-nyack/groups/corporate?x=1');
   });
 
   it('passes through already canonical or unrelated paths', () => {
     expect(resolveLocationCanonicalPath('/mount-prospect')).toBe('');
     expect(resolveLocationCanonicalPath('/api/contact')).toBe('');
     expect(resolveLocationCanonicalPath('/assets/logo/TM_Logo_White.svg')).toBe('');
+  });
+
+  it('serves shared pages behind a canonical location prefix without redirecting', () => {
+    expect(resolveLocationRouteRequest('https://timemission.com/mount-prospect/about'))
+      .toEqual({ redirectUrl: '', assetPath: '/about' });
+    expect(resolveLocationRouteRequest('https://timemission.com/philadelphia/groups/corporate?utm_source=test'))
+      .toEqual({ redirectUrl: '', assetPath: '/groups/corporate' });
+  });
+
+  it('canonicalizes location-prefixed shared page aliases before serving assets', () => {
+    expect(resolveLocationRouteRequest('https://timemission.com/MountProspect/About.html?x=1'))
+      .toEqual({
+        redirectUrl: 'https://timemission.com/mount-prospect/about?x=1',
+        assetPath: '',
+      });
+    expect(resolveLocationRouteRequest('https://timemission.com/Palisades-center/corporate-events'))
+      .toEqual({
+        redirectUrl: 'https://timemission.com/west-nyack/groups/corporate',
+        assetPath: '',
+      });
   });
 });

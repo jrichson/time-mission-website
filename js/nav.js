@@ -83,6 +83,141 @@
     const mobileMenu = document.getElementById('mobileMenu');
     const navEl = document.getElementById('nav');
     let activeLocationInfoRef = '';
+    const LOCATION_SCOPED_PATHS = [
+        '/',
+        '/about',
+        '/missions',
+        '/groups',
+        '/groups/bachelor-ette',
+        '/groups/birthdays',
+        '/groups/corporate',
+        '/groups/field-trips',
+        '/groups/holidays',
+        '/groups/private-events',
+        '/gift-cards',
+        '/faq',
+        '/contact',
+        '/contact-thank-you',
+        '/locations',
+        '/privacy',
+        '/terms',
+        '/code-of-conduct',
+        '/cookies',
+        '/accessibility',
+        '/licensing',
+        '/waiver',
+    ];
+
+    function safeDecode(value) {
+        try {
+            return decodeURIComponent(String(value || ''));
+        } catch (e) {
+            return String(value || '');
+        }
+    }
+
+    function trimTrailingSlash(pathname) {
+        return pathname.replace(/\/+$/, '') || '/';
+    }
+
+    function normalizeHrefPath(pathname) {
+        const clean = String(pathname || '/').startsWith('/') ? String(pathname || '/') : '/' + String(pathname || '');
+        return trimTrailingSlash(clean.replace(/\/+/g, '/'));
+    }
+
+    function compactPath(value) {
+        return normalizeHrefPath(safeDecode(value)).toLowerCase().replace(/\.html$/i, '').replace(/-/g, '');
+    }
+
+    const scopedPathByCompact = LOCATION_SCOPED_PATHS.reduce(function (map, path) {
+        map[compactPath(path)] = path;
+        map[compactPath(path + '.html')] = path;
+        return map;
+    }, {});
+
+    function compactLocation(value) {
+        return safeDecode(value).toLowerCase().trim().replace(/\.html$/i, '').replace(/-/g, '');
+    }
+
+    function getCurrentLocationSlug() {
+        const context = getLocationContext();
+        const loc = context && typeof context.getCurrent === 'function' ? context.getCurrent() : null;
+        if (!loc) return '';
+        return normalizeLocation(loc.slug || loc.id || loc.shortName || loc.name || '');
+    }
+
+    function isKnownLocationPath(pathname) {
+        const firstSegment = normalizeHrefPath(pathname).split('/')[1] || '';
+        if (!firstSegment) return false;
+        const compactSegment = compactLocation(firstSegment);
+        const known = (window.TM && Array.isArray(window.TM.locations)) ? window.TM.locations : [];
+        return known.some(function (loc) {
+            return compactLocation(loc.id) === compactSegment
+                || compactLocation(loc.slug) === compactSegment
+                || compactLocation(loc.shortName) === compactSegment
+                || compactLocation(loc.name) === compactSegment;
+        });
+    }
+
+    function getScopedCanonicalPath(pathname) {
+        return scopedPathByCompact[compactPath(pathname)] || '';
+    }
+
+    function shouldSkipLocationScopedLink(link, url) {
+        if (!link || !url) return true;
+        const rawHref = (link.getAttribute('href') || '').trim();
+        if (!rawHref || rawHref.charAt(0) === '#') return true;
+        if (/^(mailto|tel|sms|javascript):/i.test(rawHref)) return true;
+        if (url.origin !== window.location.origin) return true;
+        if (link.hasAttribute('download')) return true;
+        const target = (link.getAttribute('target') || '').toLowerCase();
+        if (target && target !== '_self') return true;
+        if (link.dataset && (link.dataset.tmNoLocationScope || link.dataset.city || link.dataset.tmLocationSlug)) return true;
+        if (link.hasAttribute('data-tm-href') || link.hasAttribute('data-tm-booking-kind')) return true;
+        if (link.classList && (
+            link.classList.contains('btn-tickets')
+            || link.classList.contains('btn-book-now')
+            || link.classList.contains('footer-loc-map')
+            || link.classList.contains('footer-loc-phone')
+            || link.classList.contains('location-info-book')
+        )) return true;
+        if (typeof link.closest === 'function' && link.closest('.footer-location-list')) return true;
+        const pathname = normalizeHrefPath(url.pathname);
+        if (/^\/(assets|css|data|fonts|js|api|c)\b/i.test(pathname)) return true;
+        if (/^\/(_headers|_redirects|favicon\.ico|license\.xml|robots\.txt|sitemap\.xml|llms\.txt|ai-context\.md|pricing\.md)$/i.test(pathname)) return true;
+        return isKnownLocationPath(pathname);
+    }
+
+    function updateLocationScopedLinks() {
+        const slug = getCurrentLocationSlug();
+        document.querySelectorAll('a[href]').forEach(function (link) {
+            let baseHref = link.getAttribute('data-tm-location-base-href') || link.getAttribute('href') || '';
+
+            let url;
+            try {
+                url = new URL(baseHref, window.location.origin);
+            } catch (e) {
+                return;
+            }
+
+            if (shouldSkipLocationScopedLink(link, url)) {
+                return;
+            }
+
+            if (!link.getAttribute('data-tm-location-base-href')) {
+                link.setAttribute('data-tm-location-base-href', baseHref);
+            }
+
+            const canonicalPath = getScopedCanonicalPath(url.pathname);
+            if (!slug || !canonicalPath) {
+                link.setAttribute('href', baseHref);
+                return;
+            }
+
+            const scopedPath = canonicalPath === '/' ? '/' + slug : '/' + slug + canonicalPath;
+            link.setAttribute('href', scopedPath + url.search + url.hash);
+        });
+    }
 
     // Mobile menu toggle
     const tickerBar = document.querySelector('.ticker-bar');
@@ -121,6 +256,7 @@
         if (context && typeof context.select === 'function') {
             context.select(normalized, selectOpts);
         }
+        updateLocationScopedLinks();
     }
 
     // Navigation scroll effect
@@ -292,30 +428,38 @@
         details.style.display = 'block';
     }
 
+    function syncNavLocationState(loc) {
+        const mainLocText = document.getElementById('locationText');
+        if (mainLocText && loc && (loc.shortName || loc.name)) {
+            mainLocText.textContent = loc.shortName || loc.name;
+        }
+        if (loc && (loc.id || loc.slug)) {
+            showLocationInfo(loc.id || loc.slug);
+        }
+        updateLocationScopedLinks();
+    }
+
     const navLoadContext = getLocationContext();
     if (navLoadContext && navLoadContext.ready && typeof navLoadContext.ready.then === 'function') {
         navLoadContext.ready.then(function () {
             const cur = typeof navLoadContext.getCurrent === 'function' ? navLoadContext.getCurrent() : null;
-            if (cur && (cur.shortName || cur.name)) {
-                syncLocationDisplay(cur.shortName || cur.name);
-            }
-            if (cur && (cur.id || cur.slug)) {
-                showLocationInfo(cur.id || cur.slug);
-            }
+            syncNavLocationState(cur);
         });
     }
 
     if (navLoadContext && typeof navLoadContext.subscribe === 'function') {
         navLoadContext.subscribe(function (loc) {
-            const mainLocText = document.getElementById('locationText');
-            if (mainLocText && loc && (loc.shortName || loc.name)) {
-                mainLocText.textContent = loc.shortName || loc.name;
-            }
-            if (loc && (loc.id || loc.slug)) {
-                showLocationInfo(loc.id || loc.slug);
-            }
+            syncNavLocationState(loc);
         });
     }
+
+    document.addEventListener('tm:locations-ready', function (event) {
+        syncNavLocationState(event.detail || null);
+    });
+
+    document.addEventListener('tm:location-changed', function (event) {
+        syncNavLocationState(event.detail || null);
+    });
 
     document.addEventListener('tm:language-changed', function () {
         if (activeLocationInfoRef) showLocationInfo(activeLocationInfoRef);
