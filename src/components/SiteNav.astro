@@ -21,21 +21,21 @@ const bookingCtaAttrs = {
     ...(bookingCtaI18n ? { 'data-i18n': bookingCtaI18n } : {}),
 };
 const tickerMessages = [
-    'NEW LOCATIONS COMING SOON!',
-    'NEW LOCATIONS COMING SOON!',
-    'NEW LOCATIONS COMING SOON!',
-    'NEW LOCATIONS COMING SOON!',
-    'NEW LOCATIONS COMING SOON!',
-    'NEW LOCATIONS COMING SOON!',
-    'NEW LOCATIONS COMING SOON!',
-    'NEW LOCATIONS COMING SOON!',
+    { text: 'HOUSTON GRAND OPENING JUNE 5TH', i18n: 'ticker.houstonGrandOpening' },
+    { text: 'ORLAND PARK GRAND OPENING – JUNE 11TH', i18n: 'ticker.orlandParkGrandOpening' },
+    { text: 'HOUSTON GRAND OPENING JUNE 5TH', i18n: 'ticker.houstonGrandOpening' },
+    { text: 'ORLAND PARK GRAND OPENING – JUNE 11TH', i18n: 'ticker.orlandParkGrandOpening' },
+    { text: 'HOUSTON GRAND OPENING JUNE 5TH', i18n: 'ticker.houstonGrandOpening' },
+    { text: 'ORLAND PARK GRAND OPENING – JUNE 11TH', i18n: 'ticker.orlandParkGrandOpening' },
+    { text: 'HOUSTON GRAND OPENING JUNE 5TH', i18n: 'ticker.houstonGrandOpening' },
+    { text: 'ORLAND PARK GRAND OPENING – JUNE 11TH', i18n: 'ticker.orlandParkGrandOpening' },
 ];
 ---
 
 <!-- Announcement Ticker -->
 <div class="ticker-bar">
     <div class="ticker-track">
-        {tickerMessages.map((m) => <span class="ticker-item" data-i18n="ticker.newLocations">{m}</span>)}
+        {tickerMessages.map((m) => <span class="ticker-item" data-i18n={m.i18n}>{m.text}</span>)}
     </div>
 </div>
 
