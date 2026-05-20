@@ -3,7 +3,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const HERO_POSTER = '/assets/video/hero-poster.jpg';
+const HERO_POSTER = '/assets/video/hero-poster-960.webp';
 
 function parseAttributes(tag) {
   const attrs = {};

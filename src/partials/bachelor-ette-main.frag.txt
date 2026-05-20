@@ -61,7 +61,7 @@
                     <picture>
                         <source srcset="/assets/photos/groups/bachelor-bachelorette-480.webp 480w, /assets/photos/groups/bachelor-bachelorette-800.webp 800w, /assets/photos/groups/bachelor-bachelorette-1200.webp 1200w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp">
                         <source srcset="/assets/photos/groups/bachelor-bachelorette.jpg" type="image/jpeg">
-                        <img src="/assets/photos/groups/bachelor-bachelorette.jpg" alt="Bachelorette party at Time Mission" width="1920" height="1281" loading="lazy" decoding="async">
+                        <img fetchpriority="low" src="/assets/photos/groups/bachelor-bachelorette.jpg" alt="Bachelorette party at Time Mission" width="1920" height="1281" loading="lazy" decoding="async">
                     </picture>
                 </div>
                 <div class="event-page-split-copy reveal">

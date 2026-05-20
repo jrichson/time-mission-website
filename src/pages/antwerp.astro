@@ -26,7 +26,8 @@ const antwerpMain = applyTmMediaBase(antwerpMainRaw);
     bodyDataLocation={antwerp.slug}
 >
     <Fragment slot="head-extra">
-        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" fetchpriority="high" />
+        <link rel="preload" as="image" href="/assets/video/hero-poster-960.webp" type="image/webp" fetchpriority="high" media="(max-width: 768px)" />
+        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" fetchpriority="high" media="(min-width: 769px)" />
         <link rel="stylesheet" href="/css/footer.css?v=3" />
         <link rel="stylesheet" href="/css/newsletter.css?v=3" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />

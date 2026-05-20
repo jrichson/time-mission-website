@@ -5,23 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Gift Cards | Time Mission</title>
     <!-- SEO META -->
-    <meta name="description" content="Give the gift of the mission. Time Mission gift cards work at every location and never expire.">
+    <meta name="description" content="Give the gift of the mission. Time Mission gift cards are available at participating locations and never expire.">
     <link rel="canonical" href="https://timemission.com/gift-cards">
     <meta name="robots" content="index,follow">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Time Mission">
     <meta property="og:title" content="Gift Cards | Time Mission">
-    <meta property="og:description" content="Give the gift of the mission. Time Mission gift cards work at every location and never expire.">
+    <meta property="og:description" content="Give the gift of the mission. Time Mission gift cards are available at participating locations and never expire.">
     <meta property="og:url" content="https://timemission.com/gift-cards">
     <meta property="og:image" content="https://timemission.com/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Gift Cards | Time Mission">
-    <meta name="twitter:description" content="Give the gift of the mission. Time Mission gift cards work at every location and never expire.">
+    <meta name="twitter:description" content="Give the gift of the mission. Time Mission gift cards are available at participating locations and never expire.">
     <meta name="twitter:image" content="https://timemission.com/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg">
         <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preload" as="font" href="assets/fonts/BebasNeue-Regular.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="assets/fonts/DMSans-Normal.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="assets/fonts/MonumentExtended-Regular.otf" type="font/otf" crossorigin>
+    <link rel="preload" as="font" href="assets/fonts/MonumentExtended-Ultrabold.otf" type="font/otf" crossorigin>
+    <link rel="preload" as="image" href="assets/logo/tm-gift-card.webp" type="image/webp" fetchpriority="high">
     <link rel="stylesheet" href="css/nav.css?v=17">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
@@ -603,11 +605,11 @@
     <!-- Gift Card Showcase -->
     <section class="gift-card-hero">
         <div class="gift-card-showcase">
-            <div class="gift-card-visual reveal">
+            <div class="gift-card-visual">
                 <div class="gift-card-mockup">
                     <picture>
                         <source srcset="assets/logo/tm-gift-card.webp" type="image/webp">
-                        <img src="assets/logo/tm-gift-card.png" alt="Time Mission gift card" width="5834" height="3750">
+                        <img src="assets/logo/tm-gift-card.png" alt="Time Mission gift card" width="5834" height="3750" loading="eager" fetchpriority="high" decoding="async">
                     </picture>
                     <div class="gift-card-location-overlay">
                         <span class="gift-card-location-text" data-tm-field="shortName" id="giftCardLocationText">YOUR LOCATION</span>
@@ -615,7 +617,7 @@
                 </div>
             </div>
 
-            <div class="gift-card-info reveal">
+            <div class="gift-card-info">
                 <h2>GIVE THE GIFT OF <span>ADVENTURE</span></h2>
                 <p>Time Mission gift cards make the perfect present for friends, family, or coworkers. Available in any amount, redeemable at your chosen location, and they never expire.</p>
                 <a href="#" class="btn-primary btn-gift-card" id="giftCardBuyBtn" data-gift="1">
@@ -656,7 +658,7 @@
                     </svg></div>
             </div>
             <div class="faq-answer">
-                <div class="faq-answer-content">Yes! Gift cards are valid at all Time Mission locations in the US and internationally.</div>
+                <div class="faq-answer-content">Gift card availability depends on the selected location. If a location does not currently have an approved gift-card checkout link, we will show that it is unavailable instead of sending you to booking.</div>
             </div>
         </div>
 
@@ -931,10 +933,10 @@
     <script defer src="js/language-switcher.js?v=3"></script>
     <script defer src="js/consent-bridge.js?v=1"></script>
     <script defer src="js/analytics.js?v=1"></script>
-    <script defer src="js/booking-journey.js?v=5"></script>
+    <script defer src="js/booking-journey.js?v=6"></script>
     <script defer src="js/location-catalog-view.js?v=3"></script>
-    <script defer src="js/locations.js?v=19"></script>
-    <script defer src="js/nav.js?v=10"></script>
+    <script defer src="js/locations.js?v=20"></script>
+    <script defer src="js/nav.js?v=11"></script>
     <script defer src="js/booking-controller.js?v=14"></script>
     <script defer src="js/ticket-panel.js?v=9"></script>
     <script>

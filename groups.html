@@ -19,9 +19,12 @@
     <meta name="twitter:description" content="Birthday parties, corporate team-building, and private events at Time Mission. Two ways to book: group tickets or full custom events.">
     <meta name="twitter:image" content="https://timemission.com/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg">
         <link rel="icon" type="image/png" href="assets/logo/TM_Favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preload" as="font" href="assets/fonts/BebasNeue-Regular.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="assets/fonts/DMSans-Normal.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="assets/fonts/MonumentExtended-Regular.otf" type="font/otf" crossorigin>
+    <link rel="preload" as="font" href="assets/fonts/MonumentExtended-Ultrabold.otf" type="font/otf" crossorigin>
+    <link rel="preload" as="image" href="assets/video/groups-hero-poster-960.webp" type="image/webp" fetchpriority="high" media="(max-width: 768px)">
+    <link rel="preload" as="image" href="assets/video/groups-hero-poster.jpg" fetchpriority="high" media="(min-width: 769px)">
     <link rel="stylesheet" href="css/nav.css?v=17">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
@@ -54,6 +57,13 @@
             position: absolute;
             inset: 0;
             z-index: 0;
+            background: #000 url('assets/video/groups-hero-poster-960.webp') center 40% / cover no-repeat;
+        }
+
+        @media (min-width: 769px) {
+            .hero-bg {
+                background-image: url('assets/video/groups-hero-poster.jpg');
+            }
         }
 
         .hero-bg img,
@@ -735,15 +745,13 @@
         /* Grid texture, matches about page */
         .event-types,
         .event-info,
-        .faq,
-        .inquiry-section {
+        .faq {
             position: relative;
         }
 
         .event-types::before,
         .event-info::before,
-        .faq::before,
-        .inquiry-section::before {
+        .faq::before {
             content: '';
             position: absolute;
             inset: 0;
@@ -909,126 +917,6 @@
             margin: 0 auto;
         }
 
-        /* Inquiry Form Section */
-        .inquiry-section {
-            padding: 6rem 2rem;
-            background: var(--dark);
-            position: relative;
-        }
-
-        .inquiry-section::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(255, 107, 44, 0.08) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .inquiry-container {
-            position: relative;
-            z-index: 1;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .inquiry-container .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .inquiry-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.25rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .form-group label {
-            font-family: var(--tech);
-            font-size: 0.7rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--gray);
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 0.85rem 1rem;
-            color: var(--white);
-            font-family: var(--body);
-            font-size: 0.95rem;
-            transition: border-color 0.3s ease;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.25);
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--orange);
-            background: rgba(255, 107, 44, 0.05);
-        }
-
-        .form-group select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            padding-right: 2.5rem;
-        }
-
-        .form-group select option {
-            background: var(--dark);
-            color: var(--white);
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .form-submit {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: center;
-            margin-top: 0.5rem;
-        }
-
-        .form-submit .btn-primary {
-            width: 100%;
-            justify-content: center;
-            border: none;
-            cursor: pointer;
-        }
-
-        @media (max-width: 600px) {
-            .inquiry-form {
-                grid-template-columns: 1fr;
-            }
-        }
             flex-wrap: wrap;
         }
 
@@ -1037,6 +925,14 @@
             .hero {
                 min-height: 60vh;
                 padding: 8rem 1.5rem 3rem;
+            }
+
+            .hero-bg {
+                background-image: url('assets/video/groups-hero-poster-960.webp');
+            }
+
+            .hero-bg video {
+                display: none;
             }
 
             .hero-title {
@@ -1310,8 +1206,8 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-bg">
-            <video autoplay muted loop playsinline poster="assets/video/groups-hero-poster.jpg">
-                <source src="{{TM_MEDIA_BASE}}/assets/video/groups-hero.mp4" type="video/mp4">
+            <video autoplay muted loop playsinline poster="assets/video/groups-hero-poster-960.webp" preload="none">
+                <source src="{{TM_MEDIA_BASE}}/assets/video/groups-hero.mp4" media="(min-width: 769px)" type="video/mp4">
             </video>
         </div>
         <div class="hero-content">
@@ -1355,7 +1251,7 @@
         <div class="event-types-grid">
             <div class="event-type-card reveal">
                 <div class="event-type-photo">
-                    <picture><source srcset="assets/photos/experiences/_Time-Mission_0321-480.webp 480w, assets/photos/experiences/_Time-Mission_0321-800.webp 800w, assets/photos/experiences/_Time-Mission_0321-1200.webp 1200w, assets/photos/experiences/_Time-Mission_0321.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="assets/photos/experiences/_Time-Mission_0321.jpg" alt="Kids birthday party at Time Mission" width="1600" height="1067" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="birthdays">Plan An Event</a></div>
+                    <picture><source srcset="assets/photos/experiences/_Time-Mission_0321-480.webp 480w, assets/photos/experiences/_Time-Mission_0321-800.webp 800w, assets/photos/experiences/_Time-Mission_0321-1200.webp 1200w, assets/photos/experiences/_Time-Mission_0321.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="assets/photos/experiences/_Time-Mission_0321.jpg" alt="Kids birthday party at Time Mission" width="1600" height="1067" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="birthdays">Plan An Event</a></div>
                 </div>
                 <h3>Birthday Parties</h3>
                 <p>Skip the bouncy houses and DIY cleanup. Time Mission is the ultimate kids birthday party venue and the go-to spot for adult birthday celebrations, with 25+ high-tech missions, party room upgrades, and hosts who handle every detail so you can actually enjoy the day.</p>
@@ -1363,7 +1259,7 @@
             </div>
             <div class="event-type-card reveal">
                 <div class="event-type-photo">
-                    <picture><source srcset="assets/photos/groups/corporate-events-480.webp 480w, assets/photos/groups/corporate-events-800.webp 800w, assets/photos/groups/corporate-events-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img src="assets/photos/groups/corporate-events.jpg" alt="Corporate team event at Time Mission" width="1920" height="1536" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="corporate">Plan An Event</a></div>
+                    <picture><source srcset="assets/photos/groups/corporate-events-480.webp 480w, assets/photos/groups/corporate-events-800.webp 800w, assets/photos/groups/corporate-events-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="assets/photos/groups/corporate-events.jpg" alt="Corporate team event at Time Mission" width="1920" height="1536" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="corporate">Plan An Event</a></div>
                 </div>
                 <h3>Corporate Events</h3>
                 <p>Get your team out of the conference room and into the action. No set packages. Build the night however you want, from immersive missions and shared bites to a full-venue buyout. Groups up to 125, and we handle the logistics.</p>
@@ -1371,7 +1267,7 @@
             </div>
             <div class="event-type-card reveal">
                 <div class="event-type-photo">
-                    <picture><source srcset="assets/photos/groups/bachelor-bachelorette-480.webp 480w, assets/photos/groups/bachelor-bachelorette-800.webp 800w, assets/photos/groups/bachelor-bachelorette-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img src="assets/photos/groups/bachelor-bachelorette.jpg" alt="Bachelor and bachelorette party at Time Mission" width="1920" height="1281" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="bachelor-ette">Plan An Event</a></div>
+                    <picture><source srcset="assets/photos/groups/bachelor-bachelorette-480.webp 480w, assets/photos/groups/bachelor-bachelorette-800.webp 800w, assets/photos/groups/bachelor-bachelorette-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="assets/photos/groups/bachelor-bachelorette.jpg" alt="Bachelor and bachelorette party at Time Mission" width="1920" height="1281" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="bachelor-ette">Plan An Event</a></div>
                 </div>
                 <h3>Bachelor &amp; Bachelorette</h3>
                 <p>Make the last night out legendary. Time Mission is the bachelor and bachelorette party venue for crews who want more than a standard bar crawl: head-to-head missions, private suites, customizable food and drink packages, and enough chaos to fuel stories for years.</p>
@@ -1379,7 +1275,7 @@
             </div>
             <div class="event-type-card reveal">
                 <div class="event-type-photo">
-                    <picture><source srcset="assets/photos/groups/field-trips-480.webp 480w, assets/photos/groups/field-trips-800.webp 800w, assets/photos/groups/field-trips-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img src="assets/photos/groups/field-trips.jpg" alt="School field trip at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="field-trips">Plan An Event</a></div>
+                    <picture><source srcset="assets/photos/groups/field-trips-480.webp 480w, assets/photos/groups/field-trips-800.webp 800w, assets/photos/groups/field-trips-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="assets/photos/groups/field-trips.jpg" alt="School field trip at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="field-trips">Plan An Event</a></div>
                 </div>
                 <h3>School Field Trips</h3>
                 <p>Stealth learning disguised as pure fun. Time Mission turns physics, teamwork, and problem-solving into a full-body adventure. Group rates for schools, flexible weekday scheduling, and chaperone-friendly setups make it easy to book 30 students or up to 125.</p>
@@ -1387,7 +1283,7 @@
             </div>
             <div class="event-type-card reveal">
                 <div class="event-type-photo">
-                    <picture><source srcset="assets/photos/venue/_Time-Mission_0024-480.webp 480w, assets/photos/venue/_Time-Mission_0024-800.webp 800w, assets/photos/venue/_Time-Mission_0024-1200.webp 1200w, assets/photos/venue/_Time-Mission_0024.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Private event at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">Plan An Event</a></div>
+                    <picture><source srcset="assets/photos/venue/_Time-Mission_0024-480.webp 480w, assets/photos/venue/_Time-Mission_0024-800.webp 800w, assets/photos/venue/_Time-Mission_0024-1200.webp 1200w, assets/photos/venue/_Time-Mission_0024.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img fetchpriority="low" src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Private event at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">Plan An Event</a></div>
                 </div>
                 <h3>Private Events</h3>
                 <p>Whatever you're planning, we can host it. From family outings and casual gatherings to reunions, milestone celebrations, and full Time Mission buyouts. Bring your own food and drink or let us handle catering. Add private suites, branded signage, and a dedicated coordinator when you want the full treatment.</p>
@@ -1395,7 +1291,7 @@
             </div>
             <div class="event-type-card reveal">
                 <div class="event-type-photo">
-                    <picture><source srcset="assets/photos/groups/holiday-parties-480.webp 480w, assets/photos/groups/holiday-parties-800.webp 800w, assets/photos/groups/holiday-parties-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img src="assets/photos/groups/holiday-parties.jpg" alt="Holiday party at Time Mission" width="1920" height="1281" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="holidays">Plan An Event</a></div>
+                    <picture><source srcset="assets/photos/groups/holiday-parties-480.webp 480w, assets/photos/groups/holiday-parties-800.webp 800w, assets/photos/groups/holiday-parties-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="assets/photos/groups/holiday-parties.jpg" alt="Holiday party at Time Mission" width="1920" height="1281" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="holidays">Plan An Event</a></div>
                 </div>
                 <h3>Holiday Parties</h3>
                 <p>The best holiday parties don't happen in ballrooms. As your go-to holiday party venue, Time Mission brings high-energy missions, festive packages, and holiday catering that make every company celebration, from intimate team dinners to full-venue blowouts, completely unforgettable.</p>
@@ -1475,7 +1371,7 @@
         <!-- Block 1: Group Experiences, photo left, text right -->
         <div class="event-info-block reveal">
             <div class="event-info-photo">
-                <picture><source srcset="assets/photos/venue/_Time-Mission_0042-480.webp 480w, assets/photos/venue/_Time-Mission_0042-800.webp 800w, assets/photos/venue/_Time-Mission_0042-1200.webp 1200w, assets/photos/venue/_Time-Mission_0042.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Group competing at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0042-480.webp 480w, assets/photos/venue/_Time-Mission_0042-800.webp 800w, assets/photos/venue/_Time-Mission_0042-1200.webp 1200w, assets/photos/venue/_Time-Mission_0042.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img fetchpriority="low" src="assets/photos/venue/_Time-Mission_0042.jpg" alt="Group competing at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
             </div>
             <div class="event-info-body">
                 <div class="section-badge">The Experience</div>
@@ -1492,7 +1388,7 @@
         <!-- Block 2: Custom Events, text left, photo right -->
         <div class="event-info-block reveal">
             <div class="event-info-photo">
-                <picture><source srcset="assets/photos/venue/_Time-Mission_0024-480.webp 480w, assets/photos/venue/_Time-Mission_0024-800.webp 800w, assets/photos/venue/_Time-Mission_0024-1200.webp 1200w, assets/photos/venue/_Time-Mission_0024.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Private event at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+                <picture><source srcset="assets/photos/venue/_Time-Mission_0024-480.webp 480w, assets/photos/venue/_Time-Mission_0024-800.webp 800w, assets/photos/venue/_Time-Mission_0024-1200.webp 1200w, assets/photos/venue/_Time-Mission_0024.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img fetchpriority="low" src="assets/photos/venue/_Time-Mission_0024.jpg" alt="Private event at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
             </div>
             <div class="event-info-body">
                 <div class="section-badge">Event Planning</div>
@@ -1566,86 +1462,6 @@
                     <p>Absolutely. We regularly host corporate outings, team building events, and groups of 50-200+. Submit an event request and our team will create a custom package for your needs.</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Group Event Inquiry Form -->
-    <section class="inquiry-section" id="inquiry">
-        <div class="inquiry-container">
-            <div class="section-header reveal">
-                <div class="section-badge">Get Started</div>
-                <h2 class="section-title">PLAN YOUR <span style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">EVENT</span></h2>
-                <p class="section-subtitle">Tell us about your group and we'll get back to you within 24 hours.</p>
-            </div>
-
-            <form class="inquiry-form reveal" action="https://formsubmit.co/jeffersonkrichardson@gmail.com" method="POST">
-                <input type="hidden" name="_subject" value="New Group Event Inquiry: Time Mission">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_next" value="https://timemission.com/groups?thanks=1">
-                <input type="text" name="_honey" style="display:none">
-
-                <div class="form-group">
-                    <label for="inquiry-name">Name</label>
-                    <input type="text" id="inquiry-name" name="name" placeholder="Your name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="inquiry-email">Email</label>
-                    <input type="email" id="inquiry-email" name="email" placeholder="you@email.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="inquiry-phone">Phone</label>
-                    <input type="tel" id="inquiry-phone" name="phone" placeholder="(555) 123-4567">
-                </div>
-
-                <div class="form-group">
-                    <label for="inquiry-type">Event Type</label>
-                    <select id="inquiry-type" name="event_type" required>
-                        <option value="" disabled selected>Select event type</option>
-                        <option value="birthday">Birthday Party</option>
-                        <option value="corporate">Corporate Team Building</option>
-                        <option value="school">School Field Trip</option>
-                        <option value="private">Private Event / Venue Rental</option>
-                        <option value="social">Social Outing</option>
-                        <option value="youth">Youth Group</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="inquiry-size">Estimated Group Size</label>
-                    <input type="number" id="inquiry-size" name="group_size" placeholder="e.g. 25" min="1">
-                </div>
-
-                <div class="form-group">
-                    <label for="inquiry-location">Preferred Location</label>
-                    <select id="inquiry-location" name="location">
-                        <option value="" disabled selected>Select location</option>
-                        <option value="philadelphia">Philadelphia</option>
-                        <option value="mount-prospect">Mount Prospect</option>
-                        <option value="manassas">Manassas</option>
-                        <option value="west-nyack">West Nyack</option>
-                        <option value="lincoln">Lincoln</option>
-                        <option value="houston">Houston</option>
-                        <option value="antwerp">Antwerp</option>
-                    </select>
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="inquiry-message">Tell Us More</label>
-                    <textarea id="inquiry-message" name="message" placeholder="Preferred dates, special requests, anything we should know..."></textarea>
-                </div>
-
-                <div class="form-submit">
-                    <button type="submit" class="btn-primary">
-                        Submit Inquiry
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
-                    </button>
-                </div>
-            </form>
         </div>
     </section>
 
@@ -1847,10 +1663,10 @@
     <script defer src="js/language-switcher.js?v=3"></script>
     <script defer src="js/consent-bridge.js?v=1"></script>
     <script defer src="js/analytics.js?v=1"></script>
-    <script defer src="js/booking-journey.js?v=5"></script>
+    <script defer src="js/booking-journey.js?v=6"></script>
     <script defer src="js/location-catalog-view.js?v=3"></script>
-    <script defer src="js/locations.js?v=19"></script>
-    <script defer src="js/nav.js?v=10"></script>
+    <script defer src="js/locations.js?v=20"></script>
+    <script defer src="js/nav.js?v=11"></script>
     <script defer src="js/booking-controller.js?v=14"></script>
     <script defer src="js/ticket-panel.js?v=9"></script>
     <script>

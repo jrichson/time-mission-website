@@ -61,7 +61,7 @@
                     <picture>
                         <source srcset="/assets/photos/groups/field-trips-480.webp 480w, /assets/photos/groups/field-trips-800.webp 800w, /assets/photos/groups/field-trips-1200.webp 1200w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp">
                         <source srcset="/assets/photos/groups/field-trips.jpg" type="image/jpeg">
-                        <img src="/assets/photos/groups/field-trips.jpg" alt="Group playing at Time Mission" width="1920" height="1280" loading="lazy" decoding="async">
+                        <img fetchpriority="low" src="/assets/photos/groups/field-trips.jpg" alt="Group playing at Time Mission" width="1920" height="1280" loading="lazy" decoding="async">
                     </picture>
                 </div>
                 <div class="event-page-split-copy reveal">

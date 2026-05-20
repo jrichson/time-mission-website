@@ -65,6 +65,24 @@ html {
     }
 }
 
+@media (max-width: 768px) {
+    body .hero .hero-video-container {
+        background-image: url('/assets/video/hero-poster-960.webp');
+    }
+
+    body .hero .hero-eyebrow,
+    body .hero .hero-title,
+    body .hero .hero-title .line-2,
+    body .hero .hero-subtitle,
+    body .hero .hero-cta {
+        animation: none;
+    }
+
+    body .hero .hero-title .line-2 {
+        background-position: 0% 50%;
+    }
+}
+
 body {
     font-family: var(--body);
     background: var(--black);

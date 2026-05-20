@@ -60,7 +60,7 @@
                 <div class="event-page-split-image reveal">
                     <picture>
                         <source srcset="/assets/photos/venue/_Time-Mission_0024.jpg" type="image/jpeg">
-                        <img src="/assets/photos/venue/_Time-Mission_0024.jpg" alt="Time Mission venue set up for a private event" width="1400" height="1120" loading="lazy" decoding="async">
+                        <img fetchpriority="low" src="/assets/photos/venue/_Time-Mission_0024.jpg" alt="Time Mission venue set up for a private event" width="1400" height="1120" loading="lazy" decoding="async">
                     </picture>
                 </div>
                 <div class="event-page-split-copy reveal">
