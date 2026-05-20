@@ -84,7 +84,7 @@
   "giftCards": {
     "manassas": "https://book.manassas.timemission.com/giftcards/en-us/products",
     "mount-prospect": "https://book.mountprospect.timemission.com/giftcards/en-us/products",
-    "philadelphia": "https://ecom.roller.app/timemissionphiladelphiapa/onlinecheckout/en-us/giftcards",
+    "philadelphia": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
     "west-nyack": "https://timemission-palisades.briqbookings.com",
     "lincoln": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
     "antwerp": "",
@@ -99,8 +99,8 @@
     "west-nyack": "",
     "lincoln": "",
     "antwerp": "",
-    "houston": "",
-    "orland-park": "",
+    "houston": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
+    "orland-park": "https://book.orlandpark.timemission.com/giftcards/en-us/products",
     "dallas": ""
   }
 }

@@ -10,7 +10,7 @@
             </h1>
             <p class="hero-subtitle">Buy out the floor. Full-venue access, custom configurations, and 25+ missions, perfect for milestones, product launches, and gatherings worth remembering.</p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
@@ -184,7 +184,7 @@
             <h2>Ready to take over the <span class="highlight">venue?</span></h2>
             <p class="event-page-cta-subtitle">Tell us your headcount, date, and event type, we'll build a buyout plan around it.</p>
             <div class="event-page-cta-buttons">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>

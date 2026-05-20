@@ -486,6 +486,23 @@ test('legacy groups cards open the selected location event form as a direct link
   await expect(page).toHaveURL(expectedHref);
 });
 
+test('group page Book Now CTAs keep the standard ticket booking flow', async ({ page }) => {
+  await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
+    await route.fulfill({
+      contentType: 'application/javascript',
+      body: 'window.RollerCheckout = { show: function () { window.__rollerCheckoutShown = true; } };',
+    });
+  });
+
+  await page.goto('/groups/corporate');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+  await page.evaluate(() => window.TM.select('manassas'));
+
+  await page.locator('main .btn-primary.btn-tickets[data-tm-booking-kind="tickets"]').first().click();
+  await page.waitForFunction(() => window.__rollerCheckoutShown === true);
+  await expect(page).toHaveURL(/\/groups\/corporate$/);
+});
+
 test('Houston and Orland Park group CTAs resolve to audit-approved forms', async ({ page }) => {
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
@@ -534,7 +551,7 @@ test('gift card page disables locations with blank gift-card audit rows', async 
   }
 });
 
-test('waiver panel disables Houston and Orland Park without waiver fallbacks', async ({ page }) => {
+test('waiver panel routes Houston and Orland Park to audit-provided destinations', async ({ page }) => {
   await page.goto('/waiver');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
@@ -543,11 +560,11 @@ test('waiver panel disables Houston and Orland Park without waiver fallbacks', a
 
   for (const locationId of ['houston', 'orland-park']) {
     await page.locator('#ticketLocation').selectOption(locationId);
-    await expect(page.locator('#ticketPanelTitle')).toContainText('Waiver Unavailable');
-    await expect(page.locator('#ticketBookBtn')).toHaveAttribute('aria-disabled', 'true');
+    await expect(page.locator('#ticketPanelTitle')).toContainText('Complete Your Waiver');
+    await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('aria-disabled', 'true');
     await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', locationId);
+    await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', formsLinksAudit.waivers[locationId]);
     await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
-    await page.locator('#ticketBookBtn').evaluate((button) => button.click());
     await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
   }
 });

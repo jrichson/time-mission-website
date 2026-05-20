@@ -36,7 +36,7 @@ export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'language', src: '/js/language-switcher.js', version: 3 },
     { id: 'consent', src: '/js/consent-bridge.js', version: 1 },
     { id: 'analytics', src: '/js/analytics.js', version: 1 },
-    { id: 'bookingJourney', src: '/js/booking-journey.js', version: 4 },
+    { id: 'bookingJourney', src: '/js/booking-journey.js', version: 5 },
     { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 3 },
     { id: 'locations', src: '/js/locations.js', version: 19 },
     { id: 'nav', src: '/js/nav.js', version: 10 },
