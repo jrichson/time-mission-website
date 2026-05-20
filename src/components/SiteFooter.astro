@@ -3,7 +3,18 @@
  * Full-width footer matching legacy `footer-grid` pages (index, FAQ, contact, etc.).
  * Keeps structure in sync with `src/partials/faq-footer.frag.txt`.
  */
+import { allLocations } from '../data/locations';
+import { locationOpeningLabel } from '../lib/location-status';
+
 const year = new Date().getFullYear();
+
+function openingLabelFor(slug: string) {
+    const loc = allLocations.find((entry) => entry.slug === slug || entry.id === slug);
+    return loc ? locationOpeningLabel(loc) : '';
+}
+
+const houstonOpeningLabel = openingLabelFor('houston');
+const orlandParkOpeningLabel = openingLabelFor('orland-park');
 ---
 
 <footer class="footer">
@@ -70,9 +81,13 @@ const year = new Date().getFullYear();
                         <a href="/philadelphia">Philadelphia</a>
                         <a href="/west-nyack">West Nyack</a>
                         <a href="/lincoln">Lincoln</a>
-                        <a href="/houston">Houston</a>
+                        <a href="/houston" class={houstonOpeningLabel ? 'coming-soon' : undefined}>
+                            Houston {houstonOpeningLabel && <span class="coming-soon-tag">{houstonOpeningLabel}</span>}
+                        </a>
                         <a href="/manassas">Manassas</a>
-                        <a href="/orland-park">Orland Park</a>
+                        <a href="/orland-park" class={orlandParkOpeningLabel ? 'coming-soon' : undefined}>
+                            Orland Park {orlandParkOpeningLabel && <span class="coming-soon-tag">{orlandParkOpeningLabel}</span>}
+                        </a>
                         <a href="/dallas" class="coming-soon">Dallas <span class="coming-soon-tag">Coming Soon</span></a>
                     </div>
                 </div>

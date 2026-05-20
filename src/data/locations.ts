@@ -56,6 +56,8 @@ export interface LocationRecord {
     hreflang: Array<{ lang: string; url: string }> | null;
     localBusinessSchemaEligible: boolean;
     alternateName?: string;
+    openingDate?: string;
+    openingLabel?: string;
 }
 
 export interface LocationsDocument {

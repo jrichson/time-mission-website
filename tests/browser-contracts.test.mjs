@@ -223,7 +223,9 @@ describe('browser architecture contracts', () => {
           {
             id: 'houston',
             slug: 'houston',
+            shortName: 'Houston',
             status: 'coming-soon',
+            openingLabel: 'Opening 6/5/26',
             bookingUrl: 'https://checkout.example/houston',
             rollerCheckoutUrl: 'https://checkout.example/houston',
             giftCardUrl: '',
@@ -307,6 +309,13 @@ describe('browser architecture contracts', () => {
       .toBe('https://waiver.example/manassas');
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'houston' }))
       .toBe('https://checkout.example/houston');
+    expect(window.LocationContext.getLocationView('houston'))
+      .toMatchObject({
+        hoursText: 'Opening 6/5/26',
+        openingLabel: 'Opening 6/5/26',
+      });
+    expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'houston')?.label)
+      .toBe('Houston (Opening 6/5/26)');
     expect(window.TMBooking.getDestination({ kind: 'groups', locationId: 'houston' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'houston' }))

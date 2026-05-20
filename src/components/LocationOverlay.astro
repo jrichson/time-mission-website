@@ -1,6 +1,7 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import { allLocations } from '../data/locations';
+import { locationOpeningLabel } from '../lib/location-status';
 
 interface Props {
     currentLang?: string;
@@ -15,6 +16,10 @@ function locationHref(loc: (typeof allLocations)[number]) {
     return loc.region === 'europe'
         ? loc.externalUrl || `https://timemission.eu/${loc.slug}`
         : `/${loc.slug}`;
+}
+
+function comingSoonLabel(loc: (typeof allLocations)[number]) {
+    return locationOpeningLabel(loc) || 'Coming Soon';
 }
 ---
 
@@ -42,7 +47,11 @@ function locationHref(loc: (typeof allLocations)[number]) {
                         class={loc.status === 'coming-soon' ? 'location-coming-soon' : undefined}
                     >
                         {loc.navLabel}
-                        {loc.status === 'coming-soon' && <span class="coming-soon-tag" data-i18n="location.comingSoon"> Coming Soon</span>}
+                        {loc.status === 'coming-soon' && (
+                            <span class="coming-soon-tag" data-i18n={locationOpeningLabel(loc) ? undefined : 'location.comingSoon'}>
+                                {' '}{comingSoonLabel(loc)}
+                            </span>
+                        )}
                     </a>
                 ))}
             </div>
@@ -56,7 +65,11 @@ function locationHref(loc: (typeof allLocations)[number]) {
                         class={loc.status === 'coming-soon' ? 'location-coming-soon' : undefined}
                     >
                         {loc.navLabel}
-                        {loc.status === 'coming-soon' && <span class="coming-soon-tag" data-i18n="location.comingSoon"> Coming Soon</span>}
+                        {loc.status === 'coming-soon' && (
+                            <span class="coming-soon-tag" data-i18n={locationOpeningLabel(loc) ? undefined : 'location.comingSoon'}>
+                                {' '}{comingSoonLabel(loc)}
+                            </span>
+                        )}
                     </a>
                 ))}
             </div>

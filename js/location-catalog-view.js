@@ -26,6 +26,20 @@
         return fallback;
     }
 
+    function openingLabelForLocation(loc) {
+        if (!loc) return '';
+        var explicit = String(loc.openingLabel || '').trim();
+        if (explicit) return explicit;
+        var iso = String(loc.openingDate || '').trim();
+        var match = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (!match) return '';
+        return 'Opening ' + Number(match[2]) + '/' + Number(match[3]) + '/' + match[1].slice(2);
+    }
+
+    function comingSoonLabelForLocation(loc) {
+        return openingLabelForLocation(loc) || translate('location.comingSoon', 'Coming Soon');
+    }
+
     function renderAddressLines(container, addr) {
         if (!container) return;
         container.textContent = '';
@@ -80,14 +94,14 @@
     }
 
     function hoursTextForLocation(loc) {
-        if (!loc || !loc.hours) return loc && loc.status === 'coming-soon' ? 'Coming Soon' : '';
+        if (!loc || !loc.hours) return loc && loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : '';
         var lines = [];
         dayOrder.forEach(function (day) {
             if (loc.hours[day] && loc.hours[day].label) {
                 lines.push(shortDayLabels[day] + ': ' + loc.hours[day].label);
             }
         });
-        return lines.join('\n') || (loc.status === 'coming-soon' ? 'Coming Soon' : '');
+        return lines.join('\n') || (loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : '');
     }
 
     function getMapQuery(loc) {
@@ -140,6 +154,7 @@
             bookingUrl: externalUrl ? '' : bookingUrl,
             checkoutUrl: bookingUrl,
             externalUrl: externalUrl,
+            openingLabel: openingLabelForLocation(loc),
             bookLabel: externalUrl ? 'Visit EU Site' : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
             mapQuery: mapQuery,
             mapDirectionsUrl: mapQuery ? 'https://www.google.com/maps/dir/?api=1&destination=' + mapQuery : '',
@@ -210,9 +225,9 @@
         return (Array.isArray(locations) ? locations : []).map(function (loc) {
             var view = getLocationView(loc, loc.id || loc.slug);
             var statusSuffix = loc.status === 'coming-soon'
-                ? ' (' + (view && view.bookable
+                ? ' (' + (openingLabelForLocation(loc) || (view && view.bookable
                     ? translate('booking.status.bookingNow', 'Booking Now')
-                    : translate('location.comingSoon', 'Coming Soon')) + ')'
+                    : translate('location.comingSoon', 'Coming Soon'))) + ')'
                 : '';
             return {
                 value: loc.id,

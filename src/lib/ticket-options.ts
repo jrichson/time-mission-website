@@ -1,4 +1,5 @@
 import type { LocationRecord } from '../data/locations';
+import { hasTicketBooking, locationOpeningLabel } from './location-status';
 
 export type TicketPanelOption = {
     value: string;
@@ -13,7 +14,7 @@ export function ticketPanelSelectOptions(locations: LocationRecord[]): TicketPan
         label:
             (loc.shortName || loc.name || loc.id) +
             (loc.status === 'coming-soon'
-                ? (loc.rollerCheckoutUrl || loc.bookingUrl ? ' (Booking Now)' : ' (Coming Soon)')
+                ? ` (${locationOpeningLabel(loc) || (hasTicketBooking(loc) ? 'Booking Now' : 'Coming Soon')})`
                 : ''),
         status: loc.status || 'open',
     }));

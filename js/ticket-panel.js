@@ -17,6 +17,16 @@
         return fallback;
     }
 
+    function openingLabelForLocation(loc) {
+        if (!loc) return '';
+        var explicit = String(loc.openingLabel || '').trim();
+        if (explicit) return explicit;
+        var iso = String(loc.openingDate || '').trim();
+        var match = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (!match) return '';
+        return 'Opening ' + Number(match[2]) + '/' + Number(match[3]) + '/' + match[1].slice(2);
+    }
+
     function getLocationContext() {
         if (window.LocationContext) return window.LocationContext;
         if (!window.TM) return null;
@@ -36,7 +46,10 @@
             options = window.TM.locations.map(function (loc) {
                 var suffix = '';
                 if (loc.status === 'coming-soon') {
-                    suffix = loc.rollerCheckoutUrl || loc.bookingUrl
+                    var openingLabel = openingLabelForLocation(loc);
+                    suffix = openingLabel
+                        ? ' (' + openingLabel + ')'
+                        : (loc.rollerCheckoutUrl || loc.bookingUrl)
                         ? ' (' + translate('booking.status.bookingNow', 'Booking Now') + ')'
                         : ' (' + translate('location.comingSoon', 'Coming Soon') + ')';
                 }
