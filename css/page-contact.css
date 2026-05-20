@@ -188,6 +188,12 @@
             transition: all 0.3s ease;
         }
 
+        .location-contact-card[hidden],
+        .location-contact-empty[hidden],
+        .general-contact[hidden] {
+            display: none !important;
+        }
+
         .location-contact-card:hover {
             border-color: rgba(255, 107, 44, 0.3);
             transform: translateY(-2px);
@@ -218,6 +224,10 @@
             font-size: 0.95rem;
         }
 
+        .contact-info-item[hidden] {
+            display: none !important;
+        }
+
         .contact-info-item svg {
             width: 18px;
             height: 18px;
@@ -233,6 +243,15 @@
 
         .contact-info-item a:hover {
             color: var(--orange);
+        }
+
+        .location-contact-empty {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px dashed rgba(255, 255, 255, 0.14);
+            border-radius: 16px;
+            color: rgba(255, 255, 255, 0.72);
+            line-height: 1.55;
+            padding: 1.5rem;
         }
 
         /* General Contact */

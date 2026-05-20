@@ -37,8 +37,9 @@ function replaceRawToken(source: string, token: string, value: string) {
 
 const checkoutUrl = String(location.rollerCheckoutUrl || location.bookingUrl || '').trim();
 const isBookable = checkoutUrl !== '';
-const primaryCtaLabel = isBookable ? 'Book Now' : 'Sign Up For Location Updates';
-const primaryCtaHref = isBookable ? '#' : '#newsletter';
+const contactHref = `/contact?location=${encodeURIComponent(location.slug)}&type=updates`;
+const primaryCtaLabel = isBookable ? 'Book Now' : 'Contact This Location';
+const primaryCtaHref = isBookable ? '#' : contactHref;
 const primaryCtaClass = isBookable ? 'btn-location-book' : 'btn-location-lead';
 const primaryCtaAttrs = isBookable
     ? `data-tm-booking-trigger="" data-tm-booking-kind="tickets" data-tm-location="${escapeHtml(location.slug)}" data-tm-booking-url="${escapeHtml(checkoutUrl)}"`
@@ -47,11 +48,11 @@ const pageStatusLabel = isBookable ? 'Booking Now' : 'Coming Soon';
 const bookingFaqQuestion = isBookable ? 'Can I book now?' : 'When can I book?';
 const bookingFaqAnswer = isBookable
     ? `Yes. Online booking is available for ${location.shortName}. Use Book Now to choose your date and time through our secure checkout.`
-    : 'Booking opens closer to launch. Join the location list and we will send opening updates, early access, and first ticket alerts.';
-const finalCtaTitle = isBookable ? 'BOOK YOUR MISSION' : 'GET FIRST ACCESS';
+    : `Booking opens closer to launch. Contact the ${location.shortName} team for opening updates and launch timing.`;
+const finalCtaTitle = isBookable ? 'BOOK YOUR MISSION' : 'STAY CLOSE TO LAUNCH';
 const finalCtaText = isBookable
     ? `Tickets for ${location.shortName} are available now. Choose your date, rally your team, and get ready to play.`
-    : `Join the ${location.shortName} list for launch news, early access, and opening offers.`;
+    : `Reach out about ${location.shortName} and we will route your message to the right team.`;
 
 let comingSoonMain = applyTmMediaBase(comingSoonMainRaw);
 comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_NAME', location.name);

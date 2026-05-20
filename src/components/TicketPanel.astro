@@ -8,6 +8,13 @@ interface Props {
 
 const { pageLocationSlug = '' } = Astro.props;
 const ticketOptions = ticketPanelSelectOptions(allLocations);
+const pageLocation = pageLocationSlug
+    ? allLocations.find((loc) => loc.id === pageLocationSlug || loc.slug === pageLocationSlug)
+    : null;
+const briqWidget = pageLocation?.bookingProvider === 'briq' ? pageLocation.briqWidget : null;
+const briqToggleState = briqWidget
+    ? `bwr=bu|is|${briqWidget.domain}|and|o|is|true|and|ro|is|PeopleAndDate`
+    : '';
 ---
 
 <!-- Ticket Popup Panel -->
@@ -23,49 +30,80 @@ const ticketOptions = ticketPanelSelectOptions(allLocations);
         </button>
     </div>
     <div class="ticket-panel-content">
-        <p id="ticketPanelIntro" data-i18n="booking.intro.default">Select your location and we'll take you to our booking system to choose your date and time.</p>
+        <div data-ticket-panel-standard>
+            <p id="ticketPanelIntro" data-i18n="booking.intro.default">Select your location and we'll take you to our booking system to choose your date and time.</p>
 
-        <div class="ticket-location-select">
-            <label for="ticketLocation" data-i18n="booking.locationLabel">Choose Location</label>
-            <select id="ticketLocation">
-                <option value="" data-i18n="booking.locationPlaceholder">Select a location</option>
-                {ticketOptions.map((opt) => <option value={opt.value}>{opt.label}</option>)}
-            </select>
+            <div class="ticket-location-select">
+                <label for="ticketLocation" data-i18n="booking.locationLabel">Choose Location</label>
+                <select id="ticketLocation">
+                    <option value="" data-i18n="booking.locationPlaceholder">Select a location</option>
+                    {ticketOptions.map((opt) => <option value={opt.value}>{opt.label}</option>)}
+                </select>
+            </div>
+
+            <a href="#" class="btn-ticket-book" id="ticketBookBtn">
+                <span id="ticketBookBtnText" data-i18n="booking.cta.default">Continue to Booking</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+            </a>
+
+            <div class="ticket-panel-info">
+                <h4 data-i18n="booking.quickInfo">QUICK INFO</h4>
+                <div class="ticket-info-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                    <span data-i18n="booking.info.sessions">Sessions last approximately 60-120 minutes</span>
+                </div>
+                <div class="ticket-info-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span data-i18n="booking.info.players">Teams of 2-5 players per mission</span>
+                </div>
+                <div class="ticket-info-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span data-i18n="booking.info.advance">Advance booking recommended</span>
+                </div>
+            </div>
         </div>
 
-        <a href="#" class="btn-ticket-book" id="ticketBookBtn">
-            <span id="ticketBookBtnText" data-i18n="booking.cta.default">Continue to Booking</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-        </a>
-
-        <div class="ticket-panel-info">
-            <h4 data-i18n="booking.quickInfo">QUICK INFO</h4>
-            <div class="ticket-info-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M12 6v6l4 2"></path>
-                </svg>
-                <span data-i18n="booking.info.sessions">Sessions last approximately 60-120 minutes</span>
+        {briqWidget && (
+            <div id="briq-widget-container" class="briq-panel-widget" data-briq-panel-widget>
+                <button
+                    type="button"
+                    class="bw-widget-toggle briq-widget-toggle-proxy"
+                    data-widget-state={briqToggleState}
+                    data-briq-open-toggle
+                    aria-hidden="true"
+                    tabindex="-1"
+                >
+                    Open booking
+                </button>
+                <div
+                    id="briq-widget"
+                    class="bw-widget"
+                    data-domain={briqWidget.domain}
+                    data-color-1-base={briqWidget.color1Base}
+                    data-color-1-contrast={briqWidget.color1Contrast}
+                    data-color-2-base={briqWidget.color2Base}
+                    data-color-2-contrast={briqWidget.color2Contrast}
+                    data-price-display={briqWidget.priceDisplay}
+                    data-button-text={briqWidget.buttonText}
+                    data-request-on-open="PeopleAndDate"
+                    data-features="hideMainButton"
+                    data-positioning="[{'x-align':'right','x-offset':'0px','y-offset':'0px','z-index':'10000'}]"
+                ></div>
             </div>
-            <div class="ticket-info-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                <span data-i18n="booking.info.players">Teams of 2-5 players per mission</span>
-            </div>
-            <div class="ticket-info-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
-                <span data-i18n="booking.info.advance">Advance booking recommended</span>
-            </div>
-        </div>
+        )}
     </div>
 </div>

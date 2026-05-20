@@ -5,7 +5,6 @@ import MobileMenu from '../components/MobileMenu.astro';
 import LocationOverlay from '../components/LocationOverlay.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import TicketPanel from '../components/TicketPanel.astro';
-import BriqFloatingWidget from '../components/BriqFloatingWidget.astro';
 import SiteScripts from '../components/SiteScripts.astro';
 import { allLocations } from '../data/locations';
 import { resolveLastUpdated } from '../lib/last-updated';
@@ -84,11 +83,20 @@ const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocati
         {loadsBriqWidget && (
             <script language="javascript" is:inline>
                 ;(function (d, t){
-                    var s = d.createElement(t)
-                    s.async = true
-                    s.src = 'https://widgetcdn.briqbookings.com/widget/widget.js'
-                    var r = d.getElementsByTagName(t)[0]
-                    r.parentNode.insertBefore(s, r)
+                    function loadBriqWidgetScript() {
+                        if (d.querySelector('script[data-briq-widget-script]')) return
+                        var s = d.createElement(t)
+                        s.async = true
+                        s.src = 'https://widgetcdn.briqbookings.com/widget/widget.js'
+                        s.setAttribute('data-briq-widget-script', '')
+                        var r = d.getElementsByTagName(t)[0]
+                        r.parentNode.insertBefore(s, r)
+                    }
+                    if (d.readyState === 'loading') {
+                        d.addEventListener('DOMContentLoaded', loadBriqWidgetScript, { once: true })
+                    } else {
+                        loadBriqWidgetScript()
+                    }
                 })(document, 'script')
             </script>
         )}
@@ -129,7 +137,6 @@ const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocati
             <time datetime={lastUpdatedInfo.iso}>{lastUpdatedInfo.human}</time>
         </aside>
         <TicketPanel pageLocationSlug={bodyDataLocation} />
-        {loadsBriqWidget && <BriqFloatingWidget pageLocationSlug={bodyDataLocation} />}
         <SiteScripts />
         <slot name="after-site-scripts" />
     </body>

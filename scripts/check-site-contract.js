@@ -118,8 +118,8 @@ for (const relPath of ['groups.html', 'public/groups.html']) {
       errors.push(`${relPath}: ${groupType} card CTAs must resolve through the selected location group form`);
     }
   }
-  if (html.includes('href="/contact?type=event" class="event-type-cta')) {
-    errors.push(`${relPath}: event card CTAs must open the booking panel instead of bypassing location-aware group forms`);
+  if (/href="\/contact\?type=/.test(html)) {
+    errors.push(`${relPath}: group CTAs must open the booking panel instead of bypassing location-aware group forms`);
   }
 }
 

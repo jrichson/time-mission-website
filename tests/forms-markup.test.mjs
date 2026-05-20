@@ -44,6 +44,14 @@ describe('production form markup', () => {
       .toBe((markup.match(/action="\/api\/newsletter"/g) || []).length);
   });
 
+  it('keeps newsletter signup surfaces hidden while acquisition is paused', () => {
+    const newsletterCss = fs.readFileSync(path.join(root, 'css', 'newsletter.css'), 'utf8');
+    const footerCss = fs.readFileSync(path.join(root, 'css', 'footer.css'), 'utf8');
+
+    expect(newsletterCss).toMatch(/\.newsletter-section\s*\{[\s\S]*display:\s*none\s*!important/);
+    expect(footerCss).toMatch(/\.footer-newsletter\s*\{[\s\S]*display:\s*none\s*!important/);
+  });
+
   it('mounts Turnstile on every production form', () => {
     const markup = sourceMarkup().map(({ text }) => text).join('\n');
     const formCount = (markup.match(/data-tm-form="/g) || []).length;

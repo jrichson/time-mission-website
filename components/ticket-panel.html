@@ -11,57 +11,59 @@
             </button>
         </div>
         <div class="ticket-panel-content">
-            <p id="ticketPanelIntro" data-i18n="booking.intro.default">Select your location and we'll take you to our booking system to choose your date and time.</p>
+            <div data-ticket-panel-standard>
+                <p id="ticketPanelIntro" data-i18n="booking.intro.default">Select your location and we'll take you to our booking system to choose your date and time.</p>
 
-            <div class="ticket-location-select">
-                <label for="ticketLocation" data-i18n="booking.locationLabel">Choose Location</label>
-                <select id="ticketLocation">
-                    <option value="" data-i18n="booking.locationPlaceholder">Select a location</option>
-                    <option value="mount-prospect">Mount Prospect</option>
-                    <option value="philadelphia">Philadelphia</option>
-                    <option value="west-nyack">West Nyack</option>
-                    <option value="lincoln">Lincoln</option>
-                    <option value="manassas">Manassas</option>
-                    <option value="houston">Houston (Coming Soon)</option>
-                    <option value="antwerp">Antwerp</option>
-                    <option value="orland-park">Orland Park (Coming Soon)</option>
-                    <option value="brussels">Brussels (Coming Soon)</option>
-                    <option value="dallas">Dallas (Coming Soon)</option>
-                </select>
-            </div>
-
-            <a href="#" class="btn-ticket-book" id="ticketBookBtn">
-                <span id="ticketBookBtnText" data-i18n="booking.cta.default">Continue to Booking</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-        </a>
-
-        <div class="ticket-panel-info">
-                <h4 data-i18n="booking.quickInfo">QUICK INFO</h4>
-                <div class="ticket-info-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M12 6v6l4 2"></path>
-                    </svg>
-                    <span data-i18n="booking.info.sessions">Sessions last approximately 60-120 minutes</span>
+                <div class="ticket-location-select">
+                    <label for="ticketLocation" data-i18n="booking.locationLabel">Choose Location</label>
+                    <select id="ticketLocation">
+                        <option value="" data-i18n="booking.locationPlaceholder">Select a location</option>
+                        <option value="mount-prospect">Mount Prospect</option>
+                        <option value="philadelphia">Philadelphia</option>
+                        <option value="west-nyack">West Nyack</option>
+                        <option value="lincoln">Lincoln</option>
+                        <option value="manassas">Manassas</option>
+                        <option value="houston">Houston (Coming Soon)</option>
+                        <option value="antwerp">Antwerp</option>
+                        <option value="orland-park">Orland Park (Coming Soon)</option>
+                        <option value="brussels">Brussels (Coming Soon)</option>
+                        <option value="dallas">Dallas (Coming Soon)</option>
+                    </select>
                 </div>
-                <div class="ticket-info-item">
+
+                <a href="#" class="btn-ticket-book" id="ticketBookBtn">
+                    <span id="ticketBookBtnText" data-i18n="booking.cta.default">Continue to Booking</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        <path d="M5 12h14M12 5l7 7-7 7"></path>
                     </svg>
-                    <span data-i18n="booking.info.players">Teams of 2-5 players per mission</span>
-                </div>
-                <div class="ticket-info-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                    <span data-i18n="booking.info.advance">Advance booking recommended</span>
+                </a>
+
+                <div class="ticket-panel-info">
+                    <h4 data-i18n="booking.quickInfo">QUICK INFO</h4>
+                    <div class="ticket-info-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                        <span data-i18n="booking.info.sessions">Sessions last approximately 60-120 minutes</span>
+                    </div>
+                    <div class="ticket-info-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span data-i18n="booking.info.players">Teams of 2-5 players per mission</span>
+                    </div>
+                    <div class="ticket-info-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <span data-i18n="booking.info.advance">Advance booking recommended</span>
+                    </div>
                 </div>
             </div>
         </div>

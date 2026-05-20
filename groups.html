@@ -1265,7 +1265,7 @@
             <li><a href="/contact">Contact</a></li>
         </ul>
         <div class="mobile-menu-cta">
-            <a href="#" class="btn-tickets">Book Now</a>
+            <a href="#" class="btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now</a>
         </div>
     </div>
 
@@ -1303,7 +1303,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
                     <polyline points="6,9 12,15 18,9"/>
                 </svg></button>
-            <a href="#" class="btn-tickets">Book Now</a>
+            <a href="#" class="btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now</a>
         </div>
     </nav>
 
@@ -1323,13 +1323,13 @@
                 Whether it's a birthday, team outing, or private event, Time Mission delivers an unforgettable experience for groups of all sizes.
             </p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary btn-tickets">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <a href="/contact?type=event" class="btn-secondary">Inquire Now</a>
+                <a href="#" class="btn-secondary" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">Inquire Now</a>
             </div>
         </div>
     </section>
@@ -1482,7 +1482,7 @@
                 <h3>GROUP <span class="highlight">EXPERIENCES</span></h3>
                 <p>Bring your crew for an unforgettable session of immersive challenges. Whether it's 5 friends or 50 coworkers, teams compete head-to-head across 25+ missions with real-time scoring.</p>
                 <p>Every group gets the full experience. No private room required. Just book your tickets, show up, and compete.</p>
-                <a href="#" class="btn-link btn-tickets">
+                <a href="#" class="btn-link btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
                     Book Now
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
@@ -1499,7 +1499,7 @@
                 <h3>CUSTOM <span class="highlight">EVENTS</span></h3>
                 <p>From private venue rentals to fully hosted celebrations, our events team will build the perfect experience for your group.</p>
                 <p>Ideal for corporate meetings, team building, holiday parties, and large-scale gatherings. Catering, party rooms, and dedicated hosts available.</p>
-                <a href="/contact?type=event" class="btn-link">
+                <a href="#" class="btn-link" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">
                     Plan Your Event
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
@@ -1847,11 +1847,11 @@
     <script defer src="js/language-switcher.js?v=3"></script>
     <script defer src="js/consent-bridge.js?v=1"></script>
     <script defer src="js/analytics.js?v=1"></script>
-    <script defer src="js/booking-journey.js?v=2"></script>
-    <script defer src="js/location-catalog-view.js?v=2"></script>
-    <script defer src="js/locations.js?v=17"></script>
+    <script defer src="js/booking-journey.js?v=4"></script>
+    <script defer src="js/location-catalog-view.js?v=3"></script>
+    <script defer src="js/locations.js?v=19"></script>
     <script defer src="js/nav.js?v=10"></script>
-    <script defer src="js/booking-controller.js?v=9"></script>
+    <script defer src="js/booking-controller.js?v=12"></script>
     <script defer src="js/ticket-panel.js?v=8"></script>
     <script>
     document.querySelectorAll('.footer-location-toggle').forEach(btn => {

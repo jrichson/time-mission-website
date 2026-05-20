@@ -19,8 +19,9 @@ const ld = serializeGraph(
     ]),
 );
 const market = [location.address.city, location.address.state || location.address.country].filter(Boolean).join(', ');
+const contactHref = `/contact?location=${encodeURIComponent(slug)}&type=updates`;
 const pageTitle = `${location.name} | Coming Soon`;
-const pageDescription = `${location.name} is coming soon${market ? ` in ${market}` : ''}. Sign up for launch updates, early access, and opening offers.`;
+const pageDescription = `${location.name} is coming soon${market ? ` in ${market}` : ''}. Contact the location team for launch timing and opening updates.`;
 const pageInit = {
     mode: 'city',
     config: {
@@ -44,15 +45,15 @@ const pageInit = {
     description={pageDescription}
     lang="fr-BE"
     bodyDataLocation={location.slug}
-    bookingCtaHref="#newsletter"
-    bookingCtaLabel="Sign Up"
+    bookingCtaHref={contactHref}
+    bookingCtaLabel="Contact Us"
     bookingCtaIsBookingTrigger={false}
     bookingCtaI18n=""
 >
     <Fragment slot="head-extra">
         <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" fetchpriority="high" />
         <link rel="stylesheet" href="/css/footer.css?v=3" />
-        <link rel="stylesheet" href="/css/newsletter.css?v=2" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=3" />
         <link rel="stylesheet" href="/css/ticket-panel.css" />
         <link rel="stylesheet" href="/css/page-houston.css?v=2" />
     </Fragment>

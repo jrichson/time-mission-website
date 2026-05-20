@@ -111,7 +111,7 @@
     function leadUrlForLocation(loc, slug, externalUrl, pageUrl) {
         if (externalUrl) return externalUrl;
         if (BookingJourney.isLeadOnlyComingSoon(loc)) {
-            return pageUrl ? pageUrl + '#newsletter' : '/locations#newsletter';
+            return slug ? '/contact?location=' + encodeURIComponent(slug) + '&type=updates' : '/contact?type=updates';
         }
         return '#';
     }
@@ -140,7 +140,7 @@
             bookingUrl: externalUrl ? '' : bookingUrl,
             checkoutUrl: bookingUrl,
             externalUrl: externalUrl,
-            bookLabel: externalUrl ? 'Visit EU Site' : (bookable || !comingSoon ? 'Book Now' : 'Sign Up'),
+            bookLabel: externalUrl ? 'Visit EU Site' : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
             mapQuery: mapQuery,
             mapDirectionsUrl: mapQuery ? 'https://www.google.com/maps/dir/?api=1&destination=' + mapQuery : '',
             mapEmbedUrl: mapQuery ? 'https://www.google.com/maps?q=' + mapQuery + '&output=embed&z=12' : '',
@@ -166,13 +166,13 @@
         var labelKey = view.externalUrl
             ? 'location.visitEuSite'
             : view.comingSoon
-            ? 'location.signUp'
+            ? 'location.contactUs'
             : 'nav.bookNow';
         return {
             location: view,
             cta: cta,
             bookLabelKey: labelKey,
-            bookLabelFallback: view.bookLabel || (view.externalUrl ? 'Visit EU Site' : view.comingSoon ? 'Sign Up' : 'Book Now'),
+            bookLabelFallback: view.bookLabel || (view.externalUrl ? 'Visit EU Site' : view.comingSoon ? 'Contact Us' : 'Book Now'),
         };
     }
 

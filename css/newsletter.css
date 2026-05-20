@@ -1,5 +1,9 @@
 /* Newsletter Signup Section — scoped so footer.css never overrides page CTAs */
 .newsletter-section {
+    display: none !important;
+}
+
+.newsletter-section {
     padding: 6rem 2rem;
     background: var(--dark);
     position: relative;

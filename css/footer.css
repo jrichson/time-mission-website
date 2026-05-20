@@ -108,6 +108,7 @@ html {
 
 /* Newsletter */
 .footer-newsletter {
+    display: none !important;
     max-width: 1200px;
     margin: 0 auto 2rem;
     padding: 2rem;

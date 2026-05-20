@@ -165,9 +165,9 @@
         }
         if ((kind === 'tickets' || kind === 'groups') && BookingJourney.isLeadOnlyComingSoon(loc)) {
             return {
-                title: translate('booking.updates.title', 'Get Location Updates'),
-                intro: translate('booking.updates.intro', 'Select a coming-soon location and sign up for launch news, early access, and opening offers.'),
-                cta: translate('booking.updates.cta', 'Sign Up for Updates'),
+                title: translate('booking.updates.title', 'Contact This Location'),
+                intro: translate('booking.updates.intro', 'Select a coming-soon location and we will route your message to the right team.'),
+                cta: translate('booking.updates.cta', 'Contact Us'),
             };
         }
         if (kind === 'groups') {
@@ -289,45 +289,112 @@
 
     var bookingFrame = null;
     var mountedPanel = null;
+    var briqOpenRetryTimer = null;
+    var briqCloseObserver = null;
 
     function getBriqWidgetContainer() {
         return document.getElementById('briq-widget-container');
     }
 
-    function hideBriqWidget() {
-        var container = getBriqWidgetContainer();
-        if (!container) return;
-        container.classList.remove('is-highlighted');
+    function getBriqWidget() {
+        return document.getElementById('briq-widget');
     }
 
-    function findBriqWidgetAction(widget) {
-        if (!widget || typeof widget.querySelector !== 'function') return null;
-        return widget.querySelector('button:not([disabled]), a[href], [role="button"]:not([aria-disabled="true"]), input[type="button"]:not([disabled]), input[type="submit"]:not([disabled])');
+    function getBriqWidgetMain() {
+        var widget = getBriqWidget();
+        if (!widget) return null;
+        if (widget.shadowRoot && typeof widget.shadowRoot.querySelector === 'function') {
+            return widget.shadowRoot.querySelector('.bw-widget-main');
+        }
+        if (typeof widget.querySelector === 'function') {
+            return widget.querySelector('.bw-widget-main');
+        }
+        return null;
     }
 
-    function activateBriqWidgetAction(widget, attempt) {
-        var action = findBriqWidgetAction(widget);
-        if (action) {
-            if (typeof action.focus === 'function') {
-                try {
-                    action.focus({ preventScroll: true });
-                } catch (e) {
-                    action.focus();
-                }
+    function getBriqOpenToggle() {
+        return document.querySelector('[data-briq-open-toggle]');
+    }
+
+    function briqWidgetState(open) {
+        var widget = getBriqWidget();
+        var domain = widget && widget.getAttribute('data-domain');
+        return 'bwr='
+            + (domain ? 'bu|is|' + domain + '|and|' : '')
+            + 'o|is|' + (open ? 'true' : 'false')
+            + (open ? '|and|ro|is|PeopleAndDate' : '');
+    }
+
+    function setBriqPanelMode(enabled) {
+        var panel = mountedPanel && mountedPanel.panelEl ? mountedPanel.panelEl : document.getElementById('ticketPanel');
+        if (!panel || !panel.classList) return;
+        if (enabled) panel.classList.add('ticket-panel--briq');
+        else panel.classList.remove('ticket-panel--briq');
+    }
+
+    function stopBriqOpenRetry() {
+        if (!briqOpenRetryTimer) return;
+        clearTimeout(briqOpenRetryTimer);
+        briqOpenRetryTimer = null;
+    }
+
+    function disconnectBriqCloseObserver() {
+        if (!briqCloseObserver) return;
+        briqCloseObserver.disconnect();
+        briqCloseObserver = null;
+    }
+
+    function setBriqWidgetOpen(open) {
+        var toggle = getBriqOpenToggle();
+        if (!toggle || typeof toggle.click !== 'function') return false;
+        toggle.setAttribute('data-widget-state', briqWidgetState(open));
+        toggle.click();
+        return true;
+    }
+
+    function observeBriqClose() {
+        var main = getBriqWidgetMain();
+        if (!main || typeof MutationObserver !== 'function') return;
+        disconnectBriqCloseObserver();
+        briqCloseObserver = new MutationObserver(function () {
+            if (main.classList.contains('bw-open')) return;
+            setBriqPanelMode(false);
+            disconnectBriqCloseObserver();
+            if (mountedPanel && mountedPanel.panelEl && mountedPanel.panelEl.classList.contains('active') && typeof mountedPanel.closePanel === 'function') {
+                mountedPanel.closePanel();
             }
-            if (typeof action.click === 'function') action.click();
+        });
+        briqCloseObserver.observe(main, { attributes: true, attributeFilter: ['class'] });
+    }
+
+    function triggerBriqWidgetOpen(attempt) {
+        var main = getBriqWidgetMain();
+        if (main && main.classList.contains('bw-open')) {
+            stopBriqOpenRetry();
+            observeBriqClose();
             return true;
         }
-        if (attempt >= 20) return false;
-        setTimeout(function () {
-            activateBriqWidgetAction(widget, attempt + 1);
+        if (attempt > 60) return false;
+        setBriqWidgetOpen(true);
+        stopBriqOpenRetry();
+        briqOpenRetryTimer = setTimeout(function () {
+            triggerBriqWidgetOpen(attempt + 1);
         }, 100);
-        return false;
+        return true;
+    }
+
+    function hideBriqWidget(options) {
+        var container = getBriqWidgetContainer();
+        stopBriqOpenRetry();
+        disconnectBriqCloseObserver();
+        setBriqPanelMode(false);
+        if (container) container.classList.remove('is-highlighted');
+        if (!options || options.closeProvider !== false) setBriqWidgetOpen(false);
     }
 
     function showBriqWidget(loc) {
         var container = getBriqWidgetContainer();
-        var widget = document.getElementById('briq-widget');
+        var widget = getBriqWidget();
         if (!container || !widget) return false;
         if (loc && loc.briqWidget && loc.briqWidget.domain && widget.getAttribute('data-domain') !== loc.briqWidget.domain) {
             var slug = loc.slug || loc.id || '';
@@ -337,13 +404,17 @@
             }
             return false;
         }
-        if (mountedPanel && mountedPanel.panelEl && mountedPanel.panelEl.classList.contains('active') && typeof mountedPanel.closePanel === 'function') {
-            mountedPanel.closePanel();
+        if (mountedPanel && typeof mountedPanel.openPanel === 'function') {
+            mountedPanel.openPanel({
+                kind: 'tickets',
+                locationId: (loc && (loc.id || loc.slug)) || '',
+            });
         }
+        setBriqPanelMode(true);
         container.classList.remove('is-highlighted');
         void container.offsetWidth;
         container.classList.add('is-highlighted');
-        activateBriqWidgetAction(widget, 0);
+        triggerBriqWidgetOpen(0);
         return true;
     }
 
@@ -838,6 +909,7 @@
         navigate: navigate,
         isDirectBookingUrl: isDirectBookingUrl,
         open: open,
+        closeBriqWidget: hideBriqWidget,
         resolve: resolve,
         mount: mount,
     };

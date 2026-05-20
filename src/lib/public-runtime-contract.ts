@@ -36,12 +36,12 @@ export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'language', src: '/js/language-switcher.js', version: 3 },
     { id: 'consent', src: '/js/consent-bridge.js', version: 1 },
     { id: 'analytics', src: '/js/analytics.js', version: 1 },
-    { id: 'bookingJourney', src: '/js/booking-journey.js', version: 3 },
-    { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 2 },
+    { id: 'bookingJourney', src: '/js/booking-journey.js', version: 4 },
+    { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 3 },
     { id: 'locations', src: '/js/locations.js', version: 19 },
     { id: 'nav', src: '/js/nav.js', version: 10 },
-    { id: 'bookingController', src: '/js/booking-controller.js', version: 11 },
-    { id: 'ticketPanel', src: '/js/ticket-panel.js', version: 8 },
+    { id: 'bookingController', src: '/js/booking-controller.js', version: 13 },
+    { id: 'ticketPanel', src: '/js/ticket-panel.js', version: 9 },
     { id: 'a11y', src: '/js/a11y.js', version: null },
 ];
 

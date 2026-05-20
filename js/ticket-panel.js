@@ -82,6 +82,11 @@
     }
 
     function closeTicketPanel() {
+        if (window.TMBooking && typeof window.TMBooking.closeBriqWidget === 'function') {
+            window.TMBooking.closeBriqWidget();
+        } else {
+            ticketPanel.classList.remove('ticket-panel--briq');
+        }
         ticketPanel.classList.remove('active');
         if (ticketOverlay) ticketOverlay.classList.remove('active');
         document.body.style.overflow = '';

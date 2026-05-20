@@ -1,78 +1,53 @@
-/* Briq booking widget — fixed page CTA for Briq-backed venues. */
-.briq-floating-widget {
-    position: fixed;
-    right: max(1rem, env(safe-area-inset-right));
-    bottom: max(1rem, env(safe-area-inset-bottom));
-    z-index: 9500;
-    width: min(18rem, calc(100vw - 2rem));
-    transform: translateZ(0);
+/* Briq booking widget: panel-hosted flow for Briq-backed venues. */
+.ticket-panel.ticket-panel--briq {
+    width: min(407px, 100vw);
+    right: max(-407px, -100vw);
+    overflow: hidden;
+    background: var(--black);
 }
 
-.briq-floating-widget .bw-widget {
-    min-height: 56px;
+.ticket-panel.ticket-panel--briq.active {
+    right: 0;
 }
 
-.briq-floating-widget .bw-widget button,
-.briq-floating-widget .bw-widget a,
-.briq-floating-widget .bw-widget [role="button"],
-.briq-floating-widget .bw-widget input[type="button"],
-.briq-floating-widget .bw-widget input[type="submit"] {
-    width: 100% !important;
-    min-height: 56px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0.9rem 1.5rem !important;
-    background: var(--gradient-primary) !important;
-    border: 0 !important;
-    border-radius: 100px !important;
-    color: var(--white) !important;
-    box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4) !important;
-    font-family: var(--display) !important;
-    font-size: 1.3rem !important;
-    font-weight: 400 !important;
-    letter-spacing: 0.06em !important;
-    line-height: 1 !important;
-    text-align: center !important;
-    text-decoration: none !important;
-    text-transform: uppercase !important;
-    cursor: pointer !important;
-    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+.ticket-panel.ticket-panel--briq .ticket-panel-header,
+.ticket-panel.ticket-panel--briq [data-ticket-panel-standard] {
+    display: none;
 }
 
-.briq-floating-widget .bw-widget button:hover,
-.briq-floating-widget .bw-widget a:hover,
-.briq-floating-widget .bw-widget [role="button"]:hover,
-.briq-floating-widget .bw-widget input[type="button"]:hover,
-.briq-floating-widget .bw-widget input[type="submit"]:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(239, 75, 35, 0.5) !important;
+.ticket-panel.ticket-panel--briq .ticket-panel-content {
+    position: relative;
+    height: 100%;
+    min-height: 100dvh;
+    padding: 0;
+    overflow: hidden;
+    background: var(--black);
 }
 
-.briq-floating-widget .bw-widget button:focus-visible,
-.briq-floating-widget .bw-widget a:focus-visible,
-.briq-floating-widget .bw-widget [role="button"]:focus-visible,
-.briq-floating-widget .bw-widget input[type="button"]:focus-visible,
-.briq-floating-widget .bw-widget input[type="submit"]:focus-visible {
-    outline: 2px solid var(--orange);
-    outline-offset: 3px;
+.briq-panel-widget,
+.briq-panel-widget .bw-widget {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
 }
 
-.briq-floating-widget.is-highlighted {
-    animation: briq-floating-widget-pulse 0.55s ease;
+.briq-widget-toggle-proxy {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
 }
 
-@keyframes briq-floating-widget-pulse {
-    0% { transform: translateZ(0) scale(1); }
-    35% { transform: translateZ(0) scale(1.04); }
-    100% { transform: translateZ(0) scale(1); }
-}
-
-@media (max-width: 480px) {
-    .briq-floating-widget {
-        right: max(0.875rem, env(safe-area-inset-right));
-        bottom: max(0.875rem, env(safe-area-inset-bottom));
-        left: max(0.875rem, env(safe-area-inset-left));
-        width: auto;
+@media (max-width: 420px) {
+    .ticket-panel.ticket-panel--briq {
+        width: 100vw;
     }
 }

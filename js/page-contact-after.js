@@ -1,28 +1,144 @@
+(function () {
+    'use strict';
 
-    // Pre-select the Subject field from ?type= deep-links (group page CTAs)
-    // and strip the query param so SEO crawlers see one canonical /contact URL
-    // instead of seven indexable variants. Falls back to "groups" for any
-    // event-type the form's select doesn't list explicitly.
+    function normalizeLocation(value) {
+        return String(value || '').toLowerCase().trim().replace(/\s+/g, '-');
+    }
+
+    function directContactLocations() {
+        if (window.TM && window.TM.ready && typeof window.TM.ready.then === 'function') {
+            return window.TM.ready.then(function () {
+                return Array.isArray(window.TM.locations) ? window.TM.locations : [];
+            });
+        }
+        if (window.TM && Array.isArray(window.TM.locations) && window.TM.locations.length) {
+            return Promise.resolve(window.TM.locations);
+        }
+        return fetch('/data/locations.json')
+            .then(function (res) { return res.ok ? res.json() : { locations: [] }; })
+            .then(function (doc) { return Array.isArray(doc.locations) ? doc.locations : []; })
+            .catch(function () { return []; });
+    }
+
+    function telHref(phone) {
+        var value = String(phone || '').replace(/[^\d+]/g, '');
+        return value ? 'tel:' + value : '';
+    }
+
+    function setHidden(el, hidden) {
+        if (!el) return;
+        el.hidden = !!hidden;
+    }
+
+    function setLocationContactMessage(emptyEl, text) {
+        if (emptyEl) emptyEl.textContent = text;
+    }
+
+    function initLocationContactPanel(locations) {
+        var select = document.getElementById('location');
+        var panel = document.querySelector('[data-location-contact-panel]');
+        if (!select || !panel) return;
+
+        var card = panel.querySelector('[data-location-contact-card]');
+        var empty = panel.querySelector('[data-location-contact-empty]');
+        var general = panel.querySelector('[data-location-contact-general]');
+        var nameEl = panel.querySelector('[data-location-contact-name]');
+        var phoneRow = panel.querySelector('[data-location-contact-phone-row]');
+        var phoneEl = panel.querySelector('[data-location-contact-phone]');
+        var emailRow = panel.querySelector('[data-location-contact-email-row]');
+        var emailEl = panel.querySelector('[data-location-contact-email]');
+        var byId = {};
+
+        locations.forEach(function (loc) {
+            var id = normalizeLocation(loc && (loc.id || loc.slug));
+            var slug = normalizeLocation(loc && loc.slug);
+            if (id) byId[id] = loc;
+            if (slug) byId[slug] = loc;
+        });
+
+        function render() {
+            var value = normalizeLocation(select.value);
+            setHidden(card, true);
+            setHidden(general, true);
+            setHidden(empty, true);
+
+            if (!value) {
+                setLocationContactMessage(empty, 'Choose a location in the form to see its direct contact info.');
+                setHidden(empty, false);
+                return;
+            }
+
+            if (value === 'general') {
+                setHidden(general, false);
+                return;
+            }
+
+            var loc = byId[value];
+            var contact = (loc && loc.contact) || {};
+            var phone = String(contact.phone || '').trim();
+            var email = String(contact.email || '').trim();
+            var locationName = (loc && (loc.shortName || loc.name)) || select.options[select.selectedIndex].text || 'this location';
+
+            if (!phone && !email) {
+                setLocationContactMessage(empty, 'Direct contact info is not listed for ' + locationName + ' yet. Use the message form and we will route it to the right team.');
+                setHidden(empty, false);
+                return;
+            }
+
+            if (nameEl) nameEl.textContent = locationName;
+            if (phoneEl) {
+                phoneEl.textContent = phone;
+                phoneEl.href = telHref(phone);
+            }
+            if (emailEl) {
+                emailEl.textContent = email;
+                emailEl.href = 'mailto:' + email;
+            }
+            setHidden(phoneRow, !phone);
+            setHidden(emailRow, !email);
+            setHidden(card, false);
+        }
+
+        select.addEventListener('change', render);
+        render();
+    }
+
+    directContactLocations().then(initLocationContactPanel);
+
     (function () {
         var params = new URLSearchParams(window.location.search);
         var type = params.get('type');
-        if (!type) return;
-        var select = document.getElementById('subject');
-        if (select) {
+        var location = params.get('location');
+        var subjectSelect = document.getElementById('subject');
+        var locationSelect = document.getElementById('location');
+        if (type && subjectSelect) {
             var aliases = {
                 'birthday': 'birthday',
                 'corporate': 'corporate',
                 'private-event': 'groups',
+                'private-events': 'groups',
                 'bachelor-ette': 'groups',
                 'field-trip': 'groups',
+                'field-trips': 'groups',
                 'holiday': 'groups',
-                'event': 'groups'
+                'holidays': 'groups',
+                'updates': 'general',
+                'event': 'groups',
             };
             var target = aliases[type] || type;
-            var match = Array.prototype.find.call(select.options, function (o) { return o.value === target; });
-            if (match) select.value = target;
+            var subjectMatch = Array.prototype.find.call(subjectSelect.options, function (o) { return o.value === target; });
+            if (subjectMatch) subjectSelect.value = target;
         }
-        if (window.history && typeof window.history.replaceState === 'function') {
+        if (location && locationSelect) {
+            var normalizedLocation = normalizeLocation(location);
+            var locationMatch = Array.prototype.find.call(locationSelect.options, function (o) { return o.value === normalizedLocation; });
+            if (locationMatch) {
+                locationSelect.value = normalizedLocation;
+                locationSelect.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+        if ((type || location) && window.history && typeof window.history.replaceState === 'function') {
             window.history.replaceState({}, '', '/contact');
         }
     })();
+})();

@@ -31,24 +31,64 @@ async function stubBriqWidgetScript(page) {
       contentType: 'application/javascript',
       body: `
         (function () {
-          function mountBriqButtons() {
+          function widgetStateIsOpen(state) {
+            return String(state || '').indexOf('o|is|true') !== -1;
+          }
+
+          function openWidget(host) {
+            var root = host.shadowRoot;
+            if (!root) return;
+            var main = root.querySelector('.bw-widget-main');
+            if (!main) return;
+            main.classList.remove('bw-closed');
+            main.classList.add('bw-open');
+            window.__briqBookingOpened = (window.__briqBookingOpened || 0) + 1;
+          }
+
+          function closeWidget(host) {
+            var root = host.shadowRoot;
+            if (!root) return;
+            var main = root.querySelector('.bw-widget-main');
+            if (!main) return;
+            main.classList.remove('bw-open');
+            main.classList.add('bw-closed');
+          }
+
+          function mountBriqWidgets() {
             document.querySelectorAll('.bw-widget').forEach(function (widget) {
-              if (widget.querySelector('[data-briq-stub-button]')) return;
-              var button = document.createElement('button');
-              button.type = 'button';
-              button.className = 'bw-widget-button';
-              button.setAttribute('data-briq-stub-button', '');
-              button.textContent = widget.getAttribute('data-button-text') || 'BOOK NOW';
-              button.addEventListener('click', function () {
-                window.__briqBookingOpened = (window.__briqBookingOpened || 0) + 1;
+              if (widget.shadowRoot) return;
+              var root = widget.attachShadow({ mode: 'open' });
+              var main = document.createElement('main');
+              main.className = 'bw-widget-main bw-closed';
+              main.setAttribute('data-briq-stub-main', '');
+              if (!String(widget.getAttribute('data-features') || '').includes('hideMainButton')) {
+                var button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'widget-button';
+                button.setAttribute('data-briq-stub-button', '');
+                button.textContent = widget.getAttribute('data-button-text') || 'BOOK NOW';
+                button.addEventListener('click', function () {
+                  openWidget(widget);
+                });
+                main.appendChild(button);
+              }
+              root.appendChild(main);
+            });
+            document.querySelectorAll('.bw-widget-toggle').forEach(function (toggle) {
+              if (toggle.__briqStubBound) return;
+              toggle.__briqStubBound = true;
+              toggle.addEventListener('click', function () {
+                var host = document.querySelector('.bw-widget');
+                if (!host) return;
+                if (widgetStateIsOpen(toggle.getAttribute('data-widget-state'))) openWidget(host);
+                else closeWidget(host);
               });
-              widget.appendChild(button);
             });
           }
           if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', mountBriqButtons);
+            document.addEventListener('DOMContentLoaded', mountBriqWidgets);
           } else {
-            mountBriqButtons();
+            mountBriqWidgets();
           }
         })();
       `,
@@ -533,20 +573,30 @@ test('West Nyack routes generic booking to the venue page with tracking params',
 
   await page.locator('#ticketBookBtn').click();
   await expect(page).toHaveURL(/\/west-nyack\?utm_source=paid&utm_campaign=spring&fbclid=fb123$/);
-  await expect(page.locator('#ticketPanel')).not.toHaveClass(/active/);
-  await expect(page.locator('#ticketOverlay')).not.toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
+  await expect(page.locator('#ticketOverlay')).toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel [data-ticket-panel-standard]')).not.toBeVisible();
   await expect(page.locator('#briq-widget-container')).toBeVisible();
-  await expect(page.locator('#briq-widget-container')).toHaveClass(/briq-floating-widget/);
+  await expect(page.locator('#briq-widget-container')).toHaveClass(/briq-panel-widget/);
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-domain', 'timemission-palisades');
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-button-text', 'BOOK NOW');
-  await expect(page.locator('#briq-widget [data-briq-stub-button]')).toHaveText('BOOK NOW');
-  await expect(page.locator('#briq-widget [data-briq-stub-button]')).toBeVisible();
+  await expect(page.locator('#briq-widget')).toHaveAttribute('data-features', 'hideMainButton');
+  await expect(page.locator('#briq-widget')).toHaveAttribute('data-request-on-open', 'PeopleAndDate');
   await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
+  await expect.poll(() => page.evaluate(() => {
+    const host = document.getElementById('briq-widget');
+    return host?.shadowRoot?.querySelector('.bw-widget-main')?.className || '';
+  })).toContain('bw-open');
+  expect(await page.evaluate(() => {
+    const host = document.getElementById('briq-widget');
+    return !!host?.shadowRoot?.querySelector('[data-briq-stub-button]');
+  })).toBe(false);
   await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
   expect(briqScript.requests).toBeGreaterThan(0);
 });
 
-test('West Nyack location page opens the Briq widget instead of an iframe', async ({ page }) => {
+test('West Nyack location page opens Briq inside the booking panel instead of an iframe', async ({ page }) => {
   const briqScript = await stubBriqWidgetScript(page);
 
   await page.goto('/west-nyack');
@@ -554,42 +604,49 @@ test('West Nyack location page opens the Briq widget instead of an iframe', asyn
   expect(briqScript.requests).toBeGreaterThan(0);
 
   await page.locator('.nav-right .btn-tickets').click();
-  await expect(page.locator('#ticketPanel')).not.toHaveClass(/active/);
-  await expect(page.locator('#ticketOverlay')).not.toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
+  await expect(page.locator('#ticketOverlay')).toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel [data-ticket-panel-standard]')).not.toBeVisible();
   await expect(page.locator('#briq-widget-container')).toBeVisible();
-  await expect(page.locator('#briq-widget-container')).toHaveClass(/briq-floating-widget/);
+  await expect(page.locator('#briq-widget-container')).toHaveClass(/briq-panel-widget/);
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-domain', 'timemission-palisades');
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-color-1-base', '#FFBA00');
-  await expect(page.locator('#briq-widget [data-briq-stub-button]')).toHaveText('BOOK NOW');
-  await expect(page.locator('#briq-widget [data-briq-stub-button]')).toBeVisible();
+  await expect(page.locator('#briq-widget')).toHaveAttribute('data-features', 'hideMainButton');
+  await expect(page.locator('#briq-widget')).toHaveAttribute('data-positioning', /\[\{'x-align':'right'/);
   await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
-  const briqButtonStyle = await page.locator('#briq-widget [data-briq-stub-button]').evaluate((button) => {
-    const style = getComputedStyle(button);
-    const widgetStyle = getComputedStyle(document.getElementById('briq-widget-container'));
+  await expect.poll(() => page.evaluate(() => {
+    const host = document.getElementById('briq-widget');
+    return host?.shadowRoot?.querySelector('.bw-widget-main')?.className || '';
+  })).toContain('bw-open');
+  expect(await page.evaluate(() => {
+    const host = document.getElementById('briq-widget');
+    return !!host?.shadowRoot?.querySelector('[data-briq-stub-button]');
+  })).toBe(false);
+  const briqPanelStyle = await page.locator('#ticketPanel').evaluate((panel) => {
+    const style = getComputedStyle(panel);
     return {
-      borderRadius: style.borderRadius,
-      fontFamily: style.fontFamily,
-      position: widgetStyle.position,
-      right: widgetStyle.right,
-      bottom: widgetStyle.bottom,
-      textTransform: style.textTransform,
       width: style.width,
+      position: style.position,
+      right: style.right,
+      overflow: style.overflow,
     };
   });
-  expect(parseFloat(briqButtonStyle.borderRadius)).toBeGreaterThan(40);
-  expect(briqButtonStyle.fontFamily).toMatch(/Bebas/i);
-  expect(briqButtonStyle.position).toBe('fixed');
-  expect(parseFloat(briqButtonStyle.right)).toBeGreaterThan(0);
-  expect(parseFloat(briqButtonStyle.bottom)).toBeGreaterThan(0);
-  expect(briqButtonStyle.textTransform).toBe('uppercase');
-  expect(parseFloat(briqButtonStyle.width)).toBeGreaterThan(250);
+  expect(briqPanelStyle.position).toBe('fixed');
+  expect(parseFloat(briqPanelStyle.right)).toBe(0);
+  expect(briqPanelStyle.overflow).toBe('hidden');
+  expect(parseFloat(briqPanelStyle.width)).toBeGreaterThanOrEqual(360);
   await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
+
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#ticketPanel')).not.toHaveClass(/active/);
 
   await page.evaluate(() => {
     window.__briqBookingOpened = 0;
   });
   await page.locator('main .btn-tickets[data-tm-location="west-nyack"]').first().click();
-  await expect(page.locator('#ticketPanel')).not.toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
   await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
 });
 
@@ -612,6 +669,38 @@ test('contact form uses configured submission endpoint', async ({ page }) => {
   await expect(form).toHaveAttribute('action', /\/api\/contact$/i);
   await expect(form).toHaveAttribute('data-tm-form', 'contact');
   await expect(form.locator('[data-tm-turnstile]')).toHaveCount(1);
+});
+
+test('contact page only shows direct info for the selected location', async ({ page }) => {
+  await page.goto('/contact?location=houston&type=updates');
+
+  await expect(page.locator('#location')).toHaveValue('houston');
+  await expect(page.locator('[data-location-contact-card]')).toBeVisible();
+  await expect(page.locator('[data-location-contact-name]')).toHaveText('Houston');
+  await expect(page.locator('[data-location-contact-phone]')).toHaveText('(713) 588-1630');
+  await expect(page.locator('[data-location-contact-email-row]')).toBeHidden();
+  await expect(page.locator('[data-location-contact-card]')).not.toContainText('Philadelphia');
+  await expect(page.locator('[data-location-contact-card]')).not.toContainText('Mount Prospect');
+
+  await page.locator('#location').selectOption('orland-park');
+  await expect(page.locator('[data-location-contact-card]')).toBeHidden();
+  await expect(page.locator('[data-location-contact-empty]')).toBeVisible();
+  await expect(page.locator('[data-location-contact-empty]')).toContainText('Orland Park');
+});
+
+test('newsletter signup sections are hidden while acquisition is paused', async ({ page }) => {
+  for (const route of ['/', '/contact', '/dallas']) {
+    await page.goto(route);
+    const sections = page.locator('.newsletter-section');
+    await expect(sections.first()).toBeAttached();
+    const visibleCount = await sections.evaluateAll((els) =>
+      els.filter((el) => {
+        const style = window.getComputedStyle(el);
+        return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+      }).length,
+    );
+    expect(visibleCount).toBe(0);
+  }
 });
 
 test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer (Phase 6)', async ({ page }) => {

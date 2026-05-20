@@ -127,7 +127,7 @@
 
     function resolveComingSoonLeadUrl(loc, fallbackSlug) {
         var slug = (loc && (loc.slug || loc.id)) || fallbackSlug || '';
-        return slug ? '/' + slug + '#newsletter' : '/locations#newsletter';
+        return slug ? '/contact?location=' + encodeURIComponent(slug) + '&type=updates' : '/contact?type=updates';
     }
 
     function resolveLocationDestination(loc, options) {
