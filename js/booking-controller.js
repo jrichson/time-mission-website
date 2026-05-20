@@ -293,6 +293,8 @@
     var briqCloseObserver = null;
     var briqFitRetryTimer = null;
     var briqResizeHandlerAttached = false;
+    var BRIQ_WIDGET_SCRIPT_SRC = 'https://widgetcdn.briqbookings.com/widget/widget.js';
+    var BRIQ_WIDGET_STYLE_HREF = '/css/briq-widget.css';
 
     function getBriqWidgetContainer() {
         return document.getElementById('briq-widget-container');
@@ -316,6 +318,146 @@
 
     function getBriqOpenToggle() {
         return document.querySelector('[data-briq-open-toggle]');
+    }
+
+    function briqConfigForLocation(loc) {
+        return (loc && loc.briqWidget && loc.briqWidget.domain) ? loc.briqWidget : null;
+    }
+
+    function ensureBriqStylesheet() {
+        if (document.querySelector('link[data-briq-widget-style]')) return;
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = BRIQ_WIDGET_STYLE_HREF;
+        link.setAttribute('data-briq-widget-style', '');
+        document.head.appendChild(link);
+    }
+
+    function setWidgetAttribute(widget, name, value) {
+        if (!widget || value === undefined || value === null || value === '') return;
+        widget.setAttribute(name, String(value));
+    }
+
+    function configureBriqWidget(widget, config) {
+        widget.id = 'briq-widget';
+        widget.className = 'bw-widget';
+        setWidgetAttribute(widget, 'data-domain', config.domain);
+        setWidgetAttribute(widget, 'data-color-1-base', config.color1Base || '#FFBA00');
+        setWidgetAttribute(widget, 'data-color-1-contrast', config.color1Contrast || '#010437');
+        setWidgetAttribute(widget, 'data-color-2-base', config.color2Base || '#FFBA00');
+        setWidgetAttribute(widget, 'data-color-2-contrast', config.color2Contrast || '#010437');
+        setWidgetAttribute(widget, 'data-price-display', config.priceDisplay || 'PerPerson');
+        setWidgetAttribute(widget, 'data-button-text', config.buttonText || 'BOOK NOW');
+        setWidgetAttribute(widget, 'data-features', 'hideMainButton');
+        setWidgetAttribute(widget, 'data-positioning', "[{'x-align':'right','x-offset':'0px','y-offset':'0px','z-index':'10000'}]");
+    }
+
+    function ensureBriqWidgetHost(loc) {
+        var config = briqConfigForLocation(loc);
+        if (!config) return null;
+
+        ensureBriqStylesheet();
+
+        var container = getBriqWidgetContainer();
+        var widget = getBriqWidget();
+        if (widget && widget.getAttribute('data-domain') !== config.domain) {
+            return { domainMismatch: true };
+        }
+
+        if (!container) {
+            var panel = mountedPanel && mountedPanel.panelEl ? mountedPanel.panelEl : document.getElementById('ticketPanel');
+            var panelContent = panel && panel.querySelector ? panel.querySelector('.ticket-panel-content') : null;
+            container = document.createElement('div');
+            container.id = 'briq-widget-container';
+            container.className = 'briq-panel-widget';
+            container.setAttribute('data-briq-panel-widget', '');
+            (panelContent || document.body).appendChild(container);
+        }
+
+        var toggle = getBriqOpenToggle();
+        if (!toggle) {
+            toggle = document.createElement('button');
+            toggle.type = 'button';
+            toggle.className = 'bw-widget-toggle briq-widget-toggle-proxy';
+            toggle.setAttribute('data-briq-open-toggle', '');
+            toggle.setAttribute('aria-hidden', 'true');
+            toggle.setAttribute('tabindex', '-1');
+            toggle.textContent = 'Open booking';
+            container.appendChild(toggle);
+        }
+        toggle.setAttribute('data-widget-state', 'bwr=bu|is|' + config.domain + '|and|o|is|true');
+
+        if (!widget) {
+            widget = document.createElement('div');
+            configureBriqWidget(widget, config);
+            container.appendChild(widget);
+        }
+
+        return { container: container, widget: widget };
+    }
+
+    function loadBriqWidgetScript(onReady, onError) {
+        var existing = document.querySelector('script[data-briq-widget-script]');
+        function ready() {
+            if (typeof onReady === 'function') onReady();
+        }
+        if (existing) {
+            existing.addEventListener('load', function () {
+                existing.setAttribute('data-briq-widget-loaded', 'true');
+                ready();
+            }, { once: true });
+            existing.addEventListener('error', onError || function () {}, { once: true });
+            setTimeout(ready, 0);
+            return;
+        }
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = BRIQ_WIDGET_SCRIPT_SRC;
+        script.setAttribute('data-briq-widget-script', '');
+        script.addEventListener('load', function () {
+            script.setAttribute('data-briq-widget-loaded', 'true');
+            ready();
+        }, { once: true });
+        script.addEventListener('error', onError || function () {}, { once: true });
+        var firstScript = document.getElementsByTagName && document.getElementsByTagName('script')[0];
+        if (firstScript && firstScript.parentNode) {
+            firstScript.parentNode.insertBefore(script, firstScript);
+        } else {
+            document.head.appendChild(script);
+        }
+    }
+
+    function briqWidgetDomains() {
+        var records = [];
+        if (window.TM && Array.isArray(window.TM.locations)) {
+            records = window.TM.locations;
+        } else if (window.TM_DATA && Array.isArray(window.TM_DATA.locations)) {
+            records = window.TM_DATA.locations;
+        }
+        var domains = {};
+        records.forEach(function (record) {
+            var config = briqConfigForLocation(record);
+            if (config && config.domain) domains[config.domain] = true;
+        });
+        return Object.keys(domains);
+    }
+
+    function isCurrentLocationPage(loc) {
+        var pageLocation = BookingJourney.normalizeLocation((document.body && document.body.dataset.location) || '');
+        if (!loc || !pageLocation) return false;
+        return pageLocation === BookingJourney.normalizeLocation(loc.id || '')
+            || pageLocation === BookingJourney.normalizeLocation(loc.slug || '');
+    }
+
+    function routeToBriqVenuePage(loc) {
+        var slug = loc && (loc.slug || loc.id || '');
+        if (!slug) return false;
+        window.location.assign(BookingJourney.appendTrackingParams('/' + slug + '?book=1', { includeInternal: true }));
+        return true;
+    }
+
+    function shouldForceBriqVenuePage(loc) {
+        return briqWidgetDomains().length > 1 && !isCurrentLocationPage(loc);
     }
 
     function briqWidgetState(open) {
@@ -474,17 +616,15 @@
     }
 
     function showBriqWidget(loc) {
-        var container = getBriqWidgetContainer();
-        var widget = getBriqWidget();
-        if (!container || !widget) return false;
-        if (loc && loc.briqWidget && loc.briqWidget.domain && widget.getAttribute('data-domain') !== loc.briqWidget.domain) {
-            var slug = loc.slug || loc.id || '';
-            if (slug) {
-                window.location.assign(BookingJourney.appendTrackingParams('/' + slug + '?book=1', { includeInternal: true }));
-                return true;
-            }
-            return false;
+        if (shouldForceBriqVenuePage(loc)) {
+            return routeToBriqVenuePage(loc);
         }
+        var host = ensureBriqWidgetHost(loc);
+        if (!host) return false;
+        if (host.domainMismatch) {
+            return routeToBriqVenuePage(loc);
+        }
+        var container = host.container;
         if (mountedPanel && typeof mountedPanel.openPanel === 'function') {
             mountedPanel.openPanel({
                 kind: 'tickets',
@@ -496,8 +636,10 @@
         container.classList.remove('is-highlighted');
         void container.offsetWidth;
         container.classList.add('is-highlighted');
-        triggerBriqWidgetOpen(0);
-        setTimeout(scheduleBriqWidgetFit, 600);
+        loadBriqWidgetScript(function () {
+            triggerBriqWidgetOpen(0);
+            setTimeout(scheduleBriqWidgetFit, 600);
+        });
         return true;
     }
 

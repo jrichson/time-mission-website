@@ -335,18 +335,8 @@ describe('browser architecture contracts', () => {
         externalLocation: true,
       });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'west-nyack' }))
-      .toBe('/west-nyack?book=1');
+      .toBe('#briq-widget-container');
     expect(window.TMBooking.resolveIntent({ kind: 'tickets', locationId: 'west-nyack' }))
-      .toMatchObject({
-        href: '/west-nyack?book=1',
-        presentation: 'link',
-        usesBriqWidget: false,
-      });
-    expect(window.TMBooking.resolveIntent({
-      kind: 'tickets',
-      locationId: 'west-nyack',
-      pageLocationSlug: 'west-nyack',
-    }))
       .toMatchObject({
         href: '#briq-widget-container',
         presentation: 'briq-widget',
@@ -357,19 +347,17 @@ describe('browser architecture contracts', () => {
       groupType: 'corporate',
       locationId: 'west-nyack',
     }))
-      .toBe('/west-nyack?book=1');
+      .toBe('#briq-widget-container');
     expect(window.TMBooking.getDestination({
       kind: 'groups',
       groupType: 'private-events',
       locationId: 'west-nyack',
-      pageLocationSlug: 'west-nyack',
     }))
       .toBe('#briq-widget-container');
     expect(window.TMBooking.resolveIntent({
       kind: 'groups',
       groupType: 'private-events',
       locationId: 'west-nyack',
-      pageLocationSlug: 'west-nyack',
     }))
       .toMatchObject({
         href: '#briq-widget-container',
@@ -378,9 +366,9 @@ describe('browser architecture contracts', () => {
       });
     expect(window.LocationContext.getOverlayView('west-nyack').cta)
       .toMatchObject({
-        href: '/west-nyack?book=1',
-        bookingUrl: '',
-        trigger: false,
+        href: '#',
+        bookingUrl: '#briq-widget-container',
+        trigger: true,
       });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'dallas' }))
       .toBe('/contact?location=dallas&type=updates');
@@ -451,7 +439,50 @@ describe('browser architecture contracts', () => {
         usesBookingFrame: false,
       });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'west-nyack' }))
-      .toBe('/west-nyack?book=1&utm_source=paid&utm_campaign=spring&gclid=abc123');
+      .toBe('#briq-widget-container');
+  });
+
+  it('forces a venue-page reload if multiple Briq widget domains are configured', async () => {
+    const { context, window } = createBrowserContext({
+      TM_DATA: {
+        locations: [
+          {
+            id: 'west-nyack',
+            slug: 'west-nyack',
+            status: 'open',
+            bookingProvider: 'briq',
+            bookingUrl: 'https://timemission-palisades.briqbookings.com',
+            briqWidget: { domain: 'timemission-palisades' },
+            groupFormUrls: {},
+          },
+          {
+            id: 'future-briq',
+            slug: 'future-briq',
+            status: 'open',
+            bookingProvider: 'briq',
+            bookingUrl: 'https://future-briq.briqbookings.com',
+            briqWidget: { domain: 'future-briq' },
+            groupFormUrls: {},
+          },
+        ],
+      },
+    });
+
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    runScript('js/locations.js', context);
+    runScript('js/booking-controller.js', context);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    window.TMBooking.navigate({
+      source: 'test_briq_guard',
+      href: '#briq-widget-container',
+      kind: 'tickets',
+      locationId: 'future-briq',
+    });
+
+    expect(window.location.href).toBe('/future-briq?book=1');
   });
 
   it('runtime group, gift-card, and waiver routing follows the audit fixture', async () => {
@@ -470,7 +501,7 @@ describe('browser architecture contracts', () => {
     for (const [locationId, groupUrls] of Object.entries(formsLinksAudit.groups)) {
       for (const groupType of formsLinksAudit.groupTypes) {
         const expectedRuntimeHref = locationId === 'west-nyack' && groupUrls[groupType]
-          ? '/west-nyack?book=1'
+          ? '#briq-widget-container'
           : groupUrls[groupType];
         expect(window.TMBooking.getDestination({
           kind: 'groups',
@@ -483,7 +514,7 @@ describe('browser architecture contracts', () => {
           locationId,
         })).toMatchObject({
           href: expectedRuntimeHref,
-          presentation: expectedRuntimeHref ? 'link' : 'panel',
+          presentation: locationId === 'west-nyack' && expectedRuntimeHref ? 'briq-widget' : (expectedRuntimeHref ? 'link' : 'panel'),
           usesBookingFrame: false,
         });
         if (locationId === 'west-nyack' && groupUrls[groupType]) {
@@ -491,7 +522,6 @@ describe('browser architecture contracts', () => {
             kind: 'groups',
             groupType,
             locationId,
-            pageLocationSlug: 'west-nyack',
           })).toMatchObject({
             href: '#briq-widget-container',
             presentation: 'briq-widget',

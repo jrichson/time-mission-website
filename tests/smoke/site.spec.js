@@ -573,14 +573,14 @@ test('West Nyack group inquiry CTAs hand off to the Briq widget instead of the r
     kind: 'groups',
     groupType: 'private-events',
     locationId: 'west-nyack',
-  })?.href || '')).toBe('/west-nyack?book=1');
+  })?.href || '')).toBe('#briq-widget-container');
 
   await page
     .locator('[data-tm-booking-kind="groups"][data-tm-group-type="private-events"]')
     .first()
     .click();
 
-  await expect(page).toHaveURL(/\/west-nyack$/);
+  await expect(page).toHaveURL(/\/groups$/);
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
   await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
   await expect(page.locator('#briq-widget-container')).toBeVisible();
@@ -683,7 +683,7 @@ test('waiver panel routes Houston and Orland Park to audit-provided destinations
   }
 });
 
-test('West Nyack routes generic booking to the venue page with tracking params', async ({ page }) => {
+test('West Nyack routes generic booking to the current-page Briq panel', async ({ page }) => {
   const briqScript = await stubBriqWidgetScript(page);
 
   await page.goto('/?utm_source=paid&utm_campaign=spring&fbclid=fb123');
@@ -695,11 +695,11 @@ test('West Nyack routes generic booking to the venue page with tracking params',
     window.TMBooking.open({ kind: 'tickets' });
   });
 
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/west-nyack?book=1&utm_source=paid&utm_campaign=spring&fbclid=fb123');
-  await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '#');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-booking-url', '#briq-widget-container');
 
   await page.locator('#ticketBookBtn').click();
-  await expect(page).toHaveURL(/\/west-nyack\?utm_source=paid&utm_campaign=spring&fbclid=fb123$/);
+  await expect(page).toHaveURL(/\/\?utm_source=paid&utm_campaign=spring&fbclid=fb123$/);
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
   await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
   await expect(page.locator('#ticketOverlay')).toHaveClass(/active/);

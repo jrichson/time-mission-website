@@ -144,7 +144,7 @@
     }
 
     function briqWidgetDestination(loc, slug, pageLocationSlug, fallbackHref) {
-        if (isSameLocationPage(loc, pageLocationSlug)) return '#briq-widget-container';
+        if (isBriqWidgetLocation(loc)) return '#briq-widget-container';
         return slug ? appendTrackingParams('/' + slug + '?book=1', { includeInternal: true }) : fallbackHref;
     }
 
@@ -214,7 +214,6 @@
         var normalizedKind = normalizeKind(kind);
         return (normalizedKind === 'tickets' || normalizedKind === 'groups')
             && isBriqWidgetLocation(loc)
-            && isSameLocationPage(loc, pageLocationSlug)
             && String(href || '').trim() === '#briq-widget-container';
     }
 
