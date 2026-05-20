@@ -11,9 +11,9 @@
             </button>
         </div>
         <div class="ticket-panel-content">
-            <p id="ticketPanelIntro" data-i18n="booking.intro.default">Select your location and we'll take you to our booking system to choose your date and time.</p>
+            <p id="ticketPanelIntro" data-ticket-panel-standard data-i18n="booking.intro.default">Select your location and we'll take you to our booking system to choose your date and time.</p>
 
-            <div class="ticket-location-select">
+            <div class="ticket-location-select" data-ticket-panel-standard>
                 <label for="ticketLocation" data-i18n="booking.locationLabel">Choose Location</label>
                 <select id="ticketLocation">
                     <option value="" data-i18n="booking.locationPlaceholder">Select a location</option>
@@ -30,14 +30,14 @@
                 </select>
             </div>
 
-            <a href="#" class="btn-ticket-book" id="ticketBookBtn">
+            <a href="#" class="btn-ticket-book" id="ticketBookBtn" data-ticket-panel-standard>
                 <span id="ticketBookBtnText" data-i18n="booking.cta.default">Continue to Booking</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
         </a>
 
-        <div class="ticket-panel-info">
+        <div class="ticket-panel-info" data-ticket-panel-standard>
                 <h4 data-i18n="booking.quickInfo">QUICK INFO</h4>
                 <div class="ticket-info-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -83,6 +83,14 @@
     padding: 2rem 1.5rem;
 }
 
+.ticket-panel--provider-only .ticket-panel-content {
+    padding-top: 1.5rem;
+}
+
+.ticket-panel--provider-only [data-ticket-panel-standard] {
+    display: none;
+}
+
 .ticket-panel-content p {
     color: var(--gray);
     margin-bottom: 2rem;
@@ -177,19 +185,80 @@
 }
 
 .ticket-provider-widget {
-    margin-top: 1.25rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 186, 0, 0.28);
-    border-radius: 12px;
+    max-height: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0.5rem);
+    transition: opacity 0.2s ease, transform 0.2s ease, max-height 0.2s ease;
 }
 
 .ticket-provider-widget[hidden] {
     display: none;
 }
 
+.ticket-provider-widget.active {
+    max-height: 12rem;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
 .ticket-provider-widget .bw-widget {
-    min-height: 52px;
+    min-height: 56px;
+}
+
+.ticket-provider-widget .bw-widget button,
+.ticket-provider-widget .bw-widget a,
+.ticket-provider-widget .bw-widget [role="button"],
+.ticket-provider-widget .bw-widget input[type="button"],
+.ticket-provider-widget .bw-widget input[type="submit"] {
+    width: 100% !important;
+    min-height: 56px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.9rem 1.5rem !important;
+    background: var(--gradient-primary) !important;
+    border: 0 !important;
+    border-radius: 100px !important;
+    color: var(--white) !important;
+    box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4) !important;
+    font-family: var(--display) !important;
+    font-size: 1.3rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.ticket-provider-widget .bw-widget button:hover,
+.ticket-provider-widget .bw-widget a:hover,
+.ticket-provider-widget .bw-widget [role="button"]:hover,
+.ticket-provider-widget .bw-widget input[type="button"]:hover,
+.ticket-provider-widget .bw-widget input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(239, 75, 35, 0.5) !important;
+}
+
+.ticket-provider-widget .bw-widget button:focus-visible,
+.ticket-provider-widget .bw-widget a:focus-visible,
+.ticket-provider-widget .bw-widget [role="button"]:focus-visible,
+.ticket-provider-widget .bw-widget input[type="button"]:focus-visible,
+.ticket-provider-widget .bw-widget input[type="submit"]:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+}
+
+.ticket-provider-widget .bw-widget iframe {
+    width: 100%;
+    border: 0;
 }
 
 .booking-frame-overlay {

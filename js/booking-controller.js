@@ -294,11 +294,18 @@
         return document.getElementById('briq-widget-container');
     }
 
+    function setProviderOnlyPanel(active) {
+        if (!mountedPanel || !mountedPanel.panelEl) return;
+        mountedPanel.panelEl.classList.toggle('ticket-panel--provider-only', !!active);
+    }
+
     function hideBriqWidget() {
+        setProviderOnlyPanel(false);
         var container = getBriqWidgetContainer();
         if (!container) return;
-        container.hidden = true;
         container.classList.remove('active');
+        container.setAttribute('aria-hidden', 'true');
+        container.setAttribute('inert', '');
     }
 
     function showBriqWidget(loc) {
@@ -313,8 +320,11 @@
             }
             return false;
         }
-        container.hidden = false;
+        container.removeAttribute('hidden');
+        container.removeAttribute('aria-hidden');
+        container.removeAttribute('inert');
         container.classList.add('active');
+        setProviderOnlyPanel(true);
         container.scrollIntoView({ block: 'nearest' });
         return true;
     }

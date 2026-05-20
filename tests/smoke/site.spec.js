@@ -29,7 +29,26 @@ async function stubBriqWidgetScript(page) {
     briqScript.requests += 1;
     await route.fulfill({
       contentType: 'application/javascript',
-      body: '',
+      body: `
+        (function () {
+          function mountBriqButtons() {
+            document.querySelectorAll('.bw-widget').forEach(function (widget) {
+              if (widget.querySelector('[data-briq-stub-button]')) return;
+              var button = document.createElement('button');
+              button.type = 'button';
+              button.className = 'bw-widget-button';
+              button.setAttribute('data-briq-stub-button', '');
+              button.textContent = widget.getAttribute('data-button-text') || 'BOOK NOW';
+              widget.appendChild(button);
+            });
+          }
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', mountBriqButtons);
+          } else {
+            mountBriqButtons();
+          }
+        })();
+      `,
     });
   });
   return briqScript;
@@ -512,9 +531,16 @@ test('West Nyack routes generic booking to the venue page with tracking params',
   await page.locator('#ticketBookBtn').click();
   await expect(page).toHaveURL(/\/west-nyack\?utm_source=paid&utm_campaign=spring&fbclid=fb123$/);
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--provider-only/);
+  await expect(page.locator('#ticketPanelIntro')).toBeHidden();
+  await expect(page.locator('#ticketLocation')).toBeHidden();
+  await expect(page.locator('#ticketBookBtn')).toBeHidden();
+  await expect(page.locator('.ticket-panel-info')).toBeHidden();
   await expect(page.locator('#briq-widget-container')).toBeVisible();
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-domain', 'timemission-palisades');
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-button-text', 'BOOK NOW');
+  await expect(page.locator('#briq-widget [data-briq-stub-button]')).toHaveText('BOOK NOW');
+  await expect(page.locator('#briq-widget [data-briq-stub-button]')).toBeVisible();
   await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
   expect(briqScript.requests).toBeGreaterThan(0);
 });
@@ -528,9 +554,29 @@ test('West Nyack location page opens the Briq widget instead of an iframe', asyn
 
   await page.locator('.nav-right .btn-tickets').click();
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--provider-only/);
+  await expect(page.locator('#ticketPanelIntro')).toBeHidden();
+  await expect(page.locator('#ticketLocation')).toBeHidden();
+  await expect(page.locator('#ticketBookBtn')).toBeHidden();
+  await expect(page.locator('.ticket-panel-info')).toBeHidden();
   await expect(page.locator('#briq-widget-container')).toBeVisible();
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-domain', 'timemission-palisades');
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-color-1-base', '#FFBA00');
+  await expect(page.locator('#briq-widget [data-briq-stub-button]')).toHaveText('BOOK NOW');
+  await expect(page.locator('#briq-widget [data-briq-stub-button]')).toBeVisible();
+  const briqButtonStyle = await page.locator('#briq-widget [data-briq-stub-button]').evaluate((button) => {
+    const style = getComputedStyle(button);
+    return {
+      borderRadius: style.borderRadius,
+      fontFamily: style.fontFamily,
+      textTransform: style.textTransform,
+      width: style.width,
+    };
+  });
+  expect(parseFloat(briqButtonStyle.borderRadius)).toBeGreaterThan(40);
+  expect(briqButtonStyle.fontFamily).toMatch(/Bebas/i);
+  expect(briqButtonStyle.textTransform).toBe('uppercase');
+  expect(parseFloat(briqButtonStyle.width)).toBeGreaterThan(250);
   await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
 });
 
