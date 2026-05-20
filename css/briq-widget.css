@@ -1,0 +1,78 @@
+/* Briq booking widget — fixed page CTA for Briq-backed venues. */
+.briq-floating-widget {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 9500;
+    width: min(18rem, calc(100vw - 2rem));
+    transform: translateZ(0);
+}
+
+.briq-floating-widget .bw-widget {
+    min-height: 56px;
+}
+
+.briq-floating-widget .bw-widget button,
+.briq-floating-widget .bw-widget a,
+.briq-floating-widget .bw-widget [role="button"],
+.briq-floating-widget .bw-widget input[type="button"],
+.briq-floating-widget .bw-widget input[type="submit"] {
+    width: 100% !important;
+    min-height: 56px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.9rem 1.5rem !important;
+    background: var(--gradient-primary) !important;
+    border: 0 !important;
+    border-radius: 100px !important;
+    color: var(--white) !important;
+    box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4) !important;
+    font-family: var(--display) !important;
+    font-size: 1.3rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.briq-floating-widget .bw-widget button:hover,
+.briq-floating-widget .bw-widget a:hover,
+.briq-floating-widget .bw-widget [role="button"]:hover,
+.briq-floating-widget .bw-widget input[type="button"]:hover,
+.briq-floating-widget .bw-widget input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(239, 75, 35, 0.5) !important;
+}
+
+.briq-floating-widget .bw-widget button:focus-visible,
+.briq-floating-widget .bw-widget a:focus-visible,
+.briq-floating-widget .bw-widget [role="button"]:focus-visible,
+.briq-floating-widget .bw-widget input[type="button"]:focus-visible,
+.briq-floating-widget .bw-widget input[type="submit"]:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+}
+
+.briq-floating-widget.is-highlighted {
+    animation: briq-floating-widget-pulse 0.55s ease;
+}
+
+@keyframes briq-floating-widget-pulse {
+    0% { transform: translateZ(0) scale(1); }
+    35% { transform: translateZ(0) scale(1.04); }
+    100% { transform: translateZ(0) scale(1); }
+}
+
+@media (max-width: 480px) {
+    .briq-floating-widget {
+        right: max(0.875rem, env(safe-area-inset-right));
+        bottom: max(0.875rem, env(safe-area-inset-bottom));
+        left: max(0.875rem, env(safe-area-inset-left));
+        width: auto;
+    }
+}

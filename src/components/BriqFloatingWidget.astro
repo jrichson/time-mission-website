@@ -1,0 +1,29 @@
+---
+import { allLocations } from '../data/locations';
+
+interface Props {
+    pageLocationSlug?: string;
+}
+
+const { pageLocationSlug = '' } = Astro.props;
+const pageLocation = pageLocationSlug
+    ? allLocations.find((loc) => loc.id === pageLocationSlug || loc.slug === pageLocationSlug)
+    : null;
+const briqWidget = pageLocation?.bookingProvider === 'briq' ? pageLocation.briqWidget : null;
+---
+
+{briqWidget && (
+    <div id="briq-widget-container" class="briq-floating-widget">
+        <div
+            id="briq-widget"
+            class="bw-widget"
+            data-domain={briqWidget.domain}
+            data-color-1-base={briqWidget.color1Base}
+            data-color-1-contrast={briqWidget.color1Contrast}
+            data-color-2-base={briqWidget.color2Base}
+            data-color-2-contrast={briqWidget.color2Contrast}
+            data-price-display={briqWidget.priceDisplay}
+            data-button-text={briqWidget.buttonText}
+        ></div>
+    </div>
+)}

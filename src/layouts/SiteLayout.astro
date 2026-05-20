@@ -5,6 +5,7 @@ import MobileMenu from '../components/MobileMenu.astro';
 import LocationOverlay from '../components/LocationOverlay.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import TicketPanel from '../components/TicketPanel.astro';
+import BriqFloatingWidget from '../components/BriqFloatingWidget.astro';
 import SiteScripts from '../components/SiteScripts.astro';
 import { allLocations } from '../data/locations';
 import { resolveLastUpdated } from '../lib/last-updated';
@@ -79,6 +80,7 @@ const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocati
             lastUpdatedIso={lastUpdatedInfo.iso}
         />
         <slot name="head-extra" />
+        {loadsBriqWidget && <link rel="stylesheet" href="/css/briq-widget.css" />}
         {loadsBriqWidget && (
             <script language="javascript" is:inline>
                 ;(function (d, t){
@@ -127,6 +129,7 @@ const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocati
             <time datetime={lastUpdatedInfo.iso}>{lastUpdatedInfo.human}</time>
         </aside>
         <TicketPanel pageLocationSlug={bodyDataLocation} />
+        {loadsBriqWidget && <BriqFloatingWidget pageLocationSlug={bodyDataLocation} />}
         <SiteScripts />
         <slot name="after-site-scripts" />
     </body>

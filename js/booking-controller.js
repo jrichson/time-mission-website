@@ -294,18 +294,10 @@
         return document.getElementById('briq-widget-container');
     }
 
-    function setProviderOnlyPanel(active) {
-        if (!mountedPanel || !mountedPanel.panelEl) return;
-        mountedPanel.panelEl.classList.toggle('ticket-panel--provider-only', !!active);
-    }
-
     function hideBriqWidget() {
-        setProviderOnlyPanel(false);
         var container = getBriqWidgetContainer();
         if (!container) return;
-        container.classList.remove('active');
-        container.setAttribute('aria-hidden', 'true');
-        container.setAttribute('inert', '');
+        container.classList.remove('is-highlighted');
     }
 
     function showBriqWidget(loc) {
@@ -320,25 +312,24 @@
             }
             return false;
         }
-        container.removeAttribute('hidden');
-        container.removeAttribute('aria-hidden');
-        container.removeAttribute('inert');
-        container.classList.add('active');
-        setProviderOnlyPanel(true);
-        container.scrollIntoView({ block: 'nearest' });
+        if (mountedPanel && mountedPanel.panelEl && mountedPanel.panelEl.classList.contains('active') && typeof mountedPanel.closePanel === 'function') {
+            mountedPanel.closePanel();
+        }
+        container.classList.remove('is-highlighted');
+        void container.offsetWidth;
+        container.classList.add('is-highlighted');
+        var action = widget.querySelector('button, a[href], [role="button"], input[type="button"], input[type="submit"]');
+        if (action && typeof action.focus === 'function') {
+            try {
+                action.focus({ preventScroll: true });
+            } catch (e) {
+                action.focus();
+            }
+        }
         return true;
     }
 
-    function openMountedTicketPanel(loc) {
-        if (!mountedPanel) return;
-        mountedPanel.openPanel({
-            kind: 'tickets',
-            locationId: loc && (loc.id || loc.slug) || '',
-        });
-    }
-
     function openBriqWidget(loc) {
-        openMountedTicketPanel(loc);
         showBriqWidget(loc);
     }
 
