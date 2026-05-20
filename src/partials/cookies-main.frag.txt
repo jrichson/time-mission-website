@@ -13,7 +13,7 @@
         <p>Cookies are small text files placed on your device when you visit a website. They let the site remember your preferences, keep you signed in, measure traffic, and support marketing.</p>
 
         <h2>Categories We Use</h2>
-        <p><strong>Strictly Necessary.</strong> Required for the site to function, page navigation, security, and remembering your selected location. These cannot be disabled.</p>
+        <p><strong>Strictly Necessary.</strong> Required for the site to function, page navigation, security, and location-specific page routing. These cannot be disabled.</p>
         <p><strong>Analytics &amp; Performance.</strong> Help us understand how visitors use the site so we can improve it. Examples: Google Analytics 4, Microsoft Clarity.</p>
         <p><strong>Advertising &amp; Marketing.</strong> Used to measure the effectiveness of our ads and show you relevant content on other platforms. Examples: Meta (Facebook) Pixel, Google Ads conversion tag, TikTok Pixel.</p>
         <p><strong>Functional.</strong> Remember choices you make (like your preferred location) to personalize your experience.</p>

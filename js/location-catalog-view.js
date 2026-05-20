@@ -11,6 +11,10 @@
         sat: 'Sat',
         sun: 'Sun',
     };
+    var monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
 
     var BookingJourney = window.TMBookingJourney;
     if (!BookingJourney) throw new Error('TMBookingJourney must load before location-catalog-view.js');
@@ -33,7 +37,7 @@
         var iso = String(loc.openingDate || '').trim();
         var match = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
         if (!match) return '';
-        return 'Opening ' + Number(match[2]) + '/' + Number(match[3]) + '/' + match[1].slice(2);
+        return 'Opening ' + monthNames[Number(match[2]) - 1] + ' ' + Number(match[3]) + ', ' + match[1];
     }
 
     function comingSoonLabelForLocation(loc) {
@@ -222,7 +226,9 @@
     }
 
     function listTicketOptions(locations) {
-        return (Array.isArray(locations) ? locations : []).map(function (loc) {
+        return (Array.isArray(locations) ? locations : []).filter(function (loc) {
+            return !loc.externalUrl;
+        }).map(function (loc) {
             var view = getLocationView(loc, loc.id || loc.slug);
             var statusSuffix = loc.status === 'coming-soon'
                 ? ' (' + (openingLabelForLocation(loc) || (view && view.bookable

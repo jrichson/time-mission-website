@@ -163,6 +163,76 @@
         return scopedPathByCompact[compactPath(pathname)] || '';
     }
 
+    function getPathWithoutLocationPrefix(pathname) {
+        const normalized = normalizeHrefPath(pathname);
+        const parts = normalized.split('/').filter(Boolean);
+        if (!parts.length) return '/';
+        const compactFirst = compactLocation(parts[0]);
+        const known = (window.TM && Array.isArray(window.TM.locations)) ? window.TM.locations : [];
+        const firstIsLocation = known.some(function (loc) {
+            return compactLocation(loc.id) === compactFirst
+                || compactLocation(loc.slug) === compactFirst
+                || compactLocation(loc.shortName) === compactFirst
+                || compactLocation(loc.name) === compactFirst;
+        });
+        if (!firstIsLocation) return normalized;
+        return parts.length > 1 ? '/' + parts.slice(1).join('/') : '/';
+    }
+
+    function currentScopedCanonicalPath() {
+        const withoutLocation = getPathWithoutLocationPrefix(window.location.pathname || '/');
+        return getScopedCanonicalPath(withoutLocation);
+    }
+
+    function currentSearchForLocationSelection(slug) {
+        const raw = (window.location && window.location.search) || '';
+        if (!raw) return '';
+        const params = new URLSearchParams(raw);
+        if (params.has('location')) params.set('location', slug);
+        const query = params.toString();
+        return query ? '?' + query : '';
+    }
+
+    function appendTrackingToExternalLocation(href) {
+        const journey = window.TMBookingJourney;
+        if (journey && typeof journey.appendTrackingParams === 'function') {
+            return journey.appendTrackingParams(href);
+        }
+        return href;
+    }
+
+    function locationSelectionHref(slug) {
+        const normalized = normalizeLocation(slug);
+        if (!normalized) return '';
+        const canonicalPath = currentScopedCanonicalPath();
+        const destinationPath = canonicalPath
+            ? (canonicalPath === '/' ? '/' + normalized : '/' + normalized + canonicalPath)
+            : '/' + normalized;
+        return destinationPath + currentSearchForLocationSelection(normalized) + ((window.location && window.location.hash) || '');
+    }
+
+    function syncLocationSelectionLinks() {
+        if (!locationLinks || !locationLinks.length) return;
+        locationLinks.forEach(function (link) {
+            if (isExternalLocationLink(link)) {
+                const href = link.getAttribute('data-tm-location-base-href') || link.getAttribute('href') || '';
+                if (href && !link.getAttribute('data-tm-location-base-href')) {
+                    link.setAttribute('data-tm-location-base-href', href);
+                }
+                link.setAttribute('href', appendTrackingToExternalLocation(href));
+                return;
+            }
+            const slug = getLocationSlug(link);
+            const href = locationSelectionHref(slug);
+            if (href) {
+                if (!link.getAttribute('data-tm-location-base-href')) {
+                    link.setAttribute('data-tm-location-base-href', link.getAttribute('href') || href);
+                }
+                link.setAttribute('href', href);
+            }
+        });
+    }
+
     function shouldSkipLocationScopedLink(link, url) {
         if (!link || !url) return true;
         const rawHref = (link.getAttribute('href') || '').trim();
@@ -287,6 +357,7 @@
 
     if (locationBtn && locationOverlay) {
         function openLocationOverlay() {
+            syncLocationSelectionLinks();
             locationOverlay.classList.add('open');
             if (navEl) navEl.classList.add('location-open');
             // Defer scroll lock so it doesn't interrupt the overlay's fade-in transition
@@ -333,9 +404,10 @@
             });
 
             link.addEventListener('click', (e) => {
+                syncLocationSelectionLinks();
                 const cityName = link.dataset.city;
                 const slug = getLocationSlug(link);
-                if (cityName) {
+                if (cityName && !isExternalLocationLink(link)) {
                     if (!isSameWindowNavigationClick(e, link)) {
                         closeLocationOverlay();
                         return;
@@ -353,15 +425,31 @@
 
     function getLocationSlug(link) {
         if (link && link.dataset && link.dataset.tmLocationSlug) return link.dataset.tmLocationSlug;
-        const href = (link && link.getAttribute('href') || '').trim();
+        const href = (link && (link.getAttribute('data-tm-location-base-href') || link.getAttribute('href')) || '').trim();
         if (!href) return '';
-        if (/^https?:\/\//i.test(href)) return normalizeLocation(link.dataset && link.dataset.city);
-        return href
-            .split('#')[0]
-            .split('?')[0]
+        if (isExternalLocationLink(link)) return '';
+        let pathname = href;
+        try {
+            pathname = new URL(href, window.location.origin).pathname;
+        } catch (e) {
+            pathname = href.split('#')[0].split('?')[0];
+        }
+        return pathname
             .replace(/^(\.\/|\.\.\/)+/, '')
             .replace(/^\//, '')
             .replace(/\.html$/, '');
+    }
+
+    function isExternalLocationLink(link) {
+        if (!link) return false;
+        if (link.dataset && link.dataset.tmExternalLocation === 'true') return true;
+        const href = (link.getAttribute('href') || '').trim();
+        if (!href || !/^https?:\/\//i.test(href)) return false;
+        try {
+            return new URL(href, window.location.origin).origin !== window.location.origin;
+        } catch (e) {
+            return true;
+        }
     }
 
     function isSameWindowNavigationClick(event, link) {

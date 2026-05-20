@@ -65,7 +65,7 @@ function isDynamicLandingPath(registry, pathnameNorm) {
 function expectedRedirectPairs(registry) {
   const pairs = [];
   for (const route of registry.routes || []) {
-    const canonicalTarget = route.canonicalPath === '/' ? '/' : route.canonicalPath;
+    const canonicalTarget = route.externalUrl || (route.canonicalPath === '/' ? '/' : route.canonicalPath);
     for (const legacy of route.legacySources || []) {
       pairs.push({
         source: legacy,

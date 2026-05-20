@@ -48,6 +48,10 @@ function bookingFor(location: LocationRecord): string {
     return location.bookingUrl || 'Bookings not open yet';
 }
 
+function locationUrl(location: LocationRecord): string {
+    return location.externalUrl || canonicalUrl(`/${location.slug}`);
+}
+
 function locationRows(locations: LocationRecord[]): string {
     const rows = locations.map((location) =>
         `| ${[
@@ -55,7 +59,7 @@ function locationRows(locations: LocationRecord[]): string {
             location.status === 'open' ? 'Open' : 'Coming soon',
             addressFor(location) || location.address.city,
             contactFor(location),
-            canonicalUrl(`/${location.slug}`),
+            locationUrl(location),
             bookingFor(location),
         ].map(escapeCell).join(' | ')} |`,
     );

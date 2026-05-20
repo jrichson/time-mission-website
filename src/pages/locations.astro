@@ -26,13 +26,13 @@ function orderLocs(region: string, slugOrder: string[]) {
 
 const usLocs = orderLocs('us', US_ORDER);
 const euLocs = orderLocs('europe', EU_ORDER);
-const listedLocs = [...usLocs, ...euLocs];
 const locationsAnswer = geoAnswerBlocks.blocks.locations;
 
 function formatAddress(loc: LocationRecord) {
     const a = loc.address;
-    const line = [a.line1, [a.city, a.state].filter(Boolean).join(', '), a.zip].filter(Boolean);
-    return line.join(', ');
+    const cityLine = [a.city, a.state].filter(Boolean).join(', ');
+    const postalLine = [cityLine, a.zip].filter(Boolean).join(' ');
+    return [a.line1, a.line2, postalLine, a.country].filter(Boolean).join(', ');
 }
 
 function stateBadge(loc: LocationRecord) {
@@ -45,13 +45,22 @@ function statusLabel(loc: LocationRecord) {
     return locationDisplayStatus(loc);
 }
 
-function contactLabel(loc: LocationRecord) {
-    return [loc.contact.phone, loc.contact.email].filter(Boolean).join(' / ') || 'Not yet listed';
-}
-
 function upcomingBadgeLabel(loc: LocationRecord) {
     if (loc.status !== 'coming-soon') return '';
     return locationOpeningLabel(loc) || 'Coming Soon';
+}
+
+function locationHref(loc: LocationRecord) {
+    return loc.externalUrl || `/${loc.slug}`;
+}
+
+function contactItems(loc: LocationRecord) {
+    const phone = String(loc.contact.phone || '').trim();
+    const email = String(loc.contact.email || '').trim();
+    return [
+        phone ? { label: phone, kind: 'phone' } : null,
+        email ? { label: email, kind: 'email' } : null,
+    ].filter(Boolean) as Array<{ label: string; kind: string }>;
 }
 
 const ld = serializeGraph(
@@ -97,32 +106,6 @@ const page = definePage({ canonicalPath: '/locations' });
                     <summary>Read the full location guidance</summary>
                     <p>{locationsAnswer.text}</p>
                 </details>
-                <div class="location-status-table-wrap" aria-label="Time Mission location status and contact summary">
-                    <table class="location-status-table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Location</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Contact</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                listedLocs.map((loc) => (
-                                    <tr>
-                                        <th scope="row">
-                                            <a href={`/${loc.slug}`}>{loc.shortName}</a>
-                                        </th>
-                                        <td>{statusLabel(loc)}</td>
-                                        <td>{formatAddress(loc) || loc.address.city}</td>
-                                        <td>{contactLabel(loc)}</td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </section>
 
@@ -133,7 +116,7 @@ const page = definePage({ canonicalPath: '/locations' });
                     {
                         usLocs.map((loc) => (
                             <a
-                                href={`/${loc.slug}`}
+                                href={locationHref(loc)}
                                 class:list={[
                                     'loc-row',
                                     'reveal',
@@ -148,7 +131,21 @@ const page = definePage({ canonicalPath: '/locations' });
                                             <span class="loc-coming-soon-tag">{upcomingBadgeLabel(loc)}</span>
                                         ) : null}
                                     </div>
+                                    <div class="loc-status">{statusLabel(loc)}</div>
                                     <div class="loc-address">{formatAddress(loc)}</div>
+                                    <div class="loc-contact">
+                                        {
+                                            contactItems(loc).length ? (
+                                                contactItems(loc).map((item) => (
+                                                    <span class:list={['loc-contact-item', `is-${item.kind}`]}>
+                                                        {item.label}
+                                                    </span>
+                                                ))
+                                            ) : (
+                                                <span class="loc-contact-muted">Contact details coming soon</span>
+                                            )
+                                        }
+                                    </div>
                                 </div>
                                 <svg
                                     class="loc-arrow"
@@ -170,7 +167,7 @@ const page = definePage({ canonicalPath: '/locations' });
                     {
                         euLocs.map((loc) => (
                             <a
-                                href={`/${loc.slug}`}
+                                href={locationHref(loc)}
                                 class:list={[
                                     'loc-row',
                                     'reveal',
@@ -185,7 +182,21 @@ const page = definePage({ canonicalPath: '/locations' });
                                             <span class="loc-coming-soon-tag">{upcomingBadgeLabel(loc)}</span>
                                         ) : null}
                                     </div>
+                                    <div class="loc-status">{statusLabel(loc)}</div>
                                     <div class="loc-address">{formatAddress(loc)}</div>
+                                    <div class="loc-contact">
+                                        {
+                                            contactItems(loc).length ? (
+                                                contactItems(loc).map((item) => (
+                                                    <span class:list={['loc-contact-item', `is-${item.kind}`]}>
+                                                        {item.label}
+                                                    </span>
+                                                ))
+                                            ) : (
+                                                <span class="loc-contact-muted">Contact details coming soon</span>
+                                            )
+                                        }
+                                    </div>
                                 </div>
                                 <svg
                                     class="loc-arrow"

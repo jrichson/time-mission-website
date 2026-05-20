@@ -7,6 +7,10 @@
     var ticketLocSel   = document.getElementById('ticketLocation');
     var ticketBookBtn  = document.getElementById('ticketBookBtn');
     var pageLocation   = (document.body && document.body.dataset.location) || '';
+    var monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
 
     if (!ticketPanel || !ticketLocSel) return;
 
@@ -24,7 +28,7 @@
         var iso = String(loc.openingDate || '').trim();
         var match = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
         if (!match) return '';
-        return 'Opening ' + Number(match[2]) + '/' + Number(match[3]) + '/' + match[1].slice(2);
+        return 'Opening ' + monthNames[Number(match[2]) - 1] + ' ' + Number(match[3]) + ', ' + match[1];
     }
 
     function getLocationContext() {
@@ -43,7 +47,9 @@
         if (context && typeof context.listTicketOptions === 'function') {
             options = context.listTicketOptions();
         } else if (window.TM && Array.isArray(window.TM.locations)) {
-            options = window.TM.locations.map(function (loc) {
+            options = window.TM.locations.filter(function (loc) {
+                return !loc.externalUrl;
+            }).map(function (loc) {
                 var suffix = '';
                 if (loc.status === 'coming-soon') {
                     var openingLabel = openingLabelForLocation(loc);

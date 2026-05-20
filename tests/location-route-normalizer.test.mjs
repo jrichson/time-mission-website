@@ -65,11 +65,11 @@ describe('location route normalizer', () => {
     expect(entriesWithAlternates).toHaveLength(8);
     expect(resolveLocationCanonicalPath('/R1-indoor-karting')).toBe('/lincoln');
     expect(resolveLocationCanonicalPath('/Palisades-center')).toBe('/west-nyack');
-    expect(resolveLocationCanonicalPath('/Terminal1')).toBe('/brussels');
+    expect(resolveLocationCanonicalPath('/Terminal1')).toBe('https://timemission.eu');
     expect(resolveLocationCanonicalPath('/Manassas-mall')).toBe('/manassas');
     expect(resolveLocationCanonicalPath('/Philly')).toBe('/philadelphia');
     expect(resolveLocationCanonicalPath('/Mt-Prospect')).toBe('/mount-prospect');
-    expect(resolveLocationCanonicalPath('/Experience-factory-antwerp')).toBe('/antwerp');
+    expect(resolveLocationCanonicalPath('/Experience-factory-antwerp')).toBe('https://timemission.eu/antwerp');
     expect(resolveLocationCanonicalPath('/Marq-E')).toBe('/houston');
   });
 
@@ -78,6 +78,19 @@ describe('location route normalizer', () => {
       .toBe('https://timemission.com/houston?utm_source=test');
     expect(resolveLocationRedirectUrl('https://timemission.com/WestNyack/corporate-events?x=1'))
       .toBe('https://timemission.com/west-nyack/groups/corporate?x=1');
+  });
+
+  it('redirects EU location prefixes to the EU site instead of serving local pages', () => {
+    expect(resolveLocationRedirectUrl('https://timemission.com/antwerp?utm_source=test#book'))
+      .toBe('https://timemission.eu/antwerp?utm_source=test');
+    expect(resolveLocationRedirectUrl('https://timemission.com/antwerp/groups/corporate?utm_source=test'))
+      .toBe('https://timemission.eu/antwerp?utm_source=test');
+    expect(resolveLocationRedirectUrl('https://timemission.com/brussels?utm_source=test'))
+      .toBe('https://timemission.eu/?utm_source=test');
+    expect(resolveLocationRedirectUrl('https://timemission.com/Terminal1/missions?utm_source=test'))
+      .toBe('https://timemission.eu/?utm_source=test');
+    expect(resolveLocationRouteRequest('https://timemission.com/brussels/css/nav.css?v=17'))
+      .toEqual({ redirectUrl: 'https://timemission.eu/?v=17', assetPath: '' });
   });
 
   it('passes through already canonical or unrelated paths', () => {
@@ -94,7 +107,8 @@ describe('location route normalizer', () => {
   });
 
   it('serves every prefixable shared page behind every canonical location prefix', () => {
-    for (const { canonicalPath } of locationRouteEntries()) {
+    for (const { canonicalPath, externalUrl } of locationRouteEntries()) {
+      if (externalUrl) continue;
       for (const sharedPath of sharedPagePaths) {
         expect(resolveLocationRouteRequest(`https://timemission.com${canonicalPath}${sharedPath}`))
           .toEqual({ redirectUrl: '', assetPath: sharedPath });
@@ -104,6 +118,7 @@ describe('location route normalizer', () => {
 
   it('canonicalizes every alternate location source before serving migrated shared pages', () => {
     for (const entry of locationRouteEntries()) {
+      if (entry.externalUrl) continue;
       const alternatePrefixes = sourcePrefixesFor(entry)
         .filter((prefix) => `/${prefix}` !== entry.canonicalPath);
 
@@ -120,7 +135,8 @@ describe('location route normalizer', () => {
   });
 
   it('serves root assets behind every canonical location prefix', () => {
-    for (const { canonicalPath } of locationRouteEntries()) {
+    for (const { canonicalPath, externalUrl } of locationRouteEntries()) {
+      if (externalUrl) continue;
       for (const assetPath of rootAssetPaths) {
         expect(resolveLocationRouteRequest(`https://timemission.com${canonicalPath}${assetPath}?v=17`))
           .toEqual({ redirectUrl: '', assetPath });

@@ -1,6 +1,6 @@
 /**
  * Time Mission — Location Manager
- * Handles location data loading, persistence (localStorage), and DOM updates.
+ * Handles location data loading, page-scoped selection, and DOM updates.
  *
  * Data is provided by `/data/locations.json`; tests and file previews may set
  * `window.TM_DATA`.
@@ -14,13 +14,13 @@
  *   TM.current             — currently selected location object (or null)
  *   TM.select(id, opts?)   — set active location by id; optional opts.cta_id for analytics
  *   TM.clear()             — clear selected location
- *   TM.restore()           — restore from localStorage; migrates legacy key once
+ *   TM.restore()           — clear stale stored location state
  *   TM.ready               — resolves after location data is loaded
- *   TM.getSavedSlug()      — sync read of the persisted slug
+ *   TM.getSavedSlug()      — sync read of the active slug
  *   TM.onChange(callback)  — subscribe to select/clear/restore; returns unsubscribe fn
  *
- * Only this file writes location storage keys. scripts/check-locations-architecture.js
- * enforces that rule.
+ * This file owns cleanup for legacy location storage keys. scripts/check-locations-architecture.js
+ * enforces that no other runtime writes them.
  */
 
 (function () {
@@ -56,6 +56,17 @@
                 || normalizeLocationId(loc.shortName) === normalized
                 || normalizeLocationId(loc.name) === normalized;
         }) || null;
+    }
+
+    function isSelectableLocation(loc) {
+        return !!(loc && !loc.externalUrl);
+    }
+
+    function clearStoredLocation() {
+        try {
+            localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem(LEGACY_STORAGE_KEY);
+        } catch (e) { /* localStorage unavailable */ }
     }
 
     function getLocationView(id) {
@@ -225,18 +236,8 @@
         },
 
         getSavedSlug() {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved) return saved;
-                const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
-                if (!legacy) return '';
-                const slug = normalizeLocationId(legacy);
-                try {
-                    localStorage.setItem(STORAGE_KEY, slug);
-                    localStorage.removeItem(LEGACY_STORAGE_KEY);
-                } catch (e) { /* storage unavailable — return slug anyway */ }
-                return slug;
-            } catch (e) { return ''; }
+            const loc = isSelectableLocation(TM.current) ? TM.current : null;
+            return loc ? normalizeLocationId(loc.slug || loc.id || '') : '';
         },
 
         onChange(callback) {
@@ -258,15 +259,16 @@
             if (TM.locations.length === 0) {
                 TM._pendingSelect = id;
                 TM._pendingSelectOpts = opts || null;
-                try { localStorage.setItem(STORAGE_KEY, id); } catch (e) {}
                 return;
             }
             const loc = TM.get(id);
             if (!loc) return;
+            if (!isSelectableLocation(loc)) {
+                clearStoredLocation();
+                return;
+            }
             TM.current = loc;
-            try {
-                localStorage.setItem(STORAGE_KEY, id);
-            } catch (e) { /* localStorage unavailable */ }
+            clearStoredLocation();
             TM.updateDOM();
             TM._emitChange();
             document.dispatchEvent(new CustomEvent('tm:location-changed', { detail: loc }));
@@ -282,36 +284,13 @@
 
         clear() {
             TM.current = null;
-            try {
-                localStorage.removeItem(STORAGE_KEY);
-            } catch (e) { /* localStorage unavailable */ }
+            clearStoredLocation();
             TM.updateDOM();
             TM._emitChange();
         },
 
         restore() {
-            try {
-                let saved = localStorage.getItem(STORAGE_KEY);
-                if (!saved) {
-                    const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
-                    if (legacy) {
-                        saved = normalizeLocationId(legacy);
-                        try {
-                            localStorage.setItem(STORAGE_KEY, saved);
-                            localStorage.removeItem(LEGACY_STORAGE_KEY);
-                        } catch (e) {}
-                    }
-                }
-                if (saved) {
-                    const loc = TM.get(saved);
-                    if (loc) {
-                        TM.current = loc;
-                        TM._emitChange();
-                        return;
-                    }
-                    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-                }
-            } catch (e) { /* localStorage unavailable */ }
+            clearStoredLocation();
             if (TM.locations.length > 0) {
                 TM.current = null;
                 TM._emitChange();
@@ -413,14 +392,12 @@
 
     async function init() {
         await TM.load();
+        clearStoredLocation();
         const pageLocationSlug = getPageLocationSlug();
         const pageLocation = pageLocationSlug ? TM.get(pageLocationSlug) : null;
 
-        if (pageLocation) {
+        if (isSelectableLocation(pageLocation)) {
             TM.current = pageLocation;
-            try {
-                localStorage.setItem(STORAGE_KEY, pageLocation.id || pageLocation.slug || pageLocationSlug);
-            } catch (e) { /* localStorage unavailable */ }
             TM._emitChange();
         } else {
             TM.restore();

@@ -19,6 +19,7 @@ interface MachineReadableRouteEntry extends RouteEntry {
 
 type SeoEntry = { title: string; description: string };
 type GeoAnswerBlock = { heading: string; text: string; publicPath: string };
+type LinkEntry = string | { canonicalPath: string; href: string };
 
 const citationBlocks = Object.values(geoAnswerBlocksData.blocks) as GeoAnswerBlock[];
 
@@ -59,7 +60,10 @@ const LOCATIONS_US = [
     '/houston',
     '/manassas',
 ];
-const LOCATIONS_EU = ['/antwerp', '/brussels'];
+const LOCATIONS_EU: LinkEntry[] = [
+    { canonicalPath: '/antwerp', href: 'https://timemission.eu/antwerp' },
+    { canonicalPath: '/brussels', href: 'https://timemission.eu' },
+];
 const GROUP_PAGES = [
     '/groups/birthdays',
     '/groups/corporate',
@@ -70,14 +74,16 @@ const GROUP_PAGES = [
 ];
 const MACHINE_READABLE = ['/ai-context.md', '/pricing.md'];
 
-function bullet(baseUrl: string, canonicalPath: string): string | null {
+function bullet(baseUrl: string, entry: LinkEntry): string | null {
+    const canonicalPath = typeof entry === 'string' ? entry : entry.canonicalPath;
     if (!SITEMAP_ELIGIBLE.has(canonicalPath)) return null;
     const meta = describe(canonicalPath);
     if (!meta) return null;
-    return `- [${meta.title}](${abs(baseUrl, canonicalPath)}): ${meta.description}`;
+    const href = typeof entry === 'string' ? abs(baseUrl, canonicalPath) : entry.href;
+    return `- [${meta.title}](${href}): ${meta.description}`;
 }
 
-function section(baseUrl: string, heading: string, paths: string[]): string {
+function section(baseUrl: string, heading: string, paths: LinkEntry[]): string {
     const lines = paths.map((p) => bullet(baseUrl, p)).filter((x): x is string => Boolean(x));
     if (lines.length === 0) return '';
     return `## ${heading}\n${lines.join('\n')}\n`;

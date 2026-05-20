@@ -22,9 +22,9 @@ Defined in `js/locations.js`. Notable methods:
 - `TM.ready` — Promise when `data/locations.json` has been fetched.
 - `TM.load()` — loads location roster (called by pages).
 - `TM.get(id)`, `TM.getOpen()`, `TM.getByRegion(region)`
-- `TM.normalizeSlug(value)` — same slug key rules as `id` / persisted `tm_location`.
+- `TM.normalizeSlug(value)` — same slug key rules as `id` / URL-derived location state.
 - `TM.isIndexPath()` — `true` when the current URL is the marketing homepage (no forced location restore).
-- `TM.select(id, opts?)` — optional `opts.cta_id` is merged into the `location_select` analytics payload (single event per selection).
+- `TM.select(id, opts?)` — selects a local, non-external location for the current page session. Optional `opts.cta_id` is merged into the `location_select` analytics payload (single event per selection).
 - `TM.clear()`, `TM.restore()`
 - `TM.listTicketOptions()` — ticket panel `<option>` data; **must match** `src/lib/ticket-options.ts` (`ticketPanelSelectOptions`).
 - `window.LocationContext.getLocationView(id)` — stable location view data for overlay/footer/ticket surfaces.

@@ -11,13 +11,13 @@
 /Lincoln /lincoln 301
 /Philadelphia /philadelphia 301
 /PHILADELPHIA /philadelphia 301
-/Antwerp /antwerp 301
+/Antwerp https://timemission.eu/antwerp 301
 /Mount-Prospect /mount-prospect 301
 /MountProspect /mount-prospect 301
 /West-Nyack /west-nyack 301
 /WestNyack /west-nyack 301
 /Houston /houston 301
-/Brussels /brussels 301
+/Brussels https://timemission.eu 301
 /Dallas /dallas 301
 /Orland-Park /orland-park 301
 /OrlandPark /orland-park 301
@@ -44,10 +44,12 @@
 /west-nyack.html /west-nyack 301
 /lincoln.html /lincoln 301
 /manassas.html /manassas 301
-/antwerp.html /antwerp 301
+/antwerp https://timemission.eu/antwerp 301
+/brussels https://timemission.eu 301
+/antwerp.html https://timemission.eu/antwerp 301
 /orland-park.html /orland-park 301
 /dallas.html /dallas 301
-/brussels.html /brussels 301
+/brussels.html https://timemission.eu 301
 /privacy.html /privacy 301
 /terms.html /terms 301
 /code-of-conduct.html /code-of-conduct 301
@@ -75,15 +77,15 @@
 /r1indoorkarting /lincoln 301
 /palisades-center /west-nyack 301
 /palisadescenter /west-nyack 301
-/terminal1 /brussels 301
-/terminal-1 /brussels 301
+/terminal1 https://timemission.eu 301
+/terminal-1 https://timemission.eu 301
 /manassas-mall /manassas 301
 /manassasmall /manassas 301
 /philly /philadelphia 301
 /mt-prospect /mount-prospect 301
 /mtprospect /mount-prospect 301
-/experience-factory-antwerp /antwerp 301
-/experiencefactoryantwerp /antwerp 301
+/experience-factory-antwerp https://timemission.eu/antwerp 301
+/experiencefactoryantwerp https://timemission.eu/antwerp 301
 /marq-e /houston 301
 /marqe /houston 301
 /mountprospect /mount-prospect 301
@@ -138,19 +140,18 @@
 # 301 to /west-nyack preserves link equity vs sending to /
 /palisades /west-nyack 301
 
-# Per-location legacy group aliases (TODO: build location-scoped group pages
-# at /<location>/groups/<type> and update these targets — for now redirect to
-# the global group page so users land on working content)
-/antwerp/adult-birthday-parties /groups/birthdays 301
-/antwerp/bachelorette-party /groups/bachelor-ette 301
-/antwerp/bus-tour /groups/private-events 301
-/antwerp/corporate-events /groups/corporate 301
-/antwerp/date-night-ideas /antwerp 301
-/antwerp/family-gathering /groups/holidays 301
-/antwerp/kids-birthday-party /groups/birthdays 301
-/antwerp/school-field-trips /groups/field-trips 301
-/antwerp/team-building /groups/private-events 301
-/antwerp/youth-group-camp /groups/private-events 301
+# Per-location legacy group aliases. EU prefixes hand off to the EU site; US
+# prefixes redirect to the global group page so users land on working content.
+/antwerp/adult-birthday-parties https://timemission.eu/antwerp 301
+/antwerp/bachelorette-party https://timemission.eu/antwerp 301
+/antwerp/bus-tour https://timemission.eu/antwerp 301
+/antwerp/corporate-events https://timemission.eu/antwerp 301
+/antwerp/date-night-ideas https://timemission.eu/antwerp 301
+/antwerp/family-gathering https://timemission.eu/antwerp 301
+/antwerp/kids-birthday-party https://timemission.eu/antwerp 301
+/antwerp/school-field-trips https://timemission.eu/antwerp 301
+/antwerp/team-building https://timemission.eu/antwerp 301
+/antwerp/youth-group-camp https://timemission.eu/antwerp 301
 
 /lincoln/adult-birthday-parties /groups/birthdays 301
 /lincoln/bachelorette-party /groups/bachelor-ette 301

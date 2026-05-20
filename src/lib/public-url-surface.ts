@@ -3,6 +3,7 @@ import routesRegistry from '../data/routes.json';
 export interface PublicUrlRoute {
     id?: string;
     canonicalPath: string;
+    externalUrl?: string;
     outputFile?: string;
     legacySources?: string[];
     sitemap: boolean;
@@ -10,6 +11,8 @@ export interface PublicUrlRoute {
 }
 
 export interface PublicUrlAlias {
+    allowExternal?: boolean;
+    externalAllowlistReason?: string;
     source: string;
     target: string;
     status: number;
@@ -111,7 +114,7 @@ export function registrySitemapUrls(registry: PublicUrlRegistry = defaultRegistr
 export function publicUrlRedirectPairs(registry: PublicUrlRegistry = defaultRegistry): PublicUrlRedirectPair[] {
     const pairs: PublicUrlRedirectPair[] = [];
     for (const route of registry.routes || []) {
-        const target = normalizePublicPath(route.canonicalPath);
+        const target = route.externalUrl || normalizePublicPath(route.canonicalPath);
         for (const source of route.legacySources || []) {
             pairs.push({
                 source,

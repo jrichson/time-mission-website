@@ -487,7 +487,7 @@
       "region": "us",
       "status": "coming-soon",
       "openingDate": "2026-06-05",
-      "openingLabel": "Opening 6/5/26",
+      "openingLabel": "Opening June 5, 2026",
       "address": {
         "line1": "7620 Katy Fwy",
         "line2": "STE 355",
@@ -629,7 +629,7 @@
       "region": "us",
       "status": "coming-soon",
       "openingDate": "2026-06-11",
-      "openingLabel": "Opening 6/11/26",
+      "openingLabel": "Opening June 11, 2026",
       "address": {
         "line1": "66 Orland Park",
         "city": "Orland Park",
@@ -688,6 +688,7 @@
       },
       "hours": {},
       "bookingUrl": "",
+      "externalUrl": "https://timemission.eu",
       "navLabel": "BE - Brussels",
       "mapUrl": "https://maps.google.com/?q=Av.+Imp%C3%A9ratrice+Charlotte+1020+Bruxelles+Belgium",
       "faqs": [],

@@ -172,6 +172,7 @@ describe('browser architecture contracts', () => {
 
     expect(byId.get('west-nyack')?.briqWidget?.domain).toBe('timemission-palisades');
     expect(byId.get('antwerp')?.externalUrl).toBe('https://timemission.eu/antwerp');
+    expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu');
   });
 
   it('TMConsent.update notifies document and window listeners with the same state', () => {
@@ -257,7 +258,7 @@ describe('browser architecture contracts', () => {
             slug: 'houston',
             shortName: 'Houston',
             status: 'coming-soon',
-            openingLabel: 'Opening 6/5/26',
+            openingLabel: 'Opening June 5, 2026',
             bookingUrl: 'https://checkout.example/houston',
             rollerCheckoutUrl: 'https://checkout.example/houston',
             giftCardUrl: '',
@@ -272,6 +273,15 @@ describe('browser architecture contracts', () => {
             groupFormUrls: {
               corporate: 'https://experience.example/antwerp-corporate',
             },
+          },
+          {
+            id: 'brussels',
+            slug: 'brussels',
+            status: 'coming-soon',
+            externalUrl: 'https://timemission.eu',
+            bookingUrl: '',
+            giftCardUrl: '',
+            groupFormUrls: {},
           },
           {
             id: 'west-nyack',
@@ -343,11 +353,13 @@ describe('browser architecture contracts', () => {
       .toBe('https://checkout.example/houston');
     expect(window.LocationContext.getLocationView('houston'))
       .toMatchObject({
-        hoursText: 'Opening 6/5/26',
-        openingLabel: 'Opening 6/5/26',
+        hoursText: 'Opening June 5, 2026',
+        openingLabel: 'Opening June 5, 2026',
       });
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'houston')?.label)
-      .toBe('Houston (Opening 6/5/26)');
+      .toBe('Houston (Opening June 5, 2026)');
+    expect(window.LocationContext.listTicketOptions().some((opt) => opt.value === 'antwerp')).toBe(false);
+    expect(window.LocationContext.listTicketOptions().some((opt) => opt.value === 'brussels')).toBe(false);
     expect(window.TMBooking.getDestination({ kind: 'groups', locationId: 'houston' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'houston' }))
@@ -377,6 +389,19 @@ describe('browser architecture contracts', () => {
         trigger: false,
         externalLocation: true,
       });
+    expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'brussels' }))
+      .toBe('https://timemission.eu');
+    expect(window.LocationContext.getOverlayView('brussels').cta)
+      .toMatchObject({
+        href: 'https://timemission.eu',
+        bookingUrl: '',
+        trigger: false,
+        externalLocation: true,
+      });
+    window.localStorage.setItem('tm_location', 'antwerp');
+    window.LocationContext.select('antwerp');
+    expect(window.LocationContext.getCurrent()).toBeNull();
+    expect(window.localStorage.getItem('tm_location')).toBeNull();
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'west-nyack' }))
       .toBe('#briq-widget-container');
     expect(window.TMBooking.resolveIntent({ kind: 'tickets', locationId: 'west-nyack' }))
@@ -440,7 +465,7 @@ describe('browser architecture contracts', () => {
     })).toBe('/manassas?book=1');
   });
 
-  it('homepage restores the saved location instead of dropping it on logo navigation', async () => {
+  it('homepage clears stale saved location instead of restoring it on hard refresh', async () => {
     const { context, window } = createBrowserContext({
       TM_DATA: {
         locations: [
@@ -459,15 +484,18 @@ describe('browser architecture contracts', () => {
     });
     window.location.pathname = '/';
     window.localStorage.setItem('tm_location', 'philadelphia');
+    window.localStorage.setItem('timeMissionLocation', 'Philadelphia');
 
     runScript('js/booking-journey.js', context);
     runScript('js/location-catalog-view.js', context);
     runScript('js/locations.js', context);
     await window.TM.ready;
 
-    expect(window.TM.current?.id).toBe('philadelphia');
-    expect(window.LocationContext.getCurrent()?.id).toBe('philadelphia');
-    expect(window.localStorage.getItem('tm_location')).toBe('philadelphia');
+    expect(window.TM.current).toBeNull();
+    expect(window.LocationContext.getCurrent()).toBeNull();
+    expect(window.LocationContext.getSavedSlug()).toBe('');
+    expect(window.localStorage.getItem('tm_location')).toBeNull();
+    expect(window.localStorage.getItem('timeMissionLocation')).toBeNull();
   });
 
   it('location-prefixed shared pages select the location from the URL', async () => {
@@ -488,6 +516,7 @@ describe('browser architecture contracts', () => {
       },
     });
     window.location.pathname = '/mount-prospect/about';
+    window.localStorage.setItem('tm_location', 'philadelphia');
 
     runScript('js/booking-journey.js', context);
     runScript('js/location-catalog-view.js', context);
@@ -495,7 +524,7 @@ describe('browser architecture contracts', () => {
     await window.TM.ready;
 
     expect(window.TM.current?.id).toBe('mount-prospect');
-    expect(window.localStorage.getItem('tm_location')).toBe('mount-prospect');
+    expect(window.localStorage.getItem('tm_location')).toBeNull();
   });
 
   it('navigation links carry the selected location through shared pages', async () => {

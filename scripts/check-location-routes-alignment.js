@@ -9,13 +9,23 @@ const errors = [];
 
 const locData = JSON.parse(fs.readFileSync(locationsPath, 'utf8'));
 const routeData = JSON.parse(fs.readFileSync(routesPath, 'utf8'));
-const paths = new Set((routeData.routes || []).map((r) => r.canonicalPath));
+const routesByPath = new Map((routeData.routes || []).map((r) => [r.canonicalPath, r]));
 
 for (const loc of locData.locations || []) {
   if (loc.status !== 'open' && loc.status !== 'coming-soon') continue;
   const expected = '/' + loc.slug;
-  if (!paths.has(expected)) {
+  const route = routesByPath.get(expected);
+  if (!route) {
     errors.push(`Missing route for location ${loc.id}: canonicalPath must be ${expected}`);
+    continue;
+  }
+  if (loc.externalUrl) {
+    if (route.externalUrl !== loc.externalUrl) {
+      errors.push(`External location ${loc.id}: route.externalUrl must be ${loc.externalUrl}`);
+    }
+    if (route.sitemap !== false) {
+      errors.push(`External location ${loc.id}: route.sitemap must be false because the public page redirects off-site`);
+    }
   }
 }
 

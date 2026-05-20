@@ -12,7 +12,7 @@ const REPO_ROOT = path.resolve(__dirname, '../..');
 const locationRecords = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'data', 'locations.json'), 'utf8')).locations || [];
 const contactLocations = locationRecords.filter((loc) => {
   const contact = loc.contact || {};
-  return String(contact.phone || '').trim() || String(contact.email || '').trim();
+  return !loc.externalUrl && (String(contact.phone || '').trim() || String(contact.email || '').trim());
 });
 const VIDEO_MEDIA_RE = /\.(mp4|webm)(?:\?.*)?$/i;
 
@@ -290,16 +290,12 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
     'https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home'
   );
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', 'manassas');
-  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('manassas');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('manassas');
   await expect(page.locator('#locationText')).toContainText('Manassas');
 
-  await page.locator('#ticketLocation').selectOption('antwerp');
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
-    'href',
-    'https://timemission.eu/antwerp'
-  );
-  await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url');
+  await expect(page.locator('#ticketLocation option[value="antwerp"]')).toHaveCount(0);
+  await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveCount(0);
 });
 
 test('ticket panel Continue to Booking opens Roller checkout without a location-page hop', async ({ page }) => {
@@ -373,20 +369,68 @@ test('open location ?book=1 opens embedded checkout without offsite navigation',
   await expect(page).toHaveURL(/\/philadelphia$/);
 });
 
-test('desktop location selection navigates to the canonical venue page', async ({ page, isMobile }) => {
+test('desktop location selection keeps the current page context', async ({ page, isMobile }) => {
   // Desktop-only: this flow uses the desktop `#locationBtn` in the nav.
   // Mobile location selection lives inside the hamburger menu and is covered
   // by the dedicated `Mobile location selector (P0-7a)` describe block below.
   test.skip(isMobile, 'desktop-only flow (mobile path covered by P0-7a tests)');
 
-  await page.goto('/groups/corporate');
+  await page.goto('/groups/corporate?utm_source=test#details');
 
   await page.locator('#locationBtn').click();
+  await expect(page.locator('#locationDropdown a[data-city="Philadelphia"]')).toHaveAttribute(
+    'href',
+    '/philadelphia/groups/corporate?utm_source=test#details'
+  );
   await page.locator('#locationDropdown a[data-city="Philadelphia"]').click();
 
-  await expect(page).toHaveURL(/\/philadelphia$/);
+  await expect(page).toHaveURL(/\/philadelphia\/groups\/corporate\?utm_source=test#details$/);
   await expect(page.locator('#locationText')).toContainText('Philadelphia');
-  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
+});
+
+test('desktop location selector treats Europe venues as external links only', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'desktop-only overlay path');
+
+  await page.goto('/');
+  await page.locator('#locationBtn').click();
+
+  const antwerp = page.locator('#locationDropdown a[href="https://timemission.eu/antwerp"]').first();
+  const brussels = page.locator('#locationDropdown a[href="https://timemission.eu"]').first();
+
+  await expect(antwerp).toHaveAttribute('data-tm-external-location', 'true');
+  await expect(antwerp).not.toHaveAttribute('data-city', /./);
+  await expect(antwerp).not.toHaveAttribute('data-tm-location-slug', /./);
+  await expect(brussels).toHaveAttribute('data-tm-external-location', 'true');
+  await expect(brussels).not.toHaveAttribute('data-city', /./);
+  await expect(brussels).not.toHaveAttribute('data-tm-location-slug', /./);
+});
+
+test('Europe location links preserve tracking params without becoming local selections', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'desktop-only overlay path');
+
+  await page.goto('/groups/corporate?utm_source=paid&utm_campaign=spring&book=1');
+  await page.locator('#locationBtn').click();
+
+  await expect(page.locator('#locationDropdown a[data-tm-external-location="true"]').first())
+    .toHaveAttribute('href', 'https://timemission.eu/antwerp?utm_source=paid&utm_campaign=spring');
+  await expect(page.locator('#locationDropdown a[data-tm-external-location="true"]').nth(1))
+    .toHaveAttribute('href', 'https://timemission.eu?utm_source=paid&utm_campaign=spring');
+});
+
+test('hard refresh on shared pages clears stale saved location', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('tm_location', 'philadelphia');
+    localStorage.setItem('timeMissionLocation', 'Philadelphia');
+  });
+
+  await page.goto('/groups');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBeNull();
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('timeMissionLocation'))).toBeNull();
+  await expect(page.locator('#locationText')).toContainText('Select Location');
 });
 
 test('desktop location hover renders address map preview before selection', async ({ page, isMobile }) => {
@@ -423,7 +467,7 @@ test('location page drives nav state and ticket panel default location', async (
   await page.goto('/philadelphia');
   await expect(page.locator('#locationText')).toContainText('Philadelphia');
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
-  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
     'href',
     '#'
@@ -673,7 +717,12 @@ test('gift card page disables locations with blank gift-card audit rows', async 
   await page.goto('/gift-cards');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
-  for (const locationId of ['antwerp', 'houston', 'dallas', 'west-nyack']) {
+  await page.evaluate(() => window.TM.select('antwerp'));
+  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBeNull();
+  await expect(page.locator('#giftCardBuyBtn')).not.toHaveAttribute('aria-disabled', 'true');
+  await expect(page.locator('#giftCardLocationHint')).toContainText('Select a location');
+
+  for (const locationId of ['houston', 'dallas', 'west-nyack']) {
     await page.evaluate((id) => window.TM.select(id), locationId);
     await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('aria-disabled', 'true');
     await expect(page.locator('#giftCardLocationHint')).toContainText('not available');
@@ -862,10 +911,10 @@ test('contact page only shows direct info for the selected location', async ({ p
 });
 
 test('contact page follows the active site location', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('tm_location', 'west-nyack'));
   await page.goto('/contact');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
+  await page.evaluate(() => window.TM.select('west-nyack'));
   await expect(page.locator('#location')).toHaveValue('west-nyack');
   await expect(page.locator('[data-location-contact-card]')).toBeVisible();
   await expect(page.locator('[data-location-contact-name]')).toHaveText('West Nyack');
@@ -1005,28 +1054,29 @@ test.describe('Mobile location selector (P0-7a)', () => {
   test('logo home navigation preserves the selected location', async ({ page }) => {
     await page.goto('/philadelphia');
     await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 
     await page.locator('.nav-logo').first().tap();
 
     await expect(page).toHaveURL(/\/philadelphia$/);
     await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
     await expect(page.locator('#locationText')).toContainText('Philadelphia');
     await expect.poll(() => page.evaluate(() => document.getElementById('taglineText')?.textContent || ''))
       .toContain('Time Mission Philadelphia');
   });
 
-  test('tapping a location link navigates to the canonical venue page', async ({ page }) => {
+  test('tapping a location link keeps the current page context', async ({ page }) => {
     await page.goto('/groups');
     await page.locator('#locationBtn').first().click();
     await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
 
     const philly = page.locator('#locationDropdown a[href*="philadelphia"]').first();
+    await expect(philly).toHaveAttribute('href', '/philadelphia/groups');
     await philly.tap();
 
-    await expect(page).toHaveURL(/\/philadelphia$/);
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+    await expect(page).toHaveURL(/\/philadelphia\/groups$/);
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
   });
 });
 

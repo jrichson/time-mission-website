@@ -12,6 +12,7 @@ const LOCATION_ROUTE_ENTRIES = [
   {
     canonicalPath: '/brussels',
     officialAlternate: 'terminal1',
+    externalUrl: 'https://timemission.eu',
   },
   {
     canonicalPath: '/manassas',
@@ -29,6 +30,7 @@ const LOCATION_ROUTE_ENTRIES = [
   {
     canonicalPath: '/antwerp',
     officialAlternate: 'experience-factory-antwerp',
+    externalUrl: 'https://timemission.eu/antwerp',
   },
   {
     canonicalPath: '/houston',
@@ -143,19 +145,19 @@ export function compactLocationSegment(value) {
     .replace(/-/g, '');
 }
 
-function registerSource(map, source, canonicalPath) {
+function registerSource(map, source, entry) {
   const key = compactLocationSegment(source);
-  if (key) map.set(key, canonicalPath);
+  if (key) map.set(key, entry);
 }
 
 function buildRouteMap() {
   const map = new Map();
   for (const entry of LOCATION_ROUTE_ENTRIES) {
     const canonicalSegment = entry.canonicalPath.replace(/^\//, '');
-    registerSource(map, canonicalSegment, entry.canonicalPath);
-    registerSource(map, entry.officialAlternate, entry.canonicalPath);
+    registerSource(map, canonicalSegment, entry);
+    registerSource(map, entry.officialAlternate, entry);
     for (const source of entry.compatibilitySources || []) {
-      registerSource(map, source, entry.canonicalPath);
+      registerSource(map, source, entry);
     }
   }
   return map;
@@ -200,12 +202,14 @@ export function locationRouteEntries() {
   return LOCATION_ROUTE_ENTRIES.map((entry) => ({
     canonicalPath: entry.canonicalPath,
     compatibilitySources: [...(entry.compatibilitySources || [])],
+    externalUrl: entry.externalUrl || '',
     officialAlternate: entry.officialAlternate || '',
   }));
 }
 
 export function resolveLocationCanonicalPath(pathname) {
-  return resolveLocationPath(pathname).redirectPath;
+  const route = resolveLocationPath(pathname);
+  return route.redirectUrl || route.redirectPath;
 }
 
 function resolveLocationPath(pathname) {
@@ -214,8 +218,18 @@ function resolveLocationPath(pathname) {
   const firstSegment = parts[1] || '';
   if (!firstSegment) return { redirectPath: '', assetPath: '' };
 
-  const canonicalPath = routeByCompactSegment.get(compactLocationSegment(firstSegment));
-  if (!canonicalPath) return { redirectPath: '', assetPath: '' };
+  const entry = routeByCompactSegment.get(compactLocationSegment(firstSegment));
+  if (!entry) return { redirectPath: '', redirectUrl: '', assetPath: '' };
+
+  if (entry.externalUrl) {
+    return {
+      redirectPath: '',
+      redirectUrl: entry.externalUrl,
+      assetPath: '',
+    };
+  }
+
+  const canonicalPath = entry.canonicalPath;
 
   const suffix = parts.slice(2).join('/');
   const sourcePath = trimTrailingSlash(cleanPathname);
@@ -251,6 +265,12 @@ function resolveLocationPath(pathname) {
 export function resolveLocationRedirectUrl(requestUrl) {
   const url = new URL(requestUrl);
   const route = resolveLocationPath(url.pathname);
+  if (route.redirectUrl) {
+    const target = new URL(route.redirectUrl);
+    target.search = url.search;
+    target.hash = '';
+    return target.toString();
+  }
   if (!route.redirectPath) return '';
 
   const target = new URL(url.toString());
@@ -270,6 +290,14 @@ export function resolveLocationRouteRequest(requestUrl) {
   if (route.redirectPath) {
     const target = new URL(url.toString());
     target.pathname = route.redirectPath;
+    target.hash = '';
+    result.redirectUrl = target.toString();
+    return result;
+  }
+
+  if (route.redirectUrl) {
+    const target = new URL(route.redirectUrl);
+    target.search = url.search;
     target.hash = '';
     result.redirectUrl = target.toString();
     return result;

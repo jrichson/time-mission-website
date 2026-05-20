@@ -13,8 +13,15 @@ function openingLabelFor(slug: string) {
     return loc ? locationOpeningLabel(loc) : '';
 }
 
+function hrefFor(slug: string) {
+    const loc = allLocations.find((entry) => entry.slug === slug || entry.id === slug);
+    return loc?.externalUrl || `/${slug}`;
+}
+
 const houstonOpeningLabel = openingLabelFor('houston');
 const orlandParkOpeningLabel = openingLabelFor('orland-park');
+const antwerpHref = hrefFor('antwerp');
+const brusselsHref = hrefFor('brussels');
 ---
 
 <footer class="footer">
@@ -99,8 +106,8 @@ const orlandParkOpeningLabel = openingLabelFor('orland-park');
                         </svg>
                     </button>
                     <div class="footer-location-list">
-                        <a href="https://timemission.eu/antwerp">Antwerp</a>
-                        <a href="/brussels" class="coming-soon"
+                        <a href={antwerpHref}>Antwerp</a>
+                        <a href={brusselsHref} class="coming-soon"
                             >Brussels <span class="coming-soon-tag">Coming Soon</span></a
                         >
                     </div>

@@ -40,9 +40,7 @@
                                 <option value="lincoln">Lincoln</option>
                                 <option value="houston">Houston</option>
                                 <option value="manassas">Manassas</option>
-                                <option value="antwerp">Antwerp (Belgium)</option>
                                 <option value="orland-park">Orland Park</option>
-                                <option value="brussels">Brussels</option>
                                 <option value="dallas">Dallas</option>
                                 <option value="general">General Inquiry</option>
                             </select>

@@ -18,6 +18,19 @@ const root = path.resolve(__dirname, '..');
 const errors = [];
 let astroRendered = new Set();
 
+function walkFiles(dir, predicate, out = []) {
+  if (!fs.existsSync(dir)) return out;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkFiles(full, predicate, out);
+    } else if (predicate(full)) {
+      out.push(full);
+    }
+  }
+  return out;
+}
+
 try {
   astroRendered = loadAstroRenderedOutputFilesSet(root);
   if (astroRendered.size < 1) {
@@ -58,6 +71,22 @@ if (JSON.stringify(publicContract.locationIds) !== JSON.stringify(locationIds)) 
 const externalLocationIds = (locDoc.locations || []).filter((loc) => loc.externalUrl).map((loc) => loc.id);
 if (JSON.stringify(publicContract.externalLocationIds) !== JSON.stringify(externalLocationIds)) {
   errors.push('public site contract externalLocationIds must match data/locations.json externalUrl rows');
+}
+const externalLocations = (locDoc.locations || []).filter((loc) => loc.externalUrl);
+const sourceLinkFiles = [
+  ...walkFiles(path.join(root, 'src', 'components'), (file) => file.endsWith('.astro')),
+  ...walkFiles(path.join(root, 'src', 'pages'), (file) => file.endsWith('.astro') || file.endsWith('.ts')),
+  ...walkFiles(path.join(root, 'src', 'partials'), (file) => file.endsWith('.frag.txt')),
+];
+for (const filePath of sourceLinkFiles) {
+  const src = fs.readFileSync(filePath, 'utf8');
+  const relPath = path.relative(root, filePath);
+  for (const loc of externalLocations) {
+    const slug = loc.slug || loc.id;
+    if (src.includes(`href="/${slug}"`)) {
+      errors.push(`${relPath}: ${slug} UI link must point to ${loc.externalUrl}`);
+    }
+  }
 }
 if (!publicContract.booking || publicContract.booking.locationPromptRequired !== true) {
   errors.push('public site contract must mark booking.locationPromptRequired=true');

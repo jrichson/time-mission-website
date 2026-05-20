@@ -238,11 +238,12 @@
     {
       "id": "antwerp",
       "canonicalPath": "/antwerp",
+      "externalUrl": "https://timemission.eu/antwerp",
       "legacySources": [
         "/antwerp.html"
       ],
       "outputFile": "antwerp.html",
-      "sitemap": true,
+      "sitemap": false,
       "status": 301
     },
     {
@@ -268,11 +269,12 @@
     {
       "id": "brussels",
       "canonicalPath": "/brussels",
+      "externalUrl": "https://timemission.eu",
       "legacySources": [
         "/brussels.html"
       ],
       "outputFile": "brussels.html",
-      "sitemap": true,
+      "sitemap": false,
       "status": 301
     },
     {
@@ -438,13 +440,17 @@
       "status": 301
     },
     {
+      "allowExternal": true,
+      "externalAllowlistReason": "EU venues live on timemission.eu and should not resolve to US-hosted location pages.",
       "source": "/terminal1",
-      "target": "/brussels",
+      "target": "https://timemission.eu",
       "status": 301
     },
     {
+      "allowExternal": true,
+      "externalAllowlistReason": "EU venues live on timemission.eu and should not resolve to US-hosted location pages.",
       "source": "/terminal-1",
-      "target": "/brussels",
+      "target": "https://timemission.eu",
       "status": 301
     },
     {
@@ -473,13 +479,17 @@
       "status": 301
     },
     {
+      "allowExternal": true,
+      "externalAllowlistReason": "EU venues live on timemission.eu and should not resolve to US-hosted location pages.",
       "source": "/experience-factory-antwerp",
-      "target": "/antwerp",
+      "target": "https://timemission.eu/antwerp",
       "status": 301
     },
     {
+      "allowExternal": true,
+      "externalAllowlistReason": "EU venues live on timemission.eu and should not resolve to US-hosted location pages.",
       "source": "/experiencefactoryantwerp",
-      "target": "/antwerp",
+      "target": "https://timemission.eu/antwerp",
       "status": 301
     },
     {

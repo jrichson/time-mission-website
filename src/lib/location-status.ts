@@ -5,6 +5,21 @@ type LocationStatusFields = Pick<
     'bookingUrl' | 'openingDate' | 'openingLabel' | 'rollerCheckoutUrl' | 'status'
 >;
 
+const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+];
+
 export function hasTicketBooking(loc: LocationStatusFields): boolean {
     return Boolean(String(loc.rollerCheckoutUrl || loc.bookingUrl || '').trim());
 }
@@ -17,7 +32,7 @@ export function locationOpeningLabel(loc: Pick<LocationRecord, 'openingDate' | '
     const match = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
     if (!match) return '';
 
-    return `Opening ${Number(match[2])}/${Number(match[3])}/${match[1].slice(2)}`;
+    return `Opening ${monthNames[Number(match[2]) - 1]} ${Number(match[3])}, ${match[1]}`;
 }
 
 export function locationOpeningDateText(loc: Pick<LocationRecord, 'openingDate' | 'openingLabel'>): string {
