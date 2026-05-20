@@ -81,7 +81,7 @@ const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocati
         <slot name="head-extra" />
         {loadsBriqWidget && <link rel="stylesheet" href="/css/briq-widget.css" />}
         {loadsBriqWidget && (
-            <script language="javascript" is:inline>
+            <script is:inline>
                 ;(function (d, t){
                     function loadBriqWidgetScript() {
                         if (d.querySelector('script[data-briq-widget-script]')) return

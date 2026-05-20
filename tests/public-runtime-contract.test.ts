@@ -46,6 +46,9 @@ describe('Public runtime contract', () => {
       trigger: 'web-vitals',
       dependsOn: ['webVitalsLibrary'],
     });
-    expect(versionedRuntimeSrc(byId.get('contactFormAnalytics')!)).toBe('/js/contact-form-analytics.js?v=1');
+    const contactFormAnalytics = byId.get('contactFormAnalytics');
+    expect(contactFormAnalytics).toMatchObject({ trigger: 'contact-form' });
+    expect(contactFormAnalytics && versionedRuntimeSrc(contactFormAnalytics))
+      .toBe('/js/contact-form-analytics.js?v=1');
   });
 });

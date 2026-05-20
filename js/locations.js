@@ -317,14 +317,6 @@
                 });
             }
 
-            if (loc && loc.slug) {
-                const inSubdir = window.location.pathname.includes('/locations/') || window.location.pathname.includes('/groups/');
-                const homePath = (inSubdir ? '../' : '/') + loc.slug;
-                document.querySelectorAll('.nav-logo, .location-dropdown-logo').forEach(el => {
-                    el.href = homePath;
-                });
-            }
-
             if (loc && loc.ticker) {
                 document.querySelectorAll('.ticker-track').forEach(track => {
                     const items = track.querySelectorAll('.ticker-item');

@@ -60,6 +60,23 @@
             if (slug) byId[slug] = loc;
         });
 
+        function setSelectLocation(value) {
+            var normalized = normalizeLocation(value);
+            if (!normalized) return false;
+            var match = Array.prototype.find.call(select.options, function (option) {
+                return normalizeLocation(option.value) === normalized;
+            });
+            if (!match) return false;
+            select.value = match.value;
+            return true;
+        }
+
+        function syncFromCurrentLocation() {
+            var current = window.TM && window.TM.current;
+            if (!current) return false;
+            return setSelectLocation(current.id || current.slug);
+        }
+
         function render() {
             var value = normalizeLocation(select.value);
             setHidden(card, true);
@@ -104,6 +121,11 @@
         }
 
         select.addEventListener('change', render);
+        document.addEventListener('tm:location-changed', function (event) {
+            var loc = event.detail || null;
+            if (loc && setSelectLocation(loc.id || loc.slug)) render();
+        });
+        if (!select.value) syncFromCurrentLocation();
         render();
     }
 

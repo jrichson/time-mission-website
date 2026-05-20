@@ -125,6 +125,29 @@
             || pageSlug === normalizeLocation(loc.id || '');
     }
 
+    function urlsShareOriginAndPath(firstUrl, secondUrl) {
+        var base = (window.location && window.location.origin) || 'https://timemission.com';
+        try {
+            var first = new URL(firstUrl, base);
+            var second = new URL(secondUrl, base);
+            return first.origin === second.origin
+                && first.pathname.replace(/\/+$/, '') === second.pathname.replace(/\/+$/, '');
+        } catch (e) {
+            return String(firstUrl || '').replace(/\/+$/, '') === String(secondUrl || '').replace(/\/+$/, '');
+        }
+    }
+
+    function isBriqProviderUrl(loc, href) {
+        return isBriqWidgetLocation(loc)
+            && !!href
+            && urlsShareOriginAndPath(href, loc.bookingUrl || '');
+    }
+
+    function briqWidgetDestination(loc, slug, pageLocationSlug, fallbackHref) {
+        if (isSameLocationPage(loc, pageLocationSlug)) return '#briq-widget-container';
+        return slug ? appendTrackingParams('/' + slug + '?book=1', { includeInternal: true }) : fallbackHref;
+    }
+
     function resolveComingSoonLeadUrl(loc, fallbackSlug) {
         var slug = (loc && (loc.slug || loc.id)) || fallbackSlug || '';
         return slug ? '/contact?location=' + encodeURIComponent(slug) + '&type=updates' : '/contact?type=updates';
@@ -152,6 +175,9 @@
             var groupType = normalizeGroupType(opts.groupType || opts.pageGroupType || '');
             var groupUrls = loc.groupFormUrls || {};
             var groupUrl = (groupType && groupUrls[groupType]) || groupUrls.default || loc.groupsUrl || '';
+            if (isBriqProviderUrl(loc, groupUrl)) {
+                return briqWidgetDestination(loc, slug, opts.pageLocationSlug, groupUrl);
+            }
             if (groupUrl) return groupUrl;
             return '';
         }
@@ -159,8 +185,7 @@
         var externalUrl = getExternalLocationUrl(loc);
         if (externalUrl) return externalUrl;
         if (isBriqWidgetLocation(loc)) {
-            if (isSameLocationPage(loc, opts.pageLocationSlug)) return '#briq-widget-container';
-            return slug ? appendTrackingParams('/' + slug + '?book=1', { includeInternal: true }) : checkoutUrl;
+            return briqWidgetDestination(loc, slug, opts.pageLocationSlug, checkoutUrl);
         }
         if (opts.preferLocationPageFlow && slug) {
             return appendTrackingParams('/' + slug + '?book=1', { includeInternal: true });
@@ -179,11 +204,6 @@
         return normalizeKind(kind) === 'tickets';
     }
 
-    function shouldUseBookingFrame(kind, href) {
-        // Group inquiry forms are first-class destinations; embedding them breaks provider flows.
-        return false;
-    }
-
     function shouldUseRollerCheckout(loc, href, kind) {
         if (!loc || normalizeKind(kind) !== 'tickets') return false;
         var roller = (loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
@@ -191,7 +211,8 @@
     }
 
     function shouldUseBriqWidget(loc, href, kind, pageLocationSlug) {
-        return normalizeKind(kind) === 'tickets'
+        var normalizedKind = normalizeKind(kind);
+        return (normalizedKind === 'tickets' || normalizedKind === 'groups')
             && isBriqWidgetLocation(loc)
             && isSameLocationPage(loc, pageLocationSlug)
             && String(href || '').trim() === '#briq-widget-container';
@@ -209,7 +230,6 @@
         if (shouldUseBriqWidget(loc, href, kind, opts.pageLocationSlug)) return 'briq-widget';
         if (isLocationExternalSiteUrl(loc, href)) return 'external-site';
         if (isTicketKind(kind) && shouldUseRollerCheckout(loc, href, kind)) return 'roller';
-        if (shouldUseBookingFrame(kind, href)) return 'iframe';
         return 'link';
     }
 

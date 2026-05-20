@@ -81,7 +81,7 @@
             <!-- Location Info -->
             <div class="locations-info reveal" data-location-contact-panel>
                 <h3>Contact by Location</h3>
-                <p>Choose a location in the form to show only that location's direct contact details.</p>
+                <p>Use the site location selector or the form location field to show that location's direct contact details.</p>
 
                 <div class="location-contact-card" data-location-contact-card hidden>
                     <h4>
@@ -107,7 +107,7 @@
                 </div>
 
                 <div class="location-contact-empty" data-location-contact-empty>
-                    Choose a location in the form to see its direct contact info.
+                    Choose a location to see its direct contact info.
                 </div>
 
                 <div class="general-contact" data-location-contact-general hidden>

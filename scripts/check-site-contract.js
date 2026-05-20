@@ -118,6 +118,13 @@ for (const relPath of ['groups.html', 'public/groups.html']) {
       errors.push(`${relPath}: ${groupType} card CTAs must resolve through the selected location group form`);
     }
   }
+  const eventCardTicketCtas = html.match(/class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets"/g) || [];
+  if (eventCardTicketCtas.length < 6) {
+    errors.push(`${relPath}: group event card Book Now CTAs must resolve through the standard ticket booking flow`);
+  }
+  if (/formsubmit\.co|class="inquiry-form"|id="inquiry"/.test(html)) {
+    errors.push(`${relPath}: embedded group inquiry form must not be rendered`);
+  }
   if (/href="\/contact\?type=/.test(html)) {
     errors.push(`${relPath}: group CTAs must open the booking panel instead of bypassing location-aware group forms`);
   }

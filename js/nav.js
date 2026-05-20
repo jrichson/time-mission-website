@@ -93,21 +93,6 @@
     const navEl = document.getElementById('nav');
     let activeLocationInfoRef = '';
 
-    document.querySelectorAll('.nav-logo, .location-dropdown-logo').forEach(logo => {
-        logo.addEventListener('click', function (e) {
-            const context = getLocationContext();
-            const current = context && typeof context.getCurrent === 'function' ? context.getCurrent() : null;
-            let slug = (current && (current.slug || current.id)) || '';
-            if (!slug && context && typeof context.getSavedSlug === 'function') {
-                slug = context.getSavedSlug();
-            }
-            if (!slug) return;
-            e.preventDefault();
-            const inSubdir = window.location.pathname.includes('/locations/') || window.location.pathname.includes('/groups/');
-            window.location.href = (inSubdir ? '../' : '/') + slug;
-        });
-    });
-
     // Mobile menu toggle
     const tickerBar = document.querySelector('.ticker-bar');
 
@@ -220,17 +205,13 @@
             link.addEventListener('click', (e) => {
                 const cityName = link.dataset.city;
                 const slug = getLocationSlug(link);
-                const narrowPicker = narrowPickerQuery.matches;
                 if (cityName) {
-                    const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
-                    syncAllLocations(cityName, slug, overlayTrack);
-
-                    if (slug && isSameWindowNavigationClick(e, link)) {
-                        closeLocationOverlay();
-                        locationOverlay.classList.add('navigating');
-                        return;
+                    if (isSameWindowNavigationClick(e, link)) {
+                        e.preventDefault();
                     }
 
+                    const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
+                    syncAllLocations(cityName, slug, overlayTrack);
                     showLocationInfo(slug || cityName);
                 }
 
@@ -242,7 +223,15 @@
 
     function getLocationSlug(link) {
         if (link && link.dataset && link.dataset.tmLocationSlug) return link.dataset.tmLocationSlug;
-        return (link.getAttribute('href') || '').replace(/^\//, '').replace(/\.html$/, '');
+        const href = (link && link.getAttribute('href') || '').trim();
+        if (!href) return '';
+        if (/^https?:\/\//i.test(href)) return normalizeLocation(link.dataset && link.dataset.city);
+        return href
+            .split('#')[0]
+            .split('?')[0]
+            .replace(/^(\.\/|\.\.\/)+/, '')
+            .replace(/^\//, '')
+            .replace(/\.html$/, '');
     }
 
     function isSameWindowNavigationClick(event, link) {

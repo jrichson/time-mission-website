@@ -108,7 +108,7 @@
         return '';
     }
 
-    function leadUrlForLocation(loc, slug, externalUrl, pageUrl) {
+    function leadUrlForLocation(loc, slug, externalUrl) {
         if (externalUrl) return externalUrl;
         if (BookingJourney.isLeadOnlyComingSoon(loc)) {
             return slug ? '/contact?location=' + encodeURIComponent(slug) + '&type=updates' : '/contact?type=updates';
@@ -125,7 +125,7 @@
         var comingSoon = loc.status === 'coming-soon';
         var bookable = BookingJourney.isBookableLocation(loc);
         var bookingUrl = BookingJourney.resolveOpenCheckoutUrl(loc);
-        var leadUrl = leadUrlForLocation(loc, slug, externalUrl, pageUrl);
+        var leadUrl = leadUrlForLocation(loc, slug, externalUrl);
         return {
             id: loc.id || slug,
             slug: slug,

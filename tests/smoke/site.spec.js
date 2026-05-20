@@ -9,6 +9,11 @@ require('tsx/cjs/api').register();
 const { locationsFingerprintFromRecords } = require('../../src/lib/locations-fingerprint.ts');
 
 const REPO_ROOT = path.resolve(__dirname, '../..');
+const locationRecords = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'data', 'locations.json'), 'utf8')).locations || [];
+const contactLocations = locationRecords.filter((loc) => {
+  const contact = loc.contact || {};
+  return String(contact.phone || '').trim() || String(contact.email || '').trim();
+});
 const VIDEO_MEDIA_RE = /\.(mp4|webm)(?:\?.*)?$/i;
 
 test.beforeEach(async ({ page }) => {
@@ -215,6 +220,18 @@ test('language switcher changes visible navigation text', async ({ page, isMobil
   await expect(page.locator('#ticketBookBtnText')).toHaveText(es['booking.chooseLocation.cta']);
 });
 
+test('language switcher keeps the current route', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'desktop language switcher path; mobile menu uses same runtime');
+
+  await page.goto('/groups/corporate');
+  await expect.poll(() => page.evaluate(() => Boolean(window.__TM_I18N__?.translations?.es))).toBe(true);
+
+  await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
+  await expect(page).toHaveURL(/\/groups\/corporate$/);
+  await expect.poll(() => page.evaluate(() => document.documentElement.lang)).toBe('es');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
+});
+
 test('ticket panel options hydrate from location data', async ({ page }) => {
   await page.goto('/');
 
@@ -341,18 +358,18 @@ test('open location ?book=1 opens embedded checkout without offsite navigation',
   await expect(page).toHaveURL(/\/philadelphia$/);
 });
 
-test('desktop location selection opens the selected venue page', async ({ page, isMobile }) => {
+test('desktop location selection updates active venue without leaving the current page', async ({ page, isMobile }) => {
   // Desktop-only: this flow uses the desktop `#locationBtn` in the nav.
   // Mobile location selection lives inside the hamburger menu and is covered
   // by the dedicated `Mobile location selector (P0-7a)` describe block below.
   test.skip(isMobile, 'desktop-only flow (mobile path covered by P0-7a tests)');
 
-  await page.goto('/');
+  await page.goto('/groups/corporate');
 
   await page.locator('#locationBtn').click();
   await page.locator('#locationDropdown a[data-city="Philadelphia"]').click();
 
-  await expect(page).toHaveURL(/\/philadelphia$/);
+  await expect(page).toHaveURL(/\/groups\/corporate$/);
   await expect(page.locator('#locationText')).toContainText('Philadelphia');
   await expect(page.locator('#locationDropdown')).not.toHaveClass(/open/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
@@ -486,6 +503,92 @@ test('legacy groups cards open the selected location event form as a direct link
   await expect(page).toHaveURL(expectedHref);
 });
 
+test('legacy groups event cards expose ticket booking and group inquiry triggers', async ({ page }) => {
+  await page.goto('/groups.html');
+
+  const expectedGroupTypes = [
+    'birthdays',
+    'corporate',
+    'bachelor-ette',
+    'field-trips',
+    'private-events',
+    'holidays',
+  ];
+  const cards = await page.locator('.event-type-card').evaluateAll((nodes) => nodes.map((card) => {
+    const ticket = card.querySelector('.event-type-actions .btn-tickets');
+    const inquiry = card.querySelector('.event-type-actions .ghost');
+    return {
+      ticketIsTrigger: ticket?.hasAttribute('data-tm-booking-trigger') || false,
+      ticketKind: ticket?.getAttribute('data-tm-booking-kind') || '',
+      inquiryIsTrigger: inquiry?.hasAttribute('data-tm-booking-trigger') || false,
+      inquiryKind: inquiry?.getAttribute('data-tm-booking-kind') || '',
+      groupType: inquiry?.getAttribute('data-tm-group-type') || '',
+    };
+  }));
+
+  expect(cards.map((card) => card.groupType)).toEqual(expectedGroupTypes);
+  for (const card of cards) {
+    expect(card.ticketIsTrigger).toBe(true);
+    expect(card.ticketKind).toBe('tickets');
+    expect(card.inquiryIsTrigger).toBe(true);
+    expect(card.inquiryKind).toBe('groups');
+  }
+
+  await expect(page.locator('.event-info-body [data-tm-booking-kind="groups"][data-tm-group-type="private-events"]')).toContainText('Plan Your Event');
+});
+
+test('legacy groups event card Book Now keeps the standard ticket booking flow', async ({ page }) => {
+  await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
+    await route.fulfill({
+      contentType: 'application/javascript',
+      body: 'window.RollerCheckout = { show: function () { window.__rollerCheckoutShown = true; } };',
+    });
+  });
+
+  await page.goto('/groups.html');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+  await page.evaluate(() => window.TM.select('manassas'));
+
+  await page.locator('.event-type-actions .btn-tickets[data-tm-booking-kind="tickets"]').first().click();
+  await page.waitForFunction(() => window.__rollerCheckoutShown === true);
+  await expect(page).toHaveURL(/\/groups\.html$/);
+});
+
+test('West Nyack group inquiry CTAs hand off to the Briq widget instead of the raw Briq site', async ({ page }) => {
+  const briqScript = await stubBriqWidgetScript(page);
+  const briqProviderRequests = [];
+  await page.route('https://timemission-palisades.briqbookings.com/**', async (route) => {
+    briqProviderRequests.push(route.request().url());
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>Unexpected raw Briq navigation</title>',
+    });
+  });
+
+  await page.goto('/groups');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+  await page.evaluate(() => window.TM.select('west-nyack'));
+
+  await expect.poll(() => page.evaluate(() => window.TMBooking.resolveIntent({
+    kind: 'groups',
+    groupType: 'private-events',
+    locationId: 'west-nyack',
+  })?.href || '')).toBe('/west-nyack?book=1');
+
+  await page
+    .locator('[data-tm-booking-kind="groups"][data-tm-group-type="private-events"]')
+    .first()
+    .click();
+
+  await expect(page).toHaveURL(/\/west-nyack$/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
+  await expect(page.locator('#briq-widget-container')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
+  expect(briqScript.requests).toBeGreaterThan(0);
+  expect(briqProviderRequests).toHaveLength(0);
+});
+
 test('group page Book Now CTAs keep the standard ticket booking flow', async ({ page }) => {
   await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
     await route.fulfill({
@@ -501,6 +604,17 @@ test('group page Book Now CTAs keep the standard ticket booking flow', async ({ 
   await page.locator('main .btn-primary.btn-tickets[data-tm-booking-kind="tickets"]').first().click();
   await page.waitForFunction(() => window.__rollerCheckoutShown === true);
   await expect(page).toHaveURL(/\/groups\/corporate$/);
+});
+
+test('missions Book Now CTAs open the standard ticket booking flow', async ({ page }) => {
+  await page.goto('/missions');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  await page.locator('.portal-cta.btn-book-now[data-tm-booking-trigger]').first().click();
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await expect(page.locator('#ticketLocation')).toBeVisible();
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-booking-kind', 'tickets');
+  await expect(page).toHaveURL(/\/missions$/);
 });
 
 test('Houston and Orland Park group CTAs resolve to audit-approved forms', async ({ page }) => {
@@ -544,7 +658,7 @@ test('gift card page disables locations with blank gift-card audit rows', async 
   await page.goto('/gift-cards');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
-  for (const locationId of ['antwerp', 'houston', 'dallas']) {
+  for (const locationId of ['antwerp', 'houston', 'dallas', 'west-nyack']) {
     await page.evaluate((id) => window.TM.select(id), locationId);
     await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('aria-disabled', 'true');
     await expect(page.locator('#giftCardLocationHint')).toContainText('not available');
@@ -706,6 +820,50 @@ test('contact page only shows direct info for the selected location', async ({ p
   await expect(page.locator('[data-location-contact-empty]')).toContainText('Orland Park');
 });
 
+test('contact page follows the active site location', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('tm_location', 'west-nyack'));
+  await page.goto('/contact');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  await expect(page.locator('#location')).toHaveValue('west-nyack');
+  await expect(page.locator('[data-location-contact-card]')).toBeVisible();
+  await expect(page.locator('[data-location-contact-name]')).toHaveText('West Nyack');
+
+  await page.evaluate(() => window.TM.select('philadelphia'));
+  await expect(page.locator('#location')).toHaveValue('philadelphia');
+  await expect(page.locator('[data-location-contact-name]')).toHaveText('Philadelphia');
+});
+
+test('contact page displays configured direct info for every location that has it', async ({ page }) => {
+  await page.goto('/contact');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  for (const loc of contactLocations) {
+    const contact = loc.contact || {};
+    const phone = String(contact.phone || '').trim();
+    const email = String(contact.email || '').trim();
+
+    await page.locator('#location').selectOption(loc.id);
+    await expect(page.locator('#location')).toHaveValue(loc.id);
+    await expect(page.locator('[data-location-contact-card]')).toBeVisible();
+    await expect(page.locator('[data-location-contact-name]')).toHaveText(loc.shortName || loc.name);
+
+    if (phone) {
+      await expect(page.locator('[data-location-contact-phone-row]')).toBeVisible();
+      await expect(page.locator('[data-location-contact-phone]')).toHaveText(phone);
+    } else {
+      await expect(page.locator('[data-location-contact-phone-row]')).toBeHidden();
+    }
+
+    if (email) {
+      await expect(page.locator('[data-location-contact-email-row]')).toBeVisible();
+      await expect(page.locator('[data-location-contact-email]')).toHaveText(email);
+    } else {
+      await expect(page.locator('[data-location-contact-email-row]')).toBeHidden();
+    }
+  }
+});
+
 test('newsletter signup sections are hidden while acquisition is paused', async ({ page }) => {
   for (const route of ['/', '/contact', '/dallas']) {
     await page.goto(route);
@@ -803,15 +961,15 @@ test('legacy .html URLs are served or redirected (preview vs production redirect
 test.describe('Mobile location selector (P0-7a)', () => {
   test.skip(({ isMobile }) => !isMobile, 'mobile-only test');
 
-  test('tapping a location link opens the venue page without a second tap', async ({ page }) => {
-    await page.goto('/');
+  test('tapping a location link updates the selected venue without leaving the current page', async ({ page }) => {
+    await page.goto('/groups');
     await page.locator('#locationBtn').first().click();
     await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
 
     const philly = page.locator('#locationDropdown a[href*="philadelphia"]').first();
     await philly.tap();
 
-    await expect(page).toHaveURL(/\/philadelphia$/);
+    await expect(page).toHaveURL(/\/groups$/);
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
     await expect(page.locator('#locationDropdown')).not.toHaveClass(/open/);
   });

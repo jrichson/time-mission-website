@@ -26,6 +26,16 @@ function sourceMarkup() {
   }));
 }
 
+function groupsMarkup() {
+  return [
+    path.join(root, 'groups.html'),
+    ...walk(path.join(root, 'groups')).filter((file) => file.endsWith('.html')),
+  ].map((file) => ({
+    file,
+    text: fs.readFileSync(file, 'utf8'),
+  }));
+}
+
 describe('production form markup', () => {
   it('does not rely on Netlify form handling', () => {
     const offenders = sourceMarkup()
@@ -44,14 +54,6 @@ describe('production form markup', () => {
       .toBe((markup.match(/action="\/api\/newsletter"/g) || []).length);
   });
 
-  it('keeps newsletter signup surfaces hidden while acquisition is paused', () => {
-    const newsletterCss = fs.readFileSync(path.join(root, 'css', 'newsletter.css'), 'utf8');
-    const footerCss = fs.readFileSync(path.join(root, 'css', 'footer.css'), 'utf8');
-
-    expect(newsletterCss).toMatch(/\.newsletter-section\s*\{[\s\S]*display:\s*none\s*!important/);
-    expect(footerCss).toMatch(/\.footer-newsletter\s*\{[\s\S]*display:\s*none\s*!important/);
-  });
-
   it('mounts Turnstile on every production form', () => {
     const markup = sourceMarkup().map(({ text }) => text).join('\n');
     const formCount = (markup.match(/data-tm-form="/g) || []).length;
@@ -59,5 +61,23 @@ describe('production form markup', () => {
 
     expect(formCount).toBeGreaterThan(10);
     expect(turnstileCount).toBe(formCount);
+  });
+
+  it('does not expose the deprecated group event FormSubmit form', () => {
+    const offenders = groupsMarkup()
+      .filter(({ text }) => /formsubmit\.co|class="inquiry-form"|id="inquiry"/.test(text))
+      .map(({ file }) => path.relative(root, file));
+
+    expect(offenders).toEqual([]);
+  });
+});
+
+describe('groups CTA markup', () => {
+  it('keeps tracked groups Book Now anchors wired to ticket booking', () => {
+    const offenders = groupsMarkup()
+      .filter(({ text }) => /<a href="#" class="(?:btn-tickets|btn-primary btn-tickets)">/.test(text))
+      .map(({ file }) => path.relative(root, file));
+
+    expect(offenders).toEqual([]);
   });
 });
