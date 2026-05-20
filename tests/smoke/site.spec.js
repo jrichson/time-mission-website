@@ -39,6 +39,9 @@ async function stubBriqWidgetScript(page) {
               button.className = 'bw-widget-button';
               button.setAttribute('data-briq-stub-button', '');
               button.textContent = widget.getAttribute('data-button-text') || 'BOOK NOW';
+              button.addEventListener('click', function () {
+                window.__briqBookingOpened = (window.__briqBookingOpened || 0) + 1;
+              });
               widget.appendChild(button);
             });
           }
@@ -538,6 +541,7 @@ test('West Nyack routes generic booking to the venue page with tracking params',
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-button-text', 'BOOK NOW');
   await expect(page.locator('#briq-widget [data-briq-stub-button]')).toHaveText('BOOK NOW');
   await expect(page.locator('#briq-widget [data-briq-stub-button]')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
   await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
   expect(briqScript.requests).toBeGreaterThan(0);
 });
@@ -558,6 +562,7 @@ test('West Nyack location page opens the Briq widget instead of an iframe', asyn
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-color-1-base', '#FFBA00');
   await expect(page.locator('#briq-widget [data-briq-stub-button]')).toHaveText('BOOK NOW');
   await expect(page.locator('#briq-widget [data-briq-stub-button]')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
   const briqButtonStyle = await page.locator('#briq-widget [data-briq-stub-button]').evaluate((button) => {
     const style = getComputedStyle(button);
     const widgetStyle = getComputedStyle(document.getElementById('briq-widget-container'));
@@ -579,6 +584,13 @@ test('West Nyack location page opens the Briq widget instead of an iframe', asyn
   expect(briqButtonStyle.textTransform).toBe('uppercase');
   expect(parseFloat(briqButtonStyle.width)).toBeGreaterThan(250);
   await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
+
+  await page.evaluate(() => {
+    window.__briqBookingOpened = 0;
+  });
+  await page.locator('main .btn-tickets[data-tm-location="west-nyack"]').first().click();
+  await expect(page.locator('#ticketPanel')).not.toHaveClass(/active/);
+  await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
 });
 
 test('faq accordion exposes keyboard accessible controls', async ({ page }) => {

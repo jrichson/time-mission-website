@@ -300,6 +300,31 @@
         container.classList.remove('is-highlighted');
     }
 
+    function findBriqWidgetAction(widget) {
+        if (!widget || typeof widget.querySelector !== 'function') return null;
+        return widget.querySelector('button:not([disabled]), a[href], [role="button"]:not([aria-disabled="true"]), input[type="button"]:not([disabled]), input[type="submit"]:not([disabled])');
+    }
+
+    function activateBriqWidgetAction(widget, attempt) {
+        var action = findBriqWidgetAction(widget);
+        if (action) {
+            if (typeof action.focus === 'function') {
+                try {
+                    action.focus({ preventScroll: true });
+                } catch (e) {
+                    action.focus();
+                }
+            }
+            if (typeof action.click === 'function') action.click();
+            return true;
+        }
+        if (attempt >= 20) return false;
+        setTimeout(function () {
+            activateBriqWidgetAction(widget, attempt + 1);
+        }, 100);
+        return false;
+    }
+
     function showBriqWidget(loc) {
         var container = getBriqWidgetContainer();
         var widget = document.getElementById('briq-widget');
@@ -318,14 +343,7 @@
         container.classList.remove('is-highlighted');
         void container.offsetWidth;
         container.classList.add('is-highlighted');
-        var action = widget.querySelector('button, a[href], [role="button"], input[type="button"], input[type="submit"]');
-        if (action && typeof action.focus === 'function') {
-            try {
-                action.focus({ preventScroll: true });
-            } catch (e) {
-                action.focus();
-            }
-        }
+        activateBriqWidgetAction(widget, 0);
         return true;
     }
 
