@@ -447,6 +447,15 @@ describe('browser architecture contracts', () => {
           groupType,
           locationId,
         })).toBe(groupUrls[groupType]);
+        expect(window.TMBooking.resolveIntent({
+          kind: 'groups',
+          groupType,
+          locationId,
+        })).toMatchObject({
+          href: groupUrls[groupType],
+          presentation: groupUrls[groupType] ? 'link' : 'panel',
+          usesBookingFrame: false,
+        });
       }
     }
 

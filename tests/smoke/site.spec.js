@@ -458,36 +458,32 @@ test('group CTAs resolve to audit-provided form URLs for the selected location',
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('aria-disabled', 'true');
 
   await page.locator('#ticketLocation').selectOption('manassas');
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '#');
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-booking-url', expectedHref);
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', expectedHref);
+  await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
 
   await page.locator('#ticketBookBtn').click();
-  await expect(page.locator('.booking-frame-overlay')).toHaveClass(/active/);
-  await expect(page.locator('.booking-frame')).toHaveAttribute('src', expectedHref);
-  await expect(page).toHaveURL(/\/groups\/corporate$/);
+  await expect(page).toHaveURL(expectedHref);
 });
 
-test('legacy groups cards open the selected location event form in an iframe', async ({ page }) => {
-  await page.route('https://forms.roller.app/**', async (route) => {
+test('legacy groups cards open the selected location event form as a direct link', async ({ page }) => {
+  await page.route('https://webforms.pipedrive.com/**', async (route) => {
     await route.fulfill({
       contentType: 'text/html',
-      body: '<!doctype html><title>Philadelphia event form</title><main>Event form</main>',
+      body: '<!doctype html><title>Group inquiry</title><main>Group inquiry</main>',
     });
   });
 
   await page.goto('/groups.html');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
-  await page.evaluate(() => window.TM.select('philadelphia'));
+  await page.evaluate(() => window.TM.select('mount-prospect'));
 
-  const expectedHref = 'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form';
+  const expectedHref = formsLinksAudit.groups['mount-prospect'].corporate;
   await page
     .locator('.event-type-actions [data-tm-booking-kind="groups"][data-tm-group-type="corporate"]')
     .first()
     .click();
 
-  await expect(page.locator('.booking-frame-overlay')).toHaveClass(/active/);
-  await expect(page.locator('.booking-frame')).toHaveAttribute('src', expectedHref);
-  await expect(page).toHaveURL(/\/groups\.html$/);
+  await expect(page).toHaveURL(expectedHref);
 });
 
 test('Houston and Orland Park group CTAs resolve to audit-approved forms', async ({ page }) => {

@@ -180,8 +180,8 @@
     }
 
     function shouldUseBookingFrame(kind, href) {
-        var normalizedKind = normalizeKind(kind);
-        return isExternalHttpUrl(href) && normalizedKind === 'groups';
+        // Group inquiry forms are first-class destinations; embedding them breaks provider flows.
+        return false;
     }
 
     function shouldUseRollerCheckout(loc, href, kind) {
