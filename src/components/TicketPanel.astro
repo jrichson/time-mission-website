@@ -13,7 +13,7 @@ const pageLocation = pageLocationSlug
     : null;
 const briqWidget = pageLocation?.bookingProvider === 'briq' ? pageLocation.briqWidget : null;
 const briqToggleState = briqWidget
-    ? `bwr=bu|is|${briqWidget.domain}|and|o|is|true|and|ro|is|PeopleAndDate`
+    ? `bwr=bu|is|${briqWidget.domain}|and|o|is|true`
     : '';
 ---
 
@@ -99,7 +99,6 @@ const briqToggleState = briqWidget
                     data-color-2-contrast={briqWidget.color2Contrast}
                     data-price-display={briqWidget.priceDisplay}
                     data-button-text={briqWidget.buttonText}
-                    data-request-on-open="PeopleAndDate"
                     data-features="hideMainButton"
                     data-positioning="[{'x-align':'right','x-offset':'0px','y-offset':'0px','z-index':'10000'}]"
                 ></div>

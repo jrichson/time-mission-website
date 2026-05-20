@@ -578,7 +578,7 @@ test('West Nyack routes generic booking to the venue page with tracking params',
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-domain', 'timemission-palisades');
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-button-text', 'BOOK NOW');
   await expect(page.locator('#briq-widget')).toHaveAttribute('data-features', 'hideMainButton');
-  await expect(page.locator('#briq-widget')).toHaveAttribute('data-request-on-open', 'PeopleAndDate');
+  await expect(page.locator('#briq-widget')).not.toHaveAttribute('data-request-on-open', /./);
   await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
   await expect.poll(() => page.evaluate(() => {
     const host = document.getElementById('briq-widget');
@@ -626,12 +626,17 @@ test('West Nyack location page opens Briq inside the booking panel instead of an
       position: style.position,
       right: style.right,
       overflow: style.overflow,
+      viewportWidth: document.documentElement.clientWidth,
     };
   });
   expect(briqPanelStyle.position).toBe('fixed');
   expect(parseFloat(briqPanelStyle.right)).toBe(0);
   expect(briqPanelStyle.overflow).toBe('hidden');
-  expect(parseFloat(briqPanelStyle.width)).toBeGreaterThanOrEqual(360);
+  if (briqPanelStyle.viewportWidth > 650) {
+    expect(parseFloat(briqPanelStyle.width)).toBeGreaterThan(600);
+  } else {
+    expect(parseFloat(briqPanelStyle.width)).toBeGreaterThanOrEqual(Math.min(390, briqPanelStyle.viewportWidth));
+  }
   await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
 
   await page.keyboard.press('Escape');

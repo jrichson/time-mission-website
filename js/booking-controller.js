@@ -291,6 +291,8 @@
     var mountedPanel = null;
     var briqOpenRetryTimer = null;
     var briqCloseObserver = null;
+    var briqFitRetryTimer = null;
+    var briqResizeHandlerAttached = false;
 
     function getBriqWidgetContainer() {
         return document.getElementById('briq-widget-container');
@@ -321,8 +323,7 @@
         var domain = widget && widget.getAttribute('data-domain');
         return 'bwr='
             + (domain ? 'bu|is|' + domain + '|and|' : '')
-            + 'o|is|' + (open ? 'true' : 'false')
-            + (open ? '|and|ro|is|PeopleAndDate' : '');
+            + 'o|is|' + (open ? 'true' : 'false');
     }
 
     function setBriqPanelMode(enabled) {
@@ -336,6 +337,12 @@
         if (!briqOpenRetryTimer) return;
         clearTimeout(briqOpenRetryTimer);
         briqOpenRetryTimer = null;
+    }
+
+    function stopBriqFitRetry() {
+        if (!briqFitRetryTimer) return;
+        clearTimeout(briqFitRetryTimer);
+        briqFitRetryTimer = null;
     }
 
     function disconnectBriqCloseObserver() {
@@ -352,12 +359,83 @@
         return true;
     }
 
+    function viewportSize() {
+        return {
+            width: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0),
+            height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0),
+        };
+    }
+
+    function setImportantStyle(el, prop, value) {
+        if (!el || !el.style) return;
+        el.style.setProperty(prop, value, 'important');
+    }
+
+    function fitBriqWidgetLayout() {
+        var main = getBriqWidgetMain();
+        if (!main || !main.classList.contains('bw-open')) return false;
+        var panel = mountedPanel && mountedPanel.panelEl ? mountedPanel.panelEl : document.getElementById('ticketPanel');
+        var viewport = viewportSize();
+        var width = viewport.width;
+        var height = viewport.height;
+        var widgetWidth;
+        var scale = 1;
+
+        if (width <= 420) {
+            widgetWidth = 420;
+            scale = Math.max(0.72, width / 420);
+            setImportantStyle(main, 'width', widgetWidth + 'px');
+            setImportantStyle(main, 'height', (height / scale) + 'px');
+            setImportantStyle(main, 'transform', 'scale(' + scale + ')');
+            setImportantStyle(main, 'transform-origin', 'left top');
+            setImportantStyle(main, 'left', '0');
+            setImportantStyle(main, 'right', 'auto');
+        } else {
+            widgetWidth = width <= 650 ? width : Math.min(634, width);
+            setImportantStyle(main, 'width', widgetWidth + 'px');
+            setImportantStyle(main, 'height', height + 'px');
+            setImportantStyle(main, 'transform', 'none');
+            setImportantStyle(main, 'transform-origin', 'right top');
+            setImportantStyle(main, 'left', width <= 650 ? '0' : 'auto');
+            setImportantStyle(main, 'right', width <= 650 ? 'auto' : '0');
+        }
+
+        setImportantStyle(main, 'top', '0');
+        setImportantStyle(main, 'bottom', 'auto');
+        setImportantStyle(main, '--base-font-size', width <= 375 ? '16px' : '17px');
+
+        if (panel && panel.style) {
+            panel.style.setProperty('--briq-panel-width', (width <= 650 ? width : widgetWidth) + 'px');
+        }
+        return true;
+    }
+
+    function scheduleBriqWidgetFit() {
+        stopBriqFitRetry();
+        fitBriqWidgetLayout();
+        briqFitRetryTimer = setTimeout(function () {
+            fitBriqWidgetLayout();
+        }, 250);
+    }
+
+    function ensureBriqResizeHandler() {
+        if (briqResizeHandlerAttached) return;
+        briqResizeHandlerAttached = true;
+        window.addEventListener('resize', function () {
+            scheduleBriqWidgetFit();
+            setTimeout(fitBriqWidgetLayout, 650);
+        });
+    }
+
     function observeBriqClose() {
         var main = getBriqWidgetMain();
         if (!main || typeof MutationObserver !== 'function') return;
         disconnectBriqCloseObserver();
         briqCloseObserver = new MutationObserver(function () {
-            if (main.classList.contains('bw-open')) return;
+            if (main.classList.contains('bw-open')) {
+                scheduleBriqWidgetFit();
+                return;
+            }
             setBriqPanelMode(false);
             disconnectBriqCloseObserver();
             if (mountedPanel && mountedPanel.panelEl && mountedPanel.panelEl.classList.contains('active') && typeof mountedPanel.closePanel === 'function') {
@@ -371,11 +449,13 @@
         var main = getBriqWidgetMain();
         if (main && main.classList.contains('bw-open')) {
             stopBriqOpenRetry();
+            scheduleBriqWidgetFit();
             observeBriqClose();
             return true;
         }
         if (attempt > 60) return false;
         setBriqWidgetOpen(true);
+        scheduleBriqWidgetFit();
         stopBriqOpenRetry();
         briqOpenRetryTimer = setTimeout(function () {
             triggerBriqWidgetOpen(attempt + 1);
@@ -386,6 +466,7 @@
     function hideBriqWidget(options) {
         var container = getBriqWidgetContainer();
         stopBriqOpenRetry();
+        stopBriqFitRetry();
         disconnectBriqCloseObserver();
         setBriqPanelMode(false);
         if (container) container.classList.remove('is-highlighted');
@@ -411,10 +492,12 @@
             });
         }
         setBriqPanelMode(true);
+        ensureBriqResizeHandler();
         container.classList.remove('is-highlighted');
         void container.offsetWidth;
         container.classList.add('is-highlighted');
         triggerBriqWidgetOpen(0);
+        setTimeout(scheduleBriqWidgetFit, 600);
         return true;
     }
 
