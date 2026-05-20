@@ -28,14 +28,17 @@ async function gotoHome(page) {
   });
 }
 
-async function stubBriqWidgetScript(page) {
+async function stubBriqWidgetScript(page, options = {}) {
   const briqScript = { requests: 0 };
+  const mountDelayMs = Number(options.mountDelayMs || 0);
   await page.route('https://widgetcdn.briqbookings.com/widget/widget.js', async (route) => {
     briqScript.requests += 1;
     await route.fulfill({
       contentType: 'application/javascript',
       body: `
         (function () {
+          var mountDelayMs = ${JSON.stringify(mountDelayMs)};
+
           function widgetStateIsOpen(state) {
             return String(state || '').indexOf('o|is|true') !== -1;
           }
@@ -90,10 +93,19 @@ async function stubBriqWidgetScript(page) {
               });
             });
           }
-          if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', mountBriqWidgets);
-          } else {
+
+          function scheduleMountBriqWidgets() {
+            if (mountDelayMs > 0) {
+              setTimeout(mountBriqWidgets, mountDelayMs);
+              return;
+            }
             mountBriqWidgets();
+          }
+
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', scheduleMountBriqWidgets);
+          } else {
+            scheduleMountBriqWidgets();
           }
         })();
       `,
@@ -724,6 +736,32 @@ test('West Nyack routes generic booking to the current-page Briq panel', async (
   })).toBe(false);
   await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
   expect(briqScript.requests).toBeGreaterThan(0);
+});
+
+test('West Nyack Briq panel shows loading feedback until the widget opens', async ({ page }) => {
+  await stubBriqWidgetScript(page, { mountDelayMs: 700 });
+
+  await page.goto('/?utm_source=paid&utm_campaign=spring');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  await page.evaluate(() => {
+    window.TM.select('west-nyack');
+    window.TMBooking.open({ kind: 'tickets' });
+  });
+
+  await page.locator('#ticketBookBtn').click();
+
+  const loader = page.locator('#briq-widget-container [data-briq-widget-loader]');
+  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
+  await expect(page.locator('#briq-widget-container')).toHaveClass(/is-loading/);
+  await expect(page.locator('#briq-widget-container')).toHaveAttribute('aria-busy', 'true');
+  await expect(loader).toBeVisible();
+  await expect(loader).toContainText('Loading booking options');
+
+  await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
+  await expect(page.locator('#briq-widget-container')).not.toHaveClass(/is-loading/);
+  await expect(page.locator('#briq-widget-container')).not.toHaveAttribute('aria-busy', 'true');
+  await expect(loader).toBeHidden();
 });
 
 test('West Nyack location page opens Briq inside the booking panel instead of an iframe', async ({ page }) => {

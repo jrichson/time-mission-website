@@ -79,6 +79,10 @@ const briqToggleState = briqWidget
 
         {briqWidget && (
             <div id="briq-widget-container" class="briq-panel-widget" data-briq-panel-widget>
+                <div class="briq-widget-loader" data-briq-widget-loader role="status" aria-live="polite">
+                    <span class="briq-widget-spinner" aria-hidden="true"></span>
+                    <span class="briq-widget-loader-title">Loading booking options</span>
+                </div>
                 <button
                     type="button"
                     class="bw-widget-toggle briq-widget-toggle-proxy"

@@ -318,6 +318,32 @@
         return document.getElementById('briq-widget');
     }
 
+    function ensureBriqLoadingIndicator(container) {
+        if (!container) return null;
+        var loader = container.querySelector && container.querySelector('[data-briq-widget-loader]');
+        if (loader) return loader;
+        loader = document.createElement('div');
+        loader.className = 'briq-widget-loader';
+        loader.setAttribute('data-briq-widget-loader', '');
+        loader.setAttribute('role', 'status');
+        loader.setAttribute('aria-live', 'polite');
+        loader.innerHTML = '<span class="briq-widget-spinner" aria-hidden="true"></span><span class="briq-widget-loader-title">Loading booking options</span>';
+        container.insertBefore(loader, container.firstChild || null);
+        return loader;
+    }
+
+    function setBriqLoadingState(container, isLoading) {
+        if (!container || !container.classList) return;
+        ensureBriqLoadingIndicator(container);
+        container.classList.toggle('is-loading', !!isLoading);
+        container.classList.toggle('is-ready', !isLoading);
+        if (isLoading) {
+            container.setAttribute('aria-busy', 'true');
+        } else {
+            container.removeAttribute('aria-busy');
+        }
+    }
+
     function getBriqWidgetMain() {
         var widget = getBriqWidget();
         if (!widget) return null;
@@ -382,6 +408,7 @@
             container.setAttribute('data-briq-panel-widget', '');
             (panelContent || document.body).appendChild(container);
         }
+        ensureBriqLoadingIndicator(container);
 
         var toggle = getBriqOpenToggle();
         if (!toggle) {
@@ -596,8 +623,10 @@
 
     function triggerBriqWidgetOpen(attempt) {
         var main = getBriqWidgetMain();
+        var container = getBriqWidgetContainer();
         if (main && main.classList.contains('bw-open')) {
             stopBriqOpenRetry();
+            setBriqLoadingState(container, false);
             scheduleBriqWidgetFit();
             observeBriqClose();
             return true;
@@ -618,7 +647,10 @@
         stopBriqFitRetry();
         disconnectBriqCloseObserver();
         setBriqPanelMode(false);
-        if (container) container.classList.remove('is-highlighted');
+        if (container) {
+            container.classList.remove('is-highlighted');
+            setBriqLoadingState(container, false);
+        }
         if (!options || options.closeProvider !== false) setBriqWidgetOpen(false);
     }
 
@@ -640,6 +672,7 @@
         }
         setBriqPanelMode(true);
         ensureBriqResizeHandler();
+        setBriqLoadingState(container, true);
         container.classList.remove('is-highlighted');
         void container.offsetWidth;
         container.classList.add('is-highlighted');
