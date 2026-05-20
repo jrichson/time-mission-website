@@ -31,8 +31,8 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | Orland Park | Roller checkout URL | Opens through Roller behavior. |
 | Lincoln | `https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959` | External provider navigation. |
 | Antwerp | `https://timemission.eu/antwerp` | Intentional EU external site handoff. |
-| West Nyack from another page | `/west-nyack?book=1` | Internal handoff so the Briq script loads on the correct venue page; UTM/click IDs are preserved. |
-| West Nyack on `/west-nyack` | Briq widget inside the ticket panel | Uses `data-domain="timemission-palisades"` and hidden Briq main button. |
+| West Nyack from any page | Briq widget inside the current ticket panel | Uses `data-domain="timemission-palisades"` and hidden Briq main button. |
+| Future multiple-Briq setup | Venue page reload | If more than one Briq domain is configured, the controller routes to the selected venue page before opening so the widget initializes with the correct domain. |
 | Dallas / Brussels | `/contact?location=<slug>&type=updates` | Coming-soon lead flow. |
 | `/missions` mission-card and final Book Now CTAs | Booking trigger | Uses the same ticket-booking flow as the hero/nav CTAs. |
 
@@ -48,8 +48,8 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | Orland Park | Pipedrive form URLs by group type | Birthday, corporate, field trip, bachelor/ette, private events, holiday. |
 | Lincoln | `https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959` | External provider navigation. |
 | Antwerp | `https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission` | Intentional EU/external group handoff. |
-| West Nyack from another page | `/west-nyack?book=1` | Briq group URLs are converted to the internal Briq widget handoff instead of raw external Briq navigation. |
-| West Nyack on `/west-nyack` | Briq widget inside the ticket panel | Same provider surface as ticket booking. |
+| West Nyack from any page | Briq widget inside the current ticket panel | Briq group URLs are converted to the internal Briq widget handoff instead of raw external Briq navigation. |
+| Future multiple-Briq setup | Venue page reload | Same domain-safety guard as ticket booking. |
 | Dallas / Brussels | Disabled/unavailable in panel | No approved group form URL is present in the audit fixture. |
 
 ## Gift Cards
@@ -81,7 +81,7 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | --- | --- | --- |
 | Contact page form | `POST /api/contact` | Cloudflare Pages function exists at `functions/api/contact.js`. |
 | Newsletter forms | `POST /api/newsletter` | Cloudflare Pages function exists at `functions/api/newsletter.js`; acquisition sections may be hidden while paused. |
-| Groups embedded inquiry form | `POST https://formsubmit.co/jeffersonkrichardson@gmail.com` | Known external FormSubmit endpoint. |
+| Groups embedded inquiry form | Removed | Group inquiries route through the booking controller instead of rendering the old FormSubmit form. |
 
 ## Internal Link Families
 
@@ -111,9 +111,7 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 
 | Item | Status |
 | --- | --- |
-| West Nyack group inquiry CTAs | Fixed to use the Briq widget handoff instead of raw Briq navigation. |
 | `/missions` Book Now CTAs | Fixed to use the site booking trigger instead of plain `href="#"`. |
 | West Nyack gift cards | Disabled until an approved gift-card checkout URL exists. |
 | Mount Prospect waiver URL | Verify whether the Manassas waiver URL is intentional. |
 | Houston / Orland Park waiver destinations | Verify whether booking/gift-card URLs should be used for waiver CTAs. |
-| Groups embedded FormSubmit endpoint | Verify whether the personal FormSubmit address is the intended production endpoint. |

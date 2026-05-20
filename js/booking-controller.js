@@ -81,6 +81,20 @@
         }).href;
     }
 
+    function selectSiteLocation(locationId, ctaId) {
+        var normalized = BookingJourney.normalizeLocation(locationId || '');
+        if (!normalized) return;
+        var context = getLocationContext();
+        var opts = ctaId ? { cta_id: ctaId } : undefined;
+        if (context && typeof context.select === 'function') {
+            context.select(normalized, opts);
+            return;
+        }
+        if (window.TM && typeof window.TM.select === 'function') {
+            window.TM.select(normalized, opts);
+        }
+    }
+
     function resolve(opts) {
         return getDestination(opts);
     }
@@ -333,23 +347,18 @@
         document.head.appendChild(link);
     }
 
-    function setWidgetAttribute(widget, name, value) {
-        if (!widget || value === undefined || value === null || value === '') return;
-        widget.setAttribute(name, String(value));
-    }
-
     function configureBriqWidget(widget, config) {
         widget.id = 'briq-widget';
         widget.className = 'bw-widget';
-        setWidgetAttribute(widget, 'data-domain', config.domain);
-        setWidgetAttribute(widget, 'data-color-1-base', config.color1Base || '#FFBA00');
-        setWidgetAttribute(widget, 'data-color-1-contrast', config.color1Contrast || '#010437');
-        setWidgetAttribute(widget, 'data-color-2-base', config.color2Base || '#FFBA00');
-        setWidgetAttribute(widget, 'data-color-2-contrast', config.color2Contrast || '#010437');
-        setWidgetAttribute(widget, 'data-price-display', config.priceDisplay || 'PerPerson');
-        setWidgetAttribute(widget, 'data-button-text', config.buttonText || 'BOOK NOW');
-        setWidgetAttribute(widget, 'data-features', 'hideMainButton');
-        setWidgetAttribute(widget, 'data-positioning', "[{'x-align':'right','x-offset':'0px','y-offset':'0px','z-index':'10000'}]");
+        widget.setAttribute('data-domain', config.domain);
+        widget.setAttribute('data-color-1-base', config.color1Base || '#FFBA00');
+        widget.setAttribute('data-color-1-contrast', config.color1Contrast || '#010437');
+        widget.setAttribute('data-color-2-base', config.color2Base || '#FFBA00');
+        widget.setAttribute('data-color-2-contrast', config.color2Contrast || '#010437');
+        widget.setAttribute('data-price-display', config.priceDisplay || 'PerPerson');
+        widget.setAttribute('data-button-text', config.buttonText || 'BOOK NOW');
+        widget.setAttribute('data-features', 'hideMainButton');
+        widget.setAttribute('data-positioning', "[{'x-align':'right','x-offset':'0px','y-offset':'0px','z-index':'10000'}]");
     }
 
     function ensureBriqWidgetHost(loc) {
@@ -396,7 +405,7 @@
         return { container: container, widget: widget };
     }
 
-    function loadBriqWidgetScript(onReady, onError) {
+    function loadBriqWidgetScript(onReady) {
         var existing = document.querySelector('script[data-briq-widget-script]');
         function ready() {
             if (typeof onReady === 'function') onReady();
@@ -406,7 +415,6 @@
                 existing.setAttribute('data-briq-widget-loaded', 'true');
                 ready();
             }, { once: true });
-            existing.addEventListener('error', onError || function () {}, { once: true });
             setTimeout(ready, 0);
             return;
         }
@@ -418,7 +426,6 @@
             script.setAttribute('data-briq-widget-loaded', 'true');
             ready();
         }, { once: true });
-        script.addEventListener('error', onError || function () {}, { once: true });
         var firstScript = document.getElementsByTagName && document.getElementsByTagName('script')[0];
         if (firstScript && firstScript.parentNode) {
             firstScript.parentNode.insertBefore(script, firstScript);
@@ -1051,11 +1058,8 @@
 
         if (locSelect) {
             locSelect.addEventListener('change', function () {
+                selectSiteLocation(locSelect.value, 'ticket_panel_dropdown');
                 syncCtaHref();
-                tmTrack('location_select', {
-                    location_slug: locSelect.value,
-                    cta_id: 'ticket_panel_dropdown',
-                });
             });
         }
 

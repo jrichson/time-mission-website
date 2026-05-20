@@ -42,11 +42,11 @@ describe('Cloudflare Artifact policy', () => {
   });
 
   it('requires bundled MP4 files when no external media base is configured', () => {
-    expect(planVideoArtifacts({ availableFiles: ['hero-bg-web.mp4'] })).toMatchObject({
+    expect(planVideoArtifacts({ availableFiles: ['TM-Hero-bg-web-hero.mp4'] })).toMatchObject({
       hostedExternally: false,
       removeFromBundle: [],
       requiredInBundle: OFFLOADED_MP4_FILES,
-      missingFromBundle: ['hero-bg-mobile.mp4', 'groups-hero.mp4'],
+      missingFromBundle: ['TM-Hero-bg-mobile-hero.mp4', 'groups-hero.mp4'],
     });
   });
 

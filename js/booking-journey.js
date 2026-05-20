@@ -118,13 +118,6 @@
         return !!(loc && loc.bookingProvider === 'briq' && loc.briqWidget);
     }
 
-    function isSameLocationPage(loc, pageLocationSlug) {
-        var pageSlug = normalizeLocation(pageLocationSlug || '');
-        if (!loc || !pageSlug) return false;
-        return pageSlug === normalizeLocation(loc.slug || '')
-            || pageSlug === normalizeLocation(loc.id || '');
-    }
-
     function urlsShareOriginAndPath(firstUrl, secondUrl) {
         var base = (window.location && window.location.origin) || 'https://timemission.com';
         try {
@@ -143,7 +136,7 @@
             && urlsShareOriginAndPath(href, loc.bookingUrl || '');
     }
 
-    function briqWidgetDestination(loc, slug, pageLocationSlug, fallbackHref) {
+    function briqWidgetDestination(loc, slug, fallbackHref) {
         if (isBriqWidgetLocation(loc)) return '#briq-widget-container';
         return slug ? appendTrackingParams('/' + slug + '?book=1', { includeInternal: true }) : fallbackHref;
     }
@@ -176,7 +169,7 @@
             var groupUrls = loc.groupFormUrls || {};
             var groupUrl = (groupType && groupUrls[groupType]) || groupUrls.default || loc.groupsUrl || '';
             if (isBriqProviderUrl(loc, groupUrl)) {
-                return briqWidgetDestination(loc, slug, opts.pageLocationSlug, groupUrl);
+                return briqWidgetDestination(loc, slug, groupUrl);
             }
             if (groupUrl) return groupUrl;
             return '';
@@ -185,7 +178,7 @@
         var externalUrl = getExternalLocationUrl(loc);
         if (externalUrl) return externalUrl;
         if (isBriqWidgetLocation(loc)) {
-            return briqWidgetDestination(loc, slug, opts.pageLocationSlug, checkoutUrl);
+            return briqWidgetDestination(loc, slug, checkoutUrl);
         }
         if (opts.preferLocationPageFlow && slug) {
             return appendTrackingParams('/' + slug + '?book=1', { includeInternal: true });
@@ -210,7 +203,7 @@
         return !!roller && href === roller;
     }
 
-    function shouldUseBriqWidget(loc, href, kind, pageLocationSlug) {
+    function shouldUseBriqWidget(loc, href, kind) {
         var normalizedKind = normalizeKind(kind);
         return (normalizedKind === 'tickets' || normalizedKind === 'groups')
             && isBriqWidgetLocation(loc)
@@ -223,10 +216,9 @@
             || presentation === 'iframe';
     }
 
-    function bookingPresentationFor(loc, kind, href, options) {
-        var opts = options || {};
+    function bookingPresentationFor(loc, kind, href) {
         if (!isNavigableHref(href)) return 'panel';
-        if (shouldUseBriqWidget(loc, href, kind, opts.pageLocationSlug)) return 'briq-widget';
+        if (shouldUseBriqWidget(loc, href, kind)) return 'briq-widget';
         if (isLocationExternalSiteUrl(loc, href)) return 'external-site';
         if (isTicketKind(kind) && shouldUseRollerCheckout(loc, href, kind)) return 'roller';
         return 'link';
@@ -273,9 +265,7 @@
             || (loc && (loc.id || loc.slug))
             || ''
         );
-        var presentation = bookingPresentationFor(loc, kind, href, {
-            pageLocationSlug: pageLocationSlug,
-        });
+        var presentation = bookingPresentationFor(loc, kind, href);
         if (shouldAppendTrackingForPresentation(presentation)) {
             href = appendTrackingParams(href);
         }

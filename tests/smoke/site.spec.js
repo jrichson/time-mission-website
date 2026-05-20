@@ -278,6 +278,9 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
     'https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home'
   );
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', 'manassas');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('manassas');
+  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('manassas');
+  await expect(page.locator('#locationText')).toContainText('Manassas');
 
   await page.locator('#ticketLocation').selectOption('antwerp');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
@@ -960,6 +963,21 @@ test('legacy .html URLs are served or redirected (preview vs production redirect
 
 test.describe('Mobile location selector (P0-7a)', () => {
   test.skip(({ isMobile }) => !isMobile, 'mobile-only test');
+
+  test('logo home navigation preserves the selected location', async ({ page }) => {
+    await page.goto('/philadelphia');
+    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+
+    await page.locator('.nav-logo').first().tap();
+
+    await expect(page).toHaveURL(/\/$/);
+    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
+    await expect(page.locator('#locationText')).toContainText('Philadelphia');
+    await expect.poll(() => page.evaluate(() => document.getElementById('taglineText')?.textContent || ''))
+      .toContain('Time Mission Philadelphia');
+  });
 
   test('tapping a location link updates the selected venue without leaving the current page', async ({ page }) => {
     await page.goto('/groups');

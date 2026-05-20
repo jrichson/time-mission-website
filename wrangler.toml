@@ -9,7 +9,7 @@
 #   npm run deploy:pages -- --project-name=my-staging-site
 # Hero MP4s on R2 (Pages 25 MiB/file limit): copy `.env.example` → `.env` and set
 # PUBLIC_TM_MEDIA_BASE to your public bucket URL (no trailing slash). Object keys in R2
-# must match site paths, e.g. `assets/video/hero-bg-web.mp4`.
+# must match site paths, e.g. `assets/video/TM-Hero-bg-web-hero.mp4`.
 #
 # Hero video playback from R2: ensure the bucket CORS rule allows GET (and OPTIONS if used)
 # from your web origin (`https://timemission.com` or `*`) — Safari relies on ranged requests over HTTPS.

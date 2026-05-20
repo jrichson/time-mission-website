@@ -12,15 +12,6 @@
         return (value || '').toLowerCase().trim().replace(/\s+/g, '-');
     }
 
-    function pathIsHomeIndex() {
-        const context = getLocationContext();
-        if (context && typeof context.isIndexPath === 'function') {
-            return context.isIndexPath();
-        }
-        const p = window.location.pathname;
-        return p === '/' || p.endsWith('/index.html') || p.endsWith('/index.htm');
-    }
-
     function getLocationContext() {
         if (window.LocationContext) return window.LocationContext;
         if (!window.TM) return null;
@@ -117,16 +108,19 @@
         });
     }
 
-    function syncAllLocations(city, slug, selectOpts) {
-        const normalized = normalizeLocation(slug || city);
+    function syncLocationDisplay(city) {
         const mainLocText = document.getElementById('locationText');
         if (mainLocText) mainLocText.textContent = city;
+        if (window.updateEyebrowLocation) window.updateEyebrowLocation(city);
+    }
+
+    function syncAllLocations(city, slug, selectOpts) {
+        const normalized = normalizeLocation(slug || city);
+        syncLocationDisplay(city);
         const context = getLocationContext();
         if (context && typeof context.select === 'function') {
             context.select(normalized, selectOpts);
         }
-        // Update hero eyebrow on mobile (function exposed by index.html)
-        if (window.updateEyebrowLocation) window.updateEyebrowLocation(city);
     }
 
     // Navigation scroll effect
@@ -301,13 +295,10 @@
     const navLoadContext = getLocationContext();
     if (navLoadContext && navLoadContext.ready && typeof navLoadContext.ready.then === 'function') {
         navLoadContext.ready.then(function () {
-            if (locationBtn && locationOverlay && !pathIsHomeIndex()) {
-                const cur = typeof navLoadContext.getCurrent === 'function' ? navLoadContext.getCurrent() : null;
-                if (cur && cur.shortName) {
-                    syncAllLocations(cur.shortName, cur.slug || cur.id);
-                }
-            }
             const cur = typeof navLoadContext.getCurrent === 'function' ? navLoadContext.getCurrent() : null;
+            if (cur && (cur.shortName || cur.name)) {
+                syncLocationDisplay(cur.shortName || cur.name);
+            }
             if (cur && (cur.id || cur.slug)) {
                 showLocationInfo(cur.id || cur.slug);
             }

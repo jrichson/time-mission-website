@@ -82,7 +82,7 @@ export function homeHeroMediaNodes(): Array<ImageObjectNode | VideoObjectNode> {
                 description:
                     'Hero video showing the active indoor Time Mission experience with teams moving through challenge rooms.',
                 thumbnailUrl: '/assets/video/hero-poster.jpg',
-                contentUrl: `${mediaBase}/assets/video/hero-bg-web.mp4`,
+                contentUrl: `${mediaBase}/assets/video/TM-Hero-bg-web-hero.mp4`,
                 uploadDate: '2026-05-09',
             }),
         );

@@ -36,8 +36,8 @@ inside `<section class="hero">`. All three partials share an identical structure
 <section class="hero">
     <div class="hero-video-container">
         <video id="heroVideo" muted loop playsinline webkit-playsinline preload="none" ...>
-            <source src="{{TM_MEDIA_BASE}}/assets/video/hero-bg-mobile.mp4" ...>
-            <source src="{{TM_MEDIA_BASE}}/assets/video/hero-bg-web.mp4" ...>
+            <source src="{{TM_MEDIA_BASE}}/assets/video/TM-Hero-bg-mobile-hero.mp4" ...>
+            <source src="{{TM_MEDIA_BASE}}/assets/video/TM-Hero-bg-web-hero.mp4" ...>
         </video>
     </div>
     ...

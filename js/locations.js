@@ -37,7 +37,7 @@
         return BookingJourney.normalizeLocation(value);
     }
 
-    /** Homepage paths where we skip auto-restore of saved location */
+    /** Homepage paths where saved location should restore without changing URL */
     function isIndexPage() {
         const pathname = window.location.pathname;
         return pathname === '/' || pathname.endsWith('/index.html') || pathname.endsWith('/index.htm');
@@ -397,7 +397,7 @@
                 localStorage.setItem(STORAGE_KEY, pageLocation.id || pageLocation.slug || pageLocationSlug);
             } catch (e) { /* localStorage unavailable */ }
             TM._emitChange();
-        } else if (!isIndexPage()) {
+        } else {
             TM.restore();
         }
 

@@ -108,6 +108,8 @@ function createBrowserContext(extraWindow = {}) {
     URL,
     URLSearchParams,
     navigator: window.navigator,
+    localStorage: window.localStorage,
+    sessionStorage: window.sessionStorage,
   };
   return { context, window, document };
 }
@@ -397,7 +399,37 @@ describe('browser architecture contracts', () => {
     })).toBe('/manassas?book=1');
   });
 
-  it('booking destinations preserve marketing params on external and provider-page links', async () => {
+  it('homepage restores the saved location instead of dropping it on logo navigation', async () => {
+    const { context, window } = createBrowserContext({
+      TM_DATA: {
+        locations: [
+          {
+            id: 'philadelphia',
+            slug: 'philadelphia',
+            name: 'Time Mission Philadelphia',
+            shortName: 'Philadelphia',
+            status: 'open',
+            bookingUrl: 'https://book.philadelphia.timemission.com',
+            rollerCheckoutUrl: 'https://book.philadelphia.timemission.com',
+            groupFormUrls: {},
+          },
+        ],
+      },
+    });
+    window.location.pathname = '/';
+    window.localStorage.setItem('tm_location', 'philadelphia');
+
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    runScript('js/locations.js', context);
+    await window.TM.ready;
+
+    expect(window.TM.current?.id).toBe('philadelphia');
+    expect(window.LocationContext.getCurrent()?.id).toBe('philadelphia');
+    expect(window.localStorage.getItem('tm_location')).toBe('philadelphia');
+  });
+
+  it('booking destinations preserve marketing params on external links and keep Briq local', async () => {
     const { context, window } = createBrowserContext({
       TM_DATA: {
         locations: [
@@ -500,9 +532,13 @@ describe('browser architecture contracts', () => {
 
     for (const [locationId, groupUrls] of Object.entries(formsLinksAudit.groups)) {
       for (const groupType of formsLinksAudit.groupTypes) {
-        const expectedRuntimeHref = locationId === 'west-nyack' && groupUrls[groupType]
+        const isWestNyackBriq = locationId === 'west-nyack' && !!groupUrls[groupType];
+        const expectedRuntimeHref = isWestNyackBriq
           ? '#briq-widget-container'
           : groupUrls[groupType];
+        const expectedPresentation = isWestNyackBriq
+          ? 'briq-widget'
+          : (expectedRuntimeHref ? 'link' : 'panel');
         expect(window.TMBooking.getDestination({
           kind: 'groups',
           groupType,
@@ -514,10 +550,10 @@ describe('browser architecture contracts', () => {
           locationId,
         })).toMatchObject({
           href: expectedRuntimeHref,
-          presentation: locationId === 'west-nyack' && expectedRuntimeHref ? 'briq-widget' : (expectedRuntimeHref ? 'link' : 'panel'),
+          presentation: expectedPresentation,
           usesBookingFrame: false,
         });
-        if (locationId === 'west-nyack' && groupUrls[groupType]) {
+        if (isWestNyackBriq) {
           expect(window.TMBooking.resolveIntent({
             kind: 'groups',
             groupType,

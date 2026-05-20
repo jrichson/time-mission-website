@@ -1,6 +1,6 @@
 'use strict';
 
-const OFFLOADED_MP4_FILES = ['hero-bg-web.mp4', 'hero-bg-mobile.mp4', 'groups-hero.mp4'];
+const OFFLOADED_MP4_FILES = ['TM-Hero-bg-web-hero.mp4', 'TM-Hero-bg-mobile-hero.mp4', 'groups-hero.mp4'];
 
 const MANDATORY_ROOT_FILES = [
   '_headers.tmpl',

@@ -96,6 +96,7 @@
         var currentTaglineIndex = 0;
         var isTyping = false;
         var taglineIntervalId = null;
+        var taglineStartTimerId = null;
         var reduceMotion = prefersReducedMotion();
 
         function sleep(ms) {
@@ -138,18 +139,32 @@
 
         function startRotation() {
             if (reduceMotion) return;
+            taglineStartTimerId = null;
             taglineElement.classList.remove('no-cursor');
             taglineIntervalId = setInterval(rotateTagline, 4000);
+        }
+
+        function holdBeforeRotation(delay) {
+            if (reduceMotion) return;
+            if (taglineStartTimerId) clearTimeout(taglineStartTimerId);
+            taglineStartTimerId = setTimeout(startRotation, delay);
         }
 
         // On mobile with location: show "Time Mission {City}" for 5s, then rotate.
         function setEyebrowToLocation(city) {
             if (!isMobile() || !city) return;
-            if (taglineIntervalId) clearInterval(taglineIntervalId);
+            if (taglineStartTimerId) {
+                clearTimeout(taglineStartTimerId);
+                taglineStartTimerId = null;
+            }
+            if (taglineIntervalId) {
+                clearInterval(taglineIntervalId);
+                taglineIntervalId = null;
+            }
             isTyping = false;
             taglineElement.textContent = 'Time Mission ' + city;
             taglineElement.classList.add('no-cursor');
-            if (!reduceMotion) setTimeout(startRotation, mobileLocationHoldMs);
+            holdBeforeRotation(mobileLocationHoldMs);
         }
 
         if (initialCity) {
@@ -162,7 +177,7 @@
         if (reduceMotion) {
             taglineElement.classList.add('no-cursor');
         } else {
-            setTimeout(startRotation, initialHoldMs);
+            holdBeforeRotation(initialHoldMs);
         }
 
         document.addEventListener('tm:language-changed', function () {
@@ -1008,6 +1023,12 @@
         window.updateEyebrowLocation = opts.updateEyebrow === false
             ? function () {}
             : function (newCity) { tagline.setEyebrowToLocation(newCity); };
+        if (opts.updateEyebrow !== false && window.TM && window.TM.ready && typeof window.TM.ready.then === 'function') {
+            window.TM.ready.then(function () {
+                var loc = window.TM.current || null;
+                if (loc && (loc.shortName || loc.name)) window.updateEyebrowLocation(loc.shortName || loc.name);
+            });
+        }
 
         initMinutesCycler();
         initPointsCounter();
@@ -1037,7 +1058,7 @@
             initialCity: null,
             initialHoldMs: 3000,
             testimonials: 'transform',
-            updateEyebrow: false,
+            updateEyebrow: true,
         });
     }
 
