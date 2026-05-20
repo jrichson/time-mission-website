@@ -1,0 +1,38 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import giftCardsMain from '../partials/gift-cards-main.frag.txt?raw';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+
+const page = definePage({ canonicalPath: '/gift-cards' });
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Gift Cards', href: '/gift-cards' },
+]));
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise">
+    <Fragment slot="head-extra">
+        <link
+            rel="preload"
+            as="image"
+            href="/assets/logo/tm-gift-card.webp"
+            imagesrcset="/assets/logo/tm-gift-card-640.webp 640w, /assets/logo/tm-gift-card-960.webp 960w, /assets/logo/tm-gift-card-1280.webp 1280w, /assets/logo/tm-gift-card.webp 1600w"
+            imagesizes="(max-width: 900px) calc(100vw - 4rem), 520px"
+            type="image/webp"
+            fetchpriority="high"
+        />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=3" />
+        <link rel="stylesheet" href="/css/faq.css?v=4" />
+        <link rel="stylesheet" href="/css/page-gift-cards.css?v=1" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={giftCardsMain} />
+    <Fragment slot="after-site-scripts">
+        <script defer src="/js/page-gift-cards-after.js?v=1"></script>
+    </Fragment>
+</SiteLayout>

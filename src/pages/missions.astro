@@ -1,0 +1,47 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import missionsMain from '../partials/missions-main.frag.txt?raw';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+import { imageObjectNode } from '../lib/schema/media';
+
+const page = definePage({ canonicalPath: '/missions' });
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Missions', href: '/missions' },
+], [
+    imageObjectNode({
+        canonicalPath: '/missions',
+        idFragment: 'primaryimage',
+        url: '/assets/photos/experiences/experiences-hero.jpg',
+        name: 'Time Mission challenge rooms',
+        caption: 'Time Mission teams choose from physical, logic, skill, and coordination missions.',
+    }),
+]));
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise">
+    <Fragment slot="head-extra">
+        <link
+            rel="preload"
+            as="image"
+            href="/assets/photos/experiences/experiences-hero-640.webp"
+            imagesrcset="/assets/photos/experiences/experiences-hero-640.webp 640w, /assets/photos/experiences/experiences-hero-960.webp 960w"
+            imagesizes="100vw"
+            type="image/webp"
+            fetchpriority="high"
+            media="(max-width: 768px)"
+        />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+        <link rel="stylesheet" href="/css/newsletter.css?v=3" />
+        <link rel="stylesheet" href="/css/page-missions.css?v=1" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={missionsMain} />
+    <Fragment slot="after-site-scripts">
+        <script defer src="/js/page-missions-after.js?v=1"></script>
+    </Fragment>
+</SiteLayout>

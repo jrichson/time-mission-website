@@ -9,6 +9,48 @@ import {
 } from '../functions/_shared/location-route-normalizer.mjs';
 
 describe('location route normalizer', () => {
+  const sharedPagePaths = [
+    '/about',
+    '/missions',
+    '/groups',
+    '/groups/bachelor-ette',
+    '/groups/birthdays',
+    '/groups/corporate',
+    '/groups/field-trips',
+    '/groups/holidays',
+    '/groups/private-events',
+    '/gift-cards',
+    '/faq',
+    '/contact',
+    '/contact-thank-you',
+    '/locations',
+    '/privacy',
+    '/terms',
+    '/code-of-conduct',
+    '/cookies',
+    '/accessibility',
+    '/licensing',
+    '/waiver',
+  ];
+
+  const migratedSharedPagePaths = ['/missions', '/groups', '/gift-cards'];
+  const rootAssetPaths = [
+    '/_astro/client.css',
+    '/assets/logo/TM_Logo_White.svg',
+    '/css/nav.css',
+    '/data/locations.json',
+    '/fonts/DMSans-Normal.woff2',
+    '/js/nav.js',
+  ];
+
+  function sourcePrefixesFor(entry) {
+    return [
+      entry.canonicalPath.replace(/^\//, ''),
+      entry.officialAlternate,
+      ...(entry.compatibilitySources || []),
+    ].filter(Boolean);
+  }
+
   it('normalizes location names by ignoring case and dashes', () => {
     expect(compactLocationSegment('mOuNt-Pros-pect')).toBe('mountprospect');
     expect(resolveLocationCanonicalPath('/MountProspect')).toBe('/mount-prospect');
@@ -49,6 +91,49 @@ describe('location route normalizer', () => {
       .toEqual({ redirectUrl: '', assetPath: '/about' });
     expect(resolveLocationRouteRequest('https://timemission.com/philadelphia/groups/corporate?utm_source=test'))
       .toEqual({ redirectUrl: '', assetPath: '/groups/corporate' });
+  });
+
+  it('serves every prefixable shared page behind every canonical location prefix', () => {
+    for (const { canonicalPath } of locationRouteEntries()) {
+      for (const sharedPath of sharedPagePaths) {
+        expect(resolveLocationRouteRequest(`https://timemission.com${canonicalPath}${sharedPath}`))
+          .toEqual({ redirectUrl: '', assetPath: sharedPath });
+      }
+    }
+  });
+
+  it('canonicalizes every alternate location source before serving migrated shared pages', () => {
+    for (const entry of locationRouteEntries()) {
+      const alternatePrefixes = sourcePrefixesFor(entry)
+        .filter((prefix) => `/${prefix}` !== entry.canonicalPath);
+
+      for (const sourcePrefix of alternatePrefixes) {
+        for (const sharedPath of migratedSharedPagePaths) {
+          expect(resolveLocationRouteRequest(`https://timemission.com/${sourcePrefix}${sharedPath}?utm_source=test`))
+            .toEqual({
+              redirectUrl: `https://timemission.com${entry.canonicalPath}${sharedPath}?utm_source=test`,
+              assetPath: '',
+            });
+        }
+      }
+    }
+  });
+
+  it('serves root assets behind every canonical location prefix', () => {
+    for (const { canonicalPath } of locationRouteEntries()) {
+      for (const assetPath of rootAssetPaths) {
+        expect(resolveLocationRouteRequest(`https://timemission.com${canonicalPath}${assetPath}?v=17`))
+          .toEqual({ redirectUrl: '', assetPath });
+      }
+    }
+  });
+
+  it('canonicalizes the location segment before serving location-prefixed assets', () => {
+    expect(resolveLocationRouteRequest('https://timemission.com/Philly/css/nav.css?v=17'))
+      .toEqual({
+        redirectUrl: 'https://timemission.com/philadelphia/css/nav.css?v=17',
+        assetPath: '',
+      });
   });
 
   it('canonicalizes location-prefixed shared page aliases before serving assets', () => {

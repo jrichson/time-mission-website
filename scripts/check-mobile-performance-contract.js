@@ -53,10 +53,7 @@ function hasPreload(file, href, requireResponsive = false) {
 runCheck({
   title: 'Mobile performance contract',
   run(errors) {
-    const rootStaticHtml = ['404.html', 'groups.html', 'gift-cards.html', 'missions.html']
-      .filter((file) => fs.existsSync(path.join(root, file)));
-
-    for (const file of walk('src').concat(rootStaticHtml)) {
+    for (const file of walk('src')) {
       for (const tag of imgTags(read(file))) {
         const a = attrs(tag);
         if (!a.width || !a.height) {
@@ -65,23 +62,21 @@ runCheck({
       }
     }
 
-    for (const file of ['groups.html', 'gift-cards.html', 'missions.html']) {
-      const html = read(file);
-      if (/fonts\.(googleapis|gstatic)\.com/.test(html)) {
-        errors.push(`${file}: static performance-sensitive route must use local fonts, not Google Fonts`);
-      }
-      for (const href of [
-        'assets/fonts/BebasNeue-Regular.woff2',
-        'assets/fonts/DMSans-Normal.woff2',
-        'assets/fonts/MonumentExtended-Regular.otf',
-        'assets/fonts/MonumentExtended-Ultrabold.otf',
-      ]) {
-        if (!linkTags(html).some((tag) => {
-          const a = attrs(tag);
-          return a.rel === 'preload' && a.as === 'font' && a.href === href && a.crossorigin === true;
-        })) {
-          errors.push(`${file}: missing local font preload for ${href}`);
-        }
+    const siteHead = read('src/components/SiteHead.astro');
+    if (/fonts\.(googleapis|gstatic)\.com/.test(siteHead)) {
+      errors.push('SiteHead.astro: performance-sensitive routes must use local fonts, not Google Fonts');
+    }
+    for (const href of [
+      '/assets/fonts/BebasNeue-Regular.woff2',
+      '/assets/fonts/DMSans-Normal.woff2',
+      '/assets/fonts/MonumentExtended-Regular.otf',
+      '/assets/fonts/MonumentExtended-Ultrabold.otf',
+    ]) {
+      if (!linkTags(siteHead).some((tag) => {
+        const a = attrs(tag);
+        return a.rel === 'preload' && a.as === 'font' && a.href === href && a.crossorigin === true;
+      })) {
+        errors.push(`SiteHead.astro: missing local font preload for ${href}`);
       }
     }
 
@@ -110,7 +105,7 @@ runCheck({
       'src/pages/groups/field-trips.astro': '/assets/photos/groups/field-trips-480.webp',
       'src/pages/groups/holidays.astro': '/assets/photos/groups/holiday-parties-480.webp',
       'src/pages/groups/private-events.astro': '/assets/photos/venue/_Time-Mission_0024-480.webp',
-      'missions.html': 'assets/photos/experiences/experiences-hero-640.webp',
+      'src/pages/missions.astro': '/assets/photos/experiences/experiences-hero-640.webp',
     };
     for (const [file, href] of Object.entries(responsivePreloads)) {
       if (!hasPreload(file, href, true)) {
@@ -118,44 +113,47 @@ runCheck({
       }
     }
 
-    const missionsHtml = read('missions.html');
-    if (!/media="\(max-width: 768px\)"[^>]+srcset="assets\/photos\/experiences\/experiences-hero-640\.webp 640w, assets\/photos\/experiences\/experiences-hero-960\.webp 960w"/.test(missionsHtml)) {
-      errors.push('missions.html: mobile hero picture must cap the LCP candidate set at 960w');
+    const missionsHtml = read('src/partials/missions-main.frag.txt');
+    if (!/media="\(max-width: 768px\)"[^>]+srcset="\/assets\/photos\/experiences\/experiences-hero-640\.webp 640w, \/assets\/photos\/experiences\/experiences-hero-960\.webp 960w"/.test(missionsHtml)) {
+      errors.push('src/partials/missions-main.frag.txt: mobile hero picture must cap the LCP candidate set at 960w');
     }
 
-    for (const tag of imgTags(missionsHtml).filter((tag) => tag.includes('src="assets/photos/experiences/Time-Mission'))) {
+    for (const tag of imgTags(missionsHtml).filter((tag) => tag.includes('src="/assets/photos/experiences/Time-Mission'))) {
       const a = attrs(tag);
       if (a.loading === 'lazy' && a.fetchpriority !== 'low') {
-        errors.push(`missions.html: below-fold mission card image must use fetchpriority="low": ${tag.slice(0, 140)}`);
+        errors.push(`src/partials/missions-main.frag.txt: below-fold mission card image must use fetchpriority="low": ${tag.slice(0, 140)}`);
       }
     }
 
-    if (!hasPreload('gift-cards.html', 'assets/logo/tm-gift-card.webp')) {
-      errors.push('gift-cards.html: gift-card LCP image must preload with fetchpriority="high"');
+    if (!hasPreload('src/pages/gift-cards.astro', '/assets/logo/tm-gift-card.webp', true)) {
+      errors.push('src/pages/gift-cards.astro: gift-card LCP image must preload responsive WebP candidates with fetchpriority="high"');
     }
-    const giftCardsHtml = read('gift-cards.html');
-    const giftCardImg = imgTags(giftCardsHtml).find((tag) => tag.includes('tm-gift-card.png'));
+    const giftCardsHtml = read('src/partials/gift-cards-main.frag.txt');
+    if (!giftCardsHtml.includes('/assets/logo/tm-gift-card-640.webp 640w')) {
+      errors.push('src/partials/gift-cards-main.frag.txt: gift-card hero must use resized WebP srcset candidates');
+    }
+    const giftCardImg = imgTags(giftCardsHtml).find((tag) => tag.includes('tm-gift-card-1280.png'));
     if (!giftCardImg) {
-      errors.push('gift-cards.html: missing gift-card hero image');
+      errors.push('src/partials/gift-cards-main.frag.txt: missing gift-card hero image');
     } else {
       const a = attrs(giftCardImg);
       if (a.loading !== 'eager' || a.fetchpriority !== 'high') {
-        errors.push(`gift-cards.html: gift-card hero image must be eager with fetchpriority="high": ${giftCardImg.slice(0, 140)}`);
+        errors.push(`src/partials/gift-cards-main.frag.txt: gift-card hero image must be eager with fetchpriority="high": ${giftCardImg.slice(0, 140)}`);
       }
     }
 
-    if (!hasPreload('groups.html', 'assets/video/groups-hero-poster.jpg')) {
-      errors.push('groups.html: groups hero poster must preload with fetchpriority="high"');
+    if (!hasPreload('src/pages/groups.astro', '/assets/video/groups-hero-poster.jpg')) {
+      errors.push('src/pages/groups.astro: groups hero poster must preload with fetchpriority="high"');
     }
-    if (!hasPreload('groups.html', 'assets/video/groups-hero-poster-960.webp')) {
-      errors.push('groups.html: groups mobile hero poster must preload the 960px WebP with fetchpriority="high"');
+    if (!hasPreload('src/pages/groups.astro', '/assets/video/groups-hero-poster-960.webp')) {
+      errors.push('src/pages/groups.astro: groups mobile hero poster must preload the 960px WebP with fetchpriority="high"');
     }
-    const groupsHtml = read('groups.html');
-    if (!/<video[^>]+poster="assets\/video\/groups-hero-poster-960\.webp"[^>]+preload="none"/.test(groupsHtml)) {
-      errors.push('groups.html: groups hero video must use the mobile WebP poster and preload="none"');
+    const groupsHtml = read('src/partials/groups-main.frag.txt');
+    if (!/<video[^>]+poster="\/assets\/video\/groups-hero-poster-960\.webp"[^>]+preload="none"/.test(groupsHtml)) {
+      errors.push('src/partials/groups-main.frag.txt: groups hero video must use the mobile WebP poster and preload="none"');
     }
     if (!/<source[^>]+src="\{\{TM_MEDIA_BASE\}\}\/assets\/video\/groups-hero\.mp4"[^>]+media="\(min-width: 769px\)"/.test(groupsHtml)) {
-      errors.push('groups.html: groups hero MP4 source must be desktop-only so mobile keeps the poster');
+      errors.push('src/partials/groups-main.frag.txt: groups hero MP4 source must be desktop-only so mobile keeps the poster');
     }
 
     const siteScripts = read('src/components/SiteScripts.astro');

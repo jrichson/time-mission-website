@@ -11,6 +11,7 @@ const root = path.resolve(__dirname, '..');
 const pagesDir = path.join(root, 'src', 'pages');
 const routesPath = path.join(root, 'src', 'data', 'routes.json');
 const outPath = path.join(root, 'src', 'data', 'site', 'astro-rendered-output-files.json');
+const specialStaticOutputFiles = new Set(['404.html']);
 
 function walkAstroFiles(dir, base = '') {
   const out = [];
@@ -53,6 +54,7 @@ const routeOutputs = new Set(
 
 const errors = [];
 for (const out of outputFiles) {
+  if (specialStaticOutputFiles.has(out)) continue;
   if (!routeOutputs.has(out)) {
     errors.push(`Compiled Astro output "${out}" has no matching routes.json outputFile`);
   }

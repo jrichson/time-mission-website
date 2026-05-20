@@ -27,10 +27,13 @@ function sourceMarkup() {
 }
 
 function groupsMarkup() {
-  return [
-    path.join(root, 'groups.html'),
-    ...walk(path.join(root, 'groups')).filter((file) => file.endsWith('.html')),
-  ].map((file) => ({
+  const groupsPartial = path.join(root, 'src', 'partials', 'groups-main.frag.txt');
+  const groupsDir = path.join(root, 'groups');
+  const groupSubpages = fs.existsSync(groupsDir)
+    ? walk(groupsDir).filter((file) => file.endsWith('.html'))
+    : [];
+
+  return [groupsPartial, ...groupSubpages].map((file) => ({
     file,
     text: fs.readFileSync(file, 'utf8'),
   }));

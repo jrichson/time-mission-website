@@ -26,9 +26,10 @@ export function buildHomeGraph(): Graph {
     return withContext([organizationNode(), websiteNode(), ...homeHeroMediaNodes()]);
 }
 
-export function buildSimpleGraph(crumbs?: Crumb[]): Graph {
+export function buildSimpleGraph(crumbs?: Crumb[], extraNodes: unknown[] = []): Graph {
     const nodes: unknown[] = [organizationNode()];
     if (crumbs && crumbs.length > 1) nodes.push(breadcrumbNode(crumbs));
+    nodes.push(...extraNodes);
     return withContext(nodes);
 }
 

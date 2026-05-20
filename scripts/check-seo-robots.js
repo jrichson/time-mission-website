@@ -21,6 +21,7 @@ function resolveRobotsForRoute(canonicalPath, table) {
 const routes = loadJson('src/data/routes.json');
 const robotsFile = loadJson('src/data/site/seo-robots.json');
 const distDir = path.join(root, 'dist');
+const specialRobotsOutputs = new Map([['/404', '404.html']]);
 
 if (!Array.isArray(robotsFile.rules) || robotsFile.rules.length === 0) {
   errors.push('seo-robots.json: rules must be non-empty array');
@@ -52,7 +53,12 @@ for (const rule of robotsFile.rules) {
 const canonicalSet = new Set(routes.routes.map((r) => r.canonicalPath));
 
 for (const rule of robotsFile.rules) {
-  if (rule.match === 'exact' && rule.path && !canonicalSet.has(rule.path)) {
+  if (
+    rule.match === 'exact'
+    && rule.path
+    && !canonicalSet.has(rule.path)
+    && !specialRobotsOutputs.has(rule.path)
+  ) {
     errors.push(`orphan exact rule path not in routes.json: ${rule.path}`);
   }
 }
@@ -62,6 +68,12 @@ const sitemapTrue = new Set(
 );
 
 for (const p of canonicalSet) {
+  const resolved = resolveRobotsForRoute(p, robotsFile);
+  if (!resolved) {
+    errors.push(`no rule resolved for ${p}`);
+  }
+}
+for (const p of specialRobotsOutputs.keys()) {
   const resolved = resolveRobotsForRoute(p, robotsFile);
   if (!resolved) {
     errors.push(`no rule resolved for ${p}`);
@@ -92,6 +104,25 @@ if (fs.existsSync(distDir)) {
     const expected = resolveRobotsForRoute(route.canonicalPath, robotsFile);
     if (actual !== expected) {
       errors.push(`${route.outputFile}: robots meta mismatch (got ${actual || 'empty'}, expected ${expected})`);
+    }
+  }
+
+  for (const [canonicalPath, outputFile] of specialRobotsOutputs) {
+    const distPath = path.join(distDir, outputFile);
+    if (!fs.existsSync(distPath)) continue;
+
+    const html = fs.readFileSync(distPath, 'utf8');
+    const robotsMeta = html.match(/<meta\s+[^>]*name=["']robots["'][^>]*>/i);
+    if (!robotsMeta) {
+      errors.push(`${outputFile}: missing rendered robots meta`);
+      continue;
+    }
+
+    const contentMatch = robotsMeta[0].match(/\bcontent\s*=\s*["']([^"']+)["']/i);
+    const actual = contentMatch ? contentMatch[1] : '';
+    const expected = resolveRobotsForRoute(canonicalPath, robotsFile);
+    if (actual !== expected) {
+      errors.push(`${outputFile}: robots meta mismatch (got ${actual || 'empty'}, expected ${expected})`);
     }
   }
 }

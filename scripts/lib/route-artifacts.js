@@ -3,6 +3,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { loadJson, normalizeCanonicalPath } = require('./validation-core');
+const { loadAstroRenderedOutputFilesSet } = require('./load-astro-rendered-output-files.cjs');
 
 function loadRouteRegistry(root) {
   return loadJson(root, 'src/data/routes.json');
@@ -202,6 +203,16 @@ function resolveAbsoluteSiteHref(root, registry, href) {
   return path.join(root, rel);
 }
 
+function astroSourceForOutput(deployRoot, rel) {
+  const normalized = String(rel || '').replace(/^\//, '');
+  if (!normalized.endsWith('.html')) return null;
+
+  const withoutExt = normalized.replace(/\.html$/, '');
+  const pageRel = withoutExt === 'index' ? 'index.astro' : `${withoutExt}.astro`;
+  const candidate = path.join(deployRoot, 'src', 'pages', pageRel);
+  return fs.existsSync(candidate) ? candidate : null;
+}
+
 /**
  * Resolve an internal site path against a deploy root: Astro routes.json first,
  * then static path under root (same rules as check-internal-links).
@@ -214,6 +225,11 @@ function resolveInternalDeployTarget(deployRoot, registry, href) {
   if (rel) {
     const routed = path.join(deployRoot, rel);
     if (fs.existsSync(routed)) return routed;
+    const astroRendered = loadAstroRenderedOutputFilesSet(deployRoot);
+    if (astroRendered.has(rel)) {
+      const astroSource = astroSourceForOutput(deployRoot, rel);
+      if (astroSource) return astroSource;
+    }
     // Mapped output not present in this tree (e.g. source repo vs dist); try static path.
   }
   const tail = clean.replace(/^\//, '');

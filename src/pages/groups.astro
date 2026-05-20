@@ -1,0 +1,41 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import groupsMainRaw from '../partials/groups-main.frag.txt?raw';
+import { applyTmMediaBase } from '../lib/tm-media';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+import { imageObjectNode } from '../lib/schema/media';
+
+const page = definePage({ canonicalPath: '/groups' });
+const groupsMain = applyTmMediaBase(groupsMainRaw);
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Groups & Events', href: '/groups' },
+], [
+    imageObjectNode({
+        canonicalPath: '/groups',
+        idFragment: 'primaryimage',
+        url: '/assets/video/groups-hero-poster.jpg',
+        name: 'Time Mission group events',
+        caption: 'Time Mission hosts birthdays, corporate events, school trips, private events, and holiday parties.',
+    }),
+]));
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise">
+    <Fragment slot="head-extra">
+        <link rel="preload" as="image" href="/assets/video/groups-hero-poster-960.webp" type="image/webp" fetchpriority="high" media="(max-width: 768px)" />
+        <link rel="preload" as="image" href="/assets/video/groups-hero-poster.jpg" fetchpriority="high" media="(min-width: 769px)" />
+        <link rel="stylesheet" href="/css/footer.css?v=3" />
+        <link rel="stylesheet" href="/css/ticket-panel.css" />
+        <link rel="stylesheet" href="/css/faq.css?v=4" />
+        <link rel="stylesheet" href="/css/page-groups.css?v=1" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={groupsMain} />
+    <Fragment slot="after-site-scripts">
+        <script defer src="/js/page-groups-after.js?v=1"></script>
+    </Fragment>
+</SiteLayout>

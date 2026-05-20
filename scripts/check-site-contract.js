@@ -16,9 +16,10 @@ const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-o
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
+let astroRendered = new Set();
 
 try {
-  const astroRendered = loadAstroRenderedOutputFilesSet(root);
+  astroRendered = loadAstroRenderedOutputFilesSet(root);
   if (astroRendered.size < 1) {
     errors.push('astro-rendered-output-files.json outputFiles array must not be empty');
   }
@@ -94,6 +95,16 @@ if (!siteContractSrc.includes('locationsFingerprint')) {
 }
 
 for (const relPath of ['gift-cards.html', 'groups.html', 'missions.html']) {
+  if (!astroRendered.has(relPath)) {
+    errors.push(`${relPath}: migrated route must be rendered by Astro`);
+  }
+}
+
+for (const relPath of [
+  'src/partials/gift-cards-main.frag.txt',
+  'src/partials/groups-main.frag.txt',
+  'src/partials/missions-main.frag.txt',
+]) {
   const htmlPath = path.join(root, relPath);
   if (!fs.existsSync(htmlPath)) continue;
   const html = fs.readFileSync(htmlPath, 'utf8');
@@ -109,7 +120,7 @@ for (const relPath of ['gift-cards.html', 'groups.html', 'missions.html']) {
   }
 }
 
-for (const relPath of ['groups.html', 'public/groups.html']) {
+for (const relPath of ['src/partials/groups-main.frag.txt']) {
   const htmlPath = path.join(root, relPath);
   if (!fs.existsSync(htmlPath)) continue;
   const html = fs.readFileSync(htmlPath, 'utf8');
@@ -127,23 +138,6 @@ for (const relPath of ['groups.html', 'public/groups.html']) {
   }
   if (/href="\/contact\?type=/.test(html)) {
     errors.push(`${relPath}: group CTAs must open the booking panel instead of bypassing location-aware group forms`);
-  }
-}
-
-for (const relPath of ['gift-cards.html', 'groups.html', 'missions.html', 'public/gift-cards.html', 'public/groups.html', 'public/missions.html']) {
-  const htmlPath = path.join(root, relPath);
-  if (!fs.existsSync(htmlPath)) continue;
-  const html = fs.readFileSync(htmlPath, 'utf8');
-  for (const scriptName of ['booking-journey.js', 'location-catalog-view.js', 'locations.js', 'booking-controller.js', 'ticket-panel.js']) {
-    if (!html.includes(`js/${scriptName}`)) {
-      errors.push(`${relPath}: legacy static runtime must include ${scriptName}`);
-    }
-  }
-  if (html.indexOf('js/booking-journey.js') > html.indexOf('js/locations.js')) {
-    errors.push(`${relPath}: booking journey must load before locations.js`);
-  }
-  if (html.indexOf('js/booking-controller.js') > html.indexOf('js/ticket-panel.js')) {
-    errors.push(`${relPath}: booking controller must load before ticket-panel.js`);
   }
 }
 

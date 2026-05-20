@@ -16,7 +16,9 @@ const org = loadJson('src/data/site/seo-organization.json');
 
 const canonicalPaths = routes.routes.map((r) => r.canonicalPath).filter(Boolean);
 const routeSet = new Set(canonicalPaths);
+const specialSeoPaths = new Set(['/404']);
 const seoKeys = Object.keys(seoRoutes).filter((k) => !k.startsWith('_'));
+const checkedSeoPaths = [...canonicalPaths, ...specialSeoPaths].filter((p) => p in seoRoutes);
 
 for (const p of canonicalPaths) {
   if (!(p in seoRoutes)) {
@@ -25,14 +27,14 @@ for (const p of canonicalPaths) {
 }
 
 for (const k of seoKeys) {
-  if (!routeSet.has(k)) {
+  if (!routeSet.has(k) && !specialSeoPaths.has(k)) {
     errors.push(`orphan seo-routes entry: ${k}`);
   }
 }
 
 const REQUIRED = ['title', 'description', 'ogImage', 'twitterImage'];
 
-for (const p of canonicalPaths) {
+for (const p of checkedSeoPaths) {
   const e = seoRoutes[p];
   if (!e || typeof e !== 'object') continue;
   for (const field of REQUIRED) {

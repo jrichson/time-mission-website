@@ -118,6 +118,15 @@ const PREFIXABLE_ROUTE_ALIASES = [
   ['/waiver.html', '/waiver'],
 ];
 
+const LOCATION_PREFIXED_ASSET_PREFIXES = [
+  '/_astro/',
+  '/assets/',
+  '/css/',
+  '/data/',
+  '/fonts/',
+  '/js/',
+];
+
 function safeDecode(value) {
   try {
     return decodeURIComponent(value);
@@ -218,6 +227,17 @@ function resolveLocationPath(pathname) {
   }
 
   const suffixPath = trimTrailingSlash(normalizePathname(suffix));
+  const assetPath = LOCATION_PREFIXED_ASSET_PREFIXES.some((prefix) => suffixPath.startsWith(prefix))
+    ? suffixPath
+    : '';
+  if (assetPath) {
+    const targetPath = `${canonicalPath}${assetPath}`;
+    return {
+      redirectPath: sourcePath === targetPath ? '' : targetPath,
+      assetPath: sourcePath === targetPath ? assetPath : '',
+    };
+  }
+
   const sharedPath = sharedRouteByCompactPath.get(compactRoutePath(suffixPath));
   const targetSuffix = sharedPath ? (sharedPath === '/' ? '' : sharedPath) : suffixPath;
   const targetPath = `${canonicalPath}${targetSuffix}`;

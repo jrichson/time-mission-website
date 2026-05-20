@@ -190,5 +190,11 @@
     "description": "Review Time Mission waiver guidance before your visit.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/404": {
+    "title": "404, Mission Lost in Time | Time Mission",
+    "description": "This page has drifted out of the timeline. Head back to base and pick up another mission.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   }
 }

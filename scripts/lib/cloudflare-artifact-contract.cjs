@@ -8,7 +8,6 @@ const MANDATORY_ROOT_FILES = [
   '_routes.json',
   'robots.txt',
   'license.xml',
-  '404.html',
 ];
 
 const MANDATORY_ASSET_DIRS = ['assets', 'css', 'js', 'data'];

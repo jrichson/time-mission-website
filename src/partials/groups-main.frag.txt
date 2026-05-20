@@ -1,0 +1,247 @@
+    <section class="hero">
+        <div class="hero-bg">
+            <video autoplay muted loop playsinline poster="/assets/video/groups-hero-poster-960.webp" preload="none">
+                <source src="{{TM_MEDIA_BASE}}/assets/video/groups-hero.mp4" media="(min-width: 769px)" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero-content">
+            <div class="section-badge">Groups & Events</div>
+            <h1 class="hero-title">
+                YOUR NEXT EVENT,<br><span class="highlight">LEVELED UP</span>
+            </h1>
+            <p class="hero-subtitle">
+                Whether it's a birthday, team outing, or private event, Time Mission delivers an unforgettable experience for groups of all sizes.
+            </p>
+            <div class="hero-cta">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
+                    Book Now
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#" class="btn-secondary" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">Inquire Now</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="geo-answer-section" aria-labelledby="groups-answer-title">
+        <div class="geo-answer-inner">
+            <div class="section-badge">Group Events</div>
+            <h2 id="groups-answer-title">What group events can Time Mission host?</h2>
+            <p class="geo-answer-lead">Time Mission works for birthdays, corporate outings, school trips, private events, and holidays because larger parties can split into teams and compete across many short challenge rooms.</p>
+            <details class="geo-disclosure">
+                <summary>Read the full group-event guidance</summary>
+                <p>Time Mission is built for group entertainment because every session separates larger parties into teams of two to five players, then lets those teams compete across many short rooms instead of waiting on a single attraction. Birthday parties can combine mission play with location-specific party rooms, cake, food, or add-ons where available. Corporate teams can book casual group tickets for offsites or request full-venue buyouts with catering, custom run-of-show options, and branded signage depending on the venue. School field trips can use missions for physics, logic, problem solving, teamwork, and social-emotional learning, with weekday availability and chaperone guidance. Private events and holiday parties can scale from small teams to buyouts, with exact capacity, catering, extended hours, and pricing confirmed by the selected location. The format works especially well when groups want active competition without a long rules briefing.</p>
+            </details>
+        </div>
+    </section>
+    <section class="event-types">
+        <div class="event-types-header">
+            <span class="event-types-eyebrow">Every Team, Every Occasion</span>
+            <h2 class="event-types-title">Time Mission <span class="highlight">Group Events</span></h2>
+        </div>
+        <div class="event-types-grid">
+            <div class="event-type-card reveal">
+                <div class="event-type-photo">
+                    <picture><source srcset="/assets/photos/experiences/_Time-Mission_0321-480.webp 480w, /assets/photos/experiences/_Time-Mission_0321-800.webp 800w, /assets/photos/experiences/_Time-Mission_0321-1200.webp 1200w, /assets/photos/experiences/_Time-Mission_0321.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/_Time-Mission_0321.jpg" alt="Kids birthday party at Time Mission" width="1600" height="1067" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="birthdays">Plan An Event</a></div>
+                </div>
+                <h3>Birthday Parties</h3>
+                <p>Skip the bouncy houses and DIY cleanup. Time Mission is the ultimate kids birthday party venue and the go-to spot for adult birthday celebrations, with 25+ high-tech missions, party room upgrades, and hosts who handle every detail so you can actually enjoy the day.</p>
+            <a href="/groups/birthdays" class="event-type-learn-more">Learn More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+            <div class="event-type-card reveal">
+                <div class="event-type-photo">
+                    <picture><source srcset="/assets/photos/groups/corporate-events-480.webp 480w, /assets/photos/groups/corporate-events-800.webp 800w, /assets/photos/groups/corporate-events-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/groups/corporate-events.jpg" alt="Corporate team event at Time Mission" width="1920" height="1536" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="corporate">Plan An Event</a></div>
+                </div>
+                <h3>Corporate Events</h3>
+                <p>Get your team out of the conference room and into the action. No set packages. Build the night however you want, from immersive missions and shared bites to a full-venue buyout. Groups up to 125, and we handle the logistics.</p>
+            <a href="/groups/corporate" class="event-type-learn-more">Learn More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+            <div class="event-type-card reveal">
+                <div class="event-type-photo">
+                    <picture><source srcset="/assets/photos/groups/bachelor-bachelorette-480.webp 480w, /assets/photos/groups/bachelor-bachelorette-800.webp 800w, /assets/photos/groups/bachelor-bachelorette-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/groups/bachelor-bachelorette.jpg" alt="Bachelor and bachelorette party at Time Mission" width="1920" height="1281" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="bachelor-ette">Plan An Event</a></div>
+                </div>
+                <h3>Bachelor &amp; Bachelorette</h3>
+                <p>Make the last night out legendary. Time Mission is the bachelor and bachelorette party venue for crews who want more than a standard bar crawl: head-to-head missions, private suites, customizable food and drink packages, and enough chaos to fuel stories for years.</p>
+            <a href="/groups/bachelor-ette" class="event-type-learn-more">Learn More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+            <div class="event-type-card reveal">
+                <div class="event-type-photo">
+                    <picture><source srcset="/assets/photos/groups/field-trips-480.webp 480w, /assets/photos/groups/field-trips-800.webp 800w, /assets/photos/groups/field-trips-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/groups/field-trips.jpg" alt="School field trip at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="field-trips">Plan An Event</a></div>
+                </div>
+                <h3>School Field Trips</h3>
+                <p>Stealth learning disguised as pure fun. Time Mission turns physics, teamwork, and problem-solving into a full-body adventure. Group rates for schools, flexible weekday scheduling, and chaperone-friendly setups make it easy to book 30 students or up to 125.</p>
+            <a href="/groups/field-trips" class="event-type-learn-more">Learn More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+            <div class="event-type-card reveal">
+                <div class="event-type-photo">
+                    <picture><source srcset="/assets/photos/venue/_Time-Mission_0024-480.webp 480w, /assets/photos/venue/_Time-Mission_0024-800.webp 800w, /assets/photos/venue/_Time-Mission_0024-1200.webp 1200w, /assets/photos/venue/_Time-Mission_0024.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/venue/_Time-Mission_0024.jpg" alt="Private event at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">Plan An Event</a></div>
+                </div>
+                <h3>Private Events</h3>
+                <p>Whatever you're planning, we can host it. From family outings and casual gatherings to reunions, milestone celebrations, and full Time Mission buyouts. Bring your own food and drink or let us handle catering. Add private suites, branded signage, and a dedicated coordinator when you want the full treatment.</p>
+            <a href="/groups/private-events" class="event-type-learn-more">Learn More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+            <div class="event-type-card reveal">
+                <div class="event-type-photo">
+                    <picture><source srcset="/assets/photos/groups/holiday-parties-480.webp 480w, /assets/photos/groups/holiday-parties-800.webp 800w, /assets/photos/groups/holiday-parties-1200.webp 1200w" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/groups/holiday-parties.jpg" alt="Holiday party at Time Mission" width="1920" height="1281" loading="lazy" decoding="async"></picture><div class="event-type-actions"><a href="#" class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">Book Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a href="#" class="event-type-cta ghost" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="holidays">Plan An Event</a></div>
+                </div>
+                <h3>Holiday Parties</h3>
+                <p>The best holiday parties don't happen in ballrooms. As your go-to holiday party venue, Time Mission brings high-energy missions, festive packages, and holiday catering that make every company celebration, from intimate team dinners to full-venue blowouts, completely unforgettable.</p>
+            <a href="/groups/holidays" class="event-type-learn-more">Learn More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+        </div>
+    </section>
+    <section class="why-tm">
+        <div class="why-tm-header reveal">
+            <span class="why-tm-eyebrow">Why Time Mission</span>
+            <h2 class="why-tm-title">Built For <span class="highlight">Groups</span></h2>
+            <p class="why-tm-subtitle">The conference-room offsite is dead. The banquet-hall birthday is boring. Time Mission is where groups go when they actually want to remember the night.</p>
+        </div>
+        <div class="why-tm-grid">
+            <div class="why-tm-item reveal">
+                <div class="why-tm-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3>Built For Any Size</h3>
+                <p>From 5 friends up to 125 coworkers. Intimate birthdays, full-venue buyouts, whatever the count. The experience scales.</p>
+            </div>
+            <div class="why-tm-item reveal">
+                <div class="why-tm-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <h3>Easy To Book</h3>
+                <p>Lock in a date and group size, and we handle the game, the scoring, and the hosting. You bring the crew, we run the mission.</p>
+            </div>
+            <div class="why-tm-item reveal">
+                <div class="why-tm-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <h3>Actually Memorable</h3>
+                <p>25+ high-tech missions, real-time leaderboards, private suites. Nothing like escape rooms. Nothing like bowling. Actually new.</p>
+            </div>
+        </div>
+    </section>
+    <section class="group-testimonials">
+        <div class="group-testimonials-header reveal">
+            <span class="group-testimonials-eyebrow">Groups Who've Played</span>
+            <h2 class="group-testimonials-title">The <span class="highlight">Reviews</span> Speak For Themselves</h2>
+        </div>
+        <div class="group-testimonials-grid">
+            <div class="group-testimonial reveal">
+                <div class="group-testimonial-rating">★★★★★</div>
+                <p class="group-testimonial-text">"Brought the team here for an offsite and it blew away any escape room we've done. Real competition, and everyone was still talking about it the next week."</p>
+                <div class="group-testimonial-author">
+                    <span class="group-testimonial-name">Mike R.</span>
+                    <span class="group-testimonial-meta">Corporate Team</span>
+                </div>
+            </div>
+            <div class="group-testimonial reveal">
+                <div class="group-testimonial-rating">★★★★★</div>
+                <p class="group-testimonial-text">"Booked it for my son's birthday and the kids were locked in the whole time. A bunch of parents asked where we'd booked by the time we left."</p>
+                <div class="group-testimonial-author">
+                    <span class="group-testimonial-name">Jennifer L.</span>
+                    <span class="group-testimonial-meta">Birthday Party</span>
+                </div>
+            </div>
+            <div class="group-testimonial reveal">
+                <div class="group-testimonial-rating">★★★★★</div>
+                <p class="group-testimonial-text">"Did Time Mission for my bachelorette and it was the highlight of the weekend. Way better than another bar crawl, we were cracking up the whole time."</p>
+                <div class="group-testimonial-author">
+                    <span class="group-testimonial-name">Ashley T.</span>
+                    <span class="group-testimonial-meta">Bachelorette Party</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="event-info">
+        <div class="event-info-block reveal">
+            <div class="event-info-photo">
+                <picture><source srcset="/assets/photos/venue/_Time-Mission_0042-480.webp 480w, /assets/photos/venue/_Time-Mission_0042-800.webp 800w, /assets/photos/venue/_Time-Mission_0042-1200.webp 1200w, /assets/photos/venue/_Time-Mission_0042.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/venue/_Time-Mission_0042.jpg" alt="Group competing at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+            </div>
+            <div class="event-info-body">
+                <div class="section-badge">The Experience</div>
+                <h3>GROUP <span class="highlight">EXPERIENCES</span></h3>
+                <p>Bring your crew for an unforgettable session of immersive challenges. Whether it's 5 friends or 50 coworkers, teams compete head-to-head across 25+ missions with real-time scoring.</p>
+                <p>Every group gets the full experience. No private room required. Just book your tickets, show up, and compete.</p>
+                <a href="#" class="btn-link btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
+                    Book Now
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </div>
+        <div class="event-info-block reveal">
+            <div class="event-info-photo">
+                <picture><source srcset="/assets/photos/venue/_Time-Mission_0024-480.webp 480w, /assets/photos/venue/_Time-Mission_0024-800.webp 800w, /assets/photos/venue/_Time-Mission_0024-1200.webp 1200w, /assets/photos/venue/_Time-Mission_0024.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/venue/_Time-Mission_0024.jpg" alt="Private event at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
+            </div>
+            <div class="event-info-body">
+                <div class="section-badge">Event Planning</div>
+                <h3>CUSTOM <span class="highlight">EVENTS</span></h3>
+                <p>From private venue rentals to fully hosted celebrations, our events team will build the perfect experience for your group.</p>
+                <p>Ideal for corporate meetings, team building, holiday parties, and large-scale gatherings. Catering, party rooms, and dedicated hosts available.</p>
+                <a href="#" class="btn-link" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">
+                    Plan Your Event
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+    <section class="faq">
+        <div class="section-header reveal">
+            <div class="section-badge">Questions?</div>
+            <h2 class="section-title">FREQUENTLY ASKED</h2>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-item reveal">
+                <button type="button" class="faq-question" aria-expanded="false">
+                    How do I book for a group?
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>The easiest way is to book group tickets directly through our online system. Just select your location, pick a date, and add your group. For larger or custom events, submit an event request and our team will be in touch.</p>
+                </div>
+            </div>
+
+            <div class="faq-item reveal">
+                <button type="button" class="faq-question" aria-expanded="false">
+                    What's the minimum group size?
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>There's no minimum for booking group tickets online. For private events and venue rentals, requirements vary by location. Submit an event request to learn more.</p>
+                </div>
+            </div>
+
+            <div class="faq-item reveal">
+                <button type="button" class="faq-question" aria-expanded="false">
+                    Do you offer private party rooms?
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes! Party room availability and packages vary by location. You can book group tickets for the gaming experience and add a party room, or submit a custom event request for the full package.</p>
+                </div>
+            </div>
+
+            <div class="faq-item reveal">
+                <button type="button" class="faq-question" aria-expanded="false">
+                    Can you accommodate corporate events and large groups?
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Absolutely. We regularly host corporate outings, team building events, and groups of 50-200+. Submit an event request and our team will create a custom package for your needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>

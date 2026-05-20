@@ -18,10 +18,7 @@ const ld = serializeGraph(
         { label: location.shortName, href: canonicalPath },
     ]),
 );
-const market = [location.address.city, location.address.state || location.address.country].filter(Boolean).join(', ');
 const contactHref = `/contact?location=${encodeURIComponent(slug)}&type=updates`;
-const pageTitle = `${location.name} | Coming Soon`;
-const pageDescription = `${location.name} is coming soon${market ? ` in ${market}` : ''}. Contact the location team for launch timing and opening updates.`;
 const pageInit = {
     mode: 'city',
     config: {
@@ -41,8 +38,6 @@ const pageInit = {
 
 <SiteLayout
     canonicalPath={page.canonicalPath}
-    title={pageTitle}
-    description={pageDescription}
     bodyDataLocation={location.slug}
     bookingCtaHref={contactHref}
     bookingCtaLabel="Contact Us"

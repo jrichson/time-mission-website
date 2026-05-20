@@ -1,0 +1,136 @@
+    <section class="gift-card-hero">
+        <div class="gift-card-showcase">
+            <div class="gift-card-visual">
+                <div class="gift-card-mockup">
+                    <picture>
+                        <source srcset="/assets/logo/tm-gift-card-640.webp 640w, /assets/logo/tm-gift-card-960.webp 960w, /assets/logo/tm-gift-card-1280.webp 1280w, /assets/logo/tm-gift-card.webp 1600w" sizes="(max-width: 900px) calc(100vw - 4rem), 520px" type="image/webp">
+                        <img src="/assets/logo/tm-gift-card-1280.png" alt="Time Mission gift card" width="1280" height="822" loading="eager" fetchpriority="high" decoding="async">
+                    </picture>
+                    <div class="gift-card-location-overlay">
+                        <span class="gift-card-location-text" data-tm-field="shortName" id="giftCardLocationText">YOUR LOCATION</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gift-card-info">
+                <h2>GIVE THE GIFT OF <span>ADVENTURE</span></h2>
+                <p>Time Mission gift cards make the perfect present for friends, family, or coworkers. Available in any amount, redeemable at your chosen location, and they never expire.</p>
+                <a href="#" class="btn-primary btn-gift-card" id="giftCardBuyBtn" data-gift="1">
+                    Buy a Gift Card
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <p class="gift-card-location-hint" id="giftCardLocationHint" style="font-size: 0.85rem; color: var(--gray); margin-top: 0.5rem;">Select a location to purchase, or we'll help you pick one.</p>
+            </div>
+        </div>
+    </section>
+    <section class="faq-section gift-faq">
+        <div class="section-header reveal">
+            <div class="section-badge">Got Questions?</div>
+            <h2 class="section-title">FREQUENTLY ASKED</h2>
+        </div>
+
+        <div class="faq-item reveal">
+            <button type="button" class="faq-question" aria-expanded="false">
+                <h3>Do gift cards expire?</h3>
+                <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg></div>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-content">No! Time Mission gift cards never expire. The recipient can use them whenever they're ready for their adventure.</div>
+            </div>
+        </div>
+
+        <div class="faq-item reveal">
+            <button type="button" class="faq-question" aria-expanded="false">
+                <h3>Can gift cards be used at any location?</h3>
+                <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg></div>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-content">Gift card availability depends on the selected location. If a location does not currently have an approved gift-card checkout link, we will show that it is unavailable instead of sending you to booking.</div>
+            </div>
+        </div>
+
+        <div class="faq-item reveal">
+            <button type="button" class="faq-question" aria-expanded="false">
+                <h3>What can gift cards be used for?</h3>
+                <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg></div>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-content">Gift cards can be used for general admission tickets, birthday party packages, corporate events, and any merchandise at our locations.</div>
+            </div>
+        </div>
+
+        <div class="faq-item reveal">
+            <button type="button" class="faq-question" aria-expanded="false">
+                <h3>Can I check my gift card balance?</h3>
+                <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg></div>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-content">Yes! You can check your balance at any location or by contacting our customer service team at info@timemission.com.</div>
+            </div>
+        </div>
+
+        <div class="faq-item reveal">
+            <button type="button" class="faq-question" aria-expanded="false">
+                <h3>Can I get a refund on a gift card?</h3>
+                <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg></div>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-content">Gift cards are non-refundable but they never expire, so the recipient can use them whenever they're ready!</div>
+            </div>
+        </div>
+    </section>
+    <section class="cta-section">
+        <div class="cta-content reveal">
+            <h2>GIVE THE GIFT OF <span>TIME MISSION</span></h2>
+            <p>A gift card today means a night they'll actually remember. Pick your location, choose any amount, send it instantly.</p>
+            <a href="#" class="btn-primary btn-gift-card" id="giftCardBuyBtnBottom" data-gift="1">
+                Buy a Gift Card
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <h2>DON'T MISS A THING</h2>
+            <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
+            <form name="newsletter" method="POST" action="/api/newsletter" data-tm-form="newsletter">
+                <input type="hidden" name="form-name" value="newsletter">
+                <p class="visually-hidden">
+                    <label>Do not fill this out if you are human: <input name="bot-field"></label>
+                </p>
+                <div class="newsletter-form">
+                    <label class="visually-hidden" for="gift-cards-newsletter-given-name">First name</label>
+                    <input type="text" id="gift-cards-newsletter-given-name" name="given_name" placeholder="First Name" autocomplete="given-name" required>
+                    <label class="visually-hidden" for="gift-cards-newsletter-family-name">Last name</label>
+                    <input type="text" id="gift-cards-newsletter-family-name" name="family_name" placeholder="Last Name" autocomplete="family-name">
+                    <label class="visually-hidden" for="gift-cards-newsletter-email">Email</label>
+                    <input type="email" id="gift-cards-newsletter-email" name="email" placeholder="Email" class="full-width" autocomplete="email" required>
+                </div>
+                <label class="newsletter-consent">
+                    <input type="checkbox" name="marketing_opt_in" value="yes" required>
+                    <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+                </label>
+                <div class="tm-turnstile" data-tm-turnstile></div>
+                <button type="submit" class="btn-subscribe">Sign Up</button>
+                <p class="newsletter-legal">
+                    By signing up, you agree to our
+                    <a href="/terms">Terms of Service</a> and
+                    <a href="/privacy">Privacy Policy</a>.
+                </p>
+            </form>
+        </div>
+    </section>
