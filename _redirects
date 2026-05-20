@@ -4,6 +4,8 @@
 
 # Case-variant location URLs (audit SEO #12 — duplicate-content risk)
 # Redirect title-case and all-caps spellings to canonical lowercase slug.
+# Arbitrary mixed-case and dash-insensitive location inputs are normalized by
+# the Cloudflare Pages Function in functions/[[path]].js.
 /Manassas /manassas 301
 /MANASSAS /manassas 301
 /Lincoln /lincoln 301
@@ -69,16 +71,29 @@
 /privacy-policy /privacy 301
 /privacy-policy/ /privacy 301
 /terms-and-conditions /terms 301
+/r1-indoor-karting /lincoln 301
+/r1indoorkarting /lincoln 301
+/palisades-center /west-nyack 301
+/palisadescenter /west-nyack 301
+/terminal1 /brussels 301
+/terminal-1 /brussels 301
+/manassas-mall /manassas 301
+/manassasmall /manassas 301
+/philly /philadelphia 301
+/mt-prospect /mount-prospect 301
+/mtprospect /mount-prospect 301
+/experience-factory-antwerp /antwerp 301
+/experiencefactoryantwerp /antwerp 301
+/marq-e /houston 301
+/marqe /houston 301
 /mountprospect /mount-prospect 301
 /mountprospect/* /mount-prospect/:splat 301
-/mt-prospect /mount-prospect 301
 /westnyack /west-nyack 301
 /westnyack/* /west-nyack/:splat 301
-/philly /philadelphia 301
 /philly/ /philadelphia 301
 /franchising /licensing 301
 /franchising/ /licensing 301
-/r1-indoor-karting /lincoln 301
+/orlandpark /orland-park 301
 /providence /lincoln 301
 /experiences /missions 301
 /locations/ /locations 301

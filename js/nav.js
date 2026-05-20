@@ -200,13 +200,13 @@
                 const cityName = link.dataset.city;
                 const slug = getLocationSlug(link);
                 if (cityName) {
-                    if (isSameWindowNavigationClick(e, link)) {
-                        e.preventDefault();
+                    if (!isSameWindowNavigationClick(e, link)) {
+                        closeLocationOverlay();
+                        return;
                     }
 
                     const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
                     syncAllLocations(cityName, slug, overlayTrack);
-                    showLocationInfo(slug || cityName);
                 }
 
                 // Non-location overlay links or modifier clicks: close overlay and let the browser follow href.

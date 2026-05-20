@@ -418,8 +418,98 @@
       "status": 301
     },
     {
+      "source": "/r1-indoor-karting",
+      "target": "/lincoln",
+      "status": 301
+    },
+    {
+      "source": "/r1indoorkarting",
+      "target": "/lincoln",
+      "status": 301
+    },
+    {
+      "source": "/palisades-center",
+      "target": "/west-nyack",
+      "status": 301
+    },
+    {
+      "source": "/palisadescenter",
+      "target": "/west-nyack",
+      "status": 301
+    },
+    {
+      "source": "/terminal1",
+      "target": "/brussels",
+      "status": 301
+    },
+    {
+      "source": "/terminal-1",
+      "target": "/brussels",
+      "status": 301
+    },
+    {
+      "source": "/manassas-mall",
+      "target": "/manassas",
+      "status": 301
+    },
+    {
+      "source": "/manassasmall",
+      "target": "/manassas",
+      "status": 301
+    },
+    {
+      "source": "/philly",
+      "target": "/philadelphia",
+      "status": 301
+    },
+    {
+      "source": "/mt-prospect",
+      "target": "/mount-prospect",
+      "status": 301
+    },
+    {
+      "source": "/mtprospect",
+      "target": "/mount-prospect",
+      "status": 301
+    },
+    {
+      "source": "/experience-factory-antwerp",
+      "target": "/antwerp",
+      "status": 301
+    },
+    {
+      "source": "/experiencefactoryantwerp",
+      "target": "/antwerp",
+      "status": 301
+    },
+    {
+      "source": "/marq-e",
+      "target": "/houston",
+      "status": 301
+    },
+    {
+      "source": "/marqe",
+      "target": "/houston",
+      "status": 301
+    },
+    {
       "source": "/mountprospect",
       "target": "/mount-prospect",
+      "status": 301
+    },
+    {
+      "source": "/westnyack",
+      "target": "/west-nyack",
+      "status": 301
+    },
+    {
+      "source": "/orlandpark",
+      "target": "/orland-park",
+      "status": 301
+    },
+    {
+      "source": "/palisades",
+      "target": "/west-nyack",
       "status": 301
     },
     {

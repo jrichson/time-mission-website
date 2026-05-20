@@ -5,6 +5,7 @@ const OFFLOADED_MP4_FILES = ['TM-Hero-bg-web-hero.mp4', 'TM-Hero-bg-mobile-hero.
 const MANDATORY_ROOT_FILES = [
   '_headers.tmpl',
   '_redirects',
+  '_routes.json',
   'robots.txt',
   'license.xml',
   '404.html',

@@ -56,4 +56,19 @@ describe('Public URL Surface', () => {
     expect(scriptSurface.outputFileFor('/philadelphia')).toBe(typedSurface.outputFileFor('/philadelphia'));
     expect(scriptSurface.isKnownCanonical('/c/team-night')).toBe(typedSurface.isKnownCanonical('/c/team-night'));
   });
+
+  it('keeps official location alternate redirects registered as permanent canonical moves', () => {
+    const redirects = compilePublicUrlSurface(registry).redirectPairs;
+
+    expect(redirects).toEqual(expect.arrayContaining([
+      { source: '/r1-indoor-karting', target: '/lincoln', status: 301 },
+      { source: '/palisades-center', target: '/west-nyack', status: 301 },
+      { source: '/terminal1', target: '/brussels', status: 301 },
+      { source: '/manassas-mall', target: '/manassas', status: 301 },
+      { source: '/philly', target: '/philadelphia', status: 301 },
+      { source: '/mt-prospect', target: '/mount-prospect', status: 301 },
+      { source: '/experience-factory-antwerp', target: '/antwerp', status: 301 },
+      { source: '/marq-e', target: '/houston', status: 301 },
+    ]));
+  });
 });

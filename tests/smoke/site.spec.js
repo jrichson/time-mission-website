@@ -373,7 +373,7 @@ test('open location ?book=1 opens embedded checkout without offsite navigation',
   await expect(page).toHaveURL(/\/philadelphia$/);
 });
 
-test('desktop location selection updates active venue without leaving the current page', async ({ page, isMobile }) => {
+test('desktop location selection navigates to the canonical venue page', async ({ page, isMobile }) => {
   // Desktop-only: this flow uses the desktop `#locationBtn` in the nav.
   // Mobile location selection lives inside the hamburger menu and is covered
   // by the dedicated `Mobile location selector (P0-7a)` describe block below.
@@ -384,9 +384,8 @@ test('desktop location selection updates active venue without leaving the curren
   await page.locator('#locationBtn').click();
   await page.locator('#locationDropdown a[data-city="Philadelphia"]').click();
 
-  await expect(page).toHaveURL(/\/groups\/corporate$/);
+  await expect(page).toHaveURL(/\/philadelphia$/);
   await expect(page.locator('#locationText')).toContainText('Philadelphia');
-  await expect(page.locator('#locationDropdown')).not.toHaveClass(/open/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
 });
 
@@ -1017,7 +1016,7 @@ test.describe('Mobile location selector (P0-7a)', () => {
       .toContain('Time Mission Philadelphia');
   });
 
-  test('tapping a location link updates the selected venue without leaving the current page', async ({ page }) => {
+  test('tapping a location link navigates to the canonical venue page', async ({ page }) => {
     await page.goto('/groups');
     await page.locator('#locationBtn').first().click();
     await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
@@ -1025,9 +1024,8 @@ test.describe('Mobile location selector (P0-7a)', () => {
     const philly = page.locator('#locationDropdown a[href*="philadelphia"]').first();
     await philly.tap();
 
-    await expect(page).toHaveURL(/\/groups$/);
+    await expect(page).toHaveURL(/\/philadelphia$/);
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBe('philadelphia');
-    await expect(page.locator('#locationDropdown')).not.toHaveClass(/open/);
   });
 });
 

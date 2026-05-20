@@ -1,8 +1,8 @@
 # Redirect map — Phase 02 clean URLs
 
-Canonical routing for Time Mission uses **clean extensionless paths with no trailing slash** (except the root `/`). Legacy `.html` sources and marketing shortcuts redirect **one hop** to those canonical URLs via `_redirects` (Netlify / Cloudflare Pages format).
+Canonical routing for Time Mission uses **clean extensionless paths with no trailing slash** (except the root `/`). Legacy `.html` sources and marketing shortcuts redirect **one hop** to those canonical URLs via `_redirects` (Netlify / Cloudflare Pages format). Location-name and venue-alternate inputs also normalize through a Cloudflare Pages Function so case and dashes do not create duplicate location URLs.
 
-See also: `src/data/routes.json` (machine-readable registry), `_redirects` (deployed rules), and `npm run check:routes`.
+See also: `src/data/routes.json` (machine-readable registry), `_redirects` (deployed rules), `functions/[[path]].js` (case/dash location normalization), and `npm run check:routes`.
 
 ## Cloudflare Pages Primary Behavior
 
@@ -11,6 +11,14 @@ Cloudflare Pages is the **primary** static hosting target for this repo. The `_r
 Legacy `.html` document URLs redirect directly to clean paths (for example `/about.html` → `/about`). Marketing shortcuts redirect to canonical destinations, optionally preserving fragment identifiers on the destination path.
 
 Preview deployments should be used to confirm redirect Location headers and status codes before production cutover.
+
+## Location Route Normalization
+
+The public canonical location paths are `/lincoln`, `/west-nyack`, `/brussels`, `/manassas`, `/philadelphia`, `/mount-prospect`, `/antwerp`, `/houston`, and `/orland-park`.
+
+Each location has at most one official alternate source. The current official alternates are `/r1-indoor-karting`, `/palisades-center`, `/terminal1`, `/manassas-mall`, `/philly`, `/mt-prospect`, `/experience-factory-antwerp`, and `/marq-e`. Orland Park has no official alternate.
+
+Static `_redirects` lists the normal lowercase variants for SEO clarity. The Cloudflare Pages Function applies the legacy server behavior for direct location paths by lowercasing the first path segment and ignoring dashes before redirecting to the canonical location URL. For example `/MountProspect`, `/Mount-Prospect`, and `/mOuNt-Pros-pect` all redirect to `/mount-prospect`.
 
 ## Query Strings
 
@@ -67,7 +75,7 @@ Drop `_redirects` at the site root (repo root for static publishing):
 Post-deploy on **Cloudflare Pages preview**, spot-check representative redirects:
 
 ```bash
-for path in /about.html /experiences.html /adult-birthday-parties /locations/index.html /privacy-policy; do
+for path in /about.html /experiences.html /adult-birthday-parties /locations/index.html /privacy-policy /mOuNt-Pros-pect /Palisades-center; do
   echo -n "$path -> "
   curl -sI "https://timemission.com$path" | head -2 | grep -iE 'location|http/'
 done
