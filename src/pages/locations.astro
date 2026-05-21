@@ -149,7 +149,7 @@ const page = definePage({ canonicalPath: '/locations' });
                                 <span class="loc-state">{locationStateBadge(loc)}</span>
                                 <div class="loc-body">
                                     <div class="loc-name">
-                                        {loc.shortName}
+                                        {loc.navLabel}
                                         {locationStatusBadge(loc) ? (
                                             <span class="loc-coming-soon-tag">{locationStatusBadge(loc)}</span>
                                         ) : null}

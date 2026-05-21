@@ -50,7 +50,7 @@ References:
 
 - [ ] Existing developer provides DNS zone export and confirms registrar/nameserver access.
 - [ ] Existing developer provides the current URL/link/redirect inventory for `timemission.com`.
-- [ ] Existing developer confirms exact EU destination URLs under `https://timemission.eu` for Antwerp and Brussels.
+- [x] EU destination URLs are set to `https://timemission.eu/antwerp` and `https://timemission.eu/brussels`.
 - [ ] Existing developer confirms current hosting rollback path and keeps old hosting available through launch week.
 - [ ] Search Console export of top URLs, indexed pages, external-linked pages, and 404s is reviewed.
 - [ ] Redirect QA confirms all important URLs from Search Console either resolve directly or redirect to the closest equivalent page.
@@ -282,7 +282,7 @@ If using the production Pages project for preview, do not attach or promote the 
 - [ ] `?book=1` opens embedded checkout for an open location and does not navigate offsite.
 - [ ] ROLLER booking paths open via embedded checkout/widget for Philadelphia, Mount Prospect, Manassas, Houston, and Orland Park.
 - [ ] Non-ROLLER US booking paths open in the onsite booking iframe for Lincoln.
-- [ ] European location CTAs route to `https://timemission.eu` and are not embedded in the US `.com` booking iframe.
+- [ ] European location CTAs route to their location-specific `https://timemission.eu/...` pages and are not embedded in the US `.com` booking iframe.
 - [ ] West Nyack/Briq path stays embedded on site.
 - [ ] Mobile location picker opens the venue page with one tap.
 - [ ] Gift card links work.

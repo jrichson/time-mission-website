@@ -200,9 +200,7 @@
     }
 
     function listTicketOptions(locations) {
-        return (Array.isArray(locations) ? locations : []).filter(function (loc) {
-            return !loc.externalUrl;
-        }).map(function (loc) {
+        return (Array.isArray(locations) ? locations : []).map(function (loc) {
             var view = getLocationView(loc, loc.id || loc.slug);
             var statusSuffix = loc.status === 'coming-soon'
                 ? ' (' + (openingLabelForLocation(loc) || (view && view.bookable
@@ -211,7 +209,9 @@
                 : '';
             return {
                 value: loc.id,
-                label: (view ? view.name : (loc.shortName || loc.name || loc.id)) + statusSuffix,
+                label: (loc.region === 'europe'
+                    ? (loc.navLabel || loc.shortName || loc.name || loc.id)
+                    : (view ? view.name : (loc.shortName || loc.name || loc.id))) + statusSuffix,
                 status: loc.status || 'open',
             };
         });

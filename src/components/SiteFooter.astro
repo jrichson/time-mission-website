@@ -19,6 +19,8 @@ const antwerp = allLocations.find((entry) => entry.slug === 'antwerp');
 const brussels = allLocations.find((entry) => entry.slug === 'brussels');
 const antwerpHref = antwerp ? locationHref(antwerp) : '/antwerp';
 const brusselsHref = brussels ? locationHref(brussels) : '/brussels';
+const antwerpLabel = antwerp?.navLabel || 'Belgium - Antwerp';
+const brusselsLabel = brussels?.navLabel || 'Belgium - Brussels';
 ---
 
 <footer class="footer">
@@ -103,9 +105,9 @@ const brusselsHref = brussels ? locationHref(brussels) : '/brussels';
                         </svg>
                     </button>
                     <div class="footer-location-list">
-                        <a href={antwerpHref}>Antwerp</a>
+                        <a href={antwerpHref}>{antwerpLabel}</a>
                         <a href={brusselsHref} class="coming-soon"
-                            >Brussels <span class="coming-soon-tag">Coming Soon</span></a
+                            >{brusselsLabel} <span class="coming-soon-tag">Coming Soon</span></a
                         >
                     </div>
                 </div>

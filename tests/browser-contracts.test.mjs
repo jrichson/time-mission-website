@@ -181,7 +181,8 @@ describe('browser architecture contracts', () => {
 
     expect(byId.get('west-nyack')?.briqWidget?.domain).toBe('timemission-palisades');
     expect(byId.get('antwerp')?.externalUrl).toBe('https://timemission.eu/antwerp');
-    expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu');
+    expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu/brussels');
+    expect(byId.get('brussels')?.navLabel).toBe('Belgium - Brussels');
   });
 
   it('TMConsent.update notifies document and window listeners with the same state', () => {
@@ -276,8 +277,11 @@ describe('browser architecture contracts', () => {
           {
             id: 'antwerp',
             slug: 'antwerp',
+            shortName: 'Antwerp',
+            region: 'europe',
             status: 'open',
             externalUrl: 'https://timemission.eu/antwerp',
+            navLabel: 'Belgium - Antwerp',
             bookingUrl: 'https://experience.example/antwerp',
             groupFormUrls: {
               corporate: 'https://experience.example/antwerp-corporate',
@@ -286,8 +290,11 @@ describe('browser architecture contracts', () => {
           {
             id: 'brussels',
             slug: 'brussels',
+            shortName: 'Brussels',
+            region: 'europe',
             status: 'coming-soon',
-            externalUrl: 'https://timemission.eu',
+            externalUrl: 'https://timemission.eu/brussels',
+            navLabel: 'Belgium - Brussels',
             bookingUrl: '',
             giftCardUrl: '',
             groupFormUrls: {},
@@ -372,8 +379,10 @@ describe('browser architecture contracts', () => {
       });
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'houston')?.label)
       .toBe('Houston (Opening June 5, 2026)');
-    expect(window.LocationContext.listTicketOptions().some((opt) => opt.value === 'antwerp')).toBe(false);
-    expect(window.LocationContext.listTicketOptions().some((opt) => opt.value === 'brussels')).toBe(false);
+    expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'antwerp')?.label)
+      .toBe('Belgium - Antwerp');
+    expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'brussels')?.label)
+      .toBe('Belgium - Brussels (Coming Soon)');
     expect(window.TMBooking.getDestination({ kind: 'groups', locationId: 'houston' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'houston' }))
@@ -404,10 +413,10 @@ describe('browser architecture contracts', () => {
         externalLocation: true,
       });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'brussels' }))
-      .toBe('https://timemission.eu');
+      .toBe('https://timemission.eu/brussels');
     expect(window.LocationContext.getOverlayView('brussels').cta)
       .toMatchObject({
-        href: 'https://timemission.eu',
+        href: 'https://timemission.eu/brussels',
         bookingUrl: '',
         trigger: false,
         externalLocation: true,

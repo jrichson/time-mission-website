@@ -293,8 +293,28 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('manassas');
   await expect(page.locator('#locationText')).toContainText('Manassas');
 
-  await expect(page.locator('#ticketLocation option[value="antwerp"]')).toHaveCount(0);
-  await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveCount(0);
+  await expect(page.locator('#ticketLocation option[value="antwerp"]')).toHaveText('Belgium - Antwerp');
+  await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveText('Belgium - Brussels (Coming Soon)');
+});
+
+test('ticket panel redirects Europe selections to location-specific EU pages with UTMs', async ({ page }) => {
+  await page.route('https://timemission.eu/**', async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>Time Mission EU</title><h1>Time Mission EU</h1>',
+    });
+  });
+
+  await page.goto('/?utm_source=paid&utm_campaign=eu');
+  await page.locator('.hero-cta .btn-tickets').click();
+  await page.locator('#ticketLocation').selectOption('antwerp');
+  await expect(page).toHaveURL('https://timemission.eu/antwerp?utm_source=paid&utm_campaign=eu');
+
+  await page.goto('/?utm_source=paid&utm_campaign=eu');
+  await page.locator('.hero-cta .btn-tickets').click();
+
+  await page.locator('#ticketLocation').selectOption('brussels');
+  await expect(page).toHaveURL('https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
 });
 
 test('ticket panel Continue to Booking opens Roller checkout without a location-page hop', async ({ page }) => {
@@ -395,7 +415,7 @@ test('desktop location selector previews Europe venues while keeping them extern
   await page.locator('#locationBtn').click();
 
   const antwerp = page.locator('#locationDropdown a[href="https://timemission.eu/antwerp"]').first();
-  const brussels = page.locator('#locationDropdown a[href="https://timemission.eu"]').first();
+  const brussels = page.locator('#locationDropdown a[href="https://timemission.eu/brussels"]').first();
 
   await expect(antwerp).toHaveAttribute('data-tm-external-location', 'true');
   await expect(antwerp).toHaveAttribute('data-city', 'Antwerp');
@@ -408,10 +428,11 @@ test('desktop location selector previews Europe venues while keeping them extern
   await expect(brussels).toHaveAttribute('data-tm-external-location', 'true');
   await expect(brussels).toHaveAttribute('data-city', 'Brussels');
   await expect(brussels).toHaveAttribute('data-tm-location-slug', 'brussels');
+  await expect(brussels).toContainText('Belgium - Brussels');
   await brussels.hover();
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Brussels');
   await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit EU Site');
-  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu');
+  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/brussels');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });
 
@@ -424,7 +445,7 @@ test('Europe location links preserve tracking params without becoming local sele
   await expect(page.locator('#locationDropdown a[data-tm-external-location="true"]').first())
     .toHaveAttribute('href', 'https://timemission.eu/antwerp?utm_source=paid&utm_campaign=spring');
   await expect(page.locator('#locationDropdown a[data-tm-external-location="true"]').nth(1))
-    .toHaveAttribute('href', 'https://timemission.eu?utm_source=paid&utm_campaign=spring');
+    .toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=spring');
 });
 
 test('hard refresh on shared pages clears stale saved location', async ({ page }) => {

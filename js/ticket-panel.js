@@ -48,9 +48,7 @@
         if (context && typeof context.listTicketOptions === 'function') {
             options = context.listTicketOptions();
         } else if (window.TM && Array.isArray(window.TM.locations)) {
-            options = window.TM.locations.filter(function (loc) {
-                return !loc.externalUrl;
-            }).map(function (loc) {
+            options = window.TM.locations.map(function (loc) {
                 var suffix = '';
                 if (loc.status === 'coming-soon') {
                     var openingLabel = openingLabelForLocation(loc);
@@ -62,7 +60,9 @@
                 }
                 return {
                     value: loc.id,
-                    label: loc.shortName + suffix,
+                    label: (loc.region === 'europe'
+                        ? (loc.navLabel || loc.shortName || loc.name || loc.id)
+                        : (loc.shortName || loc.name || loc.id)) + suffix,
                 };
             });
         }

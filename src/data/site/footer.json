@@ -24,8 +24,8 @@
         { "label": "All Locations", "href": "/locations" },
         { "label": "Mount Prospect", "href": "/mount-prospect" },
         { "label": "Philadelphia", "href": "/philadelphia" },
-        { "label": "Antwerp", "href": "https://timemission.eu/antwerp" },
-        { "label": "Brussels", "href": "https://timemission.eu" }
+        { "label": "Belgium - Antwerp", "href": "https://timemission.eu/antwerp" },
+        { "label": "Belgium - Brussels", "href": "https://timemission.eu/brussels" }
       ]
     }
   ]

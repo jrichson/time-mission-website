@@ -62,7 +62,7 @@ const LOCATIONS_US = [
 ];
 const LOCATIONS_EU: LinkEntry[] = [
     { canonicalPath: '/antwerp', href: 'https://timemission.eu/antwerp' },
-    { canonicalPath: '/brussels', href: 'https://timemission.eu' },
+    { canonicalPath: '/brussels', href: 'https://timemission.eu/brussels' },
 ];
 const GROUP_PAGES = [
     '/groups/birthdays',

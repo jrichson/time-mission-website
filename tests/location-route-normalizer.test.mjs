@@ -65,7 +65,7 @@ describe('location route normalizer', () => {
     expect(entriesWithAlternates).toHaveLength(8);
     expect(resolveLocationCanonicalPath('/R1-indoor-karting')).toBe('/lincoln');
     expect(resolveLocationCanonicalPath('/Palisades-center')).toBe('/west-nyack');
-    expect(resolveLocationCanonicalPath('/Terminal1')).toBe('https://timemission.eu');
+    expect(resolveLocationCanonicalPath('/Terminal1')).toBe('https://timemission.eu/brussels');
     expect(resolveLocationCanonicalPath('/Manassas-mall')).toBe('/manassas');
     expect(resolveLocationCanonicalPath('/Philly')).toBe('/philadelphia');
     expect(resolveLocationCanonicalPath('/Mt-Prospect')).toBe('/mount-prospect');
@@ -86,11 +86,11 @@ describe('location route normalizer', () => {
     expect(resolveLocationRedirectUrl('https://timemission.com/antwerp/groups/corporate?utm_source=test'))
       .toBe('https://timemission.eu/antwerp?utm_source=test');
     expect(resolveLocationRedirectUrl('https://timemission.com/brussels?utm_source=test'))
-      .toBe('https://timemission.eu/?utm_source=test');
+      .toBe('https://timemission.eu/brussels?utm_source=test');
     expect(resolveLocationRedirectUrl('https://timemission.com/Terminal1/missions?utm_source=test'))
-      .toBe('https://timemission.eu/?utm_source=test');
+      .toBe('https://timemission.eu/brussels?utm_source=test');
     expect(resolveLocationRouteRequest('https://timemission.com/brussels/css/nav.css?v=17'))
-      .toEqual({ redirectUrl: 'https://timemission.eu/?v=17', assetPath: '' });
+      .toEqual({ redirectUrl: 'https://timemission.eu/brussels?v=17', assetPath: '' });
   });
 
   it('passes through already canonical or unrelated paths', () => {

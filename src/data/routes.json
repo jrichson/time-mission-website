@@ -291,7 +291,7 @@
       "id": "brussels",
       "canonicalPath": "/brussels",
       "locationAlternate": "terminal1",
-      "externalUrl": "https://timemission.eu",
+      "externalUrl": "https://timemission.eu/brussels",
       "legacySources": [
         "/brussels.html"
       ],
@@ -510,14 +510,14 @@
       "allowExternal": true,
       "externalAllowlistReason": "EU venues live on timemission.eu and should not resolve to US-hosted location pages.",
       "source": "/terminal1",
-      "target": "https://timemission.eu",
+      "target": "https://timemission.eu/brussels",
       "status": 301
     },
     {
       "allowExternal": true,
       "externalAllowlistReason": "EU venues live on timemission.eu and should not resolve to US-hosted location pages.",
       "source": "/terminal-1",
-      "target": "https://timemission.eu",
+      "target": "https://timemission.eu/brussels",
       "status": 301
     },
     {

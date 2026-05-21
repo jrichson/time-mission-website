@@ -17,7 +17,7 @@
 /West-Nyack /west-nyack 301
 /WestNyack /west-nyack 301
 /Houston /houston 301
-/Brussels https://timemission.eu 301
+/Brussels https://timemission.eu/brussels 301
 /Dallas /dallas 301
 /Orland-Park /orland-park 301
 /OrlandPark /orland-park 301
@@ -46,11 +46,11 @@
 /lincoln.html /lincoln 301
 /manassas.html /manassas 301
 /antwerp https://timemission.eu/antwerp 301
-/brussels https://timemission.eu 301
+/brussels https://timemission.eu/brussels 301
 /antwerp.html https://timemission.eu/antwerp 301
 /orland-park.html /orland-park 301
 /dallas.html /dallas 301
-/brussels.html https://timemission.eu 301
+/brussels.html https://timemission.eu/brussels 301
 /privacy.html /privacy 301
 /terms.html /terms 301
 /code-of-conduct.html /code-of-conduct 301
@@ -87,8 +87,8 @@
 /r1indoorkarting /lincoln 301
 /palisades-center /west-nyack 301
 /palisadescenter /west-nyack 301
-/terminal1 https://timemission.eu 301
-/terminal-1 https://timemission.eu 301
+/terminal1 https://timemission.eu/brussels 301
+/terminal-1 https://timemission.eu/brussels 301
 /manassas-mall /manassas 301
 /manassasmall /manassas 301
 /philly /philadelphia 301

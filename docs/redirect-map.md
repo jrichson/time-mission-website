@@ -14,11 +14,11 @@ Preview deployments should be used to confirm redirect Location headers and stat
 
 ## Location Route Normalization
 
-The public canonical US location paths are `/lincoln`, `/west-nyack`, `/manassas`, `/philadelphia`, `/mount-prospect`, `/houston`, and `/orland-park`. EU venue paths are external handoffs: `/antwerp` redirects to `https://timemission.eu/antwerp`, and `/brussels` redirects to `https://timemission.eu` until the Brussels page is live.
+The public canonical US location paths are `/lincoln`, `/west-nyack`, `/manassas`, `/philadelphia`, `/mount-prospect`, `/houston`, and `/orland-park`. EU venue paths are external handoffs: `/antwerp` redirects to `https://timemission.eu/antwerp`, and `/brussels` redirects to `https://timemission.eu/brussels`.
 
 Each location has at most one official alternate source. The current official alternates are `/r1-indoor-karting`, `/palisades-center`, `/terminal1`, `/manassas-mall`, `/philly`, `/mt-prospect`, `/experience-factory-antwerp`, and `/marq-e`. Orland Park has no official alternate.
 
-Static `_redirects` lists the normal lowercase variants for SEO clarity. The Cloudflare Pages Function applies the legacy server behavior for direct location paths by lowercasing the first path segment and ignoring dashes before redirecting to the canonical location URL or external EU venue URL. For example `/MountProspect`, `/Mount-Prospect`, and `/mOuNt-Pros-pect` all redirect to `/mount-prospect`, while `/Terminal1` redirects to `https://timemission.eu`.
+Static `_redirects` lists the normal lowercase variants for SEO clarity. The Cloudflare Pages Function applies the legacy server behavior for direct location paths by lowercasing the first path segment and ignoring dashes before redirecting to the canonical location URL or external EU venue URL. For example `/MountProspect`, `/Mount-Prospect`, and `/mOuNt-Pros-pect` all redirect to `/mount-prospect`, while `/Terminal1` redirects to `https://timemission.eu/brussels`.
 
 ## Query Strings
 

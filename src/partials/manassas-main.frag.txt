@@ -576,8 +576,8 @@
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                         </button>
                         <div class="footer-location-list">
-                            <a href="https://timemission.eu/antwerp">Antwerp</a>
-                            <a href="https://timemission.eu" class="coming-soon">Brussels <span class="coming-soon-tag">Coming Soon</span></a>
+                            <a href="https://timemission.eu/antwerp">Belgium - Antwerp</a>
+                            <a href="https://timemission.eu/brussels" class="coming-soon">Belgium - Brussels <span class="coming-soon-tag">Coming Soon</span></a>
                         </div>
                     </div>
                 </div>

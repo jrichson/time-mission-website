@@ -60,7 +60,7 @@ export const LOCATION_ROUTE_ENTRIES = [
   {
     "canonicalPath": "/brussels",
     "compatibilitySources": [],
-    "externalUrl": "https://timemission.eu",
+    "externalUrl": "https://timemission.eu/brussels",
     "officialAlternate": "terminal1"
   },
   {

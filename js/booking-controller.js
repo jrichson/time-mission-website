@@ -1108,9 +1108,34 @@
             syncCtaElementToIntent(ctaBtn, intent);
         }
 
+        function redirectExternalTicketSelection() {
+            if (!locSelect || panelIntent.kind !== 'tickets') return false;
+            var loc = selectedLocation();
+            if (!loc || !BookingJourney.getExternalLocationUrl(loc)) return false;
+            var intent = resolveBookingIntent({
+                kind: panelIntent.kind,
+                groupType: panelIntent.groupType,
+                locationId: locSelect.value,
+                pageLocationSlug: pageLocationSlug,
+                preferLocationPageFlow: false,
+                resolveHref: true,
+            });
+            navigate({
+                source: 'ticket_panel_external_location',
+                ctaId: 'ticket_panel_external_location',
+                href: intent.href,
+                kind: intent.kind,
+                groupType: intent.groupType,
+                locationId: locSelect.value,
+                pageLocationSlug: pageLocationSlug,
+            });
+            return true;
+        }
+
         if (locSelect) {
             locSelect.addEventListener('change', function () {
                 selectSiteLocation(locSelect.value, 'ticket_panel_dropdown');
+                if (redirectExternalTicketSelection()) return;
                 syncCtaHref();
             });
         }

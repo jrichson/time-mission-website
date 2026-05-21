@@ -65,14 +65,14 @@ describe('Public URL Surface', () => {
     expect(redirects).toEqual(expect.arrayContaining([
       { source: '/r1-indoor-karting', target: '/lincoln', status: 301 },
       { source: '/palisades-center', target: '/west-nyack', status: 301 },
-      { source: '/terminal1', target: 'https://timemission.eu', status: 301 },
+      { source: '/terminal1', target: 'https://timemission.eu/brussels', status: 301 },
       { source: '/manassas-mall', target: '/manassas', status: 301 },
       { source: '/philly', target: '/philadelphia', status: 301 },
       { source: '/mt-prospect', target: '/mount-prospect', status: 301 },
       { source: '/experience-factory-antwerp', target: 'https://timemission.eu/antwerp', status: 301 },
       { source: '/marq-e', target: '/houston', status: 301 },
       { source: '/antwerp.html', target: 'https://timemission.eu/antwerp', status: 301 },
-      { source: '/brussels.html', target: 'https://timemission.eu', status: 301 },
+      { source: '/brussels.html', target: 'https://timemission.eu/brussels', status: 301 },
     ]));
   });
 });

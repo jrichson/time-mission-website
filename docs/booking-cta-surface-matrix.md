@@ -31,9 +31,10 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | Orland Park | Roller checkout URL | Opens through Roller behavior. |
 | Lincoln | `https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959` | External provider navigation. |
 | Antwerp | `https://timemission.eu/antwerp` | Intentional EU external site handoff. |
+| Brussels | `https://timemission.eu/brussels` | Intentional EU external site handoff. |
 | West Nyack from any page | Briq widget inside the current ticket panel | Uses `data-domain="timemission-palisades"` and hidden Briq main button. |
 | Future multiple-Briq setup | Venue page reload | If more than one Briq domain is configured, the controller routes to the selected venue page before opening so the widget initializes with the correct domain. |
-| Dallas / Brussels | `/contact?location=<slug>&type=updates` | Coming-soon lead flow. |
+| Dallas | `/contact?location=<slug>&type=updates` | Coming-soon lead flow. |
 | `/missions` mission-card and final Book Now CTAs | Booking trigger | Uses the same ticket-booking flow as the hero/nav CTAs. |
 
 ## Group Inquiries

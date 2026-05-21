@@ -261,7 +261,11 @@
             const loc = TM.get(id);
             if (!loc) return;
             if (!isSelectableLocation(loc)) {
+                TM.current = null;
                 clearStoredLocation();
+                TM.updateDOM();
+                TM._emitChange();
+                document.dispatchEvent(new CustomEvent('tm:location-changed', { detail: null }));
                 return;
             }
             TM.current = loc;
