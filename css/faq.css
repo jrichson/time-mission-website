@@ -1,4 +1,4 @@
-/* Unified FAQ Styles — matches .mini-faq design on index.html / location pages */
+/* Unified FAQ Styles */
 
 .faq-section {
     display: flex;
@@ -16,28 +16,50 @@
     text-transform: uppercase;
 }
 
-.faq-list {
+.faq-list,
+.mini-faq-grid {
     display: flex;
     flex-direction: column;
     gap: 0.9rem;
 }
 
-.faq-item {
+.mini-faq {
+    overflow: hidden;
+}
+
+.mini-faq::after {
+    display: none;
+}
+
+.mini-faq-header {
+    max-width: 44rem;
+    margin: 0 auto 2rem;
+}
+
+.mini-faq-grid {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-item,
+.mini-faq-item {
     background: var(--dark);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     overflow: hidden;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
     position: relative;
     z-index: 2;
     margin-bottom: 0;
 }
 
-.faq-item:hover {
+.faq-item:hover,
+.mini-faq-item:hover {
     border-color: rgba(255, 107, 44, 0.2);
 }
 
-.faq-question {
+.faq-question,
+.mini-faq-q {
     width: 100%;
     display: flex;
     align-items: center;
@@ -51,20 +73,28 @@
     gap: 1rem;
 }
 
-.faq-question:hover {
+.faq-question:hover,
+.mini-faq-q:hover {
     background: transparent;
 }
 
 .faq-question h3,
 .faq-question h4,
 .faq-question-text,
-.faq-question {
+.faq-question,
+.mini-faq-q {
     font-family: var(--body);
     font-size: 1rem;
     font-weight: 500;
     color: var(--white);
     margin: 0;
     line-height: 1.4;
+}
+
+.faq-question > span:first-child,
+.mini-faq-q > span:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .faq-question h3,
@@ -93,7 +123,8 @@
 }
 
 .faq-icon svg,
-.faq-question > svg {
+.faq-question > svg,
+.mini-faq-q > svg {
     display: block;
     width: 18px;
     height: 18px;
@@ -101,7 +132,7 @@
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.22s ease-out;
     transform-origin: 50% 50%;
     flex-shrink: 0;
     margin: 0;
@@ -120,29 +151,36 @@
    (3) <button class="faq-question"><svg>…</svg></button>  (bare svg fallback) */
 .faq-item.active .faq-icon > svg,
 .faq-item.active svg.faq-icon,
-.faq-item.active .faq-question > svg {
+.faq-item.active .faq-question > svg,
+.mini-faq-item.open .mini-faq-q > svg {
     transform: rotate(45deg);
     color: var(--orange);
 }
 
-.faq-answer {
+.faq-answer,
+.mini-faq-a {
     display: grid;
     grid-template-rows: 0fr;
     overflow: hidden;
     transition:
-        grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-        opacity 0.32s ease;
+        grid-template-rows 0.22s ease-out,
+        opacity 0.18s ease;
     opacity: 0;
+    visibility: hidden;
 }
 
-.faq-item.active .faq-answer {
+.faq-item.active .faq-answer,
+.mini-faq-item.open .mini-faq-a {
     grid-template-rows: 1fr;
     opacity: 1;
+    visibility: visible;
 }
 
 .faq-answer-content,
-.faq-answer > p {
+.faq-answer > p,
+.mini-faq-a > p {
     min-height: 0;
+    overflow: hidden;
     padding: 0 1.5rem 1.25rem;
     color: var(--gray);
     line-height: 1.6;
@@ -157,31 +195,37 @@
 .faq-answer-content p {
     margin: 0;
 }
-        @media (prefers-reduced-motion: reduce) {
-    .faq-answer {
+
+@media (prefers-reduced-motion: reduce) {
+    .faq-answer,
+    .mini-faq-a {
         transition: none;
     }
 
     .faq-icon,
     .faq-icon svg,
-    .faq-question > svg {
+    .faq-question > svg,
+    .mini-faq-q > svg {
         transition: none;
     }
 }
 
 @media (max-width: 768px) {
-    .faq-question {
+    .faq-question,
+    .mini-faq-q {
         padding: 1.25rem 1.25rem;
     }
 
     .faq-question h3,
     .faq-question h4,
-    .faq-question-text {
+    .faq-question-text,
+    .mini-faq-q {
         font-size: 0.95rem;
     }
 
     .faq-answer-content,
-    .faq-answer > p {
+    .faq-answer > p,
+    .mini-faq-a > p {
         padding: 0 1.25rem 1.25rem;
     }
 }
@@ -190,20 +234,31 @@
    Reduce horizontal padding on accordion rows so question text doesn't wrap to 4+ lines on iPhone SE.
    Keep vertical padding ≥ 14px so combined with 18px icon and line-height the row stays ≥ 44px tap target. */
 @media (max-width: 480px) {
-    .faq-question {
+    .mini-faq {
+        padding: 3.5rem 1rem;
+    }
+
+    .mini-faq-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .faq-question,
+    .mini-faq-q {
         padding: 1rem 1rem;
         gap: 0.75rem;
     }
 
     .faq-question h3,
     .faq-question h4,
-    .faq-question-text {
+    .faq-question-text,
+    .mini-faq-q {
         font-size: 0.9rem;
         line-height: 1.35;
     }
 
     .faq-answer-content,
-    .faq-answer > p {
+    .faq-answer > p,
+    .mini-faq-a > p {
         padding: 0 1rem 1rem;
         font-size: 0.85rem;
     }

@@ -555,19 +555,40 @@
     // MINI FAQ ACCORDION (index variant — sets aria-expanded for a11y)
     // ==========================================
     function initMiniFaq() {
-        document.querySelectorAll('.mini-faq-q').forEach(function (btn) {
+        function setMiniFaqState(item, isOpen) {
+            var q = item.querySelector('.mini-faq-q');
+            var panel = item.querySelector('.mini-faq-a');
+            item.classList.toggle('open', isOpen);
+            if (q) q.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            if (panel) panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        }
+
+        document.querySelectorAll('.mini-faq-q').forEach(function (btn, index) {
+            var item = btn.closest ? btn.closest('.mini-faq-item') : btn.parentElement;
+            var panel = item ? item.querySelector('.mini-faq-a') : null;
+            if (!item || !panel) return;
+
+            if (!btn.id) btn.id = 'mini-faq-trigger-' + (index + 1);
+            if (!panel.id) panel.id = 'mini-faq-panel-' + (index + 1);
+
+            btn.setAttribute('type', 'button');
+            btn.setAttribute('aria-controls', panel.id);
+            panel.setAttribute('role', 'region');
+            panel.setAttribute('aria-labelledby', btn.id);
+            setMiniFaqState(item, item.classList.contains('open'));
+
+            btn.querySelectorAll('svg').forEach(function (icon) {
+                icon.setAttribute('aria-hidden', 'true');
+                icon.setAttribute('focusable', 'false');
+            });
+
             btn.addEventListener('click', function () {
-                var item = btn.parentElement;
-                if (!item) return;
                 var wasOpen = item.classList.contains('open');
                 document.querySelectorAll('.mini-faq-item').forEach(function (i) {
-                    i.classList.remove('open');
-                    var q = i.querySelector('.mini-faq-q');
-                    if (q) q.setAttribute('aria-expanded', 'false');
+                    setMiniFaqState(i, false);
                 });
                 if (!wasOpen) {
-                    item.classList.add('open');
-                    btn.setAttribute('aria-expanded', 'true');
+                    setMiniFaqState(item, true);
                 }
             });
         });
