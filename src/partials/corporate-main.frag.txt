@@ -121,7 +121,7 @@
                         <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
                     </div>
                     <div class="faq-answer">
-                        <div class="faq-answer-content">From 8-person team offsites up to 300+ full-venue buyouts, depending on the location. Send us your headcount and we'll confirm what's possible at your chosen venue.</div>
+                        <div class="faq-answer-content">From 8-person team offsites up to 125 full-venue buyouts, depending on the location. Send us your headcount and we'll confirm what's possible at your chosen venue.</div>
                     </div>
                 </div>
 

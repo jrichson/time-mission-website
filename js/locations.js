@@ -55,7 +55,7 @@
         }) || null;
     }
 
-    function isSelectableLocation(loc) {
+    function isLocationScopedLocation(loc) {
         return !!(loc && !loc.externalUrl);
     }
 
@@ -233,7 +233,7 @@
         },
 
         getSavedSlug() {
-            const loc = isSelectableLocation(TM.current) ? TM.current : null;
+            const loc = isLocationScopedLocation(TM.current) ? TM.current : null;
             return loc ? normalizeLocationId(loc.slug || loc.id || '') : '';
         },
 
@@ -260,14 +260,6 @@
             }
             const loc = TM.get(id);
             if (!loc) return;
-            if (!isSelectableLocation(loc)) {
-                TM.current = null;
-                clearStoredLocation();
-                TM.updateDOM();
-                TM._emitChange();
-                document.dispatchEvent(new CustomEvent('tm:location-changed', { detail: null }));
-                return;
-            }
             TM.current = loc;
             clearStoredLocation();
             TM.updateDOM();
@@ -397,7 +389,7 @@
         const pageLocationSlug = getPageLocationSlug();
         const pageLocation = pageLocationSlug ? TM.get(pageLocationSlug) : null;
 
-        if (isSelectableLocation(pageLocation)) {
+        if (pageLocation) {
             TM.current = pageLocation;
             TM._emitChange();
         } else {

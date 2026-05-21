@@ -143,7 +143,7 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQ
         </main>
         <footer role="contentinfo">
             <slot name="footer">
-                <SiteFooter />
+                <SiteFooter pageLocation={pageLocation} />
             </slot>
         </footer>
         <aside class="page-last-updated" aria-label="Page freshness">

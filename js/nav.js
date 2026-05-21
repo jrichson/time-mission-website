@@ -143,6 +143,7 @@
         const context = getLocationContext();
         const loc = context && typeof context.getCurrent === 'function' ? context.getCurrent() : null;
         if (!loc) return '';
+        if (loc.externalUrl) return '';
         return normalizeLocation(loc.slug || loc.id || loc.shortName || loc.name || '');
     }
 
@@ -407,13 +408,20 @@
                 syncLocationSelectionLinks();
                 const cityName = link.dataset.city;
                 const slug = getLocationSlug(link);
-                if (cityName && !isExternalLocationLink(link)) {
+                if (cityName) {
                     if (!isSameWindowNavigationClick(e, link)) {
                         closeLocationOverlay();
                         return;
                     }
 
                     const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
+                    if (isExternalLocationLink(link)) {
+                        e.preventDefault();
+                        syncAllLocations(cityName, slug, overlayTrack);
+                        closeLocationOverlay();
+                        return;
+                    }
+
                     syncAllLocations(cityName, slug, overlayTrack);
                 }
 

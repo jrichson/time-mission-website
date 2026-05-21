@@ -132,7 +132,7 @@
                         <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
                     </div>
                     <div class="faq-answer">
-                        <div class="faq-answer-content">From 10-person small teams up to 300+ full-venue buyouts, depending on the location. Let us know your count and we'll confirm what's possible.</div>
+                        <div class="faq-answer-content">From 10-person small teams up to 125 full-venue buyouts, depending on the location. Let us know your count and we'll confirm what's possible.</div>
                     </div>
                 </div>
 

@@ -3,14 +3,26 @@
  * Full-width footer matching legacy `footer-grid` pages (index, FAQ, contact, etc.).
  * Keeps structure in sync with `src/partials/faq-footer.frag.txt`.
  */
-import { allLocations } from '../data/locations';
-import { locationHref, locationStatusBadge } from '../lib/location-view';
+import { allLocations, type LocationRecord } from '../data/locations';
+import { locationContactHref, locationHref, locationStatusBadge } from '../lib/location-view';
+
+interface Props {
+    pageLocation?: LocationRecord | null;
+}
 
 const year = new Date().getFullYear();
+const { pageLocation = null } = Astro.props;
 
 function openingLabelFor(slug: string) {
     const loc = allLocations.find((entry) => entry.slug === slug || entry.id === slug);
     return loc ? locationStatusBadge(loc) : '';
+}
+
+function contactHrefForLocation(loc: LocationRecord | null): string {
+    if (!loc) return '/contact';
+    const email = String(loc.contact.email || '').trim();
+    if (email) return `mailto:${email}`;
+    return locationContactHref(loc);
 }
 
 const houstonOpeningLabel = openingLabelFor('houston');
@@ -21,6 +33,8 @@ const antwerpHref = antwerp ? locationHref(antwerp) : '/antwerp';
 const brusselsHref = brussels ? locationHref(brussels) : '/brussels';
 const antwerpLabel = antwerp?.navLabel || 'Belgium - Antwerp';
 const brusselsLabel = brussels?.navLabel || 'Belgium - Brussels';
+const brusselsOpeningLabel = brussels ? locationStatusBadge(brussels) : '';
+const contactHref = contactHrefForLocation(pageLocation);
 ---
 
 <footer class="footer">
@@ -67,7 +81,7 @@ const brusselsLabel = brussels?.navLabel || 'Belgium - Brussels';
         <div class="footer-column">
             <h3 class="footer-title">INFO</h3>
             <ul class="footer-links">
-                <li><a href="/contact">Contact Us</a></li>
+                <li><a href={contactHref}>Contact Us</a></li>
                 <li><a href="/waiver">Waiver</a></li>
                 <li><a href="/licensing">Licensing</a></li>
             </ul>
@@ -106,9 +120,9 @@ const brusselsLabel = brussels?.navLabel || 'Belgium - Brussels';
                     </button>
                     <div class="footer-location-list">
                         <a href={antwerpHref}>{antwerpLabel}</a>
-                        <a href={brusselsHref} class="coming-soon"
-                            >{brusselsLabel} <span class="coming-soon-tag">Coming Soon</span></a
-                        >
+                        <a href={brusselsHref} class={brusselsOpeningLabel ? 'coming-soon' : undefined}>
+                            {brusselsLabel} {brusselsOpeningLabel && <span class="coming-soon-tag">{brusselsOpeningLabel}</span>}
+                        </a>
                     </div>
                 </div>
             </div>

@@ -94,13 +94,13 @@
   },
   "waivers": {
     "manassas": "https://waiver.roller.app/TimeMissionManassasMall",
-    "mount-prospect": "https://waiver.roller.app/TimeMissionManassasMall",
+    "mount-prospect": "https://waiver.roller.app/TimeMissionMountProspect/home",
     "philadelphia": "https://waiver.roller.app/TimeMissionPhiladelphiaPA",
     "west-nyack": "",
     "lincoln": "",
     "antwerp": "",
     "houston": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
-    "orland-park": "https://book.orlandpark.timemission.com/giftcards/en-us/products",
+    "orland-park": "https://waiver.roller.app/TimeMissionOrlandPark/home",
     "dallas": ""
   }
 }

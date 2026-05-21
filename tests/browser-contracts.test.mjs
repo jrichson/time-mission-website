@@ -183,6 +183,8 @@ describe('browser architecture contracts', () => {
     expect(byId.get('antwerp')?.externalUrl).toBe('https://timemission.eu/antwerp');
     expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu/brussels');
     expect(byId.get('brussels')?.navLabel).toBe('Belgium - Brussels');
+    expect(byId.get('brussels')?.openingDate).toBe('2026-06-18');
+    expect(byId.get('brussels')?.openingLabel).toBe('Opening June 18, 2026');
   });
 
   it('TMConsent.update notifies document and window listeners with the same state', () => {
@@ -293,6 +295,8 @@ describe('browser architecture contracts', () => {
             shortName: 'Brussels',
             region: 'europe',
             status: 'coming-soon',
+            openingDate: '2026-06-18',
+            openingLabel: 'Opening June 18, 2026',
             externalUrl: 'https://timemission.eu/brussels',
             navLabel: 'Belgium - Brussels',
             bookingUrl: '',
@@ -382,7 +386,7 @@ describe('browser architecture contracts', () => {
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'antwerp')?.label)
       .toBe('Belgium - Antwerp');
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'brussels')?.label)
-      .toBe('Belgium - Brussels (Coming Soon)');
+      .toBe('Belgium - Brussels (Opening June 18, 2026)');
     expect(window.TMBooking.getDestination({ kind: 'groups', locationId: 'houston' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'houston' }))
@@ -423,7 +427,8 @@ describe('browser architecture contracts', () => {
       });
     window.localStorage.setItem('tm_location', 'antwerp');
     window.LocationContext.select('antwerp');
-    expect(window.LocationContext.getCurrent()).toBeNull();
+    expect(window.LocationContext.getCurrent()?.slug).toBe('antwerp');
+    expect(window.LocationContext.getSavedSlug()).toBe('');
     expect(window.localStorage.getItem('tm_location')).toBeNull();
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'west-nyack' }))
       .toBe('#briq-widget-container');

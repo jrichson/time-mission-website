@@ -141,7 +141,7 @@
                         <div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
                     </div>
                     <div class="faq-answer">
-                        <div class="faq-answer-content">Ages 6 and up. Kids 6–13 need an adult in the group. Ages 14+ can play on their own. Adult birthdays and milestone events are a big part of what we do too.</div>
+                        <div class="faq-answer-content">Time Mission is perfect for ages 6 to 106. Kids 6–13 need an adult in the group. Ages 14+ can play on their own. Adult birthdays and milestone events are a big part of what we do too.</div>
                     </div>
                 </div>
 

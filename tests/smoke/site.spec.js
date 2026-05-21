@@ -294,7 +294,7 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await expect(page.locator('#locationText')).toContainText('Manassas');
 
   await expect(page.locator('#ticketLocation option[value="antwerp"]')).toHaveText('Belgium - Antwerp');
-  await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveText('Belgium - Brussels (Coming Soon)');
+  await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveText('Belgium - Brussels (Opening June 18, 2026)');
 });
 
 test('ticket panel redirects Europe selections to location-specific EU pages with UTMs', async ({ page }) => {
@@ -408,35 +408,51 @@ test('desktop location selection keeps the current page context', async ({ page,
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });
 
-test('desktop location selector previews Europe venues while keeping them external', async ({ page, isMobile }) => {
+test('desktop location selector previews Europe venues', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop-only overlay path');
 
-  await page.goto('/');
+  await page.goto('/?utm_source=paid&utm_campaign=eu');
   await page.locator('#locationBtn').click();
 
-  const antwerp = page.locator('#locationDropdown a[href="https://timemission.eu/antwerp"]').first();
-  const brussels = page.locator('#locationDropdown a[href="https://timemission.eu/brussels"]').first();
+  const antwerp = page.locator('#locationDropdown a[data-tm-location-slug="antwerp"]').first();
+  const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
 
   await expect(antwerp).toHaveAttribute('data-tm-external-location', 'true');
   await expect(antwerp).toHaveAttribute('data-city', 'Antwerp');
-  await expect(antwerp).toHaveAttribute('data-tm-location-slug', 'antwerp');
+  await expect(antwerp).toHaveAttribute('href', 'https://timemission.eu/antwerp?utm_source=paid&utm_campaign=eu');
   await antwerp.hover();
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Antwerp');
   await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit EU Site');
-  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/antwerp');
+  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/antwerp?utm_source=paid&utm_campaign=eu');
 
   await expect(brussels).toHaveAttribute('data-tm-external-location', 'true');
   await expect(brussels).toHaveAttribute('data-city', 'Brussels');
-  await expect(brussels).toHaveAttribute('data-tm-location-slug', 'brussels');
+  await expect(brussels).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
   await expect(brussels).toContainText('Belgium - Brussels');
+  await expect(brussels).toContainText('Opening June 18, 2026');
   await brussels.hover();
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Brussels');
   await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit EU Site');
-  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/brussels');
+  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
+});
+
+test('desktop location selector selects Brussels without leaving the page', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'desktop-only overlay path');
+
+  await page.goto('/?utm_source=paid&utm_campaign=eu');
+  await page.locator('#locationBtn').click();
+
+  const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
+
+  await brussels.click();
+  await expect(page).toHaveURL(/\/\?utm_source=paid&utm_campaign=eu$/);
+  await expect(page.locator('#locationText')).toContainText('Brussels');
+  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('brussels');
+  await expect(page.locator('nav .btn-tickets')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });
 
-test('Europe location links preserve tracking params without becoming local selections', async ({ page, isMobile }) => {
+test('Europe location fallback links preserve tracking params', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop-only overlay path');
 
   await page.goto('/groups/corporate?utm_source=paid&utm_campaign=spring&book=1');
@@ -748,9 +764,9 @@ test('gift card page disables locations with blank gift-card audit rows', async 
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
   await page.evaluate(() => window.TM.select('antwerp'));
-  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBeNull();
-  await expect(page.locator('#giftCardBuyBtn')).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(page.locator('#giftCardLocationHint')).toContainText('Select a location');
+  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('antwerp');
+  await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('aria-disabled', 'true');
+  await expect(page.locator('#giftCardLocationHint')).toContainText('not available');
 
   for (const locationId of ['houston', 'dallas', 'west-nyack']) {
     await page.evaluate((id) => window.TM.select(id), locationId);
@@ -1107,6 +1123,21 @@ test.describe('Mobile location selector (P0-7a)', () => {
 
     await expect(page).toHaveURL(/\/philadelphia\/groups$/);
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
+  });
+
+  test('tapping an EU location selects it without leaving the current page', async ({ page }) => {
+    await page.goto('/groups?utm_source=paid&utm_campaign=eu');
+    await page.locator('#locationBtn').first().click();
+    await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
+
+    const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
+    await expect(brussels).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
+    await brussels.tap();
+
+    await expect(page).toHaveURL(/\/groups\?utm_source=paid&utm_campaign=eu$/);
+    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('brussels');
+    await expect(page.locator('#locationText')).toContainText('Brussels');
+    await expect(page.locator('nav .btn-tickets')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
   });
 });
 
