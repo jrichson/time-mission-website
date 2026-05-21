@@ -1,5 +1,5 @@
 # Time Mission — robots.txt
-# License: https://timemission.com/license.xml
+# License: https://www.timemission.com/license.xml
 
 User-agent: *
 Allow: /
@@ -45,4 +45,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://timemission.com/sitemap.xml
+Sitemap: https://www.timemission.com/sitemap.xml

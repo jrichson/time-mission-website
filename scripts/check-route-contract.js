@@ -139,8 +139,8 @@ function validateRegistry(registry, errors) {
     errors.push('registry root must be an object');
     return;
   }
-  if (registry.baseUrl !== 'https://timemission.com') {
-    errors.push(`registry.baseUrl must be https://timemission.com (got ${registry.baseUrl})`);
+  if (registry.baseUrl !== 'https://www.timemission.com') {
+    errors.push(`registry.baseUrl must be https://www.timemission.com (got ${registry.baseUrl})`);
   }
   if (!Array.isArray(registry.routes)) {
     errors.push('registry.routes must be an array');
@@ -172,6 +172,30 @@ function validateRegistry(registry, errors) {
 
     if (typeof route.sitemap !== 'boolean') {
       errors.push(`route "${route.id}" sitemap must be boolean`);
+    }
+  }
+
+  if (!Array.isArray(registry.machineReadableRoutes)) {
+    errors.push('registry.machineReadableRoutes must be an array');
+  } else {
+    for (const route of registry.machineReadableRoutes) {
+      const keys = ['id', 'canonicalPath', 'outputFile', 'sitemap'];
+      for (const k of keys) {
+        if (!(k in route)) errors.push(`machine route "${route.id || '(missing id)'}" missing key ${k}`);
+      }
+      const cp = route.canonicalPath;
+      if (typeof cp !== 'string' || !cp.startsWith('/') || cp.endsWith('/')) {
+        errors.push(`machine route "${route.id}" has invalid canonicalPath "${cp}"`);
+      }
+      if (canonicalSeen.has(cp)) errors.push(`duplicate canonicalPath "${cp}"`);
+      canonicalSeen.add(cp);
+      const out = route.outputFile;
+      if (typeof out !== 'string' || !/\.(txt|md)$/.test(out)) {
+        errors.push(`machine route "${route.id}" outputFile must end with .txt or .md`);
+      }
+      if (route.sitemap !== false) {
+        errors.push(`machine route "${route.id}" sitemap must be false`);
+      }
     }
   }
 
@@ -280,10 +304,8 @@ function validateUrlSurfaceAgainstRegistry(surface, fileRel, rawUrl, errors, lab
   ) {
     return;
   }
-  if (pathname.startsWith('https://timemission.com')) {
-    pathname = pathname.slice('https://timemission.com'.length);
-  } else if (pathname.startsWith('http://timemission.com')) {
-    pathname = pathname.slice('http://timemission.com'.length);
+  if (/^https?:\/\/(?:www\.)?timemission\.com/i.test(pathname)) {
+    pathname = pathname.replace(/^https?:\/\/(?:www\.)?timemission\.com/i, '');
   }
 
   if (!pathname.startsWith('/') && !pathname.startsWith('.')) return;

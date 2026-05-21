@@ -490,6 +490,10 @@
     window.LocationContext = LocationContext;
     window.TM = TM;
 
+    document.addEventListener('tm:language-changed', function () {
+        if (TM.current) TM.updateDOM();
+    });
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

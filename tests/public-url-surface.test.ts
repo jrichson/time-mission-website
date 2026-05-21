@@ -25,8 +25,8 @@ describe('Public URL Surface', () => {
   it('resolves canonical URLs, dynamic landing paths, and output files from one surface', () => {
     const surface = compilePublicUrlSurface(registry);
 
-    expect(surface.rootHome).toBe('https://timemission.com/');
-    expect(surface.publicUrlFor('/philadelphia')).toBe('https://timemission.com/philadelphia');
+    expect(surface.rootHome).toBe('https://www.timemission.com/');
+    expect(surface.publicUrlFor('/philadelphia')).toBe('https://www.timemission.com/philadelphia');
     expect(surface.outputFileFor('/philadelphia')).toBe('philadelphia.html');
     expect(surface.isKnownCanonical('/philadelphia')).toBe(true);
     expect(surface.isKnownCanonical('/c/summer-adventures-offer')).toBe(true);

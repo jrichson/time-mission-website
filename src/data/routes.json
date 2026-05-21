@@ -1,5 +1,5 @@
 {
-  "baseUrl": "https://timemission.com",
+  "baseUrl": "https://www.timemission.com",
   "_meta": {
     "dynamicLandingPrefix": "/c"
   },
@@ -8,19 +8,25 @@
       "id": "llms",
       "canonicalPath": "/llms.txt",
       "outputFile": "llms.txt",
-      "sitemap": true
+      "sitemap": false
+    },
+    {
+      "id": "llms-full",
+      "canonicalPath": "/llms-full.txt",
+      "outputFile": "llms-full.txt",
+      "sitemap": false
     },
     {
       "id": "ai-context",
       "canonicalPath": "/ai-context.md",
       "outputFile": "ai-context.md",
-      "sitemap": true
+      "sitemap": false
     },
     {
       "id": "pricing-md",
       "canonicalPath": "/pricing.md",
       "outputFile": "pricing.md",
-      "sitemap": true
+      "sitemap": false
     }
   ],
   "routes": [

@@ -22,7 +22,7 @@ function resolveRobotsForRoute(canonicalPath, table) {
 const routesData = loadJson('src/data/routes.json');
 const seoRoutes = loadJson('src/data/site/seo-routes.json');
 const robotsTable = loadJson('src/data/site/seo-robots.json');
-const baseUrl = routesData.baseUrl || 'https://timemission.com';
+const baseUrl = routesData.baseUrl || 'https://www.timemission.com';
 
 function toAbsolutePath(canonicalPath) {
   return canonicalPath === '/' ? `${baseUrl}/` : `${baseUrl}${canonicalPath}`;

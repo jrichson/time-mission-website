@@ -72,7 +72,20 @@ const GROUP_PAGES = [
     '/groups/holidays',
     '/groups/bachelor-ette',
 ];
-const MACHINE_READABLE = ['/ai-context.md', '/pricing.md'];
+const MACHINE_READABLE_COPY: Record<string, { label: string; description: string }> = {
+    '/llms-full.txt': {
+        label: 'Full AI context bundle',
+        description: 'Comprehensive machine-readable bundle with citation blocks, locations, FAQ facts, pricing caveats, and source links.',
+    },
+    '/ai-context.md': {
+        label: 'AI context',
+        description: 'Direct-answer markdown summary of Time Mission facts, locations, booking caveats, and citation guidance.',
+    },
+    '/pricing.md': {
+        label: 'Pricing facts',
+        description: 'Machine-readable pricing, booking, gift card, group quote, and live-checkout guidance.',
+    },
+};
 
 function bullet(baseUrl: string, entry: LinkEntry): string | null {
     const canonicalPath = typeof entry === 'string' ? entry : entry.canonicalPath;
@@ -92,14 +105,12 @@ function section(baseUrl: string, heading: string, paths: LinkEntry[]): string {
 function machineReadableSection(baseUrl: string): string {
     const registryRoutes = ((routes as typeof routes & { machineReadableRoutes?: MachineReadableRouteEntry[] })
         .machineReadableRoutes || [])
-        .filter((r) => r.sitemap === true);
-    const allowed = new Set(registryRoutes.map((r) => r.canonicalPath));
-    const lines = MACHINE_READABLE.filter((path) => allowed.has(path)).map((path) => {
-        if (path === '/ai-context.md') {
-            return `- [AI context](${abs(baseUrl, path)}): Direct-answer markdown summary of Time Mission facts, locations, booking caveats, and citation guidance.`;
-        }
-        return `- [Pricing facts](${abs(baseUrl, path)}): Machine-readable pricing, booking, gift card, group quote, and live-checkout guidance.`;
-    });
+        .filter((r) => r.canonicalPath !== '/llms.txt');
+    const lines = registryRoutes.map((route) => {
+        const copy = MACHINE_READABLE_COPY[route.canonicalPath];
+        if (!copy) return null;
+        return `- [${copy.label}](${abs(baseUrl, route.canonicalPath)}): ${copy.description}`;
+    }).filter((line): line is string => Boolean(line));
     if (lines.length === 0) return '';
     return `## Machine-Readable Context\n${lines.join('\n')}\n`;
 }

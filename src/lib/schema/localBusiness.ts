@@ -1,6 +1,6 @@
 import type { LocationRecord } from '../../data/locations';
 
-const baseUrl = 'https://timemission.com';
+const baseUrl = 'https://www.timemission.com';
 
 const dayOfWeekMap: Record<string, string> = {
     mon: 'Monday',
@@ -39,7 +39,7 @@ export interface LocalBusinessNode {
     sameAs?: string[];
 }
 
-const DEFAULT_VENUE_IMAGE = 'https://timemission.com/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
+const DEFAULT_VENUE_IMAGE = 'https://www.timemission.com/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
 const DEFAULT_PRICE_RANGE = '$$';
 
 /**

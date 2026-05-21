@@ -6,6 +6,13 @@ const errors = [];
 
 const registryPath = path.join(root, 'src/data/routes.json');
 const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+const machineReadableRoutes = registry.machineReadableRoutes || [];
+
+function routeUrl(route) {
+    return route.canonicalPath === '/'
+        ? `${registry.baseUrl}/`
+        : `${registry.baseUrl}${route.canonicalPath}`;
+}
 
 const distPath = path.join(root, 'dist', 'llms.txt');
 if (!fs.existsSync(distPath)) {
@@ -17,13 +24,12 @@ if (!fs.existsSync(distPath)) {
 const body = fs.readFileSync(distPath, 'utf8');
 
 const allowlist = new Set();
-for (const route of [...registry.routes, ...(registry.machineReadableRoutes || [])]) {
+for (const route of registry.routes) {
     if (!route.sitemap) continue;
-    const url =
-        route.canonicalPath === '/'
-            ? `${registry.baseUrl}/`
-            : `${registry.baseUrl}${route.canonicalPath}`;
-    allowlist.add(url);
+    allowlist.add(routeUrl(route));
+}
+for (const route of machineReadableRoutes) {
+    allowlist.add(routeUrl(route));
 }
 
 const nonEmptyLines = body.split(/\r?\n/).filter((l) => l.trim().length > 0);
@@ -47,10 +53,8 @@ for (const heading of ['## Direct Answer Summary', '## Key Facts', '## Machine-R
 if (!body.includes('## Citation-Ready Answer Blocks')) {
     errors.push('llms.txt must include citation-ready answer blocks');
 }
-for (const requiredUrl of [
-    'https://timemission.com/ai-context.md',
-    'https://timemission.com/pricing.md',
-]) {
+for (const route of machineReadableRoutes.filter((entry) => entry.canonicalPath !== '/llms.txt')) {
+    const requiredUrl = routeUrl(route);
     if (!body.includes(requiredUrl)) {
         errors.push(`llms.txt must reference ${requiredUrl}`);
     }
@@ -60,11 +64,37 @@ if (body.includes('/contact-thank-you')) errors.push('llms.txt must not include 
 if (body.includes('/_archive/')) errors.push('llms.txt must not include /_archive/');
 if (/\.html\b/i.test(body)) errors.push('llms.txt must not reference .html URLs');
 
-for (const file of ['ai-context.md', 'pricing.md']) {
+for (const file of machineReadableRoutes.map((route) => route.outputFile)) {
     const mdPath = path.join(root, 'dist', file);
     if (!fs.existsSync(mdPath)) {
         errors.push(`Missing ${path.relative(root, mdPath)} — run npm run build:astro first`);
     }
+}
+
+const llmsFullPath = path.join(root, 'dist', 'llms-full.txt');
+if (fs.existsSync(llmsFullPath)) {
+    const llmsFullBody = fs.readFileSync(llmsFullPath, 'utf8');
+    for (const heading of [
+        '## Citation-Ready Answer Blocks',
+        '## Complete Location Facts',
+        '## Complete FAQ Answers',
+        '## Booking And Pricing Facts',
+        '## Primary Source Index',
+        '## Machine-Readable Files',
+        '## Citation Guidance For AI Systems',
+    ]) {
+        if (!llmsFullBody.includes(heading)) {
+            errors.push(`llms-full.txt must include ${heading}`);
+        }
+    }
+    for (const route of machineReadableRoutes) {
+        const requiredUrl = routeUrl(route);
+        if (!llmsFullBody.includes(requiredUrl)) {
+            errors.push(`llms-full.txt must reference ${requiredUrl}`);
+        }
+    }
+} else {
+    errors.push('Missing dist/llms-full.txt — run npm run build:astro first');
 }
 
 const aiContextPath = path.join(root, 'dist', 'ai-context.md');
@@ -89,18 +119,41 @@ if (fs.existsSync(pricingPath)) {
     if (!pricingBody.includes('| Antwerp | https://timemission.eu/antwerp |')) {
         errors.push('pricing.md must use the external EU public URL for Antwerp');
     }
-    if (/https:\/\/timemission\.com\/(?:antwerp|brussels)\b/.test(pricingBody)) {
+    if (/https:\/\/(?:www\.)?timemission\.com\/(?:antwerp|brussels)\b/.test(pricingBody)) {
         errors.push('pricing.md must not publish on-site public URLs for EU locations');
     }
 }
 
-const urlRe = /https:\/\/timemission\.com[^\s\)`'"]+/g;
-const found = [...body.matchAll(urlRe)].map((m) => m[0]);
-for (const u of found) {
-    if (!allowlist.has(u)) {
-        errors.push(`URL not in canonical sitemap-eligible set: ${u}`);
+const crawlerChecklistPath = path.join(root, 'docs', 'ai-crawler-access-checklist.md');
+if (!fs.existsSync(crawlerChecklistPath)) {
+    errors.push('Missing docs/ai-crawler-access-checklist.md');
+} else {
+    const checklistBody = fs.readFileSync(crawlerChecklistPath, 'utf8');
+    for (const token of ['OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'Claude-User', 'Claude-SearchBot', 'Googlebot', 'Bingbot']) {
+        if (!checklistBody.includes(token)) {
+            errors.push(`ai-crawler-access-checklist.md must mention ${token}`);
+        }
+    }
+    for (const artifact of ['/robots.txt', '/llms.txt', '/llms-full.txt', '/ai-context.md', '/pricing.md']) {
+        if (!checklistBody.includes(artifact)) {
+            errors.push(`ai-crawler-access-checklist.md must mention ${artifact}`);
+        }
     }
 }
+
+const urlRe = /https:\/\/www\.timemission\.com[^\s\)`'"]+/g;
+function validateKnownUrls(label, text) {
+    const urls = [...text.matchAll(urlRe)].map((m) => m[0]);
+    for (const u of urls) {
+        if (!allowlist.has(u)) {
+            errors.push(`${label}: URL not in canonical public or machine-readable set: ${u}`);
+        }
+    }
+    return urls;
+}
+
+const found = validateKnownUrls('llms.txt', body);
+if (fs.existsSync(llmsFullPath)) validateKnownUrls('llms-full.txt', fs.readFileSync(llmsFullPath, 'utf8'));
 
 if (errors.length) {
     console.error('llms.txt check failed:');

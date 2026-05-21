@@ -15,10 +15,8 @@ function stripQueryAndHash(value) {
 function normalizeCanonicalPath(raw) {
   if (!raw || typeof raw !== 'string') return '';
   let result = stripQueryAndHash(raw.trim());
-  if (result.startsWith('https://timemission.com')) {
-    result = result.slice('https://timemission.com'.length);
-  } else if (result.startsWith('http://timemission.com')) {
-    result = result.slice('http://timemission.com'.length);
+  if (/^https?:\/\/(?:www\.)?timemission\.com/i.test(result)) {
+    result = result.replace(/^https?:\/\/(?:www\.)?timemission\.com/i, '');
   }
   if (!result.startsWith('/')) result = `/${result}`;
   if (result.length > 1 && result.endsWith('/')) result = result.slice(0, -1);

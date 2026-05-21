@@ -1,14 +1,11 @@
 ---
 import { getPublicSiteContract } from '../lib/site-contract';
 import { lazyRuntimeScripts, publicRuntimeScripts, versionedRuntimeSrc } from '../lib/public-runtime-contract';
-import i18nConfig from '../data/site/i18n.json';
-import { compileLanguageSurface, type I18nCatalog } from '../lib/i18n-surface';
 
 const siteContract = getPublicSiteContract();
 const formConfig = {
     turnstileSiteKey: String(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '').trim(),
 };
-const languageRuntimeConfig = compileLanguageSurface(i18nConfig as I18nCatalog).toRuntimeConfig();
 const lazyRuntimeConfig = lazyRuntimeScripts.map((script) => ({
     ...script,
     src: versionedRuntimeSrc(script),
@@ -22,9 +19,6 @@ const lazyRuntimeConfig = lazyRuntimeScripts.map((script) => ({
     window.__TM_FORM_CONFIG__ = formConfig;
     window.__TM_DATA_URL__ = '/data/locations.json';
     window.__TM_I18N_URL__ = '/data/i18n.json';
-</script>
-<script is:inline define:vars={{ languageRuntimeConfig }}>
-    window.__TM_I18N__ = languageRuntimeConfig;
 </script>
 {publicRuntimeScripts.map((script) => (
     <script defer is:inline src={versionedRuntimeSrc(script)}></script>

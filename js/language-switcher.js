@@ -35,6 +35,7 @@
     function applyConfig(nextConfig) {
         if (!nextConfig || typeof nextConfig !== 'object') return;
         config = nextConfig;
+        window.__TM_I18N__ = nextConfig;
         languages = Array.isArray(config.languages) ? config.languages : [];
         translations = config.translations || {};
         defaultLanguage = config.defaultLanguage || (languages[0] && languages[0].code) || 'en';

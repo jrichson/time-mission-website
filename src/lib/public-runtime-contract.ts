@@ -33,12 +33,12 @@ export interface LazyRuntimeScript {
 
 export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'progressive', src: '/js/site-progressive.js', version: 1 },
-    { id: 'language', src: '/js/language-switcher.js', version: 3 },
+    { id: 'language', src: '/js/language-switcher.js', version: 4 },
     { id: 'consent', src: '/js/consent-bridge.js', version: 1 },
     { id: 'analytics', src: '/js/analytics.js', version: 1 },
     { id: 'bookingJourney', src: '/js/booking-journey.js', version: 7 },
     { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 4 },
-    { id: 'locations', src: '/js/locations.js', version: 21 },
+    { id: 'locations', src: '/js/locations.js', version: 22 },
     { id: 'nav', src: '/js/nav.js', version: 13 },
     { id: 'bookingController', src: '/js/booking-controller.js', version: 18 },
     { id: 'ticketPanel', src: '/js/ticket-panel.js', version: 11 },

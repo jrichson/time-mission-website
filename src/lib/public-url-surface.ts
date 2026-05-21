@@ -63,7 +63,7 @@ const defaultRegistry = routesRegistry as PublicUrlRegistry;
 export function normalizePublicPath(value: string): string {
     const raw = String(value || '').trim();
     if (!raw || raw === '/') return '/';
-    const withoutHost = raw.replace(/^https?:\/\/timemission\.com/i, '');
+    const withoutHost = raw.replace(/^https?:\/\/(?:www\.)?timemission\.com/i, '');
     const path = withoutHost.split('#')[0].split('?')[0] || '/';
     const withSlash = path.startsWith('/') ? path : `/${path}`;
     return withSlash.length > 1 ? withSlash.replace(/\/+$/, '') : '/';
@@ -96,11 +96,7 @@ export function isDynamicLandingPath(
 }
 
 export function publicUrlSitemapEntries(registry: PublicUrlRegistry = defaultRegistry): PublicUrlSitemapEntry[] {
-    const routes = [
-        ...(registry.routes || []),
-        ...(registry.machineReadableRoutes || []),
-    ];
-    return routes
+    return (registry.routes || [])
         .filter((route) => route.sitemap === true)
         .map((route) => ({
             canonicalPath: normalizePublicPath(route.canonicalPath),

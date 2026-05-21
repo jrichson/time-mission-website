@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import routes from '../../data/routes.json';
 import { definePage } from '../../lib/define-page';
 import {
     getPublishedLandings,
@@ -71,7 +72,7 @@ const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: landingHead.metaTitle,
-    url: page.canonicalPath === '/' ? 'https://timemission.com/' : `https://timemission.com${page.canonicalPath}`,
+    url: page.canonicalPath === '/' ? `${routes.baseUrl}/` : `${routes.baseUrl}${page.canonicalPath}`,
 };
 /** Embed-safe JSON-LD: escape `<` so `</script>` in strings cannot terminate the HTML script block. */
 const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');

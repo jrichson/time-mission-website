@@ -20,11 +20,7 @@ function publicUrlForCanonical(registry, canonicalPath) {
 }
 
 function sitemapEntries(registry) {
-  const routes = [
-    ...((registry && registry.routes) || []),
-    ...((registry && registry.machineReadableRoutes) || []),
-  ];
-  return routes
+  return ((registry && registry.routes) || [])
     .filter((route) => route.sitemap)
     .map((route) => ({
       route,

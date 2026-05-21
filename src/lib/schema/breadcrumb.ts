@@ -13,7 +13,7 @@ export interface BreadcrumbNode {
     }>;
 }
 
-const baseUrl = 'https://timemission.com';
+const baseUrl = 'https://www.timemission.com';
 
 function toAbsolute(href: string): string {
     if (/^https?:\/\//.test(href)) return href;

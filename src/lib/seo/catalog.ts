@@ -31,7 +31,7 @@ export interface LandingHeadInput {
     twitterImage?: string | null;
 }
 
-const baseUrl = 'https://timemission.com';
+const baseUrl = 'https://www.timemission.com';
 
 function toAbsolute(rootRelative: string): string {
     if (/^https?:\/\//.test(rootRelative)) return rootRelative;

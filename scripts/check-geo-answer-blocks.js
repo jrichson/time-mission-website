@@ -77,7 +77,7 @@ for (const [key, block] of publicBlocks) {
   }
 }
 
-for (const rel of ['dist/llms.txt', 'dist/ai-context.md']) {
+for (const rel of ['dist/llms.txt', 'dist/llms-full.txt', 'dist/ai-context.md']) {
   const body = requireFile(rel);
   if (!body) continue;
   const normalizedBody = normalize(body);
@@ -94,18 +94,18 @@ for (const rel of ['dist/llms.txt', 'dist/ai-context.md']) {
 const imageExpectations = [
   {
     rel: 'dist/index.html',
-    id: 'https://timemission.com/#primaryimage',
-    url: 'https://timemission.com/assets/video/hero-poster.jpg',
+    id: 'https://www.timemission.com/#primaryimage',
+    url: 'https://www.timemission.com/assets/video/hero-poster.jpg',
   },
   {
     rel: 'dist/missions.html',
-    id: 'https://timemission.com/missions#primaryimage',
-    url: 'https://timemission.com/assets/photos/experiences/experiences-hero.jpg',
+    id: 'https://www.timemission.com/missions#primaryimage',
+    url: 'https://www.timemission.com/assets/photos/experiences/experiences-hero.jpg',
   },
   {
     rel: 'dist/groups.html',
-    id: 'https://timemission.com/groups#primaryimage',
-    url: 'https://timemission.com/assets/video/groups-hero-poster.jpg',
+    id: 'https://www.timemission.com/groups#primaryimage',
+    url: 'https://www.timemission.com/assets/video/groups-hero-poster.jpg',
   },
 ];
 

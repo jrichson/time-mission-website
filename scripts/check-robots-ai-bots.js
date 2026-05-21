@@ -32,7 +32,7 @@ const REQUIRED_BOTS = [
 const sitemapLines = lines.filter((l) => l.trim().startsWith('Sitemap:'));
 if (sitemapLines.length !== 1) {
     errors.push(`Expected exactly one Sitemap: line, found ${sitemapLines.length}`);
-} else if (sitemapLines[0].trim() !== 'Sitemap: https://timemission.com/sitemap.xml') {
+} else if (sitemapLines[0].trim() !== 'Sitemap: https://www.timemission.com/sitemap.xml') {
     errors.push(`Unexpected Sitemap line: ${sitemapLines[0].trim()}`);
 }
 

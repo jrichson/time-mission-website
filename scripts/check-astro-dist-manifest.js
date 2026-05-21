@@ -39,10 +39,15 @@ mustFile('_headers');
 mustFile('_redirects');
 mustFile('robots.txt');
 mustFile('sitemap.xml');
+mustFile('llms.txt');
+mustFile('llms-full.txt');
+mustFile('ai-context.md');
+mustFile('pricing.md');
 mustFile('404.html');
 mustFile('data/locations.json');
 mustFile('css/base.css');
 mustFile('js/locations.js');
+mustFile('assets/logo/TM_Logo_White.svg');
 mustDirHasFiles('assets/fonts');
 
 mustFile('about.html');

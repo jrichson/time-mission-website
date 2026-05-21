@@ -19,7 +19,7 @@ applyTmDotEnvToProcess(repoRoot);
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
-  site: 'https://timemission.com',
+  site: 'https://www.timemission.com',
   output: 'static',
   trailingSlash: 'never',
   build: {

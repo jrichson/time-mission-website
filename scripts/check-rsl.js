@@ -6,7 +6,7 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const errors = [];
 
-const LICENSE_URL = 'https://timemission.com/license.xml';
+const LICENSE_URL = 'https://www.timemission.com/license.xml';
 const LINK_HEADER = `<${LICENSE_URL}>; rel="license"; type="application/rsl+xml"`;
 
 function read(relPath) {

@@ -1,8 +1,8 @@
 {
-  "@id": "https://timemission.com/#organization",
+  "@id": "https://www.timemission.com/#organization",
   "name": "Time Mission",
-  "url": "https://timemission.com",
-  "logo": "https://timemission.com/assets/logo/TM_Favicon.png",
+  "url": "https://www.timemission.com",
+  "logo": "https://www.timemission.com/assets/logo/TM_Favicon.png",
   "sameAs": [
     "https://www.instagram.com/timemission/",
     "https://www.tiktok.com/@timemissionhq",

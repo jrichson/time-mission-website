@@ -1,6 +1,6 @@
 import { tmMediaBase } from '../tm-media';
 
-const BASE_URL = 'https://timemission.com';
+const BASE_URL = 'https://www.timemission.com';
 
 export interface ImageObjectNode {
     '@type': 'ImageObject';

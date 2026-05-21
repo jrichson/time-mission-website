@@ -80,11 +80,11 @@ for (const p of checkedSeoPaths) {
 if (!org.name || typeof org.name !== 'string') {
   errors.push('seo-organization.json: missing name');
 }
-if (!org.url || typeof org.url !== 'string' || !org.url.startsWith('https://timemission.com')) {
-  errors.push('seo-organization.json: url must start with https://timemission.com');
+if (!org.url || typeof org.url !== 'string' || !org.url.startsWith('https://www.timemission.com')) {
+  errors.push('seo-organization.json: url must start with https://www.timemission.com');
 }
-if (!org.logo || typeof org.logo !== 'string' || !org.logo.startsWith('https://timemission.com/')) {
-  errors.push('seo-organization.json: logo must be https://timemission.com/...');
+if (!org.logo || typeof org.logo !== 'string' || !org.logo.startsWith('https://www.timemission.com/')) {
+  errors.push('seo-organization.json: logo must be https://www.timemission.com/...');
 }
 if (!Array.isArray(org.sameAs) || !org.sameAs.length) {
   errors.push('seo-organization.json: sameAs must be non-empty array');

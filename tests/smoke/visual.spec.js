@@ -34,6 +34,19 @@ test.beforeEach(async ({ page }) => {
  * Hero video and other media can otherwise cause flaky pixel diffs.
  */
 async function stabilizeForScreenshot(page) {
+  await page.evaluate(async () => {
+    const waits = [];
+    if (window.LocationContext && typeof window.LocationContext.init === 'function') {
+      waits.push(window.LocationContext.init());
+    }
+    if (window.TMI18n && window.TMI18n.ready) {
+      waits.push(window.TMI18n.ready);
+    }
+    await Promise.race([
+      Promise.all(waits),
+      new Promise((resolve) => setTimeout(resolve, 3000)),
+    ]);
+  });
   await page.addStyleTag({ content: REDUCE_MOTION_CSS });
   await page.evaluate(() => {
     document.querySelectorAll('video').forEach((v) => {
