@@ -175,14 +175,15 @@
             return '';
         }
 
-        var externalUrl = getExternalLocationUrl(loc);
-        if (externalUrl) return externalUrl;
         if (isBriqWidgetLocation(loc)) {
             return briqWidgetDestination(loc, slug, checkoutUrl);
         }
         if (opts.preferLocationPageFlow && slug) {
             return appendTrackingParams('/' + slug + '?book=1', { includeInternal: true });
         }
+        if (isTicketKind(kind) && bookable) return checkoutUrl;
+        var externalUrl = getExternalLocationUrl(loc);
+        if (externalUrl) return externalUrl;
         if (bookable) return checkoutUrl;
         if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);
         return '';

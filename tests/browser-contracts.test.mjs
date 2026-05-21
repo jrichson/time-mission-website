@@ -394,12 +394,12 @@ describe('browser architecture contracts', () => {
     expect(window.TMBooking.getDestination({ kind: 'waiver', locationId: 'houston' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'antwerp' }))
-      .toBe('https://timemission.eu/antwerp');
+      .toBe('https://experience.example/antwerp');
     expect(window.TMBooking.resolveIntent({ kind: 'tickets', locationId: 'antwerp' }))
       .toMatchObject({
-        href: 'https://timemission.eu/antwerp',
-        presentation: 'external-site',
-        externalLocationSite: true,
+        href: 'https://experience.example/antwerp',
+        presentation: 'link',
+        externalLocationSite: false,
       });
     expect(window.TMBooking.getDestination({
       kind: 'groups',

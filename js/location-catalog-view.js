@@ -174,10 +174,26 @@
         return BookingJourney.resolveCtaView(loc, options || {});
     }
 
+    function externalLocationCta(view) {
+        var href = BookingJourney.appendTrackingParams(view.externalUrl || view.pageUrl || '#');
+        return {
+            kind: 'tickets',
+            groupType: '',
+            locationId: view.locationId,
+            href: href,
+            bookingUrl: '',
+            url: href,
+            trigger: false,
+            externalLocation: true,
+            disabled: !href || href === '#',
+            presentation: 'external-site',
+        };
+    }
+
     function getOverlayView(loc, id, options) {
         var view = getLocationView(loc, id);
         if (!view) return null;
-        var cta = getBookingCtaView(loc, {
+        var cta = view.externalUrl ? externalLocationCta(view) : getBookingCtaView(loc, {
             kind: 'tickets',
             locationId: view.locationId,
             pageLocationSlug: options && options.pageLocationSlug,

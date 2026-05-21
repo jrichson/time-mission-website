@@ -297,7 +297,13 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveText('Belgium - Brussels (Opening June 18, 2026)');
 });
 
-test('ticket panel redirects Europe selections to location-specific EU pages with UTMs', async ({ page }) => {
+test('ticket panel routes Europe selections to the right external destination with UTMs', async ({ page }) => {
+  await page.route('https://www.experience-factory.com/**', async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>Experience Factory booking</title><h1>Experience Factory booking</h1>',
+    });
+  });
   await page.route('https://timemission.eu/**', async (route) => {
     await route.fulfill({
       contentType: 'text/html',
@@ -308,7 +314,7 @@ test('ticket panel redirects Europe selections to location-specific EU pages wit
   await page.goto('/?utm_source=paid&utm_campaign=eu');
   await page.locator('.hero-cta .btn-tickets').click();
   await page.locator('#ticketLocation').selectOption('antwerp');
-  await expect(page).toHaveURL('https://timemission.eu/antwerp?utm_source=paid&utm_campaign=eu');
+  await expect(page).toHaveURL('https://www.experience-factory.com/antwerp/online-booking/?utm_source=paid&utm_campaign=eu#your-group=groups-of-friends&your-favorite-experience=time-mission');
 
   await page.goto('/?utm_source=paid&utm_campaign=eu');
   await page.locator('.hero-cta .btn-tickets').click();
