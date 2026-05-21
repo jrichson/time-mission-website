@@ -2768,9 +2768,6 @@
         }
 
         @media (max-width: 480px) {
-            .hero { padding: 100px 1rem 2.5rem; min-height: 55vh; }
-            .hero-title { font-size: 2rem; line-height: 1.15; }
-            .hero-subtitle { font-size: 0.95rem; }
             .stat-card { padding: 1.25rem; }
             .stat-card .stat-value { font-size: 1.75rem; }
             .section-title { font-size: 1.85rem; }

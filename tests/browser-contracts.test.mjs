@@ -132,6 +132,12 @@ function createAnchor(href, options = {}) {
       contains(name) {
         return classes.has(name);
       },
+      add(name) {
+        classes.add(name);
+      },
+      remove(name) {
+        classes.delete(name);
+      },
     },
     getAttribute(name) {
       return attrs.has(name) ? attrs.get(name) : null;
@@ -139,6 +145,9 @@ function createAnchor(href, options = {}) {
     setAttribute(name, value) {
       attrs.set(name, String(value));
       if (name === 'href') this.href = String(value);
+    },
+    removeAttribute(name) {
+      attrs.delete(name);
     },
     hasAttribute(name) {
       return attrs.has(name);
@@ -334,6 +343,11 @@ describe('browser architecture contracts', () => {
         trigger: true,
         externalLocation: false,
       });
+    const manassasCta = createAnchor('#');
+    window.TMBookingJourney.applyCtaView(manassasCta, window.LocationContext.getOverlayView('manassas').cta);
+    expect(manassasCta.getAttribute('data-tm-booking-trigger')).toBe('');
+    expect(manassasCta.getAttribute('data-tm-booking-url')).toBe('https://checkout.example/manassas');
+    expect(manassasCta.getAttribute('data-tm-location')).toBe('manassas');
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'manassas' }))
       .toBe('https://gift.example/manassas');
     expect(window.TMBooking.getDestination({

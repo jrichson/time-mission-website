@@ -4,6 +4,7 @@ const path = require('node:path');
 const { fingerprintAnalyticsLabels } = require('../../scripts/lib/analytics-labels-fingerprint.cjs');
 const i18nCatalog = require('../../src/data/site/i18n.json');
 const formsLinksAudit = require('../fixtures/forms-links-audit.json');
+const { prepareSmokePage } = require('./network');
 
 require('tsx/cjs/api').register();
 const { locationsFingerprintFromRecords } = require('../../src/lib/locations-fingerprint.ts');
@@ -14,10 +15,8 @@ const contactLocations = locationRecords.filter((loc) => {
   const contact = loc.contact || {};
   return !loc.externalUrl && (String(contact.phone || '').trim() || String(contact.email || '').trim());
 });
-const VIDEO_MEDIA_RE = /\.(mp4|webm)(?:\?.*)?$/i;
-
 test.beforeEach(async ({ page }) => {
-  await page.route(VIDEO_MEDIA_RE, (route) => route.abort());
+  await prepareSmokePage(page);
 });
 
 async function gotoHome(page) {
@@ -1091,8 +1090,6 @@ test.describe('Mobile location selector (P0-7a)', () => {
 });
 
 test.describe('small mobile (375x667)', () => {
-  // Phase 11 RESP-01 — assert ≤480 CSS tier holds against built dist at iPhone-SE viewport.
-  // Closes the Phase 10 UAT test 8 gap (severity major).
   test.use({ viewport: { width: 375, height: 667 } });
 
   const REPRESENTATIVE_PAGES = ['/', '/antwerp', '/faq', '/locations'];
@@ -1107,7 +1104,6 @@ test.describe('small mobile (375x667)', () => {
           innerWidth: window.innerWidth,
         };
       });
-      // Allow 1px rounding tolerance — sub-pixel layout artifacts are not a regression.
       expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.innerWidth + 1);
     });
   }
@@ -1127,8 +1123,6 @@ test.describe('small mobile (375x667)', () => {
       };
     });
     expect(wrapInfo.flexWrap).toBe('wrap');
-    // With 4+ legal links wrapping to 2 lines at 375px, offsetHeight is > 30px.
-    // If only 1 line fits (single short link), childCount being low is also acceptable.
     expect(wrapInfo.offsetHeight).toBeGreaterThan(20);
   });
 
@@ -1144,13 +1138,10 @@ test.describe('small mobile (375x667)', () => {
 
   test('book-now button preserves 48x44 tap target on small mobile', async ({ page }) => {
     await page.goto('/');
-    // Scope to the always-visible nav-bar Book Now (page has 4+ .btn-tickets including
-    // a hidden one inside the collapsed mobile menu drawer).
     const ticketsBtn = page.locator('.nav-right .btn-tickets').first();
     await ticketsBtn.waitFor({ state: 'visible' });
     const box = await ticketsBtn.boundingBox();
     expect(box).not.toBeNull();
-    // .btn-tickets keeps min-height: 48px per D-A3, even on small mobile (375px viewport).
     expect(box.height).toBeGreaterThanOrEqual(48);
   });
 });

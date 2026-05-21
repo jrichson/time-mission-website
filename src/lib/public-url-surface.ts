@@ -4,6 +4,8 @@ export interface PublicUrlRoute {
     id?: string;
     canonicalPath: string;
     externalUrl?: string;
+    locationAlternate?: string;
+    locationCompatibilitySources?: string[];
     outputFile?: string;
     legacySources?: string[];
     sitemap: boolean;

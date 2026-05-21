@@ -1,63 +1,42 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { definePage } from '../lib/define-page';
-import { allLocations } from '../data/locations';
+import LocationPageHeadLinks from '../components/LocationPageHeadLinks.astro';
 import phillyMainRaw from '../partials/philadelphia-main.frag.txt?raw';
-import { applyTmMediaBase } from '../lib/tm-media';
-import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
+import { buildOpenLocationPage } from '../lib/location-page-shell';
 
-const philly = allLocations.find((l) => l.slug === 'philadelphia');
-if (!philly) throw new Error('philadelphia missing from src/data/locations');
-
-const ld = serializeGraph(
-    buildLocationGraph('philadelphia', '/philadelphia', [
-        { label: 'Home', href: '/' },
-        { label: 'Locations', href: '/locations' },
-        { label: philly.shortName, href: '/philadelphia' },
-    ]),
-);
-const page = definePage({ canonicalPath: '/philadelphia' });
-const phillyMain = applyTmMediaBase(phillyMainRaw);
+const cityPage = buildOpenLocationPage({
+    slug: 'philadelphia',
+    mainRaw: phillyMainRaw,
+    taglines: [
+        'Social Gaming Adventure',
+        "Better Than Your Ex's Personality",
+        'Date Night, Leveled Up',
+        'Family Game Night on Steroids',
+        'Where Couch Potatoes Become Heroes',
+        'Touch Grass... Indoors',
+        'Corporate Team Building, But Fun',
+        'Cheaper Than Therapy',
+        'Your New Favorite Addiction',
+        'Making Memories (& Enemies)',
+        'Swipe Right on Adventure',
+    ],
+});
 ---
 
 <SiteLayout
-    canonicalPath={page.canonicalPath}
-    bodyDataLocation={philly.slug}
+    canonicalPath={cityPage.page.canonicalPath}
+    bodyDataLocation={cityPage.location.slug}
 >
     <Fragment slot="head-extra">
-        <link rel="preload" as="image" href="/assets/video/hero-poster-960.webp" type="image/webp" fetchpriority="high" media="(max-width: 768px)" />
-        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" fetchpriority="high" media="(min-width: 769px)" />
-        <link rel="stylesheet" href="/css/footer.css?v=3" />
-        <link rel="stylesheet" href="/css/newsletter.css?v=3" />
-        <link rel="stylesheet" href="/css/ticket-panel.css" />
-        <link rel="stylesheet" href="/css/page-philadelphia.css?v=2" />
-        <link rel="stylesheet" href="/css/faq.css?v=5" />
+        <LocationPageHeadLinks pageCss="/css/page-philadelphia.css?v=2" />
     </Fragment>
     <Fragment slot="json-ld">
-        <script type="application/ld+json" is:inline set:html={ld}></script>
+        <script type="application/ld+json" is:inline set:html={cityPage.ld}></script>
     </Fragment>
-    <div set:html={phillyMain} />
+    <div set:html={cityPage.mainHtml} />
     <Fragment slot="after-site-scripts">
-        <script is:inline>
-            window.__TM_PAGE_INIT__ = {
-                mode: 'city',
-                config: {
-                    city: 'Philadelphia',
-                    taglines: [
-                        'Social Gaming Adventure',
-                        "Better Than Your Ex's Personality",
-                        'Date Night, Leveled Up',
-                        'Family Game Night on Steroids',
-                        'Where Couch Potatoes Become Heroes',
-                        'Touch Grass... Indoors',
-                        'Corporate Team Building, But Fun',
-                        'Cheaper Than Therapy',
-                        'Your New Favorite Addiction',
-                        'Making Memories (& Enemies)',
-                        'Swipe Right on Adventure'
-                    ]
-                }
-            };
+        <script is:inline define:vars={{ pageInit: cityPage.pageInit }}>
+            window.__TM_PAGE_INIT__ = pageInit;
         </script>
         <script defer is:inline src="/js/page-widgets.js?v=6"></script>
     </Fragment>

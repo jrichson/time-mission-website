@@ -169,6 +169,7 @@
       "id": "locations",
       "canonicalPath": "/locations",
       "legacySources": [
+        "/locations.html",
         "/locations/index.html"
       ],
       "outputFile": "locations.html",
@@ -178,6 +179,7 @@
     {
       "id": "philadelphia",
       "canonicalPath": "/philadelphia",
+      "locationAlternate": "philly",
       "legacySources": [
         "/philadelphia.html"
       ],
@@ -188,6 +190,7 @@
     {
       "id": "houston",
       "canonicalPath": "/houston",
+      "locationAlternate": "marq-e",
       "legacySources": [
         "/houston.html"
       ],
@@ -198,6 +201,10 @@
     {
       "id": "mount-prospect",
       "canonicalPath": "/mount-prospect",
+      "locationAlternate": "mt-prospect",
+      "locationCompatibilitySources": [
+        "mountprospect"
+      ],
       "legacySources": [
         "/mount-prospect.html"
       ],
@@ -208,6 +215,11 @@
     {
       "id": "west-nyack",
       "canonicalPath": "/west-nyack",
+      "locationAlternate": "palisades-center",
+      "locationCompatibilitySources": [
+        "westnyack",
+        "palisades"
+      ],
       "legacySources": [
         "/west-nyack.html"
       ],
@@ -218,6 +230,10 @@
     {
       "id": "lincoln",
       "canonicalPath": "/lincoln",
+      "locationAlternate": "r1-indoor-karting",
+      "locationCompatibilitySources": [
+        "providence"
+      ],
       "legacySources": [
         "/lincoln.html"
       ],
@@ -228,6 +244,7 @@
     {
       "id": "manassas",
       "canonicalPath": "/manassas",
+      "locationAlternate": "manassas-mall",
       "legacySources": [
         "/manassas.html"
       ],
@@ -238,6 +255,7 @@
     {
       "id": "antwerp",
       "canonicalPath": "/antwerp",
+      "locationAlternate": "experience-factory-antwerp",
       "externalUrl": "https://timemission.eu/antwerp",
       "legacySources": [
         "/antwerp.html"
@@ -249,6 +267,9 @@
     {
       "id": "orland-park",
       "canonicalPath": "/orland-park",
+      "locationCompatibilitySources": [
+        "orlandpark"
+      ],
       "legacySources": [
         "/orland-park.html"
       ],
@@ -269,6 +290,7 @@
     {
       "id": "brussels",
       "canonicalPath": "/brussels",
+      "locationAlternate": "terminal1",
       "externalUrl": "https://timemission.eu",
       "legacySources": [
         "/brussels.html"
@@ -355,6 +377,11 @@
       "status": 301
     },
     {
+      "source": "/adult-birthday-party",
+      "target": "/groups/birthdays",
+      "status": 301
+    },
+    {
       "source": "/kids-birthday-party",
       "target": "/groups/birthdays",
       "status": 301
@@ -370,7 +397,17 @@
       "status": 301
     },
     {
+      "source": "/date-night",
+      "target": "/",
+      "status": 301
+    },
+    {
       "source": "/corporate-events",
+      "target": "/groups/corporate",
+      "status": 301
+    },
+    {
+      "source": "/corporate-event",
       "target": "/groups/corporate",
       "status": 301
     },
@@ -385,7 +422,17 @@
       "status": 301
     },
     {
+      "source": "/field-trips",
+      "target": "/groups/field-trips",
+      "status": 301
+    },
+    {
       "source": "/youth-group-camp",
+      "target": "/groups/private-events",
+      "status": 301
+    },
+    {
+      "source": "/youth-group",
       "target": "/groups/private-events",
       "status": 301
     },
@@ -400,7 +447,17 @@
       "status": 301
     },
     {
+      "source": "/bus-tours",
+      "target": "/groups/private-events",
+      "status": 301
+    },
+    {
       "source": "/house-rules",
+      "target": "/code-of-conduct",
+      "status": 301
+    },
+    {
+      "source": "/house-rules.html",
       "target": "/code-of-conduct",
       "status": 301
     },
@@ -415,7 +472,17 @@
       "status": 301
     },
     {
+      "source": "/privacy-policy.html",
+      "target": "/privacy",
+      "status": 301
+    },
+    {
       "source": "/terms-and-conditions",
+      "target": "/terms",
+      "status": 301
+    },
+    {
+      "source": "/terms-and-conditions.html",
       "target": "/terms",
       "status": 301
     },

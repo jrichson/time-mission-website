@@ -31,6 +31,10 @@ function mustDirHasFiles(rel) {
   if (!entries.length) errors.push(`Directory empty: ${rel}`);
 }
 
+function readDist(rel) {
+  return fs.readFileSync(path.join(distDir, rel), 'utf8');
+}
+
 mustFile('_headers');
 mustFile('_redirects');
 mustFile('robots.txt');
@@ -57,6 +61,23 @@ mustFile('groups/bachelor-ette.html');
 mustFile('locations.html');
 mustFile('philadelphia.html');
 mustFile('contact-thank-you.html');
+
+if (fs.existsSync(path.join(distDir, 'index.html'))) {
+  const home = readDist('index.html');
+  const head = home.split('</head>')[0] || '';
+  const gtmIndex = head.indexOf('https://www.googletagmanager.com/gtm.js?id=');
+  const titleIndex = head.indexOf('<title>');
+  if (gtmIndex === -1) errors.push('index.html: missing rendered GTM head script');
+  if (head.includes('https://www.googletagmanager.com/ns.html')) {
+    errors.push('index.html: GTM noscript iframe must not render in <head>');
+  }
+  if (gtmIndex !== -1 && titleIndex !== -1 && gtmIndex > titleIndex) {
+    errors.push('index.html: GTM head script must render before <title>');
+  }
+  if (!/<body[^>]*>\s*<!-- Google Tag Manager \(noscript\) -->\s*<noscript>/i.test(home)) {
+    errors.push('index.html: GTM noscript must be the first rendered body child');
+  }
+}
 
 if (errors.length) {
   console.error('Astro dist manifest check failed:');

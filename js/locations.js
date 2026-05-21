@@ -18,9 +18,6 @@
  *   TM.ready               — resolves after location data is loaded
  *   TM.getSavedSlug()      — sync read of the active slug
  *   TM.onChange(callback)  — subscribe to select/clear/restore; returns unsubscribe fn
- *
- * This file owns cleanup for legacy location storage keys. scripts/check-locations-architecture.js
- * enforces that no other runtime writes them.
  */
 
 (function () {

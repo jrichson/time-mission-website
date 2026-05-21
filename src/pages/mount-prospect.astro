@@ -1,63 +1,26 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { definePage } from '../lib/define-page';
-import { allLocations } from '../data/locations';
+import LocationPageHeadLinks from '../components/LocationPageHeadLinks.astro';
 import mountProspectMainRaw from '../partials/mount-prospect-main.frag.txt?raw';
-import { applyTmMediaBase } from '../lib/tm-media';
-import { buildLocationGraph, serializeGraph } from '../lib/schema/graph';
+import { buildOpenLocationPage } from '../lib/location-page-shell';
 
-const mountProspect = allLocations.find((l) => l.slug === 'mount-prospect');
-if (!mountProspect) throw new Error('mount-prospect missing from src/data/locations');
-
-const ld = serializeGraph(
-    buildLocationGraph('mount-prospect', '/mount-prospect', [
-        { label: 'Home', href: '/' },
-        { label: 'Locations', href: '/locations' },
-        { label: mountProspect.shortName, href: '/mount-prospect' },
-    ]),
-);
-const page = definePage({ canonicalPath: '/mount-prospect' });
-const mountProspectMain = applyTmMediaBase(mountProspectMainRaw);
+const cityPage = buildOpenLocationPage({ slug: 'mount-prospect', mainRaw: mountProspectMainRaw });
 ---
 
 <SiteLayout
-    canonicalPath={page.canonicalPath}
-    bodyDataLocation={mountProspect.slug}
+    canonicalPath={cityPage.page.canonicalPath}
+    bodyDataLocation={cityPage.location.slug}
 >
     <Fragment slot="head-extra">
-        <link rel="preload" as="image" href="/assets/video/hero-poster-960.webp" type="image/webp" fetchpriority="high" media="(max-width: 768px)" />
-        <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" fetchpriority="high" media="(min-width: 769px)" />
-        <link rel="stylesheet" href="/css/footer.css?v=3" />
-        <link rel="stylesheet" href="/css/newsletter.css?v=3" />
-        <link rel="stylesheet" href="/css/ticket-panel.css" />
-        <link rel="stylesheet" href="/css/page-mount-prospect.css?v=2" />
-        <link rel="stylesheet" href="/css/faq.css?v=5" />
+        <LocationPageHeadLinks pageCss="/css/page-mount-prospect.css?v=2" />
     </Fragment>
     <Fragment slot="json-ld">
-        <script type="application/ld+json" is:inline set:html={ld}></script>
+        <script type="application/ld+json" is:inline set:html={cityPage.ld}></script>
     </Fragment>
-    <div set:html={mountProspectMain} />
+    <div set:html={cityPage.mainHtml} />
     <Fragment slot="after-site-scripts">
-        <script is:inline>
-            window.__TM_PAGE_INIT__ = {
-                mode: 'city',
-                config: {
-                    city: 'Mount Prospect',
-                    taglines: [
-                        'Social Gaming Adventure',
-                        'Family Game Night on Steroids',
-                        'Birthday Parties, Leveled Up',
-                        'Where Couch Potatoes Become Heroes',
-                        'Touch Grass... Indoors',
-                        'Corporate Team Building, But Fun',
-                        'Making Memories Together',
-                        'Built For Every Age',
-                        'Your New Favorite Weekend',
-                        'No Screens. Just Fun.',
-                        'Team Up. Beat The Clock.'
-                    ]
-                }
-            };
+        <script is:inline define:vars={{ pageInit: cityPage.pageInit }}>
+            window.__TM_PAGE_INIT__ = pageInit;
         </script>
         <script defer is:inline src="/js/page-widgets.js?v=6"></script>
     </Fragment>

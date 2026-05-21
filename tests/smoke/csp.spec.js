@@ -8,11 +8,10 @@
  * Run: npx playwright test csp.spec.js
  */
 const { test, expect } = require('@playwright/test');
-
-const VIDEO_MEDIA_RE = /\.(mp4|webm)(?:\?.*)?$/i;
+const { prepareSmokePage } = require('./network');
 
 test.beforeEach(async ({ page }) => {
-    await page.route(VIDEO_MEDIA_RE, (route) => route.abort());
+    await prepareSmokePage(page);
 });
 
 async function gotoHomeForScriptSmoke(page) {

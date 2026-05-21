@@ -4,24 +4,21 @@
  * Keeps structure in sync with `src/partials/faq-footer.frag.txt`.
  */
 import { allLocations } from '../data/locations';
-import { locationOpeningLabel } from '../lib/location-status';
+import { locationHref, locationStatusBadge } from '../lib/location-view';
 
 const year = new Date().getFullYear();
 
 function openingLabelFor(slug: string) {
     const loc = allLocations.find((entry) => entry.slug === slug || entry.id === slug);
-    return loc ? locationOpeningLabel(loc) : '';
-}
-
-function hrefFor(slug: string) {
-    const loc = allLocations.find((entry) => entry.slug === slug || entry.id === slug);
-    return loc?.externalUrl || `/${slug}`;
+    return loc ? locationStatusBadge(loc) : '';
 }
 
 const houstonOpeningLabel = openingLabelFor('houston');
 const orlandParkOpeningLabel = openingLabelFor('orland-park');
-const antwerpHref = hrefFor('antwerp');
-const brusselsHref = hrefFor('brussels');
+const antwerp = allLocations.find((entry) => entry.slug === 'antwerp');
+const brussels = allLocations.find((entry) => entry.slug === 'brussels');
+const antwerpHref = antwerp ? locationHref(antwerp) : '/antwerp';
+const brusselsHref = brussels ? locationHref(brussels) : '/brussels';
 ---
 
 <footer class="footer">

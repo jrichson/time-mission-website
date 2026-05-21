@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
+const { prepareSmokePage } = require('./network');
 
-const VIDEO_MEDIA_RE = /\.(mp4|webm)(?:\?.*)?$/i;
 const VISUAL_MAX_DIFF_PIXELS = 6000;
 const REDUCE_MOTION_CSS = `
   *, *::before, *::after {
@@ -18,7 +18,7 @@ const REDUCE_MOTION_CSS = `
 `;
 
 test.beforeEach(async ({ page }) => {
-  await page.route(VIDEO_MEDIA_RE, (route) => route.abort());
+  await prepareSmokePage(page);
   await page.addInitScript(() => {
     const realSetInterval = window.setInterval.bind(window);
 

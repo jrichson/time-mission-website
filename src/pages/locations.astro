@@ -3,7 +3,14 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
 import type { LocationRecord } from '../data/locations';
-import { locationDisplayStatus, locationOpeningLabel } from '../lib/location-status';
+import {
+    locationAddressText,
+    locationContactItems,
+    locationHref,
+    locationStateBadge,
+    locationStatusBadge,
+    locationHeadlineStatus,
+} from '../lib/location-view';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 import geoAnswerBlocks from '../data/site/geo-answer-blocks.json';
 
@@ -27,41 +34,6 @@ function orderLocs(region: string, slugOrder: string[]) {
 const usLocs = orderLocs('us', US_ORDER);
 const euLocs = orderLocs('europe', EU_ORDER);
 const locationsAnswer = geoAnswerBlocks.blocks.locations;
-
-function formatAddress(loc: LocationRecord) {
-    const a = loc.address;
-    const cityLine = [a.city, a.state].filter(Boolean).join(', ');
-    const postalLine = [cityLine, a.zip].filter(Boolean).join(' ');
-    return [a.line1, a.line2, postalLine, a.country].filter(Boolean).join(', ');
-}
-
-function stateBadge(loc: LocationRecord) {
-    if (loc.address.state && loc.address.state.trim()) return loc.address.state;
-    if (loc.region === 'europe') return 'BE';
-    return '--';
-}
-
-function statusLabel(loc: LocationRecord) {
-    return locationDisplayStatus(loc);
-}
-
-function upcomingBadgeLabel(loc: LocationRecord) {
-    if (loc.status !== 'coming-soon') return '';
-    return locationOpeningLabel(loc) || 'Coming Soon';
-}
-
-function locationHref(loc: LocationRecord) {
-    return loc.externalUrl || `/${loc.slug}`;
-}
-
-function contactItems(loc: LocationRecord) {
-    const phone = String(loc.contact.phone || '').trim();
-    const email = String(loc.contact.email || '').trim();
-    return [
-        phone ? { label: phone, kind: 'phone' } : null,
-        email ? { label: email, kind: 'email' } : null,
-    ].filter(Boolean) as Array<{ label: string; kind: string }>;
-}
 
 const ld = serializeGraph(
     buildSimpleGraph([
@@ -123,20 +95,20 @@ const page = definePage({ canonicalPath: '/locations' });
                                     { 'is-coming-soon': loc.status === 'coming-soon' },
                                 ]}
                             >
-                                <span class="loc-state">{stateBadge(loc)}</span>
+                                <span class="loc-state">{locationStateBadge(loc)}</span>
                                 <div class="loc-body">
                                     <div class="loc-name">
                                         {loc.shortName}
-                                        {upcomingBadgeLabel(loc) ? (
-                                            <span class="loc-coming-soon-tag">{upcomingBadgeLabel(loc)}</span>
+                                        {locationStatusBadge(loc) ? (
+                                            <span class="loc-coming-soon-tag">{locationStatusBadge(loc)}</span>
                                         ) : null}
                                     </div>
-                                    <div class="loc-status">{statusLabel(loc)}</div>
-                                    <div class="loc-address">{formatAddress(loc)}</div>
+                                    <div class="loc-status">{locationHeadlineStatus(loc)}</div>
+                                    <div class="loc-address">{locationAddressText(loc)}</div>
                                     <div class="loc-contact">
                                         {
-                                            contactItems(loc).length ? (
-                                                contactItems(loc).map((item) => (
+                                            locationContactItems(loc).length ? (
+                                                locationContactItems(loc).map((item) => (
                                                     <span class:list={['loc-contact-item', `is-${item.kind}`]}>
                                                         {item.label}
                                                     </span>
@@ -174,20 +146,20 @@ const page = definePage({ canonicalPath: '/locations' });
                                     { 'is-coming-soon': loc.status === 'coming-soon' },
                                 ]}
                             >
-                                <span class="loc-state">{stateBadge(loc)}</span>
+                                <span class="loc-state">{locationStateBadge(loc)}</span>
                                 <div class="loc-body">
                                     <div class="loc-name">
                                         {loc.shortName}
-                                        {upcomingBadgeLabel(loc) ? (
-                                            <span class="loc-coming-soon-tag">{upcomingBadgeLabel(loc)}</span>
+                                        {locationStatusBadge(loc) ? (
+                                            <span class="loc-coming-soon-tag">{locationStatusBadge(loc)}</span>
                                         ) : null}
                                     </div>
-                                    <div class="loc-status">{statusLabel(loc)}</div>
-                                    <div class="loc-address">{formatAddress(loc)}</div>
+                                    <div class="loc-status">{locationHeadlineStatus(loc)}</div>
+                                    <div class="loc-address">{locationAddressText(loc)}</div>
                                     <div class="loc-contact">
                                         {
-                                            contactItems(loc).length ? (
-                                                contactItems(loc).map((item) => (
+                                            locationContactItems(loc).length ? (
+                                                locationContactItems(loc).map((item) => (
                                                     <span class:list={['loc-contact-item', `is-${item.kind}`]}>
                                                         {item.label}
                                                     </span>

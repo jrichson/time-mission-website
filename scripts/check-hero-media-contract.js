@@ -43,6 +43,14 @@ runCheck({
       fs.readFileSync(path.join(root, runtimeRel), 'utf8'),
       runtimeRel,
     ));
+
+    for (const rel of [
+      'assets/video/hero-bg-mobile.mp4',
+      'public/assets/video/hero-bg-mobile.mp4',
+      'dist/assets/video/hero-bg-mobile.mp4',
+    ]) {
+      if (fs.existsSync(path.join(root, rel))) errors.push(`${rel}: stale old hero MP4 should not be bundled`);
+    }
   },
   onSuccess() {
     return `Hero media contract check passed for ${listHeroVideoPartials(root).length} video hero partials.`;

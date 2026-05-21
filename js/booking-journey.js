@@ -383,6 +383,36 @@
         return attrs;
     }
 
+    function applyCtaView(el, cta) {
+        if (!el || !cta) return;
+        el.href = cta.href || '#';
+        el.removeAttribute('target');
+        el.removeAttribute('rel');
+        if (cta.disabled) {
+            el.setAttribute('aria-disabled', 'true');
+            if (el.classList) el.classList.add('is-disabled');
+        } else {
+            el.removeAttribute('aria-disabled');
+            if (el.classList) el.classList.remove('is-disabled');
+        }
+        if (cta.trigger) {
+            el.setAttribute('data-tm-booking-trigger', '');
+            el.setAttribute('data-tm-booking-kind', cta.kind || 'tickets');
+            if (cta.locationId) el.setAttribute('data-tm-location', cta.locationId);
+            else el.removeAttribute('data-tm-location');
+            if (cta.groupType) el.setAttribute('data-tm-group-type', cta.groupType);
+            else el.removeAttribute('data-tm-group-type');
+            if (cta.bookingUrl) el.setAttribute('data-tm-booking-url', cta.bookingUrl);
+            else el.removeAttribute('data-tm-booking-url');
+            return;
+        }
+        el.removeAttribute('data-tm-booking-trigger');
+        el.removeAttribute('data-tm-booking-kind');
+        el.removeAttribute('data-tm-location');
+        el.removeAttribute('data-tm-group-type');
+        el.removeAttribute('data-tm-booking-url');
+    }
+
     window.TMBookingJourney = {
         normalizeLocation: normalizeLocation,
         normalizeGroupType: normalizeGroupType,
@@ -402,5 +432,6 @@
         resolveNavigationAction: resolveNavigationAction,
         resolveOutcome: resolveOutcome,
         ctaAttributesForIntent: ctaAttributesForIntent,
+        applyCtaView: applyCtaView,
     };
 })();

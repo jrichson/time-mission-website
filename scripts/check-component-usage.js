@@ -25,10 +25,17 @@ if (!pageFiles.length) errors.push('no src/pages/**/*.astro files found');
 const importLayoutRe = /import\s+SiteLayout\s+from\s+['"][^'"]+SiteLayout\.astro['"]/;
 const definePageImportRe = /import\s+\{\s*definePage\s*\}\s+from\s+['"][^'"]*\/lib\/define-page['"]/;
 const definePageCallRe = /\bdefinePage\s*\(\s*\{/;
+const locationPageShellImportRe = /import\s+\{[^}]*build(?:Open|ComingSoon)LocationPage[^}]*\}\s+from\s+['"][^'"]*\/lib\/location-page-shell['"]/;
+const locationPageShellCallRe = /\bbuild(?:Open|ComingSoon)LocationPage\s*\(/;
 
-/** Canonical path wiring must flow through definePage(...) → page.canonicalPath. */
+function hasDefinePageSource(text) {
+  return (definePageImportRe.test(text) && definePageCallRe.test(text))
+    || (locationPageShellImportRe.test(text) && locationPageShellCallRe.test(text));
+}
+
 function hasCanonicalSpread(text) {
-  return text.includes('canonicalPath={page.canonicalPath}');
+  return text.includes('canonicalPath={page.canonicalPath}')
+    || text.includes('canonicalPath={cityPage.page.canonicalPath}');
 }
 
 /** Pages that intentionally omit SiteLayout (minimal HTML shell). RFC: still use definePage. */
@@ -38,13 +45,8 @@ for (const file of pageFiles) {
   const rel = path.relative(root, file).split(path.sep).join('/');
   const text = fs.readFileSync(file, 'utf8');
 
-  if (!definePageImportRe.test(text)) {
-    errors.push(
-      `${rel}: missing import { definePage } from ".../lib/define-page" (relative path depth varies by folder)`,
-    );
-  }
-  if (!definePageCallRe.test(text)) {
-    errors.push(`${rel}: must call definePage({ canonicalPath: '…' }) in frontmatter`);
+  if (!hasDefinePageSource(text)) {
+    errors.push(`${rel}: must use definePage directly or through location-page-shell`);
   }
 
   if (standalonePageRels.has(rel)) {

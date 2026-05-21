@@ -1127,9 +1127,6 @@
     }
 }
 
-/* ≤480 small-mobile tier — Phase 11 RESP-01.
-   Per-element reductions (no clamp() typography per visual-parity rule).
-   Tap-target floor: .btn-tickets keeps min-height: 48px; .location-btn keeps min-height: 44px. */
 @media (max-width: 480px) {
     .ticker-item {
         font-size: 0.64rem;
@@ -1137,7 +1134,7 @@
     }
 
     .nav {
-        padding: 0.625rem 0.75rem; /* tighten side padding so 44px location-btn + brand + tickets fit ≤375px */
+        padding: 0.625rem 0.75rem;
     }
 
     .nav-left {
@@ -1146,7 +1143,7 @@
 
     .nav-logo img {
         height: 32px;
-        min-width: 88px; /* per UAT directive */
+        min-width: 88px;
     }
 
     .nav-right {
@@ -1155,7 +1152,7 @@
     }
 
     .btn-tickets {
-        min-height: var(--target-comfortable); /* MUST stay ≥48 — check:tap-targets enforces */
+        min-height: var(--target-comfortable);
         padding: 0.5rem 0.75rem;
         font-size: 0.7rem;
         letter-spacing: 0.02em;

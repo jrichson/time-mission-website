@@ -2,6 +2,7 @@
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import { allLocations } from '../data/locations';
 import { locationOpeningLabel } from '../lib/location-status';
+import { locationHref, locationStatusBadge } from '../lib/location-view';
 
 interface Props {
     currentLang?: string;
@@ -11,13 +12,8 @@ const { currentLang = 'en' } = Astro.props;
 const usLocations = allLocations.filter((l) => l.region === 'us');
 const euLocations = allLocations.filter((l) => l.region === 'europe');
 
-function locationHref(loc: (typeof allLocations)[number]) {
-    if (loc.externalUrl) return loc.externalUrl;
-    return `/${loc.slug}`;
-}
-
 function comingSoonLabel(loc: (typeof allLocations)[number]) {
-    return locationOpeningLabel(loc) || 'Coming Soon';
+    return locationStatusBadge(loc) || 'Coming Soon';
 }
 ---
 

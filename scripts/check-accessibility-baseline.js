@@ -43,6 +43,25 @@ for (const filePath of pages) {
   }
 }
 
+for (const rel of ['src/components/TicketPanel.astro', 'components/ticket-panel.html']) {
+  const filePath = path.join(root, rel);
+  if (!fs.existsSync(filePath)) continue;
+  const panel = fs.readFileSync(filePath, 'utf8');
+  for (const required of [
+    'role="dialog"',
+    'aria-modal="true"',
+    'aria-labelledby="ticketPanelTitle"',
+    'aria-describedby="ticketPanelIntro"',
+    'aria-hidden="true"',
+    'inert',
+    '<h2 id="ticketPanelTitle"',
+  ]) {
+    if (!panel.includes(required)) {
+      errors.push(`${rel} has ticket panel without ${required}`);
+    }
+  }
+}
+
 if (errors.length) {
   console.error('Accessibility baseline check failed:');
   for (const error of errors) console.error(`- ${error}`);

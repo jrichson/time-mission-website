@@ -640,6 +640,35 @@ function errorResponse(error, asJSON) {
   });
 }
 
+function validateSubmission(formType, raw) {
+  return formType === 'newsletter'
+    ? validateNewsletterSubmission(raw)
+    : validateContactSubmission(raw);
+}
+
+function emailForSubmission(formType, data) {
+  return formType === 'newsletter' ? newsletterEmail(data) : contactEmail(data);
+}
+
+function applySubmissionRecipients({ data, env, formType, message }) {
+  if (formType !== 'contact') return message;
+  const recipients = contactRecipientsFor(env, data);
+  if (recipients.length > 0) message.to = recipients.join(',');
+  return message;
+}
+
+async function archiveSubmission({ data, env, formType, request }) {
+  await assertEmailRateLimit({ email: data.email, env, formType });
+  await archiveFormSubmission({ data, env, formType, request });
+}
+
+async function deliverSubmission({ data, env, fetchImpl, formType, message }) {
+  if (formType === 'newsletter') {
+    await sendKlaviyoNewsletterSubscription({ data, env, fetchImpl });
+  }
+  await sendResendEmail({ env, fetchImpl, formType, message });
+}
+
 export async function handleFormRequest({
   env = {},
   fetchImpl = fetch,
@@ -666,22 +695,16 @@ export async function handleFormRequest({
       token: raw['cf-turnstile-response'],
     });
 
-    const data = formType === 'newsletter'
-      ? validateNewsletterSubmission(raw)
-      : validateContactSubmission(raw);
-    await assertEmailRateLimit({ email: data.email, env, formType });
-    await archiveFormSubmission({ data, env, formType, request });
+    const data = validateSubmission(formType, raw);
+    await archiveSubmission({ data, env, formType, request });
 
-    const message = formType === 'newsletter' ? newsletterEmail(data) : contactEmail(data);
-    if (formType === 'contact') {
-      const recipients = contactRecipientsFor(env, data);
-      if (recipients.length > 0) message.to = recipients.join(',');
-    }
-
-    if (formType === 'newsletter') {
-      await sendKlaviyoNewsletterSubscription({ data, env, fetchImpl });
-    }
-    await sendResendEmail({ env, fetchImpl, formType, message });
+    const message = applySubmissionRecipients({
+      data,
+      env,
+      formType,
+      message: emailForSubmission(formType, data),
+    });
+    await deliverSubmission({ data, env, fetchImpl, formType, message });
     return successResponse(request, asJSON);
   } catch (error) {
     return errorResponse(error, asJSON);

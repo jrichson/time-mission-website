@@ -1,6 +1,5 @@
 // ==========================================
 // BOOKING CONTROLLER
-// Booking gateway for URL resolution, analytics, the panel mount, and ?book=1.
 // ==========================================
 (function () {
     'use strict';

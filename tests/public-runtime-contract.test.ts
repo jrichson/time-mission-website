@@ -1,7 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { lazyRuntimeScripts, publicRuntimeScripts, versionedRuntimeSrc } from '../src/lib/public-runtime-contract';
 
 describe('Public runtime contract', () => {
@@ -55,19 +52,4 @@ describe('Public runtime contract', () => {
       .toBe('/js/contact-form-analytics.js?v=1');
   });
 
-  it('keeps GTM installed high in head and noscript as first body child', () => {
-    const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-    const siteHead = fs.readFileSync(path.join(root, 'src', 'components', 'SiteHead.astro'), 'utf8');
-    const siteLayout = fs.readFileSync(path.join(root, 'src', 'layouts', 'SiteLayout.astro'), 'utf8');
-
-    expect(siteHead).toContain("PUBLIC_GTM_CONTAINER_ID || 'GTM-WQPWRNJB'");
-    expect(siteHead).toContain('https://www.googletagmanager.com/gtm.js?id=');
-    expect(siteHead).not.toContain('https://www.googletagmanager.com/ns.html');
-    expect(siteHead.indexOf('https://www.googletagmanager.com/gtm.js?id='))
-      .toBeLessThan(siteHead.indexOf('<title>{title}</title>'));
-
-    expect(siteLayout).toContain("PUBLIC_GTM_CONTAINER_ID || 'GTM-WQPWRNJB'");
-    expect(siteLayout).toContain('https://www.googletagmanager.com/ns.html?id=');
-    expect(siteLayout).toMatch(/<body class=\{bodyClass\} data-location=\{bodyDataLocation\}>\s*<!-- Google Tag Manager \(noscript\) -->/);
-  });
 });

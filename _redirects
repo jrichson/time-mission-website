@@ -37,6 +37,7 @@
 /faq.html /faq 301
 /contact.html /contact 301
 /contact-thank-you.html /contact-thank-you 301
+/locations.html /locations 301
 /locations/index.html /locations 301
 /philadelphia.html /philadelphia 301
 /houston.html /houston 301
@@ -60,19 +61,28 @@
 
 # Marketing shortcuts (per client audit 2026-05)
 /adult-birthday-parties /groups/birthdays 301
+/adult-birthday-party /groups/birthdays 301
 /kids-birthday-party /groups/birthdays 301
 /bachelorette-party /groups/bachelor-ette 301
 /date-night-ideas / 301
+/date-night / 301
 /corporate-events /groups/corporate 301
+/corporate-event /groups/corporate 301
 /team-building /groups/private-events 301
 /school-field-trips /groups/field-trips 301
+/field-trips /groups/field-trips 301
 /youth-group-camp /groups/private-events 301
+/youth-group /groups/private-events 301
 /family-gathering /groups/holidays 301
 /bus-tour /groups/private-events 301
+/bus-tours /groups/private-events 301
 /house-rules /code-of-conduct 301
+/house-rules.html /code-of-conduct 301
 /privacy-policy /privacy 301
 /privacy-policy/ /privacy 301
+/privacy-policy.html /privacy 301
 /terms-and-conditions /terms 301
+/terms-and-conditions.html /terms 301
 /r1-indoor-karting /lincoln 301
 /r1indoorkarting /lincoln 301
 /palisades-center /west-nyack 301

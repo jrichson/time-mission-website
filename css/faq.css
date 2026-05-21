@@ -1,5 +1,3 @@
-/* Unified FAQ Styles */
-
 .faq-section {
     display: flex;
     flex-direction: column;
@@ -230,9 +228,6 @@
     }
 }
 
-/* ≤480 small-mobile tier — Phase 11 RESP-01.
-   Reduce horizontal padding on accordion rows so question text doesn't wrap to 4+ lines on iPhone SE.
-   Keep vertical padding ≥ 14px so combined with 18px icon and line-height the row stays ≥ 44px tap target. */
 @media (max-width: 480px) {
     .mini-faq {
         padding: 3.5rem 1rem;
