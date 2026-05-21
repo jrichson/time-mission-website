@@ -45,7 +45,7 @@
             overflow-x: clip;
         }
 
-        .contact-form-card h3 {
+        .contact-form-card h2 {
             font-family: var(--display);
             font-size: 1.8rem;
             letter-spacing: 0.02em;
@@ -168,7 +168,7 @@
             gap: 1.5rem;
         }
 
-        .locations-info h3 {
+        .locations-info h2 {
             font-family: var(--display);
             font-size: 1.8rem;
             letter-spacing: 0.02em;
@@ -199,7 +199,7 @@
             transform: translateY(-2px);
         }
 
-        .location-contact-card h4 {
+        .location-contact-card h3 {
             font-family: var(--display);
             font-size: 1.2rem;
             letter-spacing: 0.02em;
@@ -209,7 +209,7 @@
             gap: 0.5rem;
         }
 
-        .location-contact-card h4 svg {
+        .location-contact-card h3 svg {
             width: 18px;
             height: 18px;
             color: var(--orange);
@@ -263,7 +263,7 @@
             margin-top: 1rem;
         }
 
-        .general-contact h4 {
+        .general-contact h3 {
             font-family: var(--display);
             font-size: 1.1rem;
             letter-spacing: 0.02em;
@@ -320,10 +320,11 @@
             z-index: 1;
         }
 
-        .ticket-panel-header h3 {
+        .ticket-panel-header h2 {
             font-family: var(--display);
             font-size: 1.5rem;
             letter-spacing: 0.02em;
+            margin: 0;
         }
 
         .ticket-panel-close {
@@ -440,7 +441,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .ticket-panel-info h4 {
+        .ticket-panel-info h3 {
             font-family: var(--display);
             font-size: 1rem;
             letter-spacing: 0.05em;

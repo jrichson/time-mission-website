@@ -84,7 +84,6 @@
             font-weight: 700;
             animation: gradient-shift 5s ease-in-out infinite;
         }
-
         @media (prefers-reduced-motion: reduce) {
             .gift-card-location-text {
                 animation: none;
@@ -118,7 +117,6 @@
         .gift-card-visual:hover .gift-card-mockup {
             transform: translateY(-6px) rotate(-1.5deg);
         }
-
         @media (prefers-reduced-motion: reduce) {
             .gift-card-mockup::before {
                 animation: none;
@@ -134,14 +132,14 @@
             gap: 1.5rem;
         }
 
-        .gift-card-info h2 {
+        .gift-card-info h1 {
             font-family: var(--display);
             font-size: 2.5rem;
             letter-spacing: 0.02em;
             line-height: 1.1;
         }
 
-        .gift-card-info h2 span {
+        .gift-card-info h1 span {
             background: var(--gradient-accent);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;

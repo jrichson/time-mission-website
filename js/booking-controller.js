@@ -308,7 +308,7 @@
     var briqFitRetryTimer = null;
     var briqResizeHandlerAttached = false;
     var BRIQ_WIDGET_SCRIPT_SRC = 'https://widgetcdn.briqbookings.com/widget/widget.js';
-    var BRIQ_WIDGET_STYLE_HREF = '/css/briq-widget.css';
+    var BRIQ_WIDGET_STYLE_HREF = '/css/briq-widget.css?v=2';
 
     function getBriqWidgetContainer() {
         return document.getElementById('briq-widget-container');
@@ -547,15 +547,24 @@
         el.style.setProperty(prop, value, 'important');
     }
 
+    function setBriqWidgetMainVisibility(visible) {
+        var main = getBriqWidgetMain();
+        if (!main) return;
+        setImportantStyle(main, 'visibility', visible ? 'visible' : 'hidden');
+    }
+
     function fitBriqWidgetLayout() {
         var main = getBriqWidgetMain();
-        if (!main || !main.classList.contains('bw-open')) return false;
+        if (!main) return false;
         var panel = mountedPanel && mountedPanel.panelEl ? mountedPanel.panelEl : document.getElementById('ticketPanel');
         var viewport = viewportSize();
         var width = viewport.width;
         var height = viewport.height;
         var widgetWidth;
         var scale = 1;
+
+        setImportantStyle(main, 'transition', 'none');
+        setImportantStyle(main, 'animation', 'none');
 
         if (width <= 420) {
             widgetWidth = 420;
@@ -626,12 +635,18 @@
         var container = getBriqWidgetContainer();
         if (main && main.classList.contains('bw-open')) {
             stopBriqOpenRetry();
+            fitBriqWidgetLayout();
+            setBriqWidgetMainVisibility(true);
             setBriqLoadingState(container, false);
             scheduleBriqWidgetFit();
             observeBriqClose();
             return true;
         }
         if (attempt > 60) return false;
+        if (main) {
+            setBriqWidgetMainVisibility(false);
+            fitBriqWidgetLayout();
+        }
         setBriqWidgetOpen(true);
         scheduleBriqWidgetFit();
         stopBriqOpenRetry();
@@ -664,10 +679,14 @@
             return routeToBriqVenuePage(loc);
         }
         var container = host.container;
+        setBriqWidgetMainVisibility(false);
+        fitBriqWidgetLayout();
+        setBriqPanelMode(true);
         if (mountedPanel && typeof mountedPanel.openPanel === 'function') {
             mountedPanel.openPanel({
                 kind: 'tickets',
                 locationId: (loc && (loc.id || loc.slug)) || '',
+                briqPanel: true,
             });
         }
         setBriqPanelMode(true);
@@ -1034,21 +1053,23 @@
             if (ctaText) ctaText.textContent = copy.cta;
         }
 
-        function setPanelIntent(intent) {
+        function setPanelIntent(intent, options) {
             var next = intent || {};
             panelIntent = {
                 kind: BookingJourney.normalizeKind(next.kind || 'tickets'),
                 groupType: BookingJourney.normalizeGroupType(next.groupType || next.pageGroupType || ''),
             };
-            syncCtaHref();
+            if (!options || !options.skipSync) syncCtaHref();
         }
 
         mountedPanel = {
             panelEl: panel,
             openPanel: function (detail) {
-                setPanelIntent(detail);
+                var isBriqPanel = !!(detail && detail.briqPanel);
+                setPanelIntent(detail, { skipSync: isBriqPanel });
+                if (isBriqPanel) setBriqPanelMode(true);
                 if (openPanel) openPanel(detail);
-                syncCtaHref();
+                if (!isBriqPanel) syncCtaHref();
             },
             closePanel: closePanel,
             setPanelIntent: setPanelIntent,

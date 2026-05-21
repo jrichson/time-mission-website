@@ -1,15 +1,19 @@
 /* Briq booking widget: panel-hosted flow for Briq-backed venues. */
 .ticket-panel.ticket-panel--briq {
     width: min(var(--briq-panel-width, 634px), 100vw) !important;
-    right: max(calc(var(--briq-panel-width, 634px) * -1), -100vw) !important;
-    transform: translateX(0) !important;
+    right: 0 !important;
+    transform: none !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease !important;
     overflow: hidden !important;
     background: var(--black);
 }
 
 .ticket-panel.ticket-panel--briq.active {
-    right: 0 !important;
-    transform: translateX(0) !important;
+    transform: none !important;
+    opacity: 1;
+    visibility: visible;
 }
 
 .ticket-panel.ticket-panel--briq .ticket-panel-header,

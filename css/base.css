@@ -58,8 +58,7 @@ html {
     scroll-behavior: smooth;
     overflow-x: clip;
 }
-
-@media (prefers-reduced-motion: reduce) {
+        @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
     }
@@ -287,20 +286,14 @@ body {
 
 .ticket-panel {
     width: min(360px, 100vw) !important;
-    right: max(-360px, -100vw) !important;
-    transform: translateX(0) !important;
+    right: 0 !important;
+    transform: translateX(100%) !important;
     transition:
-        right var(--motion-slow) var(--ease-standard),
+        transform var(--motion-slow) var(--ease-standard),
         visibility var(--motion-slow) var(--ease-standard) !important;
 }
 
-.ticket-panel:not(.active) {
-    display: none !important;
-}
-
 .ticket-panel.active {
-    display: block !important;
-    right: 0 !important;
     transform: translateX(0) !important;
 }
 
@@ -479,8 +472,7 @@ body.has-noise::before {
     opacity: 1;
     transform: translateY(0);
 }
-
-@media (prefers-reduced-motion: reduce) {
+        @media (prefers-reduced-motion: reduce) {
     .reveal,
     .reveal.visible {
         opacity: 1;

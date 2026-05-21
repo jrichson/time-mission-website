@@ -220,7 +220,6 @@
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
-
         @media (prefers-reduced-motion: reduce) {
             .hero-title .line-2 {
                 animation: none;
@@ -1528,16 +1527,18 @@
         }
 
         .mini-faq-a {
-            max-height: 0;
+            display: grid;
+            grid-template-rows: 0fr;
             overflow: hidden;
-            transition: max-height 0.3s ease;
+            transition: grid-template-rows 0.3s ease;
         }
 
         .mini-faq-item.open .mini-faq-a {
-            max-height: 200px;
+            grid-template-rows: 1fr;
         }
 
         .mini-faq-a p {
+            min-height: 0;
             padding: 0 1.5rem 1.25rem;
             color: var(--gray);
             font-size: 0.9rem;
@@ -1958,7 +1959,7 @@
             z-index: 1;
         }
 
-        .ticket-panel-header h3 {
+        .ticket-panel-header h2 {
             font-family: var(--display);
             font-size: 1.5rem;
             letter-spacing: 0.02em;
@@ -2080,7 +2081,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .ticket-panel-info h4 {
+        .ticket-panel-info h3 {
             font-family: var(--display);
             font-size: 1rem;
             letter-spacing: 0.05em;
@@ -2630,12 +2631,17 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 8px 30px rgba(239, 75, 35, 0.4);
-            animation: icon-bounce 2s ease-in-out infinite;
+            animation: game-popup-icon-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
-        @keyframes icon-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        @keyframes game-popup-icon-in {
+            0% { opacity: 0; transform: translateY(6px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .game-popup-icon {
+                animation: none;
+            }
         }
 
         .game-popup-icon svg {

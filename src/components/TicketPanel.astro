@@ -19,9 +19,18 @@ const briqToggleState = briqWidget
 
 <!-- Ticket Popup Panel -->
 <div class="ticket-overlay" id="ticketOverlay"></div>
-<div class="ticket-panel" id="ticketPanel">
+<div
+    class="ticket-panel"
+    id="ticketPanel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ticketPanelTitle"
+    aria-describedby="ticketPanelIntro"
+    aria-hidden="true"
+    inert
+>
     <div class="ticket-panel-header">
-        <h3 id="ticketPanelTitle" data-i18n="booking.title.default">Book Your Adventure</h3>
+        <h2 id="ticketPanelTitle" data-i18n="booking.title.default">Book Your Adventure</h2>
         <button class="ticket-panel-close" id="ticketClose" aria-label="Close ticket panel" data-i18n-aria-label="booking.close">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -49,7 +58,7 @@ const briqToggleState = briqWidget
             </a>
 
             <div class="ticket-panel-info">
-                <h4 data-i18n="booking.quickInfo">QUICK INFO</h4>
+                <h3 data-i18n="booking.quickInfo">QUICK INFO</h3>
                 <div class="ticket-info-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"></circle>

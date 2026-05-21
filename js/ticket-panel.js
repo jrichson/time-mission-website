@@ -7,6 +7,7 @@
     var ticketLocSel   = document.getElementById('ticketLocation');
     var ticketBookBtn  = document.getElementById('ticketBookBtn');
     var pageLocation   = (document.body && document.body.dataset.location) || '';
+    var lastFocusedBeforePanel = null;
     var monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
@@ -84,15 +85,27 @@
 
     function openTicketPanel(e) {
         if (e && typeof e.preventDefault === 'function') e.preventDefault();
+        if (!ticketPanel.classList.contains('active')) {
+            lastFocusedBeforePanel = document.activeElement && document.activeElement !== document.body
+                ? document.activeElement
+                : null;
+        }
         var context = getLocationContext();
         var current = context && typeof context.getCurrent === 'function' ? context.getCurrent() : null;
         var activeLocation = (current && (current.id || current.slug)) || pageLocation;
         if (activeLocation && ticketLocSel) {
             ticketLocSel.value = String(activeLocation).toLowerCase().trim().replace(/\s+/g, '-');
         }
+        ticketPanel.removeAttribute('aria-hidden');
+        ticketPanel.removeAttribute('inert');
         ticketPanel.classList.add('active');
         if (ticketOverlay) ticketOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
+        window.requestAnimationFrame(function () {
+            if (!ticketPanel.classList.contains('ticket-panel--briq') && ticketClose && typeof ticketClose.focus === 'function') {
+                ticketClose.focus({ preventScroll: true });
+            }
+        });
         if (window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
             window.TMAnalytics.track('ticket_panel_open', {
                 location_slug: ticketLocSel ? ticketLocSel.value : '',
@@ -109,6 +122,13 @@
         ticketPanel.classList.remove('active');
         if (ticketOverlay) ticketOverlay.classList.remove('active');
         document.body.style.overflow = '';
+        var restoreTarget = lastFocusedBeforePanel;
+        lastFocusedBeforePanel = null;
+        if (restoreTarget && document.contains(restoreTarget) && typeof restoreTarget.focus === 'function') {
+            restoreTarget.focus({ preventScroll: true });
+        }
+        ticketPanel.setAttribute('aria-hidden', 'true');
+        ticketPanel.setAttribute('inert', '');
         if (window.TMAnalytics && typeof window.TMAnalytics.track === 'function') {
             window.TMAnalytics.track('ticket_panel_close', {
                 location_slug: ticketLocSel ? ticketLocSel.value : '',

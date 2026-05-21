@@ -19,11 +19,11 @@
     position: fixed;
     height: 100%;
     background: linear-gradient(200deg, var(--dark) 0%, var(--black) 50%);
-    right: max(-360px, -100vw);
+    right: 0;
     top: 0;
     visibility: hidden;
-    transform: translateX(0);
-    transition: right 0.4s ease, visibility 0.4s ease;
+    transform: translateX(100%);
+    transition: transform 0.4s ease, visibility 0.4s ease;
     border-left: 1px solid rgba(255, 107, 44, 0.3);
     padding: 0;
     z-index: 9999;
@@ -31,7 +31,6 @@
 }
 
 .ticket-panel.active {
-    right: 0;
     visibility: visible;
     transform: translateX(0);
 }
@@ -48,10 +47,11 @@
     z-index: 1;
 }
 
-.ticket-panel-header h3 {
+.ticket-panel-header h2 {
     font-family: var(--display);
     font-size: 1.5rem;
     letter-spacing: 0.02em;
+    margin: 0;
 }
 
 .ticket-panel-close {
@@ -275,7 +275,7 @@
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.ticket-panel-info h4 {
+.ticket-panel-info h3 {
     font-family: var(--display);
     font-size: 1rem;
     letter-spacing: 0.05em;
@@ -325,8 +325,12 @@
     outline: 2px solid var(--orange);
     outline-offset: 3px;
 }
+        @media (prefers-reduced-motion: reduce) {
+    .ticket-overlay,
+    .ticket-panel {
+        transition: none;
+    }
 
-@media (prefers-reduced-motion: reduce) {
     .btn-ticket-book:hover {
         transform: none;
     }

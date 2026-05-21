@@ -331,7 +331,7 @@
 
     <!-- Testimonials -->
     <section class="testimonials" id="reviews">
-        <div class="testimonials-scroll" tabindex="0" aria-label="Guest testimonials">
+        <div class="testimonials-scroll" role="region" tabindex="0" aria-label="Guest testimonials">
             <div class="testimonial-card">
                 <div class="testimonial-rating">★★★★★</div>
                 <p class="testimonial-text">"My son's birthday party was absolutely epic! The staff was amazing and all the kids had an incredible time. Highly recommend for any celebration."</p>

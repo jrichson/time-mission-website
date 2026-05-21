@@ -13,7 +13,7 @@
             </div>
 
             <div class="gift-card-info">
-                <h2>GIVE THE GIFT OF <span>ADVENTURE</span></h2>
+                <h1>GIVE THE GIFT OF <span>ADVENTURE</span></h1>
                 <p>Time Mission gift cards make the perfect present for friends, family, or coworkers. Available in any amount, redeemable at your chosen location, and they never expire.</p>
                 <a href="#" class="btn-primary btn-gift-card" id="giftCardBuyBtn" data-gift="1">
                     Buy a Gift Card

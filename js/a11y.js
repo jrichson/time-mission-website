@@ -78,7 +78,7 @@
         var dialog = document.getElementById('ticketPanel');
         if (!dialog) return;
 
-        var heading = dialog.querySelector('.ticket-panel-header h3');
+        var heading = dialog.querySelector('.ticket-panel-header h2');
         if (heading && !heading.id) heading.id = 'ticket-panel-title';
 
         dialog.setAttribute('role', 'dialog');
