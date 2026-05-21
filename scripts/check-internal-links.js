@@ -62,6 +62,10 @@ for (const filePath of pages) {
     if (raw.startsWith('{{') || raw.includes('{{')) {
       continue;
     }
+    if (/^\/contact\?/i.test(raw)) {
+      errors.push(`${relative} links to crawlable contact parameter URL: ${raw}. Use /contact#location=... for contact prefill links.`);
+      continue;
+    }
 
     const clean = stripQueryAndHash(raw);
     if (!clean || clean === '/') continue;

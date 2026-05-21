@@ -49,7 +49,10 @@ export function locationContactItems(loc: Pick<LocationRecord, 'contact'>): Loca
 }
 
 export function locationContactHref(loc: Pick<LocationRecord, 'slug'>, type = 'updates'): string {
-    return `/contact?location=${encodeURIComponent(loc.slug)}&type=${encodeURIComponent(type)}`;
+    const params = new URLSearchParams();
+    params.set('location', loc.slug);
+    params.set('type', type);
+    return `/contact#${params.toString()}`;
 }
 
 export function locationMarket(loc: Pick<LocationRecord, 'address'>): string {

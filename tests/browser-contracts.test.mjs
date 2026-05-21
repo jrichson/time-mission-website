@@ -467,7 +467,7 @@ describe('browser architecture contracts', () => {
         trigger: true,
       });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'dallas' }))
-      .toBe('/contact?location=dallas&type=updates');
+      .toBe('/contact#location=dallas&type=updates');
     expect(window.TMBooking.getDestination({ kind: 'groups', groupType: 'corporate', locationId: 'dallas' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'dallas' }))
@@ -476,13 +476,13 @@ describe('browser architecture contracts', () => {
       .toBe('');
     expect(window.LocationContext.getOverlayView('dallas').cta)
       .toMatchObject({
-        href: '/contact?location=dallas&type=updates',
+        href: '/contact#location=dallas&type=updates',
         bookingUrl: '',
         trigger: false,
       });
     expect(window.LocationContext.getLocationView('dallas'))
       .toMatchObject({
-        bookUrl: '/contact?location=dallas&type=updates',
+        bookUrl: '/contact#location=dallas&type=updates',
         bookLabel: 'Contact Us',
         comingSoon: true,
       });

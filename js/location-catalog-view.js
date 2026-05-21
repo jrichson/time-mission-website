@@ -126,10 +126,18 @@
         return '';
     }
 
+    function contactLeadUrl(slug, type) {
+        var params = new URLSearchParams();
+        if (slug) params.set('location', slug);
+        if (type) params.set('type', type);
+        var fragment = params.toString();
+        return '/contact' + (fragment ? '#' + fragment : '');
+    }
+
     function leadUrlForLocation(loc, slug, externalUrl) {
         if (externalUrl) return externalUrl;
         if (BookingJourney.isLeadOnlyComingSoon(loc)) {
-            return slug ? '/contact?location=' + encodeURIComponent(slug) + '&type=updates' : '/contact?type=updates';
+            return contactLeadUrl(slug, 'updates');
         }
         return '#';
     }

@@ -127,8 +127,21 @@
 
     directContactLocations().then(initLocationContactPanel);
 
-    (function () {
+    function contactDeepLinkParams() {
         var params = new URLSearchParams(window.location.search);
+        var hash = String(window.location.hash || '');
+        if (hash.charAt(0) === '#') hash = hash.slice(1);
+        if (hash.charAt(0) === '?') hash = hash.slice(1);
+        if (hash) {
+            new URLSearchParams(hash).forEach(function (value, name) {
+                if (!params.has(name)) params.set(name, value);
+            });
+        }
+        return params;
+    }
+
+    (function () {
+        var params = contactDeepLinkParams();
         var type = params.get('type');
         var location = params.get('location');
         var subjectSelect = document.getElementById('subject');

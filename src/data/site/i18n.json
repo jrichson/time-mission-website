@@ -21,6 +21,7 @@
     "en": {
       "language.label": "Language",
       "language.changed": "Language set to {language}",
+      "nav.home": "Home",
       "nav.about": "About",
       "nav.missions": "Missions",
       "nav.groups": "Groups",
@@ -166,6 +167,7 @@
     "es": {
       "language.label": "Idioma",
       "language.changed": "Idioma cambiado a {language}",
+      "nav.home": "Inicio",
       "nav.about": "Acerca de",
       "nav.missions": "Misiones",
       "nav.groups": "Grupos",

@@ -1,5 +1,6 @@
 {
   "primary": [
+    { "label": "Home", "href": "/" },
     { "label": "About", "href": "/about" },
     { "label": "Missions", "href": "/missions" },
     { "label": "Groups", "href": "/groups" },

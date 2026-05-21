@@ -13,6 +13,14 @@
         return normalizeLocation(value || 'tickets');
     }
 
+    function contactLeadUrl(slug, type) {
+        var params = new URLSearchParams();
+        if (slug) params.set('location', slug);
+        if (type) params.set('type', type);
+        var fragment = params.toString();
+        return '/contact' + (fragment ? '#' + fragment : '');
+    }
+
     function isNavigableHref(href) {
         var value = String(href || '').trim();
         return !!value && value !== '#' && !/^javascript:/i.test(value);
@@ -143,7 +151,7 @@
 
     function resolveComingSoonLeadUrl(loc, fallbackSlug) {
         var slug = (loc && (loc.slug || loc.id)) || fallbackSlug || '';
-        return slug ? '/contact?location=' + encodeURIComponent(slug) + '&type=updates' : '/contact?type=updates';
+        return contactLeadUrl(slug, 'updates');
     }
 
     function resolveLocationDestination(loc, options) {

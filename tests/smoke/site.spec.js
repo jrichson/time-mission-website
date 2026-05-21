@@ -946,7 +946,7 @@ test('contact form uses configured submission endpoint', async ({ page }) => {
 });
 
 test('contact page only shows direct info for the selected location', async ({ page }) => {
-  await page.goto('/contact?location=houston&type=updates');
+  await page.goto('/contact#location=houston&type=updates');
 
   await expect(page.locator('#location')).toHaveValue('houston');
   await expect(page.locator('[data-location-contact-card]')).toBeVisible();
@@ -960,6 +960,14 @@ test('contact page only shows direct info for the selected location', async ({ p
   await expect(page.locator('[data-location-contact-card]')).toBeHidden();
   await expect(page.locator('[data-location-contact-empty]')).toBeVisible();
   await expect(page.locator('[data-location-contact-empty]')).toContainText('Orland Park');
+});
+
+test('contact page still accepts legacy query prefill links', async ({ page }) => {
+  await page.goto('/contact?location=houston&type=updates');
+
+  await expect(page.locator('#location')).toHaveValue('houston');
+  await expect(page.locator('#subject')).toHaveValue('general');
+  await expect(page).toHaveURL(/\/contact$/);
 });
 
 test('contact page follows the active site location', async ({ page }) => {
