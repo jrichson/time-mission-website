@@ -83,6 +83,17 @@ if (fs.existsSync(aiContextPath)) {
     }
 }
 
+const pricingPath = path.join(root, 'dist', 'pricing.md');
+if (fs.existsSync(pricingPath)) {
+    const pricingBody = fs.readFileSync(pricingPath, 'utf8');
+    if (!pricingBody.includes('| Antwerp | https://timemission.eu/antwerp |')) {
+        errors.push('pricing.md must use the external EU public URL for Antwerp');
+    }
+    if (/https:\/\/timemission\.com\/(?:antwerp|brussels)\b/.test(pricingBody)) {
+        errors.push('pricing.md must not publish on-site public URLs for EU locations');
+    }
+}
+
 const urlRe = /https:\/\/timemission\.com[^\s\)`'"]+/g;
 const found = [...body.matchAll(urlRe)].map((m) => m[0]);
 for (const u of found) {

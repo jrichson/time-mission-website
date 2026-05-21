@@ -24,6 +24,10 @@ function escapeCell(value: string): string {
     return normalizeWhitespace(value).replace(/\|/g, '\\|');
 }
 
+function locationPublicUrl(location: LocationRecord): string {
+    return location.externalUrl || canonicalUrl(`/${location.slug}`);
+}
+
 function faqAnswer(sectionId: string, question: string): string {
     const section = (faqsData.sections as FaqSection[]).find((entry) => entry.id === sectionId);
     const item = section?.items.find((entry) => entry.q === question);
@@ -36,7 +40,7 @@ function bookingRows(locations: LocationRecord[]): string {
         .map((location) =>
             `| ${[
                 location.shortName,
-                canonicalUrl(`/${location.slug}`),
+                locationPublicUrl(location),
                 location.bookingUrl || 'Contact location',
                 location.giftCardUrl || 'Contact location',
             ].map(escapeCell).join(' | ')} |`,

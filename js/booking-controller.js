@@ -689,7 +689,6 @@
                 briqPanel: true,
             });
         }
-        setBriqPanelMode(true);
         ensureBriqResizeHandler();
         setBriqLoadingState(container, true);
         container.classList.remove('is-highlighted');
