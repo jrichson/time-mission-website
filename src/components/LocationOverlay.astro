@@ -58,6 +58,8 @@ function comingSoonLabel(loc: (typeof allLocations)[number]) {
                 {euLocations.map((loc) => (
                     <a
                         href={locationHref(loc)}
+                        data-city={loc.shortName}
+                        data-tm-location-slug={loc.slug}
                         data-tm-external-location="true"
                         class={loc.status === 'coming-soon' ? 'location-coming-soon' : undefined}
                     >

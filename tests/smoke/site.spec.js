@@ -389,7 +389,7 @@ test('desktop location selection keeps the current page context', async ({ page,
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });
 
-test('desktop location selector treats Europe venues as external links only', async ({ page, isMobile }) => {
+test('desktop location selector previews Europe venues while keeping them external', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop-only overlay path');
 
   await page.goto('/');
@@ -399,11 +399,21 @@ test('desktop location selector treats Europe venues as external links only', as
   const brussels = page.locator('#locationDropdown a[href="https://timemission.eu"]').first();
 
   await expect(antwerp).toHaveAttribute('data-tm-external-location', 'true');
-  await expect(antwerp).not.toHaveAttribute('data-city', /./);
-  await expect(antwerp).not.toHaveAttribute('data-tm-location-slug', /./);
+  await expect(antwerp).toHaveAttribute('data-city', 'Antwerp');
+  await expect(antwerp).toHaveAttribute('data-tm-location-slug', 'antwerp');
+  await antwerp.hover();
+  await expect(page.locator('#locationInfo .location-info-name')).toContainText('Antwerp');
+  await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit EU Site');
+  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/antwerp');
+
   await expect(brussels).toHaveAttribute('data-tm-external-location', 'true');
-  await expect(brussels).not.toHaveAttribute('data-city', /./);
-  await expect(brussels).not.toHaveAttribute('data-tm-location-slug', /./);
+  await expect(brussels).toHaveAttribute('data-city', 'Brussels');
+  await expect(brussels).toHaveAttribute('data-tm-location-slug', 'brussels');
+  await brussels.hover();
+  await expect(page.locator('#locationInfo .location-info-name')).toContainText('Brussels');
+  await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit EU Site');
+  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });
 
 test('Europe location links preserve tracking params without becoming local selections', async ({ page, isMobile }) => {
