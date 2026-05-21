@@ -63,9 +63,32 @@
 }
 
 @media (max-width: 768px) {
+    .ticker-bar {
+        background:
+            linear-gradient(90deg, rgba(0, 229, 255, 0.1), rgba(255, 107, 44, 0.14), rgba(0, 229, 255, 0.1)),
+            var(--dark);
+        border-bottom-color: rgba(255, 107, 44, 0.28);
+    }
+
+    .ticker-track {
+        align-items: center;
+        justify-content: center;
+        min-height: var(--tm-ticker-height);
+        padding-inline: 0.75rem;
+    }
+
     .ticker-item {
-        font-size: 0.6rem;
-        padding: 0 2rem;
+        justify-content: center;
+        max-width: calc(100vw - 1.5rem);
+        padding: 0;
+        font-size: 0.68rem;
+        line-height: 1.25;
+        letter-spacing: 0.08em;
+        text-align: center;
+        text-wrap: balance;
+        white-space: normal;
+        color: var(--white);
+        text-shadow: 0 0 14px rgba(0, 229, 255, 0.28);
     }
 }
 
@@ -1109,9 +1132,8 @@
    Tap-target floor: .btn-tickets keeps min-height: 48px; .location-btn keeps min-height: 44px. */
 @media (max-width: 480px) {
     .ticker-item {
-        font-size: 0.55rem;
-        letter-spacing: 0.12em;
-        padding: 0 1.5rem;
+        font-size: 0.64rem;
+        letter-spacing: 0.07em;
     }
 
     .nav {

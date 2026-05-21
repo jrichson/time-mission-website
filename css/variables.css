@@ -79,6 +79,6 @@
 
 @media (max-width: 768px) {
     :root {
-        --tm-ticker-height: 32px;
+        --tm-ticker-height: 40px;
     }
 }
