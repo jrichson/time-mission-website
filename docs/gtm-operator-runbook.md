@@ -3,7 +3,7 @@
 ## Container configuration
 
 1. Create or open the production GTM **web** container for `timemission.com`.
-2. Set Astro env **`PUBLIC_GTM_CONTAINER_ID`** (e.g. `GTM-XXXX`) in the build environment. Omit for builds that must not load GTM (local smoke without third-party requests is fine).
+2. Set Astro env **`PUBLIC_GTM_CONTAINER_ID=GTM-WQPWRNJB`** in the build environment. The code defaults to this ID, but the explicit Cloudflare Pages env var keeps the production measurement dependency visible in project settings.
 3. Publish the workspace after changes; use **Preview** / Tag Assistant against a preview deployment before production.
 
 ### Optional: web GTM + server-side GTM support

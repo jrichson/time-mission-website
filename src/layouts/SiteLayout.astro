@@ -63,6 +63,7 @@ const pageLocation = bodyDataLocation
     ? allLocations.find((loc) => loc.id === bodyDataLocation || loc.slug === bodyDataLocation)
     : null;
 const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocation.briqWidget;
+const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQPWRNJB').trim();
 ---
 
 <!DOCTYPE html>
@@ -104,6 +105,18 @@ const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocati
         <slot name="json-ld" />
     </head>
     <body class={bodyClass} data-location={bodyDataLocation}>
+        <!-- Google Tag Manager (noscript) -->
+        {gtmContainerId ? (
+            <noscript>
+                <iframe
+                    src={`https://www.googletagmanager.com/ns.html?id=${gtmContainerId}`}
+                    height="0"
+                    width="0"
+                    style="display:none;visibility:hidden"
+                ></iframe>
+            </noscript>
+        ) : null}
+        <!-- End Google Tag Manager (noscript) -->
         <a class="skip-link" href="#main">Skip to main content</a>
         <header role="banner">
             <slot name="pre-nav" />

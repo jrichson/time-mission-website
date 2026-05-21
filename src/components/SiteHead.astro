@@ -37,7 +37,7 @@ const og = landingHead ? seo.ogImage : ogOverride ?? seo.ogImage;
 const tw = landingHead ? seo.twitterImage : twOverride ?? seo.twitterImage;
 const robotsValue = landingHead ? seo.robots : robotsOverride ?? seo.robots;
 
-const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || '').trim();
+const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQPWRNJB').trim();
 const sgtmContainerUrl = String(import.meta.env.PUBLIC_SGTM_CONTAINER_URL || '').trim().replace(/\/+$/, '');
 const sgtmCollectPath = String(import.meta.env.PUBLIC_SGTM_COLLECT_PATH || '/g/collect').trim();
 
@@ -86,23 +86,6 @@ const consentDefaults: ConsentDefaults =
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>{title}</title>
-<!-- SEO META -->
-<meta name="description" content={description} />
-<link rel="canonical" href={canonicalUrl} />
-<meta name="robots" content={robotsValue} />
-{lastUpdatedIso ? <meta name="last-modified" content={lastUpdatedIso} /> : null}
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content={seo.siteName} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:url" content={canonicalUrl} />
-<meta property="og:image" content={og} />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={tw} />
-<link rel="icon" type="image/png" href="/assets/logo/TM_Favicon.png" />
 <script is:inline define:vars={{ analyticsLabels }}>window.__TM_ANALYTICS_LABELS__ = analyticsLabels;</script>
 <script is:inline define:vars={{ gtmContainerId, sgtmContainerUrl, sgtmCollectPath, consentDefaults, consentProfile }}>
     window.dataLayer = window.dataLayer || [];
@@ -129,32 +112,39 @@ const consentDefaults: ConsentDefaults =
         consent_profile: window.__TM_TAGGING_CONFIG__.consent_profile,
     });
 </script>
+<!-- Google Tag Manager -->
 {gtmContainerId ? (
-    <>
-        <script is:inline define:vars={{ gtmContainerId }}>
-            (function (w, d, s, l, i) {
-                w[l] = w[l] || [];
-                w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-                var f = d.getElementsByTagName(s)[0],
-                    j = d.createElement(s),
-                    dl = l != 'dataLayer' ? '&l=' + l : '';
-                j.async = true;
-                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-                f.parentNode.insertBefore(j, f);
-            })(window, document, 'script', 'dataLayer', gtmContainerId);
-        </script>
-        <noscript>
-            <iframe
-                src={`https://www.googletagmanager.com/ns.html?id=${gtmContainerId}`}
-                height="0"
-                width="0"
-                style="display:none;visibility:hidden"
-                aria-hidden="true"
-                tabindex="-1"
-            />
-        </noscript>
-    </>
+    <script is:inline define:vars={{ gtmContainerId }}>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', gtmContainerId);
+    </script>
 ) : null}
+<!-- End Google Tag Manager -->
+<title>{title}</title>
+<!-- SEO META -->
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+<meta name="robots" content={robotsValue} />
+{lastUpdatedIso ? <meta name="last-modified" content={lastUpdatedIso} /> : null}
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={seo.siteName} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={og} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={tw} />
+<link rel="icon" type="image/png" href="/assets/logo/TM_Favicon.png" />
 <link rel="preload" as="font" href="/assets/fonts/BebasNeue-Regular.woff2" type="font/woff2" crossorigin />
 <link rel="preload" as="font" href="/assets/fonts/DMSans-Normal.woff2" type="font/woff2" crossorigin />
 <link rel="preload" as="font" href="/assets/fonts/MonumentExtended-Regular.otf" type="font/otf" crossorigin />
