@@ -518,7 +518,9 @@
     <footer class="footer">
         <div class="footer-grid">
             <div class="footer-brand">
-                <img src="/assets/logo/TM_Logo_White.svg" alt="Time Mission" width="107" height="36" loading="lazy" decoding="async">
+                <a href="/" class="footer-brand-home" aria-label="Time Mission homepage">
+                    <img src="/assets/logo/TM_Logo_White.svg" alt="Time Mission" width="107" height="36" loading="lazy" decoding="async">
+                </a>
                 <p>A social gaming adventure where teams compete through immersive challenges across time and space.</p>
                 <div class="footer-social">
                     <a href="https://www.instagram.com/timemission/" target="_blank" rel="noopener" aria-label="Instagram">
@@ -534,6 +536,7 @@
             </div>            <div class="footer-column">
                 <h3 class="footer-title">EXPERIENCE</h3>
                 <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
                     <li><a href="/about">About</a></li>
                     <li><a href="/missions">The Missions</a></li>
                     <li><a href="/groups">Groups</a></li>

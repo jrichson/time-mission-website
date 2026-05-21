@@ -3,6 +3,7 @@ import SiteHead from '../components/SiteHead.astro';
 import SiteNav from '../components/SiteNav.astro';
 import MobileMenu from '../components/MobileMenu.astro';
 import LocationOverlay from '../components/LocationOverlay.astro';
+import PageSupportContent from '../components/PageSupportContent.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import TicketPanel from '../components/TicketPanel.astro';
 import SiteScripts from '../components/SiteScripts.astro';
@@ -140,6 +141,7 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQ
         </header>
         <main id="main" tabindex="-1">
             <slot />
+            <PageSupportContent canonicalPath={canonicalPath} pageLocation={pageLocation} />
         </main>
         <footer role="contentinfo">
             <slot name="footer">
