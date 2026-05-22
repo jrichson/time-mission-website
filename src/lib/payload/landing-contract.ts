@@ -14,12 +14,12 @@ export type PayloadLandingArchetype =
     | 'local_venue_city'
     | 'group_event';
 
-export type PayloadLandingLegacyTemplate =
+export type PayloadLandingCompatibilityTemplate =
     | 'campaign'
     | 'location_promo'
     | 'coming_soon';
 
-export type PayloadLandingTemplate = PayloadLandingArchetype | PayloadLandingLegacyTemplate;
+export type PayloadLandingTemplate = PayloadLandingArchetype | PayloadLandingCompatibilityTemplate;
 
 export type PayloadLandingLaunchState = 'open' | 'coming_soon';
 

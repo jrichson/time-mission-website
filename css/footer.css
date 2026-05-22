@@ -151,7 +151,7 @@ html {
     padding: 0.875rem 1.25rem;
     background: var(--dark);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 100px;
+    border-radius: var(--button-radius-pill);
     color: var(--white);
     font-family: var(--body);
     font-size: 0.9rem;
@@ -182,7 +182,7 @@ html {
     padding: 0.875rem 1.75rem;
     background: var(--gradient-primary);
     border: none;
-    border-radius: 100px;
+    border-radius: var(--button-radius-pill);
     color: var(--white);
     font-family: var(--body);
     font-size: 0.85rem;
@@ -242,8 +242,24 @@ html {
     transition: color var(--motion-standard) ease;
 }
 
+.footer-link-button {
+    color: rgba(255, 255, 255, 0.72);
+    font-family: var(--body);
+    font-size: 0.85rem;
+    background: transparent;
+    border: 0;
+    padding: 0 0.25rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.footer-link-button:focus-visible {
+    color: var(--white);
+}
+
 @media (hover: hover) {
-    .footer-legal a:hover {
+    .footer-legal a:hover,
+    .footer-link-button:hover {
         color: var(--orange);
     }
 }
@@ -327,6 +343,7 @@ html {
 }
 
 .footer-location-list a.coming-soon {
+    opacity: 0.7;
     pointer-events: none;
     cursor: default;
     display: inline-flex;
@@ -334,15 +351,16 @@ html {
     gap: 0.4rem;
 }
 
-.footer-location-list a.coming-soon .coming-soon-tag {
+.footer-location-list .coming-soon-tag {
     font-size: 0.55rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    background: rgba(255, 107, 44, 0.15);
-    color: var(--orange, #ff6b2c);
-    padding: 0.15rem 0.4rem;
-    border-radius: 100px;
+    background: rgba(255, 107, 44, 0.18);
+    color: var(--orange);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--button-radius-pill);
+    white-space: nowrap;
 }
 
 /* Footer Location Info (shown when location is selected) */
@@ -475,9 +493,6 @@ html {
     }
 }
 
-/* ≤480 small-mobile tier — Phase 11 RESP-01.
-   .footer side padding 32px → 1.25rem to recover useful width below 375px;
-   .footer-legal row wraps cleanly so legal links don't overflow. */
 @media (max-width: 480px) {
     .footer {
         padding: 2.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
@@ -519,5 +534,21 @@ html {
 
     .footer-legal a {
         font-size: 0.7rem;
+    }
+}
+
+@media (hover: none) {
+    .footer-social a:hover,
+    .footer-links a:hover,
+    .footer-legal a:hover,
+    .footer-location-toggle:hover,
+    .footer-location-list a:hover,
+    .footer-loc-phone:hover,
+    .footer-loc-map:hover,
+    .footer-loc-change:hover,
+    .footer-link-button:hover {
+        color: inherit;
+        transform: none;
+        opacity: inherit;
     }
 }

@@ -139,7 +139,7 @@ async function main() {
     );
 
     // Mirror the canonical Astro-generated sitemap back to the repo root so
-    // legacy validators (scripts/check-sitemap.js, check-route-contract.js)
+    // root-level validators (scripts/check-sitemap.js, check-route-contract.js)
     // that read root/sitemap.xml stay in sync without separate maintenance.
     const distSitemap = path.resolve(distDir, 'sitemap.xml');
     const rootSitemap = path.resolve(distDir, '..', 'sitemap.xml');

@@ -1,23 +1,10 @@
 import { allLocations, type LocationRecord } from '../data/locations';
 import { definePage } from './define-page';
+import { comingSoonLocationPageTaglines, locationPageTaglines } from './location-page-registry';
 import { hasTicketBooking, locationOpeningDateText, locationOpeningLabel } from './location-status';
 import { locationCtaView, locationMarket } from './location-view';
 import { buildLocationGraph, serializeGraph } from './schema/graph';
 import { applyTmMediaBase } from './tm-media';
-
-const defaultOpenTaglines = [
-    'Social Gaming Adventure',
-    'Family Game Night on Steroids',
-    'Birthday Parties, Leveled Up',
-    'Where Couch Potatoes Become Heroes',
-    'Touch Grass... Indoors',
-    'Corporate Team Building, But Fun',
-    'Making Memories Together',
-    'Built For Every Age',
-    'Your New Favorite Weekend',
-    'No Screens. Just Fun.',
-    'Team Up. Beat The Clock.',
-];
 
 function locationBySlug(slug: string): LocationRecord {
     const location = allLocations.find((entry) => entry.slug === slug);
@@ -49,11 +36,9 @@ function cityPageInit(location: LocationRecord, taglines: string[]) {
 export function buildOpenLocationPage({
     mainRaw,
     slug,
-    taglines = defaultOpenTaglines,
 }: {
     mainRaw: string;
     slug: string;
-    taglines?: string[];
 }) {
     const location = locationBySlug(slug);
     const canonicalPath = `/${slug}`;
@@ -63,7 +48,7 @@ export function buildOpenLocationPage({
         location,
         mainHtml: applyTmMediaBase(mainRaw),
         page: definePage({ canonicalPath }),
-        pageInit: cityPageInit(location, taglines),
+        pageInit: cityPageInit(location, locationPageTaglines(slug)),
     };
 }
 
@@ -91,15 +76,7 @@ export function buildComingSoonLocationPage(slug: string) {
         openingLabel,
         page: definePage({ canonicalPath }),
         pageDescription,
-        pageInit: cityPageInit(location, [
-            statusLabel,
-            'Social Gaming Adventure',
-            'Family Game Night on Steroids',
-            'Birthday Parties, Leveled Up',
-            'Corporate Team Building, But Fun',
-            'Built For Every Age',
-            'Team Up. Beat The Clock.',
-        ]),
+        pageInit: cityPageInit(location, comingSoonLocationPageTaglines(statusLabel)),
         pageTitle: `${location.name} | ${statusLabel}`,
     };
 }

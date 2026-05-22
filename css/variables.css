@@ -26,6 +26,7 @@
     --border-bright: #3a3a3a;
     --white: #FFFFFF;
     --white-soft: #E5E5E5;
+    --copy-bright: #c3c8d0;
     --gray: #8A8A8A;
     --gray-light: #a0a0a0;
 
@@ -59,6 +60,18 @@
     /* Interaction */
     --target-min: 44px;
     --target-comfortable: 48px;
+    --button-height-default: var(--target-min);
+    --button-height-primary: var(--target-comfortable);
+    --button-padding-y: 0.875rem;
+    --button-padding-x: 2rem;
+    --button-padding-y-compact: 0.75rem;
+    --button-padding-x-compact: 1.25rem;
+    --button-padding-x-tight: 0.75rem;
+    --button-gap: 0.625rem;
+    --button-radius-pill: 100px;
+    --button-line-height: 1.2;
+    --button-icon-size: 18px;
+    --icon-button-size: var(--target-min);
     --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
     --motion-fast: 0.2s;
     --motion-standard: 0.3s;

@@ -1,43 +1,10 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import LocationPageHeadLinks from '../components/LocationPageHeadLinks.astro';
+import OpenLocationPageShell from '../components/OpenLocationPageShell.astro';
 import phillyMainRaw from '../partials/philadelphia-main.frag.txt?raw';
 import { buildOpenLocationPage } from '../lib/location-page-shell';
 
-const cityPage = buildOpenLocationPage({
-    slug: 'philadelphia',
-    mainRaw: phillyMainRaw,
-    taglines: [
-        'Social Gaming Adventure',
-        "Better Than Your Ex's Personality",
-        'Date Night, Leveled Up',
-        'Family Game Night on Steroids',
-        'Where Couch Potatoes Become Heroes',
-        'Touch Grass... Indoors',
-        'Corporate Team Building, But Fun',
-        'Cheaper Than Therapy',
-        'Your New Favorite Addiction',
-        'Making Memories (& Enemies)',
-        'Swipe Right on Adventure',
-    ],
-});
+const slug = 'philadelphia';
+const cityPage = buildOpenLocationPage({ slug, mainRaw: phillyMainRaw });
 ---
 
-<SiteLayout
-    canonicalPath={cityPage.page.canonicalPath}
-    bodyDataLocation={cityPage.location.slug}
->
-    <Fragment slot="head-extra">
-        <LocationPageHeadLinks pageCss="/css/page-philadelphia.css?v=2" />
-    </Fragment>
-    <Fragment slot="json-ld">
-        <script type="application/ld+json" is:inline set:html={cityPage.ld}></script>
-    </Fragment>
-    <div set:html={cityPage.mainHtml} />
-    <Fragment slot="after-site-scripts">
-        <script is:inline define:vars={{ pageInit: cityPage.pageInit }}>
-            window.__TM_PAGE_INIT__ = pageInit;
-        </script>
-        <script defer is:inline src="/js/page-widgets.js?v=6"></script>
-    </Fragment>
-</SiteLayout>
+<OpenLocationPageShell cityPage={cityPage} />

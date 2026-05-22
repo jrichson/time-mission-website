@@ -1,5 +1,5 @@
 /**
- * Stable fingerprint for analytics label maps (RFC #9 spine).
+ * Stable fingerprint for analytics label maps used by the public site contract.
  * SYNC: Must match fingerprintAnalyticsLabels in scripts/lib/analytics-labels-fingerprint.cjs;
  * Node callers (checks, smoke) should require the .cjs module.
  */

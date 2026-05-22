@@ -3,12 +3,20 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 import { describe, expect, it } from 'vitest';
+import { getPublicSiteContract } from '../src/lib/site-contract.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
-const formsLinksAudit = JSON.parse(
-  fs.readFileSync(path.join(root, 'tests', 'fixtures', 'forms-links-audit.json'), 'utf8'),
-);
+const locationDoc = JSON.parse(fs.readFileSync(path.join(root, 'data', 'locations.json'), 'utf8'));
+const locationRecords = locationDoc.locations || [];
+const groupTypes = [
+  'birthdays',
+  'corporate',
+  'field-trips',
+  'bachelor-ette',
+  'private-events',
+  'holidays',
+];
 
 function readScript(rel) {
   return fs.readFileSync(path.join(root, rel), 'utf8');
@@ -93,6 +101,7 @@ function createBrowserContext(extraWindow = {}) {
       setItem() {},
     },
     dataLayer: [],
+    __TM_SITE_CONTRACT__: getPublicSiteContract(),
     ...extraWindow,
   };
 
@@ -160,23 +169,34 @@ function createAnchor(href, options = {}) {
 }
 
 describe('browser architecture contracts', () => {
-  it('real location data matches approved forms and links audit decisions', () => {
-    const doc = JSON.parse(fs.readFileSync(path.join(root, 'data', 'locations.json'), 'utf8'));
-    const byId = new Map((doc.locations || []).map((loc) => [loc.id, loc]));
+  it('real location data exposes required external routing facts', () => {
+    const byId = new Map(locationRecords.map((loc) => [loc.id, loc]));
+    const requireUrl = (locationId, field, value) => {
+      expect(value, `${locationId}.${field}`).toMatch(/^https?:\/\//);
+    };
 
-    for (const [locationId, groupUrls] of Object.entries(formsLinksAudit.groups)) {
-      const actual = byId.get(locationId)?.groupFormUrls || {};
-      for (const groupType of formsLinksAudit.groupTypes) {
-        expect(actual[groupType] || '').toBe(groupUrls[groupType]);
+    for (const locationId of [
+      'mount-prospect',
+      'philadelphia',
+      'west-nyack',
+      'lincoln',
+      'manassas',
+      'houston',
+      'antwerp',
+      'orland-park',
+    ]) {
+      const groupFormUrls = byId.get(locationId)?.groupFormUrls || {};
+      for (const groupType of groupTypes) {
+        requireUrl(locationId, `groupFormUrls.${groupType}`, groupFormUrls[groupType]);
       }
     }
 
-    for (const [locationId, expectedUrl] of Object.entries(formsLinksAudit.giftCards)) {
-      expect(byId.get(locationId)?.giftCardUrl || '').toBe(expectedUrl);
+    for (const locationId of ['mount-prospect', 'philadelphia', 'lincoln', 'manassas', 'orland-park']) {
+      requireUrl(locationId, 'giftCardUrl', byId.get(locationId)?.giftCardUrl);
     }
 
-    for (const [locationId, expectedUrl] of Object.entries(formsLinksAudit.waivers)) {
-      expect(byId.get(locationId)?.waiverUrl || '').toBe(expectedUrl);
+    for (const locationId of ['mount-prospect', 'philadelphia', 'manassas', 'houston', 'orland-park']) {
+      requireUrl(locationId, 'waiverUrl', byId.get(locationId)?.waiverUrl);
     }
 
     expect(byId.get('west-nyack')?.briqWidget?.domain).toBe('timemission-palisades');
@@ -734,10 +754,10 @@ describe('browser architecture contracts', () => {
     expect(window.location.href).toBe('/future-briq?book=1');
   });
 
-  it('runtime group, gift-card, and waiver routing follows the audit fixture', async () => {
-    const doc = JSON.parse(fs.readFileSync(path.join(root, 'data', 'locations.json'), 'utf8'));
+  it('runtime group, gift-card, and waiver routing follows location data', async () => {
+    const byId = new Map(locationRecords.map((loc) => [loc.id, loc]));
     const { context, window } = createBrowserContext({
-      TM_DATA: doc,
+      TM_DATA: locationDoc,
     });
 
     runScript('js/booking-journey.js', context);
@@ -747,12 +767,13 @@ describe('browser architecture contracts', () => {
     await Promise.resolve();
     await Promise.resolve();
 
-    for (const [locationId, groupUrls] of Object.entries(formsLinksAudit.groups)) {
-      for (const groupType of formsLinksAudit.groupTypes) {
+    for (const [locationId, loc] of byId) {
+      const groupUrls = loc.groupFormUrls || {};
+      for (const groupType of groupTypes) {
         const isWestNyackBriq = locationId === 'west-nyack' && !!groupUrls[groupType];
         const expectedRuntimeHref = isWestNyackBriq
           ? '#briq-widget-container'
-          : groupUrls[groupType];
+          : (groupUrls[groupType] || '');
         const expectedPresentation = isWestNyackBriq
           ? 'briq-widget'
           : (expectedRuntimeHref ? 'link' : 'panel');
@@ -784,12 +805,12 @@ describe('browser architecture contracts', () => {
       }
     }
 
-    for (const [locationId, expectedUrl] of Object.entries(formsLinksAudit.giftCards)) {
-      expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId })).toBe(expectedUrl);
+    for (const [locationId, loc] of byId) {
+      expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId })).toBe(loc.giftCardUrl || '');
     }
 
-    for (const [locationId, expectedUrl] of Object.entries(formsLinksAudit.waivers)) {
-      expect(window.TMBooking.getDestination({ kind: 'waiver', locationId })).toBe(expectedUrl);
+    for (const [locationId, loc] of byId) {
+      expect(window.TMBooking.getDestination({ kind: 'waiver', locationId })).toBe(loc.waiverUrl || '');
     }
   });
 

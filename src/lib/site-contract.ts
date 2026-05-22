@@ -1,11 +1,12 @@
 /**
- * Site contract (RFC #9): single derived view of durable facts for build, runtime, and checks.
+ * Site contract: single derived view of durable facts for build, runtime, and checks.
  * Ticket option rules: src/lib/ticket-options.ts (ticketPanelSelectOptions).
  */
 import { allLocations } from '../data/locations';
 import analyticsLabels from '../data/site/analytics-labels.json';
 import { fingerprintAnalyticsLabels } from './analytics-labels-fingerprint';
 import { locationsFingerprintFromRecords } from './locations-fingerprint';
+import { locationScopedCanonicalPaths } from './public-url-surface';
 import { ticketPanelSelectOptions, type TicketPanelOption } from './ticket-options';
 
 export type SiteContractMode = 'sources' | 'build';
@@ -36,12 +37,17 @@ export interface SiteContractSnapshot {
     runtime: {
         locationStorageKey: 'tm_location';
         locationChangeEvent: 'tm:location-changed';
+        locationScopedPaths: string[];
     };
     smokeHints: {
         ticketOptionCount: number;
         overlaySampleSlug: string;
         overlaySampleDataCity: string;
     };
+}
+
+function locationScopedPaths(): string[] {
+    return locationScopedCanonicalPaths(allLocations.map((loc) => `/${loc.slug || loc.id}`));
 }
 
 export function compileSiteContract(mode: SiteContractMode): SiteContractSnapshot {
@@ -71,6 +77,7 @@ export function compileSiteContract(mode: SiteContractMode): SiteContractSnapsho
         runtime: {
             locationStorageKey: 'tm_location',
             locationChangeEvent: 'tm:location-changed',
+            locationScopedPaths: locationScopedPaths(),
         },
         smokeHints: {
             ticketOptionCount: options.length,
@@ -101,6 +108,7 @@ export interface PublicSiteContract {
     runtime: {
         locationStorageKey: 'tm_location';
         locationChangeEvent: 'tm:location-changed';
+        locationScopedPaths: string[];
     };
 }
 

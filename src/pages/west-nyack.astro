@@ -1,27 +1,10 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import LocationPageHeadLinks from '../components/LocationPageHeadLinks.astro';
+import OpenLocationPageShell from '../components/OpenLocationPageShell.astro';
 import westNyackMainRaw from '../partials/west-nyack-main.frag.txt?raw';
 import { buildOpenLocationPage } from '../lib/location-page-shell';
 
-const cityPage = buildOpenLocationPage({ slug: 'west-nyack', mainRaw: westNyackMainRaw });
+const slug = 'west-nyack';
+const cityPage = buildOpenLocationPage({ slug, mainRaw: westNyackMainRaw });
 ---
 
-<SiteLayout
-    canonicalPath={cityPage.page.canonicalPath}
-    bodyDataLocation={cityPage.location.slug}
->
-    <Fragment slot="head-extra">
-        <LocationPageHeadLinks pageCss="/css/page-west-nyack.css?v=2" />
-    </Fragment>
-    <Fragment slot="json-ld">
-        <script type="application/ld+json" is:inline set:html={cityPage.ld}></script>
-    </Fragment>
-    <div set:html={cityPage.mainHtml} />
-    <Fragment slot="after-site-scripts">
-        <script is:inline define:vars={{ pageInit: cityPage.pageInit }}>
-            window.__TM_PAGE_INIT__ = pageInit;
-        </script>
-        <script defer is:inline src="/js/page-widgets.js?v=6"></script>
-    </Fragment>
-</SiteLayout>
+<OpenLocationPageShell cityPage={cityPage} />

@@ -261,19 +261,3 @@
                 grid-template-columns: 1fr;
             }
         }
-
-@media (hover: none) {
-    .footer-social a:hover,
-    .footer-links a:hover,
-    .footer-legal a:hover,
-    .footer-location-toggle:hover,
-    .footer-location-list a:hover,
-    .footer-loc-phone:hover,
-    .footer-loc-map:hover,
-    .footer-loc-change:hover,
-    .footer-link-button:hover {
-        color: inherit;
-        transform: none;
-        opacity: inherit;
-    }
-}

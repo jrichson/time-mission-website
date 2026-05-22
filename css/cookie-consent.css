@@ -1,4 +1,4 @@
-/* Phase 10 P2-4 — Brand-token overrides for vanilla-cookieconsent default styles */
+/* Brand-token overrides for vanilla-cookieconsent default styles. */
 :root {
     --cc-bg: var(--dark);
     --cc-primary-color: var(--orange);
@@ -13,32 +13,29 @@
     --cc-modal-border-radius: 12px;
 }
 
-/* Tap-target floor for cookie banner buttons (UI-SPEC Tap Target table — 44px) */
+/* Keep cookie banner buttons at the sitewide tap-target floor. */
 .cm__btn,
 .pm__btn {
     min-height: 44px;
 }
 
-/* Gradient on Accept all per UI-SPEC line 142 */
+/* Match the primary accept action to the site's primary button treatment. */
 .cm__btn[data-role="all"],
 .pm__btn[data-role="all"] {
     background: var(--gradient-primary);
 }
 
 /* ==========================================================================
-   POLISH-01 — Bottom-LEFT card placement (vanilla-cookieconsent .cm--box)
-   Spec source: docs/cutover-checklist.md lines 70-98 (D-B1..D-B6 in 11-CONTEXT.md)
-   CSS-only — no JS or markup changes. js/cookie-consent.js gate behavior is untouched.
+   Bottom-left card placement for vanilla-cookieconsent's .cm--box layout.
+   CSS-only: js/cookie-consent.js owns gate behavior.
    Note: js/cookie-consent.js already sets guiOptions.consentModal.layout: 'box'
    (line 59), so .cm--box selectors apply at runtime without a JS follow-up.
    ========================================================================== */
 
-/* D-B1: Layout — bottom-left card, 380px max-width, 16-24px from edges. */
-/* D-B2: Visual — dark rgba surface, backdrop-blur, orange 18% border, 12px radius, deep shadow. */
 /* Qualify with library position classes so our rules win regardless of stylesheet load order.
    vanilla-cookieconsent appends .cm--bottom .cm--center (per js guiOptions position: 'bottom center')
    which makes the library's own selector more specific than a bare .cm--box rule.
-   Listing those combos here matches specificity and guarantees POLISH-01 placement applies. */
+   Listing those combos here matches specificity and guarantees our placement applies. */
 .cm--box,
 .cm.cm--box,
 .cm--box.cm--bottom.cm--center,
@@ -63,7 +60,7 @@
     font-family: var(--body);
 }
 
-/* D-B3: Hierarchy — Orbitron 14px uppercase heading; DM Sans 14px body. */
+/* Match modal typography to the rest of the site. */
 .cm--box .cm__title,
 .cm--box .cm__heading {
     font-family: var(--tech); /* Orbitron / Monument Extended */
@@ -84,7 +81,7 @@
     margin: 0 0 1rem;
 }
 
-/* D-B3: button row — Accept (filled) + Reject (outlined orange) equal prominence. */
+/* Keep the primary and reject actions visually balanced. */
 .cm--box .cm__btns {
     display: flex;
     flex-direction: row;
@@ -109,7 +106,7 @@
     font-weight: 600;
 }
 
-/* D-B3: Manage Preferences as text-only tertiary BELOW the button row. */
+/* Keep preferences as a tertiary action below the main choices. */
 .cm--box .cm__btn[data-role="manage"],
 .cm--box .cm__btn[data-role="show"] {
     flex: 1 1 100%;
@@ -123,7 +120,7 @@
     min-height: 44px; /* preserve tap-target floor on the tertiary too */
 }
 
-/* D-B4: Motion — slide-up + fade in 220ms cubic-bezier(0.32, 0.72, 0, 1). */
+/* Use the same slide/fade motion as other lightweight overlays. */
 @keyframes tm-cm-slide-up {
     from {
         opacity: 0;
@@ -147,7 +144,7 @@
     }
 }
 
-/* D-B5: Mobile (< 640px) — full-width minus 16px gutter, 16px above bottom; buttons stack vertically with Accept on top. */
+/* On small screens, keep the card clear of viewport edges and stack choices. */
 @media (max-width: 640px) {
     .cm--box,
     .cm.cm--box {

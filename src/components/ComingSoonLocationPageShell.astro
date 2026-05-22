@@ -1,0 +1,54 @@
+---
+import ComingSoonLocationPage from './ComingSoonLocationPage.astro';
+import LocationPageHeadLinks from './LocationPageHeadLinks.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { locationPageCssHref, locationPageLang } from '../lib/location-page-registry';
+
+interface Props {
+    cityPage: {
+        cta: {
+            href: string;
+            i18n: string;
+            isBookingTrigger: boolean;
+            label: string;
+        };
+        ld: string;
+        location: { slug: string };
+        page: { canonicalPath: string };
+        pageDescription: string;
+        pageInit: unknown;
+        pageTitle: string;
+    };
+}
+
+const { cityPage } = Astro.props;
+const slug = cityPage.location.slug;
+const lang = locationPageLang(slug);
+const pageCss = locationPageCssHref(slug);
+---
+
+<SiteLayout
+    canonicalPath={cityPage.page.canonicalPath}
+    title={cityPage.pageTitle}
+    description={cityPage.pageDescription}
+    lang={lang}
+    bodyDataLocation={cityPage.location.slug}
+    bookingCtaHref={cityPage.cta.href}
+    bookingCtaLabel={cityPage.cta.label}
+    bookingCtaIsBookingTrigger={cityPage.cta.isBookingTrigger}
+    bookingCtaI18n={cityPage.cta.i18n}
+>
+    <Fragment slot="head-extra">
+        <LocationPageHeadLinks pageCss={pageCss} />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={cityPage.ld}></script>
+    </Fragment>
+    <ComingSoonLocationPage slug={slug} />
+    <Fragment slot="after-site-scripts">
+        <script is:inline define:vars={{ pageInit: cityPage.pageInit }}>
+            window.__TM_PAGE_INIT__ = pageInit;
+        </script>
+        <script defer is:inline src="/js/page-widgets.js?v=6"></script>
+    </Fragment>
+</SiteLayout>

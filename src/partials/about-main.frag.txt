@@ -43,7 +43,7 @@
     <section class="steps">
         <div class="steps-header reveal">
             <div class="section-badge">GET STARTED</div>
-            <h2 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">HOW IT WORKS</h2>
+            <h2 class="section-title section-title--display">HOW IT WORKS</h2>
         </div>
         <div class="timeline reveal">
             <div class="timeline-step">
@@ -85,7 +85,7 @@
         <div class="before-arrive-card">
             <div class="before-arrive-header reveal">
                 <div class="section-badge">PLAN YOUR MISSION</div>
-                <h2 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">BEFORE YOU ARRIVE</h2>
+                <h2 class="section-title section-title--display">BEFORE YOU ARRIVE</h2>
             </div>
             <div class="checklist-grid">
             <div class="checklist-item reveal">

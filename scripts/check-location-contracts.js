@@ -47,8 +47,8 @@ function validateIntlFields(location) {
       errors.push(`${id}: ${k} must be string or null`);
     }
   }
-  // Phase 10 D-02 (locked): hreflang is LANG ATTRIBUTE ONLY (BCP-47 string per location).
-  // Cross-city <link rel="alternate" hreflang> clusters are forbidden per Google docs.
+  // hreflang is stored as a language attribute only; cross-city alternate
+  // clusters are intentionally not emitted.
   if (location.hreflang == null) return;
   if (typeof location.hreflang !== 'string') {
     errors.push(`${id}: hreflang must be BCP-47 language tag string or null`);
@@ -153,9 +153,12 @@ for (const location of locations) {
     errors.push(`${location.id} has mismatched id/slug (${location.slug})`);
   }
 
-  const pagePath = path.join(root, `${location.slug}.html`);
-  if (!fs.existsSync(pagePath)) {
-    errors.push(`${location.id} points to missing page ${location.slug}.html`);
+  const pageCandidates = [
+    path.join(root, 'src', 'pages', `${location.slug}.astro`),
+    path.join(root, `${location.slug}.html`),
+  ];
+  if (!pageCandidates.some((candidate) => fs.existsSync(candidate))) {
+    errors.push(`${location.id} points to missing page source src/pages/${location.slug}.astro`);
   }
 
   validateIntlFields(location);

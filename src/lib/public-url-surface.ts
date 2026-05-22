@@ -7,7 +7,7 @@ export interface PublicUrlRoute {
     locationAlternate?: string;
     locationCompatibilitySources?: string[];
     outputFile?: string;
-    legacySources?: string[];
+    redirectSources?: string[];
     sitemap: boolean;
     status?: number;
 }
@@ -109,11 +109,21 @@ export function registrySitemapUrls(registry: PublicUrlRegistry = defaultRegistr
     return publicUrlSitemapEntries(registry).map((entry) => entry.url);
 }
 
+export function locationScopedCanonicalPaths(
+    locationPaths: Iterable<string>,
+    registry: PublicUrlRegistry = defaultRegistry,
+): string[] {
+    const excluded = new Set(Array.from(locationPaths, normalizePublicPath));
+    return (registry.routes || [])
+        .map((route) => normalizePublicPath(route.canonicalPath))
+        .filter((path) => path && !excluded.has(path));
+}
+
 export function publicUrlRedirectPairs(registry: PublicUrlRegistry = defaultRegistry): PublicUrlRedirectPair[] {
     const pairs: PublicUrlRedirectPair[] = [];
     for (const route of registry.routes || []) {
         const target = route.externalUrl || normalizePublicPath(route.canonicalPath);
-        for (const source of route.legacySources || []) {
+        for (const source of route.redirectSources || []) {
             pairs.push({
                 source,
                 target,

@@ -5,115 +5,77 @@ const path = require('node:path');
 const { loadJson, normalizeCanonicalPath } = require('./validation-core');
 const { loadAstroRenderedOutputFilesSet } = require('./load-astro-rendered-output-files.cjs');
 
+require('tsx/cjs/api').register();
+const {
+  compilePublicUrlSurface: compileTypedPublicUrlSurface,
+  dynamicLandingPrefix,
+  isDynamicLandingPath: isTypedDynamicLandingPath,
+  normalizePublicPath,
+  publicUrlForPath,
+  publicUrlRedirectPairs,
+  publicUrlSitemapEntries,
+  registrySitemapUrls,
+} = require('../../src/lib/public-url-surface.ts');
+
 function loadRouteRegistry(root) {
   return loadJson(root, 'src/data/routes.json');
 }
 
 function expectedSitemapUrls(registry) {
-  return sitemapEntries(registry).map((entry) => entry.url);
+  return registrySitemapUrls(registry);
 }
 
 function publicUrlForCanonical(registry, canonicalPath) {
-  const baseUrl = String((registry && registry.baseUrl) || '').replace(/\/+$/, '');
-  const canonical = normalizeCanonicalPath(canonicalPath || '/');
-  return canonical === '/' ? `${baseUrl}/` : `${baseUrl}${canonical}`;
+  return publicUrlForPath(canonicalPath, registry);
 }
 
 function sitemapEntries(registry) {
-  return ((registry && registry.routes) || [])
-    .filter((route) => route.sitemap)
-    .map((route) => ({
-      route,
-      canonicalPath: normalizeCanonicalPath(route.canonicalPath || ''),
-      url: publicUrlForCanonical(registry, route.canonicalPath),
-    }));
+  return publicUrlSitemapEntries(registry);
 }
 
-function compileRouteContract(registry) {
-  const baseUrl = String((registry && registry.baseUrl) || '').trim();
-  const sitemapUrls = expectedSitemapUrls(registry);
+function normalizeDynamicLandingPrefix(registry) {
+  return dynamicLandingPrefix(registry);
+}
+
+function isDynamicLandingPath(registry, pathnameNorm) {
+  return isTypedDynamicLandingPath(pathnameNorm, registry);
+}
+
+function expectedRedirectPairs(registry) {
+  return publicUrlRedirectPairs(registry);
+}
+
+function canonicalToOutputMap(registry) {
+  const surface = compileTypedPublicUrlSurface(registry);
+  const map = new Map();
+  for (const route of surface.routes) {
+    const canonical = normalizePublicPath(route.canonicalPath || '');
+    if (!canonical) continue;
+    map.set(canonical, String(route.outputFile || '').replace(/^\//, ''));
+  }
+  return map;
+}
+
+function compilePublicUrlSurface(registry) {
+  const surface = compileTypedPublicUrlSurface(registry);
+  const sitemapUrls = surface.sitemapUrls || [];
   return {
+    ...surface,
     registry,
-    baseUrl,
-    rootHome: `${baseUrl}/`,
-    sitemapUrls,
     sitemapUrlSet: new Set(sitemapUrls),
     canonicalToOutput: canonicalToOutputMap(registry),
   };
 }
 
-function normalizeDynamicLandingPrefix(registry) {
-  const raw = registry && registry._meta && registry._meta.dynamicLandingPrefix
-    ? String(registry._meta.dynamicLandingPrefix)
-    : '/c';
-  return raw.startsWith('/') ? raw : `/${raw}`;
-}
-
-function isDynamicLandingPath(registry, pathnameNorm) {
-  const prefix = normalizeDynamicLandingPrefix(registry);
-  const base = normalizeCanonicalPath(pathnameNorm);
-  if (!base.startsWith(`${prefix}/`)) return false;
-  const slug = base.slice(prefix.length + 1).replace(/\/+$/, '');
-  if (!slug || slug.includes('/') || slug.includes('.')) return false;
-  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
-}
-
-function expectedRedirectPairs(registry) {
-  const pairs = [];
-  for (const route of registry.routes || []) {
-    const canonicalTarget = route.externalUrl || (route.canonicalPath === '/' ? '/' : route.canonicalPath);
-    for (const legacy of route.legacySources || []) {
-      pairs.push({
-        source: legacy,
-        target: canonicalTarget,
-        status: route.status,
-      });
-    }
-  }
-  for (const alias of registry.aliases || []) {
-    pairs.push({
-      source: alias.source,
-      target: alias.target,
-      status: alias.status,
-    });
-  }
-  return pairs;
-}
-
-function compilePublicUrlSurface(registry) {
-  const contract = compileRouteContract(registry);
-  const routeByCanonical = new Map();
-  const canonicalPaths = new Set();
-  for (const route of registry.routes || []) {
-    const canonical = normalizeCanonicalPath(route.canonicalPath || '');
-    if (!canonical) continue;
-    canonicalPaths.add(canonical);
-    routeByCanonical.set(canonical, route);
-  }
-
+function compileRouteContract(registry) {
+  const surface = compilePublicUrlSurface(registry);
   return {
-    ...contract,
-    routes: registry.routes || [],
-    aliases: registry.aliases || [],
-    canonicalPaths,
-    routeByCanonical,
-    sitemapEntries: sitemapEntries(registry),
-    redirectPairs: expectedRedirectPairs(registry),
-    dynamicLandingPrefix: normalizeDynamicLandingPrefix(registry),
-    publicUrlFor(canonicalPath) {
-      return publicUrlForCanonical(registry, canonicalPath);
-    },
-    outputFileFor(canonicalPath) {
-      const normalized = normalizeCanonicalPath(canonicalPath);
-      return contract.canonicalToOutput.get(normalized) || '';
-    },
-    routeFor(canonicalPath) {
-      return routeByCanonical.get(normalizeCanonicalPath(canonicalPath)) || null;
-    },
-    isKnownCanonical(value) {
-      const normalized = normalizeCanonicalPath(value);
-      return canonicalPaths.has(normalized) || isDynamicLandingPath(registry, normalized);
-    },
+    registry,
+    baseUrl: surface.baseUrl,
+    rootHome: surface.rootHome,
+    sitemapUrls: surface.sitemapUrls,
+    sitemapUrlSet: surface.sitemapUrlSet,
+    canonicalToOutput: surface.canonicalToOutput,
   };
 }
 
@@ -144,7 +106,7 @@ function verifySitemapXml(xml, contract, options = {}) {
 
   for (const loc of locs) {
     if (loc.includes('.html')) {
-      errors.push(`Sitemap contains legacy .html URL: ${loc}`);
+      errors.push(`Sitemap contains historical .html URL: ${loc}`);
     }
     if (loc.endsWith('/') && loc !== contract.rootHome) {
       errors.push(`Sitemap loc must not end with trailing slash except root: ${loc}`);
@@ -179,16 +141,6 @@ function verifySitemapXml(xml, contract, options = {}) {
   }
 
   return { errors, locs };
-}
-
-function canonicalToOutputMap(registry) {
-  const map = new Map();
-  for (const route of registry.routes || []) {
-    const canonical = normalizeCanonicalPath(route.canonicalPath || '');
-    if (!canonical) continue;
-    map.set(canonical, String(route.outputFile || '').replace(/^\//, ''));
-  }
-  return map;
 }
 
 function resolveAbsoluteSiteHref(root, registry, href) {

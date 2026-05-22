@@ -484,6 +484,7 @@
     position: relative;
     white-space: nowrap;
     transition: transform var(--motion-standard) ease;
+    min-width: var(--target-min);
     min-height: var(--target-min);
 }
 
@@ -496,6 +497,11 @@
     height: 16px;
     color: var(--orange);
     transition: filter var(--motion-standard) ease;
+}
+
+.location-btn .location-btn-chevron {
+    width: 12px;
+    height: 12px;
 }
 
 .location-btn:hover svg:first-of-type {
@@ -1016,6 +1022,8 @@
 }
 
 .btn-tickets {
+    --button-current-padding-y: var(--button-padding-y-compact);
+    --button-current-padding-x: 1.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -1095,6 +1103,8 @@
 
     /* Compact tickets button — min touch target */
     .btn-tickets {
+        --button-current-padding-y: 0.5rem;
+        --button-current-padding-x: 1rem;
         min-height: var(--target-min);
         padding: 0.5rem 1rem;
         font-size: 0.75rem;
@@ -1152,6 +1162,7 @@
     }
 
     .btn-tickets {
+        --button-current-padding-x: var(--button-padding-x-tight);
         min-height: var(--target-comfortable);
         padding: 0.5rem 0.75rem;
         font-size: 0.7rem;
@@ -1174,6 +1185,7 @@
     }
 
     .btn-tickets {
+        --button-current-padding-x: 0.65rem;
         padding-left: 0.65rem;
         padding-right: 0.65rem;
         font-size: 0.68rem;

@@ -1,19 +1,6 @@
 /**
- * Phase 10 P1-1 — Static CSS tap-target audit (heuristic).
- *
- * Reads shared CSS, page CSS, and source inline-CSS partials and asserts that
- * the tap-target minimums declared in UI-SPEC (Tap Target Minimums table) are
- * present in source CSS for the documented selectors.
- *
- * NOTE: This is a STATIC HEURISTIC. The validator parses CSS source and
- * estimates an effective minimum height from `min-height`, `height`, or
- * `padding + line-height + font-size`. The DEFINITIVE measurement is a
- * runtime Playwright check — see plan 10-06 Task 2 for the human-driven
- * desktop-viewport spot check on `.btn-tickets` and `.btn-primary`.
- *
- * The validator intentionally includes page-local button CSS so core CTAs like
- * `.btn-primary` and `.btn-secondary` are not missed when they are declared
- * outside shared nav/base styles.
+ * Reads shared CSS and page CSS and asserts that the documented tap-target
+ * minimums are present in source CSS.
  */
 'use strict';
 
@@ -29,8 +16,10 @@ const REQUIRES_44PX = [
     '.nav-menu-btn',
     '.location-btn',
     '.location-dropdown-close',
+    '.booking-frame-close',
     '.mobile-menu-socials a',
     '.btn-secondary',
+    '.btn-outline',
     '.mobile-menu-links a',
     '.btn-subscribe',
     '.filter-tab',
@@ -45,6 +34,11 @@ const REQUIRES_44PX = [
 
 const REQUIRES_48PX = [
     '.btn-tickets',
+    '.btn-book-now',
+    '.btn-group-tickets',
+    '.btn-start-planning',
+    '.btn-see-all-faq',
+    '.btn-ticket-book',
     '.btn-primary',
     '.mobile-menu-cta a',
 ];
@@ -52,14 +46,8 @@ const REQUIRES_48PX = [
 function listCssSources() {
     const files = new Set();
     const cssDir = path.join(root, 'css');
-    const partialsDir = path.join(root, 'src', 'partials');
-
     for (const name of fs.readdirSync(cssDir)) {
         if (name.endsWith('.css')) files.add(path.join('css', name));
-    }
-
-    for (const name of fs.readdirSync(partialsDir)) {
-        if (name.endsWith('-inline.raw.css.txt')) files.add(path.join('src', 'partials', name));
     }
 
     return Array.from(files).sort().map((relPath) => ({

@@ -51,7 +51,7 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | Antwerp | `https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission` | Intentional EU/external group handoff. |
 | West Nyack from any page | Briq widget inside the current ticket panel | Briq group URLs are converted to the internal Briq widget handoff instead of raw external Briq navigation. |
 | Future multiple-Briq setup | Venue page reload | Same domain-safety guard as ticket booking. |
-| Dallas / Brussels | Disabled/unavailable in panel | No approved group form URL is present in the audit fixture. |
+| Dallas / Brussels | Disabled/unavailable in panel | No approved group form URL is present in location data. |
 
 ## Gift Cards
 
@@ -70,10 +70,10 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | Selected location | Destination / behavior | Notes |
 | --- | --- | --- |
 | Manassas | `https://waiver.roller.app/TimeMissionManassasMall` | External waiver page. |
-| Mount Prospect | `https://waiver.roller.app/TimeMissionManassasMall` | Known data anomaly to verify: same waiver URL as Manassas. |
+| Mount Prospect | `https://waiver.roller.app/TimeMissionMountProspect/home` | External waiver page. |
 | Philadelphia | `https://waiver.roller.app/TimeMissionPhiladelphiaPA` | External waiver page. |
-| Houston | `https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home` | Audit-approved destination, but this is a booking URL rather than a dedicated waiver URL. |
-| Orland Park | `https://book.orlandpark.timemission.com/giftcards/en-us/products` | Known data anomaly to verify: gift-card URL is used as waiver destination. |
+| Houston | `https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home` | Location data currently uses the booking URL as the waiver destination. |
+| Orland Park | `https://waiver.roller.app/TimeMissionOrlandPark/home` | External waiver page. |
 | West Nyack / Lincoln / Antwerp / Dallas / Brussels | Disabled/unavailable | No waiver URL is present. |
 
 ## Forms
@@ -114,5 +114,4 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | --- | --- |
 | `/missions` Book Now CTAs | Fixed to use the site booking trigger instead of plain `href="#"`. |
 | West Nyack gift cards | Disabled until an approved gift-card checkout URL exists. |
-| Mount Prospect waiver URL | Verify whether the Manassas waiver URL is intentional. |
-| Houston / Orland Park waiver destinations | Verify whether booking/gift-card URLs should be used for waiver CTAs. |
+| Houston waiver destination | Verify whether a dedicated waiver URL should replace the current booking URL. |

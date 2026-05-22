@@ -21,7 +21,7 @@
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <p class="gift-card-location-hint" id="giftCardLocationHint" style="font-size: 0.85rem; color: var(--gray); margin-top: 0.5rem;">Select a location to purchase, or we'll help you pick one.</p>
+                <p class="gift-card-location-hint" id="giftCardLocationHint">Select a location to purchase, or we'll help you pick one.</p>
             </div>
         </div>
     </section>

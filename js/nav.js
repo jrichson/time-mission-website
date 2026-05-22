@@ -83,30 +83,12 @@
     const mobileMenu = document.getElementById('mobileMenu');
     const navEl = document.getElementById('nav');
     let activeLocationInfoRef = '';
-    const LOCATION_SCOPED_PATHS = [
-        '/',
-        '/about',
-        '/missions',
-        '/groups',
-        '/groups/bachelor-ette',
-        '/groups/birthdays',
-        '/groups/corporate',
-        '/groups/field-trips',
-        '/groups/holidays',
-        '/groups/private-events',
-        '/gift-cards',
-        '/faq',
-        '/contact',
-        '/contact-thank-you',
-        '/locations',
-        '/privacy',
-        '/terms',
-        '/code-of-conduct',
-        '/cookies',
-        '/accessibility',
-        '/licensing',
-        '/waiver',
-    ];
+
+    function locationScopedPaths() {
+        const contract = window.__TM_SITE_CONTRACT__ || {};
+        const runtime = contract.runtime || {};
+        return Array.isArray(runtime.locationScopedPaths) ? runtime.locationScopedPaths : [];
+    }
 
     function safeDecode(value) {
         try {
@@ -129,7 +111,7 @@
         return normalizeHrefPath(safeDecode(value)).toLowerCase().replace(/\.html$/i, '').replace(/-/g, '');
     }
 
-    const scopedPathByCompact = LOCATION_SCOPED_PATHS.reduce(function (map, path) {
+    const scopedPathByCompact = locationScopedPaths().reduce(function (map, path) {
         map[compactPath(path)] = path;
         map[compactPath(path + '.html')] = path;
         return map;
@@ -520,8 +502,10 @@
 
         renderMapEmbed(mapEl, data.mapEmbedUrl);
 
-        if (empty) empty.style.display = 'none';
-        details.style.display = 'block';
+        if (empty) {
+            empty.hidden = true;
+        }
+        details.hidden = false;
     }
 
     function syncNavLocationState(loc) {

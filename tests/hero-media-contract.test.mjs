@@ -7,6 +7,7 @@ import {
   inspectHeroVideoMarkup,
   inspectHeroVideoRuntime,
   listHeroVideoPartials,
+  pageCssPathForMainPartial,
 } from '../scripts/lib/hero-media-contract.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -23,12 +24,24 @@ describe('Hero Media Surface', () => {
   });
 
   it('requires poster fallback CSS before the video is ready', () => {
+    const indexCss = pageCssPathForMainPartial(root, 'index-main.frag.txt');
     const css = [
       fs.readFileSync(path.join(root, 'css/base.css'), 'utf8'),
-      fs.readFileSync(path.join(root, 'src/partials/index-inline.raw.css.txt'), 'utf8'),
+      fs.readFileSync(indexCss, 'utf8'),
     ].join('\n');
 
-    expect(inspectHeroVideoCss(css, 'css/base.css + index-inline.raw.css.txt')).toEqual([]);
+    expect(inspectHeroVideoCss(css, 'css/base.css + css/page-index.css')).toEqual([]);
+  });
+
+  it('allows location hero fallback CSS to live in the shared location layer', () => {
+    const locationCss = pageCssPathForMainPartial(root, 'houston-main.frag.txt');
+    const css = [
+      fs.readFileSync(path.join(root, 'css/base.css'), 'utf8'),
+      fs.readFileSync(path.join(root, 'css/location-page.css'), 'utf8'),
+      fs.readFileSync(locationCss, 'utf8'),
+    ].join('\n');
+
+    expect(inspectHeroVideoCss(css, 'css/base.css + css/location-page.css + css/page-houston.css')).toEqual([]);
   });
 
   it('requires runtime reveal to wait until the video can paint', () => {

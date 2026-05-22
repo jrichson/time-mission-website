@@ -11,11 +11,6 @@
         sat: 'Sat',
         sun: 'Sun',
     };
-    var monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-
     var BookingJourney = window.TMBookingJourney;
     if (!BookingJourney) throw new Error('TMBookingJourney must load before location-catalog-view.js');
 
@@ -32,12 +27,7 @@
 
     function openingLabelForLocation(loc) {
         if (!loc) return '';
-        var explicit = String(loc.openingLabel || '').trim();
-        if (explicit) return explicit;
-        var iso = String(loc.openingDate || '').trim();
-        var match = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-        if (!match) return '';
-        return 'Opening ' + monthNames[Number(match[2]) - 1] + ' ' + Number(match[3]) + ', ' + match[1];
+        return String(loc.openingLabel || '').trim();
     }
 
     function comingSoonLabelForLocation(loc) {
@@ -140,6 +130,11 @@
             return contactLeadUrl(slug, 'updates');
         }
         return '#';
+    }
+
+    function setHidden(el, hidden) {
+        if (!el) return;
+        el.hidden = Boolean(hidden);
     }
 
     function getLocationView(loc, id) {
@@ -284,15 +279,15 @@
                 var existingAddress = infoPanel.querySelector('.footer-loc-address');
                 if (existingAddress && existingAddress.textContent.trim()) return;
             }
-            if (dropdown) dropdown.style.display = '';
-            if (infoPanel) infoPanel.style.display = 'none';
+            setHidden(dropdown, false);
+            setHidden(infoPanel, true);
             return;
         }
 
-        if (dropdown) dropdown.style.display = 'none';
+        setHidden(dropdown, true);
         if (!infoPanel) return;
 
-        infoPanel.style.display = '';
+        setHidden(infoPanel, false);
         var nameEl = infoPanel.querySelector('.footer-loc-name');
         var addrEl = infoPanel.querySelector('.footer-loc-address');
         var phoneEl = infoPanel.querySelector('.footer-loc-phone');

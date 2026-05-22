@@ -99,7 +99,7 @@
     align-items: flex-start;
     gap: 0.75rem;
     margin-top: 1rem;
-    min-height: 44px;
+    min-height: var(--target-min);
     cursor: pointer;
     text-align: left;
     max-width: 36rem;
@@ -141,7 +141,7 @@
     padding: 0.72rem 1.75rem;
     background: var(--white);
     border: none;
-    border-radius: 100px;
+    border-radius: var(--button-radius-pill);
     color: var(--black);
     font-family: var(--tech);
     font-size: 0.8rem;
@@ -184,8 +184,6 @@
     }
 }
 
-/* ≤480 small-mobile tier — Phase 11 RESP-01.
-   Reduce newsletter section padding and tighten form so it fits one column without horizontal scroll. */
 @media (max-width: 480px) {
     .newsletter-section {
         padding: 4rem 1rem;

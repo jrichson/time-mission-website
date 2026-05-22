@@ -43,11 +43,11 @@
     <section class="welcome" id="about">
         <div class="welcome-content reveal">
             <div class="section-badge">ABOUT US</div>
-            <h2 class="section-title" style="white-space: nowrap;">WHAT IS TIME MISSION?</h2>
+            <h2 class="section-title u-nowrap">WHAT IS TIME MISSION?</h2>
             <p class="welcome-text">
                 Step into a real-life video game where behind every door is a new surprise. One ticket unlocks every mission, so race the clock to play them all or run your favorites over and over. Built for every age 6 to 106 and every skill level. Game&nbsp;on!
             </p>
-            <a href="/about" class="btn-secondary welcome-learn-desktop" style="margin-top: 1.5rem;">Learn About Time Mission</a>
+            <a href="/about" class="btn-secondary welcome-learn-desktop u-mt-lg">Learn About Time Mission</a>
         </div>
     </section>
 
@@ -85,7 +85,7 @@
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                     </svg>
                 </div>
-                <div class="stat-number">2<span style="font-size: 0.5em; vertical-align: middle;">-</span>5</div>
+                <div class="stat-number">2<span class="stat-range-separator">-</span>5</div>
                 <div class="stat-label">Players Per Team</div>
             </div>
             <div class="stat-card reveal">
@@ -108,7 +108,7 @@
         <div class="experiences-header reveal">
             <div class="section-badge">THE MISSIONS</div>
             <h2 class="section-title">Unlimited Ways to Play</h2>
-            <p class="welcome-text" style="max-width: 700px; margin: 0 auto;">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
+            <p class="welcome-text u-measure-sm-centered">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
         </div>
 
         <div class="experiences-scroll" id="experiencesScroll">
@@ -289,7 +289,7 @@
     </section>
 
     <!-- Groups & Parties CTA -->
-    <section class="groups-cta" id="groups" style="scroll-margin-top: 120px;">
+    <section class="groups-cta u-scroll-anchor-xl" id="groups">
         <div class="groups-cta-photo">
             <picture><source srcset="/assets/photos/TM-Groups-480.webp 480w, /assets/photos/TM-Groups-800.webp 800w, /assets/photos/TM-Groups-1200.webp 1200w, /assets/photos/TM-Groups.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/TM-Groups.jpg" alt="Group playing at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
         </div>
@@ -338,7 +338,7 @@
     <section class="testimonials" id="reviews">
         <div class="testimonials-scroll" role="region" tabindex="0" aria-label="Guest testimonials">
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">“This is a great place to take the family for something to do. We laughed so hard and really had the best time.”</p>
                 <div class="testimonial-author">
                     <span class="author-name">Jamie N.</span>
@@ -347,7 +347,7 @@
             </div>
 
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">“We came for my husband’s birthday and our kids. We were worried about it being too much for the little ones but it was perfect, 3-year-old and 8-year-old with us. Omg this place was absolutely amazing! Customer service was 10 out of 10.”</p>
                 <div class="testimonial-author">
                     <span class="author-name">Tamara B.</span>
@@ -356,7 +356,7 @@
             </div>
 
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">“Great addition to the Manassas mall. I loved it, I finally have something I can take my family to when they visit out of town that doesn’t involve food!”</p>
                 <div class="testimonial-author">
                     <span class="author-name">Jess</span>
@@ -365,7 +365,7 @@
             </div>
 
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">“It was tons of fun and will definitely do it again. Lots of fun puzzles to do with friends or family.”</p>
                 <div class="testimonial-author">
                     <span class="author-name">Jennifer G.</span>
@@ -374,7 +374,7 @@
             </div>
 
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">“We were visiting Manassas from out of town and decided to stop by Time Mission at Manassas Mall, and it ended up being one of the highlights of our trip. The kids had an absolute blast with all the different missions and challenges.”</p>
                 <div class="testimonial-author">
                     <span class="author-name">Sri S.</span>
@@ -386,7 +386,7 @@
     </section>
 
     <!-- Mini FAQ -->
-    <section class="mini-faq" id="faq" style="scroll-margin-top: 100px;">
+    <section class="mini-faq u-scroll-anchor-lg" id="faq">
         <div class="mini-faq-header reveal">
             <div class="section-badge">GOT QUESTIONS?</div>
             <h2 class="section-title">FREQUENTLY ASKED</h2>
@@ -556,7 +556,7 @@
 
             <div class="footer-column footer-locations-column">
                 <h3 class="footer-locations-title">TIME MISSION MANASSAS</h3>
-                <div class="footer-locations-dropdown" style="display: none;">
+                <div class="footer-locations-dropdown" hidden>
                     <div class="footer-location-group">
                         <button class="footer-location-toggle">
                             United States

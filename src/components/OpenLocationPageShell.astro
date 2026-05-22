@@ -1,0 +1,40 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import LocationPageHeadLinks from './LocationPageHeadLinks.astro';
+import { locationPageCssHref, locationPageLang } from '../lib/location-page-registry';
+
+interface Props {
+    cityPage: {
+        ld: string;
+        location: { slug: string };
+        mainHtml: string;
+        page: { canonicalPath: string };
+        pageInit: unknown;
+    };
+}
+
+const { cityPage } = Astro.props;
+const slug = cityPage.location.slug;
+const lang = locationPageLang(slug);
+const pageCss = locationPageCssHref(slug);
+---
+
+<SiteLayout
+    canonicalPath={cityPage.page.canonicalPath}
+    lang={lang}
+    bodyDataLocation={cityPage.location.slug}
+>
+    <Fragment slot="head-extra">
+        <LocationPageHeadLinks pageCss={pageCss} />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={cityPage.ld}></script>
+    </Fragment>
+    <div set:html={cityPage.mainHtml} />
+    <Fragment slot="after-site-scripts">
+        <script is:inline define:vars={{ pageInit: cityPage.pageInit }}>
+            window.__TM_PAGE_INIT__ = pageInit;
+        </script>
+        <script defer is:inline src="/js/page-widgets.js?v=6"></script>
+    </Fragment>
+</SiteLayout>

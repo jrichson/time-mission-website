@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * RFC #9 cutover orchestrator — single executable flow for npm run verify.
+ * Verification orchestrator for npm run verify.
  * Keep this ordered list authoritative when adding dist/post-build gates.
  */
 import { spawnSync } from 'node:child_process';

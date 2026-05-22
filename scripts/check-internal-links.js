@@ -32,19 +32,36 @@ if (useDist && !fs.existsSync(deployRoot)) {
 }
 
 const allHtml = walkHtmlFiles(deployRoot);
-const pages = allHtml.filter((filePath) => {
-  const relative = path.relative(deployRoot, filePath);
-  if (useDist) {
-    return relative.endsWith('.html')
-      && !relative.startsWith('assets/')
-      && !relative.startsWith('_astro/');
+function walkSourceMarkupFiles(dir, files = []) {
+  if (!fs.existsSync(dir)) return files;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkSourceMarkupFiles(fullPath, files);
+    } else if (entry.name.endsWith('.astro') || entry.name.endsWith('.frag.txt')) {
+      files.push(fullPath);
+    }
   }
-  return !relative.startsWith('assets/')
-    && !relative.startsWith('ads/')
-    && !relative.startsWith('components/')
-    && !relative.startsWith('dist/')
-    && !relative.startsWith('public/');
-});
+  return files;
+}
+
+const pages = useDist
+  ? allHtml.filter((filePath) => {
+      const relative = path.relative(deployRoot, filePath);
+      return relative.endsWith('.html')
+        && !relative.startsWith('assets/')
+        && !relative.startsWith('_astro/');
+    })
+  : [
+      ...walkSourceMarkupFiles(path.join(root, 'src', 'pages')),
+      ...walkSourceMarkupFiles(path.join(root, 'src', 'components')),
+      ...walkSourceMarkupFiles(path.join(root, 'src', 'partials')),
+    ];
+
+if (!pages.length) {
+  errors.push(`No ${useDist ? 'dist HTML' : 'source markup'} files found for internal link checking`);
+}
 
 for (const filePath of pages) {
   const relative = path.relative(deployRoot, filePath);
@@ -79,7 +96,9 @@ for (const filePath of pages) {
       continue;
     }
 
-    const target = path.resolve(path.dirname(filePath), clean);
+    const target = !useDist && /^(assets|css|js|data|fonts)\//.test(clean)
+      ? path.join(root, clean)
+      : path.resolve(path.dirname(filePath), clean);
     const exists = fs.existsSync(target) || fs.existsSync(path.join(target, 'index.html'));
     if (!exists) {
       errors.push(`${relative} references missing internal asset/page: ${raw}`);
@@ -94,5 +113,5 @@ if (errors.length) {
 }
 
 console.log(
-  `Internal link check passed for ${pages.length} pages (${useDist ? 'dist output' : 'repo root'}).`,
+  `Internal link check passed for ${pages.length} ${useDist ? 'dist pages' : 'source markup files'}.`,
 );

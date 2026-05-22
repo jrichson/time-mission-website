@@ -1,42 +1,37 @@
-# GEO/AI answer-first review (Phase 7 D-13)
+# GEO/AI Answer-First Review
 
-**Last updated:** 2026-04-29
+**Last updated:** 2026-05-22
 
-**Scope:** This document is a baseline review per D-13. It does not commit Phase 7 to content rewrites; it is input for a future content phase or marketing planning.
+This review tracks whether public pages answer likely visitor and AI-citation questions quickly: what Time Mission is, where to book, what each location offers, and what practical details are available near the top of the page.
 
 ## Methodology
 
-For each route below, the reviewer read the page’s primary H1/H2 and opening body copy (or the Astro template / shared partial where applicable) and judged whether the first ~50 words answered a likely visitor or AI-surfaced question (hours, booking, what Time Mission is, location specifics).
+For each route below, review the primary H1/H2 and opening body copy, then judge whether the first roughly 50 words answer the visitor's likely question. FAQ schema source is included where relevant.
 
-## Per-page review
+## Per-Page Review
 
-| Route | Page intent | Answer-first lead present? (Y/N/Partial) | Question-shaped headings? (Y/N) | FAQ schema source | Recommendation | Status |
-|-------|-------------|------------------------------------------|--------------------------------|-------------------|----------------|--------|
-| `/` | Brand + book | Partial | N | Site `faqs.json` on FAQ page only | rewrite | pending |
-| `/about` | Brand story | Partial | N | — | add FAQ | pending |
-| `/faq` | Policy / how it works | Y | Partial | `src/data/site/faqs.json` | no action | pending |
-| `/contact` | Reach the team | Y | N | — | no action | pending |
-| `/locations` | Find a venue | Partial | N | — | rewrite | pending |
-| `/privacy` | Legal | Partial | N | — | no action | pending |
-| `/groups/corporate` | B2B booking | Partial | Partial | — | add FAQ | pending |
-| `/philadelphia` | Local venue + book | Partial | N | — | add FAQ | pending |
-| `/houston` | Coming soon | Partial | N | — | no action | pending |
-| `/mount-prospect` | Local venue + book | Partial | N | — | add FAQ | pending |
-| `/west-nyack` | Local venue + book | Partial | N | — | add FAQ | pending |
-| `/lincoln` | Local venue + book | Partial | N | — | add FAQ | pending |
-| `/manassas` | Local venue + book | Partial | N | — | add FAQ | pending |
-| `/antwerp` | Local venue + book | Partial | N | — | add FAQ | pending |
+| Route | Page intent | Answer-first lead present? | Question-shaped headings? | FAQ schema source | Recommendation | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| `/` | Brand + book | Partial | No | Site `faqs.json` on FAQ page only | Rewrite opening copy | Pending |
+| `/about` | Brand story | Partial | No | None | Add focused FAQ content | Pending |
+| `/faq` | Policy / how it works | Yes | Partial | `src/data/site/faqs.json` | No action | Pending |
+| `/contact` | Reach the team | Yes | No | None | No action | Pending |
+| `/locations` | Find a venue | Partial | No | None | Rewrite opening copy | Pending |
+| `/privacy` | Legal | Partial | No | None | No action | Pending |
+| `/groups/corporate` | B2B booking | Partial | Partial | None | Add focused FAQ content | Pending |
+| `/philadelphia` | Local venue + book | Partial | No | Location data when authored | Add location FAQ content | Pending |
+| `/houston` | Coming soon | Partial | No | Location data when authored | No action | Pending |
+| `/mount-prospect` | Local venue + book | Partial | No | Location data when authored | Add location FAQ content | Pending |
+| `/west-nyack` | Local venue + book | Partial | No | Location data when authored | Add location FAQ content | Pending |
+| `/lincoln` | Local venue + book | Partial | No | Location data when authored | Add location FAQ content | Pending |
+| `/manassas` | Local venue + book | Partial | No | Location data when authored | Add location FAQ content | Pending |
+| `/antwerp` | Local venue + book | Partial | No | Location data when authored | Add location FAQ content | Pending |
 
-## AI citation gaps
+## AI Citation Gaps
 
-- **Per-location `faqs[]` in `data/locations.json`:** No location rows currently ship validated `faqs[]` entries (arrays are empty). Per-location FAQPage / rich FAQ surfaces cannot emit from source until those arrays are authored and validated.
+- Per-location `faqs[]` rows in `data/locations.json` are ready for authored FAQ content, but most location rows still need final copy before location-specific FAQPage schema can be emitted.
+- Location pages should answer practical venue questions earlier when new copy is authored: age fit, group size, booking flow, parking or mall context, and whether the venue is open or coming soon.
 
-- **Recommendation:** Consider populating `faqs[]` per location after Phase 7 cutover so per-location FAQPage can emit per D-08.
+## Cross-Reference
 
-## Out-of-scope (D-13)
-
-Phase 7 explicitly does not require any content rewrites listed above. Items marked `rewrite` or `add FAQ` are routed to backlog or a future Phase 8+ content review.
-
-## Cross-reference
-
-- See [schema-coverage-matrix.md](./schema-coverage-matrix.md) for JSON-LD coverage and Phase 8 input.
+- See [schema-coverage-matrix.md](./schema-coverage-matrix.md) for current JSON-LD coverage.

@@ -1,8 +1,6 @@
 /**
- * Phase 10 P2-4 — EU-routed cookie consent banner
- * Wraps vanilla-cookieconsent@3 and integrates with Phase 6 Consent Mode v2.
- * Locked decision D-03: banner ONLY appears when consent_profile !== 'us_open'.
- * Locked decision D-05: button label is 'Manage Preferences' (renamed per UI-SPEC).
+ * EU-routed cookie consent banner.
+ * Wraps vanilla-cookieconsent@3 and integrates with Consent Mode v2.
  */
 (function () {
     'use strict';
@@ -16,7 +14,7 @@
         }
     }
 
-    // EU/strict pages get the banner; US-default pages skip it (D-03 locked)
+    // EU/strict pages get the banner; US-default pages skip it.
     if (getProfile() === 'us_open') return;
 
     if (!window.CookieConsent || typeof window.CookieConsent.run !== 'function') return;

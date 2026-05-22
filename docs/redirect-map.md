@@ -1,14 +1,14 @@
-# Redirect map — Phase 02 clean URLs
+# Redirect Map
 
-Canonical routing for Time Mission uses **clean extensionless paths with no trailing slash** (except the root `/`). Legacy `.html` sources and marketing shortcuts redirect **one hop** to those canonical URLs via `_redirects` (Netlify / Cloudflare Pages format). Location-name and venue-alternate inputs also normalize through a Cloudflare Pages Function so case and dashes do not create duplicate location URLs.
+Canonical routing for Time Mission uses **clean extensionless paths with no trailing slash** (except the root `/`). Historical `.html` sources and marketing shortcuts redirect **one hop** to those canonical URLs via `_redirects` (Netlify / Cloudflare Pages format). Location-name and venue-alternate inputs also normalize through a Cloudflare Pages Function so case and dashes do not create duplicate location URLs.
 
 See also: `src/data/routes.json` (machine-readable registry), `_redirects` (deployed rules), `functions/[[path]].js` (case/dash location normalization), and `npm run check:routes`.
 
 ## Cloudflare Pages Primary Behavior
 
-Cloudflare Pages is the **primary** static hosting target for this repo. The `_redirects` file at the publish root is consumed by Pages-style hosts so visitors and bots requesting legacy paths receive an explicit HTTP redirect to the matching canonical route.
+Cloudflare Pages is the **primary** static hosting target for this repo. The `_redirects` file at the publish root is consumed by Pages-style hosts so visitors and bots requesting historical paths receive an explicit HTTP redirect to the matching canonical route.
 
-Legacy `.html` document URLs redirect directly to clean paths (for example `/about.html` → `/about`). Marketing shortcuts redirect to canonical destinations, optionally preserving fragment identifiers on the destination path.
+Historical `.html` document URLs redirect directly to clean paths (for example `/about.html` → `/about`). Marketing shortcuts redirect to canonical destinations, optionally preserving fragment identifiers on the destination path.
 
 Preview deployments should be used to confirm redirect Location headers and status codes before production cutover.
 
@@ -37,7 +37,7 @@ When migrating bookmarks or ads that relied on `#sections`, prefer destinations 
 
 ## Status Policy
 
-- **`301`** — Permanent moves for durable canonical replacements (legacy `.html` → clean path; consolidated shortcuts).
+- **`301`** — Permanent moves for durable canonical replacements (historical `.html` → clean path; consolidated shortcuts).
 - **`302`** — Temporary availability / launch redirects only when explicitly documented in the route registry (for example city landing behaviors while inventory changes).
 
 Permanent migrations should not oscillate between `301` and `302` without an intentional SEO discussion.
@@ -93,11 +93,11 @@ npm run check:routes -- --sitemap
 
 ## Source Traffic to Preserve
 
-Before going live, pull Search Console top URLs for the domain and confirm each ranked legacy URL resolves via `_redirects` (add registry-backed rows if gaps appear).
+Before going live, pull Search Console top URLs for the domain and confirm each ranked historical URL resolves via `_redirects` (add registry-backed rows if gaps appear).
 
-## WordPress-Era Legacy Paths (P1-8)
+## WordPress-Era Paths
 
-The following paths existed on the legacy WordPress site (or are well-known WordPress probe URLs from bot traffic) and previously returned 404 on the new Astro site. As of the P1-8 fix they redirect with HTTP 301:
+The following paths existed on the legacy WordPress site or are well-known WordPress probe URLs from bot traffic. They redirect with HTTP 301:
 
 | Source | Target | Status | Reason |
 |--------|--------|--------|--------|
@@ -109,13 +109,13 @@ The following paths existed on the legacy WordPress site (or are well-known Word
 | `/feed` | `/` | 301 | WP RSS feed |
 | `/atom.xml` | `/` | 301 | WP Atom feed |
 | `/wp-sitemap.xml` | `/` | 301 | WP-generated sitemap; canonical sitemap is `/sitemap.xml` |
-| `/palisades` | `/west-nyack` | 301 | Legacy slug; West Nyack venue is located at Palisades Center (see `data/locations.json#west-nyack`, brand name "Time Mission Palisades") |
+| `/palisades` | `/west-nyack` | 301 | Former slug; West Nyack venue is located at Palisades Center (see `data/locations.json#west-nyack`, brand name "Time Mission Palisades") |
 
 ### Why 301 and not 410 Gone
 
-The original audit (P1-8) recommended 410 Gone for WordPress-era paths so search engines deindex faster. **Cloudflare Pages `_redirects` only supports status codes 200 (rewrite), 301, 302, 303, 307, and 308 — 410 is not available.** Emitting 410 would require a Cloudflare Worker or Pages Function, which is out of scope for a static-redirect change.
+The original redirect review considered 410 Gone for WordPress-era paths so search engines deindex faster. **Cloudflare Pages `_redirects` only supports status codes 200 (rewrite), 301, 302, 303, 307, and 308 — 410 is not available.** Emitting 410 would require a Cloudflare Worker or Pages Function, which is out of scope for a static-redirect change.
 
-The SEO outcome of 301-to-`/` is comparable for these low-volume bot/legacy paths: search engines drop the URL after a few crawl cycles either way, and any residual human traffic lands on the homepage instead of a 404.
+The SEO outcome of 301-to-`/` is comparable for these low-volume bot and historical paths: search engines drop the URL after a few crawl cycles either way, and any residual human traffic lands on the homepage instead of a 404.
 
 If 410 becomes a hard requirement (for example to suppress scoring delays in Search Console), a Cloudflare Pages Function under `functions/` could intercept these paths and return `new Response(null, { status: 410 })`. That is intentionally not done here.
 

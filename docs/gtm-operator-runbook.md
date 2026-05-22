@@ -1,4 +1,4 @@
-# GTM operator runbook (Phase 6)
+# GTM Operator Runbook
 
 ## Container configuration
 

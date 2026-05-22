@@ -13,6 +13,18 @@ export interface LocationCtaView {
     i18n: string;
 }
 
+export interface LocationViewModel {
+    addressText: string;
+    bookLabel: string;
+    bookable: boolean;
+    externalUrl: string;
+    id: string;
+    openingLabel: string;
+    pageUrl: string;
+    slug: string;
+    status: LocationRecord['status'];
+}
+
 export function locationSlug(loc: Pick<LocationRecord, 'id' | 'slug'>): string {
     return loc.slug || loc.id;
 }
@@ -42,10 +54,10 @@ export function locationStatusBadge(loc: LocationRecord): string {
 export function locationContactItems(loc: Pick<LocationRecord, 'contact'>): LocationContactItem[] {
     const phone = String(loc.contact.phone || '').trim();
     const email = String(loc.contact.email || '').trim();
-    return [
-        phone ? { label: phone, kind: 'phone' as const } : null,
-        email ? { label: email, kind: 'email' as const } : null,
-    ].filter((item): item is LocationContactItem => Boolean(item));
+    const items: LocationContactItem[] = [];
+    if (phone) items.push({ label: phone, kind: 'phone' });
+    if (email) items.push({ label: email, kind: 'email' });
+    return items;
 }
 
 export function locationContactHref(loc: Pick<LocationRecord, 'slug'>, type = 'updates'): string {
@@ -57,6 +69,12 @@ export function locationContactHref(loc: Pick<LocationRecord, 'slug'>, type = 'u
 
 export function locationMarket(loc: Pick<LocationRecord, 'address'>): string {
     return [loc.address.city, loc.address.state || loc.address.country].filter(Boolean).join(', ');
+}
+
+function locationOverlayAddressText(loc: Pick<LocationRecord, 'address'>): string {
+    const cityLine = [loc.address.city, loc.address.state].filter(Boolean).join(', ');
+    const postalLine = [cityLine, loc.address.zip].filter(Boolean).join(' ');
+    return [loc.address.line1, loc.address.line2, postalLine].filter(Boolean).join('\n');
 }
 
 export function locationCtaView(loc: LocationRecord): LocationCtaView {
@@ -74,6 +92,24 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
         isBookingTrigger: false,
         label: 'Contact Us',
         i18n: '',
+    };
+}
+
+export function locationViewModel(loc: LocationRecord): LocationViewModel {
+    const bookable = hasTicketBooking(loc);
+    const externalUrl = String(loc.externalUrl || '').trim();
+    const comingSoon = loc.status === 'coming-soon';
+
+    return {
+        addressText: locationOverlayAddressText(loc),
+        bookLabel: externalUrl ? 'Visit EU Site' : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
+        bookable,
+        externalUrl,
+        id: loc.id || locationSlug(loc),
+        openingLabel: locationOpeningLabel(loc),
+        pageUrl: locationHref(loc),
+        slug: locationSlug(loc),
+        status: loc.status,
     };
 }
 

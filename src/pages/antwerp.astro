@@ -1,28 +1,10 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import LocationPageHeadLinks from '../components/LocationPageHeadLinks.astro';
+import OpenLocationPageShell from '../components/OpenLocationPageShell.astro';
 import antwerpMainRaw from '../partials/antwerp-main.frag.txt?raw';
 import { buildOpenLocationPage } from '../lib/location-page-shell';
 
-const cityPage = buildOpenLocationPage({ slug: 'antwerp', mainRaw: antwerpMainRaw });
+const slug = 'antwerp';
+const cityPage = buildOpenLocationPage({ slug, mainRaw: antwerpMainRaw });
 ---
 
-<SiteLayout
-    canonicalPath={cityPage.page.canonicalPath}
-    lang="nl-BE"
-    bodyDataLocation={cityPage.location.slug}
->
-    <Fragment slot="head-extra">
-        <LocationPageHeadLinks pageCss="/css/page-antwerp.css?v=2" />
-    </Fragment>
-    <Fragment slot="json-ld">
-        <script type="application/ld+json" is:inline set:html={cityPage.ld}></script>
-    </Fragment>
-    <div set:html={cityPage.mainHtml} />
-    <Fragment slot="after-site-scripts">
-        <script is:inline define:vars={{ pageInit: cityPage.pageInit }}>
-            window.__TM_PAGE_INIT__ = pageInit;
-        </script>
-        <script defer is:inline src="/js/page-widgets.js?v=6"></script>
-    </Fragment>
-</SiteLayout>
+<OpenLocationPageShell cityPage={cityPage} />

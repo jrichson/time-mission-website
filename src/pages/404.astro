@@ -8,8 +8,6 @@ const page = definePage({ canonicalPath: '/404' });
 
 <SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise">
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/footer.css?v=3" />
-        <link rel="stylesheet" href="/css/ticket-panel.css" />
         <link rel="stylesheet" href="/css/page-404.css?v=1" />
     </Fragment>
     <div set:html={notFoundMain} />

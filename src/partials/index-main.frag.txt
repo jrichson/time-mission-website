@@ -53,7 +53,7 @@
                 Time Mission is a live, team-based entertainment experience where groups of two to five players move through 25 or more short mission rooms during a timed session. Each room is a self-contained challenge lasting about one to five minutes, so players can choose the order, replay favorites, and build a score across the venue. The format blends escape-room puzzles, arcade-style scoring, physical tasks, and cooperative problem solving without locking a group into one long scenario. Sessions are sold in 60, 90, or 120 minute lengths, with most groups completing 15 to 20 missions in a 90 minute visit. Time Mission works for families, friends, birthdays, team outings, field trips, date nights, and private events because different rooms test speed, strength, skill, memory, logic, and coordination. The experience is designed so mixed-ability groups can contribute in different ways rather than relying on one kind of player.
                 </p>
             </details>
-            <a href="/about" class="btn-secondary welcome-learn-desktop" style="margin-top: 1.5rem;" data-i18n="home.about.learn">Learn About Time Mission</a>
+            <a href="/about" class="btn-secondary welcome-learn-desktop u-mt-lg" data-i18n="home.about.learn">Learn About Time Mission</a>
         </div>
     </section>
 
@@ -91,7 +91,7 @@
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                     </svg>
                 </div>
-                <div class="stat-number">2<span style="font-size: 0.5em; vertical-align: middle;">-</span>5</div>
+                <div class="stat-number">2<span class="stat-range-separator">-</span>5</div>
                 <div class="stat-label" data-i18n="home.stats.players">Players Per Team</div>
             </div>
             <div class="stat-card reveal">
@@ -114,7 +114,7 @@
         <div class="experiences-header reveal">
             <div class="section-badge" data-i18n="home.missions.badge">THE MISSIONS</div>
             <h2 class="section-title" data-i18n="home.missions.title">Unlimited Ways to Play</h2>
-            <p class="welcome-text" style="max-width: 700px; margin: 0 auto;" data-i18n="home.missions.intro">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
+            <p class="welcome-text u-measure-sm-centered" data-i18n="home.missions.intro">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
         </div>
 
         <div class="experiences-scroll" id="experiencesScroll">
@@ -295,7 +295,7 @@
     </section>
 
     <!-- Groups & Parties CTA -->
-    <section class="groups-cta" id="groups" style="scroll-margin-top: 120px;">
+    <section class="groups-cta u-scroll-anchor-xl" id="groups">
         <div class="groups-cta-photo">
             <picture><source srcset="/assets/photos/TM-Groups-480.webp 480w, /assets/photos/TM-Groups-800.webp 800w, /assets/photos/TM-Groups-1200.webp 1200w, /assets/photos/TM-Groups.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/TM-Groups.jpg" alt="Group playing at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
         </div>
@@ -345,7 +345,7 @@
         <div class="testimonials-scroll" role="region" tabindex="0" aria-label="Guest testimonials" data-i18n-aria-label="home.testimonials.label">
           <div class="testimonials-track">
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">"This was the most fun my family has had in years! The challenges were exciting for both kids and adults. We're already planning our next visit."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Sarah M.</span>
@@ -354,7 +354,7 @@
             </div>
 
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">"Perfect for team building! Our company had a blast competing against each other. The immersive environments and variety of challenges kept everyone engaged."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Mike R.</span>
@@ -363,7 +363,7 @@
             </div>
 
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">"My son's birthday party was absolutely epic! The staff was amazing and all the kids had an incredible time. Highly recommend for any celebration."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Jennifer L.</span>
@@ -375,7 +375,7 @@
     </section>
 
     <!-- Mini FAQ -->
-    <section class="mini-faq" id="faq" style="scroll-margin-top: 100px;">
+    <section class="mini-faq u-scroll-anchor-lg" id="faq">
         <div class="mini-faq-header reveal">
             <div class="section-badge" data-i18n="home.faq.badge">GOT QUESTIONS?</div>
             <h2 class="section-title" data-i18n="home.faq.title">FREQUENTLY ASKED</h2>

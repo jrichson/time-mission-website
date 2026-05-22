@@ -1,6 +1,6 @@
 ---
 /**
- * Full-width footer matching legacy `footer-grid` pages (index, FAQ, contact, etc.).
+ * Full-width footer matching the shared `footer-grid` page treatment.
  * Keeps structure in sync with `src/partials/faq-footer.frag.txt`.
  */
 import { allLocations, type LocationRecord } from '../data/locations';
@@ -129,7 +129,7 @@ const contactHref = contactHrefForLocation(pageLocation);
                     </div>
                 </div>
             </div>
-            <div class="footer-location-info" style="display: none;">
+            <div class="footer-location-info" hidden>
                 <h5 class="footer-loc-name"></h5>
                 <p class="footer-loc-address"></p>
                 <a class="footer-loc-phone" href="tel:">
@@ -157,41 +157,3 @@ const contactHref = contactHrefForLocation(pageLocation);
         </div>
     </div>
 </footer>
-
-<style is:global>
-    .footer-link-button {
-        color: rgba(255, 255, 255, 0.72);
-        font-family: var(--body);
-        font-size: 0.85rem;
-        background: transparent;
-        border: 0;
-        padding: 0 0.25rem;
-        cursor: pointer;
-        border-radius: 4px;
-    }
-    .footer-link-button:focus-visible {
-        color: var(--white);
-    }
-    @media (hover: hover) {
-        .footer-link-button:hover {
-            color: var(--white);
-        }
-    }
-    .footer-location-list a.coming-soon {
-        opacity: 0.7;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
-    .footer-location-list .coming-soon-tag {
-        font-size: 0.55rem;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        background: rgba(255, 107, 44, 0.18);
-        color: var(--orange);
-        padding: 0.15rem 0.5rem;
-        border-radius: 100px;
-        white-space: nowrap;
-    }
-</style>

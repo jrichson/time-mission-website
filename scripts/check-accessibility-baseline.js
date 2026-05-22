@@ -4,43 +4,31 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const errors = [];
 
-function walk(dir, files = []) {
+function walk(dir, predicate, files = []) {
+  if (!fs.existsSync(dir)) return files;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      walk(fullPath, files);
-    } else if (entry.name.endsWith('.html')) {
+      walk(fullPath, predicate, files);
+    } else if (predicate(entry.name)) {
       files.push(fullPath);
     }
   }
   return files;
 }
 
-const pages = walk(root).filter((filePath) => {
-  const relative = path.relative(root, filePath);
-  return !relative.startsWith('assets/')
-    && !relative.startsWith('ads/')
-    && !relative.startsWith('components/')
-    && !relative.startsWith('dist/')
-    && !relative.startsWith('public/');
-});
+const pages = walk(path.join(root, 'src', 'pages'), (name) => name.endsWith('.astro'));
+if (!pages.length) errors.push('no Astro page sources found');
 
-for (const filePath of pages) {
-  const relative = path.relative(root, filePath);
-  const html = fs.readFileSync(filePath, 'utf8');
+const runtimeContract = fs.readFileSync(path.join(root, 'src', 'lib', 'public-runtime-contract.ts'), 'utf8');
+if (!runtimeContract.includes("id: 'a11y'") || !runtimeContract.includes("src: '/js/a11y.js'")) {
+  errors.push('src/lib/public-runtime-contract.ts must include js/a11y.js in publicRuntimeScripts');
+}
 
-  if (!html.includes('js/a11y.js')) {
-    errors.push(`${relative} does not load js/a11y.js`);
-  }
-
-  if (html.includes('id="ticketPanel"') && !html.includes('id="ticketClose" aria-label="Close ticket panel"')) {
-    errors.push(`${relative} has ticket panel without labeled close control`);
-  }
-
-  if (html.includes('id="locationDropdown"') && !html.includes('location-dropdown-close" aria-label="Close')) {
-    errors.push(`${relative} has location dialog without labeled close control`);
-  }
+const siteScripts = fs.readFileSync(path.join(root, 'src', 'components', 'SiteScripts.astro'), 'utf8');
+if (!siteScripts.includes('publicRuntimeScripts') || !siteScripts.includes('versionedRuntimeSrc')) {
+  errors.push('src/components/SiteScripts.astro must render publicRuntimeScripts through versionedRuntimeSrc');
 }
 
 for (const rel of ['src/components/TicketPanel.astro', 'components/ticket-panel.html']) {
@@ -62,10 +50,15 @@ for (const rel of ['src/components/TicketPanel.astro', 'components/ticket-panel.
   }
 }
 
+const overlay = fs.readFileSync(path.join(root, 'src', 'components', 'LocationOverlay.astro'), 'utf8');
+if (!overlay.includes('class="location-dropdown-close" aria-label="Close')) {
+  errors.push('src/components/LocationOverlay.astro has location dialog without labeled close control');
+}
+
 if (errors.length) {
   console.error('Accessibility baseline check failed:');
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
 
-console.log(`Accessibility baseline check passed for ${pages.length} pages.`);
+console.log(`Accessibility baseline check passed for ${pages.length} Astro page sources.`);

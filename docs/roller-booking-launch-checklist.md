@@ -2,12 +2,12 @@
 
 ## Scope
 
-Human verification for **measurement readiness** after Phase 5 resolver and same-tab checkout paths ship. Intended handoff from Phase 5 toward Phase 8 cutover validation. Do not treat code checks alone as proof that purchase events fire in production analytics.
+Human verification for **measurement readiness** after booking resolver and same-tab checkout paths ship. Do not treat code checks alone as proof that purchase events fire in production analytics.
 
 ## Prerequisites
 
 - Access to Roller **Venue Manager** or a **staging/checkout playground** that mirrors production GTM + checkout domains.
-- GTM container documented (placeholder: `{GTM-XXXX}`) and published to the environment under test.
+- GTM container documented (replace `{GTM-ID}` with the environment-specific ID) and published to the environment under test.
 - Test card / zero-dollar flow allowed by Roller for your tenant.
 
 ## Checkout QA
@@ -22,7 +22,7 @@ Human verification for **measurement readiness** after Phase 5 resolver and same
 - Confirm **no PII** (full email, phone, name) is pushed in ecommerce payload unless explicitly approved.
 - If checkout is on a different domain, confirm **cross-domain** / linker settings per your GTM + GA4 configuration.
 
-## Analytics & consent (Phase 6)
+## Analytics & Consent
 
 - **Iframe / third-party checkout:** Measurement for sessions that complete inside ROLLER or other iframes may be limited by browser privacy rules and first-party context; treat **purchase** visibility as **conditionally observable** until validated per tenant configuration (see prerequisites above).
 - **Cross-domain:** Align GA4 **cross-domain measurement** and any **linker** parameters with ROLLER’s documented hostname list and your GTM transport settings; re-test after checkout domain changes.
@@ -31,7 +31,7 @@ Human verification for **measurement readiness** after Phase 5 resolver and same
 
 ## Regression
 
-- Automated gate: `npm run verify:phase6` (includes `check:analytics`, Astro build, route/dist checks, ticket-panel parity, Playwright smoke against the repo root server).
+- Automated gate: `npm run verify` (includes `check:analytics`, Astro build, route/dist checks, ticket-panel parity, and Playwright smoke against the built site).
 - Smoke: `open location ?book=1 navigates to https checkout` in `tests/smoke/site.spec.js`.
 
 ## Sign-off

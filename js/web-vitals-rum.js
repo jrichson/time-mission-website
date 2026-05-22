@@ -1,11 +1,10 @@
 /**
- * Phase 10 P2-1 — Web Vitals RUM beacon
+ * Web Vitals RUM beacon.
  * Measures LCP / CLS / INP via the web-vitals attribution build and pushes
  * normalized non-PII events to window.dataLayer for GTM consumption.
  *
  * Consent gate: only initializes when window.__TM_CONSENT_STATE__.analytics_storage
- * === 'granted'. Set by SiteHead.astro Phase 6 init or by cookie banner accept
- * (plan 10-06).
+ * === 'granted'.
  */
 (function () {
     'use strict';
@@ -50,7 +49,6 @@
     if (consentGranted()) {
         initialize();
     } else {
-        // Listen for consent updates (Phase 6 + cookie banner from plan 10-06)
         window.addEventListener('tm:consent-updated', function () {
             if (consentGranted()) initialize();
         });

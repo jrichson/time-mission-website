@@ -1,5 +1,5 @@
 /**
- * RFC #11 architecture guard.
+ * Location storage architecture guard.
  * Asserts that ONLY js/locations.js writes the canonical or legacy location
  * storage keys. If any other file in js/, src/, or root *.html contains a
  * matching localStorage.setItem(...) call, fail.

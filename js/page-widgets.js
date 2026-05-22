@@ -927,10 +927,6 @@
 
     // ==========================================
     // GAME PROMO POPUP
-    // Shows after 8 seconds, remembers dismissal. Currently disabled-but-wired:
-    // the setTimeout(showGamePopup, 8000) line stays commented out so re-enabling
-    // is a one-line change. Close/skip/overlay/Esc handlers always attach when
-    // the DOM elements are present.
     // ==========================================
     function initGamePopup(enabled) {
         var gamePopup = document.getElementById('gamePopup');
@@ -951,13 +947,7 @@
             sessionStorage.setItem('gamePopupDismissed', 'true');
         }
 
-        // Popup disabled for now, re-enable when ready:
-        // if (enabled) setTimeout(showGamePopup, 8000);
-        // (enabled flag preserved so re-enable is a one-line guard.)
-        if (enabled) {
-            // Intentionally left as a hook — re-enable showGamePopup here when launching.
-            // setTimeout(showGamePopup, 8000);
-        }
+        if (enabled) setTimeout(showGamePopup, 8000);
 
         gamePopupClose.addEventListener('click', hideGamePopup);
         gamePopupSkip.addEventListener('click', hideGamePopup);
@@ -1083,14 +1073,22 @@
         });
     }
 
-    window.TMPage = { initCity: initCity, initIndex: initIndex };
-
-    var pageInit = window.__TM_PAGE_INIT__;
-    if (pageInit && typeof pageInit === 'object') {
+    function initFromPageInit(pageInit) {
+        if (!pageInit || typeof pageInit !== 'object') return;
         if (pageInit.mode === 'city') {
             initCity(pageInit.config);
-        } else if (pageInit.mode === 'index') {
+            return;
+        }
+        if (pageInit.mode === 'index') {
             initIndex(pageInit.config);
         }
     }
+
+    window.TMPage = {
+        initCity: initCity,
+        initIndex: initIndex,
+        initFromPageInit: initFromPageInit,
+    };
+
+    initFromPageInit(window.__TM_PAGE_INIT__);
 })();

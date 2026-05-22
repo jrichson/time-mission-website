@@ -631,15 +631,16 @@
       "openingDate": "2026-06-11",
       "openingLabel": "Opening June 11, 2026",
       "address": {
-        "line1": "66 Orland Park",
+        "line1": "66 Orland Square Dr",
+        "line2": "Suite C",
         "city": "Orland Park",
         "state": "IL",
         "zip": "60462",
         "country": "United States"
       },
       "contact": {
-        "phone": "",
-        "email": ""
+        "phone": "(708) 294-8711",
+        "email": "OrlandPark@TimeMission.com"
       },
       "hours": {},
       "bookingUrl": "https://book.orlandpark.timemission.com/timemissionorlandpark/onlinecheckout/en-us/home",
@@ -654,7 +655,7 @@
         "holidays": "https://webforms.pipedrive.com/f/6xQQrLhTsFkAoB1Os9dMge6hvvHKlouU8Kz12XSFqwTG4J6HRojT9rKKIMEKMERX0L"
       },
       "navLabel": "IL - Orland Park",
-      "mapUrl": "https://maps.google.com/?q=66+Orland+Park+IL+60462",
+      "mapUrl": "https://maps.google.com/?q=66+Orland+Square+Dr+Suite+C+Orland+Park+IL+60462",
       "faqs": [],
       "ticker": "ORLAND PARK GRAND OPENING – JUNE 11TH",
       "giftCardUrl": "https://book.orlandpark.timemission.com/giftcards/en-us/products",

@@ -1,7 +1,7 @@
     <!-- Page Header -->
     <section class="page-header">
         <div class="reveal">
-            <h1 class="section-title" style="font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.02em;">COOKIE POLICY</h1>
+            <h1 class="section-title section-title--display">COOKIE POLICY</h1>
         </div>
     </section>
 

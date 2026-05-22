@@ -1,150 +1,56 @@
-# Time Mission Website - Developer Handoff
+# Time Mission Website Developer Handoff
 
 ## Overview
 
-Marketing website for **Time Mission**, LOL Entertainment's immersive gaming brand. Dark sci-fi themed with vibrant accent colors.
+This repository contains the public Time Mission website. The active site is an Astro build with shared layout components, data-backed location pages, source-controlled route contracts, and verification scripts for routing, booking, analytics, SEO, accessibility, and performance.
 
-**Target launch:** ~May 8, 2026
-**Current state:** Static HTML/CSS prototypes — needs CMS integration and production build system.
+## Primary Source Areas
 
----
+| Area | Source |
+| --- | --- |
+| Public pages | `src/pages/**/*.astro` |
+| Shared layout and chrome | `src/layouts/SiteLayout.astro`, `src/components/` |
+| Static content fragments | `src/partials/*-main.frag.txt`, page-specific source partials |
+| Location roster and booking facts | `data/locations.json` |
+| Route registry | `src/data/routes.json` |
+| Browser runtime modules | `js/` |
+| Shared typed contracts | `src/lib/` |
+| Cloudflare Pages functions | `functions/` |
 
-## Site Map & Page Status
+## Architecture Notes
 
-### Core Pages (root)
-| Page | File | Lines | Status |
-|------|------|-------|--------|
-| Homepage | `index.html` | 3,376 | Draft complete |
-| Experiences | `experiences.html` | 1,513 | Draft complete |
-| Group Bookings | `groups.html` | 2,453 | Draft complete |
-| Gift Cards | `gift-cards.html` | 1,364 | Draft complete |
-| FAQ | `faq.html` | 1,166 | Draft complete |
-| Contact | `contact.html` | 1,293 | Draft complete |
+- `src/lib/public-url-surface.ts` owns canonical URL, sitemap, redirect, dynamic landing, and output-file behavior.
+- `src/lib/site-contract.ts` exposes a small public browser contract for location, booking, analytics, and runtime facts.
+- `src/lib/location-page-shell.ts` and `src/lib/location-page-registry.ts` derive location page metadata, CSS, language overrides, page init data, and JSON-LD from the location catalog.
+- `js/booking-journey.js` and `js/booking-controller.js` own client-side booking decisions and presentation.
+- `js/locations.js` is the only writer for persisted location state.
+- `js/page-widgets.js` is the browser adapter for page-init driven widgets.
 
-### Location Pages (`locations/`)
-| Page | File | Status |
-|------|------|--------|
-| Locations Hub | `locations/index.html` | Draft complete |
-| Philadelphia | `locations/philadelphia.html` | Full build |
-| Houston | `locations/houston.html` | Full build |
-| Antwerp | `locations/antwerp.html` | Partial |
-| West Nyack | `locations/west-nyack.html` | Partial |
-| Manassas | `locations/manassas.html` | Partial |
-| Lincoln | `locations/lincoln.html` | Partial |
-| Chicago | `locations/chicago.html` | Minimal |
+## Build And Verification
 
----
+Use these commands from the repository root:
 
-## Tech Stack
-
-- **Current:** Static HTML with inline `<style>` and `<script>` tags per page
-- **Fonts:** Google Fonts — Bebas Neue, DM Sans, Orbitron
-- **No build system** — files open directly in browser
-
----
-
-## Design System
-
-### Colors
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--orange` | `#FF6B2C` | Primary CTA, brand accent |
-| `--orange-light` | `#FF8F5C` | Hover states |
-| `--orange-dark` | `#E55A1F` | Active states |
-| `--cyan` | `#00E5FF` | Secondary accent |
-| `--magenta` | `#FF00E5` | Tertiary accent |
-| `--lime` | `#AAFF00` | Highlight accent |
-| `--black` | `#0D0D0D` | Page background |
-| `--dark` | `#151515` | Card/section backgrounds |
-| `--dark-light` | `#1F1F1F` | Elevated surfaces |
-
-### Gradients
-| Token | Value |
-|-------|-------|
-| `--gradient-primary` | `linear-gradient(135deg, #f9a41a 0%, #ef4b23 50%, #c7451e 100%)` |
-| `--gradient-secondary` | `linear-gradient(135deg, #00E5FF 0%, #AAFF00 100%)` |
-| `--gradient-accent` | `linear-gradient(90deg, #f9a41a 0%, #ef4b23 50%, #c7451e 100%)` |
-
-### Typography
-| Role | Font | Weight |
-|------|------|--------|
-| Display/Headlines | Bebas Neue | 400 |
-| Body text | DM Sans | 400, 500, 600, 700 |
-| Tech/data labels | Orbitron | 400-900 |
-
-Extracted tokens live in `css/variables.css`.
-
----
-
-## Directory Structure
-
-```
-time-mission-website/
-├── index.html              # Homepage
-├── experiences.html         # Game listings
-├── groups.html              # Group bookings
-├── gift-cards.html          # Gift cards
-├── faq.html                 # FAQ
-├── contact.html             # Contact
-├── locations/               # Per-city pages
-│   ├── index.html           # Locations hub
-│   ├── philadelphia.html
-│   ├── houston.html
-│   ├── chicago.html
-│   ├── antwerp.html
-│   ├── west-nyack.html
-│   ├── manassas.html
-│   └── lincoln.html
-├── css/
-│   └── variables.css        # Design tokens (extracted)
-├── js/                      # Shared scripts (to be extracted)
-├── assets/
-│   ├── logo/                # Brand logos + favicon
-│   ├── photos/
-│   │   ├── experiences/     # Game photography (12 images)
-│   │   └── venue/           # Venue photography (6 images)
-│   ├── news/                # Press logos (NBC, FOX, CBS, etc.)
-│   ├── mockup-reference/    # Design mockups (desktop + mobile)
-│   ├── mission/             # Mission SVG graphic
-│   └── extracted/           # Extracted animations/videos
-├── docs/
-│   ├── DESIGN-DOCUMENTATION.md
-│   ├── LAUNCH-TIMELINE.md
-│   ├── locations-snapshot-2026-04-22.json  # Historical reference snapshot (see data/locations.json for live data)
-│   └── TM-Website-Launch-Plan.xlsx
-└── _archive/                # Old experiments (not for production)
+```bash
+npm run check
+npm run build:astro
+npm run verify
 ```
 
----
+`npm run check` runs unit tests plus source-level architecture and content gates. `npm run build:astro` builds the Cloudflare Pages output into `dist/`. `npm run verify` runs the full source, build, output, accessibility, SEO, schema, link, route, and Playwright smoke pipeline.
 
-## Assets Notes
+## Deployment
 
-- **Photos are unoptimized** — experience photos are 5-19MB, venue photos 6-11MB. Need compression/resizing for web.
-- **Hero video** — Placeholder folder exists but no video yet. Currently using static hero.
-- **Team photos** — None yet. May need for About/Team section.
-- **Logos** — Only favicon versions (PNG + SVG). May need full logo SVGs.
+Cloudflare Pages deployment is wired through:
 
----
+```bash
+npm run deploy:pages
+```
 
-## Known Issues / TODO for Production
+Required production configuration lives outside the repo in Cloudflare Pages environment variables and bindings. See `docs/cutover-checklist.md`, `docs/cloudflare-preview-validation.md`, and `docs/gtm-operator-runbook.md` for deployment and validation steps.
 
-1. **CMS integration** — All content is hardcoded. Need CMS for locations, experiences, FAQ, etc.
-2. **Image optimization** — Compress all photos, serve responsive sizes (srcset)
-3. **CSS extraction** — Styles are inline in each HTML file, ~500-1000 lines per page. Extract to shared stylesheets.
-4. **JS extraction** — Scripts are inline. Extract navigation, animations, carousels to shared modules.
-5. **SEO** — Meta descriptions, OG tags, structured data need review
-6. **Analytics** — No tracking installed
-7. **Forms** — Contact form needs backend
-8. **Booking integration** — CTAs link to external booking but may need deeper integration
-9. **Accessibility** — Needs audit (contrast, ARIA labels, keyboard nav)
-10. **Performance** — Large images, no lazy loading, no CDN
+## Data Ownership
 
----
-
-## Reference Docs
-
-- `docs/DESIGN-DOCUMENTATION.md` — Design system history and rationale
-- `data/locations.json` — Live location data read by `js/locations.js`. **This is the source of truth.** Edit here, not in `docs/`.
-- `docs/locations-snapshot-2026-04-22.json` — Historical snapshot from the old timemission.com site (reference only, do not edit for live changes)
-- `docs/LAUNCH-TIMELINE.md` — Launch milestones
-- `assets/mockup-reference/` — Original design mockups (desktop + mobile PNGs)
+- Edit location names, statuses, booking URLs, group form URLs, direct contact details, and venue metadata in `data/locations.json`.
+- Edit canonical route behavior in `src/data/routes.json`.
+- Edit analytics event names and parameter labels in `src/data/site/analytics-labels.json`.
+- Do not edit generated files under `dist/` or machine-generated route artifacts by hand.

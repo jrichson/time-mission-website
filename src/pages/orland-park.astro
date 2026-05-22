@@ -1,34 +1,9 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import ComingSoonLocationPage from '../components/ComingSoonLocationPage.astro';
-import LocationPageHeadLinks from '../components/LocationPageHeadLinks.astro';
+import ComingSoonLocationPageShell from '../components/ComingSoonLocationPageShell.astro';
 import { buildComingSoonLocationPage } from '../lib/location-page-shell';
 
 const slug = 'orland-park';
 const cityPage = buildComingSoonLocationPage(slug);
 ---
 
-<SiteLayout
-    canonicalPath={cityPage.page.canonicalPath}
-    title={cityPage.pageTitle}
-    description={cityPage.pageDescription}
-    bodyDataLocation={cityPage.location.slug}
-    bookingCtaHref={cityPage.cta.href}
-    bookingCtaLabel={cityPage.cta.label}
-    bookingCtaIsBookingTrigger={cityPage.cta.isBookingTrigger}
-    bookingCtaI18n={cityPage.cta.i18n}
->
-    <Fragment slot="head-extra">
-        <LocationPageHeadLinks pageCss="/css/page-houston.css?v=2" />
-    </Fragment>
-    <Fragment slot="json-ld">
-        <script type="application/ld+json" is:inline set:html={cityPage.ld}></script>
-    </Fragment>
-    <ComingSoonLocationPage slug={slug} />
-    <Fragment slot="after-site-scripts">
-        <script is:inline define:vars={{ pageInit: cityPage.pageInit }}>
-            window.__TM_PAGE_INIT__ = pageInit;
-        </script>
-        <script defer is:inline src="/js/page-widgets.js?v=6"></script>
-    </Fragment>
-</SiteLayout>
+<ComingSoonLocationPageShell cityPage={cityPage} />

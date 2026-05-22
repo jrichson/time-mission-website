@@ -128,7 +128,7 @@
         </div>
         <div class="group-testimonials-grid">
             <div class="group-testimonial reveal">
-                <div class="group-testimonial-rating">★★★★★</div>
+                <div class="group-testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="group-testimonial-text">"Brought the team here for an offsite and it blew away any escape room we've done. Real competition, and everyone was still talking about it the next week."</p>
                 <div class="group-testimonial-author">
                     <span class="group-testimonial-name">Mike R.</span>
@@ -136,7 +136,7 @@
                 </div>
             </div>
             <div class="group-testimonial reveal">
-                <div class="group-testimonial-rating">★★★★★</div>
+                <div class="group-testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="group-testimonial-text">"Booked it for my son's birthday and the kids were locked in the whole time. A bunch of parents asked where we'd booked by the time we left."</p>
                 <div class="group-testimonial-author">
                     <span class="group-testimonial-name">Jennifer L.</span>
@@ -144,7 +144,7 @@
                 </div>
             </div>
             <div class="group-testimonial reveal">
-                <div class="group-testimonial-rating">★★★★★</div>
+                <div class="group-testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="group-testimonial-text">"Did Time Mission for my bachelorette and it was the highlight of the weekend. Way better than another bar crawl, we were cracking up the whole time."</p>
                 <div class="group-testimonial-author">
                     <span class="group-testimonial-name">Ashley T.</span>

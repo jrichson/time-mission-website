@@ -667,7 +667,7 @@
             }
         }
 
-        /* Ticket panel: shared styles from /css/ticket-panel.css (linked in SiteLayout). */
+        /* Ticket panel styles are owned by /css/ticket-panel.css. */
 
         @media (max-width: 480px) {
             .hero { padding: 100px 1rem 2.5rem; min-height: 55vh; }

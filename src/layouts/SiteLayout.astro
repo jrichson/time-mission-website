@@ -3,7 +3,6 @@ import SiteHead from '../components/SiteHead.astro';
 import SiteNav from '../components/SiteNav.astro';
 import MobileMenu from '../components/MobileMenu.astro';
 import LocationOverlay from '../components/LocationOverlay.astro';
-import PageSupportContent from '../components/PageSupportContent.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import TicketPanel from '../components/TicketPanel.astro';
 import SiteScripts from '../components/SiteScripts.astro';
@@ -28,11 +27,6 @@ interface Props {
     lang?: string;
     /** Optional YYYY-MM-DD override; otherwise resolved from git mtime of the page source file. */
     lastUpdated?: string;
-    /**
-     * @deprecated No longer needed — SiteLayout derives the source path from canonicalPath.
-     * Kept for backward compatibility; ignored if canonicalPath resolves the mtime correctly.
-     */
-    sourcePageUrl?: string;
 }
 
 const {
@@ -51,13 +45,11 @@ const {
     landingHead,
     lang = 'en',
     lastUpdated,
-    sourcePageUrl,
 } = Astro.props;
 
 const lastUpdatedInfo = resolveLastUpdated({
     override: lastUpdated,
     canonicalPath,
-    sourceFile: sourcePageUrl,
 });
 const sitePageHead = landingHead ? null : sitePageHeadForDoc(await getPublishedSitePage(canonicalPath));
 const pageLocation = bodyDataLocation
@@ -110,10 +102,10 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQ
         {gtmContainerId ? (
             <noscript>
                 <iframe
+                    class="gtm-noscript-frame"
                     src={`https://www.googletagmanager.com/ns.html?id=${gtmContainerId}`}
                     height="0"
                     width="0"
-                    style="display:none;visibility:hidden"
                 ></iframe>
             </noscript>
         ) : null}
@@ -141,7 +133,6 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQ
         </header>
         <main id="main" tabindex="-1">
             <slot />
-            <PageSupportContent canonicalPath={canonicalPath} pageLocation={pageLocation} />
         </main>
         <footer role="contentinfo">
             <slot name="footer">

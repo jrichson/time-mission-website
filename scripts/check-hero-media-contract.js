@@ -4,11 +4,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { runCheck } = require('./lib/validation-core');
 const {
-  inlineCssPathForMainPartial,
   inspectHeroVideoCss,
   inspectHeroVideoMarkup,
   inspectHeroVideoRuntime,
   listHeroVideoPartials,
+  pageCssPathForMainPartial,
 } = require('./lib/hero-media-contract');
 
 const root = path.resolve(__dirname, '..');
@@ -18,6 +18,7 @@ runCheck({
   run(errors) {
     const partials = listHeroVideoPartials(root);
     const baseCss = fs.readFileSync(path.join(root, 'css', 'base.css'), 'utf8');
+    const locationPageCss = fs.readFileSync(path.join(root, 'css', 'location-page.css'), 'utf8');
     if (!partials.length) {
       errors.push('No hero video partials found');
       return;
@@ -26,15 +27,15 @@ runCheck({
     for (const partial of partials) {
       errors.push(...inspectHeroVideoMarkup(partial.html, partial.rel));
 
-      const cssPath = inlineCssPathForMainPartial(root, partial.name);
+      const cssPath = pageCssPathForMainPartial(root, partial.name);
       if (!fs.existsSync(cssPath)) {
-        errors.push(`${partial.rel}: missing matching inline hero CSS partial`);
+        errors.push(`${partial.rel}: missing matching page CSS file`);
         continue;
       }
       const cssRel = path.relative(root, cssPath);
       errors.push(...inspectHeroVideoCss(
-        `${baseCss}\n${fs.readFileSync(cssPath, 'utf8')}`,
-        `css/base.css + ${cssRel}`,
+        `${baseCss}\n${locationPageCss}\n${fs.readFileSync(cssPath, 'utf8')}`,
+        `css/base.css + css/location-page.css + ${cssRel}`,
       ));
     }
 

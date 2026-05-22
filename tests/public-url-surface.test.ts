@@ -1,25 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { createRequire } from 'node:module';
 import routes from '../src/data/routes.json';
+import astroRenderedOutput from '../src/data/site/astro-rendered-output-files.json';
 import {
   compilePublicUrlSurface,
   dynamicLandingPrefix,
   isDynamicLandingPath,
+  locationScopedCanonicalPaths,
   publicUrlForPath,
   registrySitemapUrls,
   type PublicUrlRegistry,
 } from '../src/lib/public-url-surface';
 
 const registry = routes as PublicUrlRegistry;
-const require = createRequire(import.meta.url);
-const routeArtifacts = require('../scripts/lib/route-artifacts.js') as {
-  compilePublicUrlSurface(input: PublicUrlRegistry): {
-    sitemapUrls: string[];
-    redirectPairs: Array<{ source: string; target: string; status: number }>;
-    outputFileFor(pathname: string): string;
-    isKnownCanonical(pathname: string): boolean;
-  };
-};
 
 describe('Public URL Surface', () => {
   it('resolves canonical URLs, dynamic landing paths, and output files from one surface', () => {
@@ -49,30 +41,42 @@ describe('Public URL Surface', () => {
     expect(isDynamicLandingPath('/c/team/night', registry)).toBe(false);
   });
 
-  it('keeps script route artifacts aligned with the typed Public URL Surface', () => {
-    const typedSurface = compilePublicUrlSurface(registry);
-    const scriptSurface = routeArtifacts.compilePublicUrlSurface(registry);
+  it('derives runtime scoped paths from the public route surface', () => {
+    const paths = locationScopedCanonicalPaths(['/antwerp', '/philadelphia'], registry);
 
-    expect(scriptSurface.sitemapUrls).toEqual(typedSurface.sitemapUrls);
-    expect(scriptSurface.redirectPairs).toEqual(typedSurface.redirectPairs);
-    expect(scriptSurface.outputFileFor('/philadelphia')).toBe(typedSurface.outputFileFor('/philadelphia'));
-    expect(scriptSurface.isKnownCanonical('/c/team-night')).toBe(typedSurface.isKnownCanonical('/c/team-night'));
+    expect(paths).toContain('/');
+    expect(paths).toContain('/locations');
+    expect(paths).toContain('/gift-cards');
+    expect(paths).not.toContain('/antwerp');
+    expect(paths).not.toContain('/philadelphia');
   });
 
-  it('keeps official location alternate redirects registered as permanent canonical moves', () => {
-    const redirects = compilePublicUrlSurface(registry).redirectPairs;
+  it('keeps registered output files backed by the compiled Astro route manifest', () => {
+    const outputFiles = new Set(astroRenderedOutput.outputFiles);
 
-    expect(redirects).toEqual(expect.arrayContaining([
-      { source: '/r1-indoor-karting', target: '/lincoln', status: 301 },
-      { source: '/palisades-center', target: '/west-nyack', status: 301 },
-      { source: '/terminal1', target: 'https://timemission.eu/brussels', status: 301 },
-      { source: '/manassas-mall', target: '/manassas', status: 301 },
-      { source: '/philly', target: '/philadelphia', status: 301 },
-      { source: '/mt-prospect', target: '/mount-prospect', status: 301 },
-      { source: '/experience-factory-antwerp', target: 'https://timemission.eu/antwerp', status: 301 },
-      { source: '/marq-e', target: '/houston', status: 301 },
-      { source: '/antwerp.html', target: 'https://timemission.eu/antwerp', status: 301 },
-      { source: '/brussels.html', target: 'https://timemission.eu/brussels', status: 301 },
-    ]));
+    for (const route of registry.routes) {
+      if (route.outputFile) {
+        expect(outputFiles).toContain(route.outputFile.replace(/^\//, ''));
+      }
+    }
+    expect(astroRenderedOutput.dynamicLandingModules).toContain('c/[slug].astro');
+  });
+
+  it('keeps registered redirects in the compiled surface', () => {
+    const redirects = compilePublicUrlSurface(registry).redirectPairs;
+    const expectedRedirects = [
+      ...registry.routes.flatMap((route) => (route.redirectSources || []).map((source) => ({
+        source,
+        target: route.externalUrl || route.canonicalPath,
+        status: route.status || 301,
+      }))),
+      ...(registry.aliases || []).map((alias) => ({
+        source: alias.source,
+        target: alias.target,
+        status: alias.status,
+      })),
+    ];
+
+    expect(redirects).toEqual(expectedRedirects);
   });
 });

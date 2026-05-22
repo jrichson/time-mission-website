@@ -22,7 +22,7 @@
             position: absolute;
             inset: 0;
             z-index: 0;
-            background: #000 url('/assets/video/groups-hero-poster-960.webp') center 40% / cover no-repeat;
+            background: var(--black) url('/assets/video/groups-hero-poster-960.webp') center 40% / cover no-repeat;
         }
 
         @media (min-width: 769px) {
@@ -229,16 +229,6 @@
             color: var(--orange);
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
 
         .section-header {
             text-align: center;

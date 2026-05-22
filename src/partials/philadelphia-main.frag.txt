@@ -47,7 +47,7 @@
             <p class="welcome-text">
                 Step into a real-life video game where behind every door is a new surprise. One ticket unlocks every mission, so race the clock to play them all or run your favorites over and over. Built for every age 6 to 106 and every skill level. Game&nbsp;on!
             </p>
-            <a href="/about" class="btn-secondary welcome-learn-desktop" style="margin-top: 1.5rem;">Learn About Time Mission</a>
+            <a href="/about" class="btn-secondary welcome-learn-desktop u-mt-lg">Learn About Time Mission</a>
         </div>
     </section>
 
@@ -85,7 +85,7 @@
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                     </svg>
                 </div>
-                <div class="stat-number">2<span style="font-size: 0.5em; vertical-align: middle;">-</span>5</div>
+                <div class="stat-number">2<span class="stat-range-separator">-</span>5</div>
                 <div class="stat-label">Players Per Team</div>
             </div>
             <div class="stat-card reveal">
@@ -108,7 +108,7 @@
         <div class="experiences-header reveal">
             <div class="section-badge">THE MISSIONS</div>
             <h2 class="section-title">Unlimited Ways to Play</h2>
-            <p class="welcome-text" style="max-width: 700px; margin: 0 auto;">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
+            <p class="welcome-text u-measure-sm-centered">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
         </div>
 
         <div class="experiences-scroll" id="experiencesScroll">
@@ -289,7 +289,7 @@
     </section>
 
     <!-- Groups & Parties CTA -->
-    <section class="groups-cta" id="groups" style="scroll-margin-top: 120px;">
+    <section class="groups-cta u-scroll-anchor-xl" id="groups">
         <div class="groups-cta-photo">
             <picture><source srcset="/assets/photos/TM-Groups-480.webp 480w, /assets/photos/TM-Groups-800.webp 800w, /assets/photos/TM-Groups-1200.webp 1200w, /assets/photos/TM-Groups.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/TM-Groups.jpg" alt="Group playing at Time Mission" width="1920" height="1280" loading="lazy" decoding="async"></picture>
         </div>
@@ -338,7 +338,7 @@
     <section class="testimonials" id="reviews">
         <div class="testimonials-scroll" role="region" tabindex="0" aria-label="Guest testimonials">
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">“We had an absolute blast. I felt like a kid again. What an awesome concept and the execution was fantastic! We went for a cousin reunion hangout.”</p>
                 <div class="testimonial-author">
                     <span class="author-name">Yelena M.</span>
@@ -347,7 +347,7 @@
             </div>
 
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">“My friends and I decided to go here on a whim after a night out. It was the best spontaneous adventure ever! All of the staff was friendly and helpful. Would definitely go again!”</p>
                 <div class="testimonial-author">
                     <span class="author-name">Alexis M.</span>
@@ -356,7 +356,7 @@
             </div>
 
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">“We had such a great time. The staff was friendly, the games were creative, and every room kept us laughing, thinking, and moving. Perfect mix of challenge and fun for all ages. We’ll definitely be back.”</p>
                 <div class="testimonial-author">
                     <span class="author-name">Jenelle J.</span>
@@ -365,7 +365,7 @@
             </div>
 
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">“Super fun place! Time flies when you’re having fun! Date, bday, kids outing, doesn’t matter. You’ll love it!”</p>
                 <div class="testimonial-author">
                     <span class="author-name">Stacey G.</span>
@@ -374,7 +374,7 @@
             </div>
 
             <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
+                <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
                 <p class="testimonial-text">“Great fun for the family! The kids were enjoying themselves so much we extended our time.”</p>
                 <div class="testimonial-author">
                     <span class="author-name">Evelyn M.</span>
@@ -386,7 +386,7 @@
     </section>
 
     <!-- Mini FAQ -->
-    <section class="mini-faq" id="faq" style="scroll-margin-top: 100px;">
+    <section class="mini-faq u-scroll-anchor-lg" id="faq">
         <div class="mini-faq-header reveal">
             <div class="section-badge">GOT QUESTIONS?</div>
             <h2 class="section-title">FREQUENTLY ASKED</h2>

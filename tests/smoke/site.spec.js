@@ -3,7 +3,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { fingerprintAnalyticsLabels } = require('../../scripts/lib/analytics-labels-fingerprint.cjs');
 const i18nCatalog = require('../../src/data/site/i18n.json');
-const formsLinksAudit = require('../fixtures/forms-links-audit.json');
 const { prepareSmokePage } = require('./network');
 
 require('tsx/cjs/api').register();
@@ -11,10 +10,20 @@ const { locationsFingerprintFromRecords } = require('../../src/lib/locations-fin
 
 const REPO_ROOT = path.resolve(__dirname, '../..');
 const locationRecords = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'data', 'locations.json'), 'utf8')).locations || [];
+const locationById = new Map(locationRecords.map((loc) => [loc.id, loc]));
 const contactLocations = locationRecords.filter((loc) => {
   const contact = loc.contact || {};
   return !loc.externalUrl && (String(contact.phone || '').trim() || String(contact.email || '').trim());
 });
+
+function groupFormUrl(locationId, groupType) {
+  return locationById.get(locationId)?.groupFormUrls?.[groupType] || '';
+}
+
+function waiverUrl(locationId) {
+  return locationById.get(locationId)?.waiverUrl || '';
+}
+
 test.beforeEach(async ({ page }) => {
   await prepareSmokePage(page);
 });
@@ -397,8 +406,8 @@ test('open location ?book=1 opens embedded checkout without offsite navigation',
 test('desktop location selection keeps the current page context', async ({ page, isMobile }) => {
   // Desktop-only: this flow uses the desktop `#locationBtn` in the nav.
   // Mobile location selection lives inside the hamburger menu and is covered
-  // by the dedicated `Mobile location selector (P0-7a)` describe block below.
-  test.skip(isMobile, 'desktop-only flow (mobile path covered by P0-7a tests)');
+  // by the dedicated mobile location selector block below.
+  test.skip(isMobile, 'desktop-only flow (mobile path covered separately)');
 
   await page.goto('/groups/corporate?utm_source=test#details');
 
@@ -558,7 +567,7 @@ test('non-Roller external ticket booking leaves through the provider URL', async
   await expect(page).toHaveURL(/https:\/\/bookings\.clubspeed\.com\/R1\/R1LINCOLN/);
 });
 
-test('group CTAs resolve to audit-provided form URLs for the selected location', async ({ page }) => {
+test('group CTAs resolve to location-data form URLs for the selected location', async ({ page }) => {
   await page.route('https://webforms.pipedrive.com/**', async (route) => {
     await route.fulfill({
       contentType: 'text/html',
@@ -593,7 +602,7 @@ test('group CTAs resolve to audit-provided form URLs for the selected location',
   await expect(page).toHaveURL(expectedHref);
 });
 
-test('legacy groups cards open the selected location event form as a direct link', async ({ page }) => {
+test('group cards open the selected location event form as a direct link', async ({ page }) => {
   await page.route('https://webforms.pipedrive.com/**', async (route) => {
     await route.fulfill({
       contentType: 'text/html',
@@ -605,7 +614,7 @@ test('legacy groups cards open the selected location event form as a direct link
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
   await page.evaluate(() => window.TM.select('mount-prospect'));
 
-  const expectedHref = formsLinksAudit.groups['mount-prospect'].corporate;
+  const expectedHref = groupFormUrl('mount-prospect', 'corporate');
   await page
     .locator('.event-type-actions [data-tm-booking-kind="groups"][data-tm-group-type="corporate"]')
     .first()
@@ -614,7 +623,7 @@ test('legacy groups cards open the selected location event form as a direct link
   await expect(page).toHaveURL(expectedHref);
 });
 
-test('legacy groups event cards expose ticket booking and group inquiry triggers', async ({ page }) => {
+test('group event cards expose ticket booking and group inquiry triggers', async ({ page }) => {
   await page.goto('/groups.html');
 
   const expectedGroupTypes = [
@@ -648,7 +657,7 @@ test('legacy groups event cards expose ticket booking and group inquiry triggers
   await expect(page.locator('.event-info-body [data-tm-booking-kind="groups"][data-tm-group-type="private-events"]')).toContainText('Plan Your Event');
 });
 
-test('legacy groups event card Book Now keeps the standard ticket booking flow', async ({ page }) => {
+test('group event card Book Now keeps the standard ticket booking flow', async ({ page }) => {
   await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
     await route.fulfill({
       contentType: 'application/javascript',
@@ -728,7 +737,7 @@ test('missions Book Now CTAs open the standard ticket booking flow', async ({ pa
   await expect(page).toHaveURL(/\/missions$/);
 });
 
-test('Houston and Orland Park group CTAs resolve to audit-approved forms', async ({ page }) => {
+test('Houston and Orland Park group CTAs resolve to location-data forms', async ({ page }) => {
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
@@ -737,17 +746,17 @@ test('Houston and Orland Park group CTAs resolve to audit-approved forms', async
     groupType: 'corporate',
     locationId: 'houston',
   }));
-  expect(houstonCorporate).toBe(formsLinksAudit.groups.houston.corporate);
+  expect(houstonCorporate).toBe(groupFormUrl('houston', 'corporate'));
 
   const orlandPrivateEvents = await page.evaluate(() => window.TMBooking.getDestination({
     kind: 'groups',
     groupType: 'private-events',
     locationId: 'orland-park',
   }));
-  expect(orlandPrivateEvents).toBe(formsLinksAudit.groups['orland-park']['private-events']);
+  expect(orlandPrivateEvents).toBe(groupFormUrl('orland-park', 'private-events'));
 });
 
-test('Dallas group CTAs stay disabled when the audit has blank group rows', async ({ page }) => {
+test('Dallas group CTAs stay disabled when location data has blank group rows', async ({ page }) => {
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
@@ -765,7 +774,7 @@ test('Dallas group CTAs stay disabled when the audit has blank group rows', asyn
   await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
 });
 
-test('gift card page disables locations with blank gift-card audit rows', async ({ page }) => {
+test('gift card page disables locations with blank gift-card URLs', async ({ page }) => {
   await page.goto('/gift-cards');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
@@ -781,7 +790,7 @@ test('gift card page disables locations with blank gift-card audit rows', async 
   }
 });
 
-test('waiver panel routes Houston and Orland Park to audit-provided destinations', async ({ page }) => {
+test('waiver panel routes Houston and Orland Park to location-data destinations', async ({ page }) => {
   await page.goto('/waiver');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
@@ -793,7 +802,7 @@ test('waiver panel routes Houston and Orland Park to audit-provided destinations
     await expect(page.locator('#ticketPanelTitle')).toContainText('Complete Your Waiver');
     await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('aria-disabled', 'true');
     await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', locationId);
-    await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', formsLinksAudit.waivers[locationId]);
+    await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', waiverUrl(locationId));
     await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
     await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
   }
@@ -957,12 +966,19 @@ test('contact page only shows direct info for the selected location', async ({ p
   await expect(page.locator('[data-location-contact-card]')).not.toContainText('Mount Prospect');
 
   await page.locator('#location').selectOption('orland-park');
+  await expect(page.locator('[data-location-contact-card]')).toBeVisible();
+  await expect(page.locator('[data-location-contact-name]')).toHaveText('Orland Park');
+  await expect(page.locator('[data-location-contact-phone]')).toHaveText('(708) 294-8711');
+  await expect(page.locator('[data-location-contact-email]')).toHaveText('OrlandPark@TimeMission.com');
+  await expect(page.locator('[data-location-contact-card]')).not.toContainText('Houston');
+
+  await page.locator('#location').selectOption('dallas');
   await expect(page.locator('[data-location-contact-card]')).toBeHidden();
   await expect(page.locator('[data-location-contact-empty]')).toBeVisible();
-  await expect(page.locator('[data-location-contact-empty]')).toContainText('Orland Park');
+  await expect(page.locator('[data-location-contact-empty]')).toContainText('Dallas');
 });
 
-test('contact page still accepts legacy query prefill links', async ({ page }) => {
+test('contact page still accepts historical query prefill links', async ({ page }) => {
   await page.goto('/contact?location=houston&type=updates');
 
   await expect(page.locator('#location')).toHaveValue('houston');
@@ -1029,7 +1045,7 @@ test('newsletter signup sections are hidden while acquisition is paused', async 
   }
 });
 
-test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer (Phase 6)', async ({ page }) => {
+test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer', async ({ page }) => {
   await page.goto('/contact');
   await page.locator('form.contact-form input#name').click();
   const found = await page.evaluate(() => {
@@ -1069,7 +1085,7 @@ test('analytics click delegation tracks phone and email clicks without PII', asy
   await page.evaluate(() => {
     const phone = document.createElement('a');
     phone.id = 'tm-test-phone-link';
-    phone.href = 'tel:+15555555555';
+    phone.href = 'tel:+12158675309';
     phone.textContent = 'Call Test';
     document.body.appendChild(phone);
 
@@ -1101,14 +1117,14 @@ test('analytics click delegation tracks phone and email clicks without PII', asy
   expect(result.emailCtaId).toBe('email_link');
 });
 
-test('legacy .html URLs are served or redirected (preview vs production redirects)', async ({ request }) => {
+test('historical .html URLs are served or redirected (preview vs production redirects)', async ({ request }) => {
   // Cloudflare `_redirects` maps `/faq.html` -> `/faq` (301). `astro preview` may serve
-  // the built HTML at `/faq.html` with 200. Either behavior keeps legacy links working.
+  // the built HTML at `/faq.html` with 200. Either behavior keeps old inbound links working.
   const res = await request.get('/faq.html');
   expect(res.status()).toBeLessThan(400);
 });
 
-test.describe('Mobile location selector (P0-7a)', () => {
+test.describe('Mobile location selector', () => {
   test.skip(({ isMobile }) => !isMobile, 'mobile-only test');
 
   test('logo home navigation preserves the selected location', async ({ page }) => {

@@ -1,12 +1,12 @@
 /**
- * Compares TicketPanel Astro output against components/ticket-panel.html modulo options list and whitespace/SVG quirks.
+ * Compares TicketPanel Astro output against the shared component source modulo options list and whitespace/SVG quirks.
  */
 const fs = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const distFile = path.join(root, 'dist', 'about.html');
-const legacyFile = path.join(root, 'components', 'ticket-panel.html');
+const componentFile = path.join(root, 'components', 'ticket-panel.html');
 
 function extractPanel(html) {
   const marker = '<!-- Ticket Popup Panel -->';
@@ -34,14 +34,14 @@ if (!fs.existsSync(distFile)) {
   process.exit(1);
 }
 
-if (!fs.existsSync(legacyFile)) {
+if (!fs.existsSync(componentFile)) {
   console.error('Ticket panel source-parity check failed:');
   console.error('- components/ticket-panel.html missing');
   process.exit(1);
 }
 
 const distHtml = fs.readFileSync(distFile, 'utf8');
-const legacyHtml = fs.readFileSync(legacyFile, 'utf8');
+const componentHtml = fs.readFileSync(componentFile, 'utf8');
 
 const distPanel = extractPanel(distHtml);
 const errors = [];
@@ -49,11 +49,11 @@ const errors = [];
 if (!distPanel) errors.push('could not extract ticket panel slice from dist/about.html');
 else {
   const distNorm = normalize(distPanel);
-  const legacyNorm = normalize(legacyHtml.trim());
-  if (distNorm !== legacyNorm) {
+  const componentNorm = normalize(componentHtml.trim());
+  if (distNorm !== componentNorm) {
     errors.push('Astro-rendered ticket panel diverges from components/ticket-panel.html (modulo <option> list and normalization)');
     errors.push(`  dist (head 200 chars): ${distNorm.slice(0, 200)}`);
-    errors.push(`  legacy (head 200 chars): ${legacyNorm.slice(0, 200)}`);
+    errors.push(`  component (head 200 chars): ${componentNorm.slice(0, 200)}`);
   }
 }
 

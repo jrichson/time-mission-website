@@ -15,42 +15,41 @@ const MODE_FLAGS = ['--registry', '--redirects', '--sitemap', '--sources', '--di
 
 const SCOPE_FILES = {
   'root-core': [
-    'index.html',
-    'about.html',
-    'faq.html',
-    'contact.html',
-    'contact-thank-you.html',
     'src/pages/index.astro',
+    'src/pages/about.astro',
     'src/pages/missions.astro',
     'src/pages/groups.astro',
     'src/pages/gift-cards.astro',
+    'src/pages/faq.astro',
+    'src/pages/contact.astro',
+    'src/pages/contact-thank-you.astro',
     'src/partials/missions-main.frag.txt',
     'src/partials/groups-main.frag.txt',
     'src/partials/gift-cards-main.frag.txt',
   ],
   'root-legal': [
-    'licensing.html',
-    'privacy.html',
-    'terms.html',
-    'code-of-conduct.html',
-    'cookies.html',
-    'accessibility.html',
-    'waiver.html',
     'src/pages/404.astro',
+    'src/pages/licensing.astro',
+    'src/pages/privacy.astro',
+    'src/pages/terms.astro',
+    'src/pages/code-of-conduct.astro',
+    'src/pages/cookies.astro',
+    'src/pages/accessibility.astro',
+    'src/pages/waiver.astro',
     'src/partials/404-main.frag.txt',
   ],
   locations: [
-    'antwerp.html',
-    'brussels.html',
-    'dallas.html',
-    'houston.html',
-    'lincoln.html',
-    'manassas.html',
-    'mount-prospect.html',
-    'orland-park.html',
-    'philadelphia.html',
-    'west-nyack.html',
-    'locations/index.html',
+    'src/pages/antwerp.astro',
+    'src/pages/brussels.astro',
+    'src/pages/dallas.astro',
+    'src/pages/houston.astro',
+    'src/pages/lincoln.astro',
+    'src/pages/manassas.astro',
+    'src/pages/mount-prospect.astro',
+    'src/pages/orland-park.astro',
+    'src/pages/philadelphia.astro',
+    'src/pages/west-nyack.astro',
+    'src/pages/locations.astro',
     'data/locations.json',
   ],
   groups: [],
@@ -64,9 +63,9 @@ const SCOPE_FILES = {
 };
 
 function loadGroupsScopeFiles() {
-  const dir = path.join(root, 'groups');
+  const dir = path.join(root, 'src', 'pages', 'groups');
   if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir).filter((n) => n.endsWith('.html')).map((n) => `groups/${n}`);
+  return fs.readdirSync(dir).filter((n) => n.endsWith('.astro')).map((n) => `src/pages/groups/${n}`);
 }
 
 SCOPE_FILES.groups = loadGroupsScopeFiles();
@@ -149,12 +148,12 @@ function validateRegistry(registry, errors) {
 
   const canonicalSeen = new Set();
   for (const route of registry.routes) {
-    const keys = ['id', 'canonicalPath', 'legacySources', 'outputFile', 'sitemap', 'status'];
+    const keys = ['id', 'canonicalPath', 'redirectSources', 'outputFile', 'sitemap', 'status'];
     for (const k of keys) {
       if (!(k in route)) errors.push(`route "${route.id || '(missing id)'}" missing key ${k}`);
     }
-    if (!Array.isArray(route.legacySources) || route.legacySources.length === 0) {
-      errors.push(`route "${route.id}" needs legacySources`);
+    if (!Array.isArray(route.redirectSources) || route.redirectSources.length === 0) {
+      errors.push(`route "${route.id}" needs redirectSources`);
     }
     const cp = route.canonicalPath;
     if (cp !== '/' && (cp.endsWith('/') || cp.endsWith('.html'))) {

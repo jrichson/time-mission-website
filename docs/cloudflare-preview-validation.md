@@ -9,7 +9,7 @@ Use this checklist on a **Cloudflare Pages preview deployment** before promoting
 | Check | How to verify | Pass criteria | Related automation |
 |--------|----------------|---------------|-------------------|
 | `_redirects` deployed | Dashboard → deployment → confirm `_redirects` in served root; or `curl -sI https://{preview}/_redirects` (if exposed) | Rules present; no accidental empty file | `npm run check:routes -- --dist` (registry vs `dist/`) |
-| Legacy `.html` → clean URL | `curl -sI https://{preview}/faq.html` | `301`/`308` to `/faq` (or equivalent single hop); **no redirect loop** (`curl -sI -L --max-redirs 5` ends on 200) | `_redirects` in `public/` |
+| Historical `.html` → clean URL | `curl -sI https://{preview}/faq.html` | `301`/`308` to `/faq` (or equivalent single hop); **no redirect loop** (`curl -sI -L --max-redirs 5` ends on 200) | `_redirects` in `public/` |
 | Redirect loop sniff | `curl -sI -L --max-redirs 10 https://{preview}/` and sample legacy URLs | Final response 200; redirect chain under 10 hops | Manual |
 | Canonical URLs extensionless | Open `/`, `/faq`, `/philadelphia` in browser | Address bar shows **no** `.html`; content loads | `npm run check:sitemap-output` |
 

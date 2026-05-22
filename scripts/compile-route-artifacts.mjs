@@ -113,7 +113,7 @@ function compileLocationRouteManifest(registry, locationsDocument) {
   for (const route of routes) {
     const canonicalPath = normalizePath(route.canonicalPath);
     if (!prefixableTargets.has(canonicalPath) || canonicalPath === '/') continue;
-    for (const source of route.legacySources || []) {
+    for (const source of route.redirectSources || []) {
       prefixableRouteAliases.push([source, canonicalPath]);
     }
   }

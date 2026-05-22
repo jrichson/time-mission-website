@@ -1,10 +1,10 @@
 /**
- * RFC #9 lightweight page guard — Astro frontmatter declares durable route identity inline.
+ * Lightweight page guard: Astro frontmatter declares durable route identity inline.
  * Pairs conceptually with `src/data/routes.json`; validates shape only (no runtime merge).
  */
 
 export interface SitePageMeta {
-    /** Must match Phase 2 clean URL (e.g. `/about`). */
+    /** Must match the canonical clean URL, for example `/about`. */
     canonicalPath: string;
     /** Optional explicit last-updated override (YYYY-MM-DD). Validated at usage in resolveLastUpdated(). */
     lastUpdated?: string;

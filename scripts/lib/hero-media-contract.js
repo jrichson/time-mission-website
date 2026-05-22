@@ -118,9 +118,9 @@ function listHeroVideoPartials(root) {
     .filter((entry) => entry.html.includes('id="heroVideo"'));
 }
 
-function inlineCssPathForMainPartial(root, partialName) {
-  const cssName = partialName.replace(/-main\.frag\.txt$/, '-inline.raw.css.txt');
-  return path.join(root, 'src', 'partials', cssName);
+function pageCssPathForMainPartial(root, partialName) {
+  const cssName = `page-${partialName.replace(/-main\.frag\.txt$/, '.css')}`;
+  return path.join(root, 'css', cssName);
 }
 
 module.exports = {
@@ -130,5 +130,5 @@ module.exports = {
   inspectHeroVideoCss,
   inspectHeroVideoRuntime,
   listHeroVideoPartials,
-  inlineCssPathForMainPartial,
+  pageCssPathForMainPartial,
 };
