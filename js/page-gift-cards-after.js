@@ -32,6 +32,12 @@
 
     var buttons = Array.prototype.slice.call(document.querySelectorAll('.btn-gift-card, [data-gift="1"]'));
     var hint = document.getElementById('giftCardLocationHint');
+    var redemptionAnswer = document.querySelector('[data-gift-card-location-answer]');
+    var opsGiftCardLocationIds = {
+        'manassas': true,
+        'mount-prospect': true,
+        'orland-park': true
+    };
     if (!buttons.length) return;
 
     function setButtons(href, disabled) {
@@ -59,12 +65,43 @@
         return null;
     }
 
+    function locationSlug(loc) {
+        return String((loc && (loc.slug || loc.id)) || '').toLowerCase();
+    }
+
+    function updateRedemptionAnswer(loc) {
+        if (!redemptionAnswer) return;
+
+        if (!loc) {
+            redemptionAnswer.textContent = 'Gift cards are location-specific. Select your location before purchasing so we can show the correct gift-card checkout and redemption details.';
+            return;
+        }
+
+        var slug = locationSlug(loc);
+        var locationName = loc.shortName || loc.name || 'this location';
+        if (opsGiftCardLocationIds[slug]) {
+            redemptionAnswer.textContent = 'Gift cards purchased from this location are valid for Time Missions located in these states: AL, GA, FL, IL, IN, KS, MD, MN, MO, NC, TN, VA & WI.';
+            return;
+        }
+
+        if (loc.giftCardUrl) {
+            redemptionAnswer.textContent = 'Gift cards purchased through ' + locationName + '\'s checkout are intended for that location. Contact ' + locationName + ' before purchasing if you need to use a gift card at another Time Mission location.';
+            return;
+        }
+
+        redemptionAnswer.textContent = 'Gift cards are not available for ' + locationName + ' yet, so they cannot currently be purchased or redeemed from this page for that location.';
+    }
+
     function applySelectedLocation() {
         var loc = selectedLocation();
-        if (!loc) return false;
+        if (!loc) {
+            updateRedemptionAnswer(null);
+            return false;
+        }
 
         var url = loc.giftCardUrl || '';
         var locationName = loc.shortName || loc.name;
+        updateRedemptionAnswer(loc);
         if (!url) {
             if (hint) hint.textContent = 'Gift cards are not available for ' + locationName + ' yet.';
             setButtons('#', true);

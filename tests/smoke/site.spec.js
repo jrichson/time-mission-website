@@ -777,11 +777,19 @@ test('Dallas group CTAs stay disabled when location data has blank group rows', 
 test('gift card page disables locations with blank gift-card URLs', async ({ page }) => {
   await page.goto('/gift-cards');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+  const redemptionAnswer = page.locator('[data-gift-card-location-answer]');
+
+  await page.evaluate(() => window.TM.select('manassas'));
+  await expect(redemptionAnswer).toContainText('Gift cards purchased from this location are valid for Time Missions located in these states: AL, GA, FL, IL, IN, KS, MD, MN, MO, NC, TN, VA & WI.');
+
+  await page.evaluate(() => window.TM.select('philadelphia'));
+  await expect(redemptionAnswer).toContainText("Gift cards purchased through Philadelphia's checkout are intended for that location.");
 
   await page.evaluate(() => window.TM.select('antwerp'));
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('antwerp');
   await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('#giftCardLocationHint')).toContainText('not available');
+  await expect(redemptionAnswer).toContainText('Gift cards are not available for Antwerp yet');
 
   for (const locationId of ['houston', 'dallas', 'west-nyack']) {
     await page.evaluate((id) => window.TM.select(id), locationId);

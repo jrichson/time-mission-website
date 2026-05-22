@@ -51,7 +51,7 @@
                     </svg></div>
             </button>
             <div class="faq-answer">
-                <div class="faq-answer-content">Gift card availability depends on the selected location. If a location does not currently have an approved gift-card checkout link, we will show that it is unavailable instead of sending you to booking.</div>
+                <div class="faq-answer-content" data-gift-card-location-answer>Gift cards are location-specific. Select your location before purchasing so we can show the correct gift-card checkout and redemption details.</div>
             </div>
         </div>
 
