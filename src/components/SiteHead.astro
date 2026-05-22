@@ -36,6 +36,9 @@ const canonicalUrl = seo.canonicalUrl;
 const og = landingHead ? seo.ogImage : ogOverride ?? seo.ogImage;
 const tw = landingHead ? seo.twitterImage : twOverride ?? seo.twitterImage;
 const robotsValue = landingHead ? seo.robots : robotsOverride ?? seo.robots;
+const siteAuthor = 'Ari Simon';
+const siteDesigner = 'Jefferson Richardson';
+const siteDeveloper = 'Converge Digital';
 
 const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQPWRNJB').trim();
 const sgtmContainerUrl = String(import.meta.env.PUBLIC_SGTM_CONTAINER_URL || '').trim().replace(/\/+$/, '');
@@ -131,6 +134,9 @@ const consentDefaults: ConsentDefaults =
 <title>{title}</title>
 <!-- SEO META -->
 <meta name="description" content={description} />
+<meta name="author" content={siteAuthor} />
+<meta name="designer" content={siteDesigner} />
+<meta name="developer" content={siteDeveloper} />
 <link rel="canonical" href={canonicalUrl} />
 <meta name="robots" content={robotsValue} />
 {lastUpdatedIso ? <meta name="last-modified" content={lastUpdatedIso} /> : null}

@@ -22,9 +22,6 @@ const SCHEMA_CHECK_OUTPUT_FILES = new Set(
 const routesData = loadJson('src/data/routes.json');
 const locationsDoc = loadJson('data/locations.json');
 const orgSeed = loadJson('src/data/site/seo-organization.json');
-const faqsDoc = loadJson('src/data/site/faqs.json');
-
-const faqItemCount = faqsDoc.sections.flatMap((s) => s.items).length;
 
 const distDir = path.join(root, 'dist');
 if (!fs.existsSync(distDir)) {
@@ -47,6 +44,27 @@ function assertOrg(graph) {
     errors.push(`Organization @id mismatch: ${o['@id']}`);
   }
   return o;
+}
+
+function schemaClockTime(time) {
+  return time === '00:00' ? '23:59' : time;
+}
+
+function assertGeoMatches(outFile, label, emitted, sourceGeo) {
+  if (!sourceGeo) {
+    errors.push(`${outFile}: source geo missing for ${label}`);
+    return;
+  }
+  if (emitted?.['@type'] !== 'GeoCoordinates') {
+    errors.push(`${outFile}: missing GeoCoordinates for ${label}`);
+    return;
+  }
+  if (emitted.latitude !== sourceGeo.latitude) {
+    errors.push(`${outFile}: geo.latitude mismatch for ${label}`);
+  }
+  if (emitted.longitude !== sourceGeo.longitude) {
+    errors.push(`${outFile}: geo.longitude mismatch for ${label}`);
+  }
 }
 
 const schemaRoutes = routesData.routes.filter((r) =>
@@ -80,9 +98,12 @@ for (const route of schemaRoutes) {
   assertOrg(graph);
   const has = (t) => types.includes(t);
 
+  if (has('FAQPage')) {
+    errors.push(`${outFile}: FAQPage schema is intentionally disabled for current Google rich-result eligibility`);
+  }
+
   if (cp === '/' || cp === '/about') {
     if (has('BreadcrumbList')) errors.push(`${outFile}: home/about should not emit BreadcrumbList`);
-    if (has('FAQPage')) errors.push(`${outFile}: unexpected FAQPage`);
     if (has('EntertainmentBusiness')) errors.push(`${outFile}: unexpected EntertainmentBusiness`);
     if (types.filter((t) => t === 'Organization').length !== 1) errors.push(`${outFile}: expected Organization only`);
   }
@@ -116,44 +137,29 @@ for (const route of schemaRoutes) {
   ]);
   if (BREADCRUMB_REQUIRED_PATHS.has(cp)) {
     if (!has('BreadcrumbList')) errors.push(`${outFile}: missing BreadcrumbList`);
-    if (has('FAQPage')) errors.push(`${outFile}: unexpected FAQPage`);
     if (has('EntertainmentBusiness')) errors.push(`${outFile}: unexpected EntertainmentBusiness`);
   }
 
   /**
-   * Group event landing pages (/groups/<type>) carry Service + per-page
-   * FAQPage schema on top of Organization + BreadcrumbList. Each FAQPage
-   * mainEntity should match the corresponding section in faqs.json.
+   * Group event landing pages (/groups/<type>) carry Service schema on top
+   * of Organization + BreadcrumbList. Visible FAQs stay on-page, but FAQPage
+   * JSON-LD is intentionally omitted because Google restricts FAQ rich results.
    */
-  const GROUP_EVENT_PATHS = new Map([
-    ['/groups/birthdays', 'birthdays'],
-    ['/groups/corporate', 'corporate'],
-    ['/groups/private-events', 'private-events'],
-    ['/groups/holidays', 'holidays'],
-    ['/groups/field-trips', 'field-trips'],
-    ['/groups/bachelor-ette', 'bachelor-ette'],
+  const GROUP_EVENT_PATHS = new Set([
+    '/groups/birthdays',
+    '/groups/corporate',
+    '/groups/private-events',
+    '/groups/holidays',
+    '/groups/field-trips',
+    '/groups/bachelor-ette',
   ]);
   if (GROUP_EVENT_PATHS.has(cp)) {
     if (!has('BreadcrumbList')) errors.push(`${outFile}: missing BreadcrumbList`);
     if (!has('Service')) errors.push(`${outFile}: missing Service node`);
-    if (!has('FAQPage')) errors.push(`${outFile}: missing FAQPage`);
     if (has('EntertainmentBusiness')) errors.push(`${outFile}: unexpected EntertainmentBusiness on group page`);
-    const expectedFaqId = GROUP_EVENT_PATHS.get(cp);
-    const expectedSection = faqsDoc.sections.find((s) => s.id === expectedFaqId);
-    const faqNodes = findNodesByType(graph, 'FAQPage');
-    const mainLen = faqNodes[0]?.mainEntity?.length;
-    if (expectedSection && mainLen !== expectedSection.items.length) {
-      errors.push(`${outFile}: FAQPage mainEntity length ${mainLen}, expected ${expectedSection.items.length}`);
-    }
   }
 
   if (cp === '/faq') {
-    if (!has('FAQPage')) errors.push(`${outFile}: missing FAQPage`);
-    const faqNodes = findNodesByType(graph, 'FAQPage');
-    const mainLen = faqNodes[0]?.mainEntity?.length;
-    if (mainLen !== faqItemCount) {
-      errors.push(`${outFile}: FAQPage mainEntity length ${mainLen}, expected ${faqItemCount}`);
-    }
     if (has('EntertainmentBusiness')) errors.push(`${outFile}: unexpected EntertainmentBusiness`);
   }
 
@@ -170,9 +176,16 @@ for (const route of schemaRoutes) {
       if (b.address?.streetAddress !== expectStreet) errors.push(`${outFile}: streetAddress mismatch`);
       if (b.address?.addressLocality !== loc.address.city) errors.push(`${outFile}: city mismatch`);
       if (b.address?.postalCode !== loc.address.zip) errors.push(`${outFile}: zip mismatch`);
+      if (b.address?.addressCountry !== loc.countryCode) errors.push(`${outFile}: country code mismatch`);
+      if (b.telephone !== loc.phoneE164) errors.push(`${outFile}: telephone should use E.164 phoneE164`);
+      if (b.hasMap !== loc.mapUrl) errors.push(`${outFile}: hasMap should match mapUrl`);
+      assertGeoMatches(outFile, 'philadelphia', b.geo, loc.geo);
+      if (b.parentOrganization?.['@id'] !== orgSeed['@id']) errors.push(`${outFile}: parentOrganization should point to Organization`);
       const hours = b.openingHoursSpecification;
       if (!Array.isArray(hours) || hours.length !== 7) {
         errors.push(`${outFile}: expected 7 openingHoursSpecification entries`);
+      } else if (hours.some((h) => h.opens === '00:00' || h.closes === '00:00')) {
+        errors.push(`${outFile}: openingHoursSpecification should normalize 00:00 to 23:59`);
       }
     }
   }
@@ -214,15 +227,28 @@ for (const route of schemaRoutes) {
           errors.push(`${outFile}: alternateName drift — emitted='${b.alternateName}' source='${sourceLoc.alternateName}' (slug=${slugFromCp})`);
         }
       }
-    }
-    if (sourceLoc && Array.isArray(sourceLoc.faqs) && sourceLoc.faqs.length > 0) {
-      const faqNodes = findNodesByType(graph, 'FAQPage');
-      if (faqNodes.length !== 1) {
-        errors.push(`${outFile}: expected one FAQPage for open location ${slugFromCp}`);
-      } else {
-        const mainLen = faqNodes[0]?.mainEntity?.length;
-        if (mainLen !== sourceLoc.faqs.length) {
-          errors.push(`${outFile}: location FAQPage mainEntity length ${mainLen}, expected ${sourceLoc.faqs.length} (slug=${slugFromCp})`);
+      if (sourceLoc?.countryCode && b.address?.addressCountry !== sourceLoc.countryCode) {
+        errors.push(`${outFile}: addressCountry should use ISO countryCode for ${slugFromCp}`);
+      }
+      if (sourceLoc?.phoneE164 && b.telephone !== sourceLoc.phoneE164) {
+        errors.push(`${outFile}: telephone should use phoneE164 for ${slugFromCp}`);
+      }
+      if (sourceLoc?.mapUrl && b.hasMap !== sourceLoc.mapUrl) {
+        errors.push(`${outFile}: hasMap should match mapUrl for ${slugFromCp}`);
+      }
+      assertGeoMatches(outFile, slugFromCp, b.geo, sourceLoc?.geo);
+      if (b.parentOrganization?.['@id'] !== orgSeed['@id']) {
+        errors.push(`${outFile}: parentOrganization should point to Organization for ${slugFromCp}`);
+      }
+      const expectedHours = Object.entries(sourceLoc.hours || {}).filter(
+        ([, h]) => h && typeof h.open === 'string' && typeof h.close === 'string',
+      );
+      const gotHours = Array.isArray(b.openingHoursSpecification) ? b.openingHoursSpecification : [];
+      for (let i = 0; i < expectedHours.length; i += 1) {
+        const [, sourceHours] = expectedHours[i];
+        const emitted = gotHours[i];
+        if (emitted?.opens !== schemaClockTime(sourceHours.open) || emitted?.closes !== schemaClockTime(sourceHours.close)) {
+          errors.push(`${outFile}: normalized hours mismatch at index ${i} for ${slugFromCp}`);
         }
       }
     }

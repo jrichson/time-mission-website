@@ -19,10 +19,10 @@ All indexed public routes are rendered by Astro page modules and validated from 
 | --- | --- |
 | `/` | `Organization`, primary media schema where configured |
 | `/about` | `Organization` |
-| `/faq` | `Organization`, `FAQPage` from `src/data/site/faqs.json` |
+| `/faq` | `Organization`; visible FAQs remain on-page, but `FAQPage` JSON-LD is intentionally omitted because Google restricts FAQ rich results |
 | `/contact`, `/locations`, legal pages | `Organization`, `BreadcrumbList` |
-| `/groups/*` | `Organization`, `BreadcrumbList`, `Service`, per-page `FAQPage` |
-| Open schema-eligible locations | `Organization`, `BreadcrumbList`, `EntertainmentBusiness`, NAP and hours from `data/locations.json`; location FAQ schema when `faqs[]` is authored |
+| `/groups/*` | `Organization`, `BreadcrumbList`, `Service`; visible FAQs remain on-page without `FAQPage` JSON-LD |
+| Open schema-eligible locations | `Organization`, `BreadcrumbList`, `EntertainmentBusiness`, NAP, `GeoCoordinates`, map URL, parent organization, ISO country code, E.164 phone, and schema-normalized hours from `data/locations.json` |
 | Coming-soon locations | `Organization`, `BreadcrumbList`; no `EntertainmentBusiness` or opening hours until schema-eligible |
 | `/contact-thank-you` | No JSON-LD required |
 

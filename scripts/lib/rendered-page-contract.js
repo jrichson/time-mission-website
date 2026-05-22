@@ -23,6 +23,9 @@ function extractHeadMetadata(html) {
   return {
     title: extractFirst(html, /<title>([^<]*)<\/title>/i),
     description: extractFirst(html, /<meta\s+name="description"\s+content="([^"]*)"/i),
+    author: extractFirst(html, /<meta\s+name="author"\s+content="([^"]*)"/i),
+    designer: extractFirst(html, /<meta\s+name="designer"\s+content="([^"]*)"/i),
+    developer: extractFirst(html, /<meta\s+name="developer"\s+content="([^"]*)"/i),
     canonical: extractFirst(html, /<link\s+rel="canonical"\s+href="([^"]+)"/i),
     ogUrl: extractFirst(html, /<meta\s+property="og:url"\s+content="([^"]+)"/i),
     ogImage: extractFirst(html, /<meta\s+property="og:image"\s+content="([^"]+)"/i),

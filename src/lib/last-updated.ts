@@ -1,8 +1,8 @@
 /**
  * Per-page last-updated resolution with override > git mtime > build-date fallback.
  *
- * Used by SiteLayout to render a visible "Last updated: <Month YYYY>" stamp and
- * emit a <meta name="last-modified"> tag for AI/SEO freshness signal.
+ * Used by SiteLayout to emit a <meta name="last-modified"> tag for AI/SEO
+ * freshness signal.
  *
  * Note on path resolution during Astro builds: Vite compiles all modules (including
  * this lib) into bundled chunks, making import.meta.url unreliable for locating the

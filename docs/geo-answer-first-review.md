@@ -6,11 +6,11 @@ This review tracks whether public pages answer likely visitor and AI-citation qu
 
 ## Methodology
 
-For each route below, review the primary H1/H2 and opening body copy, then judge whether the first roughly 50 words answer the visitor's likely question. FAQ schema source is included where relevant.
+For each route below, review the primary H1/H2 and opening body copy, then judge whether the first roughly 50 words answer the visitor's likely question. FAQ content source is included where relevant; FAQPage JSON-LD is intentionally omitted because Google restricts FAQ rich results.
 
 ## Per-Page Review
 
-| Route | Page intent | Answer-first lead present? | Question-shaped headings? | FAQ schema source | Recommendation | Status |
+| Route | Page intent | Answer-first lead present? | Question-shaped headings? | FAQ content source | Recommendation | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | `/` | Brand + book | Partial | No | Site `faqs.json` on FAQ page only | Rewrite opening copy | Pending |
 | `/about` | Brand story | Partial | No | None | Add focused FAQ content | Pending |
@@ -29,7 +29,7 @@ For each route below, review the primary H1/H2 and opening body copy, then judge
 
 ## AI Citation Gaps
 
-- Per-location `faqs[]` rows in `data/locations.json` are ready for authored FAQ content, but most location rows still need final copy before location-specific FAQPage schema can be emitted.
+- Per-location `faqs[]` rows in `data/locations.json` remain useful visible content, but they are no longer emitted as FAQPage JSON-LD.
 - Location pages should answer practical venue questions earlier when new copy is authored: age fit, group size, booking flow, parking or mall context, and whether the venue is open or coming soon.
 
 ## Cross-Reference

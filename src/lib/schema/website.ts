@@ -1,7 +1,7 @@
 /**
  * WebSite schema node for the brand site root.
- * Adds the entity type Google uses for sitelinks searchbox eligibility and
- * for properly attributing the publisher to per-page Article/Service nodes.
+ * Anchors the public site entity and attributes publisher ownership to
+ * per-page schema nodes without adding unsupported search actions.
  */
 import org from '../../data/site/seo-organization.json';
 

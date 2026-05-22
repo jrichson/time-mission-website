@@ -22,6 +22,10 @@ export interface LocationRecord {
         zip: string;
         country: string;
     };
+    geo?: {
+        latitude: number;
+        longitude: number;
+    } | null;
     contact: {
         phone: string;
         email: string;

@@ -47,6 +47,12 @@ function validateIntlFields(location) {
       errors.push(`${id}: ${k} must be string or null`);
     }
   }
+  if (location.countryCode != null && !/^[A-Z]{2}$/.test(location.countryCode)) {
+    errors.push(`${id}: countryCode must be an ISO 3166-1 alpha-2 code`);
+  }
+  if (location.phoneE164 != null && !/^\+[1-9]\d{6,14}$/.test(location.phoneE164)) {
+    errors.push(`${id}: phoneE164 must be E.164 formatted`);
+  }
   // hreflang is stored as a language attribute only; cross-city alternate
   // clusters are intentionally not emitted.
   if (location.hreflang == null) return;
@@ -57,6 +63,28 @@ function validateIntlFields(location) {
   if (!/^[a-z]{2,3}(-[A-Z]{2})?$/.test(location.hreflang)) {
     errors.push(`${id}: hreflang must match BCP-47 pattern (e.g. "en", "nl-BE")`);
   }
+}
+
+function validateGeo(location) {
+  const id = location.id || '(unknown)';
+  if (!Object.prototype.hasOwnProperty.call(location, 'geo') || location.geo == null) {
+    return false;
+  }
+  if (!location.geo || typeof location.geo !== 'object' || Array.isArray(location.geo)) {
+    errors.push(`${id}: geo must be an object when present`);
+    return false;
+  }
+  const { latitude, longitude } = location.geo;
+  let ok = true;
+  if (typeof latitude !== 'number' || !Number.isFinite(latitude) || latitude < -90 || latitude > 90) {
+    errors.push(`${id}: geo.latitude must be a finite number between -90 and 90`);
+    ok = false;
+  }
+  if (typeof longitude !== 'number' || !Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
+    errors.push(`${id}: geo.longitude must be a finite number between -180 and 180`);
+    ok = false;
+  }
+  return ok;
 }
 
 function validateGroupFormUrls(location) {
@@ -162,6 +190,7 @@ for (const location of locations) {
   }
 
   validateIntlFields(location);
+  const hasValidGeo = validateGeo(location);
 
   if (Object.prototype.hasOwnProperty.call(location, 'localBusinessSchemaEligible')) {
     if (location.status === 'open' && location.localBusinessSchemaEligible !== true) {
@@ -170,6 +199,9 @@ for (const location of locations) {
     if (location.status === 'coming-soon' && location.localBusinessSchemaEligible !== false) {
       errors.push(`${location.id}: coming-soon location must have localBusinessSchemaEligible false`);
     }
+  }
+  if (location.status === 'open' && location.localBusinessSchemaEligible === true && !hasValidGeo) {
+    errors.push(`${location.id}: open schema-eligible location must define geo coordinates`);
   }
 
   if (location.status === 'open') {

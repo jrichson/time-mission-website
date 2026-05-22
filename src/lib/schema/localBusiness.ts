@@ -1,4 +1,5 @@
 import type { LocationRecord } from '../../data/locations';
+import org from '../../data/site/seo-organization.json';
 
 const baseUrl = 'https://www.timemission.com';
 
@@ -21,7 +22,14 @@ export interface LocalBusinessNode {
     image?: string;
     telephone?: string;
     email?: string;
+    hasMap?: string;
+    parentOrganization?: { '@id': string };
     priceRange?: string;
+    geo?: {
+        '@type': 'GeoCoordinates';
+        latitude: number;
+        longitude: number;
+    };
     address: {
         '@type': 'PostalAddress';
         streetAddress: string;
@@ -42,6 +50,20 @@ export interface LocalBusinessNode {
 const DEFAULT_VENUE_IMAGE = 'https://www.timemission.com/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
 const DEFAULT_PRICE_RANGE = '$$';
 
+function schemaClockTime(time: string): string {
+    // Schema.org treats 00:00 as the next day boundary; use the last minute of the visible day for "Midnight" closes.
+    return time === '00:00' ? '23:59' : time;
+}
+
+function hasValidGeo(loc: LocationRecord): loc is LocationRecord & { geo: { latitude: number; longitude: number } } {
+    return (
+        typeof loc.geo?.latitude === 'number' &&
+        Number.isFinite(loc.geo.latitude) &&
+        typeof loc.geo.longitude === 'number' &&
+        Number.isFinite(loc.geo.longitude)
+    );
+}
+
 /**
  * Returns null when the location is NOT eligible (coming-soon OR localBusinessSchemaEligible !== true).
  * Callers MUST treat null as "skip this node entirely" — Pitfall 6 / D-07 / D-10.
@@ -56,6 +78,7 @@ export function localBusinessNode(loc: LocationRecord, canonicalPath: string): L
         name: loc.name,
         url: `${baseUrl}${canonicalPath}`,
         image: DEFAULT_VENUE_IMAGE,
+        parentOrganization: { '@id': org['@id'] },
         priceRange: DEFAULT_PRICE_RANGE,
         address: {
             '@type': 'PostalAddress',
@@ -77,6 +100,16 @@ export function localBusinessNode(loc: LocationRecord, canonicalPath: string): L
     if (loc.contact?.email) {
         node.email = loc.contact.email;
     }
+    if (loc.mapUrl && loc.mapUrl.trim()) {
+        node.hasMap = loc.mapUrl;
+    }
+    if (hasValidGeo(loc)) {
+        node.geo = {
+            '@type': 'GeoCoordinates',
+            latitude: loc.geo.latitude,
+            longitude: loc.geo.longitude,
+        };
+    }
 
     const hourEntries = Object.entries(loc.hours ?? {}).filter(
         ([, h]) => h && typeof h.open === 'string' && typeof h.close === 'string',
@@ -85,8 +118,8 @@ export function localBusinessNode(loc: LocationRecord, canonicalPath: string): L
         node.openingHoursSpecification = hourEntries.map(([day, h]) => ({
             '@type': 'OpeningHoursSpecification',
             dayOfWeek: dayOfWeekMap[day] ?? day,
-            opens: h.open!,
-            closes: h.close!,
+            opens: schemaClockTime(h.open!),
+            closes: schemaClockTime(h.close!),
         }));
     }
     return node;

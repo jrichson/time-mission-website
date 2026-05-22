@@ -23,6 +23,11 @@ const routesData = loadJson('src/data/routes.json');
 const seoRoutes = loadJson('src/data/site/seo-routes.json');
 const robotsTable = loadJson('src/data/site/seo-robots.json');
 const baseUrl = routesData.baseUrl || 'https://www.timemission.com';
+const siteCredits = {
+  author: 'Ari Simon',
+  designer: 'Jefferson Richardson',
+  developer: 'Converge Digital',
+};
 
 function toAbsolutePath(canonicalPath) {
   return canonicalPath === '/' ? `${baseUrl}/` : `${baseUrl}${canonicalPath}`;
@@ -61,6 +66,9 @@ for (const route of routesData.routes) {
 
   if (meta.title !== entry.title) errors.push(`${outFile}: title mismatch`);
   if (meta.description !== entry.description) errors.push(`${outFile}: description mismatch`);
+  if (meta.author !== siteCredits.author) errors.push(`${outFile}: author metadata mismatch`);
+  if (meta.designer !== siteCredits.designer) errors.push(`${outFile}: designer metadata mismatch`);
+  if (meta.developer !== siteCredits.developer) errors.push(`${outFile}: developer metadata mismatch`);
   if (meta.canonical !== expectCanon) errors.push(`${outFile}: canonical mismatch (got ${meta.canonical}, expected ${expectCanon})`);
   if (meta.ogUrl !== expectCanon) errors.push(`${outFile}: og:url mismatch`);
   if (meta.ogImage !== expectOg) errors.push(`${outFile}: og:image mismatch`);

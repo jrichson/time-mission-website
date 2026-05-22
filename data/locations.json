@@ -15,6 +15,10 @@
         "zip": "60056",
         "country": "United States"
       },
+      "geo": {
+        "latitude": 42.0848718,
+        "longitude": -87.9328346
+      },
       "contact": {
         "phone": "(847) 250-9560",
         "email": "mtprospect@timemission.com"
@@ -86,11 +90,11 @@
       "ticker": "ORLAND PARK, IL OPENING SOON!",
       "giftCardUrl": "https://book.mountprospect.timemission.com/giftcards/en-us/products",
       "waiverUrl": "https://waiver.roller.app/TimeMissionMountProspect/home",
-      "countryCode": null,
+      "countryCode": "US",
       "locale": null,
       "timeZone": null,
       "currency": null,
-      "phoneE164": null,
+      "phoneE164": "+18472509560",
       "hreflang": null,
       "localBusinessSchemaEligible": true
     },
@@ -108,6 +112,10 @@
         "state": "PA",
         "zip": "19102",
         "country": "United States"
+      },
+      "geo": {
+        "latitude": 39.9509438,
+        "longitude": -75.16707
       },
       "contact": {
         "phone": "(267) 710-1240",
@@ -180,11 +188,11 @@
       "ticker": "SUMMER ADVENTURES AT TIME MISSION PHILADELPHIA",
       "giftCardUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
       "waiverUrl": "https://waiver.roller.app/TimeMissionPhiladelphiaPA",
-      "countryCode": null,
+      "countryCode": "US",
       "locale": null,
       "timeZone": null,
       "currency": null,
-      "phoneE164": null,
+      "phoneE164": "+12677101240",
       "hreflang": null,
       "localBusinessSchemaEligible": true
     },
@@ -203,6 +211,10 @@
         "state": "NY",
         "zip": "10994",
         "country": "United States"
+      },
+      "geo": {
+        "latitude": 41.0970124,
+        "longitude": -73.9560242
       },
       "contact": {
         "phone": "(845) 328-4528",
@@ -283,11 +295,11 @@
       ],
       "ticker": "SUMMER ADVENTURES AT TIME MISSION WEST NYACK",
       "giftCardUrl": "",
-      "countryCode": null,
+      "countryCode": "US",
       "locale": null,
       "timeZone": null,
       "currency": null,
-      "phoneE164": null,
+      "phoneE164": "+18453284528",
       "hreflang": null,
       "localBusinessSchemaEligible": true
     },
@@ -305,6 +317,10 @@
         "state": "RI",
         "zip": "02865",
         "country": "United States"
+      },
+      "geo": {
+        "latitude": 41.887026,
+        "longitude": -71.409472
       },
       "contact": {
         "phone": "(401) 721-5554",
@@ -375,11 +391,11 @@
       ],
       "ticker": "SUMMER ADVENTURES AT TIME MISSION LINCOLN",
       "giftCardUrl": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
-      "countryCode": null,
+      "countryCode": "US",
       "locale": null,
       "timeZone": null,
       "currency": null,
-      "phoneE164": null,
+      "phoneE164": "+14017215554",
       "hreflang": null,
       "localBusinessSchemaEligible": true
     },
@@ -398,6 +414,10 @@
         "state": "VA",
         "zip": "20109",
         "country": "United States"
+      },
+      "geo": {
+        "latitude": 38.7724822,
+        "longitude": -77.5038537
       },
       "contact": {
         "phone": "(571) 732-1050",
@@ -470,11 +490,11 @@
       "ticker": "SUMMER ADVENTURES AT TIME MISSION MANASSAS",
       "giftCardUrl": "https://book.manassas.timemission.com/giftcards/en-us/products",
       "waiverUrl": "https://waiver.roller.app/TimeMissionManassasMall",
-      "countryCode": null,
+      "countryCode": "US",
       "locale": null,
       "timeZone": null,
       "currency": null,
-      "phoneE164": null,
+      "phoneE164": "+15717321050",
       "hreflang": null,
       "localBusinessSchemaEligible": true
     },
@@ -495,6 +515,10 @@
         "state": "TX",
         "zip": "77024",
         "country": "United States"
+      },
+      "geo": {
+        "latitude": 29.7860306,
+        "longitude": -95.4653554
       },
       "contact": {
         "phone": "(713) 588-1630",
@@ -518,11 +542,11 @@
       "ticker": "HOUSTON GRAND OPENING JUNE 5TH",
       "giftCardUrl": "",
       "waiverUrl": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
-      "countryCode": null,
+      "countryCode": "US",
       "locale": null,
       "timeZone": null,
       "currency": null,
-      "phoneE164": null,
+      "phoneE164": "+17135881630",
       "hreflang": null,
       "localBusinessSchemaEligible": false
     },
@@ -541,6 +565,10 @@
         "state": "",
         "zip": "2030",
         "country": "Belgium"
+      },
+      "geo": {
+        "latitude": 51.2533205,
+        "longitude": 4.4178772
       },
       "contact": {
         "phone": "+32 3 301 03 03",
@@ -612,11 +640,11 @@
       ],
       "ticker": "SUMMER ADVENTURES AT TIME MISSION ANTWERP",
       "giftCardUrl": "",
-      "countryCode": null,
+      "countryCode": "BE",
       "locale": null,
       "timeZone": null,
       "currency": null,
-      "phoneE164": null,
+      "phoneE164": "+3233010303",
       "hreflang": "nl-BE",
       "localBusinessSchemaEligible": true
     },
@@ -637,6 +665,10 @@
         "state": "IL",
         "zip": "60462",
         "country": "United States"
+      },
+      "geo": {
+        "latitude": 41.6185245,
+        "longitude": -87.8424251
       },
       "contact": {
         "phone": "(708) 294-8711",
@@ -660,11 +692,11 @@
       "ticker": "ORLAND PARK GRAND OPENING – JUNE 11TH",
       "giftCardUrl": "https://book.orlandpark.timemission.com/giftcards/en-us/products",
       "waiverUrl": "https://waiver.roller.app/TimeMissionOrlandPark/home",
-      "countryCode": null,
+      "countryCode": "US",
       "locale": null,
       "timeZone": null,
       "currency": null,
-      "phoneE164": null,
+      "phoneE164": "+17082948711",
       "hreflang": null,
       "localBusinessSchemaEligible": false
     },
@@ -697,7 +729,7 @@
       "faqs": [],
       "ticker": "BRUSSELS GRAND OPENING JUNE 18TH",
       "giftCardUrl": "",
-      "countryCode": null,
+      "countryCode": "BE",
       "locale": null,
       "timeZone": null,
       "currency": null,
@@ -731,7 +763,7 @@
       "faqs": [],
       "ticker": "COMING SOON TIME MISSION DALLAS",
       "giftCardUrl": "",
-      "countryCode": null,
+      "countryCode": "US",
       "locale": null,
       "timeZone": null,
       "currency": null,
@@ -754,6 +786,10 @@
         "zip": "37203",
         "country": "United States"
       },
+      "geo": {
+        "latitude": 36.1551458,
+        "longitude": -86.7825585
+      },
       "contact": {
         "phone": "(629) 234-0123",
         "email": ""
@@ -765,11 +801,11 @@
       "faqs": [],
       "ticker": "COMING SOON TIME MISSION NASHVILLE",
       "giftCardUrl": "",
-      "countryCode": null,
+      "countryCode": "US",
       "locale": null,
       "timeZone": null,
       "currency": null,
-      "phoneE164": null,
+      "phoneE164": "+16292340123",
       "hreflang": null,
       "localBusinessSchemaEligible": false
     }

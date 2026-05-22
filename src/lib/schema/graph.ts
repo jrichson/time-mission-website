@@ -1,11 +1,9 @@
 import { allLocations } from '../../data/locations';
-import faqsDoc from '../../data/site/faqs.json';
 import { organizationNode } from './organization';
 import { websiteNode } from './website';
 import { serviceNode } from './service';
 import { breadcrumbNode, type Crumb } from './breadcrumb';
 import { localBusinessNode } from './localBusiness';
-import { faqPageNode, type FaqItem } from './faqPage';
 import { homeHeroMediaNodes } from './media';
 
 interface Graph {
@@ -34,9 +32,11 @@ export function buildSimpleGraph(crumbs?: Crumb[], extraNodes: unknown[] = []): 
 }
 
 /**
- * Builds the graph for a group-event landing page. Adds Service + FAQPage
- * nodes alongside the standard Organization + BreadcrumbList so AI search
+ * Builds the graph for a group-event landing page. Adds a Service node
+ * alongside the standard Organization + BreadcrumbList so AI search
  * engines treat each /groups/<type> page as a distinct commercial offering.
+ * Visible FAQs stay on-page, but FAQPage JSON-LD is intentionally omitted
+ * because Google restricts FAQ rich results to government and health sites.
  */
 export function buildGroupEventGraph(opts: {
     canonicalPath: string;
@@ -44,7 +44,7 @@ export function buildGroupEventGraph(opts: {
     serviceName: string;
     serviceType: string;
     serviceDescription: string;
-    faqs?: FaqItem[];
+    faqs?: unknown[];
 }): Graph {
     const nodes: unknown[] = [
         organizationNode(),
@@ -56,15 +56,11 @@ export function buildGroupEventGraph(opts: {
             description: opts.serviceDescription,
         }),
     ];
-    if (opts.faqs && opts.faqs.length > 0) {
-        nodes.push(faqPageNode(opts.faqs));
-    }
     return withContext(nodes);
 }
 
 export function buildFaqGraph(): Graph {
-    const items: FaqItem[] = (faqsDoc.sections as Array<{ items: FaqItem[] }>).flatMap((s) => s.items);
-    return withContext([organizationNode(), faqPageNode(items)]);
+    return withContext([organizationNode()]);
 }
 
 export function buildLocationGraph(slug: string, canonicalPath: string, crumbs: Crumb[]): Graph {
@@ -76,8 +72,5 @@ export function buildLocationGraph(slug: string, canonicalPath: string, crumbs: 
     const business = localBusinessNode(loc, canonicalPath);
     if (business) nodes.push(business);
 
-    if (loc.status === 'open' && Array.isArray(loc.faqs) && loc.faqs.length > 0) {
-        nodes.push(faqPageNode(loc.faqs as FaqItem[]));
-    }
     return withContext(nodes);
 }

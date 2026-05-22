@@ -22,6 +22,10 @@ const dayOfWeekMap = {
   sun: 'Sunday',
 };
 
+function schemaClockTime(time) {
+  return time === '00:00' ? '23:59' : time;
+}
+
 const distDir = path.join(root, 'dist');
 if (!fs.existsSync(distDir)) {
   console.error('NAP parity check failed:');
@@ -38,8 +42,8 @@ function expectedHours(loc) {
     .filter(([, h]) => h && typeof h.open === 'string' && typeof h.close === 'string')
     .map(([day, h]) => ({
       dayOfWeek: dayOfWeekMap[day] ?? day,
-      opens: h.open,
-      closes: h.close,
+      opens: schemaClockTime(h.open),
+      closes: schemaClockTime(h.close),
     }));
 }
 
@@ -74,6 +78,18 @@ function assertNap(slug, loc, biz, outFile) {
   const expectEmail = loc.contact?.email ?? '';
   if ((biz.email ?? '') !== expectEmail) {
     errors.push(`${prefix}: email mismatch`);
+  }
+  if (loc.geo) {
+    if (biz.geo?.['@type'] !== 'GeoCoordinates') {
+      errors.push(`${prefix}: missing GeoCoordinates`);
+    } else {
+      if (biz.geo.latitude !== loc.geo.latitude) {
+        errors.push(`${prefix}: geo.latitude mismatch`);
+      }
+      if (biz.geo.longitude !== loc.geo.longitude) {
+        errors.push(`${prefix}: geo.longitude mismatch`);
+      }
+    }
   }
   const expHours = expectedHours(loc);
   const got = biz.openingHoursSpecification;
