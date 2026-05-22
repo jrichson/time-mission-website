@@ -21,9 +21,24 @@ const bookingCtaAttrs = {
     ...(bookingCtaI18n ? { 'data-i18n': bookingCtaI18n } : {}),
 };
 const tickerBaseMessages = [
-    { text: 'HOUSTON GRAND OPENING JUNE 5TH', i18n: 'ticker.houstonGrandOpening' },
-    { text: 'ORLAND PARK GRAND OPENING – JUNE 11TH', i18n: 'ticker.orlandParkGrandOpening' },
-    { text: 'BRUSSELS GRAND OPENING JUNE 18TH', i18n: 'ticker.brusselsGrandOpening' },
+    {
+        label: 'HOUSTON GRAND OPENING',
+        date: 'JUNE 5TH',
+        labelI18n: 'ticker.houstonGrandOpeningLabel',
+        dateI18n: 'ticker.houstonGrandOpeningDate',
+    },
+    {
+        label: 'ORLAND PARK GRAND OPENING',
+        date: 'JUNE 11TH',
+        labelI18n: 'ticker.orlandParkGrandOpeningLabel',
+        dateI18n: 'ticker.orlandParkGrandOpeningDate',
+    },
+    {
+        label: 'BRUSSELS GRAND OPENING',
+        date: 'JUNE 18TH',
+        labelI18n: 'ticker.brusselsGrandOpeningLabel',
+        dateI18n: 'ticker.brusselsGrandOpeningDate',
+    },
 ];
 const tickerMessages = Array.from({ length: 4 }, () => tickerBaseMessages).flat();
 ---
@@ -31,7 +46,13 @@ const tickerMessages = Array.from({ length: 4 }, () => tickerBaseMessages).flat(
 <!-- Announcement Ticker -->
 <div class="ticker-bar">
     <div class="ticker-track">
-        {tickerMessages.map((m) => <span class="ticker-item" data-i18n={m.i18n}>{m.text}</span>)}
+        {tickerMessages.map((m) => (
+            <span class="ticker-item">
+                <span class="ticker-copy" data-i18n={m.labelI18n}>{m.label}</span>
+                <span class="ticker-separator" aria-hidden="true">-</span>
+                <span class="ticker-date" data-i18n={m.dateI18n}>{m.date}</span>
+            </span>
+        ))}
     </div>
 </div>
 

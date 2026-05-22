@@ -94,6 +94,32 @@
         LocationViews.applyBookingCtaView(el, cta);
     }
 
+    function renderTickerItem(item, text) {
+        const value = String(text || '').trim();
+        const match = value.match(/^(.*?\bGRAND OPENING)\s*(?:[-–—]\s*)?(.+)$/i);
+        item.textContent = '';
+
+        if (!match) {
+            item.textContent = value;
+            return;
+        }
+
+        const copy = document.createElement('span');
+        copy.className = 'ticker-copy';
+        copy.textContent = match[1].trim();
+
+        const separator = document.createElement('span');
+        separator.className = 'ticker-separator';
+        separator.setAttribute('aria-hidden', 'true');
+        separator.textContent = '-';
+
+        const date = document.createElement('span');
+        date.className = 'ticker-date';
+        date.textContent = match[2].trim();
+
+        item.append(copy, separator, date);
+    }
+
     function translateText(key, fallback, replacements) {
         if (window.TMI18n && typeof window.TMI18n.text === 'function') {
             return window.TMI18n.text(key, fallback, replacements);
@@ -341,7 +367,7 @@
             if (loc && loc.ticker) {
                 document.querySelectorAll('.ticker-track').forEach(track => {
                     const items = track.querySelectorAll('.ticker-item');
-                    items.forEach(item => { item.textContent = loc.ticker; });
+                    items.forEach(item => { renderTickerItem(item, loc.ticker); });
                 });
             }
 
