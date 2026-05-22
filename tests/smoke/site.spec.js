@@ -1198,6 +1198,30 @@ test.describe('small mobile (375x667)', () => {
     });
   }
 
+  test('selected location is visible in the mobile header without overflow', async ({ page }) => {
+    await page.goto('/philadelphia');
+    const locBtn = page.locator('.location-btn').first();
+    const locationText = page.locator('#locationText');
+
+    await expect(locBtn).toHaveClass(/has-location/);
+    await expect(locationText).toBeVisible();
+    await expect(locationText).toContainText('Philadelphia');
+    await expect(locBtn).toHaveAttribute('aria-label', 'Change location: Philadelphia');
+
+    const box = await locBtn.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box.width).toBeGreaterThanOrEqual(44);
+    expect(box.height).toBeGreaterThanOrEqual(44);
+
+    const overflow = await page.evaluate(() => {
+      return {
+        scrollWidth: document.documentElement.scrollWidth,
+        innerWidth: window.innerWidth,
+      };
+    });
+    expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.innerWidth + 1);
+  });
+
   test('footer-legal row wraps at 375px', async ({ page }) => {
     await page.goto('/about');
     const footerLegal = page.locator('.footer-legal').first();
@@ -1220,6 +1244,7 @@ test.describe('small mobile (375x667)', () => {
     await page.goto('/');
     const locBtn = page.locator('.location-btn').first();
     await locBtn.waitFor({ state: 'visible' });
+    await expect(locBtn).not.toHaveClass(/has-location/);
     const box = await locBtn.boundingBox();
     expect(box).not.toBeNull();
     expect(box.width).toBeGreaterThanOrEqual(44);

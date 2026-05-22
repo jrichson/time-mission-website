@@ -94,6 +94,16 @@
         LocationViews.applyBookingCtaView(el, cta);
     }
 
+    function translateText(key, fallback, replacements) {
+        if (window.TMI18n && typeof window.TMI18n.text === 'function') {
+            return window.TMI18n.text(key, fallback, replacements);
+        }
+
+        return Object.entries(replacements || {}).reduce((text, entry) => {
+            return text.replace(new RegExp('\\{' + entry[0] + '\\}', 'g'), entry[1]);
+        }, fallback);
+    }
+
     function getOverlayView(id, opts) {
         const loc = resolveLocationRef(id);
         return LocationViews.getOverlayView(loc, id, opts || {});
@@ -292,14 +302,28 @@
 
         updateDOM() {
             const loc = TM.current;
+            const selectedLocationName = loc ? (loc.shortName || loc.name || '') : '';
 
             const locationText = document.getElementById('locationText');
             if (locationText) {
-                if (loc) {
-                    locationText.textContent = loc.shortName;
+                if (selectedLocationName) {
+                    locationText.textContent = selectedLocationName;
                 } else if (TM.locations.length > 0) {
                     locationText.textContent = 'Select Location';
                 }
+            }
+
+            const locationBtn = document.getElementById('locationBtn');
+            if (locationBtn) {
+                locationBtn.classList.toggle('has-location', Boolean(selectedLocationName));
+                locationBtn.setAttribute('aria-label', selectedLocationName
+                    ? translateText('nav.changeLocationWithName', 'Change location: {location}', { location: selectedLocationName })
+                    : translateText('nav.changeLocation', 'Change location'));
+            }
+
+            const nav = document.getElementById('nav');
+            if (nav) {
+                nav.classList.toggle('has-location', Boolean(selectedLocationName));
             }
 
             const locView = loc ? getLocationView(loc.id || loc.slug) : null;

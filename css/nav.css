@@ -1061,6 +1061,34 @@
     .location-btn svg:last-of-type {
         display: none;
     }
+
+    .location-btn.has-location {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        max-width: min(11rem, 28vw);
+        padding: 0.45rem 0.75rem;
+        border: 1px solid rgba(255, 107, 44, 0.42);
+        border-radius: 999px;
+        background: rgba(255, 107, 44, 0.12);
+    }
+
+    .location-btn.has-location #locationText {
+        display: inline-block;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        color: var(--white);
+        font-family: var(--tech);
+        font-size: 0.7rem;
+        letter-spacing: 0.03em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .location-btn.has-location svg:first-of-type {
+        flex: 0 0 auto;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1093,6 +1121,12 @@
         min-width: var(--target-min);
         min-height: var(--target-min);
         padding: 0;
+    }
+
+    .location-btn.has-location {
+        justify-content: flex-start;
+        max-width: min(9.5rem, 34vw);
+        padding: 0.4rem 0.625rem;
     }
 
     .location-btn svg:first-of-type {
@@ -1151,6 +1185,11 @@
         gap: 0.5rem;
     }
 
+    .nav.has-location .nav-left {
+        flex: 0 1 auto;
+        min-width: 0;
+    }
+
     .nav-logo img {
         height: 32px;
         min-width: 88px;
@@ -1161,11 +1200,32 @@
         min-width: 0;
     }
 
+    .nav.has-location .nav-right {
+        flex: 1 1 auto;
+        justify-content: flex-end;
+    }
+
     .btn-tickets {
         --button-current-padding-x: var(--button-padding-x-tight);
         min-height: var(--target-comfortable);
         padding: 0.5rem 0.75rem;
         font-size: 0.7rem;
+        letter-spacing: 0.02em;
+    }
+
+    .nav.has-location .btn-tickets {
+        --button-current-padding-x: 0.6rem;
+        font-size: 0.66rem;
+    }
+
+    .location-btn.has-location {
+        gap: 0.3rem;
+        max-width: min(7.75rem, 36vw);
+        padding: 0.35rem 0.5rem;
+    }
+
+    .location-btn.has-location #locationText {
+        font-size: 0.66rem;
         letter-spacing: 0.02em;
     }
 }
@@ -1189,5 +1249,22 @@
         padding-left: 0.65rem;
         padding-right: 0.65rem;
         font-size: 0.68rem;
+    }
+
+    .nav.has-location .btn-tickets {
+        --button-current-padding-x: 0.5rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        font-size: 0.62rem;
+    }
+
+    .location-btn.has-location {
+        max-width: 6.75rem;
+        padding-left: 0.45rem;
+        padding-right: 0.45rem;
+    }
+
+    .location-btn.has-location #locationText {
+        font-size: 0.64rem;
     }
 }
