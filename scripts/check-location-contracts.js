@@ -87,6 +87,22 @@ function validateGeo(location) {
   return ok;
 }
 
+function validateLocationTicker(location) {
+  const id = location.id || '(unknown)';
+  if (typeof location.ticker !== 'string' || location.ticker.trim() === '') {
+    errors.push(`${id}: ticker must be a non-empty string`);
+    return;
+  }
+
+  const ticker = location.ticker.toLowerCase();
+  for (const other of locations) {
+    if (!other || other.id === location.id || !other.shortName) continue;
+    if (ticker.includes(String(other.shortName).toLowerCase())) {
+      errors.push(`${id}: ticker must not mention ${other.shortName}`);
+    }
+  }
+}
+
 function validateGroupFormUrls(location) {
   const id = location.id || '(unknown)';
   if (location.groupFormUrls == null) return;
@@ -190,6 +206,7 @@ for (const location of locations) {
   }
 
   validateIntlFields(location);
+  validateLocationTicker(location);
   const hasValidGeo = validateGeo(location);
 
   if (Object.prototype.hasOwnProperty.call(location, 'localBusinessSchemaEligible')) {

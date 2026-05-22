@@ -127,6 +127,7 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQ
                     bookingCtaLabel={bookingCtaLabel}
                     bookingCtaIsBookingTrigger={bookingCtaIsBookingTrigger}
                     bookingCtaI18n={bookingCtaI18n}
+                    locationTicker={pageLocation?.ticker}
                 />
                 <LocationOverlay currentLang={lang} />
             </slot>

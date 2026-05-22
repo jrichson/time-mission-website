@@ -7,6 +7,7 @@ interface Props {
     bookingCtaLabel?: string;
     bookingCtaIsBookingTrigger?: boolean;
     bookingCtaI18n?: string;
+    locationTicker?: string;
 }
 
 const {
@@ -15,6 +16,7 @@ const {
     bookingCtaLabel = 'Book Now',
     bookingCtaIsBookingTrigger = true,
     bookingCtaI18n = 'nav.bookNow',
+    locationTicker = '',
 } = Astro.props;
 const bookingCtaAttrs = {
     ...(bookingCtaIsBookingTrigger ? { 'data-tm-booking-trigger': '', 'data-tm-booking-kind': 'tickets' } : {}),
@@ -40,7 +42,19 @@ const tickerBaseMessages = [
         dateI18n: 'ticker.brusselsGrandOpeningDate',
     },
 ];
-const tickerMessages = Array.from({ length: 4 }, () => tickerBaseMessages).flat();
+const tickerCycles = 4;
+
+function tickerMessageFromText(text: string) {
+    const value = text.trim();
+    const match = value.match(/^(.*?\bGRAND OPENING)\s*(?:[-–—]\s*)?(.+)$/i);
+    if (match) return { label: match[1].trim(), date: match[2].trim() };
+    return value ? { text: value } : null;
+}
+
+const locationTickerMessage = tickerMessageFromText(locationTicker);
+const tickerMessages = locationTickerMessage
+    ? Array.from({ length: tickerCycles }, () => locationTickerMessage)
+    : Array.from({ length: tickerCycles }, () => tickerBaseMessages).flat();
 ---
 
 <!-- Announcement Ticker -->
@@ -48,9 +62,15 @@ const tickerMessages = Array.from({ length: 4 }, () => tickerBaseMessages).flat(
     <div class="ticker-track">
         {tickerMessages.map((m) => (
             <span class="ticker-item">
-                <span class="ticker-copy" data-i18n={m.labelI18n}>{m.label}</span>
-                <span class="ticker-separator" aria-hidden="true">-</span>
-                <span class="ticker-date" data-i18n={m.dateI18n}>{m.date}</span>
+                {'text' in m ? (
+                    m.text
+                ) : (
+                    <>
+                        <span class="ticker-copy" data-i18n={m.labelI18n}>{m.label}</span>
+                        <span class="ticker-separator" aria-hidden="true">-</span>
+                        <span class="ticker-date" data-i18n={m.dateI18n}>{m.date}</span>
+                    </>
+                )}
             </span>
         ))}
     </div>
