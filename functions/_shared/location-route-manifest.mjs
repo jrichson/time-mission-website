@@ -68,6 +68,12 @@ export const LOCATION_ROUTE_ENTRIES = [
     "compatibilitySources": [],
     "externalUrl": "",
     "officialAlternate": ""
+  },
+  {
+    "canonicalPath": "/nashville",
+    "compatibilitySources": [],
+    "externalUrl": "",
+    "officialAlternate": ""
   }
 ];
 export const PREFIXABLE_CANONICAL_PATHS = [

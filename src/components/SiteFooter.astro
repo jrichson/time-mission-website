@@ -27,6 +27,7 @@ function contactHrefForLocation(loc: LocationRecord | null): string {
 
 const houstonOpeningLabel = openingLabelFor('houston');
 const orlandParkOpeningLabel = openingLabelFor('orland-park');
+const nashvilleOpeningLabel = openingLabelFor('nashville');
 const antwerp = allLocations.find((entry) => entry.slug === 'antwerp');
 const brussels = allLocations.find((entry) => entry.slug === 'brussels');
 const antwerpHref = antwerp ? locationHref(antwerp) : '/antwerp';
@@ -112,6 +113,9 @@ const contactHref = contactHrefForLocation(pageLocation);
                             Orland Park {orlandParkOpeningLabel && <span class="coming-soon-tag">{orlandParkOpeningLabel}</span>}
                         </a>
                         <a href="/dallas" class="coming-soon">Dallas <span class="coming-soon-tag">Coming Soon</span></a>
+                        <a href="/nashville" class={nashvilleOpeningLabel ? 'coming-soon' : undefined}>
+                            Nashville {nashvilleOpeningLabel && <span class="coming-soon-tag">{nashvilleOpeningLabel}</span>}
+                        </a>
                     </div>
                 </div>
                 <div class="footer-location-group">

@@ -55,6 +55,7 @@
                             <a href="/manassas">Manassas</a>
                             <a href="/orland-park" class="coming-soon">Orland Park <span class="coming-soon-tag">Opening June 11, 2026</span></a>
                             <a href="/dallas" class="coming-soon">Dallas <span class="coming-soon-tag">Coming Soon</span></a>
+                            <a href="/nashville" class="coming-soon">Nashville <span class="coming-soon-tag">Coming Soon</span></a>
                         </div>
                     </div>
                     <div class="footer-location-group">

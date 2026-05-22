@@ -12,6 +12,7 @@ const locationPageCssBySlug: Record<string, string> = {
     lincoln: '/css/page-lincoln.css?v=2',
     manassas: '/css/page-manassas.css?v=2',
     'mount-prospect': '/css/page-mount-prospect.css?v=2',
+    nashville: comingSoonLocationCss,
     'orland-park': comingSoonLocationCss,
     philadelphia: '/css/page-philadelphia.css?v=2',
     'west-nyack': '/css/page-west-nyack.css?v=2',

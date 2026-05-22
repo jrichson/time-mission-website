@@ -738,6 +738,40 @@
       "phoneE164": null,
       "hreflang": null,
       "localBusinessSchemaEligible": false
+    },
+    {
+      "id": "nashville",
+      "slug": "nashville",
+      "name": "Time Mission Nashville",
+      "shortName": "Nashville",
+      "venueName": null,
+      "region": "us",
+      "status": "coming-soon",
+      "address": {
+        "line1": "209 10th Avenue South",
+        "city": "Nashville",
+        "state": "TN",
+        "zip": "37203",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "(629) 234-0123",
+        "email": ""
+      },
+      "hours": {},
+      "bookingUrl": "",
+      "navLabel": "TN - Nashville",
+      "mapUrl": "https://maps.google.com/?q=209+10th+Avenue+South+Nashville+TN+37203",
+      "faqs": [],
+      "ticker": "COMING SOON TIME MISSION NASHVILLE",
+      "giftCardUrl": "",
+      "countryCode": null,
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": false
     }
   ]
 }

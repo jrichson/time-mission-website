@@ -188,7 +188,7 @@
       "items": [
         {
           "q": "What's the minimum headcount for a buyout?",
-          "a": "Varies by location, but most buyouts start around 40–60 guests. Send us your size and we'll confirm what works at your chosen venue."
+          "a": "Varies by location, but most locations do not require a minimum headcount. Send us your size and we'll confirm what works at your chosen venue."
         },
         {
           "q": "How is buyout pricing structured?",
@@ -238,7 +238,7 @@
         },
         {
           "q": "What ages can play?",
-          "a": "Time Mission is perfect for ages 6 to 106! Kids 6–13 need an adult in the group. Ages 14+ can play on their own. Perfect for mixed-age family holiday parties."
+          "a": "Time Mission is perfect for ages 6 to 106. Kids 6–13 need an adult in the group. Great for mixed-age family holiday parties."
         }
       ]
     },
@@ -252,7 +252,7 @@
         },
         {
           "q": "What are your chaperone requirements?",
-          "a": "Chaperone ratios depend on grade level. Generally, one adult per 8–10 students for elementary groups and one per 15 for middle/high school. Chaperones are typically free or discounted."
+          "a": "Chaperone ratios depend on grade level. Generally, one adult per 8–10 students for elementary groups and one per 15 for middle/high school. Chaperones who are not issued player wristbands are free."
         },
         {
           "q": "Is there weekday availability?",
@@ -264,7 +264,7 @@
         },
         {
           "q": "Is there a place for lunches or bus drop-off?",
-          "a": "Varies by location. Some venues have nearby lunch spots or drop-off zones; others recommend a boxed lunch before or after. We'll share location-specific logistics when you book."
+          "a": "Varies by location. Most venues have nearby lunch spots, bus drop-off zones, or parking options. If a venue handles lunch differently, we'll share those logistics when you book."
         },
         {
           "q": "What's the age minimum?",
@@ -278,11 +278,11 @@
       "items": [
         {
           "q": "What group size works best?",
-          "a": "Anywhere from 6-person small crews up to 30+ party squads. Most locations can comfortably host a standard bachelor/ette group."
+          "a": "Anywhere from 6-person small crews up to 30+ party squads. Most locations can comfortably host a standard bachelor or bachelorette group."
         },
         {
           "q": "Are alcoholic drinks available?",
-          "a": "At most locations, yes — drink packages and bar options vary by venue. We'll confirm what's available when you request a quote."
+          "a": "Varies by location. Some venues offer drink packages or bar options. Every location is near food and beverage options, and most are BYO-friendly. We'll confirm what's available when you request a quote."
         },
         {
           "q": "Is there a dress code?",

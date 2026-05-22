@@ -628,8 +628,11 @@
             font-size: 0.72rem;
             font-weight: 600;
             letter-spacing: 0.1em;
+            line-height: 1.15;
             text-transform: uppercase;
             text-align: center;
+            overflow-wrap: normal;
+            word-break: keep-all;
         }
 
         @media (max-width: 900px) {

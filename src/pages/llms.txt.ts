@@ -57,6 +57,7 @@ const LOCATIONS_US = [
     '/philadelphia',
     '/lincoln',
     '/dallas',
+    '/nashville',
     '/houston',
     '/manassas',
 ];

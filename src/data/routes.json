@@ -294,6 +294,16 @@
       "status": 301
     },
     {
+      "id": "nashville",
+      "canonicalPath": "/nashville",
+      "redirectSources": [
+        "/nashville.html"
+      ],
+      "outputFile": "nashville.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "brussels",
       "canonicalPath": "/brussels",
       "locationAlternate": "terminal1",

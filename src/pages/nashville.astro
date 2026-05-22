@@ -1,0 +1,9 @@
+---
+import ComingSoonLocationPageShell from '../components/ComingSoonLocationPageShell.astro';
+import { buildComingSoonLocationPage } from '../lib/location-page-shell';
+
+const slug = 'nashville';
+const cityPage = buildComingSoonLocationPage(slug);
+---
+
+<ComingSoonLocationPageShell cityPage={cityPage} />

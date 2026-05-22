@@ -46,6 +46,7 @@ const SCOPE_FILES = {
     'src/pages/lincoln.astro',
     'src/pages/manassas.astro',
     'src/pages/mount-prospect.astro',
+    'src/pages/nashville.astro',
     'src/pages/orland-park.astro',
     'src/pages/philadelphia.astro',
     'src/pages/west-nyack.astro',
