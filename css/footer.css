@@ -522,11 +522,15 @@ html {
 }
 
 .footer-loc-change {
+    appearance: none;
+    background: transparent;
+    border: 0;
     color: rgba(255, 255, 255, 0.72);
+    cursor: pointer;
     font-family: var(--body);
     font-size: 0.75rem;
+    padding: 0;
     text-decoration: none;
-    cursor: pointer;
     display: inline-flex;
     align-items: center;
     min-height: var(--target-min);

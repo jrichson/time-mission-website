@@ -87,11 +87,8 @@ function groupRows(): string {
 }
 
 export const GET: APIRoute = () => {
-    const lastUpdated = new Date().toISOString().slice(0, 10);
     const sections = [
         '# Time Mission AI Context',
-        '',
-        `Last updated: ${lastUpdated}`,
         '',
         '## Direct Answer Summary',
         '',

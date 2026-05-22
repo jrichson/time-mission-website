@@ -302,11 +302,13 @@
         var addrEl = infoPanel.querySelector('.footer-loc-address');
         var phoneEl = infoPanel.querySelector('.footer-loc-phone');
         var phoneNoteEl = infoPanel.querySelector('.footer-loc-phone-note');
+        var hoursDetails = infoPanel.querySelector('.footer-loc-hours-details');
         var hoursEl = infoPanel.querySelector('.footer-loc-hours');
         var mapEl = infoPanel.querySelector('.footer-loc-map');
-        var displayName = loc.name || loc.shortName || '';
+        var displayName = loc.shortName || loc.name || '';
 
         if (titleEl) titleEl.textContent = displayName || 'LOCATIONS';
+        if (hoursDetails) hoursDetails.removeAttribute('open');
         renderAddressLines(addrEl, loc.address);
         if (phoneEl && loc.contact && loc.contact.phone) {
             phoneEl.textContent = loc.contact.phone;

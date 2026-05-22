@@ -1,7 +1,7 @@
 ---
 /**
  * Full-width footer matching the shared `footer-grid` page treatment.
- * Keeps structure in sync with `src/partials/faq-footer.frag.txt`.
+ * Canonical site footer rendered by SiteLayout.
  */
 import { allLocations, type LocationRecord } from '../data/locations';
 import {
@@ -49,7 +49,7 @@ function hoursFallbackForLocation(loc: LocationRecord | null): string {
     return locationStatusBadge(loc) || 'Hours coming soon';
 }
 
-const footerLocationName = pageLocation ? pageLocation.name || pageLocation.shortName : '';
+const footerLocationName = pageLocation ? pageLocation.shortName || pageLocation.name : '';
 const footerAddressParts = locationAddressLines(pageLocation);
 const footerPhone = String(pageLocation?.contact.phone || '').trim();
 const footerPhoneHref = locationPhoneHref(pageLocation);
@@ -197,7 +197,7 @@ const hasPageLocation = Boolean(pageLocation);
                 <a class="footer-loc-map" href={pageLocation?.mapUrl || '#'} target="_blank" rel="noopener" hidden={!pageLocation?.mapUrl}>
                     Get Directions →
                 </a>
-                <a class="footer-loc-change" href="#">Change Location</a>
+                <button type="button" class="footer-loc-change">Change Location</button>
             </div>
         </div>
     </div>

@@ -4,6 +4,8 @@ export type RuntimeScriptId =
     | 'consent'
     | 'analytics'
     | 'bookingJourney'
+    | 'bookingFrame'
+    | 'bookingBriqProvider'
     | 'locationCatalogView'
     | 'locations'
     | 'nav'
@@ -36,12 +38,14 @@ export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'language', src: '/js/language-switcher.js', version: 4 },
     { id: 'consent', src: '/js/consent-bridge.js', version: 1 },
     { id: 'analytics', src: '/js/analytics.js', version: 1 },
-    { id: 'bookingJourney', src: '/js/booking-journey.js', version: 8 },
-    { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 6 },
+    { id: 'bookingJourney', src: '/js/booking-journey.js', version: 9 },
+    { id: 'bookingFrame', src: '/js/booking-frame.js', version: 1 },
+    { id: 'bookingBriqProvider', src: '/js/booking-provider-briq.js', version: 1 },
+    { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 7 },
     { id: 'locations', src: '/js/locations.js', version: 23 },
     { id: 'nav', src: '/js/nav.js', version: 14 },
-    { id: 'bookingController', src: '/js/booking-controller.js', version: 18 },
-    { id: 'ticketPanel', src: '/js/ticket-panel.js', version: 11 },
+    { id: 'bookingController', src: '/js/booking-controller.js', version: 19 },
+    { id: 'ticketPanel', src: '/js/ticket-panel.js', version: 12 },
     { id: 'a11y', src: '/js/a11y.js', version: null },
 ];
 

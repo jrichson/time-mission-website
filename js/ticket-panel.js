@@ -8,10 +8,6 @@
     var ticketBookBtn  = document.getElementById('ticketBookBtn');
     var pageLocation   = (document.body && document.body.dataset.location) || '';
     var lastFocusedBeforePanel = null;
-    var monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ];
 
     if (!ticketPanel || !ticketLocSel) return;
 
@@ -20,16 +16,6 @@
             return window.TMI18n.text(key, fallback);
         }
         return fallback;
-    }
-
-    function openingLabelForLocation(loc) {
-        if (!loc) return '';
-        var explicit = String(loc.openingLabel || '').trim();
-        if (explicit) return explicit;
-        var iso = String(loc.openingDate || '').trim();
-        var match = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-        if (!match) return '';
-        return 'Opening ' + monthNames[Number(match[2]) - 1] + ' ' + Number(match[3]) + ', ' + match[1];
     }
 
     function getLocationContext() {
@@ -47,24 +33,13 @@
         var options = [];
         if (context && typeof context.listTicketOptions === 'function') {
             options = context.listTicketOptions();
-        } else if (window.TM && Array.isArray(window.TM.locations)) {
-            options = window.TM.locations.map(function (loc) {
-                var suffix = '';
-                if (loc.status === 'coming-soon') {
-                    var openingLabel = openingLabelForLocation(loc);
-                    suffix = openingLabel
-                        ? ' (' + openingLabel + ')'
-                        : (loc.rollerCheckoutUrl || loc.bookingUrl)
-                        ? ' (' + translate('booking.status.bookingNow', 'Booking Now') + ')'
-                        : ' (' + translate('location.comingSoon', 'Coming Soon') + ')';
-                }
-                return {
-                    value: loc.id,
-                    label: (loc.region === 'europe'
-                        ? (loc.navLabel || loc.shortName || loc.name || loc.id)
-                        : (loc.shortName || loc.name || loc.id)) + suffix,
-                };
-            });
+        } else if (
+            window.TMLocationViews
+            && typeof window.TMLocationViews.listTicketOptions === 'function'
+            && window.TM
+            && Array.isArray(window.TM.locations)
+        ) {
+            options = window.TMLocationViews.listTicketOptions(window.TM.locations);
         }
         if (!options.length) return;
         var prev = ticketLocSel.value;

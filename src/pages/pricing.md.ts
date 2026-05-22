@@ -53,11 +53,8 @@ function bookingRows(locations: LocationRecord[]): string {
 }
 
 export const GET: APIRoute = () => {
-    const lastUpdated = new Date().toISOString().slice(0, 10);
     const sections = [
         '# Time Mission Pricing And Booking Facts',
-        '',
-        `Last updated: ${lastUpdated}`,
         '',
         '## Direct Answer',
         '',

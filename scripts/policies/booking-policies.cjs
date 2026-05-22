@@ -81,6 +81,26 @@ module.exports = [
     chain: [
       {
         after: '/js/booking-journey.js',
+        before: '/js/booking-frame.js',
+        message: 'public runtime contract must load booking-journey.js before booking-frame.js',
+      },
+      {
+        after: '/js/booking-journey.js',
+        before: '/js/booking-provider-briq.js',
+        message: 'public runtime contract must load booking-journey.js before booking-provider-briq.js',
+      },
+      {
+        after: '/js/booking-frame.js',
+        before: '/js/booking-controller.js',
+        message: 'public runtime contract must load booking-frame.js before booking-controller.js',
+      },
+      {
+        after: '/js/booking-provider-briq.js',
+        before: '/js/booking-controller.js',
+        message: 'public runtime contract must load booking-provider-briq.js before booking-controller.js',
+      },
+      {
+        after: '/js/booking-journey.js',
         before: '/js/locations.js',
         message: 'public runtime contract must load booking-journey.js before locations.js',
       },

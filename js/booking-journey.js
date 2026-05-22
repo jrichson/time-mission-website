@@ -326,31 +326,28 @@
         var opts = options || {};
         var resolved = intent || {};
         var href = String(resolved.href || '').trim();
+        var provider = 'link';
+        var deferred = false;
         if (!isNavigableHref(href)) {
-            return { type: 'panel', href: href, shouldPreventDefault: true, trackCheckout: false };
+            provider = 'panel';
+        } else if (resolved.externalLocationSite || resolved.presentation === 'external-site') {
+            provider = 'external-site';
+        } else if (resolved.usesBriqWidget || resolved.presentation === 'briq-widget') {
+            provider = 'briq-widget';
+        } else if (resolved.usesRollerCheckout || resolved.presentation === 'roller') {
+            provider = 'roller';
+        } else if (resolved.usesBookingFrame || resolved.presentation === 'iframe') {
+            provider = 'iframe';
         }
-        if (resolved.externalLocationSite || resolved.presentation === 'external-site') {
-            return { type: 'external-site', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
-        }
-        if (!opts.deferUntilLoad && (resolved.usesBriqWidget || resolved.presentation === 'briq-widget')) {
-            return { type: 'briq-widget', href: href, shouldPreventDefault: true, trackCheckout: false };
-        }
-        if (!opts.deferUntilLoad && (resolved.usesRollerCheckout || resolved.presentation === 'roller')) {
-            return { type: 'roller', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
-        }
-        if (!opts.deferUntilLoad && (resolved.usesBookingFrame || resolved.presentation === 'iframe')) {
-            return { type: 'iframe', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
-        }
-        if (opts.deferUntilLoad && (resolved.usesBriqWidget || resolved.presentation === 'briq-widget')) {
-            return { type: 'deferred-briq-widget', href: href, shouldPreventDefault: true, trackCheckout: false };
-        }
-        if (opts.deferUntilLoad && (resolved.usesRollerCheckout || resolved.presentation === 'roller')) {
-            return { type: 'deferred-roller', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
-        }
-        if (opts.deferUntilLoad && (resolved.usesBookingFrame || resolved.presentation === 'iframe')) {
-            return { type: 'deferred-iframe', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
-        }
-        return { type: opts.deferUntilLoad ? 'deferred-link' : 'link', href: href, shouldPreventDefault: true, trackCheckout: isExternalHttpUrl(href) };
+        deferred = !!opts.deferUntilLoad && provider !== 'panel' && provider !== 'external-site';
+        return {
+            type: deferred ? 'deferred-' + provider : provider,
+            provider: provider,
+            href: href,
+            deferred: deferred,
+            shouldPreventDefault: true,
+            trackCheckout: provider !== 'panel' && provider !== 'briq-widget' && isExternalHttpUrl(href),
+        };
     }
 
     function resolveOutcome(options, actionOptions) {

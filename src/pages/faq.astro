@@ -4,7 +4,6 @@ import { definePage } from '../lib/define-page';
 import Faq from '../components/Faq.astro';
 import faqs from '../data/site/faqs.json';
 import geoAnswerBlocks from '../data/site/geo-answer-blocks.json';
-import faqFooter from '../partials/faq-footer.frag.txt?raw';
 import { buildFaqGraph, serializeGraph } from '../lib/schema/graph';
 
 const ld = serializeGraph(buildFaqGraph());
@@ -22,7 +21,6 @@ const faqAnswer = geoAnswerBlocks.blocks.faq;
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
-    <Fragment slot="footer" set:html={faqFooter} />
 
     <main class="faq-main">
         <section class="page-header">

@@ -11,11 +11,6 @@ const { locationsFingerprintFromRecords } = require('../../src/lib/locations-fin
 const REPO_ROOT = path.resolve(__dirname, '../..');
 const locationRecords = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'data', 'locations.json'), 'utf8')).locations || [];
 const locationById = new Map(locationRecords.map((loc) => [loc.id, loc]));
-const contactLocations = locationRecords.filter((loc) => {
-  const contact = loc.contact || {};
-  return !loc.externalUrl && (String(contact.phone || '').trim() || String(contact.email || '').trim());
-});
-
 function groupFormUrl(locationId, groupType) {
   return locationById.get(locationId)?.groupFormUrls?.[groupType] || '';
 }
@@ -34,92 +29,6 @@ async function gotoHome(page) {
     state: 'visible',
     timeout: 15000,
   });
-}
-
-async function stubBriqWidgetScript(page, options = {}) {
-  const briqScript = { requests: 0 };
-  const mountDelayMs = Number(options.mountDelayMs || 0);
-  await page.route('https://widgetcdn.briqbookings.com/widget/widget.js', async (route) => {
-    briqScript.requests += 1;
-    await route.fulfill({
-      contentType: 'application/javascript',
-      body: `
-        (function () {
-          var mountDelayMs = ${JSON.stringify(mountDelayMs)};
-
-          function widgetStateIsOpen(state) {
-            return String(state || '').indexOf('o|is|true') !== -1;
-          }
-
-          function openWidget(host) {
-            var root = host.shadowRoot;
-            if (!root) return;
-            var main = root.querySelector('.bw-widget-main');
-            if (!main) return;
-            main.classList.remove('bw-closed');
-            main.classList.add('bw-open');
-            window.__briqBookingOpened = (window.__briqBookingOpened || 0) + 1;
-          }
-
-          function closeWidget(host) {
-            var root = host.shadowRoot;
-            if (!root) return;
-            var main = root.querySelector('.bw-widget-main');
-            if (!main) return;
-            main.classList.remove('bw-open');
-            main.classList.add('bw-closed');
-          }
-
-          function mountBriqWidgets() {
-            document.querySelectorAll('.bw-widget').forEach(function (widget) {
-              if (widget.shadowRoot) return;
-              var root = widget.attachShadow({ mode: 'open' });
-              var main = document.createElement('main');
-              main.className = 'bw-widget-main bw-closed';
-              main.setAttribute('data-briq-stub-main', '');
-              if (!String(widget.getAttribute('data-features') || '').includes('hideMainButton')) {
-                var button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'widget-button';
-                button.setAttribute('data-briq-stub-button', '');
-                button.textContent = widget.getAttribute('data-button-text') || 'BOOK NOW';
-                button.addEventListener('click', function () {
-                  openWidget(widget);
-                });
-                main.appendChild(button);
-              }
-              root.appendChild(main);
-            });
-            document.querySelectorAll('.bw-widget-toggle').forEach(function (toggle) {
-              if (toggle.__briqStubBound) return;
-              toggle.__briqStubBound = true;
-              toggle.addEventListener('click', function () {
-                var host = document.querySelector('.bw-widget');
-                if (!host) return;
-                if (widgetStateIsOpen(toggle.getAttribute('data-widget-state'))) openWidget(host);
-                else closeWidget(host);
-              });
-            });
-          }
-
-          function scheduleMountBriqWidgets() {
-            if (mountDelayMs > 0) {
-              setTimeout(mountBriqWidgets, mountDelayMs);
-              return;
-            }
-            mountBriqWidgets();
-          }
-
-          if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', scheduleMountBriqWidgets);
-          } else {
-            scheduleMountBriqWidgets();
-          }
-        })();
-      `,
-    });
-  });
-  return briqScript;
 }
 
 /** Wait for GTM bootstrap push, then read `consent_profile` from `tm_tagging_config`. */
@@ -557,13 +466,14 @@ test('location pages render footer contact details with accordion hours', async 
 
   const footer = page.locator('footer.footer');
   await expect(page.locator('footer.footer')).toHaveCount(1);
-  await expect(footer.locator('.footer-locations-title')).toHaveText('Time Mission Mount Prospect');
+  await expect(footer.locator('.footer-locations-title')).toHaveText('Mount Prospect');
   await expect(footer.locator('.footer-locations-dropdown')).toBeHidden();
   await expect(footer.locator('.footer-location-info')).toBeVisible();
   await expect(footer.locator('.footer-loc-address')).toContainText('132 Randhurst Village Drive');
   await expect(footer.locator('.footer-loc-address')).toContainText('Mount Prospect, IL 60056');
   await expect(footer.locator('.footer-loc-phone')).toHaveText('(847) 250-9560');
   await expect(footer.locator('.footer-loc-phone')).toHaveAttribute('href', 'tel:8472509560');
+  await expect(footer.getByRole('button', { name: 'Change Location' })).toBeVisible();
 
   const hours = footer.locator('.footer-loc-hours-details');
   await expect(hours.locator('.footer-loc-hours-summary')).toContainText('Hours');
@@ -578,7 +488,7 @@ test('coming-soon location pages render footer contact fallback hours', async ({
   await page.goto('/houston');
 
   const footer = page.locator('footer.footer');
-  await expect(footer.locator('.footer-locations-title')).toHaveText('Time Mission Houston');
+  await expect(footer.locator('.footer-locations-title')).toHaveText('Houston');
   await expect(footer.locator('.footer-location-info')).toBeVisible();
   await expect(footer.locator('.footer-loc-address')).toContainText('7620 Katy Fwy');
   await expect(footer.locator('.footer-loc-phone')).toHaveText('(713) 588-1630');
@@ -600,7 +510,7 @@ test('selected location updates shared footer contact panel', async ({ page }) =
   await expect(footer.locator('.footer-locations-dropdown')).toBeVisible();
 
   await page.evaluate(() => window.TM.select('houston'));
-  await expect(footer.locator('.footer-locations-title')).toHaveText('Time Mission Houston');
+  await expect(footer.locator('.footer-locations-title')).toHaveText('Houston');
   await expect(footer.locator('.footer-locations-dropdown')).toBeHidden();
   await expect(footer.locator('.footer-location-info')).toBeVisible();
   await expect(footer.locator('.footer-loc-address')).toContainText('7620 Katy Fwy');
@@ -610,6 +520,10 @@ test('selected location updates shared footer contact panel', async ({ page }) =
   await expect(hours).not.toHaveAttribute('open', '');
   await hours.locator('.footer-loc-hours-summary').click();
   await expect(hours.locator('.footer-hours-row--note')).toContainText('Opening June 5, 2026');
+
+  await page.evaluate(() => window.TM.select('philadelphia'));
+  await expect(footer.locator('.footer-locations-title')).toHaveText('Philadelphia');
+  await expect(hours).not.toHaveAttribute('open', '');
 
   await page.evaluate(() => window.TM.clear());
   await expect(footer.locator('.footer-location-info')).toBeHidden();
@@ -739,41 +653,6 @@ test('group event card Book Now keeps the standard ticket booking flow', async (
   await expect(page).toHaveURL(/\/groups\.html$/);
 });
 
-test('West Nyack group inquiry CTAs hand off to the Briq widget instead of the raw Briq site', async ({ page }) => {
-  const briqScript = await stubBriqWidgetScript(page);
-  const briqProviderRequests = [];
-  await page.route('https://timemission-palisades.briqbookings.com/**', async (route) => {
-    briqProviderRequests.push(route.request().url());
-    await route.fulfill({
-      contentType: 'text/html',
-      body: '<!doctype html><title>Unexpected raw Briq navigation</title>',
-    });
-  });
-
-  await page.goto('/groups');
-  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
-  await page.evaluate(() => window.TM.select('west-nyack'));
-
-  await expect.poll(() => page.evaluate(() => window.TMBooking.resolveIntent({
-    kind: 'groups',
-    groupType: 'private-events',
-    locationId: 'west-nyack',
-  })?.href || '')).toBe('#briq-widget-container');
-
-  await page
-    .locator('[data-tm-booking-kind="groups"][data-tm-group-type="private-events"]')
-    .first()
-    .click();
-
-  await expect(page).toHaveURL(/\/groups$/);
-  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
-  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
-  await expect(page.locator('#briq-widget-container')).toBeVisible();
-  await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
-  expect(briqScript.requests).toBeGreaterThan(0);
-  expect(briqProviderRequests).toHaveLength(0);
-});
-
 test('group page Book Now CTAs keep the standard ticket booking flow', async ({ page }) => {
   await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
     await route.fulfill({
@@ -881,131 +760,6 @@ test('waiver panel routes Houston and Orland Park to location-data destinations'
   }
 });
 
-test('West Nyack routes generic booking to the current-page Briq panel', async ({ page }) => {
-  const briqScript = await stubBriqWidgetScript(page);
-
-  await page.goto('/?utm_source=paid&utm_campaign=spring&fbclid=fb123');
-  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
-  expect(briqScript.requests).toBe(0);
-
-  await page.evaluate(() => {
-    window.TM.select('west-nyack');
-    window.TMBooking.open({ kind: 'tickets' });
-  });
-
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '#');
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-booking-url', '#briq-widget-container');
-
-  await page.locator('#ticketBookBtn').click();
-  await expect(page).toHaveURL(/\/\?utm_source=paid&utm_campaign=spring&fbclid=fb123$/);
-  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
-  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
-  await expect(page.locator('#ticketOverlay')).toHaveClass(/active/);
-  await expect(page.locator('#ticketPanel [data-ticket-panel-standard]')).not.toBeVisible();
-  await expect(page.locator('#briq-widget-container')).toBeVisible();
-  await expect(page.locator('#briq-widget-container')).toHaveClass(/briq-panel-widget/);
-  await expect(page.locator('#briq-widget')).toHaveAttribute('data-domain', 'timemission-palisades');
-  await expect(page.locator('#briq-widget')).toHaveAttribute('data-button-text', 'BOOK NOW');
-  await expect(page.locator('#briq-widget')).toHaveAttribute('data-features', 'hideMainButton');
-  await expect(page.locator('#briq-widget')).not.toHaveAttribute('data-request-on-open', /./);
-  await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
-  await expect.poll(() => page.evaluate(() => {
-    const host = document.getElementById('briq-widget');
-    return host?.shadowRoot?.querySelector('.bw-widget-main')?.className || '';
-  })).toContain('bw-open');
-  expect(await page.evaluate(() => {
-    const host = document.getElementById('briq-widget');
-    return !!host?.shadowRoot?.querySelector('[data-briq-stub-button]');
-  })).toBe(false);
-  await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
-  expect(briqScript.requests).toBeGreaterThan(0);
-});
-
-test('West Nyack Briq panel shows loading feedback until the widget opens', async ({ page }) => {
-  await stubBriqWidgetScript(page, { mountDelayMs: 700 });
-
-  await page.goto('/?utm_source=paid&utm_campaign=spring');
-  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
-
-  await page.evaluate(() => {
-    window.TM.select('west-nyack');
-    window.TMBooking.open({ kind: 'tickets' });
-  });
-
-  await page.locator('#ticketBookBtn').click();
-
-  const loader = page.locator('#briq-widget-container [data-briq-widget-loader]');
-  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
-  await expect(page.locator('#briq-widget-container')).toHaveClass(/is-loading/);
-  await expect(page.locator('#briq-widget-container')).toHaveAttribute('aria-busy', 'true');
-  await expect(loader).toBeVisible();
-  await expect(loader).toContainText('Loading booking options');
-
-  await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
-  await expect(page.locator('#briq-widget-container')).not.toHaveClass(/is-loading/);
-  await expect(page.locator('#briq-widget-container')).not.toHaveAttribute('aria-busy', 'true');
-  await expect(loader).toBeHidden();
-});
-
-test('West Nyack location page opens Briq inside the booking panel instead of an iframe', async ({ page }) => {
-  const briqScript = await stubBriqWidgetScript(page);
-
-  await page.goto('/west-nyack');
-  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('west-nyack');
-  expect(briqScript.requests).toBeGreaterThan(0);
-
-  await page.locator('.nav-right .btn-tickets').click();
-  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
-  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
-  await expect(page.locator('#ticketOverlay')).toHaveClass(/active/);
-  await expect(page.locator('#ticketPanel [data-ticket-panel-standard]')).not.toBeVisible();
-  await expect(page.locator('#briq-widget-container')).toBeVisible();
-  await expect(page.locator('#briq-widget-container')).toHaveClass(/briq-panel-widget/);
-  await expect(page.locator('#briq-widget')).toHaveAttribute('data-domain', 'timemission-palisades');
-  await expect(page.locator('#briq-widget')).toHaveAttribute('data-color-1-base', '#FFBA00');
-  await expect(page.locator('#briq-widget')).toHaveAttribute('data-features', 'hideMainButton');
-  await expect(page.locator('#briq-widget')).toHaveAttribute('data-positioning', /\[\{'x-align':'right'/);
-  await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
-  await expect.poll(() => page.evaluate(() => {
-    const host = document.getElementById('briq-widget');
-    return host?.shadowRoot?.querySelector('.bw-widget-main')?.className || '';
-  })).toContain('bw-open');
-  expect(await page.evaluate(() => {
-    const host = document.getElementById('briq-widget');
-    return !!host?.shadowRoot?.querySelector('[data-briq-stub-button]');
-  })).toBe(false);
-  const briqPanelStyle = await page.locator('#ticketPanel').evaluate((panel) => {
-    const style = getComputedStyle(panel);
-    return {
-      width: style.width,
-      position: style.position,
-      right: style.right,
-      overflow: style.overflow,
-      viewportWidth: document.documentElement.clientWidth,
-    };
-  });
-  expect(briqPanelStyle.position).toBe('fixed');
-  expect(parseFloat(briqPanelStyle.right)).toBe(0);
-  expect(briqPanelStyle.overflow).toBe('hidden');
-  if (briqPanelStyle.viewportWidth > 650) {
-    expect(parseFloat(briqPanelStyle.width)).toBeGreaterThan(600);
-  } else {
-    expect(parseFloat(briqPanelStyle.width)).toBeGreaterThanOrEqual(Math.min(390, briqPanelStyle.viewportWidth));
-  }
-  await expect(page.locator('.booking-frame-overlay.active')).toHaveCount(0);
-
-  await page.keyboard.press('Escape');
-  await expect(page.locator('#ticketPanel')).not.toHaveClass(/active/);
-
-  await page.evaluate(() => {
-    window.__briqBookingOpened = 0;
-  });
-  await page.locator('main .btn-tickets[data-tm-location="west-nyack"]').first().click();
-  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
-  await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
-  await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);
-});
-
 test('faq accordion exposes keyboard accessible controls', async ({ page }) => {
   await page.goto('/faq');
 
@@ -1015,92 +769,6 @@ test('faq accordion exposes keyboard accessible controls', async ({ page }) => {
 
   await firstQuestion.press('Enter');
   await expect(firstQuestion).toHaveAttribute('aria-expanded', 'true');
-});
-
-test('contact form uses configured submission endpoint', async ({ page }) => {
-  await page.goto('/contact');
-
-  const form = page.locator('form.contact-form');
-  await expect(form).toHaveAttribute('method', /post/i);
-  await expect(form).toHaveAttribute('action', /\/api\/contact$/i);
-  await expect(form).toHaveAttribute('data-tm-form', 'contact');
-  await expect(form.locator('[data-tm-turnstile]')).toHaveCount(1);
-});
-
-test('contact page only shows direct info for the selected location', async ({ page }) => {
-  await page.goto('/contact#location=houston&type=updates');
-
-  await expect(page.locator('#location')).toHaveValue('houston');
-  await expect(page.locator('[data-location-contact-card]')).toBeVisible();
-  await expect(page.locator('[data-location-contact-name]')).toHaveText('Houston');
-  await expect(page.locator('[data-location-contact-phone]')).toHaveText('(713) 588-1630');
-  await expect(page.locator('[data-location-contact-email-row]')).toBeHidden();
-  await expect(page.locator('[data-location-contact-card]')).not.toContainText('Philadelphia');
-  await expect(page.locator('[data-location-contact-card]')).not.toContainText('Mount Prospect');
-
-  await page.locator('#location').selectOption('orland-park');
-  await expect(page.locator('[data-location-contact-card]')).toBeVisible();
-  await expect(page.locator('[data-location-contact-name]')).toHaveText('Orland Park');
-  await expect(page.locator('[data-location-contact-phone]')).toHaveText('(708) 294-8711');
-  await expect(page.locator('[data-location-contact-email]')).toHaveText('OrlandPark@TimeMission.com');
-  await expect(page.locator('[data-location-contact-card]')).not.toContainText('Houston');
-
-  await page.locator('#location').selectOption('dallas');
-  await expect(page.locator('[data-location-contact-card]')).toBeHidden();
-  await expect(page.locator('[data-location-contact-empty]')).toBeVisible();
-  await expect(page.locator('[data-location-contact-empty]')).toContainText('Dallas');
-});
-
-test('contact page still accepts historical query prefill links', async ({ page }) => {
-  await page.goto('/contact?location=houston&type=updates');
-
-  await expect(page.locator('#location')).toHaveValue('houston');
-  await expect(page.locator('#subject')).toHaveValue('general');
-  await expect(page).toHaveURL(/\/contact$/);
-});
-
-test('contact page follows the active site location', async ({ page }) => {
-  await page.goto('/contact');
-  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
-
-  await page.evaluate(() => window.TM.select('west-nyack'));
-  await expect(page.locator('#location')).toHaveValue('west-nyack');
-  await expect(page.locator('[data-location-contact-card]')).toBeVisible();
-  await expect(page.locator('[data-location-contact-name]')).toHaveText('West Nyack');
-
-  await page.evaluate(() => window.TM.select('philadelphia'));
-  await expect(page.locator('#location')).toHaveValue('philadelphia');
-  await expect(page.locator('[data-location-contact-name]')).toHaveText('Philadelphia');
-});
-
-test('contact page displays configured direct info for every location that has it', async ({ page }) => {
-  await page.goto('/contact');
-  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
-
-  for (const loc of contactLocations) {
-    const contact = loc.contact || {};
-    const phone = String(contact.phone || '').trim();
-    const email = String(contact.email || '').trim();
-
-    await page.locator('#location').selectOption(loc.id);
-    await expect(page.locator('#location')).toHaveValue(loc.id);
-    await expect(page.locator('[data-location-contact-card]')).toBeVisible();
-    await expect(page.locator('[data-location-contact-name]')).toHaveText(loc.shortName || loc.name);
-
-    if (phone) {
-      await expect(page.locator('[data-location-contact-phone-row]')).toBeVisible();
-      await expect(page.locator('[data-location-contact-phone]')).toHaveText(phone);
-    } else {
-      await expect(page.locator('[data-location-contact-phone-row]')).toBeHidden();
-    }
-
-    if (email) {
-      await expect(page.locator('[data-location-contact-email-row]')).toBeVisible();
-      await expect(page.locator('[data-location-contact-email]')).toHaveText(email);
-    } else {
-      await expect(page.locator('[data-location-contact-email-row]')).toBeHidden();
-    }
-  }
 });
 
 test('newsletter signup sections are hidden while acquisition is paused', async ({ page }) => {
@@ -1116,18 +784,6 @@ test('newsletter signup sections are hidden while acquisition is paused', async 
     );
     expect(visibleCount).toBe(0);
   }
-});
-
-test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer', async ({ page }) => {
-  await page.goto('/contact');
-  await page.locator('form.contact-form input#name').click();
-  const found = await page.evaluate(() => {
-    return (
-      Array.isArray(window.dataLayer) &&
-      window.dataLayer.some((entry) => entry && entry.event_name === 'CONTACT_FORM_FOCUS')
-    );
-  });
-  expect(found).toBe(true);
 });
 
 test('startup tagging config exposes consent profile by route type', async ({ page }) => {
@@ -1195,139 +851,4 @@ test('historical .html URLs are served or redirected (preview vs production redi
   // the built HTML at `/faq.html` with 200. Either behavior keeps old inbound links working.
   const res = await request.get('/faq.html');
   expect(res.status()).toBeLessThan(400);
-});
-
-test.describe('Mobile location selector', () => {
-  test.skip(({ isMobile }) => !isMobile, 'mobile-only test');
-
-  test('logo home navigation preserves the selected location', async ({ page }) => {
-    await page.goto('/philadelphia');
-    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
-
-    await page.locator('.nav-logo').first().tap();
-
-    await expect(page).toHaveURL(/\/philadelphia$/);
-    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
-    await expect(page.locator('#locationText')).toContainText('Philadelphia');
-    await expect.poll(() => page.evaluate(() => document.getElementById('taglineText')?.textContent || ''))
-      .toContain('Time Mission Philadelphia');
-  });
-
-  test('tapping a location link keeps the current page context', async ({ page }) => {
-    await page.goto('/groups');
-    await page.locator('#locationBtn').first().click();
-    await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
-
-    const philly = page.locator('#locationDropdown a[href*="philadelphia"]').first();
-    await expect(philly).toHaveAttribute('href', '/philadelphia/groups');
-    await philly.tap();
-
-    await expect(page).toHaveURL(/\/philadelphia\/groups$/);
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
-  });
-
-  test('tapping an EU location selects it without leaving the current page', async ({ page }) => {
-    await page.goto('/groups?utm_source=paid&utm_campaign=eu');
-    await page.locator('#locationBtn').first().click();
-    await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
-
-    const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
-    await expect(brussels).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
-    await brussels.tap();
-
-    await expect(page).toHaveURL(/\/groups\?utm_source=paid&utm_campaign=eu$/);
-    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('brussels');
-    await expect(page.locator('#locationText')).toContainText('Brussels');
-    await expect(page.locator('nav .btn-tickets')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
-  });
-});
-
-test.describe('small mobile (375x667)', () => {
-  test.use({ viewport: { width: 375, height: 667 } });
-
-  const REPRESENTATIVE_PAGES = ['/', '/antwerp', '/faq', '/locations'];
-
-  for (const url of REPRESENTATIVE_PAGES) {
-    test(`no horizontal scroll on ${url}`, async ({ page }) => {
-      await page.goto(url);
-      await page.locator('.nav').first().waitFor({ state: 'visible' });
-      const overflow = await page.evaluate(() => {
-        return {
-          scrollWidth: document.documentElement.scrollWidth,
-          innerWidth: window.innerWidth,
-        };
-      });
-      expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.innerWidth + 1);
-    });
-  }
-
-  test('selected location is visible in the mobile header without overflow', async ({ page }) => {
-    await page.goto('/mount-prospect');
-    const locBtn = page.locator('.location-btn').first();
-    const locationText = page.locator('#locationText');
-
-    await expect(locBtn).toHaveClass(/has-location/);
-    await expect(locationText).toBeVisible();
-    await expect(locationText).toContainText('Mount Prospect');
-    await expect(locBtn).toHaveAttribute('aria-label', 'Change location: Mount Prospect');
-
-    const labelBox = await locationText.evaluate((el) => ({
-      clientWidth: el.clientWidth,
-      scrollWidth: el.scrollWidth,
-    }));
-    expect(labelBox.scrollWidth).toBeLessThanOrEqual(labelBox.clientWidth + 1);
-
-    const box = await locBtn.boundingBox();
-    expect(box).not.toBeNull();
-    expect(box.width).toBeGreaterThanOrEqual(44);
-    expect(box.height).toBeGreaterThanOrEqual(44);
-
-    const overflow = await page.evaluate(() => {
-      return {
-        scrollWidth: document.documentElement.scrollWidth,
-        innerWidth: window.innerWidth,
-      };
-    });
-    expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.innerWidth + 1);
-  });
-
-  test('footer-legal row wraps at 375px', async ({ page }) => {
-    await page.goto('/about');
-    const footerLegal = page.locator('.footer-legal').first();
-    await footerLegal.scrollIntoViewIfNeeded();
-    await footerLegal.waitFor({ state: 'visible' });
-
-    const wrapInfo = await footerLegal.evaluate((el) => {
-      const cs = window.getComputedStyle(el);
-      return {
-        flexWrap: cs.flexWrap,
-        offsetHeight: el.offsetHeight,
-        childCount: el.children.length,
-      };
-    });
-    expect(wrapInfo.flexWrap).toBe('wrap');
-    expect(wrapInfo.offsetHeight).toBeGreaterThan(20);
-  });
-
-  test('location button preserves 44x44 tap target', async ({ page }) => {
-    await page.goto('/');
-    const locBtn = page.locator('.location-btn').first();
-    await locBtn.waitFor({ state: 'visible' });
-    await expect(locBtn).not.toHaveClass(/has-location/);
-    const box = await locBtn.boundingBox();
-    expect(box).not.toBeNull();
-    expect(box.width).toBeGreaterThanOrEqual(44);
-    expect(box.height).toBeGreaterThanOrEqual(44);
-  });
-
-  test('book-now button preserves 48x44 tap target on small mobile', async ({ page }) => {
-    await page.goto('/');
-    const ticketsBtn = page.locator('.nav-right .btn-tickets').first();
-    await ticketsBtn.waitFor({ state: 'visible' });
-    const box = await ticketsBtn.boundingBox();
-    expect(box).not.toBeNull();
-    expect(box.height).toBeGreaterThanOrEqual(48);
-  });
 });

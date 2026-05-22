@@ -353,6 +353,8 @@ describe('browser architecture contracts', () => {
     runScript('js/booking-journey.js', context);
     runScript('js/location-catalog-view.js', context);
     runScript('js/locations.js', context);
+    runScript('js/booking-frame.js', context);
+    runScript('js/booking-provider-briq.js', context);
     runScript('js/booking-controller.js', context);
     await Promise.resolve();
     await Promise.resolve();
@@ -696,6 +698,8 @@ describe('browser architecture contracts', () => {
     runScript('js/booking-journey.js', context);
     runScript('js/location-catalog-view.js', context);
     runScript('js/locations.js', context);
+    runScript('js/booking-frame.js', context);
+    runScript('js/booking-provider-briq.js', context);
     runScript('js/booking-controller.js', context);
     await Promise.resolve();
     await Promise.resolve();
@@ -740,6 +744,8 @@ describe('browser architecture contracts', () => {
     runScript('js/booking-journey.js', context);
     runScript('js/location-catalog-view.js', context);
     runScript('js/locations.js', context);
+    runScript('js/booking-frame.js', context);
+    runScript('js/booking-provider-briq.js', context);
     runScript('js/booking-controller.js', context);
     await Promise.resolve();
     await Promise.resolve();
@@ -763,6 +769,8 @@ describe('browser architecture contracts', () => {
     runScript('js/booking-journey.js', context);
     runScript('js/location-catalog-view.js', context);
     runScript('js/locations.js', context);
+    runScript('js/booking-frame.js', context);
+    runScript('js/booking-provider-briq.js', context);
     runScript('js/booking-controller.js', context);
     await Promise.resolve();
     await Promise.resolve();
@@ -817,6 +825,8 @@ describe('browser architecture contracts', () => {
   it('booking click handler prompts for tickets without a selected location but still navigates non-ticket links', async () => {
     const { context, window } = createBrowserContext();
     runScript('js/booking-journey.js', context);
+    runScript('js/booking-frame.js', context);
+    runScript('js/booking-provider-briq.js', context);
     runScript('js/booking-controller.js', context);
 
     function makeButton(attrs) {

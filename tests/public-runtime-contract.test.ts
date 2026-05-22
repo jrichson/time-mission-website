@@ -8,12 +8,18 @@ describe('Public runtime contract', () => {
 
     expect(new Set(ids).size).toBe(ids.length);
     expect(srcs).toContain('/js/booking-journey.js');
+    expect(srcs).toContain('/js/booking-frame.js');
+    expect(srcs).toContain('/js/booking-provider-briq.js');
     expect(srcs).toContain('/js/location-catalog-view.js');
     expect(srcs).toContain('/js/locations.js');
     expect(srcs).toContain('/js/booking-controller.js');
     expect(srcs).toContain('/js/ticket-panel.js');
+    expect(srcs.indexOf('/js/booking-journey.js')).toBeLessThan(srcs.indexOf('/js/booking-frame.js'));
+    expect(srcs.indexOf('/js/booking-journey.js')).toBeLessThan(srcs.indexOf('/js/booking-provider-briq.js'));
     expect(srcs.indexOf('/js/booking-journey.js')).toBeLessThan(srcs.indexOf('/js/locations.js'));
     expect(srcs.indexOf('/js/location-catalog-view.js')).toBeLessThan(srcs.indexOf('/js/locations.js'));
+    expect(srcs.indexOf('/js/booking-frame.js')).toBeLessThan(srcs.indexOf('/js/booking-controller.js'));
+    expect(srcs.indexOf('/js/booking-provider-briq.js')).toBeLessThan(srcs.indexOf('/js/booking-controller.js'));
     expect(srcs.indexOf('/js/booking-controller.js')).toBeLessThan(srcs.indexOf('/js/ticket-panel.js'));
   });
 
@@ -22,6 +28,8 @@ describe('Public runtime contract', () => {
 
     [
       '/js/booking-journey.js',
+      '/js/booking-frame.js',
+      '/js/booking-provider-briq.js',
       '/js/location-catalog-view.js',
       '/js/language-switcher.js',
       '/js/locations.js',

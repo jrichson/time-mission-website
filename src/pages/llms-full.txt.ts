@@ -117,11 +117,8 @@ function seoRows(): string {
 }
 
 export const GET: APIRoute = () => {
-    const lastUpdated = new Date().toISOString().slice(0, 10);
     const sections = [
         '# Time Mission Full AI Context',
-        '',
-        `Last updated: ${lastUpdated}`,
         '',
         '## Direct Answer Summary',
         '',

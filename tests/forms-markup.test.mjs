@@ -28,12 +28,12 @@ function sourceMarkup() {
 
 function groupsMarkup() {
   const groupsPartial = path.join(root, 'src', 'partials', 'groups-main.frag.txt');
-  const groupsDir = path.join(root, 'groups');
-  const groupSubpages = fs.existsSync(groupsDir)
-    ? walk(groupsDir).filter((file) => file.endsWith('.html'))
-    : [];
+  const groupsPagesDir = path.join(root, 'src', 'pages', 'groups');
+  const groupPages = walk(groupsPagesDir).filter((file) => file.endsWith('.astro'));
+  const groupPartials = walk(path.join(root, 'src', 'partials'))
+    .filter((file) => /(?:bachelor-ette|birthdays|corporate|field-trips|holidays|private-events)-main\.frag\.txt$/.test(file));
 
-  return [groupsPartial, ...groupSubpages].map((file) => ({
+  return [groupsPartial, ...groupPages, ...groupPartials].map((file) => ({
     file,
     text: fs.readFileSync(file, 'utf8'),
   }));
