@@ -4,7 +4,14 @@
  * Keeps structure in sync with `src/partials/faq-footer.frag.txt`.
  */
 import { allLocations, type LocationRecord } from '../data/locations';
-import { locationContactHref, locationHref, locationStatusBadge } from '../lib/location-view';
+import {
+    locationAddressLines,
+    locationContactHref,
+    locationHoursRows,
+    locationHref,
+    locationPhoneHref,
+    locationStatusBadge,
+} from '../lib/location-view';
 
 interface Props {
     pageLocation?: LocationRecord | null;
@@ -36,6 +43,19 @@ const antwerpLabel = antwerp?.navLabel || 'Belgium - Antwerp';
 const brusselsLabel = brussels?.navLabel || 'Belgium - Brussels';
 const brusselsOpeningLabel = brussels ? locationStatusBadge(brussels) : '';
 const contactHref = contactHrefForLocation(pageLocation);
+
+function hoursFallbackForLocation(loc: LocationRecord | null): string {
+    if (!loc) return '';
+    return locationStatusBadge(loc) || 'Hours coming soon';
+}
+
+const footerLocationName = pageLocation ? pageLocation.name || pageLocation.shortName : '';
+const footerAddressParts = locationAddressLines(pageLocation);
+const footerPhone = String(pageLocation?.contact.phone || '').trim();
+const footerPhoneHref = locationPhoneHref(pageLocation);
+const footerHoursRows = locationHoursRows(pageLocation);
+const footerHoursFallback = hoursFallbackForLocation(pageLocation);
+const hasPageLocation = Boolean(pageLocation);
 ---
 
 <footer class="footer">
@@ -91,8 +111,8 @@ const contactHref = contactHrefForLocation(pageLocation);
             </ul>
         </div>
         <div class="footer-column footer-locations-column">
-            <h3 class="footer-locations-title">LOCATIONS</h3>
-            <div class="footer-locations-dropdown">
+            <h3 class="footer-locations-title">{footerLocationName || 'LOCATIONS'}</h3>
+            <div class="footer-locations-dropdown" hidden={hasPageLocation}>
                 <div class="footer-location-group">
                     <button type="button" class="footer-location-toggle">
                         United States
@@ -133,14 +153,50 @@ const contactHref = contactHrefForLocation(pageLocation);
                     </div>
                 </div>
             </div>
-            <div class="footer-location-info" hidden>
-                <h5 class="footer-loc-name"></h5>
-                <p class="footer-loc-address"></p>
-                <a class="footer-loc-phone" href="tel:">
-                    <span class="visually-hidden">Call your selected location</span>
+            <div class="footer-location-info" hidden={!hasPageLocation}>
+                <div class="footer-loc-detail">
+                    <span class="footer-loc-label">Address</span>
+                    <p class="footer-loc-address">
+                        {footerAddressParts.map((part, index) => (
+                            <>
+                                {part}{index < footerAddressParts.length - 1 && <br />}
+                            </>
+                        ))}
+                    </p>
+                </div>
+                <div class="footer-loc-detail">
+                    <span class="footer-loc-label">Phone</span>
+                    <a class="footer-loc-phone" href={footerPhoneHref || undefined} hidden={!footerPhone}>
+                        {footerPhone || <span class="visually-hidden">Call your selected location</span>}
+                    </a>
+                    <p class="footer-loc-phone-note" hidden={Boolean(footerPhone)}>Phone coming soon</p>
+                </div>
+                <details class="footer-loc-hours-details">
+                    <summary class="footer-loc-hours-summary">
+                        <span>Hours</span>
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M6 9l6 6 6-6"></path>
+                        </svg>
+                    </summary>
+                    <div class="footer-loc-hours">
+                        {footerHoursRows.length ? (
+                            footerHoursRows.map((row) => (
+                                <div class="footer-hours-row">
+                                    <span>{row.day}</span>
+                                    <span>{row.label}</span>
+                                </div>
+                            ))
+                        ) : (
+                            <div class="footer-hours-row footer-hours-row--note">
+                                <span>Status</span>
+                                <span>{footerHoursFallback}</span>
+                            </div>
+                        )}
+                    </div>
+                </details>
+                <a class="footer-loc-map" href={pageLocation?.mapUrl || '#'} target="_blank" rel="noopener" hidden={!pageLocation?.mapUrl}>
+                    Get Directions →
                 </a>
-                <div class="footer-loc-hours"></div>
-                <a class="footer-loc-map" href="#" target="_blank" rel="noopener">Get Directions →</a>
                 <a class="footer-loc-change" href="#">Change Location</a>
             </div>
         </div>

@@ -364,19 +364,36 @@ html {
 }
 
 /* Footer Location Info (shown when location is selected) */
+.footer-locations-dropdown[hidden],
+.footer-location-info[hidden],
+.footer-loc-phone[hidden],
+.footer-loc-phone-note[hidden],
+.footer-loc-map[hidden] {
+    display: none;
+}
+
 .footer-location-info {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.8rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.footer-loc-name {
+.footer-loc-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.footer-loc-label {
+    color: rgba(255, 255, 255, 0.56);
     font-family: var(--tech);
+    font-size: 0.62rem;
     font-weight: 400;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    color: var(--white);
-    margin: 0;
+    letter-spacing: 0.14em;
+    line-height: 1.4;
+    text-transform: uppercase;
 }
 
 .footer-loc-address {
@@ -398,20 +415,79 @@ html {
     transition: color var(--motion-standard) ease;
 }
 
+.footer-loc-phone-note {
+    color: rgba(255, 255, 255, 0.62);
+    font-family: var(--body);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
 .footer-loc-phone:hover {
     color: var(--orange);
+}
+
+.footer-loc-hours-details {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-loc-hours-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--target-min);
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    font-family: var(--tech);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.13em;
+    list-style: none;
+    text-transform: uppercase;
+}
+
+.footer-loc-hours-summary::-webkit-details-marker {
+    display: none;
+}
+
+.footer-loc-hours-summary svg {
+    color: rgba(255, 255, 255, 0.45);
+    flex: 0 0 auto;
+    transition: transform var(--motion-standard) ease, color var(--motion-standard) ease;
+}
+
+.footer-loc-hours-details[open] .footer-loc-hours-summary svg {
+    transform: rotate(180deg);
+}
+
+.footer-loc-hours-summary:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+@media (hover: hover) {
+    .footer-loc-hours-summary:hover {
+        color: var(--orange);
+    }
+
+    .footer-loc-hours-summary:hover svg {
+        color: var(--orange);
+    }
 }
 
 .footer-loc-hours {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
-    margin-top: 0.25rem;
+    padding-bottom: 0.75rem;
 }
 
 .footer-hours-row {
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
     font-family: var(--body);
     font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.7);
@@ -420,6 +496,14 @@ html {
 .footer-hours-row span:first-child {
     color: rgba(255, 255, 255, 0.85);
     min-width: 80px;
+}
+
+.footer-hours-row--note {
+    color: rgba(255, 255, 255, 0.74);
+}
+
+.footer-hours-row--note span:first-child {
+    color: rgba(255, 255, 255, 0.56);
 }
 
 .footer-loc-map {
@@ -544,6 +628,7 @@ html {
     .footer-location-toggle:hover,
     .footer-location-list a:hover,
     .footer-loc-phone:hover,
+    .footer-loc-hours-summary:hover,
     .footer-loc-map:hover,
     .footer-loc-change:hover,
     .footer-link-button:hover {

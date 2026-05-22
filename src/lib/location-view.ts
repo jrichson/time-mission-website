@@ -6,6 +6,11 @@ export interface LocationContactItem {
     label: string;
 }
 
+export interface LocationHoursRow {
+    day: string;
+    label: string;
+}
+
 export interface LocationCtaView {
     href: string;
     isBookingTrigger: boolean;
@@ -25,6 +30,16 @@ export interface LocationViewModel {
     status: LocationRecord['status'];
 }
 
+const locationDayOrder = [
+    ['mon', 'Monday'],
+    ['tue', 'Tuesday'],
+    ['wed', 'Wednesday'],
+    ['thu', 'Thursday'],
+    ['fri', 'Friday'],
+    ['sat', 'Saturday'],
+    ['sun', 'Sunday'],
+] as const;
+
 export function locationSlug(loc: Pick<LocationRecord, 'id' | 'slug'>): string {
     return loc.slug || loc.id;
 }
@@ -38,6 +53,14 @@ export function locationAddressText(loc: Pick<LocationRecord, 'address'>, separa
     const cityLine = [address.city, address.state].filter(Boolean).join(', ');
     const postalLine = [cityLine, address.zip].filter(Boolean).join(' ');
     return [address.line1, address.line2, postalLine, address.country].filter(Boolean).join(separator);
+}
+
+export function locationAddressLines(loc: Pick<LocationRecord, 'address'> | null | undefined): string[] {
+    if (!loc) return [];
+    const address = loc.address;
+    const cityLine = [address.city, address.state].filter(Boolean).join(', ');
+    const postalLine = [cityLine, address.zip].filter(Boolean).join(' ');
+    return [address.line1, address.line2, postalLine].filter(Boolean);
 }
 
 export function locationStateBadge(loc: Pick<LocationRecord, 'address' | 'region'>): string {
@@ -60,6 +83,12 @@ export function locationContactItems(loc: Pick<LocationRecord, 'contact'>): Loca
     return items;
 }
 
+export function locationPhoneHref(loc: Pick<LocationRecord, 'contact'> | null | undefined): string {
+    const phone = String(loc?.contact.phone || '').trim();
+    if (!phone) return '';
+    return `tel:${phone.replace(/[^\d+]/g, '')}`;
+}
+
 export function locationContactHref(loc: Pick<LocationRecord, 'slug'>, type = 'updates'): string {
     const params = new URLSearchParams();
     params.set('location', loc.slug);
@@ -69,6 +98,14 @@ export function locationContactHref(loc: Pick<LocationRecord, 'slug'>, type = 'u
 
 export function locationMarket(loc: Pick<LocationRecord, 'address'>): string {
     return [loc.address.city, loc.address.state || loc.address.country].filter(Boolean).join(', ');
+}
+
+export function locationHoursRows(loc: Pick<LocationRecord, 'hours'> | null | undefined): LocationHoursRow[] {
+    if (!loc) return [];
+    return locationDayOrder.flatMap(([key, day]) => {
+        const label = loc.hours?.[key]?.label;
+        return label ? [{ day, label }] : [];
+    });
 }
 
 function locationOverlayAddressText(loc: Pick<LocationRecord, 'address'>): string {

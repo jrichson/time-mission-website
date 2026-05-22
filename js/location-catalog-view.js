@@ -52,10 +52,11 @@
         });
     }
 
-    function renderHoursTable(container, hours) {
+    function renderHoursTable(container, hours, fallback) {
         if (!container) return;
         container.textContent = '';
-        if (!hours) return;
+        if (!hours) hours = {};
+        var rendered = false;
         var dayLabels = {
             mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday',
             thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday'
@@ -71,7 +72,19 @@
             row.appendChild(dayEl);
             row.appendChild(timeEl);
             container.appendChild(row);
+            rendered = true;
         });
+        if (!rendered && fallback) {
+            var noteRow = document.createElement('div');
+            noteRow.className = 'footer-hours-row footer-hours-row--note';
+            var statusEl = document.createElement('span');
+            statusEl.textContent = translate('location.status', 'Status');
+            var fallbackEl = document.createElement('span');
+            fallbackEl.textContent = fallback;
+            noteRow.appendChild(statusEl);
+            noteRow.appendChild(fallbackEl);
+            container.appendChild(noteRow);
+        }
     }
 
     function addressTextForLocation(loc) {
@@ -273,12 +286,10 @@
 
         var dropdown = locationsColumn.querySelector('.footer-locations-dropdown');
         var infoPanel = locationsColumn.querySelector('.footer-location-info');
+        var titleEl = locationsColumn.querySelector('.footer-locations-title');
 
         if (!loc) {
-            if (infoPanel) {
-                var existingAddress = infoPanel.querySelector('.footer-loc-address');
-                if (existingAddress && existingAddress.textContent.trim()) return;
-            }
+            if (titleEl) titleEl.textContent = 'LOCATIONS';
             setHidden(dropdown, false);
             setHidden(infoPanel, true);
             return;
@@ -288,22 +299,35 @@
         if (!infoPanel) return;
 
         setHidden(infoPanel, false);
-        var nameEl = infoPanel.querySelector('.footer-loc-name');
         var addrEl = infoPanel.querySelector('.footer-loc-address');
         var phoneEl = infoPanel.querySelector('.footer-loc-phone');
+        var phoneNoteEl = infoPanel.querySelector('.footer-loc-phone-note');
         var hoursEl = infoPanel.querySelector('.footer-loc-hours');
         var mapEl = infoPanel.querySelector('.footer-loc-map');
+        var displayName = loc.name || loc.shortName || '';
 
-        if (nameEl) nameEl.textContent = loc.name || loc.shortName || '';
+        if (titleEl) titleEl.textContent = displayName || 'LOCATIONS';
         renderAddressLines(addrEl, loc.address);
         if (phoneEl && loc.contact && loc.contact.phone) {
             phoneEl.textContent = loc.contact.phone;
             phoneEl.href = 'tel:' + loc.contact.phone.replace(/[^\d+]/g, '');
+            setHidden(phoneEl, false);
+            setHidden(phoneNoteEl, true);
+        } else {
+            if (phoneEl) {
+                phoneEl.textContent = '';
+                phoneEl.removeAttribute('href');
+                setHidden(phoneEl, true);
+            }
+            if (phoneNoteEl) {
+                phoneNoteEl.textContent = translate('location.phoneComingSoon', 'Phone coming soon');
+                setHidden(phoneNoteEl, false);
+            }
         }
-        renderHoursTable(hoursEl, loc.hours);
+        renderHoursTable(hoursEl, loc.hours, loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : translate('location.hoursComingSoon', 'Hours coming soon'));
         if (mapEl) {
             mapEl.href = loc.mapUrl || '#';
-            mapEl.style.display = loc.mapUrl ? '' : 'none';
+            setHidden(mapEl, !loc.mapUrl);
         }
     }
 

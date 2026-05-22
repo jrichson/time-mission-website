@@ -552,6 +552,71 @@ test('location page drives nav state and ticket panel default location', async (
   );
 });
 
+test('location pages render footer contact details with accordion hours', async ({ page }) => {
+  await page.goto('/mount-prospect');
+
+  const footer = page.locator('footer.footer');
+  await expect(page.locator('footer.footer')).toHaveCount(1);
+  await expect(footer.locator('.footer-locations-title')).toHaveText('Time Mission Mount Prospect');
+  await expect(footer.locator('.footer-locations-dropdown')).toBeHidden();
+  await expect(footer.locator('.footer-location-info')).toBeVisible();
+  await expect(footer.locator('.footer-loc-address')).toContainText('132 Randhurst Village Drive');
+  await expect(footer.locator('.footer-loc-address')).toContainText('Mount Prospect, IL 60056');
+  await expect(footer.locator('.footer-loc-phone')).toHaveText('(847) 250-9560');
+  await expect(footer.locator('.footer-loc-phone')).toHaveAttribute('href', 'tel:8472509560');
+
+  const hours = footer.locator('.footer-loc-hours-details');
+  await expect(hours.locator('.footer-loc-hours-summary')).toContainText('Hours');
+  await expect(hours).not.toHaveAttribute('open', '');
+  await hours.locator('.footer-loc-hours-summary').click();
+  await expect(hours).toHaveAttribute('open', '');
+  await expect(hours.locator('.footer-hours-row')).toHaveCount(7);
+  await expect(hours.locator('.footer-hours-row').first()).toContainText('Monday');
+});
+
+test('coming-soon location pages render footer contact fallback hours', async ({ page }) => {
+  await page.goto('/houston');
+
+  const footer = page.locator('footer.footer');
+  await expect(footer.locator('.footer-locations-title')).toHaveText('Time Mission Houston');
+  await expect(footer.locator('.footer-location-info')).toBeVisible();
+  await expect(footer.locator('.footer-loc-address')).toContainText('7620 Katy Fwy');
+  await expect(footer.locator('.footer-loc-phone')).toHaveText('(713) 588-1630');
+
+  const hours = footer.locator('.footer-loc-hours-details');
+  await expect(hours).not.toHaveAttribute('open', '');
+  await hours.locator('.footer-loc-hours-summary').click();
+  await expect(hours).toHaveAttribute('open', '');
+  await expect(hours.locator('.footer-hours-row--note')).toContainText('Opening June 5, 2026');
+});
+
+test('selected location updates shared footer contact panel', async ({ page }) => {
+  await page.goto('/');
+
+  const footer = page.locator('footer.footer');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+  await page.evaluate(() => window.TM.clear());
+  await expect(footer.locator('.footer-location-info')).toBeHidden();
+  await expect(footer.locator('.footer-locations-dropdown')).toBeVisible();
+
+  await page.evaluate(() => window.TM.select('houston'));
+  await expect(footer.locator('.footer-locations-title')).toHaveText('Time Mission Houston');
+  await expect(footer.locator('.footer-locations-dropdown')).toBeHidden();
+  await expect(footer.locator('.footer-location-info')).toBeVisible();
+  await expect(footer.locator('.footer-loc-address')).toContainText('7620 Katy Fwy');
+  await expect(footer.locator('.footer-loc-phone')).toHaveText('(713) 588-1630');
+
+  const hours = footer.locator('.footer-loc-hours-details');
+  await expect(hours).not.toHaveAttribute('open', '');
+  await hours.locator('.footer-loc-hours-summary').click();
+  await expect(hours.locator('.footer-hours-row--note')).toContainText('Opening June 5, 2026');
+
+  await page.evaluate(() => window.TM.clear());
+  await expect(footer.locator('.footer-location-info')).toBeHidden();
+  await expect(footer.locator('.footer-locations-dropdown')).toBeVisible();
+  await expect(footer.locator('.footer-locations-title')).toHaveText('LOCATIONS');
+});
+
 test('non-Roller external ticket booking leaves through the provider URL', async ({ page }) => {
   await page.route('https://bookings.clubspeed.com/**', async (route) => {
     await route.fulfill({
