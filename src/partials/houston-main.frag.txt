@@ -9,10 +9,10 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <div class="hero-eyebrow">
-                <span class="tagline-text no-cursor" id="taglineText">{{LOCATION_NAME}}</span>
+                <span class="tagline-text no-cursor" id="taglineText">{{LOCATION_SHORT_NAME}}</span>
             </div>
             <h1 class="hero-title">
-                <span class="visually-hidden hero-h1-seo">{{LOCATION_NAME}} — 25+ Interactive Mission Rooms {{LOCATION_PAGE_STATUS_LABEL}}.</span>
+                <span class="visually-hidden hero-h1-seo">{{LOCATION_SHORT_NAME}} — 25+ Interactive Mission Rooms {{LOCATION_PAGE_STATUS_LABEL}}.</span>
                 <span class="line-1" aria-hidden="true">STEP INTO THE</span>
                 <span class="line-2" aria-hidden="true" role="presentation"></span>
             </h1>
