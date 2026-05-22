@@ -1199,14 +1199,20 @@ test.describe('small mobile (375x667)', () => {
   }
 
   test('selected location is visible in the mobile header without overflow', async ({ page }) => {
-    await page.goto('/philadelphia');
+    await page.goto('/mount-prospect');
     const locBtn = page.locator('.location-btn').first();
     const locationText = page.locator('#locationText');
 
     await expect(locBtn).toHaveClass(/has-location/);
     await expect(locationText).toBeVisible();
-    await expect(locationText).toContainText('Philadelphia');
-    await expect(locBtn).toHaveAttribute('aria-label', 'Change location: Philadelphia');
+    await expect(locationText).toContainText('Mount Prospect');
+    await expect(locBtn).toHaveAttribute('aria-label', 'Change location: Mount Prospect');
+
+    const labelBox = await locationText.evaluate((el) => ({
+      clientWidth: el.clientWidth,
+      scrollWidth: el.scrollWidth,
+    }));
+    expect(labelBox.scrollWidth).toBeLessThanOrEqual(labelBox.clientWidth + 1);
 
     const box = await locBtn.boundingBox();
     expect(box).not.toBeNull();

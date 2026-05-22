@@ -1,7 +1,7 @@
 
-        /* Page Header, override: contact uses 120px top padding */
+        /* Page Header, override: contact needs extra nav clearance */
         .page-header {
-            padding: 120px 2rem 4rem;
+            padding: 140px clamp(1.5rem, 4vw, 2.5rem) 4.5rem;
             text-align: center;
             background: linear-gradient(180deg, var(--black) 0%, var(--dark) 100%);
         }
@@ -23,7 +23,7 @@
 
         /* Contact Section */
         .contact-section {
-            padding: 2rem 2rem 6rem;
+            padding: 3rem clamp(1.5rem, 4vw, 2.5rem) 6.5rem;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -31,7 +31,7 @@
         .contact-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            gap: 3.5rem;
             min-width: 0;
         }
 
@@ -40,7 +40,7 @@
             background: var(--dark);
             border: 1px solid rgba(255, 107, 44, 0.15);
             border-radius: 20px;
-            padding: 2.5rem;
+            padding: clamp(2rem, 4vw, 2.75rem);
             min-width: 0;
             overflow-x: clip;
         }
@@ -184,7 +184,7 @@
             background: var(--dark);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.75rem;
             transition: background var(--motion-standard) ease, border-color var(--motion-standard) ease, box-shadow var(--motion-standard) ease, color var(--motion-standard) ease, opacity var(--motion-standard) ease, transform var(--motion-standard) ease;
         }
 
@@ -251,7 +251,7 @@
             border-radius: 16px;
             color: rgba(255, 255, 255, 0.72);
             line-height: 1.55;
-            padding: 1.5rem;
+            padding: 1.75rem;
         }
 
         /* General Contact */
@@ -259,7 +259,7 @@
             background: rgba(255, 107, 44, 0.05);
             border: 1px solid rgba(255, 107, 44, 0.2);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.75rem;
             margin-top: 1rem;
         }
 
@@ -283,12 +283,17 @@
         }
 
         @media (max-width: 480px) {
-            .page-header { padding: 100px 1rem 2rem; }
+            .page-header { padding: 120px 1.25rem 2.75rem; }
             .section-title { font-size: 2rem; }
             .page-subtitle { font-size: 0.95rem; line-height: 1.6; }
-            .contact-section { padding-left: 1rem; padding-right: 1rem; }
-            .contact-form-card { padding: 1.35rem 1rem; }
+            .contact-section { padding: 2rem 1.25rem 5rem; }
+            .contact-grid { gap: 1.75rem; }
+            .contact-form-card { padding: 1.65rem 1.25rem; border-radius: 16px; }
             .contact-form { padding-left: 0; padding-right: 0; }
+            .locations-info { gap: 1.25rem; }
+            .location-contact-card,
+            .location-contact-empty,
+            .general-contact { padding: 1.25rem; }
             .form-group input, .form-group textarea { padding: 0.75rem 0.9rem; font-size: 0.95rem; }
             .btn-submit { min-height: 44px; font-size: 0.85rem; padding: 0.85rem 1.5rem; }
         }

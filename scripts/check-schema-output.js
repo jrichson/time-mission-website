@@ -32,6 +32,10 @@ if (!fs.existsSync(distDir)) {
   process.exit(1);
 }
 
+function hasTimezoneQualifiedDatetime(value) {
+  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value);
+}
+
 function assertOrg(graph) {
   const orgs = findNodesByType(graph, 'Organization');
   if (orgs.length !== 1) {
@@ -87,6 +91,8 @@ for (const route of schemaRoutes) {
     for (const video of findNodesByType(graph, 'VideoObject')) {
       if (typeof video.uploadDate !== 'string' || !video.uploadDate.trim()) {
         errors.push(`${outFile}: VideoObject missing uploadDate`);
+      } else if (!hasTimezoneQualifiedDatetime(video.uploadDate)) {
+        errors.push(`${outFile}: VideoObject uploadDate must include full datetime and timezone`);
       }
     }
   }
