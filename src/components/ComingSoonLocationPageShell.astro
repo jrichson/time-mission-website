@@ -1,6 +1,7 @@
 ---
 import ComingSoonLocationPage from './ComingSoonLocationPage.astro';
 import LocationPageHeadLinks from './LocationPageHeadLinks.astro';
+import PageWidgetsScripts from './PageWidgetsScripts.astro';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { locationPageCssHref, locationPageLang } from '../lib/location-page-registry';
 
@@ -46,9 +47,6 @@ const pageCss = locationPageCssHref(slug);
     </Fragment>
     <ComingSoonLocationPage slug={slug} />
     <Fragment slot="after-site-scripts">
-        <script is:inline define:vars={{ pageInit: cityPage.pageInit }}>
-            window.__TM_PAGE_INIT__ = pageInit;
-        </script>
-        <script defer is:inline src="/js/page-widgets.js?v=6"></script>
+        <PageWidgetsScripts pageInit={cityPage.pageInit} />
     </Fragment>
 </SiteLayout>

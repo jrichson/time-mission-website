@@ -45,8 +45,8 @@ describe('Hero Media Surface', () => {
   });
 
   it('requires runtime reveal to wait until the video can paint', () => {
-    const runtime = fs.readFileSync(path.join(root, 'js/page-widgets.js'), 'utf8');
+    const runtime = fs.readFileSync(path.join(root, 'js/page-widgets-hero-video.js'), 'utf8');
 
-    expect(inspectHeroVideoRuntime(runtime, 'js/page-widgets.js')).toEqual([]);
+    expect(inspectHeroVideoRuntime(runtime, 'js/page-widgets-hero-video.js')).toEqual([]);
   });
 });

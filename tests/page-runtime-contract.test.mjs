@@ -6,7 +6,19 @@ import { describe, expect, it } from 'vitest';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
-const runtime = fs.readFileSync(path.join(root, 'js/page-widgets.js'), 'utf8');
+const pageWidgetRuntimeFiles = [
+  'js/page-widgets-shared.js',
+  'js/page-widgets-hero-video.js',
+  'js/page-widgets-tagline.js',
+  'js/page-widgets-counters.js',
+  'js/page-widgets-experiences.js',
+  'js/page-widgets-content.js',
+  'js/page-widgets-effects.js',
+  'js/page-widgets.js',
+];
+const runtime = pageWidgetRuntimeFiles
+  .map((file) => fs.readFileSync(path.join(root, file), 'utf8'))
+  .join('\n');
 
 function createTaglineElement() {
   return {
@@ -62,7 +74,7 @@ function runRuntime(pageInit) {
     window,
   };
 
-  vm.runInNewContext(runtime, context, { filename: 'js/page-widgets.js' });
+  vm.runInNewContext(runtime, context, { filename: 'page-widgets-runtime' });
   return elements;
 }
 
@@ -88,5 +100,13 @@ describe('page-widgets runtime contract', () => {
   it('uses canonical clean URLs for runtime navigation', () => {
     expect(runtime).not.toContain('missions.html');
     expect(runtime).toContain("window.location.href = '/missions'");
+  });
+
+  it('keeps the coordinator small and leaves widget behavior in focused files', () => {
+    const coordinator = fs.readFileSync(path.join(root, 'js/page-widgets.js'), 'utf8');
+    expect(coordinator.split('\n').length).toBeLessThanOrEqual(120);
+    for (const file of pageWidgetRuntimeFiles) {
+      expect(fs.existsSync(path.join(root, file))).toBe(true);
+    }
   });
 });

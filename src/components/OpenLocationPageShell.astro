@@ -1,6 +1,7 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import LocationPageHeadLinks from './LocationPageHeadLinks.astro';
+import PageWidgetsScripts from './PageWidgetsScripts.astro';
 import { locationPageCssHref, locationPageLang } from '../lib/location-page-registry';
 
 interface Props {
@@ -32,9 +33,6 @@ const pageCss = locationPageCssHref(slug);
     </Fragment>
     <div set:html={cityPage.mainHtml} />
     <Fragment slot="after-site-scripts">
-        <script is:inline define:vars={{ pageInit: cityPage.pageInit }}>
-            window.__TM_PAGE_INIT__ = pageInit;
-        </script>
-        <script defer is:inline src="/js/page-widgets.js?v=6"></script>
+        <PageWidgetsScripts pageInit={cityPage.pageInit} />
     </Fragment>
 </SiteLayout>

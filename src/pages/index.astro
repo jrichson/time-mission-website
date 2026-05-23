@@ -6,6 +6,7 @@ import { applyTmMediaBase } from '../lib/tm-media';
 import indexPrenav from '../partials/index-prenav.frag.txt?raw';
 import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 import { homePageTaglines } from '../lib/page-taglines';
+import PageWidgetsScripts from '../components/PageWidgetsScripts.astro';
 
 const ld = serializeGraph(buildHomeGraph());
 const page = definePage({ canonicalPath: '/' });
@@ -33,9 +34,6 @@ const pageInit = {
     <Fragment slot="pre-nav" set:html={indexPrenav} />
     <div class="home-main" set:html={indexMain} />
     <Fragment slot="after-site-scripts">
-        <script is:inline define:vars={{ pageInit }}>
-            window.__TM_PAGE_INIT__ = pageInit;
-        </script>
-        <script defer is:inline src="/js/page-widgets.js?v=6"></script>
+        <PageWidgetsScripts pageInit={pageInit} />
     </Fragment>
 </SiteLayout>

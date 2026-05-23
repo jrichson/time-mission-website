@@ -170,14 +170,19 @@ runCheck({
       if (!runtimeContract.includes(src)) errors.push(`public-runtime-contract.ts missing lazy runtime script: ${src}`);
     }
 
-    const widgets = read('js/page-widgets.js');
+    const widgets = [
+      'js/page-widgets-shared.js',
+      'js/page-widgets-experiences.js',
+      'js/page-widgets-effects.js',
+      'js/page-widgets-content.js',
+    ].map(read).join('\n');
     for (const needle of [
       'function runWhenVisible',
       'IntersectionObserver',
       'runWhenVisible(scrollEl, startAutoScroll, stopAutoScroll',
       'runWhenVisible(logosContainer, startTicker, stopTicker',
     ]) {
-      if (!widgets.includes(needle)) errors.push(`js/page-widgets.js missing mobile visibility gate: ${needle}`);
+      if (!widgets.includes(needle)) errors.push(`page widgets runtime missing mobile visibility gate: ${needle}`);
     }
   },
   onSuccess() {

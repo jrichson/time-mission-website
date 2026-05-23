@@ -39,7 +39,7 @@ runCheck({
       ));
     }
 
-    const runtimeRel = 'js/page-widgets.js';
+    const runtimeRel = 'js/page-widgets-hero-video.js';
     errors.push(...inspectHeroVideoRuntime(
       fs.readFileSync(path.join(root, runtimeRel), 'utf8'),
       runtimeRel,

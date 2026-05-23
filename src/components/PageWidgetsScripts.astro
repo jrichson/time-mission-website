@@ -1,0 +1,23 @@
+---
+interface Props {
+    pageInit: unknown;
+}
+
+const { pageInit } = Astro.props;
+const runtimeVersion = '7';
+const runtimeScripts = [
+    'page-widgets-shared',
+    'page-widgets-hero-video',
+    'page-widgets-tagline',
+    'page-widgets-counters',
+    'page-widgets-experiences',
+    'page-widgets-content',
+    'page-widgets-effects',
+    'page-widgets',
+].map((name) => `/js/${name}.js?v=${runtimeVersion}`);
+---
+
+<script is:inline define:vars={{ pageInit }}>
+    window.__TM_PAGE_INIT__ = pageInit;
+</script>
+{runtimeScripts.map((src) => <script defer is:inline src={src}></script>)}
