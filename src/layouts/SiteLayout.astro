@@ -135,11 +135,9 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQ
         <main id="main" tabindex="-1">
             <slot />
         </main>
-        <footer role="contentinfo">
-            <slot name="footer">
-                <SiteFooter pageLocation={pageLocation} />
-            </slot>
-        </footer>
+        <slot name="footer">
+            <SiteFooter pageLocation={pageLocation} />
+        </slot>
         <TicketPanel pageLocationSlug={bodyDataLocation} />
         <SiteScripts />
         <slot name="after-site-scripts" />

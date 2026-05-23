@@ -435,9 +435,8 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
         <script type="application/ld+json" is:inline set:html={jsonLdEmbed} />
     </Fragment>
 
-    <main
+    <div
         class:list={['tm-landing-main', `tm-landing-main--${template}`, { 'tm-landing-main--coming-soon': launchState === 'coming_soon' }]}
-        id="main"
     >
         <section class:list={['tm-landing-hero', `tm-landing-hero--${template}`]} data-landing-section={`${template}-hero`}>
             <div class="tm-landing-hero-media" aria-hidden="true">
@@ -660,7 +659,7 @@ const jsonLdEmbed = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
                 </div>
             </div>
         </section>
-    </main>
+    </div>
 
     <Fragment slot="after-site-scripts">
         <script is:inline define:vars={{ slug: doc.slug }}>

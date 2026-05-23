@@ -295,7 +295,7 @@
     // ==========================================
     // INFINITE EXPERIENCES CAROUSEL WITH DRAG SCROLL + 3D TILT
     // Returns nothing — wires DOM listeners on #experiencesScroll, prev/next,
-    // and tilt on .experience-card. Inlines the click→missions.html handler
+    // and tilt on .experience-card. Inlines the click-to-missions handler
     // because it depends on closure-shared isHovering/wasDragged state.
     //
     // Ships the index-style smoothSlide (handles backward-from-zero by jumping
@@ -545,7 +545,7 @@
 
             card.addEventListener('click', function () {
                 if (isHovering && !wasDragged) {
-                    window.location.href = 'missions.html';
+                    window.location.href = '/missions';
                 }
             });
         });

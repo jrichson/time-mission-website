@@ -84,4 +84,9 @@ describe('page-widgets runtime contract', () => {
 
     expect(elements.get('taglineText').textContent).toBe('Index Tagline');
   });
+
+  it('uses canonical clean URLs for runtime navigation', () => {
+    expect(runtime).not.toContain('missions.html');
+    expect(runtime).toContain("window.location.href = '/missions'");
+  });
 });

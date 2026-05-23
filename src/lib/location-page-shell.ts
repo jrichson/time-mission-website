@@ -33,12 +33,6 @@ function cityPageInit(location: LocationRecord, taglines: string[]) {
     };
 }
 
-function withoutEmbeddedLegacyFooter(mainRaw: string): string {
-    const marker = '<!-- Footer -->';
-    const markerIndex = mainRaw.lastIndexOf(marker);
-    return markerIndex === -1 ? mainRaw : `${mainRaw.slice(0, markerIndex).trimEnd()}\n`;
-}
-
 export function buildOpenLocationPage({
     mainRaw,
     slug,
@@ -52,7 +46,7 @@ export function buildOpenLocationPage({
         canonicalPath,
         ld: locationJsonLd(location),
         location,
-        mainHtml: applyTmMediaBase(withoutEmbeddedLegacyFooter(mainRaw)),
+        mainHtml: applyTmMediaBase(mainRaw),
         page: definePage({ canonicalPath }),
         pageInit: cityPageInit(location, locationPageTaglines(slug)),
     };

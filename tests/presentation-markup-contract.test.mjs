@@ -18,6 +18,10 @@ function walk(dir, acc = []) {
   return acc;
 }
 
+function astroPages() {
+  return walk(path.join(root, 'src/pages')).filter((file) => file.endsWith('.astro'));
+}
+
 describe('presentation markup contract', () => {
   it('keeps shared markup free of inline style attributes', () => {
     const files = [
@@ -49,5 +53,22 @@ describe('presentation markup contract', () => {
     });
 
     expect(offenders).toEqual([]);
+  });
+
+  it('keeps SiteLayout as the owner of page landmarks', () => {
+    const pageOffenders = astroPages().flatMap((file) => {
+      const rel = path.relative(root, file);
+      const text = fs.readFileSync(file, 'utf8');
+      if (!/<SiteLayout\b/.test(text)) return [];
+      return text
+        .split('\n')
+        .map((line, index) => ({ line, index }))
+        .filter(({ line }) => /<\/?main\b/.test(line))
+        .map(({ index }) => `${rel}:${index + 1}`);
+    });
+
+    const layout = fs.readFileSync(path.join(root, 'src/layouts/SiteLayout.astro'), 'utf8');
+    expect(pageOffenders).toEqual([]);
+    expect(layout).not.toMatch(/<footer[^>]*>\s*<slot name="footer"/s);
   });
 });
