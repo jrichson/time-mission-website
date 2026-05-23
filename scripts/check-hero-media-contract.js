@@ -18,6 +18,7 @@ runCheck({
   run(errors) {
     const partials = listHeroVideoPartials(root);
     const baseCss = fs.readFileSync(path.join(root, 'css', 'base.css'), 'utf8');
+    const layoutGuardsCss = fs.readFileSync(path.join(root, 'css', 'layout-guards.css'), 'utf8');
     const locationPageCss = fs.readFileSync(path.join(root, 'css', 'location-page.css'), 'utf8');
     if (!partials.length) {
       errors.push('No hero video partials found');
@@ -34,8 +35,8 @@ runCheck({
       }
       const cssRel = path.relative(root, cssPath);
       errors.push(...inspectHeroVideoCss(
-        `${baseCss}\n${locationPageCss}\n${fs.readFileSync(cssPath, 'utf8')}`,
-        `css/base.css + css/location-page.css + ${cssRel}`,
+        `${baseCss}\n${layoutGuardsCss}\n${locationPageCss}\n${fs.readFileSync(cssPath, 'utf8')}`,
+        `css/base.css + css/layout-guards.css + css/location-page.css + ${cssRel}`,
       ));
     }
 

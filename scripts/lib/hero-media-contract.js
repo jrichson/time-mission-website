@@ -2,6 +2,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const locationPageAssets = require('../../src/data/site/location-page-assets.json');
 
 const HERO_POSTER = '/assets/video/hero-poster-960.webp';
 
@@ -119,7 +120,9 @@ function listHeroVideoPartials(root) {
 }
 
 function pageCssPathForMainPartial(root, partialName) {
-  const cssName = `page-${partialName.replace(/-main\.frag\.txt$/, '.css')}`;
+  const slug = partialName.replace(/-main\.frag\.txt$/, '');
+  const href = locationPageAssets.css && locationPageAssets.css[slug];
+  const cssName = href ? path.basename(String(href).split('?')[0]) : `page-${slug}.css`;
   return path.join(root, 'css', cssName);
 }
 

@@ -1,0 +1,218 @@
+/* ==========================================
+   HOMEPAGE GROUPS CTA
+   Homepage only
+   ========================================== */
+
+/* Groups & Parties CTA, Netflix House style */
+.groups-cta {
+    position: relative;
+    background: var(--dark);
+    padding: 0;
+    overflow: visible;
+}
+
+.groups-cta-photo {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+
+.groups-cta-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+}
+
+/* Gradient fade from photo into card */
+.groups-cta-photo::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 200px;
+    background: linear-gradient(to top, var(--dark) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.groups-cta-card {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: -80px auto 0;
+    background: var(--dark);
+    border-radius: 24px 24px 0 0;
+    padding: 3rem 3rem 3.5rem;
+    text-align: center;
+}
+
+.groups-cta-card .section-title {
+    margin-bottom: 0.75rem;
+}
+
+.groups-cta-card .welcome-text {
+    color: var(--gray);
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.groups-event-types {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+    max-width: 680px;
+    margin: 2rem auto 2rem;
+}
+
+.groups-event-type {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.25rem;
+    text-decoration: none;
+    transition: background var(--motion-standard) ease, border-color var(--motion-standard) ease, box-shadow var(--motion-standard) ease, color var(--motion-standard) ease, opacity var(--motion-standard) ease, transform var(--motion-standard) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .groups-event-type:hover {
+        transform: translateY(-2px);
+    }
+
+    .groups-event-type:hover svg,
+    .groups-event-type:hover span {
+        color: var(--orange);
+    }
+}
+
+.groups-event-type svg {
+    width: 24px;
+    height: 24px;
+    color: var(--orange);
+    stroke-width: 1.5;
+}
+
+.groups-event-type span {
+    font-family: var(--body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--white);
+    text-align: center;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 768px) {
+    .groups-event-types {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+        margin: 1.5rem auto;
+    }
+    .groups-event-type {
+        padding: 0.4rem 0.2rem;
+    }
+    .groups-event-type span {
+        font-size: 0.65rem;
+    }
+}
+
+.btn-start-planning {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    text-decoration: none;
+    font-family: var(--tech);
+    font-size: 0.85rem;
+    font-weight: 400;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: background var(--motion-standard) ease, border-color var(--motion-standard) ease, box-shadow var(--motion-standard) ease, color var(--motion-standard) ease, opacity var(--motion-standard) ease, transform var(--motion-standard) ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-top: 1.25rem;
+}
+
+
+.btn-start-planning:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+    transform: translateY(-2px);
+}
+
+.groups-cta-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.25rem;
+}
+
+.groups-cta-buttons .btn-start-planning,
+.groups-cta-buttons .btn-group-tickets {
+    margin-top: 0;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    .groups-cta-buttons {
+        gap: 0.5rem;
+    }
+    .groups-cta-buttons .btn-start-planning,
+    .groups-cta-buttons .btn-group-tickets {
+        flex: 1 1 0;
+        min-width: 0;
+        justify-content: center;
+        padding: 0.75rem 0.75rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.05em;
+    }
+    .groups-cta-buttons .btn-start-planning svg,
+    .groups-cta-buttons .btn-group-tickets svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+    }
+}
+
+.btn-group-tickets {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    text-decoration: none;
+    font-family: var(--tech);
+    font-size: 0.85rem;
+    font-weight: 400;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: background var(--motion-standard) ease, border-color var(--motion-standard) ease, box-shadow var(--motion-standard) ease, color var(--motion-standard) ease, opacity var(--motion-standard) ease, transform var(--motion-standard) ease;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
+}
+
+.btn-group-tickets:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+}
+
+@media (max-width: 768px) {
+    .groups-cta-photo {
+        height: 280px;
+    }
+
+    .groups-cta-card {
+        max-width: none;
+        margin: -40px 1.25rem 0;
+        padding: 2rem 1.5rem 2.5rem;
+        border-radius: 20px 20px 0 0;
+        box-shadow: none;
+    }
+}

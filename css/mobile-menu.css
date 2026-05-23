@@ -1,0 +1,162 @@
+/* ==========================================
+   SHARED MOBILE MENU
+   Included on all pages
+   ========================================== */
+
+/* ---- Full-screen Mobile Menu ---- */
+.mobile-menu {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .mobile-menu {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 999;
+        background: var(--black);
+        padding:
+            calc(100px + env(safe-area-inset-top, 0px))
+            calc(1.5rem + env(safe-area-inset-right, 0px))
+            calc(2rem + env(safe-area-inset-bottom, 0px))
+            calc(1.5rem + env(safe-area-inset-left, 0px));
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.35s ease, visibility 0.35s ease;
+        overflow-y: auto;
+    }
+
+    .mobile-menu.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Move nav to top when mobile menu is open */
+    .nav.menu-open {
+        top: env(safe-area-inset-top, 0px);
+    }
+
+    /* Hide ticker when mobile menu is open */
+    .ticker-bar.menu-hidden {
+        display: none;
+    }
+
+    /* Hide tickets when mobile menu is open */
+    .nav.menu-open .btn-tickets {
+        display: none;
+    }
+
+    /* Show city name next to pin when menu is open */
+    .nav.menu-open .location-btn {
+        display: flex;
+    }
+
+    .nav.menu-open .location-btn #locationText {
+        display: inline !important;
+    }
+
+    .mobile-menu-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .mobile-menu-links li {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mobile-menu-links a {
+        display: block;
+        padding: 1.1rem 0;
+        color: var(--white);
+        text-decoration: none;
+        font-family: var(--tech);
+        font-size: 1rem;
+        font-weight: 400;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        transition: color var(--motion-fast) ease;
+    }
+
+    .mobile-menu-links a:hover,
+    .mobile-menu-links a:active {
+        color: var(--orange);
+    }
+
+    .mobile-menu-socials {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        padding-top: 2rem;
+    }
+
+    .mobile-menu-socials a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--target-min);
+        height: var(--target-min);
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: var(--white);
+        transition:
+            border-color var(--motion-standard) ease,
+            color var(--motion-standard) ease,
+            transform var(--motion-standard) ease;
+    }
+
+    .mobile-menu-socials a:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+        transform: translateY(-2px);
+    }
+
+    .mobile-menu-socials svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .mobile-menu-cta {
+        padding-top: 1.5rem;
+    }
+
+    .mobile-menu-cta a {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        background: var(--gradient-primary);
+        color: var(--white);
+        text-align: center;
+        text-decoration: none;
+        font-family: var(--tech);
+        font-size: 0.85rem;
+        font-weight: 400;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        border-radius: 100px;
+        box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
+    }
+
+    .mobile-menu-language {
+        display: flex;
+        justify-content: center;
+        padding-top: 1.5rem;
+    }
+
+    .language-switcher--desktop {
+        display: none;
+    }
+
+    .language-switcher--mobile {
+        display: inline-flex;
+    }
+
+    .language-switcher--mobile select {
+        min-width: 6rem;
+        text-align: center;
+    }
+}

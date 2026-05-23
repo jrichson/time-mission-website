@@ -1,0 +1,19 @@
+{
+  "css": {
+    "antwerp": "/css/page-west-nyack.css?v=2",
+    "brussels": "/css/page-houston.css?v=2",
+    "dallas": "/css/page-houston.css?v=2",
+    "houston": "/css/page-houston.css?v=2",
+    "lincoln": "/css/page-mount-prospect.css?v=2",
+    "manassas": "/css/page-west-nyack.css?v=2",
+    "mount-prospect": "/css/page-mount-prospect.css?v=2",
+    "nashville": "/css/page-houston.css?v=2",
+    "orland-park": "/css/page-houston.css?v=2",
+    "philadelphia": "/css/page-philadelphia.css?v=2",
+    "west-nyack": "/css/page-west-nyack.css?v=2"
+  },
+  "lang": {
+    "antwerp": "nl-BE",
+    "brussels": "fr-BE"
+  }
+}

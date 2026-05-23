@@ -2,6 +2,12 @@
 # Phase 02 — legacy sources and aliases redirect to clean canonical paths
 # See docs/redirect-map.md for Cloudflare vs Netlify behavior and verification.
 
+# Retired duplicate location CSS assets. Keep old cache-era CSS URLs working
+# while current pages use the canonical shared files from location-page-assets.json.
+/css/page-antwerp.css /css/page-west-nyack.css 200
+/css/page-lincoln.css /css/page-mount-prospect.css 200
+/css/page-manassas.css /css/page-west-nyack.css 200
+
 # Case-variant location URLs (audit SEO #12 — duplicate-content risk)
 # Redirect title-case and all-caps spellings to canonical lowercase slug.
 # Arbitrary mixed-case and dash-insensitive location inputs are normalized by

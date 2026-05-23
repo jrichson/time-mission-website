@@ -1,0 +1,316 @@
+/* ==========================================
+   HOMEPAGE HOW IT WORKS, FAQ, AND FINAL CTA
+   Homepage only
+   ========================================== */
+
+/* How It Works */
+.how-it-works {
+    padding: 3rem 2rem 3rem;
+    background: linear-gradient(180deg, var(--dark) 0%, var(--black) 100%);
+}
+
+.how-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 40px; /* centers on the 80px circles */
+    left: 14%;
+    right: 14%;
+    height: 2px;
+    background: var(--gradient-primary);
+    z-index: 0;
+    transform: scaleX(0);
+    transform-origin: center;
+    opacity: 0;
+    animation: lineDraw 0.6s ease 0.2s forwards;
+}
+
+.step-card {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.step-number {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: 50%;
+    font-family: var(--display);
+    font-size: 2rem;
+    color: var(--white);
+    position: relative;
+    box-shadow: 0 4px 20px rgba(239, 75, 35, 0.4);
+}
+
+.step-card:nth-child(2) .step-number,
+.step-card:nth-child(3) .step-number,
+.step-card:nth-child(4) .step-number {
+    background: var(--gradient-primary);
+}
+
+.step-title {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.step-text {
+    font-size: 0.9rem;
+    color: var(--gray);
+    line-height: 1.6;
+}
+
+/* Mini FAQ */
+.mini-faq {
+    padding: 3rem 2rem;
+    background: var(--black);
+    position: relative;
+}
+
+.mini-faq::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent 0%, rgba(239, 75, 35, 0.15) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.mini-faq-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.mini-faq-grid {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: relative;
+    z-index: 2;
+}
+
+.mini-faq-item {
+    background: var(--dark);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.mini-faq-item:hover {
+    border-color: rgba(255, 107, 44, 0.2);
+}
+
+.mini-faq-q {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    color: var(--white);
+    font-family: var(--body);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.mini-faq-q svg {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--orange);
+    transition: transform 0.3s ease;
+}
+
+.mini-faq-item.open .mini-faq-q svg {
+    transform: rotate(45deg);
+}
+
+.mini-faq-a {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: grid-template-rows 0.3s ease;
+}
+
+.mini-faq-item.open .mini-faq-a {
+    grid-template-rows: 1fr;
+}
+
+.mini-faq-a p {
+    min-height: 0;
+    padding: 0 1.5rem 1.25rem;
+    color: var(--gray);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.mini-faq-cta {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.btn-see-all-faq {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    text-decoration: none;
+    font-family: var(--tech);
+    font-size: 0.85rem;
+    font-weight: 400;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: background var(--motion-standard) ease, border-color var(--motion-standard) ease, box-shadow var(--motion-standard) ease, color var(--motion-standard) ease, opacity var(--motion-standard) ease, transform var(--motion-standard) ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-see-all-faq:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+    transform: translateY(-2px);
+}
+
+/* CTA Section, photo bleed style */
+.cta-section {
+    position: relative;
+    background: var(--dark);
+    padding: 0;
+    overflow: visible;
+}
+
+/* Remove the button glow on mobile so it doesn't bleed into surrounding content */
+@media (max-width: 768px) {
+    .final-cta .btn-tickets,
+    .final-cta .btn-primary {
+        box-shadow: none;
+    }
+    .final-cta .btn-tickets:hover,
+    .final-cta .btn-primary:hover {
+        box-shadow: none;
+    }
+}
+
+.cta-photo {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+.cta-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+}
+
+.cta-photo::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 200px;
+    background: linear-gradient(to top, var(--dark) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.cta-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: -80px auto 0;
+    background: var(--dark);
+    border-radius: 24px 24px 0 0;
+    padding: 3rem 3rem 3.5rem;
+    text-align: center;
+}
+
+.final-cta {
+    padding-bottom: 2rem;
+}
+
+.cta-title {
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: 0.02em;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .cta-photo {
+        height: 280px;
+    }
+
+    .cta-content {
+        max-width: none;
+        margin: -40px 1.25rem 0;
+        padding: 2rem 1.5rem 2.5rem;
+        border-radius: 20px 20px 0 0;
+        box-shadow: none;
+    }
+}
+
+.cta-text {
+    color: var(--gray);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+}
+
+@media (max-width: 1024px) {
+    .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3rem;
+    }
+
+    .steps-grid::before {
+        left: 12%;
+        right: 12%;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .steps-grid::before {
+        left: 14%;
+        right: 14%;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+}

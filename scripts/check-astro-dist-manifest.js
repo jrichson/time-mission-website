@@ -35,6 +35,24 @@ function readDist(rel) {
   return fs.readFileSync(path.join(distDir, rel), 'utf8');
 }
 
+function walkHtml(dir, acc = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (path.relative(distDir, full).startsWith(`assets${path.sep}extracted`)) continue;
+      walkHtml(full, acc);
+    } else if (entry.name.endsWith('.html')) {
+      acc.push(full);
+    }
+  }
+  return acc;
+}
+
+function stylesheetHrefs(html) {
+  return [...html.matchAll(/<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+)["'][^>]*>/gi)]
+    .map((match) => match[1]);
+}
+
 mustFile('_headers');
 mustFile('_redirects');
 mustFile('robots.txt');
@@ -46,6 +64,7 @@ mustFile('pricing.md');
 mustFile('404.html');
 mustFile('data/locations.json');
 mustFile('css/base.css');
+mustDirHasFiles('css/bundles');
 mustFile('js/locations.js');
 mustFile('assets/logo/TM_Logo_White.svg');
 mustDirHasFiles('assets/fonts');
@@ -81,6 +100,23 @@ if (fs.existsSync(path.join(distDir, 'index.html'))) {
   }
   if (!/<body[^>]*>\s*<!-- Google Tag Manager \(noscript\) -->\s*<noscript>/i.test(home)) {
     errors.push('index.html: GTM noscript must be the first rendered body child');
+  }
+}
+
+for (const htmlFile of walkHtml(distDir)) {
+  const rel = path.relative(distDir, htmlFile);
+  const localCss = stylesheetHrefs(fs.readFileSync(htmlFile, 'utf8'))
+    .filter((href) => href.startsWith('/css/'));
+  if (localCss.length > 2) {
+    errors.push(`${rel}: expected bundled CSS output to use at most 2 local stylesheet links, found ${localCss.length}`);
+  }
+  if (!localCss.some((href) => /^\/css\/bundles\/site-core\.[a-f0-9]{10}\.css$/.test(href))) {
+    errors.push(`${rel}: missing site-core CSS bundle`);
+  }
+  for (const href of localCss) {
+    if (!href.startsWith('/css/bundles/')) {
+      errors.push(`${rel}: unbundled stylesheet link remains (${href})`);
+    }
   }
 }
 
