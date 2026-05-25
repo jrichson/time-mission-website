@@ -9,28 +9,17 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import url from 'node:url';
+import { createRequire } from 'node:module';
 import * as esbuild from 'esbuild';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+const { stylesheetLinks } = require('./lib/html-link-parser.cjs');
+const siteCssAssets = require('../src/data/site/site-css-assets.json');
 const distDir = path.resolve(__dirname, '..', 'dist');
 const bundleDir = path.join(distDir, 'css', 'bundles');
 
-const SITE_CORE_CSS = [
-    '/css/variables.css',
-    '/css/base.css',
-    '/css/layout-guards.css',
-    '/css/social-proof.css',
-    '/css/game-popup.css',
-    '/css/small-viewport-overrides.css',
-    '/css/page-shell.css',
-    '/css/nav-ticker.css',
-    '/css/nav.css',
-    '/css/mobile-menu.css',
-    '/css/location-overlay.css',
-    '/css/footer.css',
-    '/css/newsletter.css',
-    '/css/ticket-panel.css',
-];
+const SITE_CORE_CSS = siteCssAssets.core.map((href) => new URL(href, 'https://timemission.local').pathname);
 
 const siteCoreSet = new Set(SITE_CORE_CSS);
 
@@ -47,46 +36,6 @@ async function walkHtml(dir) {
         }
     }
     return out;
-}
-
-function parseAttributes(tag) {
-    const attrs = {};
-    const attrRe = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)(?:\s*=\s*(["'])(.*?)\2)?/g;
-    for (const match of String(tag || '').matchAll(attrRe)) {
-        const name = match[1].toLowerCase();
-        if (name === 'link') continue;
-        attrs[name] = match[3] === undefined ? true : match[3];
-    }
-    return attrs;
-}
-
-function cssPathname(href) {
-    try {
-        const parsed = new URL(href, 'https://timemission.local');
-        return parsed.pathname;
-    } catch {
-        return '';
-    }
-}
-
-function stylesheetLinks(html) {
-    const links = [];
-    const linkRe = /<link\b[^>]*>/gi;
-    let match;
-    while ((match = linkRe.exec(html)) !== null) {
-        const tag = match[0];
-        const attrs = parseAttributes(tag);
-        const rel = String(attrs.rel || '').toLowerCase().split(/\s+/);
-        if (!rel.includes('stylesheet') || !attrs.href) continue;
-        links.push({
-            tag,
-            href: String(attrs.href),
-            pathname: cssPathname(String(attrs.href)),
-            start: match.index,
-            end: match.index + tag.length,
-        });
-    }
-    return links;
 }
 
 function distCssPath(pathname) {

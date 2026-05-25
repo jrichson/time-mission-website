@@ -4,9 +4,13 @@
  */
 const fs = require('node:fs');
 const path = require('node:path');
+const { shouldExcludeArtifactPath } = require('./lib/cloudflare-artifact-contract.cjs');
+const { stylesheetLinks } = require('./lib/html-link-parser.cjs');
 
 const root = path.resolve(__dirname, '..');
 const distDir = path.join(root, 'dist');
+const astroManifest = JSON.parse(fs.readFileSync(path.join(root, 'src/data/site/astro-rendered-output-files.json'), 'utf8'));
+const astroRenderedHtml = new Set(astroManifest.outputFiles || []);
 
 const errors = [];
 
@@ -35,22 +39,25 @@ function readDist(rel) {
   return fs.readFileSync(path.join(distDir, rel), 'utf8');
 }
 
-function walkHtml(dir, acc = []) {
+function walkFiles(dir, acc = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
+    const rel = path.relative(distDir, full).split(path.sep).join('/');
+    if (shouldExcludeArtifactPath(rel)) {
+      errors.push(`Unexpected stale/generated artifact in dist: ${rel}`);
+    }
     if (entry.isDirectory()) {
       if (path.relative(distDir, full).startsWith(`assets${path.sep}extracted`)) continue;
-      walkHtml(full, acc);
-    } else if (entry.name.endsWith('.html')) {
+      walkFiles(full, acc);
+    } else {
       acc.push(full);
     }
   }
   return acc;
 }
 
-function stylesheetHrefs(html) {
-  return [...html.matchAll(/<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+)["'][^>]*>/gi)]
-    .map((match) => match[1]);
+function htmlFiles() {
+  return walkFiles(distDir).filter((file) => file.endsWith('.html'));
 }
 
 mustFile('_headers');
@@ -86,6 +93,10 @@ mustFile('locations.html');
 mustFile('philadelphia.html');
 mustFile('contact-thank-you.html');
 
+for (const rel of astroRenderedHtml) {
+  mustFile(rel);
+}
+
 if (fs.existsSync(path.join(distDir, 'index.html'))) {
   const home = readDist('index.html');
   const head = home.split('</head>')[0] || '';
@@ -103,19 +114,22 @@ if (fs.existsSync(path.join(distDir, 'index.html'))) {
   }
 }
 
-for (const htmlFile of walkHtml(distDir)) {
-  const rel = path.relative(distDir, htmlFile);
-  const localCss = stylesheetHrefs(fs.readFileSync(htmlFile, 'utf8'))
-    .filter((href) => href.startsWith('/css/'));
+for (const htmlFile of htmlFiles()) {
+  const rel = path.relative(distDir, htmlFile).split(path.sep).join('/');
+  if (!astroRenderedHtml.has(rel) && !rel.startsWith('c/')) {
+    errors.push(`${rel}: unexpected HTML artifact in dist`);
+  }
+  const localCss = stylesheetLinks(fs.readFileSync(htmlFile, 'utf8'))
+    .filter((link) => link.pathname.startsWith('/css/'));
   if (localCss.length > 2) {
     errors.push(`${rel}: expected bundled CSS output to use at most 2 local stylesheet links, found ${localCss.length}`);
   }
-  if (!localCss.some((href) => /^\/css\/bundles\/site-core\.[a-f0-9]{10}\.css$/.test(href))) {
+  if (!localCss.some((link) => /^\/css\/bundles\/site-core\.[a-f0-9]{10}\.css$/.test(link.pathname))) {
     errors.push(`${rel}: missing site-core CSS bundle`);
   }
-  for (const href of localCss) {
-    if (!href.startsWith('/css/bundles/')) {
-      errors.push(`${rel}: unbundled stylesheet link remains (${href})`);
+  for (const link of localCss) {
+    if (!link.pathname.startsWith('/css/bundles/')) {
+      errors.push(`${rel}: unbundled stylesheet link remains (${link.href})`);
     }
   }
 }

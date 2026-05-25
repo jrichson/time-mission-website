@@ -1,0 +1,18 @@
+{
+  "core": [
+    "/css/variables.css",
+    "/css/base.css",
+    "/css/layout-guards.css?v=1",
+    "/css/social-proof.css?v=1",
+    "/css/game-popup.css?v=1",
+    "/css/small-viewport-overrides.css?v=1",
+    "/css/page-shell.css?v=1",
+    "/css/nav-ticker.css?v=1",
+    "/css/nav.css?v=23",
+    "/css/mobile-menu.css?v=1",
+    "/css/location-overlay.css?v=1",
+    "/css/footer.css?v=6",
+    "/css/newsletter.css?v=4",
+    "/css/ticket-panel.css?v=2"
+  ]
+}

@@ -14,7 +14,29 @@ function lineCount(text) {
   return text.trimEnd().split('\n').length;
 }
 
+function siteCoreCss() {
+  return JSON.parse(read('src/data/site/site-css-assets.json')).core;
+}
+
+function hrefPath(href) {
+  return new URL(href, 'https://timemission.local').pathname.slice(1);
+}
+
 describe('css architecture contract', () => {
+  it('keeps shared CSS order in the shared manifest used by head and build output', () => {
+    const sharedCss = siteCoreCss();
+    const uniqueCssPaths = new Set(sharedCss.map((href) => href.split('?')[0]));
+
+    expect(sharedCss.length).toBeGreaterThan(0);
+    expect(uniqueCssPaths.size).toBe(sharedCss.length);
+    for (const href of sharedCss) {
+      expect(fs.existsSync(path.join(root, hrefPath(href))), href).toBe(true);
+    }
+
+    expect(read('src/components/SiteHead.astro')).toContain("site-css-assets.json");
+    expect(read('scripts/bundle-dist-css.mjs')).toContain("site-css-assets.json");
+  });
+
   it('keeps shared base styles split by responsibility', () => {
     const expectedFiles = [
       'css/base.css',
@@ -30,9 +52,9 @@ describe('css architecture contract', () => {
       expect(lineCount(read(file)), file).toBeLessThan(700);
     }
 
-    const siteHead = read('src/components/SiteHead.astro');
-    const linkedAssets = [...siteHead.matchAll(/href="(\/css\/(?:base|layout-guards|social-proof|game-popup|small-viewport-overrides|page-shell)\.css(?:\?v=\d+)?)"/g)]
-      .map((match) => match[1].split('?')[0]);
+    const linkedAssets = siteCoreCss()
+      .filter((href) => /^\/css\/(?:base|layout-guards|social-proof|game-popup|small-viewport-overrides|page-shell)\.css/.test(href))
+      .map((href) => href.split('?')[0]);
 
     expect(linkedAssets).toEqual([
       '/css/base.css',
@@ -62,9 +84,9 @@ describe('css architecture contract', () => {
     expect(navCss).not.toMatch(/Full-screen Mobile Menu/);
     expect(navCss).not.toMatch(/Full-screen Location Overlay/);
 
-    const siteHead = read('src/components/SiteHead.astro');
-    const linkedAssets = [...siteHead.matchAll(/href="(\/css\/(?:nav-ticker|nav|mobile-menu|location-overlay)\.css\?v=\d+)"/g)]
-      .map((match) => match[1].split('?')[0]);
+    const linkedAssets = siteCoreCss()
+      .filter((href) => /^\/css\/(?:nav-ticker|nav|mobile-menu|location-overlay)\.css/.test(href))
+      .map((href) => href.split('?')[0]);
 
     expect(linkedAssets).toEqual([
       '/css/nav-ticker.css',

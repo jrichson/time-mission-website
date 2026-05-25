@@ -1,5 +1,6 @@
 ---
 import analyticsLabels from '../data/site/analytics-labels.json';
+import siteCssAssets from '../data/site/site-css-assets.json';
 import { getSeoForRoute, resolveLandingHeadSeo, type LandingHeadInput } from '../lib/seo/catalog';
 import locationsData from '../../data/locations.json';
 
@@ -39,6 +40,7 @@ const robotsValue = landingHead ? seo.robots : robotsOverride ?? seo.robots;
 const siteAuthor = 'Ari Simon';
 const siteDesigner = 'Jefferson Richardson';
 const siteDeveloper = 'Converge Digital';
+const siteCoreCss = siteCssAssets.core;
 
 const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQPWRNJB').trim();
 const sgtmContainerUrl = String(import.meta.env.PUBLIC_SGTM_CONTAINER_URL || '').trim().replace(/\/+$/, '');
@@ -155,17 +157,4 @@ const consentDefaults: ConsentDefaults =
 <link rel="preload" as="font" href="/assets/fonts/DMSans-Normal.woff2" type="font/woff2" crossorigin />
 <link rel="preload" as="font" href="/assets/fonts/MonumentExtended-Regular.otf" type="font/otf" crossorigin />
 <link rel="preload" as="font" href="/assets/fonts/MonumentExtended-Ultrabold.otf" type="font/otf" crossorigin />
-<link rel="stylesheet" href="/css/variables.css" />
-<link rel="stylesheet" href="/css/base.css" />
-<link rel="stylesheet" href="/css/layout-guards.css?v=1" />
-<link rel="stylesheet" href="/css/social-proof.css?v=1" />
-<link rel="stylesheet" href="/css/game-popup.css?v=1" />
-<link rel="stylesheet" href="/css/small-viewport-overrides.css?v=1" />
-<link rel="stylesheet" href="/css/page-shell.css?v=1" />
-<link rel="stylesheet" href="/css/nav-ticker.css?v=1" />
-<link rel="stylesheet" href="/css/nav.css?v=23" />
-<link rel="stylesheet" href="/css/mobile-menu.css?v=1" />
-<link rel="stylesheet" href="/css/location-overlay.css?v=1" />
-<link rel="stylesheet" href="/css/footer.css?v=6" />
-<link rel="stylesheet" href="/css/newsletter.css?v=4" />
-<link rel="stylesheet" href="/css/ticket-panel.css?v=2" />
+{siteCoreCss.map((href) => <link rel="stylesheet" href={href} />)}
