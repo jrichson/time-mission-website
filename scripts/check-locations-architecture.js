@@ -1,7 +1,7 @@
 /**
  * Location storage architecture guard.
  * Asserts that ONLY js/locations.js writes the canonical or legacy location
- * storage keys. If any other file in js/, src/, or root *.html contains a
+ * storage keys. If any other file in js/ or src/ contains a
  * matching localStorage.setItem(...) call, fail.
  */
 const fs = require('node:fs');
@@ -28,9 +28,6 @@ function walk(dir, acc) {
 const candidates = [
   ...walk(path.join(root, 'js'), []),
   ...walk(path.join(root, 'src'), []),
-  ...fs.readdirSync(root)
-    .filter((f) => f.endsWith('.html'))
-    .map((f) => path.join(root, f)),
 ];
 
 const errors = [];

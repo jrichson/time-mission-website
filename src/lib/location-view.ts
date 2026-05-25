@@ -60,7 +60,7 @@ export function locationAddressLines(loc: Pick<LocationRecord, 'address'> | null
     const address = loc.address;
     const cityLine = [address.city, address.state].filter(Boolean).join(', ');
     const postalLine = [cityLine, address.zip].filter(Boolean).join(' ');
-    return [address.line1, address.line2, postalLine].filter(Boolean);
+    return [address.line1, address.line2, postalLine].filter((line): line is string => Boolean(line));
 }
 
 export function locationStateBadge(loc: Pick<LocationRecord, 'address' | 'region'>): string {

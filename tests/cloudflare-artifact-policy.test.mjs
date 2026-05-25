@@ -51,6 +51,7 @@ describe('Cloudflare Artifact policy', () => {
   });
 
   it('excludes archived and Finder duplicate artifacts consistently', () => {
+    expect(shouldExcludeArtifactPath('assets/extracted/gradient-animated.html')).toBe(true);
     expect(shouldExcludeArtifactPath('assets/mockup-reference/hero.png')).toBe(true);
     expect(shouldExcludeArtifactPath('js 2/nav.js')).toBe(true);
     expect(shouldExcludeArtifactPath('css/site 2.css')).toBe(true);

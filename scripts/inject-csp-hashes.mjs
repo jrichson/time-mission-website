@@ -15,6 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { shouldExcludeArtifactPath } from './lib/cloudflare-artifact-policy.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -50,10 +51,8 @@ function walkHtml(dir) {
 }
 
 const htmlFiles = walkHtml(distDir).filter(f => {
-    const rel = path.relative(distDir, f);
-    if (/ \d*\.html$/.test(path.basename(f))) return false;
-    if (rel.startsWith('assets/extracted/')) return false;
-    return true;
+    const rel = path.relative(distDir, f).split(path.sep).join('/');
+    return !shouldExcludeArtifactPath(rel);
 });
 
 // Steps 3-4: Extract inline blocks and compute hashes

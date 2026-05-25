@@ -3,8 +3,8 @@
  * before `astro build`, so Cloudflare-style `_headers`, `_redirects`, JS/CSS/data,
  * etc. appear under Astro output.
  *
- * Registered HTML routes from `src/data/routes.json` are copied to `public/{outputFile}`
- * so clean URLs resolve to file-style artifacts under `dist/` after build.
+ * HTML is rendered by Astro from `src/pages`. This script intentionally does not
+ * copy repo-root `.html` files into `public/`.
  */
 import fs from 'fs';
 import path from 'path';
@@ -31,10 +31,6 @@ applyTmDotEnvToProcess(root);
 
 function tmMediaBaseFromEnv() {
   return normalizedPublicTmMediaBase(root);
-}
-
-function applyTmMediaToken(html) {
-  return html.replaceAll('{{TM_MEDIA_BASE}}', tmMediaBaseFromEnv());
 }
 
 const compileArtifacts = path.join(__dirname, 'compile-route-artifacts.mjs');
@@ -190,6 +186,19 @@ if (ASTRO_RENDERED_OUTPUT_FILES.size === 0) {
   process.exit(1);
 }
 
+const nonAstroRoutes = routes
+  .map((route) => ({
+    route,
+    outputFile: route.outputFile.replace(/^\//, ''),
+  }))
+  .filter(({ outputFile }) => !ASTRO_RENDERED_OUTPUT_FILES.has(outputFile));
+
+for (const { route, outputFile } of nonAstroRoutes) {
+  errors.push(
+    `Route ${route.canonicalPath} outputs ${outputFile}, but src/data/site/astro-rendered-output-files.json does not list it`,
+  );
+}
+
 /** Remove stale `public/` HTML from prior syncs so Astro output is not shadowed */
 for (const rel of ASTRO_RENDERED_OUTPUT_FILES) {
   const abs = path.join(publicDir, rel);
@@ -200,49 +209,12 @@ for (const rel of ASTRO_RENDERED_OUTPUT_FILES) {
   }
 }
 
-function resolveHtmlSource(route) {
-  const outRel = route.outputFile.replace(/^\//, '');
-  const primary = path.join(root, outRel);
-  if (fs.existsSync(primary)) return primary;
-  for (const source of route.redirectSources || []) {
-    const rel = source.replace(/^\//, '');
-    if (!rel.endsWith('.html')) continue;
-    const candidate = path.join(root, rel);
-    if (fs.existsSync(candidate)) return candidate;
-  }
-  return null;
-}
-
-let copiedHtml = 0;
-for (const route of routes) {
-  if (route.canonicalPath === '/') continue;
-  const destRel = route.outputFile.replace(/^\//, '');
-  if (ASTRO_RENDERED_OUTPUT_FILES.has(destRel)) continue;
-  const dest = path.join(publicDir, destRel);
-  const src = resolveHtmlSource(route);
-  if (!src) {
-    errors.push(
-      `No source HTML for route ${route.canonicalPath} (outputFile: ${route.outputFile})`,
-    );
-    continue;
-  }
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
-  let html = fs.readFileSync(src, 'utf8');
-  html = applyTmMediaToken(html);
-  fs.writeFileSync(dest, html);
-  copiedHtml += 1;
-}
-
 if (errors.length) {
   console.error('Static sync failed:');
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
 
-const skippedHtml = routes.filter((r) =>
-  ASTRO_RENDERED_OUTPUT_FILES.has(r.outputFile.replace(/^\//, '')),
-).length;
-
 console.log(
-  `Synced root static assets and ${copiedHtml} registered HTML routes from routes.json to public/ (skipped ${skippedHtml} Astro-rendered routes).`,
+  `Synced root static assets; ${routes.length - nonAstroRoutes.length} registered HTML routes are Astro-rendered.`,
 );

@@ -21,7 +21,6 @@ const VERIFY_STEPS = [
   ['check:astro-dist', []],
   ['check:payload-dist', []],
   ['check:ticket-panel-parity', []],
-  ['check:ticket-panel-source-parity', []],
   ['check:seo-output', []],
   ['check:schema-output', []],
   ['check:img-alt-axe', []],
@@ -47,7 +46,8 @@ function isFinderDuplicateName(name) {
 
 function shouldExcludeArtifactPath(relPath) {
   const normalized = String(relPath || '').split('\\').join('/');
-  return /(?:^|\/)(?:mockup-reference|_archive)(?:\/|$)/i.test(normalized)
+  return /(?:^|\/)assets\/extracted(?:\/|$)/i.test(normalized)
+    || /(?:^|\/)(?:mockup-reference|_archive)(?:\/|$)/i.test(normalized)
     || /(?:^|\/)[^/]*\s[0-9]+(?:\/|$)/i.test(normalized)
     || /\s[0-9]+\.[a-z0-9]+$/i.test(normalized);
 }

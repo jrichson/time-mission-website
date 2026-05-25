@@ -74,18 +74,26 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQ
         />
         <slot name="head-extra" />
         {loadsBriqWidget && <link rel="stylesheet" href="/css/briq-widget.css?v=2" />}
-        {loadsBriqWidget && (
-            <script is:inline>
-                ;(function (d, t){
-                    function loadBriqWidgetScript() {
-                        if (d.querySelector('script[data-briq-widget-script]')) return
-                        var s = d.createElement(t)
-                        s.async = true
-                        s.src = 'https://widgetcdn.briqbookings.com/widget/widget.js'
-                        s.setAttribute('data-briq-widget-script', '')
-                        var r = d.getElementsByTagName(t)[0]
-                        r.parentNode.insertBefore(s, r)
-                    }
+		{loadsBriqWidget && (
+			<script is:inline>
+				;(function (d, t){
+					function loadBriqWidgetScript() {
+						if (d.querySelector('script[data-briq-widget-script]')) return
+						var s = d.createElement(t)
+						s.async = true
+						s.src = 'https://widgetcdn.briqbookings.com/widget/widget.js'
+						s.setAttribute('data-briq-widget-script', '')
+						s.addEventListener('load', function () {
+							s.setAttribute('data-briq-widget-loaded', 'true')
+							s.removeAttribute('data-briq-widget-error')
+						}, { once: true })
+						s.addEventListener('error', function () {
+							s.setAttribute('data-briq-widget-error', 'true')
+							s.removeAttribute('data-briq-widget-loaded')
+						}, { once: true })
+						var r = d.getElementsByTagName(t)[0]
+						r.parentNode.insertBefore(s, r)
+					}
                     if (d.readyState === 'loading') {
                         d.addEventListener('DOMContentLoaded', loadBriqWidgetScript, { once: true })
                     } else {

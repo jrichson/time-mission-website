@@ -107,14 +107,47 @@ test('West Nyack Briq panel shows loading feedback until the widget opens', asyn
   await expect(loader).toBeHidden();
 });
 
+test('West Nyack falls back to the Briq site if the widget script fails', async ({ page }) => {
+  let widgetScriptRequests = 0;
+  const briqProviderRequests = [];
+  await page.route('https://widgetcdn.briqbookings.com/widget/widget.js', async (route) => {
+    widgetScriptRequests += 1;
+    await route.abort('failed');
+  });
+  await page.route(/https:\/\/timemission-palisades\.briqbookings\.com\/?.*/, async (route) => {
+    briqProviderRequests.push(route.request().url());
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>Briq fallback</title>',
+    });
+  });
+
+  await page.goto('/?utm_source=paid&utm_campaign=spring');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  await page.evaluate(() => {
+    window.TM.select('west-nyack');
+    window.TMBooking.open({ kind: 'tickets' });
+  });
+
+  await page.locator('#ticketBookBtn').click();
+
+  await expect(page).toHaveURL(
+    /https:\/\/timemission-palisades\.briqbookings\.com\/?\?utm_source=paid&utm_campaign=spring/,
+    { timeout: 12000 },
+  );
+  expect(widgetScriptRequests).toBeGreaterThan(0);
+  expect(briqProviderRequests).toHaveLength(1);
+});
+
 test('West Nyack location page opens Briq inside the booking panel instead of an iframe', async ({ page }) => {
   const briqScript = await stubBriqWidgetScript(page);
 
   await page.goto('/west-nyack');
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('west-nyack');
-  expect(briqScript.requests).toBeGreaterThan(0);
 
   await page.locator('.nav-right .btn-tickets').click();
+  await expect.poll(() => briqScript.requests).toBeGreaterThan(0);
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
   await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
   await expect(page.locator('#ticketOverlay')).toHaveClass(/active/);

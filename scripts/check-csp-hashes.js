@@ -14,6 +14,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { shouldExcludeArtifactPath } = require('./lib/cloudflare-artifact-contract.cjs');
 
 const root = path.resolve(__dirname, '..');
 const distDir = path.join(root, 'dist');
@@ -77,10 +78,8 @@ function walkHtml(dir) {
 }
 
 const htmlFiles = walkHtml(distDir).filter(f => {
-    const rel = path.relative(distDir, f);
-    if (/ \d*\.html$/.test(path.basename(f))) return false;
-    if (rel.startsWith('assets/extracted/')) return false;
-    return true;
+    const rel = path.relative(distDir, f).split(path.sep).join('/');
+    return !shouldExcludeArtifactPath(rel);
 });
 
 const INLINE_SCRIPT_RE = /<script([^>]*)>([\s\S]*?)<\/script>/g;

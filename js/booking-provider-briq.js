@@ -14,6 +14,7 @@
     var briqResizeHandlerAttached = false;
     var BRIQ_WIDGET_SCRIPT_SRC = 'https://widgetcdn.briqbookings.com/widget/widget.js';
     var BRIQ_WIDGET_STYLE_HREF = '/css/briq-widget.css?v=2';
+    var BRIQ_WIDGET_SCRIPT_TIMEOUT_MS = 8000;
 
     function getPanel() {
         if (panelAdapter && typeof panelAdapter.getPanelEl === 'function') return panelAdapter.getPanelEl();
@@ -66,10 +67,24 @@
         ensureBriqLoadingIndicator(container);
         container.classList.toggle('is-loading', !!isLoading);
         container.classList.toggle('is-ready', !isLoading);
+        container.classList.remove('is-error');
         if (isLoading) {
             container.setAttribute('aria-busy', 'true');
         } else {
             container.removeAttribute('aria-busy');
+        }
+    }
+
+    function setBriqErrorState(container) {
+        if (!container || !container.classList) return;
+        var loader = ensureBriqLoadingIndicator(container);
+        container.classList.remove('is-loading');
+        container.classList.remove('is-ready');
+        container.classList.add('is-error');
+        container.removeAttribute('aria-busy');
+        if (loader) {
+            var title = loader.querySelector && loader.querySelector('.briq-widget-loader-title');
+            if (title) title.textContent = 'Booking options are taking longer than expected.';
         }
     }
 
@@ -161,33 +176,82 @@
         return { container: container, widget: widget };
     }
 
-    function loadBriqWidgetScript(onReady) {
-        var existing = document.querySelector('script[data-briq-widget-script]');
+    function markBriqScriptLoaded(script) {
+        if (!script) return;
+        script.setAttribute('data-briq-widget-loaded', 'true');
+        script.removeAttribute('data-briq-widget-error');
+    }
+
+    function markBriqScriptError(script) {
+        if (!script) return;
+        script.setAttribute('data-briq-widget-error', 'true');
+        script.removeAttribute('data-briq-widget-loaded');
+    }
+
+    function bindBriqScriptLifecycle(script, onReady, onError) {
+        var settled = false;
+        var timeout = setTimeout(function () {
+            fail(new Error('Briq widget script timed out'));
+        }, BRIQ_WIDGET_SCRIPT_TIMEOUT_MS);
+
+        function cleanup() {
+            clearTimeout(timeout);
+            script.removeEventListener('load', ready);
+            script.removeEventListener('error', fail);
+        }
+
         function ready() {
+            if (settled) return;
+            settled = true;
+            cleanup();
+            markBriqScriptLoaded(script);
             if (typeof onReady === 'function') onReady();
         }
+
+        function fail(err) {
+            if (settled) return;
+            settled = true;
+            cleanup();
+            markBriqScriptError(script);
+            if (script.parentNode) script.parentNode.removeChild(script);
+            if (typeof onError === 'function') onError(err);
+        }
+
+        script.addEventListener('load', ready);
+        script.addEventListener('error', fail);
+    }
+
+    function loadBriqWidgetScript(onReady, onError) {
+        var existing = document.querySelector('script[data-briq-widget-script]');
         if (existing) {
-            existing.addEventListener('load', function () {
-                existing.setAttribute('data-briq-widget-loaded', 'true');
-                ready();
-            }, { once: true });
-            setTimeout(ready, 0);
-            return;
+            if (existing.getAttribute('data-briq-widget-loaded') === 'true') {
+                setTimeout(function () {
+                    if (typeof onReady === 'function') onReady();
+                }, 0);
+                return;
+            }
+            if (existing.getAttribute('data-briq-widget-error') === 'true') {
+                if (existing.parentNode) existing.parentNode.removeChild(existing);
+            } else {
+                bindBriqScriptLifecycle(existing, onReady, onError);
+                return;
+            }
+        }
+        var failed = document.querySelector('script[data-briq-widget-script][data-briq-widget-error="true"]');
+        if (failed && failed.parentNode) {
+            failed.parentNode.removeChild(failed);
         }
         var script = document.createElement('script');
         script.async = true;
         script.src = BRIQ_WIDGET_SCRIPT_SRC;
         script.setAttribute('data-briq-widget-script', '');
-        script.addEventListener('load', function () {
-            script.setAttribute('data-briq-widget-loaded', 'true');
-            ready();
-        }, { once: true });
+        bindBriqScriptLifecycle(script, onReady, onError);
         var firstScript = document.getElementsByTagName && document.getElementsByTagName('script')[0];
         if (firstScript && firstScript.parentNode) {
             firstScript.parentNode.insertBefore(script, firstScript);
-        } else {
-            document.head.appendChild(script);
+            return;
         }
+        document.head.appendChild(script);
     }
 
     function briqWidgetDomains() {
@@ -351,7 +415,19 @@
         briqCloseObserver.observe(main, { attributes: true, attributeFilter: ['class'] });
     }
 
-    function triggerBriqWidgetOpen(attempt) {
+    function fallbackToBriqBookingUrl(loc, container) {
+        stopBriqOpenRetry();
+        stopBriqFitRetry();
+        disconnectBriqCloseObserver();
+        setBriqPanelMode(false);
+        if (container) setBriqErrorState(container);
+        var fallback = loc && loc.bookingUrl && String(loc.bookingUrl).trim();
+        if (!fallback) return false;
+        window.location.assign(BookingJourney.appendTrackingParams(fallback));
+        return true;
+    }
+
+    function triggerBriqWidgetOpen(attempt, onFailure) {
         var main = getBriqWidgetMain();
         var container = getBriqWidgetContainer();
         if (main && main.classList.contains('bw-open')) {
@@ -363,7 +439,11 @@
             observeBriqClose();
             return true;
         }
-        if (attempt > 60) return false;
+        if (attempt > 60) {
+            stopBriqOpenRetry();
+            if (typeof onFailure === 'function') onFailure(new Error('Briq widget did not open'));
+            return false;
+        }
         if (main) {
             setBriqWidgetMainVisibility(false);
             fitBriqWidgetLayout();
@@ -372,7 +452,7 @@
         scheduleBriqWidgetFit();
         stopBriqOpenRetry();
         briqOpenRetryTimer = setTimeout(function () {
-            triggerBriqWidgetOpen(attempt + 1);
+            triggerBriqWidgetOpen(attempt + 1, onFailure);
         }, 100);
         return true;
     }
@@ -414,8 +494,12 @@
         void container.offsetWidth;
         container.classList.add('is-highlighted');
         loadBriqWidgetScript(function () {
-            triggerBriqWidgetOpen(0);
+            triggerBriqWidgetOpen(0, function () {
+                fallbackToBriqBookingUrl(loc, container);
+            });
             setTimeout(scheduleBriqWidgetFit, 600);
+        }, function () {
+            fallbackToBriqBookingUrl(loc, container);
         });
         return true;
     }

@@ -47,7 +47,7 @@ function walkFiles(dir, acc = []) {
       errors.push(`Unexpected stale/generated artifact in dist: ${rel}`);
     }
     if (entry.isDirectory()) {
-      if (path.relative(distDir, full).startsWith(`assets${path.sep}extracted`)) continue;
+      if (shouldExcludeArtifactPath(rel)) continue;
       walkFiles(full, acc);
     } else {
       acc.push(full);

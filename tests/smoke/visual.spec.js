@@ -48,6 +48,31 @@ async function stabilizeForScreenshot(page) {
     ]);
   });
   await page.addStyleTag({ content: REDUCE_MOTION_CSS });
+  await page.evaluate(async () => {
+    const decodeImage = (img) => {
+      if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+      if (typeof img.decode === 'function') return img.decode().catch(() => {});
+      return new Promise((resolve) => {
+        img.addEventListener('load', resolve, { once: true });
+        img.addEventListener('error', resolve, { once: true });
+      });
+    };
+
+    await Promise.all(
+      Array.from(document.querySelectorAll('.nav-logo img, .location-dropdown-logo img'))
+        .map(decodeImage),
+    );
+
+    const heroWordmark = document.querySelector('.hero-title .line-2');
+    if (heroWordmark) {
+      const style = window.getComputedStyle(heroWordmark);
+      const maskImage = style.webkitMaskImage || style.maskImage || '';
+      const match = maskImage.match(/url\(["']?(.+?)["']?\)/);
+      if (match && match[1]) await fetch(match[1]).catch(() => {});
+    }
+
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+  });
   await page.evaluate(() => {
     document.querySelectorAll('video').forEach((v) => {
       try {

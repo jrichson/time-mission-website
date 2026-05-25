@@ -1,6 +1,6 @@
 # Time Mission Website
 
-Static marketing site for Time Mission. The production path is intentionally lightweight: HTML/CSS/vanilla JS served from a static host, with automated checks around the fragile parts of the site.
+Static marketing site for Time Mission. Astro renders the HTML, then Cloudflare Pages serves the static output with vanilla JS runtime behavior and automated checks around booking, location state, SEO, schema, and accessibility.
 
 ## Quick Start
 
@@ -12,7 +12,8 @@ npm run verify
 For local browsing:
 
 ```bash
-python3 -m http.server 4173
+npm run build:astro
+npm run preview:test
 ```
 
 Then open `http://127.0.0.1:4173`.
@@ -36,8 +37,8 @@ npm run test:smoke
 ## Production Notes
 
 - `data/locations.json` is the source of truth for location state, booking URLs, gift card URLs, and Roller checkout URLs.
-- `js/ticket-panel.js` and `js/roller-checkout.js` consume location data through `window.TM`; do not reintroduce separate URL maps.
-- `components/ticket-panel.html` is synced into pages by `./build.sh`.
+- Page HTML is generated from `src/pages`, `src/layouts/SiteLayout.astro`, and shared components. Do not add repo-root `.html` page sources back to the build path.
+- `js/booking-journey.js`, `js/booking-controller.js`, `js/booking-provider-briq.js`, and `js/ticket-panel.js` consume location data through `window.TM`; do not reintroduce separate URL maps.
 - `_headers` contains Cloudflare Pages security headers and is generated from `_headers.tmpl` during `npm run build:astro`.
 - `_redirects` is written for Netlify/Cloudflare Pages style routing.
 - Contact and newsletter forms are handled by Cloudflare Pages Functions in `functions/api/`. Wrangler Direct Upload must be run from the repo root so the sibling `functions/` directory is uploaded with `dist/`.
