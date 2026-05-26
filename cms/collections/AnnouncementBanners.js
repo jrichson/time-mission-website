@@ -23,8 +23,6 @@ const bannerLocationOptions = [
   { label: 'Time Mission Philadelphia', value: 'philadelphia' },
   { label: 'Time Mission West Nyack', value: 'west-nyack' },
 ];
-const locationSlugSet = new Set(bannerLocationOptions.map((location) => location.value));
-const locationExamples = bannerLocationOptions.slice(0, 4).map((location) => location.value).join(', ');
 
 function deployHookURL() {
   const value = process.env.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL;
@@ -85,14 +83,6 @@ function validateInternalOrHttpsUrl(val) {
 
   if (url.protocol !== 'https:') return 'External links must use https';
   if (url.username || url.password) return 'External links must not include credentials';
-  return true;
-}
-
-function validateLocationSlug(val) {
-  if (typeof val !== 'string' || !val.trim()) return 'Choose a location slug';
-  if (!locationSlugSet.has(val.trim())) {
-    return `Use an existing location slug such as ${locationExamples}.`;
-  }
   return true;
 }
 
@@ -234,7 +224,6 @@ export const AnnouncementBanners = {
           required: true,
           label: 'Location slug',
           options: bannerLocationOptions,
-          validate: validateLocationSlug,
         },
       ],
     },

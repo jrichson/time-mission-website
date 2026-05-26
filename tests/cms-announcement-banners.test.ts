@@ -8,12 +8,34 @@ import {
   selectAnnouncementBanner,
   type PayloadAnnouncementBannerDoc,
 } from '../src/lib/payload/announcement-banner-contract';
+import { AnnouncementBanners } from '../cms/collections/AnnouncementBanners.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
 function read(rel: string): string {
   return fs.readFileSync(path.join(root, rel), 'utf8');
+}
+
+type CollectionField = {
+  admin?: { description?: string };
+  fields?: CollectionField[];
+  label?: string;
+  name?: string;
+  options?: unknown[];
+  required?: boolean;
+  type?: string;
+};
+
+function findField(fields: CollectionField[], name: string): CollectionField | null {
+  for (const field of fields) {
+    if (field?.name === name) return field;
+    if (Array.isArray(field?.fields)) {
+      const nested = findField(field.fields, name);
+      if (nested) return nested;
+    }
+  }
+  return null;
 }
 
 const baseBanner: PayloadAnnouncementBannerDoc = {
@@ -27,20 +49,20 @@ const baseBanner: PayloadAnnouncementBannerDoc = {
 
 describe('CMS announcement banners', () => {
   it('registers a text-only Payload collection with deploy-gated wording', () => {
-    const collection = read('cms/collections/AnnouncementBanners.js');
     const config = read('cms/payload.config.ts');
     const migration = read('cms/migrations/20260526_120000_cms_scope_and_announcements.ts');
+    const messageField = findField(AnnouncementBanners.fields, 'message');
+    const publishedField = findField(AnnouncementBanners.fields, 'published');
+    const locationField = findField(AnnouncementBanners.fields, 'locationSlug');
 
     expect(config).toContain('AnnouncementBanners as CollectionConfig');
-    expect(collection).toContain("singular: 'Announcement Banner'");
-    expect(collection).toContain('Text-only top banner messages');
-    expect(collection).toContain('Published in CMS');
-    expect(collection).toContain('Live after deploy');
-    expect(collection).toContain("name: 'message'");
-    expect(collection).not.toContain("type: 'upload'");
-    expect(collection).not.toContain('../../data/locations.json');
-    expect(collection).toContain('bannerLocationOptions');
-    expect(collection).toContain("label: 'Time Mission Philadelphia'");
+    expect(AnnouncementBanners.labels.singular).toBe('Announcement Banner');
+    expect(AnnouncementBanners.admin.description).toContain('Text-only top banner messages');
+    expect(messageField).toMatchObject({ name: 'message', type: 'text', required: true });
+    expect(publishedField?.label).toBe('Published in CMS');
+    expect(publishedField?.admin?.description).toContain('Live after deploy');
+    expect(locationField?.type).toBe('select');
+    expect(locationField?.options).toContainEqual({ label: 'Time Mission Philadelphia', value: 'philadelphia' });
     expect(migration).toContain('CREATE TABLE "announcement_banners"');
     expect(migration).toContain('ALTER TABLE "users" ADD COLUMN IF NOT EXISTS "can_deploy"');
   });
