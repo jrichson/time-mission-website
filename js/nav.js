@@ -225,7 +225,8 @@
         if (link.hasAttribute('download')) return true;
         const target = (link.getAttribute('target') || '').toLowerCase();
         if (target && target !== '_self') return true;
-        if (link.dataset && (link.dataset.tmNoLocationScope || link.dataset.city || link.dataset.tmLocationSlug)) return true;
+        if (link.hasAttribute('data-tm-no-location-scope')) return true;
+        if (link.dataset && (link.dataset.city || link.dataset.tmLocationSlug)) return true;
         if (link.hasAttribute('data-tm-href') || link.hasAttribute('data-tm-booking-kind')) return true;
         if (link.classList && (
             link.classList.contains('btn-tickets')

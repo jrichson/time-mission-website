@@ -52,7 +52,7 @@ function locationScopedPaths(): string[] {
 
 export function compileSiteContract(mode: SiteContractMode): SiteContractSnapshot {
     const options = ticketPanelSelectOptions(allLocations);
-    const philly = allLocations.find((l) => l.slug === 'philadelphia' || l.id === 'philadelphia');
+    const overlaySample = allLocations.find((l) => l.status === 'open' && !l.externalUrl) || allLocations[0];
     const roster = allLocations.map((loc) => ({
         id: loc.id,
         slug: loc.slug,
@@ -81,8 +81,8 @@ export function compileSiteContract(mode: SiteContractMode): SiteContractSnapsho
         },
         smokeHints: {
             ticketOptionCount: options.length,
-            overlaySampleSlug: philly?.slug ?? 'philadelphia',
-            overlaySampleDataCity: philly?.shortName ?? 'Philadelphia',
+            overlaySampleSlug: overlaySample?.slug ?? 'mount-prospect',
+            overlaySampleDataCity: overlaySample?.shortName ?? 'Mount Prospect',
         },
     };
 }

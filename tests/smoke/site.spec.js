@@ -307,9 +307,22 @@ test('open location ?book=1 opens embedded checkout without offsite navigation',
       body: 'window.RollerCheckout = { show: function () { window.__rollerCheckoutShown = true; } };',
     });
   });
-  await page.goto('/philadelphia?book=1');
+  await page.goto('/mount-prospect?book=1');
   await page.waitForFunction(() => window.__rollerCheckoutShown === true);
+  await expect(page).toHaveURL(/\/mount-prospect$/);
+});
+
+test('temporarily closed Philadelphia ?book=1 opens the closure notice instead of checkout', async ({ page }) => {
+  await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
+    throw new Error(`Philadelphia closure must not load Roller checkout: ${route.request().url()}`);
+  });
+
+  await page.goto('/philadelphia?book=1');
   await expect(page).toHaveURL(/\/philadelphia$/);
+  await expect(page.locator('#temporaryClosureModal')).toHaveClass(/is-active/);
+  await expect(page.locator('#temporaryClosureModalTitle')).toHaveText('Temporarily Closed');
+  await expect(page.locator('#temporaryClosureModalCopy')).toContainText('Time Mission Philadelphia is temporarily closed for the time being');
+  await expect(page.locator('#temporaryClosureModalCopy')).toContainText("We'll share more soon");
 });
 
 test('desktop location selection keeps the current page context', async ({ page, isMobile }) => {
@@ -412,13 +425,13 @@ test('desktop location hover renders address map preview before selection', asyn
   await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
   await expect(page.locator('#locationDropdown .location-dropdown-title')).toHaveText(i18nCatalog.translations.es['location.title']);
 
-  await page.locator('#locationDropdown a[data-city="Philadelphia"]').hover();
+  await page.locator('#locationDropdown a[data-city="Mount Prospect"]').hover();
   const className = await page.locator('#locationDropdown').evaluate((el) => el.className || '');
   expect(className).toContain('open');
   expect(className).not.toContain('navigating');
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.locator('#locationInfo .location-info-name')).toContainText('Philadelphia');
-  await expect(page.locator('#locationInfo .location-info-address')).toContainText('1530 Chestnut Street');
+  await expect(page.locator('#locationInfo .location-info-name')).toContainText('Mount Prospect');
+  await expect(page.locator('#locationInfo .location-info-address')).toContainText('132 Randhurst Village Drive');
   await expect(page.locator('#locationInfo .location-info-directions')).toContainText(i18nCatalog.translations.es['location.getDirections']);
   await expect(page.locator('#locationInfo .location-info-hours')).toContainText(`${i18nCatalog.translations.es['location.day.mon']}:`);
   await expect(page.locator('#locationInfo .location-info-book')).toContainText(i18nCatalog.translations.es['nav.bookNow']);
@@ -434,9 +447,9 @@ test('location page drives nav state and ticket panel default location', async (
     sessionStorage.clear();
   });
 
-  await page.goto('/philadelphia');
-  await expect(page.locator('#locationText')).toContainText('Philadelphia');
-  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
+  await page.goto('/mount-prospect');
+  await expect(page.locator('#locationText')).toContainText('Mount Prospect');
+  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('mount-prospect');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
     'href',
@@ -444,21 +457,36 @@ test('location page drives nav state and ticket panel default location', async (
   );
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
     'data-tm-booking-url',
-    'https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home'
+    'https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home'
   );
-  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('data-tm-location', 'philadelphia');
+  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('data-tm-location', 'mount-prospect');
 
   await page.evaluate(() => window.TMBooking.open({ kind: 'tickets' }));
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
-  await expect(page.locator('#ticketLocation')).toHaveValue('philadelphia');
+  await expect(page.locator('#ticketLocation')).toHaveValue('mount-prospect');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
     'href',
     '#'
   );
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute(
     'data-tm-booking-url',
-    'https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home'
+    'https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home'
   );
+});
+
+test('Philadelphia page makes closure state visible and disables ticket booking CTAs', async ({ page }) => {
+  await page.goto('/philadelphia');
+
+  await expect(page.locator('.tm-closure-strip')).toBeVisible();
+  await expect(page.locator('.tm-closure-strip')).toContainText('Temporarily Closed');
+  await expect(page.locator('.tm-closure-strip')).toContainText('ticket sales are paused');
+  await expect(page.locator('.hero-cta .btn-tickets')).toHaveAttribute('href', '/contact#location=philadelphia&type=closure');
+  await expect(page.locator('.hero-cta .btn-tickets')).not.toHaveAttribute('data-tm-booking-trigger', '');
+  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('href', '/contact#location=philadelphia&type=closure');
+  await expect(page.locator('.nav-right .btn-tickets')).not.toHaveAttribute('data-tm-booking-trigger', '');
+  await expect(page.locator('#temporaryClosureModal .tm-closure-button--primary')).toHaveAttribute('href', '/contact#location=philadelphia&type=closure');
+  await expect(page.locator('.tm-closure-strip .tm-closure-button--primary')).toHaveAttribute('href', '/contact#location=philadelphia&type=closure');
+  await expect(page.locator('#temporaryClosureModal')).toHaveClass(/is-active/);
 });
 
 test('location pages render footer contact details with accordion hours', async ({ page }) => {
@@ -521,8 +549,8 @@ test('selected location updates shared footer contact panel', async ({ page }) =
   await hours.locator('.footer-loc-hours-summary').click();
   await expect(hours.locator('.footer-hours-row--note')).toContainText('Opening June 5, 2026');
 
-  await page.evaluate(() => window.TM.select('philadelphia'));
-  await expect(footer.locator('.footer-locations-title')).toHaveText('Philadelphia');
+  await page.evaluate(() => window.TM.select('mount-prospect'));
+  await expect(footer.locator('.footer-locations-title')).toHaveText('Mount Prospect');
   await expect(hours).not.toHaveAttribute('open', '');
 
   await page.evaluate(() => window.TM.clear());
@@ -727,7 +755,9 @@ test('gift card page disables locations with blank gift-card URLs', async ({ pag
   await expect(redemptionAnswer).toContainText('Gift cards purchased from this location are valid for Time Missions located in these states: AL, GA, FL, IL, IN, KS, MD, MN, MO, NC, TN, VA & WI.');
 
   await page.evaluate(() => window.TM.select('philadelphia'));
-  await expect(redemptionAnswer).toContainText("Gift cards purchased through Philadelphia's checkout are intended for that location.");
+  await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('aria-disabled', 'true');
+  await expect(page.locator('#giftCardLocationHint')).toContainText('temporarily paused');
+  await expect(redemptionAnswer).toContainText('Gift cards are temporarily paused for Philadelphia');
 
   await page.evaluate(() => window.TM.select('antwerp'));
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('antwerp');

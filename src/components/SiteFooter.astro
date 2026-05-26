@@ -33,6 +33,7 @@ function contactHrefForLocation(loc: LocationRecord | null): string {
 }
 
 const houstonOpeningLabel = openingLabelFor('houston');
+const philadelphiaStatusLabel = openingLabelFor('philadelphia');
 const orlandParkOpeningLabel = openingLabelFor('orland-park');
 const nashvilleOpeningLabel = openingLabelFor('nashville');
 const antwerp = allLocations.find((entry) => entry.slug === 'antwerp');
@@ -122,7 +123,9 @@ const hasPageLocation = Boolean(pageLocation);
                     </button>
                     <div class="footer-location-list">
                         <a href="/mount-prospect">Mount Prospect</a>
-                        <a href="/philadelphia">Philadelphia</a>
+                        <a href="/philadelphia" class={philadelphiaStatusLabel ? 'coming-soon' : undefined}>
+                            Philadelphia {philadelphiaStatusLabel && <span class="coming-soon-tag">{philadelphiaStatusLabel}</span>}
+                        </a>
                         <a href="/west-nyack">West Nyack</a>
                         <a href="/lincoln">Lincoln</a>
                         <a href="/houston" class={houstonOpeningLabel ? 'coming-soon' : undefined}>

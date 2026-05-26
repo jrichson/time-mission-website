@@ -17,7 +17,7 @@ export function ticketPanelSelectOptions(locations: LocationRecord[]): TicketPan
                 (loc.region === 'europe'
                     ? loc.navLabel || loc.shortName || loc.name || loc.id
                     : loc.shortName || loc.name || loc.id) +
-                (loc.status === 'coming-soon'
+                (loc.status !== 'open'
                     ? ` (${locationStatusBadge(loc) || (hasTicketBooking(loc) ? 'Booking Now' : 'Coming Soon')})`
                     : ''),
             status: loc.status || 'open',

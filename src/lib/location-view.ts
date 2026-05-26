@@ -1,5 +1,10 @@
 import type { LocationRecord } from '../data/locations';
-import { hasTicketBooking, locationDisplayStatus, locationOpeningLabel } from './location-status';
+import {
+    hasTicketBooking,
+    locationDisplayStatus,
+    locationOpeningLabel,
+    locationTemporaryClosureLabel,
+} from './location-status';
 
 export interface LocationContactItem {
     kind: 'phone' | 'email';
@@ -70,6 +75,8 @@ export function locationStateBadge(loc: Pick<LocationRecord, 'address' | 'region
 }
 
 export function locationStatusBadge(loc: LocationRecord): string {
+    const closureLabel = locationTemporaryClosureLabel(loc);
+    if (closureLabel) return closureLabel;
     if (loc.status !== 'coming-soon') return '';
     return locationOpeningLabel(loc) || 'Coming Soon';
 }
@@ -115,6 +122,14 @@ function locationOverlayAddressText(loc: Pick<LocationRecord, 'address'>): strin
 }
 
 export function locationCtaView(loc: LocationRecord): LocationCtaView {
+    if (loc.status === 'temporarily-closed') {
+        return {
+            href: locationContactHref(loc, 'closure'),
+            isBookingTrigger: false,
+            label: loc.temporaryClosure?.ctaLabel || 'Get Closure Updates',
+            i18n: '',
+        };
+    }
     const isBookable = hasTicketBooking(loc);
     if (isBookable) {
         return {
@@ -136,10 +151,15 @@ export function locationViewModel(loc: LocationRecord): LocationViewModel {
     const bookable = hasTicketBooking(loc);
     const externalUrl = String(loc.externalUrl || '').trim();
     const comingSoon = loc.status === 'coming-soon';
+    const temporarilyClosed = loc.status === 'temporarily-closed';
 
     return {
         addressText: locationOverlayAddressText(loc),
-        bookLabel: externalUrl ? 'Visit EU Site' : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
+        bookLabel: temporarilyClosed
+            ? loc.temporaryClosure?.ctaLabel || 'Get Closure Updates'
+            : externalUrl
+            ? 'Visit EU Site'
+            : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
         bookable,
         externalUrl,
         id: loc.id || locationSlug(loc),

@@ -1,0 +1,45 @@
+---
+import type { LocationRecord } from '../data/locations';
+import { locationContactHref } from '../lib/location-view';
+
+interface Props {
+    location: LocationRecord;
+}
+
+const { location } = Astro.props;
+const closure = location.temporaryClosure;
+const title = closure?.title || 'Temporarily Closed';
+const summary = closure?.summary || '';
+const detail = closure?.detail || '';
+const contactHref = locationContactHref(location, 'closure');
+---
+
+<div
+    class="tm-closure-modal"
+    id="temporaryClosureModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="temporaryClosureModalTitle"
+    aria-describedby="temporaryClosureModalCopy"
+    aria-hidden="true"
+    data-temporary-closure-modal
+    hidden
+>
+    <div class="tm-closure-modal__panel">
+        <button class="tm-closure-modal__close" type="button" aria-label="Close closure notice" data-temporary-closure-close>
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+        </button>
+        <p class="tm-closure-modal__eyebrow">{closure?.label || title}</p>
+        <h2 id="temporaryClosureModalTitle">{title}</h2>
+        <div id="temporaryClosureModalCopy" class="tm-closure-modal__copy">
+            <p>{summary}</p>
+            <p>{detail}</p>
+        </div>
+        <div class="tm-closure-modal__actions">
+            <a href={contactHref} class="tm-closure-button tm-closure-button--primary" data-tm-no-location-scope>{closure?.ctaLabel || 'Get Closure Updates'}</a>
+            <button class="tm-closure-button tm-closure-button--ghost" type="button" data-temporary-closure-close>Close</button>
+        </div>
+    </div>
+</div>

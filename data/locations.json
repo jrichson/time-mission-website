@@ -105,7 +105,15 @@
       "shortName": "Philadelphia",
       "venueName": null,
       "region": "us",
-      "status": "open",
+      "status": "temporarily-closed",
+      "temporaryClosure": {
+        "label": "Temporarily Closed",
+        "title": "Temporarily Closed",
+        "summary": "Time Mission Philadelphia is temporarily closed for the time being, and ticket sales are paused while we take care of a few things behind the scenes.",
+        "detail": "Stay tuned for updates. We'll share more soon and can't wait to welcome you back.",
+        "ctaLabel": "Get Closure Updates",
+        "contactLabel": "Contact Philadelphia"
+      },
       "address": {
         "line1": "1530 Chestnut Street",
         "city": "Philadelphia",
@@ -123,58 +131,37 @@
       },
       "hours": {
         "mon": {
-          "open": "12:00",
-          "close": "22:00",
-          "label": "12pm - 10pm"
+          "label": "Temporarily closed"
         },
         "tue": {
-          "open": "12:00",
-          "close": "22:00",
-          "label": "12pm - 10pm"
+          "label": "Temporarily closed"
         },
         "wed": {
-          "open": "12:00",
-          "close": "22:00",
-          "label": "12pm - 10pm"
+          "label": "Temporarily closed"
         },
         "thu": {
-          "open": "12:00",
-          "close": "22:00",
-          "label": "12pm - 10pm"
+          "label": "Temporarily closed"
         },
         "fri": {
-          "open": "12:00",
-          "close": "23:00",
-          "label": "12pm - 11pm"
+          "label": "Temporarily closed"
         },
         "sat": {
-          "open": "10:00",
-          "close": "23:00",
-          "label": "10am - 11pm"
+          "label": "Temporarily closed"
         },
         "sun": {
-          "open": "10:00",
-          "close": "22:00",
-          "label": "10am - 10pm"
+          "label": "Temporarily closed"
         }
       },
-      "bookingUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
-      "rollerCheckoutUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
+      "bookingUrl": "",
+      "rollerCheckoutUrl": "",
       "bookingProvider": "roller",
-      "groupFormUrls": {
-        "birthdays": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
-        "corporate": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
-        "field-trips": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
-        "bachelor-ette": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
-        "private-events": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
-        "holidays": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form"
-      },
+      "groupFormUrls": {},
       "navLabel": "PA - Philadelphia",
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
       "faqs": [
         {
-          "q": "How do I book Time Mission Philadelphia?",
-          "a": "Use the Philadelphia location page or booking button for current ticket inventory, session lengths, package availability, and checkout-specific pricing. Advance online booking is recommended because walk-ins depend on availability."
+          "q": "Is Time Mission Philadelphia open?",
+          "a": "Time Mission Philadelphia is temporarily closed while the venue is rebuilt. Ticket booking is paused until reopening timing is confirmed."
         },
         {
           "q": "What ages can play at Time Mission Philadelphia?",
@@ -185,16 +172,16 @@
           "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
         }
       ],
-      "ticker": "SUMMER ADVENTURES AT TIME MISSION PHILADELPHIA",
-      "giftCardUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
-      "waiverUrl": "https://waiver.roller.app/TimeMissionPhiladelphiaPA",
+      "ticker": "PHILADELPHIA TEMPORARILY CLOSED - REBUILD UNDERWAY",
+      "giftCardUrl": "",
+      "waiverUrl": "",
       "countryCode": "US",
       "locale": null,
       "timeZone": null,
       "currency": null,
       "phoneE164": "+12677101240",
       "hreflang": null,
-      "localBusinessSchemaEligible": true
+      "localBusinessSchemaEligible": false
     },
     {
       "id": "west-nyack",

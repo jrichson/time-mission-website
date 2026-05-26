@@ -181,6 +181,35 @@ function validateComingSoonLocation(location) {
   }
 }
 
+function validateTemporaryClosure(location) {
+  const id = location.id;
+  if (!location.temporaryClosure || typeof location.temporaryClosure !== 'object' || Array.isArray(location.temporaryClosure)) {
+    errors.push(`${id}: temporarily-closed location must define temporaryClosure copy`);
+  } else {
+    for (const field of ['label', 'title', 'summary', 'detail', 'ctaLabel', 'contactLabel']) {
+      requireString(location, `temporaryClosure.${field}`, location.temporaryClosure[field]);
+    }
+  }
+  if (location.bookingUrl && String(location.bookingUrl).trim() !== '') {
+    errors.push(`${id}: temporarily-closed location must not expose bookingUrl`);
+  }
+  if (location.rollerCheckoutUrl && String(location.rollerCheckoutUrl).trim() !== '') {
+    errors.push(`${id}: temporarily-closed location must not expose rollerCheckoutUrl`);
+  }
+  if (location.giftCardUrl && String(location.giftCardUrl).trim() !== '') {
+    errors.push(`${id}: temporarily-closed location must not expose giftCardUrl`);
+  }
+  if (location.waiverUrl && String(location.waiverUrl).trim() !== '') {
+    errors.push(`${id}: temporarily-closed location must not expose waiverUrl`);
+  }
+  validateGroupFormUrls(location);
+  if (location.groupFormUrls && Object.keys(location.groupFormUrls).length > 0) {
+    errors.push(`${id}: temporarily-closed location must not expose group form URLs`);
+  }
+  assertSafeUrl(id, 'mapUrl', location.mapUrl);
+  requireString(location, 'contact.email', location.contact && location.contact.email);
+}
+
 for (const location of locations) {
   requireString(location, 'id', location.id);
   requireString(location, 'slug', location.slug);
@@ -216,6 +245,9 @@ for (const location of locations) {
     if (location.status === 'coming-soon' && location.localBusinessSchemaEligible !== false) {
       errors.push(`${location.id}: coming-soon location must have localBusinessSchemaEligible false`);
     }
+    if (location.status === 'temporarily-closed' && location.localBusinessSchemaEligible !== false) {
+      errors.push(`${location.id}: temporarily-closed location must have localBusinessSchemaEligible false`);
+    }
   }
   if (location.status === 'open' && location.localBusinessSchemaEligible === true && !hasValidGeo) {
     errors.push(`${location.id}: open schema-eligible location must define geo coordinates`);
@@ -225,6 +257,10 @@ for (const location of locations) {
     validateOpenLocation(location);
   } else if (location.status === 'coming-soon') {
     validateComingSoonLocation(location);
+  } else if (location.status === 'temporarily-closed') {
+    validateTemporaryClosure(location);
+  } else {
+    errors.push(`${location.id}: unsupported status ${location.status}`);
   }
 }
 

@@ -65,7 +65,7 @@ function hasValidGeo(loc: LocationRecord): loc is LocationRecord & { geo: { lati
 }
 
 /**
- * Returns null when the location is NOT eligible (coming-soon OR localBusinessSchemaEligible !== true).
+ * Returns null when the location is NOT eligible (coming-soon, temporarily closed, OR localBusinessSchemaEligible !== true).
  * Callers MUST treat null as "skip this node entirely" — Pitfall 6 / D-07 / D-10.
  */
 export function localBusinessNode(loc: LocationRecord, canonicalPath: string): LocalBusinessNode | null {

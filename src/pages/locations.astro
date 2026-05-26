@@ -50,7 +50,7 @@ const page = definePage({ canonicalPath: '/locations' });
     bodyClass="has-noise"
 >
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-locations.css?v=1" />
+        <link rel="stylesheet" href="/css/page-locations.css?v=2" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
@@ -91,6 +91,7 @@ const page = definePage({ canonicalPath: '/locations' });
                                     'loc-row',
                                     'reveal',
                                     { 'is-coming-soon': loc.status === 'coming-soon' },
+                                    { 'is-temporarily-closed': loc.status === 'temporarily-closed' },
                                 ]}
                             >
                                 <span class="loc-state">{locationStateBadge(loc)}</span>
@@ -142,6 +143,7 @@ const page = definePage({ canonicalPath: '/locations' });
                                     'loc-row',
                                     'reveal',
                                     { 'is-coming-soon': loc.status === 'coming-soon' },
+                                    { 'is-temporarily-closed': loc.status === 'temporarily-closed' },
                                 ]}
                             >
                                 <span class="loc-state">{locationStateBadge(loc)}</span>

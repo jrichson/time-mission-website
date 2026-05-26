@@ -110,11 +110,20 @@
         return (loc.bookingUrl && String(loc.bookingUrl).trim()) || '';
     }
 
+    function isTemporarilyClosedLocation(loc) {
+        return !!(loc && loc.status === 'temporarily-closed');
+    }
+
+    function temporaryClosureCtaLabel(loc) {
+        return (loc && loc.temporaryClosure && String(loc.temporaryClosure.ctaLabel || '').trim()) || 'Get Closure Updates';
+    }
+
     function getExternalLocationUrl(loc) {
         return (loc && loc.externalUrl && String(loc.externalUrl).trim()) || '';
     }
 
     function isBookableLocation(loc) {
+        if (isTemporarilyClosedLocation(loc)) return false;
         return !!resolveOpenCheckoutUrl(loc);
     }
 
@@ -161,6 +170,10 @@
         var slug = loc.slug || loc.id || normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
         var checkoutUrl = resolveOpenCheckoutUrl(loc);
         var bookable = !!checkoutUrl;
+
+        if (isTemporarilyClosedLocation(loc)) {
+            return contactLeadUrl(slug, 'closure');
+        }
 
         if (kind === 'gift-cards' || kind === 'giftcards') {
             if (loc.giftCardUrl) return loc.giftCardUrl;
@@ -314,6 +327,7 @@
             locationId: locationId,
             href: trigger ? '#' : (intent.href || '#'),
             bookingUrl: trigger ? intent.href : '',
+            label: isTemporarilyClosedLocation(loc) ? temporaryClosureCtaLabel(loc) : '',
             url: intent.href,
             trigger: trigger,
             externalLocation: intent.externalLocationSite,
@@ -391,6 +405,20 @@
 
     function applyCtaView(el, cta) {
         if (!el || !cta) return;
+        if (cta.label) {
+            var updatedText = false;
+            if (el.childNodes && typeof el.childNodes.forEach === 'function') {
+                el.childNodes.forEach(function (node) {
+                    if (node.nodeType === 3 && String(node.nodeValue || '').trim()) {
+                        node.nodeValue = cta.label + ' ';
+                        updatedText = true;
+                    }
+                });
+            }
+            var childCount = el.childNodes ? el.childNodes.length : 0;
+            if (!updatedText && childCount === 0) el.textContent = cta.label;
+            el.removeAttribute('data-i18n');
+        }
         el.href = cta.href || '#';
         el.removeAttribute('target');
         el.removeAttribute('rel');
@@ -429,6 +457,8 @@
         appendTrackingParams: appendTrackingParams,
         resolveOpenCheckoutUrl: resolveOpenCheckoutUrl,
         getExternalLocationUrl: getExternalLocationUrl,
+        isTemporarilyClosedLocation: isTemporarilyClosedLocation,
+        temporaryClosureCtaLabel: temporaryClosureCtaLabel,
         isBookableLocation: isBookableLocation,
         isLeadOnlyComingSoon: isLeadOnlyComingSoon,
         resolveLocationDestination: resolveLocationDestination,

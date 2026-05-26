@@ -52,6 +52,7 @@ function locationPublicUrl(location: LocationRecord): string {
 }
 
 function bookingFor(location: LocationRecord): string {
+    if (location.status === 'temporarily-closed') return 'Bookings temporarily paused';
     return location.bookingUrl || 'Bookings not open yet';
 }
 
@@ -60,16 +61,23 @@ function giftCardFor(location: LocationRecord): string {
 }
 
 function groupFormSummary(location: LocationRecord): string {
+    if (location.status === 'temporarily-closed') return 'Group bookings temporarily paused';
     const forms = location.groupFormUrls || {};
     const labels = Object.keys(forms).filter((key) => forms[key]);
     return labels.length ? labels.join(', ') : 'Contact location';
+}
+
+function statusFor(location: LocationRecord): string {
+    if (location.status === 'open') return 'Open';
+    if (location.status === 'temporarily-closed') return 'Temporarily closed';
+    return 'Coming soon';
 }
 
 function locationRows(locations: LocationRecord[]): string {
     const rows = locations.map((location) =>
         `| ${[
             location.shortName,
-            location.status === 'open' ? 'Open' : 'Coming soon',
+            statusFor(location),
             addressFor(location) || location.address.city,
             contactFor(location),
             locationPublicUrl(location),

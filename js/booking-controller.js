@@ -147,6 +147,14 @@
                 cta: translate('booking.chooseLocation.cta', 'Select Location First'),
             };
         }
+        if (BookingJourney.isTemporarilyClosedLocation(loc)) {
+            var closure = loc.temporaryClosure || {};
+            return {
+                title: String(closure.title || '').trim() || ((loc.shortName || loc.name || 'This location') + ' Is Temporarily Closed'),
+                intro: String(closure.detail || closure.summary || '').trim() || 'Bookings are paused while this location is rebuilt.',
+                cta: String(closure.ctaLabel || '').trim() || 'Get Closure Updates',
+            };
+        }
         if (intent && !intent.hasHref && (kind === 'groups' || kind === 'waiver' || kind === 'waivers' || kind === 'gift-cards' || kind === 'giftcards')) {
             var locationName = loc.shortName || loc.name || 'this location';
             if (kind === 'groups') {
@@ -724,6 +732,12 @@
         if (window.location.search.indexOf('book=1') === -1) return;
 
         function doRedirect() {
+            var loc = getLocation(pageLocationSlug);
+            if (BookingJourney.isTemporarilyClosedLocation(loc)) {
+                cleanBookParamFromCurrentUrl();
+                document.dispatchEvent(new CustomEvent('tm:location-closure:open', { detail: { location: loc } }));
+                return;
+            }
             var href = getDestination({
                 kind: 'tickets',
                 locationId: pageLocationSlug,

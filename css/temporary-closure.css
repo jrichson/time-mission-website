@@ -1,0 +1,193 @@
+/* Temporary closure notice */
+.tm-closure-strip {
+    position: relative;
+    z-index: 2;
+    padding: clamp(2.5rem, 6vw, 4.5rem) var(--space-page-inline);
+    background:
+        linear-gradient(180deg, rgba(13, 13, 13, 0.92), rgba(21, 21, 21, 0.98)),
+        radial-gradient(circle at 18% 0%, rgba(239, 68, 68, 0.18), transparent 34%);
+}
+
+.tm-closure-strip__inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: clamp(1.25rem, 4vw, 2rem);
+    border: 1px solid rgba(239, 68, 68, 0.32);
+    border-radius: 8px;
+    background: rgba(13, 13, 13, 0.7);
+}
+
+.tm-closure-strip__eyebrow,
+.tm-closure-modal__eyebrow {
+    margin: 0 0 0.75rem;
+    color: #ff8a7a;
+    font-family: var(--tech);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.tm-closure-strip h2,
+.tm-closure-modal h2 {
+    margin: 0 0 0.75rem;
+    color: var(--white);
+    font-family: var(--display);
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 0.95;
+    text-transform: uppercase;
+}
+
+.tm-closure-strip p,
+.tm-closure-modal__copy p {
+    max-width: 720px;
+    margin: 0;
+    color: var(--copy-bright);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.tm-closure-strip p + p,
+.tm-closure-modal__copy p + p {
+    margin-top: 0.75rem;
+}
+
+.tm-closure-strip__actions,
+.tm-closure-modal__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.tm-closure-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--target-min);
+    padding: 0.8rem 1.25rem;
+    border-radius: var(--button-radius-pill);
+    font-family: var(--tech);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+        background var(--motion-standard) ease,
+        border-color var(--motion-standard) ease,
+        color var(--motion-standard) ease,
+        transform var(--motion-standard) ease;
+}
+
+.tm-closure-button--primary {
+    border: 1px solid rgba(255, 107, 44, 0.52);
+    background: var(--gradient-primary);
+    color: var(--white);
+}
+
+.tm-closure-button--secondary,
+.tm-closure-button--ghost {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--white-soft);
+}
+
+.tm-closure-button:hover {
+    transform: translateY(-1px);
+}
+
+.tm-closure-button:focus-visible,
+.tm-closure-modal__close:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+}
+
+.tm-closure-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10020;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+    background: rgba(0, 0, 0, 0.82);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity var(--motion-standard) ease,
+        visibility var(--motion-standard) ease;
+}
+
+.tm-closure-modal[hidden] {
+    display: none;
+}
+
+.tm-closure-modal.is-active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.tm-closure-modal__panel {
+    position: relative;
+    width: min(560px, 100%);
+    padding: clamp(1.5rem, 5vw, 2.25rem);
+    border: 1px solid rgba(239, 68, 68, 0.36);
+    border-radius: 8px;
+    background:
+        linear-gradient(145deg, rgba(21, 21, 21, 0.98), rgba(13, 13, 13, 0.98)),
+        radial-gradient(circle at 100% 0%, rgba(255, 107, 44, 0.12), transparent 44%);
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.62);
+}
+
+.tm-closure-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--icon-button-size);
+    height: var(--icon-button-size);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--white-soft);
+    cursor: pointer;
+}
+
+.tm-closure-modal__close svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 2;
+}
+
+@media (max-width: 520px) {
+    .tm-closure-strip__actions,
+    .tm-closure-modal__actions {
+        flex-direction: column;
+    }
+
+    .tm-closure-button {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tm-closure-button,
+    .tm-closure-modal {
+        transition: none;
+    }
+
+    .tm-closure-button:hover {
+        transform: none;
+    }
+}

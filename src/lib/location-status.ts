@@ -2,7 +2,7 @@ import type { LocationRecord } from '../data/locations';
 
 type LocationStatusFields = Pick<
     LocationRecord,
-    'bookingUrl' | 'openingDate' | 'openingLabel' | 'rollerCheckoutUrl' | 'status'
+    'bookingUrl' | 'openingDate' | 'openingLabel' | 'rollerCheckoutUrl' | 'status' | 'temporaryClosure'
 >;
 
 const monthNames = [
@@ -21,7 +21,13 @@ const monthNames = [
 ];
 
 export function hasTicketBooking(loc: LocationStatusFields): boolean {
+    if (loc.status === 'temporarily-closed') return false;
     return Boolean(String(loc.rollerCheckoutUrl || loc.bookingUrl || '').trim());
+}
+
+export function locationTemporaryClosureLabel(loc: Pick<LocationRecord, 'status' | 'temporaryClosure'>): string {
+    if (loc.status !== 'temporarily-closed') return '';
+    return String(loc.temporaryClosure?.label || '').trim() || 'Temporarily Closed';
 }
 
 export function locationOpeningLabel(loc: Pick<LocationRecord, 'openingDate' | 'openingLabel'>): string {
@@ -40,6 +46,8 @@ export function locationOpeningDateText(loc: Pick<LocationRecord, 'openingDate' 
 }
 
 export function locationDisplayStatus(loc: LocationStatusFields): string {
+    const closureLabel = locationTemporaryClosureLabel(loc);
+    if (closureLabel) return closureLabel;
     const openingLabel = locationOpeningLabel(loc);
     if (openingLabel) return openingLabel;
     if (loc.status === 'coming-soon') return hasTicketBooking(loc) ? 'Booking Now' : 'Coming Soon';

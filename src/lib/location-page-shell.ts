@@ -33,6 +33,47 @@ function cityPageInit(location: LocationRecord, taglines: string[]) {
     };
 }
 
+function escapeHtml(value: string): string {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function contactHref(slug: string, type = 'closure'): string {
+    const params = new URLSearchParams();
+    params.set('location', slug);
+    params.set('type', type);
+    return `/contact#${params.toString()}`;
+}
+
+function temporaryClosureStrip(location: LocationRecord): string {
+    if (location.status !== 'temporarily-closed' || !location.temporaryClosure) return '';
+    const closure = location.temporaryClosure;
+    return `
+    <section class="tm-closure-strip" aria-labelledby="tm-closure-strip-title">
+        <div class="tm-closure-strip__inner">
+            <p class="tm-closure-strip__eyebrow">${escapeHtml(closure.label || closure.title)}</p>
+            <h2 id="tm-closure-strip-title">${escapeHtml(closure.title)}</h2>
+            <p>${escapeHtml(closure.summary)}</p>
+            <p>${escapeHtml(closure.detail)}</p>
+            <div class="tm-closure-strip__actions">
+                <a href="${escapeHtml(contactHref(location.slug))}" class="tm-closure-button tm-closure-button--primary" data-tm-no-location-scope>${escapeHtml(closure.ctaLabel)}</a>
+                <a href="mailto:${escapeHtml(location.contact.email)}" class="tm-closure-button tm-closure-button--secondary">${escapeHtml(closure.contactLabel)}</a>
+            </div>
+        </div>
+    </section>`;
+}
+
+function withTemporaryClosureStrip(mainRaw: string, location: LocationRecord): string {
+    const notice = temporaryClosureStrip(location);
+    if (!notice) return mainRaw;
+    const firstSectionClose = mainRaw.indexOf('</section>');
+    if (firstSectionClose === -1) return notice + mainRaw;
+    return `${mainRaw.slice(0, firstSectionClose + '</section>'.length)}${notice}${mainRaw.slice(firstSectionClose + '</section>'.length)}`;
+}
+
 export function buildOpenLocationPage({
     mainRaw,
     slug,
@@ -46,7 +87,7 @@ export function buildOpenLocationPage({
         canonicalPath,
         ld: locationJsonLd(location),
         location,
-        mainHtml: applyTmMediaBase(mainRaw),
+        mainHtml: applyTmMediaBase(withTemporaryClosureStrip(mainRaw, location)),
         page: definePage({ canonicalPath }),
         pageInit: cityPageInit(location, locationPageTaglines(slug)),
     };

@@ -353,7 +353,7 @@
             }
 
             const locView = loc ? getLocationView(loc.id || loc.slug) : null;
-            if (loc && locView && (locView.bookable || loc.status === 'coming-soon')) {
+            if (loc && locView && (locView.bookable || loc.status === 'coming-soon' || loc.status === 'temporarily-closed')) {
                 const pageLocationSlug = getPageLocationSlug();
                 document.querySelectorAll('.btn-tickets, .btn-book-now').forEach(el => {
                     const bookingKind = (el.getAttribute('data-tm-booking-kind') || 'tickets').toLowerCase();

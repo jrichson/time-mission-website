@@ -12,8 +12,14 @@ const { currentLang = 'en' } = Astro.props;
 const usLocations = allLocations.filter((l) => l.region === 'us');
 const euLocations = allLocations.filter((l) => l.region === 'europe');
 
-function comingSoonLabel(loc: (typeof allLocations)[number]) {
+function statusLabel(loc: (typeof allLocations)[number]) {
     return locationStatusBadge(loc) || 'Coming Soon';
+}
+
+function statusClass(loc: (typeof allLocations)[number]) {
+    if (loc.status === 'coming-soon') return 'location-coming-soon';
+    if (loc.status === 'temporarily-closed') return 'location-temporarily-closed';
+    return undefined;
 }
 ---
 
@@ -38,12 +44,12 @@ function comingSoonLabel(loc: (typeof allLocations)[number]) {
                         href={locationHref(loc)}
                         data-city={loc.shortName}
                         data-tm-location-slug={loc.slug}
-                        class={loc.status === 'coming-soon' ? 'location-coming-soon' : undefined}
+                        class={statusClass(loc)}
                     >
                         {loc.navLabel}
-                        {loc.status === 'coming-soon' && (
-                            <span class="coming-soon-tag" data-i18n={locationOpeningLabel(loc) ? undefined : 'location.comingSoon'}>
-                                {' '}{comingSoonLabel(loc)}
+                        {loc.status !== 'open' && (
+                            <span class="coming-soon-tag" data-i18n={loc.status === 'coming-soon' && !locationOpeningLabel(loc) ? 'location.comingSoon' : undefined}>
+                                {' '}{statusLabel(loc)}
                             </span>
                         )}
                     </a>
@@ -57,12 +63,12 @@ function comingSoonLabel(loc: (typeof allLocations)[number]) {
                         data-city={loc.shortName}
                         data-tm-location-slug={loc.slug}
                         data-tm-external-location="true"
-                        class={loc.status === 'coming-soon' ? 'location-coming-soon' : undefined}
+                        class={statusClass(loc)}
                     >
                         {loc.navLabel}
-                        {loc.status === 'coming-soon' && (
-                            <span class="coming-soon-tag" data-i18n={locationOpeningLabel(loc) ? undefined : 'location.comingSoon'}>
-                                {' '}{comingSoonLabel(loc)}
+                        {loc.status !== 'open' && (
+                            <span class="coming-soon-tag" data-i18n={loc.status === 'coming-soon' && !locationOpeningLabel(loc) ? 'location.comingSoon' : undefined}>
+                                {' '}{statusLabel(loc)}
                             </span>
                         )}
                     </a>

@@ -45,7 +45,14 @@ function contactFor(location: LocationRecord): string {
 }
 
 function bookingFor(location: LocationRecord): string {
+    if (location.status === 'temporarily-closed') return 'Bookings temporarily paused';
     return location.bookingUrl || 'Bookings not open yet';
+}
+
+function statusFor(location: LocationRecord): string {
+    if (location.status === 'open') return 'Open';
+    if (location.status === 'temporarily-closed') return 'Temporarily closed';
+    return 'Coming soon';
 }
 
 function locationUrl(location: LocationRecord): string {
@@ -56,7 +63,7 @@ function locationRows(locations: LocationRecord[]): string {
     const rows = locations.map((location) =>
         `| ${[
             location.shortName,
-            location.status === 'open' ? 'Open' : 'Coming soon',
+            statusFor(location),
             addressFor(location) || location.address.city,
             contactFor(location),
             locationUrl(location),

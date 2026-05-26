@@ -79,6 +79,11 @@
 
         var slug = locationSlug(loc);
         var locationName = loc.shortName || loc.name || 'this location';
+        if (loc.status === 'temporarily-closed') {
+            redemptionAnswer.textContent = 'Gift cards are temporarily paused for ' + locationName + ' while ticket sales are paused.';
+            return;
+        }
+
         if (opsGiftCardLocationIds[slug]) {
             redemptionAnswer.textContent = 'Gift cards purchased from this location are valid for Time Missions located in these states: AL, GA, FL, IL, IN, KS, MD, MN, MO, NC, TN, VA & WI.';
             return;
@@ -103,7 +108,11 @@
         var locationName = loc.shortName || loc.name;
         updateRedemptionAnswer(loc);
         if (!url) {
-            if (hint) hint.textContent = 'Gift cards are not available for ' + locationName + ' yet.';
+            if (hint) {
+                hint.textContent = loc.status === 'temporarily-closed'
+                    ? 'Gift cards are temporarily paused for ' + locationName + '.'
+                    : 'Gift cards are not available for ' + locationName + ' yet.';
+            }
             setButtons('#', true);
             return true;
         }

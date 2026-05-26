@@ -3,11 +3,14 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import LocationPageHeadLinks from './LocationPageHeadLinks.astro';
 import PageWidgetsScripts from './PageWidgetsScripts.astro';
 import { locationPageCssHref, locationPageLang } from '../lib/location-page-registry';
+import { locationCtaView } from '../lib/location-view';
+import TemporaryClosureNotice from './TemporaryClosureNotice.astro';
+import type { LocationRecord } from '../data/locations';
 
 interface Props {
     cityPage: {
         ld: string;
-        location: { slug: string };
+        location: LocationRecord;
         mainHtml: string;
         page: { canonicalPath: string };
         pageInit: unknown;
@@ -18,21 +21,30 @@ const { cityPage } = Astro.props;
 const slug = cityPage.location.slug;
 const lang = locationPageLang(slug);
 const pageCss = locationPageCssHref(slug);
+const bookingCta = locationCtaView(cityPage.location);
+const isTemporarilyClosed = cityPage.location.status === 'temporarily-closed';
 ---
 
 <SiteLayout
     canonicalPath={cityPage.page.canonicalPath}
     lang={lang}
     bodyDataLocation={cityPage.location.slug}
+    bookingCtaHref={bookingCta.href}
+    bookingCtaLabel={bookingCta.label}
+    bookingCtaIsBookingTrigger={bookingCta.isBookingTrigger}
+    bookingCtaI18n={bookingCta.i18n}
 >
     <Fragment slot="head-extra">
         <LocationPageHeadLinks pageCss={pageCss} />
+        {isTemporarilyClosed && <link rel="stylesheet" href="/css/temporary-closure.css?v=1" />}
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={cityPage.ld}></script>
     </Fragment>
     <div set:html={cityPage.mainHtml} />
+    {isTemporarilyClosed && <TemporaryClosureNotice location={cityPage.location} />}
     <Fragment slot="after-site-scripts">
+        {isTemporarilyClosed && <script is:inline src="/js/temporary-closure-notice.js?v=1"></script>}
         <PageWidgetsScripts pageInit={cityPage.pageInit} />
     </Fragment>
 </SiteLayout>

@@ -34,6 +34,15 @@
         return openingLabelForLocation(loc) || translate('location.comingSoon', 'Coming Soon');
     }
 
+    function temporaryClosureLabelForLocation(loc) {
+        if (!loc || loc.status !== 'temporarily-closed') return '';
+        return (loc.temporaryClosure && String(loc.temporaryClosure.label || '').trim()) || 'Temporarily Closed';
+    }
+
+    function statusLabelForLocation(loc) {
+        return temporaryClosureLabelForLocation(loc) || comingSoonLabelForLocation(loc);
+    }
+
     function renderAddressLines(container, addr) {
         if (!container) return;
         container.textContent = '';
@@ -101,14 +110,19 @@
     }
 
     function hoursTextForLocation(loc) {
-        if (!loc || !loc.hours) return loc && loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : '';
+        if (!loc || !loc.hours) {
+            if (loc && loc.status === 'temporarily-closed') return temporaryClosureLabelForLocation(loc);
+            return loc && loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : '';
+        }
         var lines = [];
         dayOrder.forEach(function (day) {
             if (loc.hours[day] && loc.hours[day].label) {
                 lines.push(shortDayLabels[day] + ': ' + loc.hours[day].label);
             }
         });
-        return lines.join('\n') || (loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : '');
+        return lines.join('\n')
+            || (loc.status === 'temporarily-closed' ? temporaryClosureLabelForLocation(loc) : '')
+            || (loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : '');
     }
 
     function getMapQuery(loc) {
@@ -139,6 +153,9 @@
 
     function leadUrlForLocation(loc, slug, externalUrl) {
         if (externalUrl) return externalUrl;
+        if (BookingJourney.isTemporarilyClosedLocation(loc)) {
+            return contactLeadUrl(slug, 'closure');
+        }
         if (BookingJourney.isLeadOnlyComingSoon(loc)) {
             return contactLeadUrl(slug, 'updates');
         }
@@ -157,6 +174,7 @@
         var externalUrl = BookingJourney.getExternalLocationUrl(loc);
         var pageUrl = externalUrl || (slug ? '/' + slug : '/');
         var comingSoon = loc.status === 'coming-soon';
+        var temporarilyClosed = loc.status === 'temporarily-closed';
         var bookable = BookingJourney.isBookableLocation(loc);
         var bookingUrl = BookingJourney.resolveOpenCheckoutUrl(loc);
         var leadUrl = leadUrlForLocation(loc, slug, externalUrl);
@@ -175,11 +193,16 @@
             checkoutUrl: bookingUrl,
             externalUrl: externalUrl,
             openingLabel: openingLabelForLocation(loc),
-            bookLabel: externalUrl ? 'Visit EU Site' : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
+            bookLabel: temporarilyClosed
+                ? BookingJourney.temporaryClosureCtaLabel(loc)
+                : externalUrl
+                ? 'Visit EU Site'
+                : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
             mapQuery: mapQuery,
             mapDirectionsUrl: mapQuery ? 'https://www.google.com/maps/dir/?api=1&destination=' + mapQuery : '',
             mapEmbedUrl: mapQuery ? 'https://www.google.com/maps?q=' + mapQuery + '&output=embed&z=12' : '',
             comingSoon: comingSoon && !bookable,
+            temporarilyClosed: temporarilyClosed,
             status: loc.status || 'open',
             bookable: bookable,
             locationId: loc.id || slug,
@@ -234,8 +257,8 @@
     function listTicketOptions(locations) {
         return (Array.isArray(locations) ? locations : []).map(function (loc) {
             var view = getLocationView(loc, loc.id || loc.slug);
-            var statusSuffix = loc.status === 'coming-soon'
-                ? ' (' + (openingLabelForLocation(loc) || (view && view.bookable
+        var statusSuffix = loc.status !== 'open'
+                ? ' (' + (temporaryClosureLabelForLocation(loc) || openingLabelForLocation(loc) || (view && view.bookable
                     ? translate('booking.status.bookingNow', 'Booking Now')
                     : translate('location.comingSoon', 'Coming Soon'))) + ')'
                 : '';
@@ -326,7 +349,7 @@
                 setHidden(phoneNoteEl, false);
             }
         }
-        renderHoursTable(hoursEl, loc.hours, loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : translate('location.hoursComingSoon', 'Hours coming soon'));
+        renderHoursTable(hoursEl, loc.hours, loc.status === 'temporarily-closed' ? temporaryClosureLabelForLocation(loc) : loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : translate('location.hoursComingSoon', 'Hours coming soon'));
         if (mapEl) {
             mapEl.href = loc.mapUrl || '#';
             setHidden(mapEl, !loc.mapUrl);
@@ -337,6 +360,8 @@
         getLocationView: getLocationView,
         addressTextForLocation: addressTextForLocation,
         hoursTextForLocation: hoursTextForLocation,
+        temporaryClosureLabelForLocation: temporaryClosureLabelForLocation,
+        statusLabelForLocation: statusLabelForLocation,
         getMapQuery: getMapQuery,
         renderAddressLines: renderAddressLines,
         renderHoursTable: renderHoursTable,

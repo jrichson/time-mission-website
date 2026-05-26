@@ -177,7 +177,6 @@ describe('browser architecture contracts', () => {
 
     for (const locationId of [
       'mount-prospect',
-      'philadelphia',
       'west-nyack',
       'lincoln',
       'manassas',
@@ -191,14 +190,18 @@ describe('browser architecture contracts', () => {
       }
     }
 
-    for (const locationId of ['mount-prospect', 'philadelphia', 'lincoln', 'manassas', 'orland-park']) {
+    for (const locationId of ['mount-prospect', 'lincoln', 'manassas', 'orland-park']) {
       requireUrl(locationId, 'giftCardUrl', byId.get(locationId)?.giftCardUrl);
     }
 
-    for (const locationId of ['mount-prospect', 'philadelphia', 'manassas', 'houston', 'orland-park']) {
+    for (const locationId of ['mount-prospect', 'manassas', 'houston', 'orland-park']) {
       requireUrl(locationId, 'waiverUrl', byId.get(locationId)?.waiverUrl);
     }
 
+    expect(byId.get('philadelphia')?.status).toBe('temporarily-closed');
+    expect(byId.get('philadelphia')?.bookingUrl).toBe('');
+    expect(byId.get('philadelphia')?.rollerCheckoutUrl).toBe('');
+    expect(byId.get('philadelphia')?.groupFormUrls).toEqual({});
     expect(byId.get('west-nyack')?.briqWidget?.domain).toBe('timemission-palisades');
     expect(byId.get('antwerp')?.externalUrl).toBe('https://timemission.eu/antwerp');
     expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu/brussels');
@@ -779,7 +782,9 @@ describe('browser architecture contracts', () => {
       const groupUrls = loc.groupFormUrls || {};
       for (const groupType of groupTypes) {
         const isWestNyackBriq = locationId === 'west-nyack' && !!groupUrls[groupType];
-        const expectedRuntimeHref = isWestNyackBriq
+        const expectedRuntimeHref = loc.status === 'temporarily-closed'
+          ? `/contact#location=${loc.slug || loc.id}&type=closure`
+          : isWestNyackBriq
           ? '#briq-widget-container'
           : (groupUrls[groupType] || '');
         const expectedPresentation = isWestNyackBriq
@@ -814,11 +819,17 @@ describe('browser architecture contracts', () => {
     }
 
     for (const [locationId, loc] of byId) {
-      expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId })).toBe(loc.giftCardUrl || '');
+      const expected = loc.status === 'temporarily-closed'
+        ? `/contact#location=${loc.slug || loc.id}&type=closure`
+        : loc.giftCardUrl || '';
+      expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId })).toBe(expected);
     }
 
     for (const [locationId, loc] of byId) {
-      expect(window.TMBooking.getDestination({ kind: 'waiver', locationId })).toBe(loc.waiverUrl || '');
+      const expected = loc.status === 'temporarily-closed'
+        ? `/contact#location=${loc.slug || loc.id}&type=closure`
+        : loc.waiverUrl || '';
+      expect(window.TMBooking.getDestination({ kind: 'waiver', locationId })).toBe(expected);
     }
   });
 

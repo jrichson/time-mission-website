@@ -13,7 +13,15 @@ export interface LocationRecord {
     shortName: string;
     venueName: string | null;
     region: string;
-    status: 'open' | 'coming-soon';
+    status: 'open' | 'coming-soon' | 'temporarily-closed';
+    temporaryClosure?: {
+        label: string;
+        title: string;
+        summary: string;
+        detail: string;
+        ctaLabel: string;
+        contactLabel: string;
+    };
     address: {
         line1: string;
         line2?: string;

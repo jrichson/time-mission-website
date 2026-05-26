@@ -12,7 +12,7 @@ const routeData = JSON.parse(fs.readFileSync(routesPath, 'utf8'));
 const routesByPath = new Map((routeData.routes || []).map((r) => [r.canonicalPath, r]));
 
 for (const loc of locData.locations || []) {
-  if (loc.status !== 'open' && loc.status !== 'coming-soon') continue;
+  if (!['open', 'coming-soon', 'temporarily-closed'].includes(loc.status)) continue;
   const expected = '/' + loc.slug;
   const route = routesByPath.get(expected);
   if (!route) {

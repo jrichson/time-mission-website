@@ -114,9 +114,9 @@ test.describe('visual regression (representative templates)', () => {
     });
   });
 
-  test('open location (Philadelphia)', async ({ page }) => {
-    await page.goto('/philadelphia');
-    await expect(page).toHaveTitle(/Philadelphia/i);
+  test('open location (Mount Prospect)', async ({ page }) => {
+    await page.goto('/mount-prospect');
+    await expect(page).toHaveTitle(/Mount Prospect/i);
     await stabilizeForScreenshot(page);
     await expect(page).toHaveScreenshot('location-open.png', {
       fullPage: false,

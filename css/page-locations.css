@@ -264,6 +264,16 @@
             color: var(--white-soft);
         }
 
+        .loc-row.is-temporarily-closed .loc-status {
+            color: #ff8a7a;
+        }
+
+        .loc-row.is-temporarily-closed .loc-coming-soon-tag {
+            border-color: rgba(239, 68, 68, 0.35);
+            background: rgba(239, 68, 68, 0.14);
+            color: #ff8a7a;
+        }
+
         /* Responsive */
         @media (max-width: 600px) {
             .hero {
