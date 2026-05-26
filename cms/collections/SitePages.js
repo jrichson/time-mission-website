@@ -67,30 +67,47 @@ function isAdminOrEditor(user) {
   return role === 'admin' || role === 'editor';
 }
 
+function isAdmin(user) {
+  return userRole(user) === 'admin';
+}
+
 function canManageSitePages({ req: { user } }) {
   if (!user || user.collection !== 'users') return false;
 
   return isAdminOrEditor(user);
 }
 
+function canCreateOrDeleteSitePages({ req: { user } }) {
+  if (!user || user.collection !== 'users') return false;
+
+  return isAdmin(user);
+}
+
+function canManageSensitiveSeoFields({ req: { user } }) {
+  if (!user || user.collection !== 'users') return false;
+
+  return isAdmin(user);
+}
+
 export const SitePages = {
   slug: 'site-pages',
   labels: {
-    singular: 'Existing Page',
-    plural: 'Existing Pages',
+    singular: 'Page SEO Override',
+    plural: 'Page SEO Overrides',
   },
   admin: {
-    group: 'Pages',
+    group: 'Site Surfaces',
     useAsTitle: 'title',
     defaultColumns: ['title', 'path', 'published', 'updatedAt'],
-    description: 'SEO metadata for static Astro pages. Match the canonical path exactly, such as /about.',
+    description:
+      'Search and social metadata for code-owned public pages. This does not change page body copy or layout.',
   },
   access: {
     admin: canManageSitePages,
     read: ({ req }) => (canManageSitePages({ req }) ? true : { published: { equals: true } }),
-    create: canManageSitePages,
+    create: canCreateOrDeleteSitePages,
     update: canManageSitePages,
-    delete: canManageSitePages,
+    delete: canCreateOrDeleteSitePages,
   },
   fields: [
     {
@@ -101,6 +118,7 @@ export const SitePages = {
           type: 'text',
           required: true,
           maxLength: 120,
+          admin: { description: 'Internal label for this SEO override. It is not page body content.' },
         },
         {
           name: 'path',
@@ -108,7 +126,14 @@ export const SitePages = {
           required: true,
           unique: true,
           index: true,
-          admin: { description: 'Existing page path, e.g. /, /about, /groups/birthdays.' },
+          label: 'Code-owned page path',
+          access: {
+            update: canManageSensitiveSeoFields,
+          },
+          admin: {
+            description:
+              'Admin-only. Match a known code-owned page path, e.g. /, /about, /groups/birthdays. Landing pages use /c/* instead.',
+          },
           validate: validateExistingPagePath,
         },
       ],
@@ -117,9 +142,11 @@ export const SitePages = {
       name: 'published',
       type: 'checkbox',
       defaultValue: true,
+      label: 'Published in CMS',
       admin: {
         position: 'sidebar',
-        description: 'When checked, the Astro build can use this metadata for the matching existing page.',
+        description:
+          'Published in CMS means this metadata is approved. It is Live after deploy when the static public site rebuilds.',
       },
     },
     {
@@ -132,7 +159,7 @@ export const SitePages = {
           type: 'text',
           required: true,
           maxLength: 90,
-          admin: { description: '<title> and og:title for the existing page' },
+          admin: { description: '<title> and og:title for the code-owned page' },
         },
         {
           name: 'metaDescription',
@@ -144,6 +171,12 @@ export const SitePages = {
           name: 'robots',
           type: 'select',
           defaultValue: 'index,follow',
+          access: {
+            update: canManageSensitiveSeoFields,
+          },
+          admin: {
+            description: 'Admin-only. Indexing changes can affect crawlability.',
+          },
           options: [
             { label: 'index, follow', value: 'index,follow' },
             { label: 'noindex, follow', value: 'noindex,follow' },

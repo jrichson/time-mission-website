@@ -74,6 +74,19 @@
         0 0 22px rgba(255, 107, 44, 0.2);
 }
 
+.ticker-link {
+    color: var(--gold);
+    font-weight: 800;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+}
+
+.ticker-link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+}
+
 @keyframes ticker-scroll {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }

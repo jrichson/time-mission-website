@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     'site-pages': SitePage;
+    'announcement-banners': AnnouncementBanner;
     landings: Landing;
     'user-invites': UserInvite;
     users: User;
@@ -79,6 +80,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     'site-pages': SitePagesSelect<false> | SitePagesSelect<true>;
+    'announcement-banners': AnnouncementBannersSelect<false> | AnnouncementBannersSelect<true>;
     landings: LandingsSelect<false> | LandingsSelect<true>;
     'user-invites': UserInvitesSelect<false> | UserInvitesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -122,7 +124,7 @@ export interface UserAuthOperations {
   };
 }
 /**
- * SEO metadata for static Astro pages. Match the canonical path exactly, such as /about.
+ * Search and social metadata for code-owned public pages. This does not change page body copy or layout.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-pages".
@@ -131,16 +133,16 @@ export interface SitePage {
   id: number;
   title: string;
   /**
-   * Existing page path, e.g. /, /about, /groups/birthdays.
+   * Admin-only. Match a known code-owned page path, e.g. /, /about, /groups/birthdays. Landing pages use /c/* instead.
    */
   path: string;
   /**
-   * When checked, the Astro build can use this metadata for the matching existing page.
+   * Published in CMS means this metadata is approved. It is Live after deploy when the static public site rebuilds.
    */
   published?: boolean | null;
   seo: {
     /**
-     * <title> and og:title for the existing page
+     * <title> and og:title for the code-owned page
      */
     metaTitle: string;
     metaDescription: string;
@@ -154,6 +156,74 @@ export interface SitePage {
      */
     twitterImage?: string | null;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Text-only top banner messages. Publish in CMS to approve; the public site shows the winning active banner after the next approved deploy.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcement-banners".
+ */
+export interface AnnouncementBanner {
+  id: number;
+  /**
+   * Internal label for editors. This is not shown on the public site.
+   */
+  title: string;
+  /**
+   * Higher priority wins when multiple banners are active. Matching priorities use the newest start date.
+   */
+  priority?: number | null;
+  /**
+   * Text-only banner message. Keep it short enough to scan in the moving top banner.
+   */
+  message: string;
+  /**
+   * Published in CMS means approved. It is Live after deploy when the static public site rebuilds.
+   */
+  published?: boolean | null;
+  /**
+   * Optional. Leave empty to make the banner eligible immediately after deploy.
+   */
+  startsAt?: string | null;
+  /**
+   * Optional. Leave empty for no scheduled end.
+   */
+  endsAt?: string | null;
+  /**
+   * Use all visitors unless this announcement is specific to a region or location page.
+   */
+  targetScope: 'global' | 'regions' | 'locations';
+  /**
+   * The banner is eligible only on pages associated with these regions.
+   */
+  targetRegions?:
+    | {
+        region: 'us' | 'europe';
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The banner is eligible only on these location pages.
+   */
+  targetLocations?:
+    | {
+        /**
+         * Location slug
+         */
+        locationSlug: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional text link label. Example: Learn more.
+   */
+  linkLabel?: string | null;
+  /**
+   * Optional clean internal path or credential-free https URL.
+   */
+  linkUrl?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -285,6 +355,10 @@ export interface User {
    * Only the CMS owner can assign roles. Editors manage landing content only.
    */
   role: 'admin' | 'editor';
+  /**
+   * Owner-granted permission to publish approved CMS changes to the public site. Roles alone do not grant deploy access.
+   */
+  canDeploy?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -408,6 +482,35 @@ export interface SitePagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcement-banners_select".
+ */
+export interface AnnouncementBannersSelect<T extends boolean = true> {
+  title?: T;
+  priority?: T;
+  message?: T;
+  published?: T;
+  startsAt?: T;
+  endsAt?: T;
+  targetScope?: T;
+  targetRegions?:
+    | T
+    | {
+        region?: T;
+        id?: T;
+      };
+  targetLocations?:
+    | T
+    | {
+        locationSlug?: T;
+        id?: T;
+      };
+  linkLabel?: T;
+  linkUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "landings_select".
  */
 export interface LandingsSelect<T extends boolean = true> {
@@ -505,6 +608,7 @@ export interface UserInvitesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   role?: T;
+  canDeploy?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

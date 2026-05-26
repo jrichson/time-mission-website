@@ -8,6 +8,7 @@ import type { CollectionConfig } from 'payload';
 import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 
+import { AnnouncementBanners } from './collections/AnnouncementBanners.js';
 import { Landings } from './collections/Landings.js';
 import { SitePages } from './collections/SitePages.js';
 import { UserInvites } from './collections/UserInvites.js';
@@ -155,6 +156,7 @@ export default buildConfig({
   },
   collections: [
     SitePages as CollectionConfig,
+    AnnouncementBanners as CollectionConfig,
     Landings as CollectionConfig,
     UserInvites as CollectionConfig,
     Users as CollectionConfig,

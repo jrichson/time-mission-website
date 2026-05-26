@@ -2,6 +2,11 @@
 import LanguageSwitcher from './LanguageSwitcher.astro';
 
 interface Props {
+    announcementBanner?: {
+        message: string;
+        linkLabel?: string | null;
+        linkUrl?: string | null;
+    } | null;
     currentLang?: string;
     bookingCtaHref?: string;
     bookingCtaLabel?: string;
@@ -11,6 +16,7 @@ interface Props {
 }
 
 const {
+    announcementBanner = null,
     currentLang = 'en',
     bookingCtaHref = '#',
     bookingCtaLabel = 'Book Now',
@@ -24,7 +30,7 @@ const bookingCtaAttrs = {
 };
 
 type TickerMessage =
-    | { text: string }
+    | { text: string; href?: string | null; linkLabel?: string | null }
     | { label: string; date: string; labelI18n?: string; dateI18n?: string };
 
 const tickerBaseMessages: TickerMessage[] = [
@@ -57,7 +63,16 @@ function tickerMessageFromText(text: string): TickerMessage | null {
 }
 
 const locationTickerMessage = tickerMessageFromText(locationTicker);
-const tickerMessages: TickerMessage[] = locationTickerMessage
+const cmsAnnouncementMessage: TickerMessage | null = announcementBanner?.message
+    ? {
+        text: announcementBanner.message,
+        href: announcementBanner.linkUrl,
+        linkLabel: announcementBanner.linkLabel,
+    }
+    : null;
+const tickerMessages: TickerMessage[] = cmsAnnouncementMessage
+    ? Array.from({ length: tickerCycles }, () => cmsAnnouncementMessage)
+    : locationTickerMessage
     ? Array.from({ length: tickerCycles }, () => locationTickerMessage)
     : Array.from({ length: tickerCycles }, () => tickerBaseMessages).flat();
 ---
@@ -68,7 +83,15 @@ const tickerMessages: TickerMessage[] = locationTickerMessage
         {tickerMessages.map((m) => (
             <span class="ticker-item">
                 {'text' in m ? (
-                    m.text
+                    <>
+                        <span>{m.text}</span>
+                        {m.href && (
+                            <>
+                                <span class="ticker-separator" aria-hidden="true">-</span>
+                                <a class="ticker-link" href={m.href}>{m.linkLabel || 'Learn more'}</a>
+                            </>
+                        )}
+                    </>
                 ) : (
                     <>
                         <span class="ticker-copy" data-i18n={m.labelI18n}>{m.label}</span>

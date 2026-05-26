@@ -5,8 +5,13 @@ import styles from './home.module.css';
 const quickLinks = [
   {
     href: '/admin/collections/site-pages',
-    label: 'Existing Pages',
-    description: 'Update canonical site pages, SEO metadata, and page-specific content without changing code.',
+    label: 'Page SEO Overrides',
+    description: 'Update search and social metadata for code-owned pages. Canonical page body copy and layouts stay code-owned.',
+  },
+  {
+    href: '/admin/collections/announcement-banners',
+    label: 'Announcement Banners',
+    description: 'Manage text-only top banner messages, scheduling, priority, and location or region targeting.',
   },
   {
     href: '/admin/collections/landings',
@@ -41,7 +46,7 @@ const landingActions = [
   },
 ];
 
-const workflowSteps = ['Capture the brief', 'Choose the landing shape', 'Write page copy from the brief', 'Preview, publish, and deploy'];
+const workflowSteps = ['Draft', 'Preview', 'Published in CMS', 'Live after deploy'];
 
 export default function Home() {
   return (
@@ -51,8 +56,8 @@ export default function Home() {
           <p className={styles.kicker}>Time Mission CMS</p>
           <h1 id="cms-home-title">Keep the site current without touching code</h1>
           <p className={styles.lede}>
-            Update existing pages, launch campaign landings through a brief-first wizard, preview work, and invite approved
-            editors from one operator console.
+            Launch campaign landings, manage reusable site surfaces, update page SEO, preview work, and invite approved
+            editors from one operator console. Canonical page body copy and layouts stay code-owned.
           </p>
           <div className={styles.actions}>
             <Link className={styles.primaryAction} href="/landings/new">
@@ -72,8 +77,8 @@ export default function Home() {
             ))}
           </ol>
           <p className={styles.panelNote}>
-            CMS saves create drafts and previews first. Approved public changes still need a manual deploy before
-            visitors see them.
+            CMS saves create drafts and previews first. Published in CMS means approved; content is Live after deploy
+            when the static public site rebuilds.
           </p>
         </aside>
       </section>

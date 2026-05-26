@@ -1,5 +1,6 @@
 /** Build-time Payload REST client for CMS landings (`cms/` workspace). */
 
+import type { PayloadAnnouncementBannerDoc } from './announcement-banner-contract';
 import {
     cmsBuildStrict,
     PAYLOAD_FETCH_TIMEOUT_MS,
@@ -7,6 +8,11 @@ import {
 } from './cms-origin';
 import type { PayloadLandingSurface } from './landing-contract';
 import type { PayloadLandingSourceChannel } from './landing-contract';
+export {
+    announcementBannerDocLooksUsable,
+    announcementBannerViewForDoc,
+    selectAnnouncementBanner,
+} from './announcement-banner-contract';
 export {
     DEFAULT_LANDING_TEMPLATE,
     LANDING_TEMPLATE_OPTIONS,
@@ -33,6 +39,7 @@ export type { PayloadLandingArchetype } from './landing-contract';
 export type { PayloadLandingLaunchState } from './landing-contract';
 export type { PayloadLandingSourceChannel } from './landing-contract';
 export type { PayloadLandingTemplate } from './landing-contract';
+export type { PayloadAnnouncementBannerDoc } from './announcement-banner-contract';
 
 const DEFAULT_ORIGIN_KEYS = ['PAYLOAD_CMS_ORIGIN', 'PAYLOAD_PUBLIC_CMS_ORIGIN'] as const;
 
@@ -157,6 +164,7 @@ async function fetchPayloadLandings(origin: string, strict: boolean): Promise<Pa
 }
 
 let sitePagesCache: Promise<PayloadSitePageDoc[]> | null = null;
+let announcementBannersCache: Promise<PayloadAnnouncementBannerDoc[]> | null = null;
 
 async function fetchPayloadSitePages(origin: string, strict: boolean): Promise<PayloadSitePageDoc[]> {
     const url = new URL('/api/site-pages', `${origin}/`);
@@ -179,6 +187,28 @@ async function fetchPayloadSitePages(origin: string, strict: boolean): Promise<P
     } catch (err) {
         if (strict) throw err;
         console.warn('[payload] site pages fetch failed:', err instanceof Error ? err.message : err);
+        return [];
+    }
+}
+
+async function fetchPayloadAnnouncementBanners(origin: string): Promise<PayloadAnnouncementBannerDoc[]> {
+    const url = new URL('/api/announcement-banners', `${origin}/`);
+    url.searchParams.set('limit', '250');
+    url.searchParams.set('depth', '0');
+    url.searchParams.sort();
+    try {
+        const res = await fetch(url.toString(), {
+            headers: { Accept: 'application/json' },
+            signal: AbortSignal.timeout(PAYLOAD_FETCH_TIMEOUT_MS),
+        });
+        if (!res.ok) {
+            console.warn(`[payload] optional announcement banners skipped: GET ${url} failed: ${res.status}`);
+            return [];
+        }
+        const body = (await res.json()) as PayloadListResponse;
+        return Array.isArray(body.docs) ? (body.docs as PayloadAnnouncementBannerDoc[]) : [];
+    } catch (err) {
+        console.warn('[payload] optional announcement banners fetch failed:', err instanceof Error ? err.message : err);
         return [];
     }
 }
@@ -219,6 +249,22 @@ export async function getPublishedSitePages(origin?: string): Promise<PayloadSit
 
     sitePagesCache = sitePagesCache ?? fetchPayloadSitePages(base, strict);
     return sitePagesCache;
+}
+
+/**
+ * Published announcement banners are optional during CMS rollout.
+ * A missing collection, missing migration, or failed fetch must not break the public build.
+ */
+export async function getPublishedAnnouncementBanners(origin?: string): Promise<PayloadAnnouncementBannerDoc[]> {
+    const raw = (origin ?? cmsOrigin()).trim().replace(/\/+$/, '');
+    const base = validatedCmsOriginBase(raw);
+    if (!base) {
+        if (raw) console.warn('[payload] skipping optional announcement banners: invalid or disallowed PAYLOAD_CMS_ORIGIN');
+        return [];
+    }
+
+    announcementBannersCache = announcementBannersCache ?? fetchPayloadAnnouncementBanners(base);
+    return announcementBannersCache;
 }
 
 export async function getPublishedSitePage(canonicalPath: string, origin?: string): Promise<PayloadSitePageDoc | null> {

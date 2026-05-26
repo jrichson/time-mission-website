@@ -194,9 +194,10 @@ export const Landings = {
       name: 'published',
       type: 'checkbox',
       defaultValue: false,
+      label: 'Published in CMS',
       admin: {
         position: 'sidebar',
-        description: 'When checked, this page can appear on the public site after the next approved deploy.',
+        description: 'Published in CMS means approved. It is Live after deploy when the static public site rebuilds.',
       },
     },
     {

@@ -14,9 +14,13 @@ function userRole(user) {
   return user?.role;
 }
 
-function isAdminOrEditor(user) {
+export function isAdminOrEditor(user) {
   const role = userRole(user);
   return role === 'admin' || role === 'editor';
+}
+
+function isAdmin(user) {
+  return userRole(user) === 'admin';
 }
 
 function isCMSUser(user) {
@@ -37,6 +41,13 @@ export function isOwner({ req: { user } }) {
   if (!configuredOwnerEmail) return false;
 
   return normalizeEmail(user.email) === configuredOwnerEmail;
+}
+
+export function canTriggerCmsDeploy(args) {
+  const user = args?.req?.user;
+  if (!isCMSUser(user)) return false;
+  if (isOwner(args)) return true;
+  return isAdmin(user) && user.canDeploy === true;
 }
 
 function isSelf({ req: { user }, id }) {
@@ -149,6 +160,21 @@ export const Users = {
         position: 'sidebar',
         description: 'Only the CMS owner can assign roles. Editors manage landing content only.',
       },
+    },
+    {
+      name: 'canDeploy',
+      type: 'checkbox',
+      defaultValue: false,
+      access: {
+        read: isOwner,
+        update: isOwner,
+      },
+      admin: {
+        position: 'sidebar',
+        description:
+          'Owner-granted permission to publish approved CMS changes to the public site. Roles alone do not grant deploy access.',
+      },
+      label: 'Can trigger site deploy',
     },
   ],
 };

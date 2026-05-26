@@ -1,6 +1,6 @@
 # Payload CMS (Railway)
 
-PostgreSQL-backed Payload 3 admin for **existing pages** and **landing pages** consumed by the Astro site at build time.
+PostgreSQL-backed Payload 3 admin for **Page SEO Overrides**, **Announcement Banners**, and **Landing Pages** consumed by the Astro site at build time.
 
 ## Local
 
@@ -14,9 +14,16 @@ PostgreSQL-backed Payload 3 admin for **existing pages** and **landing pages** c
 
 ## Content model
 
-- **Existing Pages**: `path` matches a route-registry page such as `/`, `/about`, or `/groups/birthdays`. The production migration preloads one row per registered route. Published records override that page's SEO metadata at Astro build time.
+- **Page SEO Overrides**: `path` matches a route-registry page such as `/`, `/about`, or `/groups/birthdays`. The production migration preloads one row per registered route. Published records override that code-owned page's SEO metadata at Astro build time; they do not edit page body copy or layout.
+- **Announcement Banners**: text-only top banner messages with scheduling, priority, and optional region/location targeting. If no CMS banner is active or the optional CMS endpoint is unavailable during rollout, the public site keeps the existing hardcoded ticker fallback.
 - **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Start new pages from `/landings/new`, which captures the campaign brief and creates a draft. Refine the saved record in Payload, use **Preview** to review the Railway-hosted page, then enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
 - **User Invites**: owner-only records that create or update a CMS user, then either email a 24-hour password setup link or create a copyable 24-hour invite link. Use this instead of manually creating users with temporary passwords.
+
+CMS public states use shared language:
+
+- **Draft**: saved work that is not approved for the public build.
+- **Published in CMS**: approved CMS content visible to the build API.
+- **Live after deploy**: content included in the next approved static-site deploy.
 
 ## Landing launch workflow
 
@@ -72,8 +79,9 @@ Configure the Pages project (or GitHub Action) with:
 
 The static build calls:
 
-- `GET {PAYLOAD_CMS_ORIGIN}/api/site-pages?limit=250&depth=0` for **published** existing-page SEO overrides.
+- `GET {PAYLOAD_CMS_ORIGIN}/api/site-pages?limit=250&depth=0` for **published** Page SEO Overrides.
 - `GET {PAYLOAD_CMS_ORIGIN}/api/landings?limit=250&depth=0` for **published** landing documents.
+- `GET {PAYLOAD_CMS_ORIGIN}/api/announcement-banners?limit=250&depth=0` for optional **published** Announcement Banners. This fetch is non-fatal during rollout so the public build can fall back to the code-owned ticker if the collection is unavailable.
 
 No API key is required for public published reads.
 

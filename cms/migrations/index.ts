@@ -5,6 +5,7 @@ import * as migration_20260508_213000_landing_templates from './20260508_213000_
 import * as migration_20260508_230000_user_invites from './20260508_230000_user_invites';
 import * as migration_20260511_190000_landing_archetype_fields from './20260511_190000_landing_archetype_fields';
 import * as migration_20260511_201500_landing_brief_fields from './20260511_201500_landing_brief_fields';
+import * as migration_20260526_120000_cms_scope_and_announcements from './20260526_120000_cms_scope_and_announcements';
 
 export const migrations = [
   {
@@ -41,5 +42,10 @@ export const migrations = [
     up: migration_20260511_201500_landing_brief_fields.up,
     down: migration_20260511_201500_landing_brief_fields.down,
     name: '20260511_201500_landing_brief_fields'
+  },
+  {
+    up: migration_20260526_120000_cms_scope_and_announcements.up,
+    down: migration_20260526_120000_cms_scope_and_announcements.down,
+    name: '20260526_120000_cms_scope_and_announcements'
   },
 ];

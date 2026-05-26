@@ -8,7 +8,13 @@ import TicketPanel from '../components/TicketPanel.astro';
 import SiteScripts from '../components/SiteScripts.astro';
 import { allLocations } from '../data/locations';
 import { resolveLastUpdated } from '../lib/last-updated';
-import { getPublishedSitePage, sitePageHeadForDoc } from '../lib/payload/load';
+import {
+    announcementBannerViewForDoc,
+    getPublishedAnnouncementBanners,
+    getPublishedSitePage,
+    selectAnnouncementBanner,
+    sitePageHeadForDoc,
+} from '../lib/payload/load';
 
 interface Props {
     canonicalPath: string;
@@ -55,6 +61,12 @@ const sitePageHead = landingHead ? null : sitePageHeadForDoc(await getPublishedS
 const pageLocation = bodyDataLocation
     ? allLocations.find((loc) => loc.id === bodyDataLocation || loc.slug === bodyDataLocation)
     : null;
+const announcementBanner = announcementBannerViewForDoc(
+    selectAnnouncementBanner(await getPublishedAnnouncementBanners(), {
+        locationSlug: pageLocation?.slug,
+        region: pageLocation?.region,
+    }),
+);
 const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocation.briqWidget;
 const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQPWRNJB').trim();
 ---
@@ -131,6 +143,7 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQ
                 />
                 <SiteNav
                     currentLang={lang}
+                    announcementBanner={announcementBanner}
                     bookingCtaHref={bookingCtaHref}
                     bookingCtaLabel={bookingCtaLabel}
                     bookingCtaIsBookingTrigger={bookingCtaIsBookingTrigger}
