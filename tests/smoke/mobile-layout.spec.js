@@ -104,6 +104,40 @@ test.describe('small mobile (375x667)', () => {
     }
   });
 
+  test('intro stat tiles keep the same mobile grid across location pages', async ({ page }) => {
+    const urls = ['/', '/philadelphia', '/west-nyack', '/manassas', '/houston', '/orland-park', '/dallas', '/nashville', '/mount-prospect'];
+    const measured = [];
+
+    for (const url of urls) {
+      await page.goto(url);
+      const firstCard = page.locator('.stats-grid .stat-card').first();
+      await firstCard.waitFor({ state: 'visible' });
+
+      const dimensions = await firstCard.evaluate((el) => {
+        const rect = el.getBoundingClientRect();
+        const grid = el.closest('.stats-grid');
+        const gridStyle = grid ? window.getComputedStyle(grid) : null;
+        return {
+          width: Math.round(rect.width),
+          height: Math.round(rect.height),
+          columns: gridStyle ? gridStyle.gridTemplateColumns.split(' ').length : 0,
+          pageScrollWidth: document.documentElement.scrollWidth,
+          viewportWidth: window.innerWidth,
+        };
+      });
+
+      measured.push({ url, ...dimensions });
+    }
+
+    const [baseline] = measured;
+    for (const item of measured) {
+      expect(item.columns, `${item.url} stat grid columns`).toBe(2);
+      expect(item.width, `${item.url} stat tile width`).toBe(baseline.width);
+      expect(item.height, `${item.url} stat tile height`).toBe(baseline.height);
+      expect(item.pageScrollWidth, `${item.url} horizontal overflow`).toBeLessThanOrEqual(item.viewportWidth + 1);
+    }
+  });
+
   test('selected location is visible in the mobile header without overflow', async ({ page }) => {
     await page.goto('/mount-prospect');
     const locBtn = page.locator('.location-btn').first();

@@ -143,3 +143,29 @@
         scroll-snap-align: center;
     }
 }
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 1rem !important;
+    }
+
+    .stats-grid .stat-card {
+        aspect-ratio: auto !important;
+        min-width: 0 !important;
+        width: auto !important;
+        min-height: 13.25rem !important;
+        padding: 1.5rem !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .stats-grid .stat-number {
+        font-size: 2.5rem !important;
+    }
+
+    .stats-grid .stat-label {
+        font-size: 0.72rem !important;
+        letter-spacing: 0.1em !important;
+    }
+}
