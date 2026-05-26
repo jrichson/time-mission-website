@@ -1,9 +1,4 @@
-import { createRequire } from 'node:module';
-
 import { isAdminOrEditor } from './Users.js';
-
-const require = createRequire(import.meta.url);
-const locationsDocument = require('../../data/locations.json');
 
 const CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS = 15_000;
 const bannerTargetScopeOptions = [
@@ -15,12 +10,21 @@ const bannerRegionOptions = [
   { label: 'United States', value: 'us' },
   { label: 'Europe', value: 'europe' },
 ];
-const locationSlugSet = new Set(
-  (locationsDocument?.locations || [])
-    .map((location) => String(location?.slug || '').trim())
-    .filter(Boolean),
-);
-const locationExamples = Array.from(locationSlugSet).slice(0, 4).join(', ');
+const bannerLocationOptions = [
+  { label: 'Time Mission Antwerp', value: 'antwerp' },
+  { label: 'Time Mission Brussels', value: 'brussels' },
+  { label: 'Time Mission Dallas', value: 'dallas' },
+  { label: 'Time Mission Houston', value: 'houston' },
+  { label: 'Time Mission Lincoln', value: 'lincoln' },
+  { label: 'Time Mission Manassas', value: 'manassas' },
+  { label: 'Time Mission Mount Prospect', value: 'mount-prospect' },
+  { label: 'Time Mission Nashville', value: 'nashville' },
+  { label: 'Time Mission Orland Park', value: 'orland-park' },
+  { label: 'Time Mission Philadelphia', value: 'philadelphia' },
+  { label: 'Time Mission West Nyack', value: 'west-nyack' },
+];
+const locationSlugSet = new Set(bannerLocationOptions.map((location) => location.value));
+const locationExamples = bannerLocationOptions.slice(0, 4).map((location) => location.value).join(', ');
 
 function deployHookURL() {
   const value = process.env.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL;
@@ -221,14 +225,15 @@ export const AnnouncementBanners = {
       labels: { singular: 'Target location', plural: 'Target locations' },
       admin: {
         condition: (_, siblingData) => siblingData?.targetScope === 'locations',
-        description: `The banner is eligible only on these location pages. Examples: ${locationExamples}.`,
+        description: 'The banner is eligible only on these location pages.',
       },
       fields: [
         {
           name: 'locationSlug',
-          type: 'text',
+          type: 'select',
           required: true,
           label: 'Location slug',
+          options: bannerLocationOptions,
           validate: validateLocationSlug,
         },
       ],

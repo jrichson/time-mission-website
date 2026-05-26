@@ -38,6 +38,9 @@ describe('CMS announcement banners', () => {
     expect(collection).toContain('Live after deploy');
     expect(collection).toContain("name: 'message'");
     expect(collection).not.toContain("type: 'upload'");
+    expect(collection).not.toContain('../../data/locations.json');
+    expect(collection).toContain('bannerLocationOptions');
+    expect(collection).toContain("label: 'Time Mission Philadelphia'");
     expect(migration).toContain('CREATE TABLE "announcement_banners"');
     expect(migration).toContain('ALTER TABLE "users" ADD COLUMN IF NOT EXISTS "can_deploy"');
   });
