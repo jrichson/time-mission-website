@@ -84,27 +84,30 @@ function parseSitemapLocs(xml) {
   return [...String(xml || '').matchAll(locRe)].map((m) => m[1]);
 }
 
-function verifySitemapXml(xml, contract, options = {}) {
+function isDynamicLandingSitemapLoc(loc, contract) {
+  const registry = contract.registry || {};
+  const base = String(registry.baseUrl || '').replace(/\/+$/, '');
+  const prefix = normalizeDynamicLandingPrefix(registry);
+  const prefixSlug = prefix.startsWith('/') ? prefix.slice(1) : prefix;
+  const expectedPrefixNoSlash = `${base}/${prefixSlug}`;
+  if (!loc.startsWith(`${expectedPrefixNoSlash}/`)) return false;
+  const slug = loc.slice(expectedPrefixNoSlash.length + 1).replace(/\/+$/, '');
+  if (!slug || slug.includes('/') || slug.includes('.')) return false;
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+}
+
+function verifySitemapLocs(locs, contract, options = {}) {
   const errors = [];
   const opts = {
-    requireXmlHeader: false,
-    requireXmlns: false,
     requireBaseUrl: false,
     ...options,
   };
+  const list = locs.map((loc) => String(loc || ''));
+  const seen = new Set();
 
-  const body = String(xml || '');
-  const locs = parseSitemapLocs(body);
-
-  if (opts.requireXmlHeader && !body.startsWith('<?xml version="1.0" encoding="UTF-8"?>')) {
-    errors.push('sitemap.xml must start with <?xml version="1.0" encoding="UTF-8"?>');
-  }
-
-  if (opts.requireXmlns && !body.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')) {
-    errors.push('sitemap.xml must declare sitemap 0.9 xmlns');
-  }
-
-  for (const loc of locs) {
+  for (const loc of list) {
+    if (seen.has(loc)) errors.push(`Duplicate sitemap URL: ${loc}`);
+    seen.add(loc);
     if (loc.includes('.html')) {
       errors.push(`Sitemap contains historical .html URL: ${loc}`);
     }
@@ -117,30 +120,40 @@ function verifySitemapXml(xml, contract, options = {}) {
   }
 
   for (const url of contract.sitemapUrls) {
-    if (!locs.includes(url)) {
+    if (!seen.has(url)) {
       errors.push(`Missing sitemap URL: ${url}`);
     }
   }
 
-  function isDynamicLandingSitemapLoc(loc) {
-    const registry = contract.registry || {};
-    const base = String(registry.baseUrl || '').replace(/\/+$/, '');
-    const prefix = normalizeDynamicLandingPrefix(registry);
-    const prefixSlug = prefix.startsWith('/') ? prefix.slice(1) : prefix;
-    const expectedPrefixNoSlash = `${base}/${prefixSlug}`;
-    if (!loc.startsWith(`${expectedPrefixNoSlash}/`)) return false;
-    const slug = loc.slice(expectedPrefixNoSlash.length + 1).replace(/\/+$/, '');
-    if (!slug || slug.includes('/') || slug.includes('.')) return false;
-    return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
-  }
-
-  for (const loc of locs) {
-    if (!contract.sitemapUrlSet.has(loc) && !isDynamicLandingSitemapLoc(loc)) {
+  for (const loc of list) {
+    if (!contract.sitemapUrlSet.has(loc) && !isDynamicLandingSitemapLoc(loc, contract)) {
       errors.push(`Unexpected sitemap URL: ${loc}`);
     }
   }
 
-  return { errors, locs };
+  return { errors, locs: list };
+}
+
+function verifySitemapXml(xml, contract, options = {}) {
+  const errors = [];
+  const opts = {
+    requireXmlHeader: false,
+    requireXmlns: false,
+    ...options,
+  };
+  const body = String(xml || '');
+
+  if (opts.requireXmlHeader && !body.startsWith('<?xml version="1.0" encoding="UTF-8"?>')) {
+    errors.push('sitemap.xml must start with <?xml version="1.0" encoding="UTF-8"?>');
+  }
+
+  if (opts.requireXmlns && !body.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')) {
+    errors.push('sitemap.xml must declare sitemap 0.9 xmlns');
+  }
+
+  const result = verifySitemapLocs(parseSitemapLocs(body), contract, options);
+  errors.push(...result.errors);
+  return { errors, locs: result.locs };
 }
 
 function resolveAbsoluteSiteHref(root, registry, href) {
@@ -201,6 +214,7 @@ module.exports = {
   normalizeDynamicLandingPrefix,
   isDynamicLandingPath,
   parseSitemapLocs,
+  verifySitemapLocs,
   verifySitemapXml,
   canonicalToOutputMap,
   resolveAbsoluteSiteHref,

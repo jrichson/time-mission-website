@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { shouldExcludeArtifactPath } from './lib/cloudflare-artifact-policy.mjs';
+import { pruneExcludedArtifacts } from './lib/cloudflare-artifact-policy.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -14,20 +14,6 @@ if (targetRoots.length === 0) {
   process.exit(1);
 }
 
-function prune(dir, baseDir, removed) {
-  if (!fs.existsSync(dir)) return;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const abs = path.join(dir, entry.name);
-    const rel = path.relative(baseDir, abs).split(path.sep).join('/');
-    if (shouldExcludeArtifactPath(rel)) {
-      fs.rmSync(abs, { recursive: true, force: true });
-      removed.push(rel);
-      continue;
-    }
-    if (entry.isDirectory()) prune(abs, baseDir, removed);
-  }
-}
-
 let totalRemoved = 0;
 
 for (const target of targetRoots) {
@@ -36,8 +22,7 @@ for (const target of targetRoots) {
     process.exit(1);
   }
   const baseDir = path.join(root, target);
-  const removed = [];
-  prune(baseDir, baseDir, removed);
+  const removed = fs.existsSync(baseDir) ? pruneExcludedArtifacts(baseDir, { baseDir }) : [];
   totalRemoved += removed.length;
   if (removed.length) {
     console.log(`Pruned ${removed.length} excluded artifact(s) from ${target}/.`);

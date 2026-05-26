@@ -16,6 +16,12 @@ runCheck({
     if (pkg.scripts.verify !== 'node scripts/verify-site-output.mjs') {
       errors.push('package.json script "verify" must run scripts/verify-site-output.mjs');
     }
+    if (pkg.scripts['build:astro'] !== 'node scripts/build-site-output.mjs') {
+      errors.push('package.json script "build:astro" must run scripts/build-site-output.mjs');
+    }
+    if (pkg.scripts['deploy:pages'] !== 'npm run build:astro && wrangler pages deploy dist') {
+      errors.push('package.json script "deploy:pages" must not duplicate artifact pruning');
+    }
 
     for (const [scriptName] of VERIFY_STEPS) {
       if (!pkg.scripts[scriptName]) {

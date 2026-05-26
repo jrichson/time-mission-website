@@ -11,25 +11,27 @@ Order is fixed in `scripts/lib/cloudflare-artifact-contract.cjs` and exposed thr
 | Step | Command | Purpose |
 | --- | --- | --- |
 | 1 | `npm run check` | Source checks, unit tests, route artifacts, architecture policies, analytics/consent, SEO catalogs |
-| 2 | `npm run build:astro` | Sync static assets, run `astro build`, minify assets, inject CSP hashes |
+| 2 | `npm run build:astro` | Sync static assets, run `astro build`, prune excluded artifacts, minify assets, bundle CSS, inject CSP hashes |
 | 3 | `npm run check:csp-hashes` | CSP inline hash parity after build |
 | 4 | `npm run check:routes -- --dist` | Route registry vs built output |
 | 5 | `npm run check:links -- --dist` | Built internal link and asset targets |
 | 6 | `npm run check:astro-dist` | Astro dist manifest and hosting expectations |
-| 7 | `npm run check:payload-dist` | Payload landing dist artifacts when CMS origin is configured |
-| 8 | `npm run check:ticket-panel-parity` | Ticket panel markup parity vs built output |
-| 9 | `npm run check:seo-output` | Built HTML SEO metadata vs catalog |
-| 10 | `npm run check:schema-output` | JSON-LD in `dist/` |
-| 11 | `npm run check:img-alt-axe` | Built image alt accessibility sweep |
-| 12 | `npm run check:hreflang-cluster` | Hreflang cluster integrity |
-| 13 | `npm run check:tap-targets` | CSS tap-target sizing |
-| 14 | `npm run check:sitemap-output` | Generated sitemap vs routes |
-| 15 | `npm run check:robots-ai` | `robots.txt` AI crawler rules |
-| 16 | `npm run check:llms-txt` | `llms.txt` output |
-| 17 | `npm run check:geo-answer-blocks` | Visible GEO answer blocks plus primary media schema |
-| 18 | `npm run check:rsl` | RSL license file, `robots.txt` License directive, and built `_headers` license discovery |
-| 19 | `npm run check:nap-parity` | NAP / schema vs location data |
-| 20 | `npm run test:smoke` | Playwright smoke flows and visual baselines |
+| 7 | `npm run check:analytics-output` | Built GTM placement |
+| 8 | `npm run check:css-bundles` | Built stylesheet bundling |
+| 9 | `npm run check:payload-dist` | Payload landing dist artifacts when CMS origin is configured |
+| 10 | `npm run check:ticket-panel-parity` | Ticket panel markup parity vs built output |
+| 11 | `npm run check:seo-output` | Built HTML SEO metadata vs catalog |
+| 12 | `npm run check:schema-output` | JSON-LD in `dist/` |
+| 13 | `npm run check:img-alt-axe` | Built image alt accessibility sweep |
+| 14 | `npm run check:hreflang-cluster` | Hreflang cluster integrity |
+| 15 | `npm run check:tap-targets` | CSS tap-target sizing |
+| 16 | `npm run check:sitemap-output` | Generated sitemap vs routes |
+| 17 | `npm run check:robots-ai` | `robots.txt` AI crawler rules |
+| 18 | `npm run check:llms-txt` | `llms.txt` output |
+| 19 | `npm run check:geo-answer-blocks` | Visible GEO answer blocks plus primary media schema |
+| 20 | `npm run check:rsl` | RSL license file, `robots.txt` License directive, and built `_headers` license discovery |
+| 21 | `npm run check:nap-parity` | NAP / schema vs location data |
+| 22 | `npm run test:smoke` | Playwright smoke flows and visual baselines |
 
 `npm run check` includes Vitest coverage for the Cloudflare Pages Functions form handler and source-markup assertions that prevent Netlify form attributes from returning. Runtime delivery still requires preview testing with real Pages Function secrets and inbox confirmation.
 

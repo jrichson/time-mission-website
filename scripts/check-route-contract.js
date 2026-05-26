@@ -5,7 +5,7 @@ const path = require('node:path');
 const {
   loadRouteRegistry,
   compilePublicUrlSurface,
-  verifySitemapXml,
+  verifySitemapLocs,
 } = require('./lib/route-artifacts');
 const { normalizeCanonicalPath } = require('./lib/validation-core');
 
@@ -245,20 +245,14 @@ function validateRedirects(registry, errors) {
     if (!actual.has(key)) {
       errors.push(`missing _redirects row for ${pair.source} -> ${pair.target} (${pair.status})`);
     }
-
   }
-
 }
 
 function validateSitemap(registry, errors) {
-  const sitemapPath = path.join(root, 'sitemap.xml');
-  if (!fs.existsSync(sitemapPath)) {
-    errors.push('missing sitemap.xml');
-    return;
-  }
-  const xml = fs.readFileSync(sitemapPath, 'utf8');
   const surface = compilePublicUrlSurface(registry);
-  const result = verifySitemapXml(xml, surface);
+  const result = verifySitemapLocs(surface.sitemapUrls, surface, {
+    requireBaseUrl: true,
+  });
   result.errors.forEach((error) => {
     errors.push(error.replace(/^Sitemap\s/, 'sitemap '));
   });

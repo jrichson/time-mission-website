@@ -1,5 +1,8 @@
 'use strict';
 
+const fs = require('node:fs');
+const path = require('node:path');
+
 const OFFLOADED_MP4_FILES = ['TM-Hero-bg-web-hero.mp4', 'TM-Hero-bg-mobile-hero.mp4', 'groups-hero.mp4'];
 
 const MANDATORY_ROOT_FILES = [
@@ -12,44 +15,96 @@ const MANDATORY_ROOT_FILES = [
 
 const MANDATORY_ASSET_DIRS = ['assets', 'css', 'js', 'data'];
 
-const VERIFY_STEPS = [
-  ['check', []],
-  ['build:astro', []],
-  ['check:csp-hashes', []],
-  ['check:routes', ['--', '--dist']],
-  ['check:links', ['--', '--dist']],
-  ['check:astro-dist', []],
-  ['check:payload-dist', []],
-  ['check:ticket-panel-parity', []],
-  ['check:seo-output', []],
-  ['check:schema-output', []],
-  ['check:img-alt-axe', []],
-  ['check:hreflang-cluster', []],
-  ['check:tap-targets', []],
-  ['check:sitemap-output', []],
-  ['check:robots-ai', []],
-  ['check:llms-txt', []],
-  ['check:geo-answer-blocks', []],
-  ['check:rsl', []],
-  ['check:nap-parity', []],
-  ['test:smoke', []],
-];
+const STATIC_EXCLUDED_ARTIFACT_PATH_RE = /(?:^|\/)(?:assets\/extracted|mockup-reference|_archive)(?:\/|$)/i;
 
-const VERIFY_SUCCESS_MESSAGE = 'verify-site-output.mjs: all steps passed.';
+function finderOriginalName(name) {
+  const match = String(name || '').match(/^(.+)\s[0-9]+(\.[^/.]+)?$/);
+  if (!match) return '';
+  return `${match[1]}${match[2] || ''}`;
+}
 
-const FINDER_DUPLICATE_DIR_RE = /\s[0-9]+$/;
-const FINDER_DUPLICATE_FILE_RE = /\s[0-9]+(?:\.[a-z0-9]+)?$/i;
-
-function isFinderDuplicateName(name) {
-  return FINDER_DUPLICATE_DIR_RE.test(name) || FINDER_DUPLICATE_FILE_RE.test(name);
+function hasFinderOriginalSibling(name, siblingNames = new Set()) {
+  const original = finderOriginalName(name);
+  return Boolean(original && siblingNames.has(original));
 }
 
 function shouldExcludeArtifactPath(relPath) {
   const normalized = String(relPath || '').split('\\').join('/');
-  return /(?:^|\/)assets\/extracted(?:\/|$)/i.test(normalized)
-    || /(?:^|\/)(?:mockup-reference|_archive)(?:\/|$)/i.test(normalized)
-    || /(?:^|\/)[^/]*\s[0-9]+(?:\/|$)/i.test(normalized)
-    || /\s[0-9]+\.[a-z0-9]+$/i.test(normalized);
+  return STATIC_EXCLUDED_ARTIFACT_PATH_RE.test(normalized);
+}
+
+function shouldPruneArtifactEntry(relPath, entryName, siblingNames = new Set()) {
+  return shouldExcludeArtifactPath(relPath) || hasFinderOriginalSibling(entryName, siblingNames);
+}
+
+function normalizedRelativePath(baseDir, absPath) {
+  return path.relative(baseDir, absPath).split(path.sep).join('/');
+}
+
+function pruneExcludedArtifacts(dir, { baseDir = dir } = {}) {
+  const removed = [];
+  if (!fs.existsSync(dir)) return removed;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const siblingNames = new Set(entries.map((entry) => entry.name));
+  for (const entry of entries) {
+    const abs = path.join(dir, entry.name);
+    const rel = normalizedRelativePath(baseDir, abs);
+    if (shouldPruneArtifactEntry(rel, entry.name, siblingNames)) {
+      fs.rmSync(abs, { recursive: true, force: true });
+      removed.push(rel);
+      continue;
+    }
+    if (entry.isDirectory()) {
+      removed.push(...pruneExcludedArtifacts(abs, { baseDir }));
+    }
+  }
+  return removed;
+}
+
+function walkDeployFiles(dir, { baseDir = dir, includeFile = () => true, onPruned = null } = {}) {
+  const files = [];
+  if (!fs.existsSync(dir)) return files;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const siblingNames = new Set(entries.map((entry) => entry.name));
+  for (const entry of entries) {
+    const abs = path.join(dir, entry.name);
+    const rel = normalizedRelativePath(baseDir, abs);
+    if (shouldPruneArtifactEntry(rel, entry.name, siblingNames)) {
+      if (typeof onPruned === 'function') onPruned(rel);
+      continue;
+    }
+    if (entry.isDirectory()) {
+      files.push(...walkDeployFiles(abs, { baseDir, includeFile, onPruned }));
+    } else if (entry.isFile() && includeFile(abs, rel)) {
+      files.push(abs);
+    }
+  }
+  return files;
+}
+
+function copyFilteredTree(src, dest, { baseDir = path.dirname(src) } = {}) {
+  const stat = fs.statSync(src);
+  if (!stat.isDirectory()) {
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.copyFileSync(src, dest);
+    return;
+  }
+
+  fs.mkdirSync(dest, { recursive: true });
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+  const siblingNames = new Set(entries.map((entry) => entry.name));
+  for (const entry of entries) {
+    const srcAbs = path.join(src, entry.name);
+    const rel = normalizedRelativePath(baseDir, srcAbs);
+    if (shouldPruneArtifactEntry(rel, entry.name, siblingNames)) continue;
+    const destAbs = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      copyFilteredTree(srcAbs, destAbs, { baseDir });
+    } else if (entry.isFile()) {
+      fs.mkdirSync(path.dirname(destAbs), { recursive: true });
+      fs.copyFileSync(srcAbs, destAbs);
+    }
+  }
 }
 
 function planRequiredArtifacts() {
@@ -73,29 +128,15 @@ function planVideoArtifacts({ mediaBase = '', availableFiles = [] } = {}) {
   };
 }
 
-function resolveNpmStep(step, platform = process.platform) {
-  const [name, forwarded] = step;
-  return {
-    command: platform === 'win32' ? 'npm.cmd' : 'npm',
-    args: ['run', name, ...(forwarded || [])],
-  };
-}
-
-function formatNpmStep(step) {
-  const resolved = resolveNpmStep(step, 'posix');
-  return [resolved.command, ...resolved.args].join(' ');
-}
-
 module.exports = {
   OFFLOADED_MP4_FILES,
   MANDATORY_ROOT_FILES,
   MANDATORY_ASSET_DIRS,
-  VERIFY_STEPS,
-  VERIFY_SUCCESS_MESSAGE,
-  isFinderDuplicateName,
+  copyFilteredTree,
+  pruneExcludedArtifacts,
   shouldExcludeArtifactPath,
+  shouldPruneArtifactEntry,
+  walkDeployFiles,
   planRequiredArtifacts,
   planVideoArtifacts,
-  resolveNpmStep,
-  formatNpmStep,
 };

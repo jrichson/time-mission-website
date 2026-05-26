@@ -1,14 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   OFFLOADED_MP4_FILES,
-  VERIFY_STEPS,
-  VERIFY_SUCCESS_MESSAGE,
-  formatNpmStep,
-  isFinderDuplicateName,
   planRequiredArtifacts,
   planVideoArtifacts,
-  resolveNpmStep,
   shouldExcludeArtifactPath,
+  shouldPruneArtifactEntry,
 } from '../scripts/lib/cloudflare-artifact-policy.mjs';
 
 describe('Cloudflare Artifact policy', () => {
@@ -18,18 +14,6 @@ describe('Cloudflare Artifact policy', () => {
       assetDirs: expect.arrayContaining(['assets', 'css', 'js', 'data']),
       requiredDataFiles: ['data/locations.json'],
     });
-  });
-
-  it('owns the verify pipeline order used for Pages readiness', () => {
-    expect(VERIFY_STEPS[0][0]).toBe('check');
-    expect(VERIFY_STEPS[1][0]).toBe('build:astro');
-    expect(VERIFY_STEPS.at(-1)[0]).toBe('test:smoke');
-    expect(formatNpmStep(VERIFY_STEPS[0])).toBe('npm run check');
-    expect(resolveNpmStep(VERIFY_STEPS[0], 'win32')).toEqual({
-      command: 'npm.cmd',
-      args: ['run', 'check'],
-    });
-    expect(VERIFY_SUCCESS_MESSAGE).toBe('verify-site-output.mjs: all steps passed.');
   });
 
   it('keeps large MP4 files out of the Pages bundle when media is hosted externally', () => {
@@ -50,12 +34,15 @@ describe('Cloudflare Artifact policy', () => {
     });
   });
 
-  it('excludes archived and Finder duplicate artifacts consistently', () => {
+  it('excludes archived artifacts and prunes Finder duplicates only with original siblings', () => {
     expect(shouldExcludeArtifactPath('assets/extracted/gradient-animated.html')).toBe(true);
     expect(shouldExcludeArtifactPath('assets/mockup-reference/hero.png')).toBe(true);
-    expect(shouldExcludeArtifactPath('js 2/nav.js')).toBe(true);
-    expect(shouldExcludeArtifactPath('css/site 2.css')).toBe(true);
+    expect(shouldExcludeArtifactPath('js 2/nav.js')).toBe(false);
+    expect(shouldExcludeArtifactPath('css/site 2.css')).toBe(false);
     expect(shouldExcludeArtifactPath('css/site.css')).toBe(false);
-    expect(isFinderDuplicateName('sitemap 2.xml')).toBe(true);
+    expect(shouldPruneArtifactEntry('css/site 2.css', 'site 2.css', new Set(['site.css', 'site 2.css']))).toBe(true);
+    expect(shouldPruneArtifactEntry('sitemap 2.xml', 'sitemap 2.xml', new Set(['sitemap.xml', 'sitemap 2.xml']))).toBe(true);
+    expect(shouldPruneArtifactEntry('js 2', 'js 2', new Set(['js', 'js 2']))).toBe(true);
+    expect(shouldPruneArtifactEntry('assets/photos/Class of 2026.jpg', 'Class of 2026.jpg', new Set(['Class of 2026.jpg']))).toBe(false);
   });
 });

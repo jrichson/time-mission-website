@@ -1,8 +1,5 @@
 #!/usr/bin/env node
-/**
- * Verification orchestrator for npm run verify.
- * Keep this ordered list authoritative when adding dist/post-build gates.
- */
+/** Verification orchestrator for npm run verify. */
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
