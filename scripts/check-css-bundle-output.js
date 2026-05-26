@@ -36,6 +36,18 @@ runCheck({
       for (const link of localCss) {
         if (!link.pathname.startsWith('/css/bundles/')) {
           errors.push(`${rel}: unbundled stylesheet link remains (${link.href})`);
+          continue;
+        }
+
+        const bundleFile = path.join(distDir, link.pathname.slice(1));
+        if (!fs.existsSync(bundleFile)) {
+          errors.push(`${rel}: stylesheet bundle is referenced but missing (${link.pathname})`);
+          continue;
+        }
+
+        const stat = fs.statSync(bundleFile);
+        if (!stat.isFile() || stat.size === 0) {
+          errors.push(`${rel}: stylesheet bundle is empty or invalid (${link.pathname})`);
         }
       }
     }

@@ -96,6 +96,10 @@ async function writeBundle(pathnames, name) {
     };
 }
 
+function bundleAbsPath(pathname) {
+    return path.join(distDir, pathname.slice(1));
+}
+
 function replaceLinks(html, replacements) {
     let out = html;
     const ordered = replacements.sort((a, b) => b.start - a.start);
@@ -113,6 +117,53 @@ function assertSiteCoreSequence(htmlFile, siteCoreLinks) {
     }
 }
 
+async function assertNoExistingBundleLinks(htmlFiles) {
+    const offenders = [];
+    for (const htmlFile of htmlFiles) {
+        const html = await fs.readFile(htmlFile, 'utf8');
+        const rel = path.relative(distDir, htmlFile);
+        const bundleLinks = stylesheetLinks(html)
+            .filter((link) => link.pathname.startsWith('/css/bundles/'))
+            .map((link) => link.pathname);
+
+        if (bundleLinks.length) {
+            offenders.push(`${rel}: ${bundleLinks.join(', ')}`);
+        }
+    }
+
+    if (offenders.length) {
+        throw new Error(
+            'dist already contains bundled CSS links. Run the full clean build (`npm run build:astro`) before bundling.\n' +
+            offenders.join('\n'),
+        );
+    }
+}
+
+async function assertReferencedBundlesExist(htmlFiles) {
+    const missing = [];
+    for (const htmlFile of htmlFiles) {
+        const html = await fs.readFile(htmlFile, 'utf8');
+        const rel = path.relative(distDir, htmlFile);
+        const links = stylesheetLinks(html).filter((link) => link.pathname.startsWith('/css/bundles/'));
+
+        for (const link of links) {
+            const file = bundleAbsPath(link.pathname);
+            try {
+                const stat = await fs.stat(file);
+                if (!stat.isFile() || stat.size === 0) {
+                    missing.push(`${rel}: ${link.pathname}`);
+                }
+            } catch {
+                missing.push(`${rel}: ${link.pathname}`);
+            }
+        }
+    }
+
+    if (missing.length) {
+        throw new Error(`Missing CSS bundle file(s):\n${missing.join('\n')}`);
+    }
+}
+
 async function main() {
     try {
         await fs.access(distDir);
@@ -121,11 +172,13 @@ async function main() {
         process.exit(1);
     }
 
+    const htmlFiles = await walkHtml(distDir);
+    await assertNoExistingBundleLinks(htmlFiles);
+
     await fs.rm(bundleDir, { recursive: true, force: true });
     await fs.mkdir(bundleDir, { recursive: true });
 
     const siteCore = await writeBundle(SITE_CORE_CSS, 'site-core');
-    const htmlFiles = await walkHtml(distDir);
     let rewritten = 0;
     let beforeLinks = 0;
     let afterLinks = 0;
@@ -164,6 +217,8 @@ async function main() {
         beforeLinks += localCssLinks.length;
         afterLinks += 1 + (pageBundle ? 1 : 0);
     }
+
+    await assertReferencedBundlesExist(htmlFiles);
 
     const routeBundleTotal = Array.from(routeBundleBytes.values()).reduce((sum, bytes) => sum + bytes, 0);
     console.log(

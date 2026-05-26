@@ -71,6 +71,39 @@ test.describe('small mobile (375x667)', () => {
     });
   }
 
+  test('experience tiles keep the same mobile sizing across public and location pages', async ({ page }) => {
+    const urls = ['/', '/philadelphia', '/houston', '/mount-prospect', '/antwerp', '/nashville'];
+    const measured = [];
+
+    for (const url of urls) {
+      await page.goto(url);
+      const firstCard = page.locator('.experience-card').first();
+      await firstCard.waitFor({ state: 'visible' });
+
+      const dimensions = await firstCard.evaluate((el) => {
+        const rect = el.getBoundingClientRect();
+        const carousel = el.closest('.experiences-scroll');
+        return {
+          width: Math.round(rect.width),
+          height: Math.round(rect.height),
+          display: carousel ? window.getComputedStyle(carousel).display : '',
+          pageScrollWidth: document.documentElement.scrollWidth,
+          viewportWidth: window.innerWidth,
+        };
+      });
+
+      measured.push({ url, ...dimensions });
+    }
+
+    const [baseline] = measured;
+    for (const item of measured) {
+      expect(item.display, `${item.url} carousel display`).toBe('flex');
+      expect(item.width, `${item.url} card width`).toBe(baseline.width);
+      expect(item.height, `${item.url} card height`).toBe(baseline.height);
+      expect(item.pageScrollWidth, `${item.url} horizontal overflow`).toBeLessThanOrEqual(item.viewportWidth + 1);
+    }
+  });
+
   test('selected location is visible in the mobile header without overflow', async ({ page }) => {
     await page.goto('/mount-prospect');
     const locBtn = page.locator('.location-btn').first();
