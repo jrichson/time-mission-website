@@ -104,6 +104,12 @@ describe('CMS landing templates', () => {
     expect(wizard).toContain('redirect(`/preview/landings/${created.id}`)');
     expect(payloadConfig).toContain("beforeDashboard: ['/components/LandingWizardDashboard.tsx']");
     expect(collection).toContain("beforeList: ['/components/LandingWizardDashboard.tsx']");
+    expect(dashboardCard).toContain('Owner tools');
+    expect(dashboardCard).toContain('Invite approved CMS users');
+    expect(dashboardCard).toContain('User invites are owner-only.');
+    expect(dashboardCard).toContain('href="/admin/collections/user-invites/create"');
+    expect(dashboardCard).toContain("href: '/admin/collections/user-invites'");
+    expect(dashboardCard).toContain("href: '/admin/collections/users'");
     expect(dashboardCard).toContain('Start brief');
     expect(dashboardCard).toContain('href="/landings/new"');
     expect(dashboardCard).toContain('/landings/new?template=paid_social_campaign');
