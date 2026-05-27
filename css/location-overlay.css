@@ -238,16 +238,22 @@
     justify-content: flex-start;
 }
 
-.location-dropdown a.location-coming-soon .coming-soon-tag {
+.location-dropdown a.location-coming-soon .coming-soon-tag,
+.location-dropdown a.location-temporarily-closed .coming-soon-tag {
+    display: inline-flex;
+    align-items: center;
     font-size: 0.55rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    background: rgba(255, 107, 44, 0.15);
-    color: var(--orange, #ff6b2c);
     padding: 0.2rem 0.5rem;
     border-radius: 100px;
     white-space: nowrap;
+}
+
+.location-dropdown a.location-coming-soon .coming-soon-tag {
+    background: rgba(255, 107, 44, 0.15);
+    color: var(--orange, #ff6b2c);
 }
 
 .location-dropdown a.location-temporarily-closed .coming-soon-tag {

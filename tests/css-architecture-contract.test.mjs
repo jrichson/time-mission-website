@@ -80,9 +80,14 @@ describe('css architecture contract', () => {
     }
 
     const navCss = read('css/nav.css');
+    const locationOverlayCss = read('css/location-overlay.css');
     expect(navCss).not.toMatch(/Announcement Ticker/);
     expect(navCss).not.toMatch(/Full-screen Mobile Menu/);
     expect(navCss).not.toMatch(/Full-screen Location Overlay/);
+    expect(locationOverlayCss).toContain('.location-dropdown a.location-coming-soon .coming-soon-tag,\n.location-dropdown a.location-temporarily-closed .coming-soon-tag');
+    expect(locationOverlayCss).toContain('display: inline-flex');
+    expect(locationOverlayCss).toContain('.location-dropdown a.location-temporarily-closed .coming-soon-tag');
+    expect(locationOverlayCss).toContain('background: rgba(239, 68, 68, 0.14)');
 
     const linkedAssets = siteCoreCss()
       .filter((href) => /^\/css\/(?:nav-ticker|nav|mobile-menu|location-overlay)\.css/.test(href))
