@@ -107,10 +107,10 @@
       "region": "us",
       "status": "temporarily-closed",
       "temporaryClosure": {
-        "label": "Temporarily Closed",
-        "title": "Temporarily Closed",
-        "summary": "Time Mission Philadelphia is temporarily closed for the time being, and ticket sales are paused while we take care of a few things behind the scenes.",
-        "detail": "Stay tuned for updates. We'll share more soon and can't wait to welcome you back.",
+        "label": "Important Mission Update",
+        "title": "⚠️ Important Mission Update:",
+        "summary": "Time Mission Philadelphia is temporarily closed due to unexpected maintenance-related issues within our space.",
+        "detail": "Ticket purchases are currently unavailable, and a reopening date will be announced as soon as possible. Existing ticket holders will be contacted by our customer support team shortly.",
         "ctaLabel": "Get Closure Updates",
         "contactLabel": "Contact Philadelphia"
       },

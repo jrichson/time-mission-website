@@ -320,9 +320,13 @@ test('temporarily closed Philadelphia ?book=1 opens the closure notice instead o
   await page.goto('/philadelphia?book=1');
   await expect(page).toHaveURL(/\/philadelphia$/);
   await expect(page.locator('#temporaryClosureModal')).toHaveClass(/is-active/);
-  await expect(page.locator('#temporaryClosureModalTitle')).toHaveText('Temporarily Closed');
-  await expect(page.locator('#temporaryClosureModalCopy')).toContainText('Time Mission Philadelphia is temporarily closed for the time being');
-  await expect(page.locator('#temporaryClosureModalCopy')).toContainText("We'll share more soon");
+  await expect(page.locator('#temporaryClosureModalTitle')).toHaveText('⚠️ Important Mission Update:');
+  await expect(page.locator('#temporaryClosureModalCopy')).toContainText(
+    'Time Mission Philadelphia is temporarily closed due to unexpected maintenance-related issues within our space.',
+  );
+  await expect(page.locator('#temporaryClosureModalCopy')).toContainText(
+    'Existing ticket holders will be contacted by our customer support team shortly.',
+  );
 });
 
 test('desktop location selection keeps the current page context', async ({ page, isMobile }) => {
