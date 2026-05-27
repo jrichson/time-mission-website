@@ -1,16 +1,7 @@
+import { markCmsDeployNeeded } from '../lib/cms-deploy-gate.js';
+import { validateOptionalPublicAssetPath, validatePublicAssetPath } from '../lib/media-library.js';
+
 const pathRegex = /^\/$|^\/[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
-
-const CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS = 15_000;
-
-function validateAssetPath(val) {
-  if (typeof val !== 'string' || !val.startsWith('/assets/')) {
-    return 'Must be a root-relative path starting with /assets/';
-  }
-  if (val.includes('://') || val.includes('..') || /[<>"'\\\s]/.test(val)) {
-    return 'Invalid image path';
-  }
-  return true;
-}
 
 function validateExistingPagePath(val) {
   if (typeof val !== 'string' || !pathRegex.test(val)) {
@@ -20,42 +11,6 @@ function validateExistingPagePath(val) {
     return 'Use Landing Pages for /c/* campaign pages.';
   }
   return true;
-}
-
-function deployHookURL() {
-  const value = process.env.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL;
-  if (!value) {
-    console.warn('[site-pages] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL unset');
-    return null;
-  }
-
-  let url;
-  try {
-    url = new URL(value);
-  } catch {
-    console.warn('[site-pages] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL is invalid');
-    return null;
-  }
-
-  if (url.protocol !== 'https:' || url.username || url.password) {
-    console.warn('[site-pages] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL must be a credential-free https URL');
-    return null;
-  }
-
-  return url.toString();
-}
-
-function triggerPagesDeploy(reason) {
-  const url = deployHookURL();
-  if (!url) return;
-
-  void fetch(url, {
-    method: 'POST',
-    signal: AbortSignal.timeout(CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS),
-  }).then(
-    (res) => console.log('[site-pages] Cloudflare Pages hook:', reason, res.status),
-    (err) => console.error('[site-pages] Cloudflare Pages hook failed:', err),
-  );
 }
 
 function userRole(user) {
@@ -187,32 +142,24 @@ export const SitePages = {
           type: 'text',
           required: true,
           admin: { description: 'Root-relative path, e.g. /assets/photos/...' },
-          validate: validateAssetPath,
+          validate: validatePublicAssetPath,
         },
         {
           name: 'twitterImage',
           type: 'text',
           admin: { description: 'Defaults to og:image if empty' },
-          validate: (val) => {
-            if (val == null || val === '') return true;
-            return validateAssetPath(val);
-          },
+          validate: validateOptionalPublicAssetPath,
         },
       ],
     },
   ],
   hooks: {
     afterChange: [
-      ({ doc, previousDoc }) => {
-        const pub = Boolean(doc?.published);
-        const wasPub = Boolean(previousDoc?.published);
-        if (pub || wasPub) triggerPagesDeploy('site-page-change');
-      },
+      ({ doc, previousDoc, req }) =>
+        markCmsDeployNeeded({ action: 'change', collection: 'site-pages', doc, previousDoc, req }),
     ],
     afterDelete: [
-      ({ doc }) => {
-        if (Boolean(doc?.published)) triggerPagesDeploy('site-page-delete');
-      },
+      ({ doc, req }) => markCmsDeployNeeded({ action: 'delete', collection: 'site-pages', doc, req }),
     ],
   },
 };

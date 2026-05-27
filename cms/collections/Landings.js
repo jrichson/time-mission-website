@@ -1,49 +1,11 @@
+import { markCmsDeployNeeded } from '../lib/cms-deploy-gate.js';
+import {
+  legacyTemplateNote,
+  payloadLandingTemplateOptions,
+} from '../lib/landing-contract.js';
+import { validateOptionalPublicAssetPath, validatePublicAssetPath } from '../lib/media-library.js';
+
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const assetPathUnsafeRegex = /[<>"'\\\s]/;
-
-const CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS = 15_000;
-const landingTemplateOptions = [
-  {
-    label: 'Paid/Social Campaign - Ad or social campaign',
-    value: 'paid_social_campaign',
-  },
-  {
-    label: 'Local Venue/City - Local venue or city campaign',
-    value: 'local_venue_city',
-  },
-  {
-    label: 'Group/Event - Group or event landing',
-    value: 'group_event',
-  },
-];
-
-const legacyLandingTemplateOptions = [
-  {
-    legacyValue: 'campaign',
-    mapsTo: 'paid_social_campaign',
-  },
-  {
-    legacyValue: 'location_promo',
-    mapsTo: 'local_venue_city',
-  },
-  {
-    legacyValue: 'coming_soon',
-    mapsTo: 'local_venue_city',
-  },
-];
-const legacyTemplateNote = legacyLandingTemplateOptions
-  .map((option) => `${option.legacyValue} -> ${option.mapsTo}`)
-  .join(', ');
-
-function validateAssetPath(val) {
-  if (typeof val !== 'string' || !val.startsWith('/assets/')) {
-    return 'Must be a root-relative path starting with /assets/';
-  }
-  if (val.includes('://') || val.includes('..') || assetPathUnsafeRegex.test(val)) {
-    return 'Invalid image path';
-  }
-  return true;
-}
 
 function validateHttpsUrl(val, label) {
   if (typeof val !== 'string') return `${label} must be an https URL`;
@@ -59,44 +21,6 @@ function validateHttpsUrl(val, label) {
   if (url.protocol !== 'https:') return `${label} must use https`;
   if (url.username || url.password) return `${label} must not include credentials`;
   return true;
-}
-
-function deployHookURL() {
-  const value = process.env.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL;
-  if (!value) {
-    console.warn('[landings] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL unset');
-    return null;
-  }
-
-  let url;
-  try {
-    url = new URL(value);
-  } catch {
-    console.warn('[landings] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL is invalid');
-    return null;
-  }
-
-  if (url.protocol !== 'https:' || url.username || url.password) {
-    console.warn('[landings] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL must be a credential-free https URL');
-    return null;
-  }
-
-  return url.toString();
-}
-
-function triggerPagesDeploy(reason) {
-  const url = deployHookURL();
-  if (!url) {
-    return;
-  }
-  void fetch(url, {
-    method: 'POST',
-    signal: AbortSignal.timeout(CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS),
-  }).then(
-    (res) =>
-      console.log('[landings] Cloudflare Pages hook:', reason, res.status),
-    (err) => console.error('[landings] Cloudflare Pages hook failed:', err),
-  );
 }
 
 function userRole(user) {
@@ -183,11 +107,11 @@ export const Landings = {
       type: 'select',
       required: true,
       defaultValue: 'paid_social_campaign',
-      options: landingTemplateOptions,
+      options: payloadLandingTemplateOptions(),
       admin: {
         position: 'sidebar',
         description:
-          `Choose the landing shape after the brief is clear. Paid/social is booking-first, local venue/city is place-first, and group/event is planner-first. Legacy values normalize internally: ${legacyTemplateNote}.`,
+          `Choose the landing shape after the brief is clear. Paid/social is booking-first, local venue/city is place-first, and group/event is planner-first. Legacy values normalize internally: ${legacyTemplateNote()}.`,
       },
     },
     {
@@ -392,16 +316,13 @@ export const Landings = {
           required: true,
           label: 'Hero / social image',
           admin: { description: 'Root-relative /assets/... path. Use real venue or experience photography, not abstract artwork.' },
-          validate: validateAssetPath,
+          validate: validatePublicAssetPath,
         },
         {
           name: 'twitterImage',
           type: 'text',
           admin: { description: 'Defaults to og:image if empty' },
-          validate: (val) => {
-            if (val == null || val === '') return true;
-            return validateAssetPath(val);
-          },
+          validate: validateOptionalPublicAssetPath,
         },
       ],
     },
@@ -565,18 +486,11 @@ export const Landings = {
   ],
   hooks: {
     afterChange: [
-      ({ doc, previousDoc }) => {
-        const pub = Boolean(doc?.published);
-        const wasPub = Boolean(previousDoc?.published);
-        if (pub || wasPub) triggerPagesDeploy('landing-change');
-      },
+      ({ doc, previousDoc, req }) =>
+        markCmsDeployNeeded({ action: 'change', collection: 'landings', doc, previousDoc, req }),
     ],
     afterDelete: [
-      ({ doc }) => {
-        if (Boolean(doc?.published)) {
-          triggerPagesDeploy('landing-delete');
-        }
-      },
+      ({ doc, req }) => markCmsDeployNeeded({ action: 'delete', collection: 'landings', doc, req }),
     ],
   },
 };

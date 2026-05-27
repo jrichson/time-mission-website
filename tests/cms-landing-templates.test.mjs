@@ -2,6 +2,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import {
+  LANDING_TEMPLATE_OPTIONS,
+  LEGACY_LANDING_TEMPLATE_OPTIONS,
+  payloadLandingTemplateOptions,
+  safeExternalLandingHref,
+  validHttpsUrl,
+} from '../cms/lib/landing-contract.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -15,14 +22,17 @@ describe('CMS landing templates', () => {
     const collection = read('cms/collections/Landings.js');
     const migration = read('cms/migrations/20260508_213000_landing_templates.ts');
     const briefMigration = read('cms/migrations/20260511_201500_landing_brief_fields.ts');
+    const currentTemplates = LANDING_TEMPLATE_OPTIONS.map((option) => option.value);
+    const legacyTemplates = LEGACY_LANDING_TEMPLATE_OPTIONS.map((option) => option.legacyValue);
+    const payloadTemplateOptions = payloadLandingTemplateOptions();
 
     for (const template of ['paid_social_campaign', 'local_venue_city', 'group_event']) {
-      expect(collection).toContain(`value: '${template}'`);
+      expect(currentTemplates).toContain(template);
       expect(migration).toContain(`'${template}'`);
     }
 
     for (const template of ['campaign', 'location_promo', 'coming_soon']) {
-      expect(collection).toContain(`legacyValue: '${template}'`);
+      expect(legacyTemplates).toContain(template);
       expect(migration).toContain(`'${template}'`);
     }
 
@@ -31,9 +41,11 @@ describe('CMS landing templates', () => {
       'Local venue or city campaign',
       'Group or event landing',
     ]) {
-      expect(collection).toContain(guidance);
+      expect(JSON.stringify(payloadTemplateOptions)).toContain(guidance);
     }
 
+    expect(collection).toContain('payloadLandingTemplateOptions()');
+    expect(collection).toContain('legacyTemplateNote()');
     expect(collection).toContain('preview: landingPreviewPath');
     expect(migration).toContain('ALTER TABLE "landings" ADD COLUMN "template"');
     expect(collection).toContain("name: 'brief'");
@@ -55,8 +67,8 @@ describe('CMS landing templates', () => {
     expect(previewRoute).toContain('Sitemap');
     expect(previewRoute).toContain('Review warnings');
     expect(previewRoute).toContain('landingReviewWarningsForDoc');
-    expect(previewRoute).toContain('safePublicAssetPath');
-    expect(previewRoute).toContain('safeExternalLandingHref');
+    expect(previewRoute).toContain('mediaPublicAssetURL');
+    expect(previewRoute).toContain('landingCtaForDoc');
     expect(previewRoute).toContain('missing-page-url');
     expect(previewRoute).toContain('Use a root-relative /assets/... hero image path.');
     expect(previewRoute).toContain('data-preview-section="paid-social-proof"');
@@ -106,11 +118,14 @@ describe('CMS landing templates', () => {
     const previewRoute = read('cms/app/preview/landings/[id]/page.tsx');
     const previewStyles = read('cms/app/preview/landings/[id]/page.module.css');
 
-    expect(wizard).toContain('!url.username && !url.password');
+    expect(validHttpsUrl('https://example.com/source')).toBe(true);
+    expect(validHttpsUrl('http://example.com/source')).toBe(false);
+    expect(safeExternalLandingHref('https://user:pass@example.com/source')).toBeNull();
     expect(wizard).toContain('maxLength={URL_MAX_LENGTH}');
     expect(wizard).toContain('dir="auto"');
     expect(previewRoute).toContain('publicAssetWasRepaired');
     expect(previewRoute).toContain('reviewWarnings.unshift');
+    expect(wizard).toContain('publicAssetPathIsValid');
     expect(wizardStyles).toContain('overflow-wrap: anywhere');
     expect(wizardStyles).toContain('hyphens: auto');
     expect(previewStyles).toContain('overflow-wrap: anywhere');

@@ -4,6 +4,18 @@ import { notFound, redirect } from 'next/navigation';
 import { getPayload } from 'payload';
 
 import type { Landing } from '../../../../payload-types';
+import {
+  landingArchetypeForDoc,
+  landingCtaForDoc,
+  landingLaunchStateForDoc,
+  landingReviewWarningsForDoc,
+  landingShouldAppearInSitemap,
+  landingTemplateLabel,
+} from '../../../../lib/landing-contract.js';
+import {
+  publicAssetURL as mediaPublicAssetURL,
+  publicAssetWasRepaired,
+} from '../../../../lib/media-library.js';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -17,8 +29,6 @@ export const metadata = {
 };
 
 type PayloadLandingArchetype = 'paid_social_campaign' | 'local_venue_city' | 'group_event';
-type PayloadLandingSurface = 'book_panel' | 'missions' | 'groups' | 'contact' | 'gift_cards' | 'external';
-type PayloadLandingLaunchState = 'open' | 'coming_soon';
 type PayloadLandingSourceChannel = 'paid_ad' | 'organic_social' | 'email' | 'local_search' | 'partner' | 'internal' | 'other';
 
 const templateMeta: Record<PayloadLandingArchetype, { headline: string; journeyHeading: string; secondaryHref: string; secondaryLabel: string; }> = {
@@ -48,10 +58,6 @@ const templateClasses: Record<PayloadLandingArchetype, string> = {
   local_venue_city: styles.locationPromoTemplate,
 };
 
-const DEFAULT_HERO_IMAGE = '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
-const ASSET_PATH_MAX_LENGTH = 512;
-const EXTERNAL_URL_MAX_LENGTH = 2048;
-
 const sourceChannelLabels: Record<PayloadLandingSourceChannel, string> = {
   email: 'Email',
   internal: 'Internal campaign',
@@ -66,43 +72,9 @@ type PageProps = {
   params: Promise<{ id: string }>;
 };
 
-function safePublicAssetPath(path: string | null | undefined): string {
-  const raw = typeof path === 'string' ? path.trim() : '';
-  if (
-    !raw ||
-    raw.length > ASSET_PATH_MAX_LENGTH ||
-    !raw.startsWith('/assets/') ||
-    raw.includes('://') ||
-    raw.includes('..') ||
-    /[<>"'\\\s]/.test(raw)
-  ) {
-    return DEFAULT_HERO_IMAGE;
-  }
-  return raw;
-}
-
 function publicAssetURL(path: string | null | undefined): string {
-  const raw = safePublicAssetPath(path);
   const origin = process.env.PAYLOAD_PUBLIC_SITE_ORIGIN?.trim().replace(/\/+$/, '');
-  return origin ? `${origin}${raw}` : raw;
-}
-
-function publicAssetWasRepaired(path: string | null | undefined): boolean {
-  const raw = typeof path === 'string' ? path.trim() : '';
-  return Boolean(raw && safePublicAssetPath(raw) !== raw);
-}
-
-function safeExternalLandingHref(value: string | null | undefined): string | null {
-  const raw = typeof value === 'string' ? value.trim() : '';
-  if (!raw || raw.length > EXTERNAL_URL_MAX_LENGTH || /[<>"'\\\s]/.test(raw)) return null;
-
-  try {
-    const url = new URL(raw);
-    if (url.protocol !== 'https:' || url.username || url.password) return null;
-    return url.toString();
-  } catch {
-    return null;
-  }
+  return mediaPublicAssetURL(path, origin);
 }
 
 function publicPathURL(path: string): string {
@@ -115,69 +87,6 @@ function landingCanonicalPath(slug: string): string {
   return `/c/${slug}`;
 }
 
-function landingArchetypeForDoc(doc: Landing): PayloadLandingArchetype {
-  if (doc.template === 'group_event') return 'group_event';
-  if (doc.template === 'local_venue_city' || doc.template === 'location_promo' || doc.template === 'coming_soon') {
-    return 'local_venue_city';
-  }
-  return 'paid_social_campaign';
-}
-
-function landingTemplateLabel(template: PayloadLandingArchetype): string {
-  if (template === 'group_event') return 'Group Event';
-  if (template === 'local_venue_city') return 'Local Venue/City';
-  return 'Paid/Social Campaign';
-}
-
-function landingLaunchStateForDoc(doc: Landing): PayloadLandingLaunchState {
-  if (doc.template === 'coming_soon') return 'coming_soon';
-  return doc.strategy?.launchState === 'coming_soon' ? 'coming_soon' : 'open';
-}
-
-function defaultCtaSurfaceForDoc(doc: Landing): PayloadLandingSurface {
-  if (landingArchetypeForDoc(doc) === 'group_event') return 'contact';
-  if (landingLaunchStateForDoc(doc) === 'coming_soon') return 'contact';
-  return 'book_panel';
-}
-
-function landingCtaForDoc(doc: Landing): { surface: PayloadLandingSurface; primaryHref: string; bookTrigger: boolean; linkPath: string } {
-  const surface = (doc.content?.ctaSurface || defaultCtaSurfaceForDoc(doc)) as PayloadLandingSurface;
-  if (surface === 'book_panel') {
-    return { surface, primaryHref: '#tickets', bookTrigger: true, linkPath: '/tickets' };
-  }
-
-  const internalHrefs: Record<Exclude<PayloadLandingSurface, 'book_panel' | 'external'>, string> = {
-    contact: '/contact',
-    gift_cards: '/gift-cards',
-    groups: '/groups',
-    missions: '/missions',
-  };
-
-  if (surface !== 'external') {
-    const href = internalHrefs[surface] || '/missions';
-    return { surface, primaryHref: href, bookTrigger: false, linkPath: href };
-  }
-
-  const primaryHref = safeExternalLandingHref(doc.content?.ctaExternalUrl);
-  if (!primaryHref) {
-    return { surface: 'missions', primaryHref: '/missions', bookTrigger: false, linkPath: '/missions' };
-  }
-
-  let linkPath = '/';
-  try {
-    linkPath = new URL(primaryHref).pathname || '/';
-  } catch {
-    linkPath = '/';
-  }
-  return { surface, primaryHref, bookTrigger: false, linkPath };
-}
-
-function landingShouldAppearInSitemap(doc: Landing): boolean {
-  if (doc.includeInSitemap === false) return false;
-  if (doc.seo?.robots === 'noindex,follow') return false;
-  return Boolean(doc.slug && doc.seo?.metaTitle && doc.seo?.metaDescription && doc.seo?.ogImage && doc.content?.headline && doc.content?.primaryCtaLabel);
-}
-
 function landingBullets(doc: Landing): string[] {
   const bullets = doc.content?.bullets
     ?.map((bullet) => String(bullet?.text || '').trim())
@@ -186,26 +95,6 @@ function landingBullets(doc: Landing): string[] {
   return bullets?.length
     ? bullets
     : ['25+ interactive mission rooms', 'Team-based scoring', 'Built for every age and group size'];
-}
-
-function landingReviewWarningsForDoc(doc: Landing): string[] {
-  const warnings: string[] = [];
-  const bullets = doc.content?.bullets?.filter((bullet) => String(bullet?.text || '').trim()).length ?? 0;
-  const sourcePromise = String(doc.brief?.sourcePromise || '').trim();
-  const visitorIntent = String(doc.brief?.visitorIntent || '').trim();
-
-  if (!sourcePromise) warnings.push('Add the source promise from the ad, post, email, search query, or campaign request.');
-  if (!visitorIntent) warnings.push('Add the visitor intent so the page copy is tied to a real decision path.');
-  if (!doc.content?.subheadline) warnings.push('Add a subheadline so visitors understand the offer before they choose.');
-  if (bullets < 3) warnings.push('Add at least three concrete proof points.');
-  if (doc.content?.ctaSurface === 'external' && !safeExternalLandingHref(doc.content.ctaExternalUrl)) {
-    warnings.push('Add a credential-free https external CTA URL before publishing.');
-  }
-  if (landingLaunchStateForDoc(doc) === 'coming_soon' && doc.content?.ctaSurface === 'book_panel') {
-    warnings.push('Coming-soon pages should use contact or updates language instead of immediate booking.');
-  }
-
-  return warnings;
 }
 
 async function loadLanding(id: string): Promise<Landing> {

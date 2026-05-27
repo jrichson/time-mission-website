@@ -3,11 +3,11 @@
 import type { PayloadAnnouncementBannerDoc } from './announcement-banner-contract';
 import {
     cmsBuildStrict,
-    PAYLOAD_FETCH_TIMEOUT_MS,
     validatedCmsOriginBase,
 } from './cms-origin';
 import type { PayloadLandingSurface } from './landing-contract';
 import type { PayloadLandingSourceChannel } from './landing-contract';
+import { fetchPayloadCollection } from './read-adapter';
 export {
     announcementBannerDocLooksUsable,
     announcementBannerViewForDoc,
@@ -134,85 +134,6 @@ export interface PayloadSitePageDoc {
     };
 }
 
-interface PayloadListResponse {
-    docs?: unknown[];
-}
-
-async function fetchPayloadLandings(origin: string, strict: boolean): Promise<PayloadLandingDoc[]> {
-    const url = new URL('/api/landings', `${origin}/`);
-    url.searchParams.set('limit', '250');
-    url.searchParams.set('depth', '0');
-    url.searchParams.sort();
-    try {
-        const res = await fetch(url.toString(), {
-            headers: { Accept: 'application/json' },
-            signal: AbortSignal.timeout(PAYLOAD_FETCH_TIMEOUT_MS),
-        });
-        if (!res.ok) {
-            const msg = `[payload] GET ${url} failed: ${res.status}`;
-            if (strict) throw new Error(msg);
-            console.warn(msg);
-            return [];
-        }
-        const body = (await res.json()) as PayloadListResponse;
-        return Array.isArray(body.docs) ? (body.docs as PayloadLandingDoc[]) : [];
-    } catch (err) {
-        if (strict) throw err;
-        console.warn('[payload] landings fetch failed:', err instanceof Error ? err.message : err);
-        return [];
-    }
-}
-
-let sitePagesCache: Promise<PayloadSitePageDoc[]> | null = null;
-let announcementBannersCache: Promise<PayloadAnnouncementBannerDoc[]> | null = null;
-
-async function fetchPayloadSitePages(origin: string, strict: boolean): Promise<PayloadSitePageDoc[]> {
-    const url = new URL('/api/site-pages', `${origin}/`);
-    url.searchParams.set('limit', '250');
-    url.searchParams.set('depth', '0');
-    url.searchParams.sort();
-    try {
-        const res = await fetch(url.toString(), {
-            headers: { Accept: 'application/json' },
-            signal: AbortSignal.timeout(PAYLOAD_FETCH_TIMEOUT_MS),
-        });
-        if (!res.ok) {
-            const msg = `[payload] GET ${url} failed: ${res.status}`;
-            if (strict) throw new Error(msg);
-            console.warn(msg);
-            return [];
-        }
-        const body = (await res.json()) as PayloadListResponse;
-        return Array.isArray(body.docs) ? (body.docs as PayloadSitePageDoc[]) : [];
-    } catch (err) {
-        if (strict) throw err;
-        console.warn('[payload] site pages fetch failed:', err instanceof Error ? err.message : err);
-        return [];
-    }
-}
-
-async function fetchPayloadAnnouncementBanners(origin: string): Promise<PayloadAnnouncementBannerDoc[]> {
-    const url = new URL('/api/announcement-banners', `${origin}/`);
-    url.searchParams.set('limit', '250');
-    url.searchParams.set('depth', '0');
-    url.searchParams.sort();
-    try {
-        const res = await fetch(url.toString(), {
-            headers: { Accept: 'application/json' },
-            signal: AbortSignal.timeout(PAYLOAD_FETCH_TIMEOUT_MS),
-        });
-        if (!res.ok) {
-            console.warn(`[payload] optional announcement banners skipped: GET ${url} failed: ${res.status}`);
-            return [];
-        }
-        const body = (await res.json()) as PayloadListResponse;
-        return Array.isArray(body.docs) ? (body.docs as PayloadAnnouncementBannerDoc[]) : [];
-    } catch (err) {
-        console.warn('[payload] optional announcement banners fetch failed:', err instanceof Error ? err.message : err);
-        return [];
-    }
-}
-
 /** Published landings visible to anonymous API (CMS access rule). */
 export async function getPublishedLandings(origin?: string): Promise<PayloadLandingDoc[]> {
     const strict = cmsBuildStrict();
@@ -228,7 +149,7 @@ export async function getPublishedLandings(origin?: string): Promise<PayloadLand
         console.warn('[payload] skipping landings: invalid or disallowed PAYLOAD_CMS_ORIGIN');
         return [];
     }
-    return fetchPayloadLandings(base, strict);
+    return fetchPayloadCollection<PayloadLandingDoc>({ collection: 'landings', origin: base, strict });
 }
 
 /** Published existing-page metadata visible to anonymous API (CMS access rule). */
@@ -247,8 +168,7 @@ export async function getPublishedSitePages(origin?: string): Promise<PayloadSit
         return [];
     }
 
-    sitePagesCache = sitePagesCache ?? fetchPayloadSitePages(base, strict);
-    return sitePagesCache;
+    return fetchPayloadCollection<PayloadSitePageDoc>({ collection: 'site-pages', origin: base, strict });
 }
 
 /**
@@ -263,8 +183,11 @@ export async function getPublishedAnnouncementBanners(origin?: string): Promise<
         return [];
     }
 
-    announcementBannersCache = announcementBannersCache ?? fetchPayloadAnnouncementBanners(base);
-    return announcementBannersCache;
+    return fetchPayloadCollection<PayloadAnnouncementBannerDoc>({
+        collection: 'announcement-banners',
+        optionalLabel: 'announcement banners',
+        origin: base,
+    });
 }
 
 export async function getPublishedSitePage(canonicalPath: string, origin?: string): Promise<PayloadSitePageDoc | null> {

@@ -4,6 +4,24 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getPayload } from 'payload';
 
+import {
+  CTA_SURFACE_OPTIONS,
+  defaultLandingCtaLabel,
+  LANDING_TEMPLATE_OPTIONS,
+  landingCtaSurface,
+  landingLaunchState,
+  landingSourceChannel,
+  landingTemplate,
+  SOURCE_CHANNEL_OPTIONS,
+  slugifyLandingPath,
+  truncateLandingText,
+  validHttpsUrl,
+} from '../../../lib/landing-contract.js';
+import {
+  DEFAULT_LANDING_HERO_IMAGE,
+  publicAssetPathIsValid,
+  PUBLIC_ASSET_PATH_MAX_LENGTH,
+} from '../../../lib/media-library.js';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -20,131 +38,26 @@ type PageProps = {
   }>;
 };
 
-const DEFAULT_HERO_IMAGE = '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
-const ASSET_PATH_MAX_LENGTH = 512;
 const URL_MAX_LENGTH = 2048;
 
-const templateOptions: Array<{
+const templateOptions = LANDING_TEMPLATE_OPTIONS as Array<{
   value: LandingTemplate;
   label: string;
   help: string;
   bestFor: string;
   creates: string[];
-}> = [
-  {
-    value: 'paid_social_campaign',
-    label: 'Paid/Social Campaign',
-    help: 'A matching destination for an ad, post, email, or seasonal offer.',
-    bestFor: 'One promise, one primary booking action, fast proof.',
-    creates: ['Campaign hero', 'Proof cards', 'Friction reducers', 'Booking CTA'],
-  },
-  {
-    value: 'local_venue_city',
-    label: 'Local Venue/City',
-    help: 'A city, venue opening, local SEO push, or place-specific offer.',
-    bestFor: 'Place-first demand where the city or venue has to feel real.',
-    creates: ['City signal', 'Venue confidence', 'Launch-state copy', 'Local CTA'],
-  },
-  {
-    value: 'group_event',
-    label: 'Group/Event',
-    help: 'A buyer or planner page for birthdays, corporate outings, schools, or private events.',
-    bestFor: 'Planner confidence, logistics reassurance, and inquiry-friendly conversion.',
-    creates: ['Planner promise', 'Logistics proof', 'Group-size framing', 'Inquiry CTA'],
-  },
-];
-
-const sourceChannelOptions: Array<{ value: SourceChannel; label: string }> = [
-  { value: 'paid_ad', label: 'Paid ad' },
-  { value: 'organic_social', label: 'Organic social' },
-  { value: 'email', label: 'Email' },
-  { value: 'local_search', label: 'Local search / SEO' },
-  { value: 'partner', label: 'Partner / referral' },
-  { value: 'internal', label: 'Internal campaign' },
-  { value: 'other', label: 'Other' },
-];
-
-const ctaSurfaceOptions: Array<{ value: CtaSurface; label: string }> = [
-  { value: 'book_panel', label: 'Open booking panel' },
-  { value: 'contact', label: 'Contact / inquiry' },
-  { value: 'groups', label: 'Groups hub' },
-  { value: 'missions', label: 'Missions page' },
-  { value: 'gift_cards', label: 'Gift cards' },
-  { value: 'external', label: 'External URL' },
-];
+}>;
+const sourceChannelOptions = SOURCE_CHANNEL_OPTIONS as Array<{ value: SourceChannel; label: string }>;
+const ctaSurfaceOptions = CTA_SURFACE_OPTIONS as Array<{ value: CtaSurface; label: string }>;
 
 function formString(formData: FormData, key: string): string {
   const value = formData.get(key);
   return typeof value === 'string' ? value.trim() : '';
 }
 
-function landingTemplate(value: string): LandingTemplate {
-  return templateOptions.some((option) => option.value === value)
-    ? (value as LandingTemplate)
-    : 'paid_social_campaign';
-}
-
-function sourceChannel(value: string): SourceChannel {
-  return sourceChannelOptions.some((option) => option.value === value) ? (value as SourceChannel) : 'paid_ad';
-}
-
-function launchState(value: string): LaunchState {
-  return value === 'coming_soon' ? 'coming_soon' : 'open';
-}
-
-function ctaSurface(value: string, template: LandingTemplate, state: LaunchState): CtaSurface {
-  if (ctaSurfaceOptions.some((option) => option.value === value)) return value as CtaSurface;
-  if (template === 'group_event' || state === 'coming_soon') return 'contact';
-  return 'book_panel';
-}
-
-function slugify(value: string): string {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .replace(/-{2,}/g, '-')
-    .slice(0, 80);
-}
-
-function truncate(value: string, maxLength: number): string {
-  if (value.length <= maxLength) return value;
-  return value.slice(0, maxLength - 1).replace(/\s+\S*$/, '').trimEnd();
-}
-
 function wizardUrl(template: LandingTemplate, error: string): string {
   const params = new URLSearchParams({ error, template });
   return `/landings/new?${params.toString()}`;
-}
-
-function defaultCtaLabel(template: LandingTemplate, state: LaunchState): string {
-  if (state === 'coming_soon') return 'Ask About Opening Updates';
-  if (template === 'group_event') return 'Request Event Help';
-  if (template === 'local_venue_city') return 'Book This Location';
-  return 'Book Now';
-}
-
-function validAssetPath(value: string): boolean {
-  return (
-    value.length > 0 &&
-    value.length <= ASSET_PATH_MAX_LENGTH &&
-    value.startsWith('/assets/') &&
-    !value.includes('://') &&
-    !value.includes('..') &&
-    !/[<>"'\\\s]/.test(value)
-  );
-}
-
-function validHttpsUrl(value: string): boolean {
-  if (!value) return true;
-  if (value.length > URL_MAX_LENGTH || /[<>"'\\\s]/.test(value)) return false;
-
-  try {
-    const url = new URL(value);
-    return url.protocol === 'https:' && !url.username && !url.password;
-  } catch {
-    return false;
-  }
 }
 
 async function requireCmsUser(redirectPath: string) {
@@ -161,10 +74,10 @@ async function requireCmsUser(redirectPath: string) {
 async function createLandingDraft(formData: FormData) {
   'use server';
 
-  const template = landingTemplate(formString(formData, 'template'));
-  const state = launchState(formString(formData, 'launchState'));
+  const template = landingTemplate(formString(formData, 'template')) as LandingTemplate;
+  const state = landingLaunchState(formString(formData, 'launchState')) as LaunchState;
   const title = formString(formData, 'title');
-  const slug = slugify(formString(formData, 'slug') || title);
+  const slug = slugifyLandingPath(formString(formData, 'slug') || title);
   const headline = formString(formData, 'headline');
   const subheadline = formString(formData, 'subheadline');
   const sourcePromise = formString(formData, 'sourcePromise');
@@ -174,7 +87,7 @@ async function createLandingDraft(formData: FormData) {
   const proofPoints = ['proofPoint1', 'proofPoint2', 'proofPoint3']
     .map((key) => formString(formData, key))
     .filter(Boolean);
-  const imagePath = formString(formData, 'ogImage') || DEFAULT_HERO_IMAGE;
+  const imagePath = formString(formData, 'ogImage') || DEFAULT_LANDING_HERO_IMAGE;
 
   if (!title || !slug || !headline || !subheadline || !sourcePromise || !visitorIntent || !successMetric) {
     redirect(wizardUrl(template, 'missing-required-fields'));
@@ -182,7 +95,7 @@ async function createLandingDraft(formData: FormData) {
   if (proofPoints.length < 3) {
     redirect(wizardUrl(template, 'missing-proof-points'));
   }
-  if (!validAssetPath(imagePath)) {
+  if (!publicAssetPathIsValid(imagePath)) {
     redirect(wizardUrl(template, 'invalid-image-path'));
   }
   if (!validHttpsUrl(sourceUrl)) {
@@ -210,16 +123,16 @@ async function createLandingDraft(formData: FormData) {
     redirect(wizardUrl(template, 'slug-exists'));
   }
 
-  const selectedCtaSurface = ctaSurface(formString(formData, 'ctaSurface'), template, state);
-  const primaryCtaLabel = formString(formData, 'primaryCtaLabel') || defaultCtaLabel(template, state);
-  const metaTitle = truncate(`${headline} | Time Mission`, 90);
-  const metaDescription = truncate(subheadline || sourcePromise, 220);
+  const selectedCtaSurface = landingCtaSurface(formString(formData, 'ctaSurface'), template, state) as CtaSurface;
+  const primaryCtaLabel = formString(formData, 'primaryCtaLabel') || defaultLandingCtaLabel(template, state);
+  const metaTitle = truncateLandingText(`${headline} | Time Mission`, 90);
+  const metaDescription = truncateLandingText(subheadline || sourcePromise, 220);
   const created = await payload
     .create({
       collection: 'landings',
       data: {
         brief: {
-          sourceChannel: sourceChannel(formString(formData, 'sourceChannel')),
+          sourceChannel: landingSourceChannel(formString(formData, 'sourceChannel')),
           sourceName: formString(formData, 'sourceName'),
           sourcePromise,
           sourceUrl,
@@ -542,9 +455,9 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
               Hero / social image
               <input
                 dir="ltr"
-                maxLength={ASSET_PATH_MAX_LENGTH}
+                maxLength={PUBLIC_ASSET_PATH_MAX_LENGTH}
                 name="ogImage"
-                defaultValue={DEFAULT_HERO_IMAGE}
+                defaultValue={DEFAULT_LANDING_HERO_IMAGE}
                 pattern="/assets/.*"
                 required
               />

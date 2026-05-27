@@ -11,4 +11,5 @@ CMS media records live in Railway Postgres, but uploaded media files live in dur
 ## Consequences
 
 - CMS media needs object-storage configuration before production uploads are fully useful.
-- Public rendering should use approved media URLs from CMS records rather than editor-typed `/assets/...` paths.
+- Until object storage is connected, CMS fields that need public images use the shared CMS media adapter for approved root-relative `/assets/...` paths.
+- Public rendering should ultimately use approved media URLs from CMS records rather than editor-typed paths.

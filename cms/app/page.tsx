@@ -23,6 +23,11 @@ const quickLinks = [
     label: 'User Invites',
     description: 'Invite editors, copy invite links, and keep CMS access limited to approved users.',
   },
+  {
+    href: '/deploy',
+    label: 'Deploy Gate',
+    description: 'Trigger the public-site deploy after approved CMS content is ready to go live.',
+  },
 ];
 
 const landingActions = [

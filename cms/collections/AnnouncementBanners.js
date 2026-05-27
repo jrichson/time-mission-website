@@ -1,6 +1,6 @@
 import { isAdminOrEditor } from './Users.js';
+import { markCmsDeployNeeded } from '../lib/cms-deploy-gate.js';
 
-const CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS = 15_000;
 const bannerTargetScopeOptions = [
   { label: 'All visitors', value: 'global' },
   { label: 'Regions', value: 'regions' },
@@ -23,42 +23,6 @@ const bannerLocationOptions = [
   { label: 'Time Mission Philadelphia', value: 'philadelphia' },
   { label: 'Time Mission West Nyack', value: 'west-nyack' },
 ];
-
-function deployHookURL() {
-  const value = process.env.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL;
-  if (!value) {
-    console.warn('[announcement-banners] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL unset');
-    return null;
-  }
-
-  let url;
-  try {
-    url = new URL(value);
-  } catch {
-    console.warn('[announcement-banners] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL is invalid');
-    return null;
-  }
-
-  if (url.protocol !== 'https:' || url.username || url.password) {
-    console.warn('[announcement-banners] skip deploy hook: CLOUDFLARE_PAGES_DEPLOY_HOOK_URL must be a credential-free https URL');
-    return null;
-  }
-
-  return url.toString();
-}
-
-function triggerPagesDeploy(reason) {
-  const url = deployHookURL();
-  if (!url) return;
-
-  void fetch(url, {
-    method: 'POST',
-    signal: AbortSignal.timeout(CLOUDFLARE_DEPLOY_HOOK_TIMEOUT_MS),
-  }).then(
-    (res) => console.log('[announcement-banners] Cloudflare Pages hook:', reason, res.status),
-    (err) => console.error('[announcement-banners] Cloudflare Pages hook failed:', err),
-  );
-}
 
 function canManageAnnouncementBanners({ req: { user } }) {
   if (!user || user.collection !== 'users') return false;
@@ -248,16 +212,11 @@ export const AnnouncementBanners = {
   ],
   hooks: {
     afterChange: [
-      ({ doc, previousDoc }) => {
-        const pub = Boolean(doc?.published);
-        const wasPub = Boolean(previousDoc?.published);
-        if (pub || wasPub) triggerPagesDeploy('announcement-banner-change');
-      },
+      ({ doc, previousDoc, req }) =>
+        markCmsDeployNeeded({ action: 'change', collection: 'announcement-banners', doc, previousDoc, req }),
     ],
     afterDelete: [
-      ({ doc }) => {
-        if (Boolean(doc?.published)) triggerPagesDeploy('announcement-banner-delete');
-      },
+      ({ doc, req }) => markCmsDeployNeeded({ action: 'delete', collection: 'announcement-banners', doc, req }),
     ],
   },
 };
