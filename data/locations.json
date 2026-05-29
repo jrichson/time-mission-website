@@ -25,29 +25,29 @@
       },
       "hours": {
         "mon": {
-          "open": "12:00",
+          "open": "11:00",
           "close": "21:00",
-          "label": "12pm - 9pm"
+          "label": "11am - 9pm"
         },
         "tue": {
-          "open": "12:00",
+          "open": "11:00",
           "close": "21:00",
-          "label": "12pm - 9pm"
+          "label": "11am - 9pm"
         },
         "wed": {
-          "open": "12:00",
+          "open": "11:00",
           "close": "21:00",
-          "label": "12pm - 9pm"
+          "label": "11am - 9pm"
         },
         "thu": {
-          "open": "12:00",
+          "open": "11:00",
           "close": "21:00",
-          "label": "12pm - 9pm"
+          "label": "11am - 9pm"
         },
         "fri": {
-          "open": "12:00",
+          "open": "11:00",
           "close": "00:00",
-          "label": "12pm - Midnight"
+          "label": "11am - Midnight"
         },
         "sat": {
           "open": "10:00",
