@@ -254,19 +254,63 @@
         BookingJourney.applyCtaView(el, cta);
     }
 
+    var REGION_ORDER = {
+        us: 0,
+        europe: 1,
+    };
+
+    function normalizeListDash(value) {
+        return String(value || '').replace(/\s+[-–—]\s+/g, ' – ').trim();
+    }
+
+    function locationListCity(loc) {
+        return (loc && (loc.shortName || (loc.address && loc.address.city) || loc.name || loc.id)) || '';
+    }
+
+    function locationListRegion(loc) {
+        if (!loc) return '';
+        if (loc.region === 'europe') {
+            return (loc.address && loc.address.country) || loc.countryCode || '';
+        }
+        return (loc.address && loc.address.state) || loc.countryCode || '';
+    }
+
+    function locationListLabel(loc) {
+        var region = locationListRegion(loc);
+        var city = locationListCity(loc);
+        if (region && city) return region + ' – ' + city;
+        return normalizeListDash(loc && loc.navLabel) || city || (loc && loc.id) || '';
+    }
+
+    function locationListSortKey(loc) {
+        var region = (loc && loc.region) || '';
+        var regionOrder = Object.prototype.hasOwnProperty.call(REGION_ORDER, region)
+            ? REGION_ORDER[region]
+            : 99;
+        return [
+            regionOrder,
+            locationListRegion(loc).toLocaleUpperCase('en-US'),
+            locationListCity(loc).toLocaleUpperCase('en-US'),
+        ].join('|');
+    }
+
+    function sortLocationsForList(locations) {
+        return (Array.isArray(locations) ? locations : []).slice().sort(function (a, b) {
+            return locationListSortKey(a).localeCompare(locationListSortKey(b), 'en-US');
+        });
+    }
+
     function listTicketOptions(locations) {
-        return (Array.isArray(locations) ? locations : []).map(function (loc) {
+        return sortLocationsForList(locations).map(function (loc) {
             var view = getLocationView(loc, loc.id || loc.slug);
-        var statusSuffix = loc.status !== 'open'
+            var statusSuffix = loc.status !== 'open'
                 ? ' (' + (temporaryClosureLabelForLocation(loc) || openingLabelForLocation(loc) || (view && view.bookable
                     ? translate('booking.status.bookingNow', 'Booking Now')
                     : translate('location.comingSoon', 'Coming Soon'))) + ')'
                 : '';
             return {
                 value: loc.id,
-                label: (loc.region === 'europe'
-                    ? (loc.navLabel || loc.shortName || loc.name || loc.id)
-                    : (view ? view.name : (loc.shortName || loc.name || loc.id))) + statusSuffix,
+                label: locationListLabel(loc) + statusSuffix,
                 status: loc.status || 'open',
             };
         });

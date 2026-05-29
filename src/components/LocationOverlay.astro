@@ -1,6 +1,7 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import { allLocations } from '../data/locations';
+import { locationsForRegion, locationListLabel } from '../lib/location-list';
 import { locationOpeningLabel } from '../lib/location-status';
 import { locationHref, locationStatusBadge } from '../lib/location-view';
 
@@ -9,8 +10,8 @@ interface Props {
 }
 
 const { currentLang = 'en' } = Astro.props;
-const usLocations = allLocations.filter((l) => l.region === 'us');
-const euLocations = allLocations.filter((l) => l.region === 'europe');
+const usLocations = locationsForRegion(allLocations, 'us');
+const euLocations = locationsForRegion(allLocations, 'europe');
 
 function statusLabel(loc: (typeof allLocations)[number]) {
     return locationStatusBadge(loc) || 'Coming Soon';
@@ -46,7 +47,7 @@ function statusClass(loc: (typeof allLocations)[number]) {
                         data-tm-location-slug={loc.slug}
                         class={statusClass(loc)}
                     >
-                        {loc.navLabel}
+                        {locationListLabel(loc)}
                         {loc.status !== 'open' && (
                             <span class="coming-soon-tag" data-i18n={loc.status === 'coming-soon' && !locationOpeningLabel(loc) ? 'location.comingSoon' : undefined}>
                                 {' '}{statusLabel(loc)}
@@ -65,7 +66,7 @@ function statusClass(loc: (typeof allLocations)[number]) {
                         data-tm-external-location="true"
                         class={statusClass(loc)}
                     >
-                        {loc.navLabel}
+                        {locationListLabel(loc)}
                         {loc.status !== 'open' && (
                             <span class="coming-soon-tag" data-i18n={loc.status === 'coming-soon' && !locationOpeningLabel(loc) ? 'location.comingSoon' : undefined}>
                                 {' '}{statusLabel(loc)}

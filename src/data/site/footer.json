@@ -23,10 +23,17 @@
       "title": "LOCATIONS",
       "links": [
         { "label": "All Locations", "href": "/locations" },
-        { "label": "Mount Prospect", "href": "/mount-prospect" },
-        { "label": "Philadelphia", "href": "/philadelphia" },
-        { "label": "Belgium - Antwerp", "href": "https://timemission.eu/antwerp" },
-        { "label": "Belgium - Brussels", "href": "https://timemission.eu/brussels" }
+        { "label": "IL – Mount Prospect", "href": "/mount-prospect" },
+        { "label": "IL – Orland Park", "href": "/orland-park" },
+        { "label": "NY – West Nyack", "href": "/west-nyack" },
+        { "label": "PA – Philadelphia", "href": "/philadelphia" },
+        { "label": "RI – Lincoln", "href": "/lincoln" },
+        { "label": "TN – Nashville", "href": "/nashville" },
+        { "label": "TX – Dallas", "href": "/dallas" },
+        { "label": "TX – Houston", "href": "/houston" },
+        { "label": "VA – Manassas", "href": "/manassas" },
+        { "label": "Belgium – Antwerp", "href": "https://timemission.eu/antwerp" },
+        { "label": "Belgium – Brussels", "href": "https://timemission.eu/brussels" }
       ]
     }
   ]

@@ -71,7 +71,7 @@
         "private-events": "https://webforms.pipedrive.com/f/6rEdb4VYmIPwozxhdVp2Ov6yH0IyqO72Q0Fh1CeXXrOriZh5762qatQSiEygGRMjYf",
         "holidays": "https://webforms.pipedrive.com/f/6rGnRlGiXrnS1NPUnGIZGiMCYrvpr8NrD3AdFSYa2I6qPMyRLsVhIFNrf2JM3vwmJB"
       },
-      "navLabel": "IL - Mount Prospect",
+      "navLabel": "IL – Mount Prospect",
       "mapUrl": "https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056",
       "faqs": [
         {
@@ -156,7 +156,7 @@
       "rollerCheckoutUrl": "",
       "bookingProvider": "roller",
       "groupFormUrls": {},
-      "navLabel": "PA - Philadelphia",
+      "navLabel": "PA – Philadelphia",
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
       "faqs": [
         {
@@ -264,7 +264,7 @@
         "private-events": "https://timemission-palisades.briqbookings.com",
         "holidays": "https://timemission-palisades.briqbookings.com"
       },
-      "navLabel": "NY - West Nyack",
+      "navLabel": "NY – West Nyack",
       "mapUrl": "https://maps.google.com/?q=3532+Palisades+Center+Dr+West+Nyack+NY+10994",
       "faqs": [
         {
@@ -360,7 +360,7 @@
         "private-events": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
         "holidays": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959"
       },
-      "navLabel": "RI - Lincoln",
+      "navLabel": "RI – Lincoln",
       "mapUrl": "https://maps.google.com/?q=100+Higginson+Ave+Lincoln+RI+02865",
       "faqs": [
         {
@@ -458,7 +458,7 @@
         "private-events": "https://webforms.pipedrive.com/f/czKmvg7yJDn1vaeQPIzJlwA0gK4cMhBl3aSuQVpHJ8YsZ13BJFCk2xEKF301qR6KDF",
         "holidays": "https://webforms.pipedrive.com/f/63f1HEKkrC42GkAS68wtfh9HcHWyi8c6TlESzmjbi3nKuXQ3xiIQXnr9WhZuTX5wlR"
       },
-      "navLabel": "VA - Manassas",
+      "navLabel": "VA – Manassas",
       "mapUrl": "https://maps.google.com/?q=8300+Sudley+Rd+Manassas+VA+20109",
       "faqs": [
         {
@@ -523,7 +523,7 @@
         "private-events": "https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form",
         "holidays": "https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form"
       },
-      "navLabel": "TX - Houston",
+      "navLabel": "TX – Houston",
       "mapUrl": "https://maps.google.com/?q=7620+Katy+Fwy+STE+355+Houston+TX+77024",
       "faqs": [],
       "ticker": "HOUSTON GRAND OPENING - JUNE 5TH",
@@ -609,7 +609,7 @@
         "private-events": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
         "holidays": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission"
       },
-      "navLabel": "Belgium - Antwerp",
+      "navLabel": "Belgium – Antwerp",
       "mapUrl": "https://maps.google.com/?q=Michiganstraat+1+Antwerp+2030+Belgium",
       "faqs": [
         {
@@ -673,7 +673,7 @@
         "private-events": "https://webforms.pipedrive.com/f/czzh7CGANHcgfeUk2Mun2OZSX0ENMgqTvljheWTglNaczrnSJBJFVdRYvLeAdm6Y83",
         "holidays": "https://webforms.pipedrive.com/f/6xQQrLhTsFkAoB1Os9dMge6hvvHKlouU8Kz12XSFqwTG4J6HRojT9rKKIMEKMERX0L"
       },
-      "navLabel": "IL - Orland Park",
+      "navLabel": "IL – Orland Park",
       "mapUrl": "https://maps.google.com/?q=66+Orland+Square+Dr+Suite+C+Orland+Park+IL+60462",
       "faqs": [],
       "ticker": "ORLAND PARK GRAND OPENING - JUNE 11TH",
@@ -711,7 +711,7 @@
       "hours": {},
       "bookingUrl": "",
       "externalUrl": "https://timemission.eu/brussels",
-      "navLabel": "Belgium - Brussels",
+      "navLabel": "Belgium – Brussels",
       "mapUrl": "https://maps.google.com/?q=Av.+Imp%C3%A9ratrice+Charlotte+1020+Bruxelles+Belgium",
       "faqs": [],
       "ticker": "BRUSSELS GRAND OPENING - JUNE 18TH",
@@ -745,7 +745,7 @@
       },
       "hours": {},
       "bookingUrl": "",
-      "navLabel": "TX - Dallas",
+      "navLabel": "TX – Dallas",
       "mapUrl": "https://maps.google.com/?q=Dallas+TX",
       "faqs": [],
       "ticker": "DALLAS COMING SOON",
@@ -783,7 +783,7 @@
       },
       "hours": {},
       "bookingUrl": "",
-      "navLabel": "TN - Nashville",
+      "navLabel": "TN – Nashville",
       "mapUrl": "https://maps.google.com/?q=209+10th+Avenue+South+Nashville+TN+37203",
       "faqs": [],
       "ticker": "NASHVILLE COMING SOON",

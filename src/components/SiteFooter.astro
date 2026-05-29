@@ -4,6 +4,7 @@
  * Canonical site footer rendered by SiteLayout.
  */
 import { allLocations, type LocationRecord } from '../data/locations';
+import { locationsForRegion, locationListLabel } from '../lib/location-list';
 import {
     locationAddressLines,
     locationContactHref,
@@ -20,11 +21,6 @@ interface Props {
 const year = new Date().getFullYear();
 const { pageLocation = null } = Astro.props;
 
-function openingLabelFor(slug: string) {
-    const loc = allLocations.find((entry) => entry.slug === slug || entry.id === slug);
-    return loc ? locationStatusBadge(loc) : '';
-}
-
 function contactHrefForLocation(loc: LocationRecord | null): string {
     if (!loc) return '/contact';
     const email = String(loc.contact.email || '').trim();
@@ -32,18 +28,9 @@ function contactHrefForLocation(loc: LocationRecord | null): string {
     return locationContactHref(loc);
 }
 
-const houstonOpeningLabel = openingLabelFor('houston');
-const philadelphiaStatusLabel = openingLabelFor('philadelphia');
-const orlandParkOpeningLabel = openingLabelFor('orland-park');
-const nashvilleOpeningLabel = openingLabelFor('nashville');
-const antwerp = allLocations.find((entry) => entry.slug === 'antwerp');
-const brussels = allLocations.find((entry) => entry.slug === 'brussels');
-const antwerpHref = antwerp ? locationHref(antwerp) : '/antwerp';
-const brusselsHref = brussels ? locationHref(brussels) : '/brussels';
-const antwerpLabel = antwerp?.navLabel || 'Belgium - Antwerp';
-const brusselsLabel = brussels?.navLabel || 'Belgium - Brussels';
-const brusselsOpeningLabel = brussels ? locationStatusBadge(brussels) : '';
 const contactHref = contactHrefForLocation(pageLocation);
+const footerUsLocations = locationsForRegion(allLocations, 'us');
+const footerEuropeLocations = locationsForRegion(allLocations, 'europe');
 
 function hoursFallbackForLocation(loc: LocationRecord | null): string {
     if (!loc) return '';
@@ -122,23 +109,14 @@ const hasPageLocation = Boolean(pageLocation);
                         </svg>
                     </button>
                     <div class="footer-location-list">
-                        <a href="/mount-prospect">Mount Prospect</a>
-                        <a href="/philadelphia" class={philadelphiaStatusLabel ? 'coming-soon' : undefined}>
-                            Philadelphia {philadelphiaStatusLabel && <span class="coming-soon-tag">{philadelphiaStatusLabel}</span>}
-                        </a>
-                        <a href="/west-nyack">West Nyack</a>
-                        <a href="/lincoln">Lincoln</a>
-                        <a href="/houston" class={houstonOpeningLabel ? 'coming-soon' : undefined}>
-                            Houston {houstonOpeningLabel && <span class="coming-soon-tag">{houstonOpeningLabel}</span>}
-                        </a>
-                        <a href="/manassas">Manassas</a>
-                        <a href="/orland-park" class={orlandParkOpeningLabel ? 'coming-soon' : undefined}>
-                            Orland Park {orlandParkOpeningLabel && <span class="coming-soon-tag">{orlandParkOpeningLabel}</span>}
-                        </a>
-                        <a href="/dallas" class="coming-soon">Dallas <span class="coming-soon-tag">Coming Soon</span></a>
-                        <a href="/nashville" class={nashvilleOpeningLabel ? 'coming-soon' : undefined}>
-                            Nashville {nashvilleOpeningLabel && <span class="coming-soon-tag">{nashvilleOpeningLabel}</span>}
-                        </a>
+                        {footerUsLocations.map((loc) => {
+                            const statusLabel = locationStatusBadge(loc);
+                            return (
+                                <a href={locationHref(loc)} class={statusLabel ? 'coming-soon' : undefined}>
+                                    {locationListLabel(loc)} {statusLabel && <span class="coming-soon-tag">{statusLabel}</span>}
+                                </a>
+                            );
+                        })}
                     </div>
                 </div>
                 <div class="footer-location-group">
@@ -149,10 +127,14 @@ const hasPageLocation = Boolean(pageLocation);
                         </svg>
                     </button>
                     <div class="footer-location-list">
-                        <a href={antwerpHref}>{antwerpLabel}</a>
-                        <a href={brusselsHref} class={brusselsOpeningLabel ? 'coming-soon' : undefined}>
-                            {brusselsLabel} {brusselsOpeningLabel && <span class="coming-soon-tag">{brusselsOpeningLabel}</span>}
-                        </a>
+                        {footerEuropeLocations.map((loc) => {
+                            const statusLabel = locationStatusBadge(loc);
+                            return (
+                                <a href={locationHref(loc)} class={statusLabel ? 'coming-soon' : undefined}>
+                                    {locationListLabel(loc)} {statusLabel && <span class="coming-soon-tag">{statusLabel}</span>}
+                                </a>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

@@ -148,6 +148,11 @@
     }
 
     function applyTextTranslations() {
+        document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+            var value = translate(el.getAttribute('data-i18n-html'));
+            if (typeof value === 'string') el.innerHTML = value;
+        });
+
         document.querySelectorAll('[data-i18n]').forEach(function (el) {
             var value = translate(el.getAttribute('data-i18n'));
             if (typeof value === 'string') el.textContent = value;

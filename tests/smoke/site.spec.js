@@ -211,8 +211,8 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('manassas');
   await expect(page.locator('#locationText')).toContainText('Manassas');
 
-  await expect(page.locator('#ticketLocation option[value="antwerp"]')).toHaveText('Belgium - Antwerp');
-  await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveText('Belgium - Brussels (Opening June 18, 2026)');
+  await expect(page.locator('#ticketLocation option[value="antwerp"]')).toHaveText('Belgium – Antwerp');
+  await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveText('Belgium – Brussels (Opening June 18, 2026)');
 });
 
 test('ticket panel routes Europe selections to the right external destination with UTMs', async ({ page }) => {
@@ -369,7 +369,7 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await expect(brussels).toHaveAttribute('data-tm-external-location', 'true');
   await expect(brussels).toHaveAttribute('data-city', 'Brussels');
   await expect(brussels).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
-  await expect(brussels).toContainText('Belgium - Brussels');
+  await expect(brussels).toContainText('Belgium – Brussels');
   await expect(brussels).toContainText('Opening June 18, 2026');
   await brussels.hover();
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Brussels');
@@ -479,11 +479,13 @@ test('location page drives nav state and ticket panel default location', async (
 });
 
 test('Philadelphia page makes closure state visible and disables ticket booking CTAs', async ({ page }) => {
+  const closure = locationById.get('philadelphia')?.temporaryClosure || {};
+
   await page.goto('/philadelphia');
 
   await expect(page.locator('.tm-closure-strip')).toBeVisible();
-  await expect(page.locator('.tm-closure-strip')).toContainText('Temporarily Closed');
-  await expect(page.locator('.tm-closure-strip')).toContainText('ticket sales are paused');
+  await expect(page.locator('.tm-closure-strip')).toContainText(closure.label);
+  await expect(page.locator('.tm-closure-strip')).toContainText(closure.detail);
   await expect(page.locator('.hero-cta .btn-tickets')).toHaveAttribute('href', '/contact#location=philadelphia&type=closure');
   await expect(page.locator('.hero-cta .btn-tickets')).not.toHaveAttribute('data-tm-booking-trigger', '');
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('href', '/contact#location=philadelphia&type=closure');

@@ -34,15 +34,17 @@
                             <label for="location">Location</label>
                             <select id="location" name="location" required>
                                 <option value="">Select a Location</option>
-                                <option value="philadelphia">Philadelphia</option>
-                                <option value="mount-prospect">Mount Prospect</option>
-                                <option value="west-nyack">West Nyack</option>
-                                <option value="lincoln">Lincoln</option>
-                                <option value="houston">Houston</option>
-                                <option value="manassas">Manassas</option>
-                                <option value="orland-park">Orland Park</option>
-                                <option value="dallas">Dallas</option>
-                                <option value="nashville">Nashville</option>
+                                <option value="mount-prospect">IL – Mount Prospect</option>
+                                <option value="orland-park">IL – Orland Park</option>
+                                <option value="west-nyack">NY – West Nyack</option>
+                                <option value="philadelphia">PA – Philadelphia</option>
+                                <option value="lincoln">RI – Lincoln</option>
+                                <option value="nashville">TN – Nashville</option>
+                                <option value="dallas">TX – Dallas</option>
+                                <option value="houston">TX – Houston</option>
+                                <option value="manassas">VA – Manassas</option>
+                                <option value="antwerp">Belgium – Antwerp</option>
+                                <option value="brussels">Belgium – Brussels</option>
                                 <option value="general">General Inquiry</option>
                             </select>
                         </div>

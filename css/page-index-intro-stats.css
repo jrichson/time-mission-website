@@ -49,6 +49,11 @@
     color: var(--white);
 }
 
+.welcome-text .copy-emphasis {
+    color: var(--orange);
+    font-weight: 700;
+}
+
 .geo-disclosure {
     max-width: 700px;
     margin: 1rem auto 0;

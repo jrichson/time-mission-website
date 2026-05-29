@@ -2,7 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
-import type { LocationRecord } from '../data/locations';
+import { locationsForRegion, locationListLabel } from '../lib/location-list';
 import {
     locationAddressText,
     locationContactItems,
@@ -14,26 +14,8 @@ import {
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 import geoAnswerBlocks from '../data/site/geo-answer-blocks.json';
 
-const US_ORDER = [
-    'mount-prospect',
-    'orland-park',
-    'west-nyack',
-    'philadelphia',
-    'lincoln',
-    'dallas',
-    'nashville',
-    'houston',
-    'manassas',
-];
-const EU_ORDER = ['antwerp', 'brussels'];
-
-function orderLocs(region: string, slugOrder: string[]) {
-    const pool = allLocations.filter((l) => l.region === region);
-    return slugOrder.map((s) => pool.find((l) => l.slug === s)).filter(Boolean) as LocationRecord[];
-}
-
-const usLocs = orderLocs('us', US_ORDER);
-const euLocs = orderLocs('europe', EU_ORDER);
+const usLocs = locationsForRegion(allLocations, 'us');
+const euLocs = locationsForRegion(allLocations, 'europe');
 const locationsAnswer = geoAnswerBlocks.blocks.locations;
 
 const ld = serializeGraph(
@@ -74,7 +56,7 @@ const page = definePage({ canonicalPath: '/locations' });
                 <p class="geo-answer-lead">{locationsAnswer.summary}</p>
                 <details class="geo-disclosure">
                     <summary>Read the full location guidance</summary>
-                    <p>{locationsAnswer.text}</p>
+                    <p set:html={locationsAnswer.textHtml ?? locationsAnswer.text}></p>
                 </details>
             </div>
         </section>
@@ -97,7 +79,7 @@ const page = definePage({ canonicalPath: '/locations' });
                                 <span class="loc-state">{locationStateBadge(loc)}</span>
                                 <div class="loc-body">
                                     <div class="loc-name">
-                                        {loc.shortName}
+                                        {locationListLabel(loc)}
                                         {locationStatusBadge(loc) ? (
                                             <span class="loc-coming-soon-tag">{locationStatusBadge(loc)}</span>
                                         ) : null}
@@ -149,7 +131,7 @@ const page = definePage({ canonicalPath: '/locations' });
                                 <span class="loc-state">{locationStateBadge(loc)}</span>
                                 <div class="loc-body">
                                     <div class="loc-name">
-                                        {loc.navLabel}
+                                        {locationListLabel(loc)}
                                         {locationStatusBadge(loc) ? (
                                             <span class="loc-coming-soon-tag">{locationStatusBadge(loc)}</span>
                                         ) : null}

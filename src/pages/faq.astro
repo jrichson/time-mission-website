@@ -40,7 +40,7 @@ const faqAnswer = geoAnswerBlocks.blocks.faq;
                 <p class="geo-answer-lead">{faqAnswer.summary}</p>
                 <details class="geo-disclosure">
                     <summary>Read the full pre-visit guidance</summary>
-                    <p>{faqAnswer.text}</p>
+                    <p set:html={faqAnswer.textHtml ?? faqAnswer.text}></p>
                 </details>
             </div>
         </section>

@@ -208,6 +208,16 @@ body {
     justify-content: center;
 }
 
+.geo-disclosure strong {
+    color: var(--white);
+    font-weight: 700;
+}
+
+.geo-disclosure .copy-emphasis {
+    color: var(--orange);
+    font-weight: 700;
+}
+
 .btn-primary,
 .btn-secondary,
 .btn-outline,

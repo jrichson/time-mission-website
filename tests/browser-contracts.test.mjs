@@ -205,7 +205,7 @@ describe('browser architecture contracts', () => {
     expect(byId.get('west-nyack')?.briqWidget?.domain).toBe('timemission-palisades');
     expect(byId.get('antwerp')?.externalUrl).toBe('https://timemission.eu/antwerp');
     expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu/brussels');
-    expect(byId.get('brussels')?.navLabel).toBe('Belgium - Brussels');
+    expect(byId.get('brussels')?.navLabel).toBe('Belgium – Brussels');
     expect(byId.get('brussels')?.openingDate).toBe('2026-06-18');
     expect(byId.get('brussels')?.openingLabel).toBe('Opening June 18, 2026');
   });
@@ -292,7 +292,13 @@ describe('browser architecture contracts', () => {
             id: 'houston',
             slug: 'houston',
             shortName: 'Houston',
+            region: 'us',
             status: 'coming-soon',
+            address: {
+              city: 'Houston',
+              state: 'TX',
+              country: 'United States',
+            },
             openingLabel: 'Opening June 5, 2026',
             bookingUrl: 'https://checkout.example/houston',
             rollerCheckoutUrl: 'https://checkout.example/houston',
@@ -306,7 +312,7 @@ describe('browser architecture contracts', () => {
             region: 'europe',
             status: 'open',
             externalUrl: 'https://timemission.eu/antwerp',
-            navLabel: 'Belgium - Antwerp',
+            navLabel: 'Belgium – Antwerp',
             bookingUrl: 'https://experience.example/antwerp',
             groupFormUrls: {
               corporate: 'https://experience.example/antwerp-corporate',
@@ -321,7 +327,7 @@ describe('browser architecture contracts', () => {
             openingDate: '2026-06-18',
             openingLabel: 'Opening June 18, 2026',
             externalUrl: 'https://timemission.eu/brussels',
-            navLabel: 'Belgium - Brussels',
+            navLabel: 'Belgium – Brussels',
             bookingUrl: '',
             giftCardUrl: '',
             groupFormUrls: {},
@@ -407,11 +413,11 @@ describe('browser architecture contracts', () => {
         openingLabel: 'Opening June 5, 2026',
       });
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'houston')?.label)
-      .toBe('Houston (Opening June 5, 2026)');
+      .toBe('TX – Houston (Opening June 5, 2026)');
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'antwerp')?.label)
-      .toBe('Belgium - Antwerp');
+      .toBe('Belgium – Antwerp');
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'brussels')?.label)
-      .toBe('Belgium - Brussels (Opening June 18, 2026)');
+      .toBe('Belgium – Brussels (Opening June 18, 2026)');
     expect(window.TMBooking.getDestination({ kind: 'groups', locationId: 'houston' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'houston' }))
