@@ -19,6 +19,24 @@ const landingActions = [
   },
 ];
 
+const siteSurfaceActions = [
+  {
+    href: '/admin/collections/location-details',
+    label: 'Location details',
+    text: 'Update public address and hours for existing code-owned locations.',
+  },
+  {
+    href: '/admin/collections/announcement-banners',
+    label: 'Announcement banners',
+    text: 'Manage text-only top banner copy, targeting, priority, and scheduling.',
+  },
+  {
+    href: '/admin/collections/site-pages',
+    label: 'Page SEO overrides',
+    text: 'Update metadata for code-owned pages without changing body copy or layout.',
+  },
+];
+
 const ownerActions = [
   {
     href: '/admin/collections/user-invites/create',
@@ -66,6 +84,40 @@ export function LandingWizardDashboard() {
 
         <div className="tm-landing-wizard-card__actions" aria-label="CMS user management shortcuts">
           {ownerActions.map((action) => (
+            <Link className="tm-landing-wizard-card__action" href={action.href} key={action.href}>
+              <strong>{action.label}</strong>
+              <span>{action.text}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="tm-landing-wizard-card" aria-labelledby="tm-site-surfaces-title">
+        <div className="tm-landing-wizard-card__header">
+          <div>
+            <p className="tm-landing-wizard-card__eyebrow">Reusable site surfaces</p>
+            <h2 id="tm-site-surfaces-title">Update shared public details</h2>
+          </div>
+          <Link className="tm-landing-wizard-card__button" href="/admin/collections/location-details">
+            Location details
+          </Link>
+        </div>
+
+        <div className="tm-landing-wizard-card__body">
+          <p>
+            Location detail records only update address and hours for existing locations. Pages, booking links,
+            providers, and location status stay code-owned.
+          </p>
+          <ol className="tm-landing-wizard-card__steps" aria-label="Site surface workflow">
+            <li>Edit</li>
+            <li>Preview</li>
+            <li>Published in CMS</li>
+            <li>Live after deploy</li>
+          </ol>
+        </div>
+
+        <div className="tm-landing-wizard-card__actions" aria-label="Reusable site surface shortcuts">
+          {siteSurfaceActions.map((action) => (
             <Link className="tm-landing-wizard-card__action" href={action.href} key={action.href}>
               <strong>{action.label}</strong>
               <span>{action.text}</span>

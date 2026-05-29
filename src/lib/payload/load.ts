@@ -7,6 +7,7 @@ import {
 } from './cms-origin';
 import type { PayloadLandingSurface } from './landing-contract';
 import type { PayloadLandingSourceChannel } from './landing-contract';
+import type { PayloadLocationDetailsDoc } from './location-details-contract';
 import { fetchPayloadCollection } from './read-adapter';
 export {
     announcementBannerDocLooksUsable,
@@ -30,6 +31,10 @@ export {
     slugIsValidForLanding,
 } from './landing-contract';
 export {
+    applyLocationDetailsOverrides,
+    locationDetailsDocLooksUsable,
+} from './location-details-contract';
+export {
     sitePageDocLooksRenderable,
     sitePageHeadForDoc,
     sitePagePathIsValid,
@@ -40,6 +45,7 @@ export type { PayloadLandingLaunchState } from './landing-contract';
 export type { PayloadLandingSourceChannel } from './landing-contract';
 export type { PayloadLandingTemplate } from './landing-contract';
 export type { PayloadAnnouncementBannerDoc } from './announcement-banner-contract';
+export type { PayloadLocationDetailsDoc } from './location-details-contract';
 
 const DEFAULT_ORIGIN_KEYS = ['PAYLOAD_CMS_ORIGIN', 'PAYLOAD_PUBLIC_CMS_ORIGIN'] as const;
 
@@ -186,6 +192,25 @@ export async function getPublishedAnnouncementBanners(origin?: string): Promise<
     return fetchPayloadCollection<PayloadAnnouncementBannerDoc>({
         collection: 'announcement-banners',
         optionalLabel: 'announcement banners',
+        origin: base,
+    });
+}
+
+/**
+ * Published location details are optional during CMS rollout.
+ * Missing CMS data must not block the public build; the code-owned location JSON remains the fallback.
+ */
+export async function getPublishedLocationDetails(origin?: string): Promise<PayloadLocationDetailsDoc[]> {
+    const raw = (origin ?? cmsOrigin()).trim().replace(/\/+$/, '');
+    const base = validatedCmsOriginBase(raw);
+    if (!base) {
+        if (raw) console.warn('[payload] skipping optional location details: invalid or disallowed PAYLOAD_CMS_ORIGIN');
+        return [];
+    }
+
+    return fetchPayloadCollection<PayloadLocationDetailsDoc>({
+        collection: 'location-details',
+        optionalLabel: 'location details',
         origin: base,
     });
 }

@@ -20,16 +20,18 @@ describe('CMS scope copy', () => {
     expect(sitePages).toContain('does not change page body copy or layout');
     expect(sitePages).not.toContain("singular: 'Existing Page'");
     expect(home).toContain('Page SEO Overrides');
-    expect(home).toContain('Canonical page body copy and layouts stay code-owned.');
+    expect(home).toContain('Canonical page body copy, layouts, and booking settings stay code-owned.');
   });
 
   it('uses deploy-gated CMS publishing language', () => {
     const landings = read('cms/collections/Landings.js');
+    const locationDetails = read('cms/collections/LocationDetails.js');
     const sitePages = read('cms/collections/SitePages.js');
     const home = read('cms/app/page.tsx');
 
     for (const copy of ['Published in CMS', 'Live after deploy']) {
       expect(landings).toContain(copy);
+      expect(locationDetails).toContain(copy);
       expect(sitePages).toContain(copy);
       expect(home).toContain(copy);
     }

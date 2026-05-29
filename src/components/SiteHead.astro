@@ -1,8 +1,8 @@
 ---
 import analyticsLabels from '../data/site/analytics-labels.json';
 import siteCssAssets from '../data/site/site-css-assets.json';
+import { allLocations } from '../data/locations';
 import { getSeoForRoute, resolveLandingHeadSeo, type LandingHeadInput } from '../lib/seo/catalog';
-import locationsData from '../../data/locations.json';
 
 interface Props {
     canonicalPath: string;
@@ -57,9 +57,8 @@ type ConsentDefaults = {
     wait_for_update: number;
 };
 
-const locationEntries = ((locationsData as { locations?: Array<{ slug?: string; region?: string }> }).locations || []);
 const pathRegionMap = new Map<string, string>();
-for (const entry of locationEntries) {
+for (const entry of allLocations) {
     if (!entry?.slug || !entry?.region) continue;
     pathRegionMap.set(`/${entry.slug}`, String(entry.region));
 }

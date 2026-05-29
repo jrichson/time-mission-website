@@ -10,6 +10,7 @@ import sharp from 'sharp';
 
 import { AnnouncementBanners } from './collections/AnnouncementBanners.js';
 import { Landings } from './collections/Landings.js';
+import { LocationDetails } from './collections/LocationDetails.js';
 import { SitePages } from './collections/SitePages.js';
 import { UserInvites } from './collections/UserInvites.js';
 import { Users } from './collections/Users.js';
@@ -157,6 +158,7 @@ export default buildConfig({
   collections: [
     SitePages as CollectionConfig,
     AnnouncementBanners as CollectionConfig,
+    LocationDetails as CollectionConfig,
     Landings as CollectionConfig,
     UserInvites as CollectionConfig,
     Users as CollectionConfig,

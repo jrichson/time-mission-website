@@ -14,6 +14,11 @@ const quickLinks = [
     description: 'Manage text-only top banner messages, scheduling, priority, and location or region targeting.',
   },
   {
+    href: '/admin/collections/location-details',
+    label: 'Location Details',
+    description: 'Update public address and hours for existing locations. Pages, booking links, and providers stay code-owned.',
+  },
+  {
     href: '/admin/collections/landings',
     label: 'Landing Pages',
     description: 'Create campaign pages from a real brief, preview the public result, and publish when approved.',
@@ -62,7 +67,7 @@ export default function Home() {
           <h1 id="cms-home-title">Keep the site current without touching code</h1>
           <p className={styles.lede}>
             Launch campaign landings, manage reusable site surfaces, update page SEO, preview work, and invite approved
-            editors from one operator console. Canonical page body copy and layouts stay code-owned.
+            editors from one operator console. Canonical page body copy, layouts, and booking settings stay code-owned.
           </p>
           <div className={styles.actions}>
             <Link className={styles.primaryAction} href="/landings/new">

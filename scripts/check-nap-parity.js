@@ -8,7 +8,10 @@ const errors = [];
 
 const ASTRO_RENDERED_OUTPUT_FILES = loadAstroRenderedOutputFilesSet(root);
 
-const locationsDoc = JSON.parse(fs.readFileSync(path.join(root, 'data/locations.json'), 'utf8'));
+const publicLocationsPath = path.join(root, 'public/data/locations.json');
+const locationsDoc = JSON.parse(
+  fs.readFileSync(fs.existsSync(publicLocationsPath) ? publicLocationsPath : path.join(root, 'data/locations.json'), 'utf8'),
+);
 const routesData = JSON.parse(fs.readFileSync(path.join(root, 'src/data/routes.json'), 'utf8'));
 const baseUrl = routesData.baseUrl;
 

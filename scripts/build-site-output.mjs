@@ -20,12 +20,12 @@ function nodeStep(script, args = []) {
   };
 }
 
-function runStep({ label, command, args }) {
+function runStep({ label, command, args, env }) {
   console.log(`\n[build:astro] ${label}`);
   const result = spawnSync(command, args, {
     cwd: root,
     stdio: 'inherit',
-    env: process.env,
+    env: { ...process.env, ...(env || {}) },
   });
   if (result.error) {
     console.error(result.error.message);
@@ -41,7 +41,12 @@ function runStep({ label, command, args }) {
 const steps = [
   { label: 'Clean build output', ...nodeStep('scripts/clean-build-output.mjs') },
   { label: 'Sync static assets', ...nodeStep('scripts/sync-static-to-public.mjs') },
-  { label: 'Build Astro output', command: localBin('astro'), args: ['build'] },
+  {
+    label: 'Build Astro output',
+    command: localBin('astro'),
+    args: ['build'],
+    env: { TM_RESOLVED_LOCATIONS_PATH: path.join(root, 'public', 'data', 'locations.json') },
+  },
   { label: 'Prune excluded artifacts', ...nodeStep('scripts/prune-excluded-artifacts.mjs', ['dist', 'public']) },
   { label: 'Minify copied CSS and JS', ...nodeStep('scripts/minify-dist-assets.mjs') },
   { label: 'Bundle route CSS', ...nodeStep('scripts/bundle-dist-css.mjs') },

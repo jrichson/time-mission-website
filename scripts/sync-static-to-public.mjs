@@ -89,6 +89,16 @@ for (const d of mandatoryDirs) {
   copyFilteredTree(src, dest, { baseDir: root });
 }
 
+const generatePublicLocations = path.join(__dirname, 'generate-public-locations.mjs');
+const generatePublicLocationsRes = spawnSync(process.execPath, [generatePublicLocations], {
+  cwd: root,
+  stdio: 'inherit',
+  env: process.env,
+});
+if (generatePublicLocationsRes.status !== 0) {
+  process.exit(generatePublicLocationsRes.status ?? 1);
+}
+
 const videoDir = path.join(publicDir, 'assets', 'video');
 const mediaBase = normalizedPublicTmMediaBase(root);
 

@@ -1,4 +1,8 @@
-import locationsJson from '../../data/locations.json';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import fallbackLocationsJson from '../../data/locations.json';
 
 export interface LocationDayHours {
     open?: string;
@@ -76,5 +80,32 @@ export interface LocationsDocument {
     locations: LocationRecord[];
 }
 
-export const locationsDocument = locationsJson as LocationsDocument;
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+
+function resolvedLocationsPath(): string {
+    const configuredPath = typeof process !== 'undefined' ? process.env.TM_RESOLVED_LOCATIONS_PATH : '';
+    const cleanedPath = typeof configuredPath === 'string' ? configuredPath.trim() : '';
+    if (!cleanedPath) return '';
+
+    return path.isAbsolute(cleanedPath) ? cleanedPath : path.resolve(repoRoot, cleanedPath);
+}
+
+function readLocationsDocument(): LocationsDocument {
+    const locationDataPath = resolvedLocationsPath();
+    if (!locationDataPath) return fallbackLocationsJson as LocationsDocument;
+
+    try {
+        const parsed = JSON.parse(fs.readFileSync(locationDataPath, 'utf8')) as LocationsDocument;
+        if (Array.isArray(parsed?.locations)) return parsed;
+    } catch (err) {
+        console.warn(
+            '[locations] failed to read resolved location data; using code-owned fallback:',
+            err instanceof Error ? err.message : err,
+        );
+    }
+
+    return fallbackLocationsJson as LocationsDocument;
+}
+
+export const locationsDocument = readLocationsDocument();
 export const allLocations = locationsDocument.locations;

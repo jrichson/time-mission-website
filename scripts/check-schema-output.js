@@ -20,7 +20,7 @@ const SCHEMA_CHECK_OUTPUT_FILES = new Set(
 );
 
 const routesData = loadJson('src/data/routes.json');
-const locationsDoc = loadJson('data/locations.json');
+const locationsDoc = loadJson(fs.existsSync(path.join(root, 'public/data/locations.json')) ? 'public/data/locations.json' : 'data/locations.json');
 const orgSeed = loadJson('src/data/site/seo-organization.json');
 
 const distDir = path.join(root, 'dist');
@@ -168,7 +168,10 @@ for (const route of schemaRoutes) {
     if (!loc) errors.push('philadelphia missing from data/locations.json');
     if (!has('BreadcrumbList')) errors.push(`${outFile}: missing BreadcrumbList`);
     const biz = findNodesByType(graph, 'EntertainmentBusiness');
-    if (biz.length !== 1) {
+    const expectBiz = loc.status === 'open' && loc.localBusinessSchemaEligible === true;
+    if (!expectBiz) {
+      if (biz.length !== 0) errors.push(`${outFile}: unexpected EntertainmentBusiness`);
+    } else if (biz.length !== 1) {
       errors.push(`${outFile}: expected one EntertainmentBusiness`);
     } else {
       const b = biz[0];
