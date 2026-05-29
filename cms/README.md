@@ -50,7 +50,12 @@ Set these in Railway:
 - `PAYLOAD_ALLOWED_ORIGINS` — optional comma-separated browser origins allowed to call the CMS API with cookies. `PAYLOAD_SERVER_URL` is always included.
 - `PAYLOAD_PUBLIC_SITE_ORIGIN` — optional public Astro/Cloudflare origin used by CMS previews to load `/assets/...` images. Set this to your current Pages preview/custom domain while `timemission.com` is not live.
 - `PAYLOAD_ENABLE_GRAPHQL` — optional. Defaults to `false`; the public site uses REST.
-- `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` — leave unset for the current Wrangler Direct Upload launch path. Set it only after you add a separate CI/direct-upload automation endpoint; deploys are triggered from `/deploy` by users with CMS Deploy Permission.
+- `CMS_DEPLOY_PROVIDER` — set to `github_actions` for the current Wrangler Direct Upload path.
+- `GITHUB_ACTIONS_DEPLOY_TOKEN` — GitHub fine-grained token used by the CMS `/deploy` page to dispatch `.github/workflows/cms-wrangler-deploy.yml`. Grant only the target repo and Actions write access.
+- `GITHUB_ACTIONS_DEPLOY_REPO` — defaults to `jrichson/time-mission-website`.
+- `GITHUB_ACTIONS_DEPLOY_WORKFLOW_ID` — defaults to `cms-wrangler-deploy.yml`.
+- `GITHUB_ACTIONS_DEPLOY_REF` — defaults to `rebuild`. Change this after the production deployment branch changes.
+- `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` — optional older path for Cloudflare Pages Git deploy hooks. Leave unset for Wrangler-only direct uploads.
 
 Production schema changes are handled by committed Payload migrations. `npm start` runs `payload migrate` before `next start`, so a fresh Railway Postgres database gets the required tables automatically. `PAYLOAD_DB_PUSH` is only useful in local/dev mode; Payload's Postgres adapter does not push schema in `NODE_ENV=production`.
 
@@ -66,9 +71,9 @@ If an email invite is marked `failed`, check SMTP env vars and create a new invi
 
 ## Deploy gate
 
-Saving **Published in CMS** content marks that the public site needs a deploy, but collection saves do not trigger the public-site deploy directly. Users with owner-granted CMS Deploy Permission can open `/deploy` and trigger the hook when `CLOUDFLARE_PAGES_DEPLOY_HOOK_URL` is configured.
+Saving **Published in CMS** content marks that the public site needs a deploy, but collection saves do not trigger the public-site deploy directly. Users with owner-granted CMS Deploy Permission can open `/deploy` and trigger the configured remote deploy runner.
 
-For this launch, the public site is deployed by Wrangler Direct Upload, so leave the hook unset and run the static deploy manually after CMS content changes. Marketing should expect **minutes** of delay once a future hook-backed CI path exists (CMS deploy gate → hook → CI build → upload), not instant publishes.
+For the current Wrangler Direct Upload path, the CMS deploy gate dispatches the GitHub Actions workflow at `.github/workflows/cms-wrangler-deploy.yml`. The workflow runs `npm run build:astro`, fetches published CMS content from Railway, then runs `npx wrangler pages deploy dist --project-name time-mission-website`. Marketing should expect **minutes** of delay (CMS deploy gate → GitHub Actions build → Wrangler upload), not instant publishes.
 
 ## Astro / Cloudflare Pages build
 
@@ -86,6 +91,15 @@ The static build calls:
 - `GET {PAYLOAD_CMS_ORIGIN}/api/location-details?limit=250&depth=0` for optional **published** Location Details. This fetch is non-fatal so the public build can fall back to the code-owned location data if the collection is unavailable.
 
 No API key is required for public published reads.
+
+## GitHub Actions Wrangler deploy
+
+The CMS `/deploy` page can trigger `.github/workflows/cms-wrangler-deploy.yml` when Railway has the `GITHUB_ACTIONS_DEPLOY_*` env vars above. GitHub Actions also needs these repository secrets:
+
+- `CLOUDFLARE_API_TOKEN` — token with Cloudflare Pages edit/deploy access for the `time-mission-website` project.
+- `CLOUDFLARE_ACCOUNT_ID` — Cloudflare account ID.
+
+The workflow hardcodes `PAYLOAD_CMS_ORIGIN=https://time-mission-website-production.up.railway.app` and `PAYLOAD_CMS_ALLOWED_HOSTS=railway.app`, so CMS content is pulled during the public build before Wrangler uploads `dist/`.
 
 ## Monorepo
 

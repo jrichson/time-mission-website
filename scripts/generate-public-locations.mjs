@@ -35,6 +35,10 @@ function cmsOriginFromEnv() {
   return '';
 }
 
+function cmsBuildStrict() {
+  return /^1|true$/i.test(cleanString(process.env.PAYLOAD_CMS_BUILD_STRICT));
+}
+
 function locationDetailsUrl(origin) {
   const url = new URL('/api/location-details', `${origin}/`);
   url.searchParams.set('limit', '250');
@@ -149,9 +153,13 @@ function applyLocationDetailsOverrides(locations, docs) {
 }
 
 async function fetchLocationDetails(origin) {
+  const strict = cmsBuildStrict();
   const raw = cleanString(origin).replace(/\/+$/, '');
   const base = validatedCmsOriginBase(raw);
   if (!base) {
+    if (strict) {
+      throw new Error('PAYLOAD_CMS_BUILD_STRICT is set but PAYLOAD_CMS_ORIGIN is missing, invalid, or not allowed.');
+    }
     if (raw) console.warn('[locations] skipping optional CMS location details: invalid or disallowed PAYLOAD_CMS_ORIGIN');
     return [];
   }
@@ -163,6 +171,7 @@ async function fetchLocationDetails(origin) {
       signal: AbortSignal.timeout(PAYLOAD_FETCH_TIMEOUT_MS),
     });
     if (!res.ok) {
+      if (strict) throw new Error(`GET ${url} failed: ${res.status}`);
       console.warn(`[locations] optional CMS location details skipped: GET ${url} failed: ${res.status}`);
       return [];
     }
@@ -170,6 +179,7 @@ async function fetchLocationDetails(origin) {
     const body = await res.json();
     return Array.isArray(body?.docs) ? body.docs : [];
   } catch (err) {
+    if (strict) throw err;
     console.warn(
       '[locations] optional CMS location details fetch failed:',
       err instanceof Error ? err.message : err,

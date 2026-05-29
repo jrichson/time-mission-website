@@ -43,8 +43,8 @@ function statusCopy(status: string | undefined): string | null {
   const messages: Record<string, string> = {
     failed: 'Deploy hook failed. Check Railway logs before trying again.',
     forbidden: 'Your account does not have CMS Deploy Permission.',
-    not_configured: 'Deploy hook is not configured. Keep using the manual Cloudflare deploy path.',
-    triggered: 'Deploy hook triggered. The public site updates after the static build finishes.',
+    not_configured: 'Deploy trigger is not configured. Keep using the manual Wrangler deploy path.',
+    triggered: 'Deploy trigger started. The public site updates after the Wrangler upload finishes.',
   };
 
   return status ? messages[status] || null : null;
@@ -91,7 +91,7 @@ export default async function DeployPage({ searchParams }: PageProps) {
           <ol className={styles.stepList}>
             <li>Published in CMS</li>
             <li>Deploy permission checked</li>
-            <li>Cloudflare hook triggered</li>
+            <li>Remote deploy triggered</li>
             <li>Live after deploy</li>
           </ol>
           <p className={styles.panelNote}>

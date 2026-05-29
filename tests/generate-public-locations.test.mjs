@@ -7,6 +7,7 @@ import { generatePublicLocations } from '../scripts/generate-public-locations.mj
 
 afterEach(() => {
   vi.restoreAllMocks();
+  delete process.env.PAYLOAD_CMS_BUILD_STRICT;
 });
 
 describe('public location data generator', () => {
@@ -62,5 +63,17 @@ describe('public location data generator', () => {
     expect(philadelphia.status).toBe('temporarily-closed');
 
     fs.rmSync(tempDir, { force: true, recursive: true });
+  });
+
+  it('fails in strict CMS build mode when location details cannot be fetched', async () => {
+    process.env.PAYLOAD_CMS_BUILD_STRICT = 'true';
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 503 }));
+
+    await expect(
+      generatePublicLocations({
+        origin: 'https://cms.example',
+        outputPath: path.join(os.tmpdir(), 'strict-location-data.json'),
+      }),
+    ).rejects.toThrow('GET https://cms.example/api/location-details?depth=0&limit=250 failed: 503');
   });
 });
