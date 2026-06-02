@@ -96,8 +96,18 @@ module.exports = [
       },
       {
         after: '/js/booking-provider-briq.js',
+        before: '/js/booking-navigation-adapters.js',
+        message: 'public runtime contract must load booking-provider-briq.js before booking-navigation-adapters.js',
+      },
+      {
+        after: '/js/booking-frame.js',
+        before: '/js/booking-navigation-adapters.js',
+        message: 'public runtime contract must load booking-frame.js before booking-navigation-adapters.js',
+      },
+      {
+        after: '/js/booking-navigation-adapters.js',
         before: '/js/booking-controller.js',
-        message: 'public runtime contract must load booking-provider-briq.js before booking-controller.js',
+        message: 'public runtime contract must load booking-navigation-adapters.js before booking-controller.js',
       },
       {
         after: '/js/booking-journey.js',

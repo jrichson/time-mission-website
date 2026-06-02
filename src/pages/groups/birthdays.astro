@@ -38,6 +38,6 @@ const page = definePage({ canonicalPath: '/groups/birthdays' });
     </Fragment>
     <div set:html={birthdaysMain} />
     <Fragment slot="after-site-scripts">
-        <script defer src="/js/page-group-event-after.js?v=1"></script>
+        <script is:inline defer src="/js/page-group-event-after.js?v=1"></script>
     </Fragment>
 </SiteLayout>

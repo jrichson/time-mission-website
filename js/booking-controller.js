@@ -6,6 +6,8 @@
 
     var BookingJourney = window.TMBookingJourney;
     if (!BookingJourney) throw new Error('TMBookingJourney must load before booking-controller.js');
+    var NavigationAdapters = window.TMBookingNavigationAdapters;
+    if (!NavigationAdapters) throw new Error('TMBookingNavigationAdapters must load before booking-controller.js');
 
     function getLocationContext() {
         if (window.LocationContext) return window.LocationContext;
@@ -283,124 +285,18 @@
         }
     }
 
-    function loadRollerCheckout(loc, onReady, onError) {
-        var checkoutUrl = (loc && loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
-        if (!checkoutUrl) {
-            if (typeof onError === 'function') onError();
-            return;
-        }
-        var existing = document.getElementById('roller-checkout');
-        if (existing && existing.getAttribute('data-checkout') !== checkoutUrl && existing.parentNode) {
-            existing.parentNode.removeChild(existing);
-            existing = null;
-        }
-        if (existing && window.RollerCheckout && typeof window.RollerCheckout.show === 'function') {
-            onReady();
-            return;
-        }
-        if (existing) {
-            existing.addEventListener('load', onReady, { once: true });
-            existing.addEventListener('error', onError || function () {}, { once: true });
-            return;
-        }
-        var script = document.createElement('script');
-        script.id = 'roller-checkout';
-        script.src = 'https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js';
-        script.async = true;
-        script.setAttribute('data-checkout', checkoutUrl);
-        script.addEventListener('load', onReady, { once: true });
-        script.addEventListener('error', onError || function () {}, { once: true });
-        document.head.appendChild(script);
-    }
-
-    function showRollerCheckout(loc, fallback) {
-        loadRollerCheckout(
-            loc,
-            function () {
-                if (window.RollerCheckout && typeof window.RollerCheckout.show === 'function') {
-                    window.RollerCheckout.show();
-                    return;
-                }
-                if (typeof fallback === 'function') fallback();
-            },
-            fallback
-        );
-    }
-
     var mountedPanel = null;
 
-    function bookingFrameProvider() {
-        return window.TMBookingFrame || null;
-    }
-
-    function briqProvider() {
-        return window.TMBookingBriq || null;
-    }
-
     function setBriqPanelMode(enabled) {
-        var panel = mountedPanel && mountedPanel.panelEl
-            ? mountedPanel.panelEl
-            : document.getElementById('ticketPanel');
-        if (!panel || !panel.classList) return;
-        if (enabled) panel.classList.add('ticket-panel--briq');
-        else panel.classList.remove('ticket-panel--briq');
+        NavigationAdapters.setBriqPanelMode(enabled);
     }
 
     function hideBriqWidget(options) {
-        var provider = briqProvider();
-        if (provider && typeof provider.close === 'function') {
-            provider.close(options);
-            return;
-        }
-        setBriqPanelMode(false);
-    }
-
-    function openBriqWidget(loc) {
-        var provider = briqProvider();
-        if (provider && typeof provider.open === 'function') provider.open(loc);
-    }
-
-    function showBookingFrame(loc, href) {
-        var frame = bookingFrameProvider();
-        return !!(frame && typeof frame.show === 'function' && frame.show(loc, href));
-    }
-
-    var navigationHandlers = {
-        'external-site': function (action) {
-            navigateToHref(action.href);
-            return true;
-        },
-        'briq-widget': function (_action, loc) {
-            openBriqWidget(loc);
-            return true;
-        },
-        roller: function (action, loc) {
-            showRollerCheckout(loc, function () { showBookingFrame(loc, action.href); });
-            return true;
-        },
-        iframe: function (action, loc) {
-            showBookingFrame(loc, action.href);
-            return true;
-        },
-        link: function (action) {
-            navigateToHref(action.href);
-            return true;
-        },
-    };
-
-    function navigateToHref(href) {
-        if (BookingJourney.isExternalHttpUrl(href) && typeof window.open === 'function') {
-            var opened = window.open(href, '_blank', 'noopener');
-            if (opened && typeof opened.opener !== 'undefined') opened.opener = null;
-            return;
-        }
-        window.location.assign(href);
+        NavigationAdapters.hideBriqWidget(options);
     }
 
     function executeResolvedAction(action, loc) {
-        var provider = action.provider || action.type || 'link';
-        var handler = navigationHandlers[provider] || navigationHandlers.link;
-        return handler(action, loc);
+        return NavigationAdapters.execute(action, loc);
     }
 
     function executeNavigationAction(action, loc, options) {
@@ -659,6 +555,13 @@
             closePanel: closePanel,
             setPanelIntent: setPanelIntent,
         };
+        NavigationAdapters.configure({
+            getPanelEl: function () {
+                return mountedPanel && mountedPanel.panelEl
+                    ? mountedPanel.panelEl
+                    : document.getElementById('ticketPanel');
+            },
+        });
         if (window.TMBookingBriq && typeof window.TMBookingBriq.setPanelAdapter === 'function') {
             window.TMBookingBriq.setPanelAdapter({
                 getPanelEl: function () { return panel; },

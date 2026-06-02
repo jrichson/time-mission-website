@@ -25,6 +25,6 @@ const page = definePage({ canonicalPath: '/contact' });
     </Fragment>
     <div set:html={contactMain} />
     <Fragment slot="after-site-scripts">
-        <script defer src="/js/page-contact-after.js?v=4"></script>
+        <script is:inline defer src="/js/page-contact-after.js?v=4"></script>
     </Fragment>
 </SiteLayout>

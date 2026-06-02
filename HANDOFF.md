@@ -26,6 +26,19 @@ This repository contains the public Time Mission website. The active site is an 
 - `js/locations.js` is the only writer for persisted location state.
 - `js/page-widgets.js` is the browser adapter for page-init driven widgets.
 
+## Internal API Integration Map
+
+Use these seams when connecting a future internal API. The goal is to make the API an adapter behind existing contracts, not a second source of truth.
+
+| Requirement | Current seam | Integration rule |
+| --- | --- | --- |
+| Location roster, status, hours, addresses, booking URLs, gift cards, temporary closures | `data/locations.json`, `src/data/locations.ts`, `scripts/generate-public-locations.mjs`, `js/locations.js` | Produce the same `LocationRecord` and public `data/locations.json` shape, then let `window.TM` hydrate the browser. Do not add parallel location URL maps in page scripts. |
+| Booking decisions and provider presentation | `js/booking-journey.js`, `js/booking-controller.js`, `js/booking-provider-briq.js`, `js/booking-frame.js` | Feed provider facts through the Location Catalog. Keep provider routing in the Booking Journey modules so generic CTAs, location CTAs, group pages, and direct location pages stay aligned. |
+| CMS-owned landing pages and reusable site surfaces | `src/lib/payload/read-adapter.ts`, `src/lib/payload/*-contract.ts`, `src/pages/c/[slug].astro` | If the internal API replaces Payload reads, make it satisfy the existing contract modules first. Those contracts are the test surface for renderability, sitemap eligibility, and safe published content. |
+| Forms and PII-bound submissions | `functions/_shared/form-handler.mjs`, `functions/api/contact.js`, `functions/api/newsletter.js`, `migrations/0001_form_submissions.sql` | Keep PII on the server side. If submissions move to the internal API, preserve Turnstile verification, origin checks, rate limiting, archival semantics, and Resend/Klaviyo failure behavior deliberately. |
+| Analytics events and future server-side event collection | `js/analytics.js`, `src/data/site/analytics-labels.json`, `docs/analytics-event-contract.md` | Reuse the documented non-PII event envelope. Do not send email, names, phones, raw form messages, or free-text contact subjects into `dataLayer` or a future event endpoint. |
+| Public routes, sitemap, redirects, and generated output | `src/data/routes.json`, `src/lib/public-url-surface.ts`, `scripts/compile-route-artifacts.mjs` | Add or remove public paths through the route registry so sitemap, redirects, Cloudflare output files, and smoke tests stay in sync. |
+
 ## Build And Verification
 
 Use these commands from the repository root:

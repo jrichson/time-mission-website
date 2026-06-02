@@ -97,10 +97,9 @@ async function main() {
       const cleanPath = outputFile.replace(/\.html$/, '');
       const url = `${BASE_URL}/${cleanPath}`;
 
-      // 'load' rather than 'networkidle' — autoplay hero <video> on location pages
-      // keeps the network busy indefinitely and never reaches networkidle. axe DOM
-      // queries only require the document loaded.
-      await page.goto(url, { waitUntil: 'load', timeout: 20_000 });
+      // axe only needs the DOM. Waiting for full load lets third-party scripts
+      // and embeds make this local check flaky.
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 20_000 });
 
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa'])

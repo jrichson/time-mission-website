@@ -48,6 +48,13 @@ export type { PayloadAnnouncementBannerDoc } from './announcement-banner-contrac
 export type { PayloadLocationDetailsDoc } from './location-details-contract';
 
 const DEFAULT_ORIGIN_KEYS = ['PAYLOAD_CMS_ORIGIN', 'PAYLOAD_PUBLIC_CMS_ORIGIN'] as const;
+const STRICT_CMS_ORIGIN_ERROR =
+    'PAYLOAD_CMS_BUILD_STRICT is set but PAYLOAD_CMS_ORIGIN is missing, invalid, or not allowed by PAYLOAD_CMS_ALLOWED_HOSTS.';
+
+interface CmsReadOrigin {
+    base: string;
+    strict: boolean;
+}
 
 function cmsOrigin(): string {
     try {
@@ -63,6 +70,31 @@ function cmsOrigin(): string {
         if (v) return v;
     }
     return '';
+}
+
+function publishedCmsOrigin({
+    label,
+    optional = false,
+    origin,
+}: {
+    label: string;
+    optional?: boolean;
+    origin?: string;
+}): CmsReadOrigin | null {
+    const strict = optional ? false : cmsBuildStrict();
+    const raw = (origin ?? cmsOrigin()).trim().replace(/\/+$/, '');
+    const base = validatedCmsOriginBase(raw);
+    if (base) return { base, strict };
+
+    if (!optional && !strict && !raw) return null;
+    if (!optional && strict) throw new Error(STRICT_CMS_ORIGIN_ERROR);
+
+    if (raw) {
+        console.warn(
+            `[payload] skipping ${optional ? `optional ${label}` : label}: invalid or disallowed PAYLOAD_CMS_ORIGIN`,
+        );
+    }
+    return null;
 }
 
 export interface PayloadLandingBulletsRow {
@@ -142,39 +174,25 @@ export interface PayloadSitePageDoc {
 
 /** Published landings visible to anonymous API (CMS access rule). */
 export async function getPublishedLandings(origin?: string): Promise<PayloadLandingDoc[]> {
-    const strict = cmsBuildStrict();
-    const raw = (origin ?? cmsOrigin()).trim().replace(/\/+$/, '');
-    const base = validatedCmsOriginBase(raw);
-    if (!base) {
-        if (!strict && !raw) return [];
-        if (strict) {
-            throw new Error(
-                'PAYLOAD_CMS_BUILD_STRICT is set but PAYLOAD_CMS_ORIGIN is missing, invalid, or not allowed by PAYLOAD_CMS_ALLOWED_HOSTS.',
-            );
-        }
-        console.warn('[payload] skipping landings: invalid or disallowed PAYLOAD_CMS_ORIGIN');
-        return [];
-    }
-    return fetchPayloadCollection<PayloadLandingDoc>({ collection: 'landings', origin: base, strict });
+    const readOrigin = publishedCmsOrigin({ label: 'landings', origin });
+    if (!readOrigin) return [];
+    return fetchPayloadCollection<PayloadLandingDoc>({
+        collection: 'landings',
+        origin: readOrigin.base,
+        strict: readOrigin.strict,
+    });
 }
 
 /** Published existing-page metadata visible to anonymous API (CMS access rule). */
 export async function getPublishedSitePages(origin?: string): Promise<PayloadSitePageDoc[]> {
-    const strict = cmsBuildStrict();
-    const raw = (origin ?? cmsOrigin()).trim().replace(/\/+$/, '');
-    const base = validatedCmsOriginBase(raw);
-    if (!base) {
-        if (!strict && !raw) return [];
-        if (strict) {
-            throw new Error(
-                'PAYLOAD_CMS_BUILD_STRICT is set but PAYLOAD_CMS_ORIGIN is missing, invalid, or not allowed by PAYLOAD_CMS_ALLOWED_HOSTS.',
-            );
-        }
-        console.warn('[payload] skipping site pages: invalid or disallowed PAYLOAD_CMS_ORIGIN');
-        return [];
-    }
+    const readOrigin = publishedCmsOrigin({ label: 'site pages', origin });
+    if (!readOrigin) return [];
 
-    return fetchPayloadCollection<PayloadSitePageDoc>({ collection: 'site-pages', origin: base, strict });
+    return fetchPayloadCollection<PayloadSitePageDoc>({
+        collection: 'site-pages',
+        origin: readOrigin.base,
+        strict: readOrigin.strict,
+    });
 }
 
 /**
@@ -182,17 +200,13 @@ export async function getPublishedSitePages(origin?: string): Promise<PayloadSit
  * A missing collection, missing migration, or failed fetch must not break the public build.
  */
 export async function getPublishedAnnouncementBanners(origin?: string): Promise<PayloadAnnouncementBannerDoc[]> {
-    const raw = (origin ?? cmsOrigin()).trim().replace(/\/+$/, '');
-    const base = validatedCmsOriginBase(raw);
-    if (!base) {
-        if (raw) console.warn('[payload] skipping optional announcement banners: invalid or disallowed PAYLOAD_CMS_ORIGIN');
-        return [];
-    }
+    const readOrigin = publishedCmsOrigin({ label: 'announcement banners', optional: true, origin });
+    if (!readOrigin) return [];
 
     return fetchPayloadCollection<PayloadAnnouncementBannerDoc>({
         collection: 'announcement-banners',
         optionalLabel: 'announcement banners',
-        origin: base,
+        origin: readOrigin.base,
     });
 }
 
@@ -201,17 +215,13 @@ export async function getPublishedAnnouncementBanners(origin?: string): Promise<
  * Missing CMS data must not block the public build; the code-owned location JSON remains the fallback.
  */
 export async function getPublishedLocationDetails(origin?: string): Promise<PayloadLocationDetailsDoc[]> {
-    const raw = (origin ?? cmsOrigin()).trim().replace(/\/+$/, '');
-    const base = validatedCmsOriginBase(raw);
-    if (!base) {
-        if (raw) console.warn('[payload] skipping optional location details: invalid or disallowed PAYLOAD_CMS_ORIGIN');
-        return [];
-    }
+    const readOrigin = publishedCmsOrigin({ label: 'location details', optional: true, origin });
+    if (!readOrigin) return [];
 
     return fetchPayloadCollection<PayloadLocationDetailsDoc>({
         collection: 'location-details',
         optionalLabel: 'location details',
-        origin: base,
+        origin: readOrigin.base,
     });
 }
 

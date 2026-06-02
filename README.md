@@ -39,6 +39,7 @@ npm run test:smoke
 - `data/locations.json` is the source of truth for location state, booking URLs, gift card URLs, and Roller checkout URLs.
 - Page HTML is generated from `src/pages`, `src/layouts/SiteLayout.astro`, and shared components. Do not add repo-root `.html` page sources back to the build path.
 - `js/booking-journey.js`, `js/booking-controller.js`, `js/booking-provider-briq.js`, and `js/ticket-panel.js` consume location data through `window.TM`; do not reintroduce separate URL maps.
+- Future internal API work should start from [HANDOFF.md](HANDOFF.md), [docs/tm-public-api.md](docs/tm-public-api.md), and [docs/analytics-event-contract.md](docs/analytics-event-contract.md). Replace data adapters at the documented seams rather than bypassing the Location Catalog, Booking Journey, or `window.TM` browser contract.
 - `_headers` contains Cloudflare Pages security headers and is generated from `_headers.tmpl` during `npm run build:astro`.
 - `_redirects` is written for Netlify/Cloudflare Pages style routing.
 - Contact and newsletter forms are handled by Cloudflare Pages Functions in `functions/api/`. Wrangler Direct Upload must be run from the repo root so the sibling `functions/` directory is uploaded with `dist/`.
@@ -46,7 +47,7 @@ npm run test:smoke
 
 ## Remaining Modernization Risks
 
-- A GitHub Actions workflow was not added because the local environment blocked workflow-file edits; CI should run `npm ci`, install Chromium, then `npm run verify`.
+- The existing GitHub Actions workflow is a manual CMS deploy path. Add a separate CI quality gate that runs `npm ci`, installs Chromium, and executes `npm run verify`.
 - Image and video optimization still need a dedicated Core Web Vitals pass.
 - Most CSS is still page-local; extract shared styles only behind visual regression or expanded Playwright coverage.
-- A future CMS/static-generation phase should build on `data/locations.json` rather than replacing it ad hoc.
+- Internal API integration should preserve the existing adapter seams: generate or fetch Location Catalog data into the current `LocationRecord` shape, keep `js/locations.js` as the sole browser location writer, and keep booking decisions in `js/booking-journey.js`.

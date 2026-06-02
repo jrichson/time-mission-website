@@ -142,6 +142,28 @@
         return formatText(translateText(key, fallback, langCode), replacements);
     }
 
+    function sanitizeTranslatedHtml(value) {
+        var template = document.createElement('template');
+        template.innerHTML = String(value || '');
+        var allowedTags = { STRONG: true, SPAN: true };
+        var allowedSpanClasses = { 'copy-emphasis': true };
+
+        Array.prototype.slice.call(template.content.querySelectorAll('*')).forEach(function (node) {
+            if (!allowedTags[node.tagName]) {
+                node.replaceWith(document.createTextNode(node.textContent || ''));
+                return;
+            }
+            Array.prototype.slice.call(node.attributes).forEach(function (attr) {
+                var keepClass = node.tagName === 'SPAN'
+                    && attr.name === 'class'
+                    && allowedSpanClasses[attr.value];
+                if (!keepClass) node.removeAttribute(attr.name);
+            });
+        });
+
+        return template.innerHTML;
+    }
+
     function array(key, fallback, langCode) {
         var value = translate(key, langCode);
         return Array.isArray(value) && value.length ? value : (Array.isArray(fallback) ? fallback : []);
@@ -150,7 +172,7 @@
     function applyTextTranslations() {
         document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
             var value = translate(el.getAttribute('data-i18n-html'));
-            if (typeof value === 'string') el.innerHTML = value;
+            if (typeof value === 'string') el.innerHTML = sanitizeTranslatedHtml(value);
         });
 
         document.querySelectorAll('[data-i18n]').forEach(function (el) {

@@ -9,18 +9,18 @@ test.describe('Mobile location selector', () => {
   test.skip(({ isMobile }) => !isMobile, 'mobile-only test');
 
   test('logo home navigation preserves the selected location', async ({ page }) => {
-    await page.goto('/philadelphia');
-    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
+    await page.goto('/mount-prospect');
+    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('mount-prospect');
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 
     await page.locator('.nav-logo').first().tap();
 
-    await expect(page).toHaveURL(/\/philadelphia$/);
-    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('philadelphia');
+    await expect(page).toHaveURL(/\/mount-prospect$/);
+    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('mount-prospect');
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
-    await expect(page.locator('#locationText')).toContainText('Philadelphia');
+    await expect(page.locator('#locationText')).toContainText('Mount Prospect');
     await expect.poll(() => page.evaluate(() => document.getElementById('taglineText')?.textContent || ''))
-      .toContain('Time Mission Philadelphia');
+      .toContain('Time Mission Mount Prospect');
   });
 
   test('tapping a location link keeps the current page context', async ({ page }) => {

@@ -176,13 +176,21 @@ runCheck({
       'js/page-widgets-effects.js',
       'js/page-widgets-content.js',
     ].map(read).join('\n');
-    for (const needle of [
+    const widgetMarkers = [
       'function runWhenVisible',
       'IntersectionObserver',
       'runWhenVisible(scrollEl, startAutoScroll, stopAutoScroll',
       'runWhenVisible(logosContainer, startTicker, stopTicker',
-    ]) {
+    ];
+    for (const needle of widgetMarkers) {
       if (!widgets.includes(needle)) errors.push(`page widgets runtime missing mobile visibility gate: ${needle}`);
+    }
+    const inpMarkers = [
+      'requestAnimationFrame(applyTilt)',
+      'cancelAnimationFrame(tiltFrame)',
+    ];
+    for (const needle of inpMarkers) {
+      if (!widgets.includes(needle)) errors.push(`page widgets runtime missing INP pointer-work throttle: ${needle}`);
     }
   },
   onSuccess() {

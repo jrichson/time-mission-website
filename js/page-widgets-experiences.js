@@ -237,10 +237,15 @@
             if (reduceMotion) {
                 card.style.transition = 'none';
             } else {
-                card.addEventListener('mousemove', function (e) {
+                var tiltFrame = null;
+                var tiltEvent = null;
+
+                function applyTilt() {
+                    tiltFrame = null;
+                    if (!tiltEvent) return;
                     var rect = card.getBoundingClientRect();
-                    var x = e.clientX - rect.left;
-                    var y = e.clientY - rect.top;
+                    var x = tiltEvent.clientX - rect.left;
+                    var y = tiltEvent.clientY - rect.top;
 
                     var centerX = rect.width / 2;
                     var centerY = rect.height / 2;
@@ -249,9 +254,19 @@
                     var rotateY = (x - centerX) / centerX * 8;
 
                     card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-8px)';
+                }
+
+                card.addEventListener('mousemove', function (e) {
+                    tiltEvent = e;
+                    if (!tiltFrame) tiltFrame = requestAnimationFrame(applyTilt);
                 });
 
                 card.addEventListener('mouseleave', function () {
+                    if (tiltFrame) {
+                        cancelAnimationFrame(tiltFrame);
+                        tiltFrame = null;
+                    }
+                    tiltEvent = null;
                     card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
                 });
             }

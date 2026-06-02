@@ -195,8 +195,9 @@
     }
 
     function syncLocationSelectionLinks() {
-        if (!locationLinks || !locationLinks.length) return;
-        locationLinks.forEach(function (link) {
+        const links = getLocationLinks();
+        if (!links.length) return;
+        links.forEach(function (link) {
             if (isExternalLocationLink(link)) {
                 const href = link.getAttribute('data-tm-location-base-href') || link.getAttribute('href') || '';
                 if (href && !link.getAttribute('data-tm-location-base-href')) {
@@ -336,8 +337,17 @@
     // Location overlay toggle and selection
     const locationBtn = document.getElementById('locationBtn');
     const locationOverlay = document.getElementById('locationDropdown');
-    const locationLinks = locationOverlay ? locationOverlay.querySelectorAll('a') : [];
     const narrowPickerQuery = window.matchMedia('(max-width: 768px)');
+
+    function getLocationLinks() {
+        return locationOverlay ? Array.from(locationOverlay.querySelectorAll('a')) : [];
+    }
+
+    function getLocationLinkFromEvent(target) {
+        const link = target && typeof target.closest === 'function' ? target.closest('a') : null;
+        if (!link || !locationOverlay || !locationOverlay.contains(link)) return null;
+        return link;
+    }
 
     if (locationBtn && locationOverlay) {
         function openLocationOverlay() {
@@ -378,39 +388,40 @@
             }
         });
 
-        // Handle location selection
-        locationLinks.forEach(link => {
-            // Show info panel on hover (desktop) and click
-            link.addEventListener('mouseenter', () => {
-                if (narrowPickerQuery.matches) return;
-                const slug = getLocationSlug(link);
-                if (slug) showLocationInfo(slug);
-            });
+        // Handle hydrated location links through delegation; the link list can change after locations load.
+        locationOverlay.addEventListener('mouseover', (e) => {
+            if (narrowPickerQuery.matches) return;
+            const link = getLocationLinkFromEvent(e.target);
+            const slug = getLocationSlug(link);
+            if (slug) showLocationInfo(slug);
+        });
 
-            link.addEventListener('click', (e) => {
-                syncLocationSelectionLinks();
-                const cityName = link.dataset.city;
-                const slug = getLocationSlug(link);
-                if (cityName) {
-                    if (!isSameWindowNavigationClick(e, link)) {
-                        closeLocationOverlay();
-                        return;
-                    }
+        locationOverlay.addEventListener('click', (e) => {
+            const link = getLocationLinkFromEvent(e.target);
+            if (!link) return;
 
-                    const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
-                    if (isExternalLocationLink(link)) {
-                        e.preventDefault();
-                        syncAllLocations(cityName, slug, overlayTrack);
-                        closeLocationOverlay();
-                        return;
-                    }
-
+            syncLocationSelectionLinks();
+            const cityName = link.dataset.city;
+            const slug = getLocationSlug(link);
+            if (cityName) {
+                const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
+                if (isExternalLocationLink(link) && isPlainPrimaryClick(e)) {
+                    e.preventDefault();
                     syncAllLocations(cityName, slug, overlayTrack);
+                    closeLocationOverlay();
+                    return;
                 }
 
-                // Non-location overlay links or modifier clicks: close overlay and let the browser follow href.
-                closeLocationOverlay();
-            });
+                if (!isSameWindowNavigationClick(e, link)) {
+                    closeLocationOverlay();
+                    return;
+                }
+
+                syncAllLocations(cityName, slug, overlayTrack);
+            }
+
+            // Non-location overlay links or modifier clicks: close overlay and let the browser follow href.
+            closeLocationOverlay();
         });
     }
 
@@ -444,10 +455,19 @@
     }
 
     function isSameWindowNavigationClick(event, link) {
-        if (!link || event.defaultPrevented || event.button !== 0) return false;
-        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+        if (!link || !isPlainPrimaryClick(event)) return false;
         const target = (link.getAttribute('target') || '').toLowerCase();
         return !target || target === '_self';
+    }
+
+    function isPlainPrimaryClick(event) {
+        return !!event
+            && !event.defaultPrevented
+            && event.button === 0
+            && !event.metaKey
+            && !event.ctrlKey
+            && !event.shiftKey
+            && !event.altKey;
     }
 
     function setMultilineText(el, value) {

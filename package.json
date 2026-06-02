@@ -30,6 +30,7 @@
     "check:seo-catalog": "node scripts/check-seo-catalog.js",
     "check:seo-robots": "node scripts/check-seo-robots.js",
     "check:mobile-performance": "node scripts/check-mobile-performance-contract.js",
+    "check:best-practices": "node scripts/check-best-practices.js",
     "check:seo-output": "node scripts/check-seo-output.js",
     "check:schema-output": "node scripts/check-schema-output.js",
     "check:sitemap-output": "node scripts/check-sitemap-output.js",
@@ -46,7 +47,7 @@
     "prune:artifacts": "node scripts/prune-excluded-artifacts.mjs dist public",
     "compile:routes": "node scripts/compile-route-artifacts.mjs",
     "test:unit": "vitest run",
-    "check": "npm run compile:routes && npm run check:astro && npm run test:unit && npm run check:locations && npm run check:sitemap && npm run check:components && npm run check:booking && npm run check:a11y && npm run check:links && npm run check:routes && npm run check:site-data && npm run check:location-routes && npm run check:locations-architecture && npm run check:component-usage && npm run check:site-contract && npm run check:verify-pipeline && npm run check:analytics && npm run check:consent && npm run check:seo-catalog && npm run check:seo-robots && npm run check:mobile-performance && npm run check:hero-media",
+    "check": "npm run compile:routes && npm run check:astro && npm run test:unit && npm run check:locations && npm run check:sitemap && npm run check:components && npm run check:booking && npm run check:a11y && npm run check:links && npm run check:routes && npm run check:site-data && npm run check:location-routes && npm run check:locations-architecture && npm run check:component-usage && npm run check:site-contract && npm run check:verify-pipeline && npm run check:analytics && npm run check:consent && npm run check:seo-catalog && npm run check:seo-robots && npm run check:mobile-performance && npm run check:best-practices && npm run check:hero-media",
     "verify:sources": "npm run check",
     "test:smoke": "playwright test",
     "test": "npm run test:smoke",
@@ -81,7 +82,7 @@
     "esbuild": "^0.28.0",
     "tsx": "^4.19.2",
     "typescript": "^5.9.3",
-    "vitest": "^3.0.5",
+    "vitest": "^4.1.8",
     "wrangler": "^4.87.0"
   },
   "dependencies": {

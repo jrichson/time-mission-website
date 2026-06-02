@@ -28,6 +28,6 @@ const page = definePage({ canonicalPath: '/about' });
     </Fragment>
     <div set:html={aboutMain} />
     <Fragment slot="after-site-scripts">
-        <script defer src="/js/page-about-after.js?v=1"></script>
+        <script is:inline defer src="/js/page-about-after.js?v=1"></script>
     </Fragment>
 </SiteLayout>

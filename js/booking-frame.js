@@ -52,7 +52,25 @@
         close.type = 'button';
         close.className = 'booking-frame-close';
         close.setAttribute('aria-label', translate('booking.frame.close', 'Close booking'));
-        close.innerHTML = '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+        var closeIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        closeIcon.setAttribute('aria-hidden', 'true');
+        closeIcon.setAttribute('focusable', 'false');
+        closeIcon.setAttribute('viewBox', '0 0 24 24');
+        closeIcon.setAttribute('fill', 'none');
+        closeIcon.setAttribute('stroke', 'currentColor');
+        closeIcon.setAttribute('stroke-width', '2');
+        [
+            ['18', '6', '6', '18'],
+            ['6', '6', '18', '18'],
+        ].forEach(function (points) {
+            var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', points[0]);
+            line.setAttribute('y1', points[1]);
+            line.setAttribute('x2', points[2]);
+            line.setAttribute('y2', points[3]);
+            closeIcon.appendChild(line);
+        });
+        close.appendChild(closeIcon);
 
         var iframe = document.createElement('iframe');
         iframe.className = 'booking-frame';

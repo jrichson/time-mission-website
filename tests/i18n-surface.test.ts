@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
 import i18n from '../src/data/site/i18n.json';
 import {
   compileLanguageSurface,
@@ -53,5 +55,25 @@ describe('Language Surface', () => {
     });
     expect(runtimeConfig.languages.map((language) => language.code)).toEqual(['en', 'es']);
     expect(runtimeConfig.translations.es['booking.chooseLocation.title']).toBeTruthy();
+  });
+
+  it('keeps translated rich text on the approved HTML allowlist', () => {
+    const languageSwitcher = fs.readFileSync(path.join(process.cwd(), 'js/language-switcher.js'), 'utf8');
+    expect(languageSwitcher).toContain('function sanitizeTranslatedHtml');
+    expect(languageSwitcher).toContain('sanitizeTranslatedHtml(value)');
+
+    const richTextKeys = Object.keys(catalog.translations.en).filter((key) => key.endsWith('Html'));
+    expect(richTextKeys).toEqual(['home.about.longHtml']);
+
+    for (const translations of Object.values(catalog.translations)) {
+      for (const key of richTextKeys) {
+        const html = translations[key];
+        expect(typeof html).toBe('string');
+        const tags = String(html).match(/<[^>]+>/g) || [];
+        for (const tag of tags) {
+          expect(tag).toMatch(/^<\/?strong>$|^<span class="copy-emphasis">$|^<\/span>$/);
+        }
+      }
+    }
   });
 });

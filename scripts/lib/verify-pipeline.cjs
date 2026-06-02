@@ -4,6 +4,7 @@ const VERIFY_STEPS = [
   ['check', []],
   ['build:astro', []],
   ['check:csp-hashes', []],
+  ['check:best-practices', ['--', '--dist']],
   ['check:routes', ['--', '--dist']],
   ['check:links', ['--', '--dist']],
   ['check:astro-dist', []],

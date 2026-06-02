@@ -34,6 +34,6 @@ const ld = serializeGraph(buildSimpleGraph([
     </Fragment>
     <div set:html={groupsMain} />
     <Fragment slot="after-site-scripts">
-        <script defer src="/js/page-groups-after.js?v=1"></script>
+        <script is:inline defer src="/js/page-groups-after.js?v=1"></script>
     </Fragment>
 </SiteLayout>

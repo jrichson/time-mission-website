@@ -12,7 +12,26 @@ function loadJson(rel) {
 }
 
 function normalize(value) {
-  return String(value || '').replace(/\s+/g, ' ').trim();
+  return String(value || '').replace(/\s+/g, ' ').replace(/\s+([,.:;!?])/g, '$1').trim();
+}
+
+function decodeHtmlEntities(value) {
+  return String(value || '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x([0-9a-f]+);/gi, (_match, hex) => String.fromCodePoint(Number.parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_match, dec) => String.fromCodePoint(Number.parseInt(dec, 10)));
+}
+
+function renderedText(value) {
+  return decodeHtmlEntities(value)
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ');
 }
 
 function wordCount(value) {
@@ -68,7 +87,7 @@ for (const [key, block] of publicBlocks) {
   const rel = route.outputFile.replace(/^\//, '');
   const body = requireFile(path.join('dist', rel));
   if (!body) continue;
-  const normalizedBody = normalize(body);
+  const normalizedBody = normalize(renderedText(body));
   if (!normalizedBody.toLowerCase().includes(normalize(block.heading).toLowerCase())) {
     errors.push(`${rel}: missing visible GEO heading for ${key}`);
   }
