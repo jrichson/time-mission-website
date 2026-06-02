@@ -112,7 +112,12 @@ const hasPageLocation = Boolean(pageLocation);
                         {footerUsLocations.map((loc) => {
                             const statusLabel = locationStatusBadge(loc);
                             return (
-                                <a href={locationHref(loc)} class={statusLabel ? 'coming-soon' : undefined}>
+                                <a
+                                    href={locationHref(loc)}
+                                    class={statusLabel ? 'coming-soon' : undefined}
+                                    target={loc.externalUrl ? '_blank' : undefined}
+                                    rel={loc.externalUrl ? 'noopener' : undefined}
+                                >
                                     {locationListLabel(loc)} {statusLabel && <span class="coming-soon-tag">{statusLabel}</span>}
                                 </a>
                             );
@@ -130,7 +135,12 @@ const hasPageLocation = Boolean(pageLocation);
                         {footerEuropeLocations.map((loc) => {
                             const statusLabel = locationStatusBadge(loc);
                             return (
-                                <a href={locationHref(loc)} class={statusLabel ? 'coming-soon' : undefined}>
+                                <a
+                                    href={locationHref(loc)}
+                                    class={statusLabel ? 'coming-soon' : undefined}
+                                    target={loc.externalUrl ? '_blank' : undefined}
+                                    rel={loc.externalUrl ? 'noopener' : undefined}
+                                >
                                     {locationListLabel(loc)} {statusLabel && <span class="coming-soon-tag">{statusLabel}</span>}
                                 </a>
                             );

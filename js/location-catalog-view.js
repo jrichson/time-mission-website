@@ -110,8 +110,9 @@
     }
 
     function hoursTextForLocation(loc) {
-        if (!loc || !loc.hours) {
-            if (loc && loc.status === 'temporarily-closed') return temporaryClosureLabelForLocation(loc);
+        if (!loc) return '';
+        if (loc.status === 'temporarily-closed') return temporaryClosureLabelForLocation(loc);
+        if (!loc.hours) {
             return loc && loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : '';
         }
         var lines = [];
@@ -121,7 +122,6 @@
             }
         });
         return lines.join('\n')
-            || (loc.status === 'temporarily-closed' ? temporaryClosureLabelForLocation(loc) : '')
             || (loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : '');
     }
 
@@ -393,7 +393,7 @@
                 setHidden(phoneNoteEl, false);
             }
         }
-        renderHoursTable(hoursEl, loc.hours, loc.status === 'temporarily-closed' ? temporaryClosureLabelForLocation(loc) : loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : translate('location.hoursComingSoon', 'Hours coming soon'));
+        renderHoursTable(hoursEl, loc.status === 'temporarily-closed' ? {} : loc.hours, loc.status === 'temporarily-closed' ? temporaryClosureLabelForLocation(loc) : loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : translate('location.hoursComingSoon', 'Hours coming soon'));
         if (mapEl) {
             mapEl.href = loc.mapUrl || '#';
             setHidden(mapEl, !loc.mapUrl);

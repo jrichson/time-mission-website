@@ -37,6 +37,22 @@
         return /^(https?:|mailto:|tel:)/i.test(href);
     }
 
+    function syncExternalLinkAttrs(el, cta) {
+        if (!el || !cta || cta.trigger) {
+            if (el) {
+                el.removeAttribute('target');
+                el.removeAttribute('rel');
+            }
+            return;
+        }
+        var target = cta.target || (BookingJourney.isExternalHttpUrl(cta.href) ? '_blank' : '');
+        var rel = cta.rel || (target === '_blank' ? 'noopener' : '');
+        if (target) el.setAttribute('target', target);
+        else el.removeAttribute('target');
+        if (rel) el.setAttribute('rel', rel);
+        else el.removeAttribute('rel');
+    }
+
     function locationForOptions(opts) {
         opts = opts || {};
         var locationId = BookingJourney.normalizeLocation(opts.locationId || '');
@@ -225,6 +241,8 @@
         if (cta.disabled) {
             ctaBtn.href = '#';
             ctaBtn.removeAttribute('data-tm-booking-url');
+            ctaBtn.removeAttribute('target');
+            ctaBtn.removeAttribute('rel');
             ctaBtn.setAttribute('data-tm-booking-kind', cta.kind);
             if (cta.locationId) {
                 ctaBtn.setAttribute('data-tm-location', cta.locationId);
@@ -244,6 +262,7 @@
         ctaBtn.removeAttribute('aria-disabled');
         if (ctaBtn.classList) ctaBtn.classList.remove('is-disabled');
         ctaBtn.href = cta.href || '#';
+        syncExternalLinkAttrs(ctaBtn, cta);
         if (cta.externalLocation) {
             ctaBtn.removeAttribute('data-tm-booking-url');
         } else if (cta.trigger) {
@@ -348,7 +367,7 @@
 
     var navigationHandlers = {
         'external-site': function (action) {
-            window.location.assign(action.href);
+            navigateToHref(action.href);
             return true;
         },
         'briq-widget': function (_action, loc) {
@@ -364,10 +383,19 @@
             return true;
         },
         link: function (action) {
-            window.location.assign(action.href);
+            navigateToHref(action.href);
             return true;
         },
     };
+
+    function navigateToHref(href) {
+        if (BookingJourney.isExternalHttpUrl(href) && typeof window.open === 'function') {
+            var opened = window.open(href, '_blank', 'noopener');
+            if (opened && typeof opened.opener !== 'undefined') opened.opener = null;
+            return;
+        }
+        window.location.assign(href);
+    }
 
     function executeResolvedAction(action, loc) {
         var provider = action.provider || action.type || 'link';

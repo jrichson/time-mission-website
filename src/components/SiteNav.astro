@@ -31,20 +31,11 @@ const bookingCtaAttrs = {
 
 type TickerMessage =
     | { text: string; href?: string | null; linkLabel?: string | null }
-    | { label: string; date: string; labelI18n?: string; dateI18n?: string };
+    | { label: string; date: string; separator?: string; labelI18n?: string; dateI18n?: string };
 
 const tickerBaseMessages: TickerMessage[] = [
     {
-        label: 'HOUSTON GRAND OPENING',
-        date: 'JUNE 5TH',
-        labelI18n: 'ticker.houstonGrandOpeningLabel',
-        dateI18n: 'ticker.houstonGrandOpeningDate',
-    },
-    {
-        label: 'ORLAND PARK GRAND OPENING',
-        date: 'JUNE 11TH',
-        labelI18n: 'ticker.orlandParkGrandOpeningLabel',
-        dateI18n: 'ticker.orlandParkGrandOpeningDate',
+        text: 'Now Accepting Group Event Bookings!',
     },
     {
         label: 'BRUSSELS GRAND OPENING',
@@ -57,6 +48,10 @@ const tickerCycles = 4;
 
 function tickerMessageFromText(text: string): TickerMessage | null {
     const value = text.trim();
+    if (value.includes('|')) {
+        const [label, ...rest] = value.split('|').map((part) => part.trim()).filter(Boolean);
+        if (label && rest.length) return { label, date: rest.join(' | '), separator: '|' };
+    }
     const match = value.match(/^(.*?\bGRAND OPENING)\s*(?:[-–—]\s*)?(.+)$/i);
     if (match) return { label: match[1].trim(), date: match[2].trim() };
     return value ? { text: value } : null;
@@ -75,6 +70,12 @@ const tickerMessages: TickerMessage[] = cmsAnnouncementMessage
     : locationTickerMessage
     ? Array.from({ length: tickerCycles }, () => locationTickerMessage)
     : Array.from({ length: tickerCycles }, () => tickerBaseMessages).flat();
+
+function externalLinkAttrs(href: string | null | undefined) {
+    return /^https?:\/\//i.test(String(href || '').trim())
+        ? { target: '_blank', rel: 'noopener' }
+        : {};
+}
 ---
 
 <!-- Announcement Ticker -->
@@ -88,14 +89,14 @@ const tickerMessages: TickerMessage[] = cmsAnnouncementMessage
                         {m.href && (
                             <>
                                 <span class="ticker-separator" aria-hidden="true">-</span>
-                                <a class="ticker-link" href={m.href}>{m.linkLabel || 'Learn more'}</a>
+                                <a class="ticker-link" href={m.href} {...externalLinkAttrs(m.href)}>{m.linkLabel || 'Learn more'}</a>
                             </>
                         )}
                     </>
                 ) : (
                     <>
                         <span class="ticker-copy" data-i18n={m.labelI18n}>{m.label}</span>
-                        <span class="ticker-separator" aria-hidden="true">-</span>
+                        <span class="ticker-separator" aria-hidden="true">{m.separator || '-'}</span>
                         <span class="ticker-date" data-i18n={m.dateI18n}>{m.date}</span>
                     </>
                 )}

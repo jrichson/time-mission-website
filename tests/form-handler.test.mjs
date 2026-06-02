@@ -180,6 +180,33 @@ describe('Cloudflare form handler', () => {
     });
   });
 
+  it('keeps Turnstile strict without exposing backend configuration details', async () => {
+    const response = await handleFormRequest({
+      env: {
+        ...env,
+        TURNSTILE_SECRET_KEY: '',
+      },
+      fetchImpl: fetchOk,
+      formType: 'contact',
+      request: formRequest('/api/contact', {
+        'cf-turnstile-response': 'token',
+        email: 'guest@example.com',
+        location: 'houston',
+        message: 'Question about groups',
+        name: 'Guest',
+        subject: 'groups',
+      }),
+    });
+
+    expect(response.status).toBe(500);
+    const body = await response.json();
+    expect(body).toMatchObject({
+      error: 'Form protection is temporarily unavailable. Please try again later.',
+      ok: false,
+    });
+    expect(body.error).not.toMatch(/not configured/i);
+  });
+
   it('can bypass the archive for local emergency testing only', async () => {
     const response = await handleFormRequest({
       env: {

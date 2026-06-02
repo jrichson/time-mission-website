@@ -131,25 +131,39 @@
       },
       "hours": {
         "mon": {
-          "label": "Temporarily closed"
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
         },
         "tue": {
-          "label": "Temporarily closed"
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
         },
         "wed": {
-          "label": "Temporarily closed"
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
         },
         "thu": {
-          "label": "Temporarily closed"
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
         },
         "fri": {
-          "label": "Temporarily closed"
+          "open": "10:00",
+          "close": "23:00",
+          "label": "10am - 11pm"
         },
         "sat": {
-          "label": "Temporarily closed"
+          "open": "10:00",
+          "close": "23:00",
+          "label": "10am - 11pm"
         },
         "sun": {
-          "label": "Temporarily closed"
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
         }
       },
       "bookingUrl": "",
@@ -511,7 +525,43 @@
         "phone": "(713) 588-1630",
         "email": ""
       },
-      "hours": {},
+      "hours": {
+        "mon": {
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
+        },
+        "tue": {
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
+        },
+        "wed": {
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
+        },
+        "thu": {
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
+        },
+        "fri": {
+          "open": "10:00",
+          "close": "23:00",
+          "label": "10am - 11pm"
+        },
+        "sat": {
+          "open": "10:00",
+          "close": "23:00",
+          "label": "10am - 11pm"
+        },
+        "sun": {
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
+        }
+      },
       "bookingUrl": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
       "bookingProvider": "roller",
@@ -526,8 +576,8 @@
       "navLabel": "TX – Houston",
       "mapUrl": "https://maps.google.com/?q=7620+Katy+Fwy+STE+355+Houston+TX+77024",
       "faqs": [],
-      "ticker": "HOUSTON GRAND OPENING - JUNE 5TH",
-      "giftCardUrl": "",
+      "ticker": "GRAND OPENING JUNE 5! | 50% OFF ANY DATE — CODE OPEN50",
+      "giftCardUrl": "https://book.houston.timemission.com/giftcards/en-us/products",
       "waiverUrl": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
       "countryCode": "US",
       "locale": null,
@@ -676,7 +726,7 @@
       "navLabel": "IL – Orland Park",
       "mapUrl": "https://maps.google.com/?q=66+Orland+Square+Dr+Suite+C+Orland+Park+IL+60462",
       "faqs": [],
-      "ticker": "ORLAND PARK GRAND OPENING - JUNE 11TH",
+      "ticker": "Now Accepting Group Event Bookings!",
       "giftCardUrl": "https://book.orlandpark.timemission.com/giftcards/en-us/products",
       "waiverUrl": "https://waiver.roller.app/TimeMissionOrlandPark/home",
       "countryCode": "US",

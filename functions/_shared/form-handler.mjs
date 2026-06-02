@@ -18,10 +18,11 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const memoryRateLimits = new Map();
 
 export class FormError extends Error {
-  constructor(message, status = 400) {
+  constructor(message, status = 400, publicMessage = message) {
     super(message);
     this.name = 'FormError';
     this.status = status;
+    this.publicMessage = publicMessage;
   }
 }
 
@@ -333,7 +334,11 @@ export function validateNewsletterSubmission(raw) {
 async function verifyTurnstile({ env, fetchImpl, request, token }) {
   const secret = stringValue(env.TURNSTILE_SECRET_KEY).trim();
   if (!secret) {
-    throw new FormError('Form protection is not configured.', 500);
+    throw new FormError(
+      'Form protection is not configured.',
+      500,
+      'Form protection is temporarily unavailable. Please try again later.',
+    );
   }
   if (!normalizeText(token, 4096)) {
     throw new FormError('Complete the form protection check.');
@@ -628,7 +633,11 @@ function successResponse(request, asJSON) {
 
 function errorResponse(error, asJSON) {
   const status = error instanceof FormError ? error.status : 500;
-  const message = error instanceof Error ? error.message : 'Form submission failed.';
+  const message = error instanceof FormError
+    ? error.publicMessage
+    : error instanceof Error
+      ? error.message
+      : 'Form submission failed.';
 
   if (asJSON) {
     return Response.json({ error: message, ok: false }, { status });

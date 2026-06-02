@@ -107,8 +107,9 @@ export function locationMarket(loc: Pick<LocationRecord, 'address'>): string {
     return [loc.address.city, loc.address.state || loc.address.country].filter(Boolean).join(', ');
 }
 
-export function locationHoursRows(loc: Pick<LocationRecord, 'hours'> | null | undefined): LocationHoursRow[] {
+export function locationHoursRows(loc: Pick<LocationRecord, 'hours' | 'status'> | null | undefined): LocationHoursRow[] {
     if (!loc) return [];
+    if (loc.status === 'temporarily-closed') return [];
     return locationDayOrder.flatMap(([key, day]) => {
         const label = loc.hours?.[key]?.label;
         return label ? [{ day, label }] : [];

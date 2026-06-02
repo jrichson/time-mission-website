@@ -1,7 +1,7 @@
 <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <video id="heroVideo" muted loop playsinline webkit-playsinline poster="/assets/video/hero-poster-960.webp" preload="none">
+            <video id="heroVideo" muted loop playsinline webkit-playsinline poster="/assets/photos/experiences/ready-to-play-1200.webp" preload="none">
                 <source data-src="{{TM_MEDIA_BASE}}/assets/video/TM-Hero-bg-mobile-hero.mp4" data-media="(max-width: 768px)" type="video/mp4">
                 <source data-src="{{TM_MEDIA_BASE}}/assets/video/TM-Hero-bg-web-hero.mp4" type="video/mp4">
             </video>

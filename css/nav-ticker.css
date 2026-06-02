@@ -25,6 +25,8 @@
 .ticker-track {
     display: flex;
     align-items: center;
+    flex-wrap: nowrap;
+    white-space: nowrap;
     width: max-content;
     animation: ticker-scroll 20s linear infinite;
 }
@@ -115,21 +117,26 @@
 
     .ticker-track {
         align-items: center;
-        justify-content: center;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        white-space: nowrap;
+        width: max-content;
+        max-width: none;
         min-height: var(--tm-ticker-height);
-        padding-inline: 0.75rem;
+        padding-inline: 0;
+        animation: ticker-scroll 26s linear infinite;
     }
 
     .ticker-item {
-        justify-content: center;
-        max-width: calc(100vw - 1.5rem);
-        padding: 0;
-        font-size: 0.68rem;
-        line-height: 1.25;
+        flex: 0 0 auto;
+        justify-content: flex-start;
+        max-width: none;
+        padding: 0 1.75rem;
+        font-size: 0.66rem;
+        line-height: 1;
         letter-spacing: 0.08em;
-        text-align: center;
-        text-wrap: balance;
-        white-space: normal;
+        text-align: left;
+        white-space: nowrap;
         color: var(--white);
         text-shadow: 0 0 14px rgba(0, 229, 255, 0.28);
     }
@@ -139,7 +146,7 @@
     }
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 1024px) {
     .ticker-track {
         width: 100%;
         max-width: 100%;
@@ -154,7 +161,24 @@
 
 @media (max-width: 480px) {
     .ticker-item {
-        font-size: 0.64rem;
-        letter-spacing: 0.07em;
+        font-size: 0.62rem;
+        letter-spacing: 0.06em;
+        padding: 0 1.25rem;
+    }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+    .ticker-track {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        animation: none;
+    }
+
+    .ticker-item {
+        max-width: calc(100vw - 1.5rem);
+        overflow: hidden;
+        text-align: center;
+        text-overflow: ellipsis;
     }
 }

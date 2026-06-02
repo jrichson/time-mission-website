@@ -82,6 +82,11 @@ function createBrowserContext(extraWindow = {}) {
       href: '',
       assign(url) { this.href = url; },
     },
+    openCalls: [],
+    open(url, target, features) {
+      this.openCalls.push({ features, target, url });
+      return { opener: null };
+    },
     history: { replaceState() {} },
     matchMedia() { return { matches: false }; },
     navigator: {
@@ -390,6 +395,8 @@ describe('browser architecture contracts', () => {
     expect(manassasCta.getAttribute('data-tm-booking-trigger')).toBe('');
     expect(manassasCta.getAttribute('data-tm-booking-url')).toBe('https://checkout.example/manassas');
     expect(manassasCta.getAttribute('data-tm-location')).toBe('manassas');
+    expect(manassasCta.getAttribute('target')).toBeNull();
+    expect(manassasCta.getAttribute('rel')).toBeNull();
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'manassas' }))
       .toBe('https://gift.example/manassas');
     expect(window.TMBooking.getDestination({
@@ -397,6 +404,18 @@ describe('browser architecture contracts', () => {
       groupType: 'corporate',
       locationId: 'manassas',
     })).toBe('https://forms.example/manassas-corporate');
+    const manassasGroupIntent = window.TMBooking.resolveIntent({
+      kind: 'groups',
+      groupType: 'corporate',
+      locationId: 'manassas',
+    });
+    const manassasGroupCta = createAnchor('#');
+    window.TMBookingJourney.applyCtaView(
+      manassasGroupCta,
+      window.TMBookingJourney.ctaAttributesForIntent(manassasGroupIntent),
+    );
+    expect(manassasGroupCta.getAttribute('target')).toBe('_blank');
+    expect(manassasGroupCta.getAttribute('rel')).toBe('noopener');
     expect(window.TMBooking.getDestination({
       kind: 'groups',
       groupType: 'birthdays',
@@ -405,6 +424,19 @@ describe('browser architecture contracts', () => {
       .toBe('https://forms.example/manassas-birthdays');
     expect(window.TMBooking.getDestination({ kind: 'waiver', locationId: 'manassas' }))
       .toBe('https://waiver.example/manassas');
+    window.TMBooking.navigate({
+      source: 'waiver_test',
+      href: 'https://waiver.example/manassas',
+      kind: 'waiver',
+      locationId: 'manassas',
+      event: { preventDefault() {} },
+    });
+    expect(window.openCalls.at(-1)).toEqual({
+      features: 'noopener',
+      target: '_blank',
+      url: 'https://waiver.example/manassas',
+    });
+    expect(window.location.href).toBe('');
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'houston' }))
       .toBe('https://checkout.example/houston');
     expect(window.LocationContext.getLocationView('houston'))

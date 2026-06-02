@@ -4,13 +4,14 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { allLocations, type LocationRecord } from '../src/data/locations';
-import { locationViewModel, type LocationViewModel } from '../src/lib/location-view';
+import { locationHoursRows, locationViewModel, type LocationViewModel } from '../src/lib/location-view';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
 interface RuntimeLocationViews {
     getLocationView(loc: LocationRecord, id?: string): LocationViewModel;
+    hoursTextForLocation(loc: LocationRecord): string;
 }
 
 interface RuntimeWindow {
@@ -63,5 +64,21 @@ describe('Location View contract', () => {
                 status: runtimeView.status,
             }).toEqual(typedView);
         }
+    });
+
+    it('keeps stored Philadelphia hours hidden while the location is temporarily closed', () => {
+        const philadelphia = allLocations.find((loc) => loc.id === 'philadelphia');
+        if (!philadelphia) throw new Error('Philadelphia location missing');
+
+        const runtime = loadRuntimeLocationViews();
+
+        expect(philadelphia.status).toBe('temporarily-closed');
+        expect(philadelphia.hours.mon).toMatchObject({
+            open: '10:00',
+            close: '22:00',
+            label: '10am - 10pm',
+        });
+        expect(locationHoursRows(philadelphia)).toEqual([]);
+        expect(runtime.hoursTextForLocation(philadelphia)).toBe('Important Mission Update');
     });
 });

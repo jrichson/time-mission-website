@@ -96,9 +96,30 @@
 
     function renderTickerItem(item, text) {
         const value = String(text || '').trim();
-        const match = value.match(/^(.*?\bGRAND OPENING)\s*(?:[-–—]\s*)?(.+)$/i);
         item.textContent = '';
 
+        if (value.includes('|')) {
+            const parts = value.split('|').map(part => part.trim()).filter(Boolean);
+            if (parts.length > 1) {
+                const copy = document.createElement('span');
+                copy.className = 'ticker-copy';
+                copy.textContent = parts[0];
+
+                const separator = document.createElement('span');
+                separator.className = 'ticker-separator';
+                separator.setAttribute('aria-hidden', 'true');
+                separator.textContent = '|';
+
+                const offer = document.createElement('span');
+                offer.className = 'ticker-date';
+                offer.textContent = parts.slice(1).join(' | ');
+
+                item.append(copy, separator, offer);
+                return;
+            }
+        }
+
+        const match = value.match(/^(.*?\bGRAND OPENING)\s*(?:[-–—]\s*)?(.+)$/i);
         if (!match) {
             item.textContent = value;
             return;
@@ -352,9 +373,9 @@
                 nav.classList.toggle('has-location', Boolean(selectedLocationName));
             }
 
+            const pageLocationSlug = getPageLocationSlug();
             const locView = loc ? getLocationView(loc.id || loc.slug) : null;
             if (loc && locView && (locView.bookable || loc.status === 'coming-soon' || loc.status === 'temporarily-closed')) {
-                const pageLocationSlug = getPageLocationSlug();
                 document.querySelectorAll('.btn-tickets, .btn-book-now').forEach(el => {
                     const bookingKind = (el.getAttribute('data-tm-booking-kind') || 'tickets').toLowerCase();
                     if (bookingKind !== 'tickets') return;
@@ -364,7 +385,7 @@
                 });
             }
 
-            if (loc && loc.ticker) {
+            if (loc && loc.ticker && pageLocationSlug === normalizeLocationId(loc.slug || loc.id)) {
                 document.querySelectorAll('.ticker-track').forEach(track => {
                     const items = track.querySelectorAll('.ticker-item');
                     items.forEach(item => { renderTickerItem(item, loc.ticker); });
@@ -409,6 +430,7 @@
 
         getTodayHours() {
             if (!TM.current || !TM.current.hours) return null;
+            if (TM.current.status === 'temporarily-closed') return null;
             const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
             const today = days[new Date().getDay()];
             return TM.current.hours[today] || null;

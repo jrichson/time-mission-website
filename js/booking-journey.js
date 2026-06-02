@@ -30,6 +30,12 @@
         return /^https?:\/\//i.test(String(href || '').trim());
     }
 
+    function externalLinkAttributes(href) {
+        return isExternalHttpUrl(href)
+            ? { target: '_blank', rel: 'noopener' }
+            : { target: '', rel: '' };
+    }
+
     function getCurrentSearch() {
         return (window.location && window.location.search) || '';
     }
@@ -333,6 +339,8 @@
             externalLocation: intent.externalLocationSite,
             disabled: !loc || !intent.hasHref,
             presentation: intent.presentation,
+            target: trigger ? '' : externalLinkAttributes(intent.href).target,
+            rel: trigger ? '' : externalLinkAttributes(intent.href).rel,
         };
     }
 
@@ -384,6 +392,8 @@
             disabled: !resolved.location || !resolved.hasHref,
             trigger: false,
             externalLocation: !!resolved.externalLocationSite,
+            target: '',
+            rel: '',
         };
         if (!resolved.location) return attrs;
         attrs.disabled = !resolved.hasHref;
@@ -391,6 +401,7 @@
         if (!resolved.hasHref) return attrs;
         if (resolved.externalLocationSite) {
             attrs.href = resolved.href || '#';
+            Object.assign(attrs, externalLinkAttributes(attrs.href));
             return attrs;
         }
         if (resolved.usesBookingFrame || resolved.usesRollerCheckout || resolved.usesBriqWidget) {
@@ -400,6 +411,7 @@
             return attrs;
         }
         attrs.href = resolved.href || '#';
+        Object.assign(attrs, externalLinkAttributes(attrs.href));
         return attrs;
     }
 
@@ -420,8 +432,14 @@
             el.removeAttribute('data-i18n');
         }
         el.href = cta.href || '#';
-        el.removeAttribute('target');
-        el.removeAttribute('rel');
+        var linkAttrs = cta.trigger ? { target: '', rel: '' } : {
+            target: cta.target || externalLinkAttributes(cta.href).target,
+            rel: cta.rel || externalLinkAttributes(cta.href).rel,
+        };
+        if (linkAttrs.target) el.setAttribute('target', linkAttrs.target);
+        else el.removeAttribute('target');
+        if (linkAttrs.rel) el.setAttribute('rel', linkAttrs.rel);
+        else el.removeAttribute('rel');
         if (cta.disabled) {
             el.setAttribute('aria-disabled', 'true');
             if (el.classList) el.classList.add('is-disabled');
