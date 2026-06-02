@@ -108,7 +108,9 @@ test('group event cards expose ticket booking and group inquiry triggers', async
     expect(card.inquiryKind).toBe('groups');
   }
 
-  await expect(page.locator('.event-info-body [data-tm-booking-kind="groups"][data-tm-group-type="private-events"]')).toContainText('Plan Your Event');
+  const customEventCta = page.locator('.event-info-body .btn-link[data-tm-booking-kind="groups"]');
+  await expect(customEventCta).toContainText('Plan Your Event');
+  await expect(customEventCta).not.toHaveAttribute('data-tm-group-type', /./);
 });
 
 test('group event card Book Now keeps the standard ticket booking flow', async ({ page }) => {
@@ -162,6 +164,27 @@ test('Houston and Orland Park group CTAs resolve to location-data forms', async 
     locationId: 'orland-park',
   }));
   expect(orlandPrivateEvents).toBe(groupFormUrl('orland-park', 'private-events'));
+});
+
+test('main groups page inquiry CTAs use the default location form', async ({ page }) => {
+  await page.route('https://webforms.pipedrive.com/**', async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>Group inquiry</title><main>Group inquiry</main>',
+    });
+  });
+
+  await page.goto('/groups.html');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+  await page.evaluate(() => window.TM.select('manassas'));
+
+  const expectedHref = groupFormUrl('manassas', 'default');
+  await expectPopupUrl(
+    page,
+    () => page.locator('.hero-cta [data-tm-booking-kind="groups"]').click(),
+    expectedHref
+  );
+  await expect(page).toHaveURL(/\/groups\.html$/);
 });
 
 test('Dallas group CTAs stay disabled when location data has blank group rows', async ({ page }) => {

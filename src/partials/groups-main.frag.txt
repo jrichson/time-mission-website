@@ -19,7 +19,7 @@
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <a href="#" class="btn-secondary" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">Inquire Now</a>
+                <a href="#" class="btn-secondary" data-tm-booking-trigger data-tm-booking-kind="groups">Inquire Now</a>
             </div>
         </div>
     </section>
@@ -178,7 +178,7 @@
                 <h3>CUSTOM <span class="highlight">EVENTS</span></h3>
                 <p>From private venue rentals to fully hosted celebrations, our events team will build the perfect experience for your group.</p>
                 <p>Ideal for corporate meetings, team building, holiday parties, and large-scale gatherings. Catering, party rooms, and dedicated hosts available.</p>
-                <a href="#" class="btn-link" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="private-events">
+                <a href="#" class="btn-link" data-tm-booking-trigger data-tm-booking-kind="groups">
                     Plan Your Event
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>

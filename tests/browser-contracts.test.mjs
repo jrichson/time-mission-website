@@ -28,6 +28,24 @@ describe('browser data, consent, and i18n contracts', () => {
       }
     }
 
+    const correctedGroupForms = {
+      manassas: {
+        default: 'https://webforms.pipedrive.com/f/6WfZe3FsT5CpyAGlGQNeSnD8PZnbw9PpoyBG6Q1lAtqvD4ribAKRsWWceRYG0npA79',
+        'private-events': 'https://webforms.pipedrive.com/f/6rClhKJC878Zy4wEQE4nx3rxHFl2oN1XCAwr5J647D5e6JZyz2dBibV21rAvu5pkn9',
+      },
+      'mount-prospect': {
+        default: 'https://webforms.pipedrive.com/f/bXEQpsMHJsOtiIdTnIOIuMINAj2jCuMpbJftCRoKl6naQBGsW8F6S0WOShrlXluKB55',
+        'private-events': 'https://webforms.pipedrive.com/f/6GXSuNhFZD5Ep1YKjgbkzhtyyHT3rtD5bFu3SenbU7WtdMBlNK2ii0rTXXxlXLV5o7',
+      },
+      'orland-park': {
+        default: 'https://webforms.pipedrive.com/f/6qn4HwjvjuHH9aTSI0opXZlY9S6zSaww1No8AKIHefxbmVVTrc2EWOy4D4SWAztcVJ',
+        'private-events': 'https://webforms.pipedrive.com/f/czCBoZIYCV9RLnYgcPalyzr4UrH8eF7EV2LwETaisfp3lEkkuVtnZ6UqTjiZ9w9pSz',
+      },
+    };
+    for (const [locationId, forms] of Object.entries(correctedGroupForms)) {
+      expect(byId.get(locationId)?.groupFormUrls).toMatchObject(forms);
+    }
+
     for (const locationId of ['mount-prospect', 'lincoln', 'manassas', 'orland-park']) {
       requireUrl(locationId, 'giftCardUrl', byId.get(locationId)?.giftCardUrl);
     }

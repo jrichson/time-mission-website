@@ -158,6 +158,10 @@ for (const relPath of ['src/partials/groups-main.frag.txt']) {
       errors.push(`${relPath}: ${groupType} card CTAs must resolve through the selected location group form`);
     }
   }
+  const genericGroupCtas = html.match(/data-tm-booking-kind="groups"(?![^>]*data-tm-group-type)/g) || [];
+  if (genericGroupCtas.length < 2) {
+    errors.push(`${relPath}: generic group CTAs must use the default selected-location group form`);
+  }
   const eventCardTicketCtas = html.match(/class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets"/g) || [];
   if (eventCardTicketCtas.length < 6) {
     errors.push(`${relPath}: group event card Book Now CTAs must resolve through the standard ticket booking flow`);
