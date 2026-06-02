@@ -22,12 +22,16 @@
             position: absolute;
             inset: 0;
             z-index: 0;
-            background: var(--black) url('/assets/video/groups-hero-poster-960.webp') center 40% / cover no-repeat;
+            background: var(--black);
         }
 
-        @media (min-width: 769px) {
+        @media (max-width: 768px) {
             .hero-bg {
-                background-image: url('/assets/video/groups-hero-poster.jpg');
+                background: var(--black) url('/assets/video/groups-hero-poster-960.webp') center 40% / cover no-repeat;
+            }
+
+            .hero-bg video {
+                display: none;
             }
         }
 
@@ -864,22 +868,11 @@
             margin: 0 auto;
         }
 
-            flex-wrap: wrap;
-        }
-
         @media (max-width: 768px) {
             .hero {
                 min-height: 60vh;
                 min-height: 60svh;
                 padding: 8rem 1.5rem 3rem;
-            }
-
-            .hero-bg {
-                background-image: url('/assets/video/groups-hero-poster-960.webp');
-            }
-
-            .hero-bg video {
-                display: none;
             }
 
             .hero-title {
