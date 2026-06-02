@@ -7,8 +7,8 @@
 
     // ==========================================
     // HERO VIDEO + REDUCED MOTION / DATA SAVER
-    // Keep the poster as the first paint, then defer muted playback for users
-    // who have not asked for reduced motion or data savings.
+    // Keep the video-matched poster as the first paint, then switch to the
+    // static fallback only for reduced motion, data saver, or blocked playback.
     // ==========================================
     function initHeroVideo() {
         var heroVideoEl = document.getElementById('heroVideo');
@@ -16,7 +16,17 @@
         var heroVideoShell = heroVideoEl.closest ? heroVideoEl.closest('.hero-video-container') : null;
 
         function revealHeroVideo() {
-            if (heroVideoShell) heroVideoShell.classList.add('is-video-ready');
+            if (heroVideoShell) {
+                heroVideoShell.classList.remove('is-video-fallback');
+                heroVideoShell.classList.add('is-video-ready');
+            }
+        }
+
+        function revealHeroFallback() {
+            if (heroVideoShell) {
+                heroVideoShell.classList.remove('is-video-ready');
+                heroVideoShell.classList.add('is-video-fallback');
+            }
         }
 
         if (shouldLimitAutoplayMedia()) {
@@ -24,7 +34,7 @@
             heroVideoEl.removeAttribute('loop');
             heroVideoEl.preload = 'none';
             heroVideoEl.pause();
-            if (heroVideoShell) heroVideoShell.classList.remove('is-video-ready');
+            revealHeroFallback();
             return;
         }
 
@@ -45,7 +55,7 @@
             function kickHeroPlayback() {
                 if (attempted) return;
                 attempted = true;
-                heroVideoEl.play().then(revealHeroVideo).catch(function () {});
+                heroVideoEl.play().then(revealHeroVideo).catch(revealHeroFallback);
             }
 
             heroVideoEl.preload = 'metadata';

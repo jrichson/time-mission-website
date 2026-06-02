@@ -4,7 +4,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const locationPageAssets = require('../../src/data/site/location-page-assets.json');
 
-const HERO_POSTER = '/assets/photos/experiences/ready-to-play-1200.webp';
+const HERO_POSTER = '/assets/video/hero-poster-960.webp';
+const AUTOPLAY_FALLBACK = '/assets/photos/experiences/ready-to-play-1200.webp';
 
 function parseAttributes(tag) {
   const attrs = {};
@@ -84,6 +85,9 @@ function inspectHeroVideoCss(css, label = 'hero css') {
   if (!body.includes(HERO_POSTER)) {
     errors.push(`${label}: .hero-video-container must paint ${HERO_POSTER} as fallback background`);
   }
+  if (!body.includes('.hero-video-container.is-video-fallback') || !body.includes(AUTOPLAY_FALLBACK)) {
+    errors.push(`${label}: static fallback image must be scoped to .hero-video-container.is-video-fallback`);
+  }
   if (!body.includes('.hero-video-container.is-video-ready video')) {
     errors.push(`${label}: missing .hero-video-container.is-video-ready video reveal rule`);
   }
@@ -99,6 +103,7 @@ function inspectHeroVideoRuntime(js, label = 'hero runtime') {
     ['loadeddata', 'wait for loadeddata before playback reveal'],
     ['canplay', 'wait for canplay before playback reveal'],
     ['is-video-ready', 'reveal video only after it can paint'],
+    ['is-video-fallback', 'show static fallback only when playback is limited or blocked'],
   ];
   for (const [needle, description] of required) {
     if (!body.includes(needle)) errors.push(`${label}: must ${description}`);

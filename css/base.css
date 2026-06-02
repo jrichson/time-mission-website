@@ -67,6 +67,10 @@ html {
 
 @media (max-width: 768px) {
     body .hero .hero-video-container {
+        background-image: url('/assets/video/hero-poster-960.webp');
+    }
+
+    body .hero .hero-video-container.is-video-fallback {
         background-image: url('/assets/photos/experiences/ready-to-play-1200.webp');
     }
 
