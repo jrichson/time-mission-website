@@ -18,6 +18,8 @@ Normalized events use a small shared schema so GTM `dataLayer` pushes and a futu
 | `parameters` | object | Keys must map to `parameters` in `analytics-labels.json` (GTM-friendly aliases). |
 | `consent_snapshot` | object | Subset of Consent Mode states the client knew at enqueue time (non-PII). |
 | `consent_profile` | string | Route-derived profile (`eu_strict`, `us_open`, `global_strict`) for policy/debug context. |
+| `location_slug` / `region` / `location_name` | string | Non-PII location routing context. `js/analytics.js` enriches events from explicit params, destination URLs, page location, selected site location, or form location where available. |
+| `form_name` / `form_subject` | string | Non-PII form context. `form_subject` must be a controlled option id, not free text. |
 | `utm_*` / click IDs | string | Campaign attribution context (for example `utm_source`, `utm_campaign`, `gclid`, `fbclid`, `msclkid`) captured from landing URL and persisted in local storage. |
 
 ## Forbidden (PII and free text)
@@ -27,11 +29,13 @@ Do **not** send:
 - Visitor **email**, **name**, **phone**, **address**, raw **message** / **comment** body, or other direct identifiers.
 - Full free-text **subject** lines from contact forms.
 
-Use **counts**, **option ids** (e.g. `subject: "groups"`), **slugs**, and **paths** only.
+Use **counts**, **option ids** (e.g. `form_subject: "groups"`), **slugs**, and **paths** only.
 
 ## Alignment
 
 Runtime labels and GTM event names are defined in `src/data/site/analytics-labels.json`. `js/analytics.js` embeds the same object as `TM_ANALYTICS_LABELS_EMBED`; `npm run check:analytics` fails on drift or banned substrings.
+
+GTM location routing should use `parameters.LOCATION_SLUG` first. If a normalized event cannot provide a location slug, location-specific GA4/Meta routing is expected to skip that event instead of guessing.
 
 Separately, the head bootstrap pushes a one-time `dataLayer` config event (`tm_tagging_config`) with non-PII routing metadata for web+server GTM orchestration (`tagging_mode`, server URL/path, web container ID, `consent_profile`). This is operator config context, not a conversion event.
 

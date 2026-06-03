@@ -30,6 +30,7 @@
             page_path: 'PAGE_PATH',
             cta_id: 'CTA_ID',
             location_slug: 'LOCATION_SLUG',
+            location_name: 'LOCATION_NAME',
             region: 'REGION',
             destination_url: 'DESTINATION_URL',
             event_id: 'EVENT_ID',
@@ -50,6 +51,7 @@
             landing_page: 'LANDING_PAGE',
             landing_referrer: 'LANDING_REFERRER',
             form_name: 'FORM_NAME',
+            form_subject: 'FORM_SUBJECT',
             consent_snapshot: 'CONSENT_SNAPSHOT',
             consent_profile: 'CONSENT_PROFILE',
             timestamp: 'TIMESTAMP',
@@ -291,6 +293,130 @@
         return '';
     }
 
+    function normalizeLocationSlug(value) {
+        return String(value || '')
+            .toLowerCase()
+            .trim()
+            .replace(/&/g, 'and')
+            .replace(/[\s_]+/g, '-')
+            .replace(/[^a-z0-9-]/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    }
+
+    function routingKey(value) {
+        return normalizeLocationSlug(value).replace(/-/g, '');
+    }
+
+    function usableLocationSlug(value) {
+        var slug = normalizeLocationSlug(value);
+        return slug && slug !== 'general' ? slug : '';
+    }
+
+    function locationRecords() {
+        if (window.TM && Array.isArray(window.TM.locations) && window.TM.locations.length) {
+            return window.TM.locations;
+        }
+        if (window.TM_DATA && Array.isArray(window.TM_DATA.locations) && window.TM_DATA.locations.length) {
+            return window.TM_DATA.locations;
+        }
+        return [];
+    }
+
+    function contractLocationIds() {
+        var contract = window.__TM_SITE_CONTRACT__ || {};
+        return Array.isArray(contract.locationIds) ? contract.locationIds : [];
+    }
+
+    function findLocation(slug) {
+        var needle = routingKey(slug);
+        if (!needle) return null;
+        var records = locationRecords();
+        for (var i = 0; i < records.length; i += 1) {
+            var loc = records[i] || {};
+            var candidates = [loc.id, loc.slug, loc.shortName, loc.name];
+            for (var j = 0; j < candidates.length; j += 1) {
+                if (routingKey(candidates[j]) === needle) return loc;
+            }
+        }
+        return null;
+    }
+
+    function slugFromKnownLocations(value) {
+        var haystack = routingKey(value);
+        if (!haystack) return '';
+
+        var records = locationRecords();
+        for (var i = 0; i < records.length; i += 1) {
+            var loc = records[i] || {};
+            var slug = usableLocationSlug(loc.slug || loc.id);
+            if (slug && haystack.indexOf(routingKey(slug)) !== -1) return slug;
+        }
+
+        var ids = contractLocationIds();
+        for (var j = 0; j < ids.length; j += 1) {
+            var id = usableLocationSlug(ids[j]);
+            if (id && haystack.indexOf(routingKey(id)) !== -1) return id;
+        }
+
+        return '';
+    }
+
+    function locationSlugFromCurrentSelection() {
+        var current = window.TM && window.TM.current;
+        var currentSlug = current && (current.slug || current.id);
+        if (currentSlug) return usableLocationSlug(currentSlug);
+        if (window.TM && typeof window.TM.getSavedSlug === 'function') {
+            return usableLocationSlug(window.TM.getSavedSlug());
+        }
+        return '';
+    }
+
+    function locationSlugFromForm() {
+        var field = null;
+        try {
+            field = document.querySelector(
+                'form.contact-form [name="location"], form[data-tm-form="newsletter"] [name="location"]'
+            );
+        } catch (e) {}
+        return usableLocationSlug(field && field.value);
+    }
+
+    function locationSlugFromBody() {
+        return usableLocationSlug(document.body && document.body.dataset && document.body.dataset.location);
+    }
+
+    function locationSlugFromPagePath() {
+        return slugFromKnownLocations(window.location && window.location.pathname);
+    }
+
+    function locationSlugFromDestination(raw) {
+        return slugFromKnownLocations(raw && (raw.destination_url || raw.link_path || raw.landing_page || ''));
+    }
+
+    function resolveLocationContext(params) {
+        var raw = params || {};
+        var slug =
+            usableLocationSlug(raw.location_slug) ||
+            locationSlugFromDestination(raw) ||
+            locationSlugFromForm() ||
+            locationSlugFromBody() ||
+            locationSlugFromCurrentSelection() ||
+            locationSlugFromPagePath();
+
+        if (!slug) return {};
+
+        var loc = findLocation(slug);
+        var context = {
+            location_slug: usableLocationSlug((loc && (loc.slug || loc.id)) || slug),
+        };
+        if (loc && loc.region) context.region = String(loc.region).slice(0, 80);
+        if (loc && (loc.shortName || loc.name)) {
+            context.location_name = String(loc.shortName || loc.name).slice(0, 120);
+        }
+        return context;
+    }
+
     function hasBannedParamKey(params) {
         if (!params) return false;
         var banned = /^(visitor_)?(email|e_mail|phone|message|name|first_?name|last_?name|fullname)$/i;
@@ -301,7 +427,8 @@
     }
 
     function buildRawParams(params) {
-        return Object.assign({}, getAttributionPayload(), cachedConsentContext, params || {});
+        var explicit = params || {};
+        return Object.assign({}, getAttributionPayload(), cachedConsentContext, resolveLocationContext(explicit), explicit);
     }
 
     function mapParameterAliases(raw, paramAliases) {

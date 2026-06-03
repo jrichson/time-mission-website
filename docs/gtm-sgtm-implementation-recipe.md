@@ -29,6 +29,11 @@ Create **Data Layer Variables**:
 - `dlv.event_name` -> `event_name`
 - `dlv.event_id` -> `event_id`
 - `dlv.parameters` -> `parameters`
+- `dlv.parameters.location_slug` -> `parameters.LOCATION_SLUG`
+- `dlv.parameters.location_name` -> `parameters.LOCATION_NAME`
+- `dlv.parameters.region` -> `parameters.REGION`
+- `dlv.parameters.form_name` -> `parameters.FORM_NAME`
+- `dlv.parameters.form_subject` -> `parameters.FORM_SUBJECT`
 - `dlv.parameters.consent_snapshot` -> `parameters.CONSENT_SNAPSHOT`
 - `dlv.parameters.consent_profile` -> `parameters.CONSENT_PROFILE`
 - `dlv.parameters.consent.ad_storage` -> `parameters.CONSENT_SNAPSHOT.ad_storage`
@@ -106,6 +111,11 @@ Create **Custom Event Trigger** (for normalized app events):
   - `consent_analytics_storage` = `{{dlv.parameters.consent.analytics_storage}}`
   - `consent_ad_user_data` = `{{dlv.parameters.consent.ad_user_data}}`
   - `consent_ad_personalization` = `{{dlv.parameters.consent.ad_personalization}}`
+  - `location_slug` = `{{dlv.parameters.location_slug}}`
+  - `location_name` = `{{dlv.parameters.location_name}}`
+  - `region` = `{{dlv.parameters.region}}`
+  - `form_name` = `{{dlv.parameters.form_name}}`
+  - `form_subject` = `{{dlv.parameters.form_subject}}`
   - Plus mapped keys from `{{dlv.parameters}}` as needed in your GA4 schema
 - Trigger: `CE - tracked events`
 - Consent checks: enabled
