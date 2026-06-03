@@ -113,6 +113,7 @@ describe('analytics routing context', () => {
     expect(attempt.parameters).not.toHaveProperty('MESSAGE');
 
     window.location.pathname = '/contact-thank-you';
+    delete window.TM_DATA;
     document.querySelector = () => null;
     runScript('js/contact-form-analytics.js', context);
 
