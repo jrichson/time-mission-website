@@ -19,7 +19,6 @@ pages_build_output_dir = "dist"
 compatibility_date = "2026-05-09"
 
 [vars]
-PUBLIC_TM_MEDIA_BASE = "https://pub-703466e77255453f8a7b58b18dfd4a88.r2.dev"
 PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAADdV7UFMRdD_WvXW"
 
 # Wrangler Direct Upload deploys `dist/` and, when run from this repo root, also uploads
