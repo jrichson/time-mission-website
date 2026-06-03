@@ -3,9 +3,12 @@ import fs from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { applyTmDotEnvToProcess } from './tm-dotenv.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
+
+applyTmDotEnvToProcess(root);
 
 function localBin(name) {
   const ext = process.platform === 'win32' ? '.cmd' : '';

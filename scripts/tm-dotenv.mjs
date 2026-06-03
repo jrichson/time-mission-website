@@ -1,6 +1,6 @@
 /**
- * Shared `.env*` parsing & merge for PUBLIC_TM_MEDIA_BASE (R2 CDN base URL).
- * Used by scripts/sync-static-to-public.mjs and astro.config.mjs so behavior matches.
+ * Shared public build env parsing and merge.
+ * Used by scripts/sync-static-to-public.mjs and the Astro build wrapper so behavior matches.
  *
  * Matches common shell habits: `export PUBLIC_TM_MEDIA_BASE=https://…`
  */
@@ -13,6 +13,8 @@ export const TM_ENV_FILE_CHAIN = [
   '.env.production',
   '.env.production.local',
 ];
+
+const WRANGLER_PUBLIC_VAR_SECTIONS = new Set(['vars', 'env.production.vars']);
 
 /**
  * @param {string} content
@@ -58,9 +60,61 @@ export function mergeTmDotEnvFromDisk(repoRoot) {
   return merged;
 }
 
-/** Hydrate process.env from merged `.env*` when shell value is absent or whitespace-only. */
+/**
+ * @param {string} content
+ * @returns {Record<string, string>}
+ */
+export function parseTmWranglerPublicVarsBody(content) {
+  const out = {};
+  const text = typeof content === 'string' ? content.replace(/^\uFEFF/, '') : '';
+  let inPublicVars = false;
+
+  for (const line of text.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+
+    const section = trimmed.match(/^\[([^\]]+)\]$/);
+    if (section) {
+      inPublicVars = WRANGLER_PUBLIC_VAR_SECTIONS.has(section[1].trim());
+      continue;
+    }
+
+    if (!inPublicVars) continue;
+    const eq = trimmed.indexOf('=');
+    if (eq === -1) continue;
+
+    const key = trimmed.slice(0, eq).trim();
+    if (!/^PUBLIC_[A-Z0-9_]+$/.test(key)) continue;
+
+    let val = trimmed.slice(eq + 1).trim();
+    if (
+      (val.startsWith('"') && val.endsWith('"')) ||
+      (val.startsWith("'") && val.endsWith("'"))
+    ) {
+      val = val.slice(1, -1);
+    }
+    out[key] = val;
+  }
+
+  return out;
+}
+
+export function mergeTmWranglerPublicVarsFromDisk(repoRoot) {
+  const abs = path.join(repoRoot, 'wrangler.toml');
+  if (!fs.existsSync(abs)) return {};
+  return parseTmWranglerPublicVarsBody(fs.readFileSync(abs, 'utf8'));
+}
+
+export function mergeTmPublicBuildEnvFromDisk(repoRoot) {
+  return {
+    ...mergeTmWranglerPublicVarsFromDisk(repoRoot),
+    ...mergeTmDotEnvFromDisk(repoRoot),
+  };
+}
+
+/** Hydrate process.env from public build env when shell value is absent or whitespace-only. */
 export function applyTmDotEnvToProcess(repoRoot) {
-  const merged = mergeTmDotEnvFromDisk(repoRoot);
+  const merged = mergeTmPublicBuildEnvFromDisk(repoRoot);
   for (const [key, val] of Object.entries(merged)) {
     const cur = process.env[key];
     const hasShellValue = !(cur === undefined || String(cur).trim() === '');
@@ -76,7 +130,7 @@ export function applyTmDotEnvToProcess(repoRoot) {
 export function normalizedPublicTmMediaBase(repoRoot) {
   let raw = process.env.PUBLIC_TM_MEDIA_BASE;
   if (!(typeof raw === 'string' && raw.trim())) {
-    const fromDisk = mergeTmDotEnvFromDisk(repoRoot).PUBLIC_TM_MEDIA_BASE;
+    const fromDisk = mergeTmPublicBuildEnvFromDisk(repoRoot).PUBLIC_TM_MEDIA_BASE;
     if (typeof fromDisk === 'string' && fromDisk.trim()) {
       raw = fromDisk.trim();
       process.env.PUBLIC_TM_MEDIA_BASE = raw;
