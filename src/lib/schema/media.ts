@@ -66,7 +66,7 @@ export function homeHeroMediaNodes(): Array<ImageObjectNode | VideoObjectNode> {
         imageObjectNode({
             canonicalPath: '/',
             idFragment: 'primaryimage',
-            url: '/assets/video/hero-poster.jpg',
+            url: '/assets/photos/experiences/ready-to-play.jpg',
             name: 'Time Mission interactive mission rooms',
             caption: 'Time Mission teams compete through short, replayable mission rooms.',
         }),
@@ -81,7 +81,7 @@ export function homeHeroMediaNodes(): Array<ImageObjectNode | VideoObjectNode> {
                 name: 'Time Mission challenge room overview',
                 description:
                     'Hero video showing the active indoor Time Mission experience with teams moving through challenge rooms.',
-                thumbnailUrl: '/assets/video/hero-poster.jpg',
+                thumbnailUrl: '/assets/photos/experiences/ready-to-play.jpg',
                 contentUrl: `${mediaBase}/assets/video/TM-Hero-bg-web-hero.mp4`,
                 uploadDate: '2026-05-09T00:00:00+00:00',
             }),

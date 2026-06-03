@@ -89,12 +89,13 @@ runCheck({
     for (const file of fs.readdirSync(pagesDir).filter((name) => name.endsWith('.astro'))) {
       const rel = path.join('src', 'pages', file);
       const html = read(rel);
-      if (html.includes('/assets/video/hero-poster-960.webp') && !hasPreload(rel, '/assets/video/hero-poster.jpg')) {
-        errors.push(`${rel}: video poster preload must use fetchpriority="high"`);
+      if (html.includes('/assets/photos/experiences/ready-to-play-1200.webp') && !hasPreload(rel, '/assets/photos/experiences/ready-to-play-1200.webp')) {
+        errors.push(`${rel}: hero first-paint image preload must use the static WebP with fetchpriority="high"`);
       }
-      if (html.includes('/assets/video/hero-poster-960.webp') && !hasPreload(rel, '/assets/video/hero-poster-960.webp')) {
-        errors.push(`${rel}: mobile video poster preload must use the 960px WebP with fetchpriority="high"`);
-      }
+    }
+
+    if (!hasPreload('src/components/LocationPageHeadLinks.astro', '/assets/photos/experiences/ready-to-play-1200.webp')) {
+      errors.push('src/components/LocationPageHeadLinks.astro: location hero first-paint image must preload the static WebP with fetchpriority="high"');
     }
 
     const responsivePreloads = {

@@ -20,8 +20,8 @@
     width: 100%;
     height: 100%;
     z-index: 1;
-    background: var(--black) url('/assets/video/hero-poster.jpg') center/cover no-repeat;
-    background-image: url('/assets/video/hero-poster-960.webp');
+    background: var(--black) url('/assets/photos/experiences/ready-to-play.jpg') center/cover no-repeat;
+    background-image: url('/assets/photos/experiences/ready-to-play-1200.webp');
 }
 
 .hero-video-container.is-video-fallback {

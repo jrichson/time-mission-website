@@ -7,8 +7,8 @@
 
     // ==========================================
     // HERO VIDEO + REDUCED MOTION / DATA SAVER
-    // Keep the video-matched poster as the first paint, then switch to the
-    // static fallback only for reduced motion, data saver, or blocked playback.
+    // Keep the static experience photo as the first paint and fallback, then
+    // reveal the hero video only after playback can paint.
     // ==========================================
     function initHeroVideo() {
         var heroVideoEl = document.getElementById('heroVideo');

@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const locationPageAssets = require('../../src/data/site/location-page-assets.json');
 
-const HERO_POSTER = '/assets/video/hero-poster-960.webp';
+const HERO_POSTER = '/assets/photos/experiences/ready-to-play-1200.webp';
 const AUTOPLAY_FALLBACK = '/assets/photos/experiences/ready-to-play-1200.webp';
 
 function parseAttributes(tag) {
@@ -83,7 +83,7 @@ function inspectHeroVideoCss(css, label = 'hero css') {
     errors.push(`${label}: missing .hero-video-container rule`);
   }
   if (!body.includes(HERO_POSTER)) {
-    errors.push(`${label}: .hero-video-container must paint ${HERO_POSTER} as fallback background`);
+    errors.push(`${label}: .hero-video-container must paint ${HERO_POSTER} as the first-paint fallback background`);
   }
   if (!body.includes('.hero-video-container.is-video-fallback') || !body.includes(AUTOPLAY_FALLBACK)) {
     errors.push(`${label}: static fallback image must be scoped to .hero-video-container.is-video-fallback`);
