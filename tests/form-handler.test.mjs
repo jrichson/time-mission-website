@@ -153,6 +153,17 @@ describe('Cloudflare form handler', () => {
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       'https://api.resend.com/emails',
     ]);
+
+    const emailPayload = JSON.parse(calls.at(-1).init.body);
+    expect(emailPayload).toMatchObject({
+      reply_to: 'guest@example.com',
+      subject: 'Time Mission contact: TX - Houston - Group Events',
+      text: expect.stringContaining('Location: TX - Houston'),
+      to: ['ops@timemission.com'],
+    });
+    expect(emailPayload.html).toContain('New contact inquiry');
+    expect(emailPayload.html).toContain('TX - Houston');
+    expect(emailPayload.html).toContain('Question about groups');
   });
 
   it('requires a Cloudflare D1 form archive unless explicitly disabled', async () => {
@@ -255,8 +266,13 @@ describe('Cloudflare form handler', () => {
     });
 
     expect(response.status).toBe(200);
-    expect(calls.at(-1).url).toBe('https://api.resend.com/emails');
-    expect(calls.at(-1).body.to).toEqual(['palisades@timemission.com']);
+    const emailCall = calls.at(-1);
+    expect(emailCall.url).toBe('https://api.resend.com/emails');
+    expect(emailCall.body).toMatchObject({
+      subject: 'Time Mission contact: NY - West Nyack - Group Events',
+      to: ['palisades@timemission.com'],
+    });
+    expect(emailCall.body.html).toContain('NY - West Nyack');
   });
 
   it('subscribes newsletter opt-ins to Klaviyo before sending fallback email', async () => {
@@ -306,6 +322,15 @@ describe('Cloudflare form handler', () => {
         },
       },
     });
+
+    const newsletterPayload = JSON.parse(calls.at(-1).init.body);
+    expect(newsletterPayload).toMatchObject({
+      subject: 'Time Mission newsletter signup: Guest Example',
+      text: expect.stringContaining('Location: NY - West Nyack'),
+      to: ['newsletter@timemission.com'],
+    });
+    expect(newsletterPayload.html).toContain('New newsletter signup');
+    expect(newsletterPayload.html).toContain('NY - West Nyack');
   });
 
   it('rate limits repeated submissions before paid email delivery', async () => {

@@ -158,6 +158,7 @@ Set these before preview sign-off:
 - [ ] `FORM_EMAIL_API_KEY`
 - [ ] `FORM_FROM_EMAIL`
 - [ ] `CONTACT_TO_EMAIL`
+- [ ] Optional location-specific contact recipients using the selector-derived pattern `CONTACT_TO_EMAIL_<LOCATION>`, for example `CONTACT_TO_EMAIL_MOUNT_PROSPECT`, `CONTACT_TO_EMAIL_ORLAND_PARK`, `CONTACT_TO_EMAIL_WEST_NYACK`, `CONTACT_TO_EMAIL_HOUSTON`, or `CONTACT_TO_EMAIL_GENERAL`; unset locations fall back to `CONTACT_TO_EMAIL`
 - [ ] `NEWSLETTER_TO_EMAIL`
 - [ ] `TURNSTILE_SECRET_KEY`
 - [ ] D1 database created for form submissions and bound as `FORM_SUBMISSIONS_DB`

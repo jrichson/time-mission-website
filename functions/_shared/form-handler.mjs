@@ -17,6 +17,30 @@ const DEFAULT_ALLOWED_ORIGINS = [
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const memoryRateLimits = new Map();
 
+const CONTACT_LOCATION_LABELS = {
+  antwerp: 'Belgium - Antwerp',
+  brussels: 'Belgium - Brussels',
+  dallas: 'TX - Dallas',
+  general: 'General Inquiry',
+  houston: 'TX - Houston',
+  lincoln: 'RI - Lincoln',
+  manassas: 'VA - Manassas',
+  'mount-prospect': 'IL - Mount Prospect',
+  'orland-park': 'IL - Orland Park',
+  philadelphia: 'PA - Philadelphia',
+  'west-nyack': 'NY - West Nyack',
+};
+
+const CONTACT_SUBJECT_LABELS = {
+  birthday: 'Birthday Parties',
+  booking: 'Booking Question',
+  corporate: 'Corporate Events',
+  feedback: 'Feedback',
+  general: 'General Inquiry',
+  groups: 'Group Events',
+  other: 'Other',
+};
+
 export class FormError extends Error {
   constructor(message, status = 400, publicMessage = message) {
     super(message);
@@ -54,6 +78,81 @@ function htmlEscape(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+function humanizeSlug(value) {
+  const normalized = normalizeText(value, 160).replace(/[-_]+/g, ' ');
+  if (!normalized) return '';
+  return normalized.replace(/\b[a-z]/g, (char) => char.toUpperCase());
+}
+
+function contactLocationLabel(location) {
+  return CONTACT_LOCATION_LABELS[location] || humanizeSlug(location);
+}
+
+function contactSubjectLabel(subject) {
+  return CONTACT_SUBJECT_LABELS[subject] || humanizeSlug(subject);
+}
+
+function notificationRows(rows) {
+  return rows
+    .filter((row) => row.value)
+    .map((row) => `
+      <tr>
+        <td style="padding: 14px 0; border-bottom: 1px solid #E7E2D9;">
+          <div style="font: 700 11px/1.2 Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; color: #8A8378;">${htmlEscape(row.label)}</div>
+          <div style="margin-top: 5px; font: 600 16px/1.4 Arial, sans-serif; color: #17130F;">${htmlEscape(row.value)}</div>
+        </td>
+      </tr>
+    `)
+    .join('');
+}
+
+function notificationEmailHtml({
+  intro,
+  message,
+  messageLabel = 'Message',
+  preheader,
+  rows,
+  title,
+}) {
+  const messageHtml = message
+    ? `
+      <div style="margin-top: 24px;">
+        <div style="font: 700 11px/1.2 Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; color: #8A8378;">${htmlEscape(messageLabel)}</div>
+        <div style="margin-top: 8px; padding: 18px; border-radius: 8px; background: #F7F2EA; border: 1px solid #E7E2D9; font: 16px/1.6 Arial, sans-serif; color: #17130F;">${htmlEscape(message).replaceAll('\n', '<br>')}</div>
+      </div>
+    `
+    : '';
+
+  return `
+    <!doctype html>
+    <html>
+      <body style="margin: 0; padding: 0; background: #0D0D0D;">
+        <div style="display: none; max-height: 0; overflow: hidden; opacity: 0;">${htmlEscape(preheader)}</div>
+        <div style="padding: 32px 14px; background: #0D0D0D;">
+          <div style="max-width: 640px; margin: 0 auto; overflow: hidden; border-radius: 12px; background: #FFF8EF; border: 1px solid #2E251F;">
+            <div style="background: #151515; padding: 26px 28px 24px; border-bottom: 4px solid #FF6B2C;">
+              <div style="font: 700 12px/1.2 Arial, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: #FFB47F;">Time Mission Website</div>
+              <h1 style="margin: 10px 0 0; font: 700 28px/1.1 Arial, sans-serif; color: #FFF8EF;">${htmlEscape(title)}</h1>
+              <p style="margin: 12px 0 0; font: 15px/1.6 Arial, sans-serif; color: #D8D1C6;">${htmlEscape(intro)}</p>
+            </div>
+            <div style="padding: 28px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                <tbody>
+                  ${notificationRows(rows)}
+                </tbody>
+              </table>
+              ${messageHtml}
+              <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #E7E2D9; font: 13px/1.5 Arial, sans-serif; color: #6F665A;">
+                Reply directly to this email to respond to the guest. This notification was sent by the Time Mission website form handler.
+              </div>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
 }
 
 function envList(value) {
@@ -366,58 +465,68 @@ async function verifyTurnstile({ env, fetchImpl, request, token }) {
 }
 
 function contactEmail(data) {
+  const locationLabel = contactLocationLabel(data.location);
+  const subjectLabel = contactSubjectLabel(data.subject);
   const text = [
     'New Time Mission contact form submission',
     '',
     `Name: ${data.name}`,
     `Email: ${data.email}`,
-    `Location: ${data.location}`,
-    `Subject: ${data.subject}`,
+    `Location: ${locationLabel}`,
+    `Subject: ${subjectLabel}`,
     '',
     data.message,
   ].join('\n');
 
-  const html = `
-    <h2>New Time Mission contact form submission</h2>
-    <p><strong>Name:</strong> ${htmlEscape(data.name)}</p>
-    <p><strong>Email:</strong> ${htmlEscape(data.email)}</p>
-    <p><strong>Location:</strong> ${htmlEscape(data.location)}</p>
-    <p><strong>Subject:</strong> ${htmlEscape(data.subject)}</p>
-    <p><strong>Message:</strong></p>
-    <p>${htmlEscape(data.message).replaceAll('\n', '<br>')}</p>
-  `;
+  const html = notificationEmailHtml({
+    intro: 'A guest submitted the contact form. Reply to this email to continue the conversation.',
+    message: data.message,
+    preheader: `${locationLabel} contact inquiry from ${data.name}`,
+    rows: [
+      { label: 'Name', value: data.name },
+      { label: 'Email', value: data.email },
+      { label: 'Location', value: locationLabel },
+      { label: 'Subject', value: subjectLabel },
+    ],
+    title: 'New contact inquiry',
+  });
 
   return {
     html,
     replyTo: data.email,
-    subject: `Time Mission contact: ${data.subject}`,
+    subject: `Time Mission contact: ${locationLabel} - ${subjectLabel}`,
     text,
   };
 }
 
 function newsletterEmail(data) {
   const fullName = [data.givenName, data.familyName].filter(Boolean).join(' ');
+  const locationLabel = contactLocationLabel(data.location);
   const text = [
     'New Time Mission newsletter signup',
     '',
     `Name: ${fullName}`,
     `Email: ${data.email}`,
-    `Location: ${data.location}`,
+    `Location: ${locationLabel}`,
     'Marketing opt-in: yes',
   ].join('\n');
 
-  const html = `
-    <h2>New Time Mission newsletter signup</h2>
-    <p><strong>Name:</strong> ${htmlEscape(fullName)}</p>
-    <p><strong>Email:</strong> ${htmlEscape(data.email)}</p>
-    <p><strong>Location:</strong> ${htmlEscape(data.location)}</p>
-    <p><strong>Marketing opt-in:</strong> yes</p>
-  `;
+  const html = notificationEmailHtml({
+    intro: 'A visitor opted in for Time Mission news and special offers.',
+    preheader: `${fullName || data.email} joined the newsletter`,
+    rows: [
+      { label: 'Name', value: fullName || 'Not provided' },
+      { label: 'Email', value: data.email },
+      { label: 'Location', value: locationLabel },
+      { label: 'Marketing opt-in', value: 'Yes' },
+    ],
+    title: 'New newsletter signup',
+  });
 
   return {
     html,
     replyTo: data.email,
-    subject: `Time Mission newsletter signup: ${data.email}`,
+    subject: `Time Mission newsletter signup: ${fullName || data.email}`,
     text,
   };
 }
