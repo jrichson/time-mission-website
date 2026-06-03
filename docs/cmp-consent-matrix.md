@@ -23,8 +23,8 @@ The site pushes `tm_tagging_config` on startup with:
 `consent_profile` is route-derived:
 
 - `eu_strict` for EU location pages
-- `us_open` for US location pages
-- `global_strict` for non-location/global pages
+- `us_open` for all other generated public routes, including US location, marketing, form, and legal pages
+- `global_strict` is reserved for explicit future strict routes or defensive runtime fallback behavior
 
 ## Consent defaults by profile
 
@@ -32,7 +32,7 @@ The site pushes `tm_tagging_config` on startup with:
 |---|---|---|---|---|---|
 | `eu_strict` | denied | denied | denied | denied | Default-deny until CMP update |
 | `us_open` | granted | granted | granted | granted | More permissive baseline; still CMP-overridable |
-| `global_strict` | denied | denied | denied | denied | Conservative default for global/non-location pages |
+| `global_strict` | denied | denied | denied | denied | Reserved conservative profile for explicit future strict surfaces |
 
 ## GTM web container mapping
 
@@ -67,16 +67,16 @@ In server-side container logic:
 - Require explicit CMP update before ad/analytics destinations.
 - Do not rely on inferred or previously stored consent for ad personalization.
 
-### US pages (`us_open`)
+### US and global public pages (`us_open`)
 
 - Default-granted baseline can run for allowed states/policies.
 - CMP should still apply user-level overrides and opt-outs.
 - If state-level restrictions are required, CMP must call `TMConsent.update` quickly on page load.
 
-### Global pages (`global_strict`)
+### Reserved strict pages (`global_strict`)
 
-- Keep conservative default-deny.
-- Use CMP updates to enable where legally appropriate.
+- Use only for explicit future strict surfaces.
+- Keep conservative default-deny when this profile is intentionally assigned.
 
 ## Dedupe and attribution controls
 
@@ -93,7 +93,7 @@ In server-side container logic:
 ## QA checklist
 
 - GTM Preview shows `tm_tagging_config` on load.
-- `consent_profile` value matches page type (EU/US/global).
+- `consent_profile` value matches page type (EU vs default-open public routes).
 - CMP update events change consent state as expected.
 - sGTM receives events only when expected by consent policy.
 - Dedupe behavior is stable for web + server copies of same event.

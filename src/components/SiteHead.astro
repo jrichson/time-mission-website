@@ -64,7 +64,9 @@ for (const entry of allLocations) {
 }
 const currentRegion = pathRegionMap.get(canonicalPath) || '';
 const consentProfile: ConsentProfile =
-    currentRegion === 'europe' ? 'eu_strict' : currentRegion === 'us' ? 'us_open' : 'global_strict';
+    currentRegion === 'europe'
+        ? 'eu_strict'
+        : 'us_open';
 
 const consentDefaults: ConsentDefaults =
     consentProfile === 'us_open'

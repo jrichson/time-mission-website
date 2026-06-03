@@ -22,8 +22,17 @@ test('startup tagging config exposes consent profile by route type', async ({ pa
   await page.goto('/houston');
   await expect.poll(async () => readTaggingConsentProfile(page)).toBe('us_open');
 
+  await page.goto('/contact');
+  await expect.poll(async () => readTaggingConsentProfile(page)).toBe('us_open');
+
+  await page.goto('/contact-thank-you');
+  await expect.poll(async () => readTaggingConsentProfile(page)).toBe('us_open');
+
   await page.goto('/faq');
-  await expect.poll(async () => readTaggingConsentProfile(page)).toBe('global_strict');
+  await expect.poll(async () => readTaggingConsentProfile(page)).toBe('us_open');
+
+  await page.goto('/antwerp');
+  await expect.poll(async () => readTaggingConsentProfile(page)).toBe('eu_strict');
 });
 
 test('strict profiles do not persist paid attribution before consent grant', async ({ page }) => {

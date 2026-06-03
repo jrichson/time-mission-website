@@ -147,12 +147,12 @@ Use `consent_profile` from `tm_tagging_config` as policy context:
 
 - `eu_strict`: require explicit consent enablement before ad/analytics destinations.
 - `us_open`: allow default-granted path but still honor user opt-outs/CMP updates.
-- `global_strict`: keep default-deny unless updated.
+- `global_strict`: reserved strict/fallback profile; keep default-deny unless updated.
 
 ## 7) QA flow (copy-paste checklist)
 
 - [ ] In GTM Preview, `tm_tagging_config` appears once on load.
-- [ ] `consent_profile` matches page type (EU/US/global).
+- [ ] `consent_profile` matches page type (EU vs default-open public routes).
 - [ ] `tagging_mode` reflects env configuration.
 - [ ] Routed tags only fire when `web_and_sgtm` is active.
 - [ ] No duplicate GA4 events for same `event_id` unless intentionally dual-tracking.

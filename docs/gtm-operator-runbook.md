@@ -30,8 +30,8 @@ Use those values in GTM variables/triggers to route specific tags to server-side
 
 - Defaults are set in `SiteHead.astro` **before** the GTM snippet runs with route-aware profiles:
   - `eu_strict` (EU location pages): marketing/analytics defaults **denied**
-  - `us_open` (US location pages): marketing/analytics defaults **granted**
-  - `global_strict` (all non-location/global pages): marketing/analytics defaults **denied**
+  - `us_open` (all other generated public routes): marketing/analytics defaults **granted**
+  - `global_strict` (reserved future strict routes or fallback behavior): marketing/analytics defaults **denied**
 - A CMP or operator can still override at runtime via `window.TMConsent.update({ … })`.
 - Validate in Tag Assistant that **`consent`** default and any **update** events match your CMP roadmap.
 
