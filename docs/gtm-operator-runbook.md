@@ -41,6 +41,16 @@ Use those values in GTM variables/triggers to route specific tags to server-side
 2. Trigger on-site actions (booking CTA, ticket panel, contact form focus).
 3. Confirm **non-PII** parameters only — see `docs/analytics-event-contract.md`.
 
+## Offsite Pipedrive group forms
+
+Set each Pipedrive form's success redirect to:
+
+```text
+https://www.timemission.com/group-form-thank-you/{location_slug}/{form_subject}
+```
+
+The generated pages emit `GROUP_FORM_SUBMIT_SUCCESS` with `parameters.LOCATION_SLUG`, `parameters.LOCATION_NAME`, `parameters.REGION`, `parameters.FORM_NAME`, `parameters.FORM_SUBJECT`, and `parameters.PROVIDER`. Use `parameters.LOCATION_SLUG` for location routing and `parameters.FORM_SUBJECT` for group-form type segmentation.
+
 ## Staging vs production
 
 - Use separate containers or workspaces per environment when possible.

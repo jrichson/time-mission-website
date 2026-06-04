@@ -47,21 +47,44 @@ const astroRels = walkAstroFiles(pagesDir);
 const dynamicLandingModules = astroRels.filter(hasDynamicSegment).sort();
 const staticAstroRels = astroRels.filter((rel) => !hasDynamicSegment(rel));
 
-const outputFiles = [...new Set(staticAstroRels.map(astroRelToOutputHtml))].sort();
-
 const registry = JSON.parse(fs.readFileSync(routesPath, 'utf8'));
 const locationsDocument = JSON.parse(fs.readFileSync(locationsPath, 'utf8'));
 const routeOutputs = new Set(
   (registry.routes || []).map((r) => String(r.outputFile || '').replace(/^\//, '')),
 );
 
+function isPipedriveFormUrl(value) {
+  return typeof value === 'string' && value.includes('webforms.pipedrive.com');
+}
+
+function groupFormThankYouOutputFiles(locationsDocument) {
+  const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
+  const files = [];
+  for (const location of locations) {
+    const slug = String(location?.slug || location?.id || '').trim();
+    if (!slug) continue;
+    const formUrls = location.groupFormUrls && typeof location.groupFormUrls === 'object'
+      ? location.groupFormUrls
+      : {};
+    for (const [formKey, url] of Object.entries(formUrls)) {
+      if (!isPipedriveFormUrl(url)) continue;
+      files.push(`group-form-thank-you/${slug}/${formKey}.html`);
+    }
+  }
+  return files;
+}
+
+const staticOutputFiles = [...new Set(staticAstroRels.map(astroRelToOutputHtml))].sort();
+
 const errors = [];
-for (const out of outputFiles) {
+for (const out of staticOutputFiles) {
   if (specialStaticOutputFiles.has(out)) continue;
   if (!routeOutputs.has(out)) {
     errors.push(`Compiled Astro output "${out}" has no matching routes.json outputFile`);
   }
 }
+
+const outputFiles = [...new Set([...staticOutputFiles, ...groupFormThankYouOutputFiles(locationsDocument)])].sort();
 
 if (errors.length) {
   console.error('compile-route-artifacts failed:');

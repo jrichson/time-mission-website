@@ -12,6 +12,7 @@ const errors = [];
 const labelPath = path.join(root, 'src', 'data', 'site', 'analytics-labels.json');
 const analyticsJs = path.join(root, 'js', 'analytics.js');
 const contactJs = path.join(root, 'js', 'contact-form-analytics.js');
+const groupThankYouJs = path.join(root, 'js', 'group-form-thank-you.js');
 
 function read(p) {
     return fs.readFileSync(p, 'utf8');
@@ -110,6 +111,7 @@ if (!errors.length) {
 
 scanNoPii(analyticsJs, 'js/analytics.js');
 scanNoPii(contactJs, 'js/contact-form-analytics.js');
+scanNoPii(groupThankYouJs, 'js/group-form-thank-you.js');
 
 if (errors.length) {
     console.error('Analytics contract check failed:');

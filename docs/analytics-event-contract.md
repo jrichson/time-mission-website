@@ -20,6 +20,7 @@ Normalized events use a small shared schema so GTM `dataLayer` pushes and a futu
 | `consent_profile` | string | Route-derived profile (`eu_strict`, `us_open`, `global_strict`) for policy/debug context. |
 | `location_slug` / `region` / `location_name` | string | Non-PII location routing context. `js/analytics.js` enriches events from explicit params, destination URLs, page location, selected site location, or form location where available. |
 | `form_name` / `form_subject` | string | Non-PII form context. `form_subject` must be a controlled option id, not free text. |
+| `provider` | string | Non-PII integration/source id such as `pipedrive` for offsite form thank-you pages. |
 | `utm_*` / click IDs | string | Campaign attribution context (for example `utm_source`, `utm_campaign`, `gclid`, `fbclid`, `msclkid`) captured from landing URL and persisted in local storage. |
 
 ## Forbidden (PII and free text)
@@ -36,6 +37,8 @@ Use **counts**, **option ids** (e.g. `form_subject: "groups"`), **slugs**, and *
 Runtime labels and GTM event names are defined in `src/data/site/analytics-labels.json`. `js/analytics.js` embeds the same object as `TM_ANALYTICS_LABELS_EMBED`; `npm run check:analytics` fails on drift or banned substrings.
 
 GTM location routing should use `parameters.LOCATION_SLUG` first. If a normalized event cannot provide a location slug, location-specific GA4/Meta routing is expected to skip that event instead of guessing.
+
+Offsite Pipedrive group forms should redirect to `/group-form-thank-you/{location_slug}/{form_subject}`. Those pages emit `GROUP_FORM_SUBMIT_SUCCESS` once per session/form/location with `provider: "pipedrive"`, `form_name: "pipedrive_group"`, location context, and the controlled form subject id.
 
 Separately, the head bootstrap pushes a one-time `dataLayer` config event (`tm_tagging_config`) with non-PII routing metadata for web+server GTM orchestration (`tagging_mode`, server URL/path, web container ID, `consent_profile`). This is operator config context, not a conversion event.
 

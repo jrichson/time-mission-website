@@ -13,6 +13,27 @@
     "dallas.html",
     "faq.html",
     "gift-cards.html",
+    "group-form-thank-you/manassas/bachelor-ette.html",
+    "group-form-thank-you/manassas/birthdays.html",
+    "group-form-thank-you/manassas/corporate.html",
+    "group-form-thank-you/manassas/default.html",
+    "group-form-thank-you/manassas/field-trips.html",
+    "group-form-thank-you/manassas/holidays.html",
+    "group-form-thank-you/manassas/private-events.html",
+    "group-form-thank-you/mount-prospect/bachelor-ette.html",
+    "group-form-thank-you/mount-prospect/birthdays.html",
+    "group-form-thank-you/mount-prospect/corporate.html",
+    "group-form-thank-you/mount-prospect/default.html",
+    "group-form-thank-you/mount-prospect/field-trips.html",
+    "group-form-thank-you/mount-prospect/holidays.html",
+    "group-form-thank-you/mount-prospect/private-events.html",
+    "group-form-thank-you/orland-park/bachelor-ette.html",
+    "group-form-thank-you/orland-park/birthdays.html",
+    "group-form-thank-you/orland-park/corporate.html",
+    "group-form-thank-you/orland-park/default.html",
+    "group-form-thank-you/orland-park/field-trips.html",
+    "group-form-thank-you/orland-park/holidays.html",
+    "group-form-thank-you/orland-park/private-events.html",
     "groups.html",
     "groups/bachelor-ette.html",
     "groups/birthdays.html",
@@ -37,6 +58,7 @@
     "west-nyack.html"
   ],
   "dynamicLandingModules": [
-    "c/[slug].astro"
+    "c/[slug].astro",
+    "group-form-thank-you/[location]/[form].astro"
   ]
 }

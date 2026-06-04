@@ -34,6 +34,7 @@ Create **Data Layer Variables**:
 - `dlv.parameters.region` -> `parameters.REGION`
 - `dlv.parameters.form_name` -> `parameters.FORM_NAME`
 - `dlv.parameters.form_subject` -> `parameters.FORM_SUBJECT`
+- `dlv.parameters.provider` -> `parameters.PROVIDER`
 - `dlv.parameters.consent_snapshot` -> `parameters.CONSENT_SNAPSHOT`
 - `dlv.parameters.consent_profile` -> `parameters.CONSENT_PROFILE`
 - `dlv.parameters.consent.ad_storage` -> `parameters.CONSENT_SNAPSHOT.ad_storage`
@@ -88,7 +89,7 @@ Create **Custom Event Trigger** (for normalized app events):
 - Event name regex:
 
 ```regex
-^(AD_LANDING|CTA_CLICK|BOOKING_CLICK|CHECKOUT_START|PHONE_CLICK|EMAIL_CLICK|GIFT_CARD_CLICK|LOCATION_SELECT|TICKET_PANEL_OPEN|TICKET_PANEL_CLOSE|MISSION_CARD_CLICK|CONTACT_FORM_FOCUS|CONTACT_FORM_SUBMIT_ATTEMPT|CONTACT_FORM_SUBMIT_SUCCESS|NAV_CTA_CLICK)$
+^(AD_LANDING|CTA_CLICK|BOOKING_CLICK|CHECKOUT_START|PHONE_CLICK|EMAIL_CLICK|GIFT_CARD_CLICK|LOCATION_SELECT|TICKET_PANEL_OPEN|TICKET_PANEL_CLOSE|MISSION_CARD_CLICK|CONTACT_FORM_FOCUS|CONTACT_FORM_SUBMIT_ATTEMPT|CONTACT_FORM_SUBMIT_SUCCESS|GROUP_FORM_SUBMIT_SUCCESS|NAV_CTA_CLICK)$
 ```
 
 ## 3) Web GTM: tags
@@ -116,6 +117,7 @@ Create **Custom Event Trigger** (for normalized app events):
   - `region` = `{{dlv.parameters.region}}`
   - `form_name` = `{{dlv.parameters.form_name}}`
   - `form_subject` = `{{dlv.parameters.form_subject}}`
+  - `provider` = `{{dlv.parameters.provider}}`
   - Plus mapped keys from `{{dlv.parameters}}` as needed in your GA4 schema
 - Trigger: `CE - tracked events`
 - Consent checks: enabled
@@ -162,6 +164,7 @@ Use `consent_profile` from `tm_tagging_config` as policy context:
 ## 7) QA flow (copy-paste checklist)
 
 - [ ] In GTM Preview, `tm_tagging_config` appears once on load.
+- [ ] Pipedrive group forms redirect to `/group-form-thank-you/{location_slug}/{form_subject}` and fire `GROUP_FORM_SUBMIT_SUCCESS` once.
 - [ ] `consent_profile` matches page type (EU vs default-open public routes).
 - [ ] `tagging_mode` reflects env configuration.
 - [ ] Routed tags only fire when `web_and_sgtm` is active.
