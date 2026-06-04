@@ -89,12 +89,12 @@ runCheck({
     for (const file of fs.readdirSync(pagesDir).filter((name) => name.endsWith('.astro'))) {
       const rel = path.join('src', 'pages', file);
       const html = read(rel);
-      if (html.includes('/assets/photos/experiences/server-heist-hero-poster-1200.webp') && !hasPreload(rel, '/assets/photos/experiences/server-heist-hero-poster-1200.webp')) {
+      if (html.includes('/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp') && !hasPreload(rel, '/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp')) {
         errors.push(`${rel}: hero first-paint image preload must use the static WebP with fetchpriority="high"`);
       }
     }
 
-    if (!hasPreload('src/components/LocationPageHeadLinks.astro', '/assets/photos/experiences/server-heist-hero-poster-1200.webp')) {
+    if (!hasPreload('src/components/LocationPageHeadLinks.astro', '/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp')) {
       errors.push('src/components/LocationPageHeadLinks.astro: location hero first-paint image must preload the static WebP with fetchpriority="high"');
     }
 

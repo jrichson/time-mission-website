@@ -29,12 +29,12 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            background: var(--black) url('/assets/photos/experiences/server-heist-hero-poster.jpg') center/cover no-repeat;
-            background-image: url('/assets/photos/experiences/server-heist-hero-poster-1200.webp');
+            background: var(--black) url('/assets/photos/experiences/magma-mayhem-hero-poster.jpg') center/cover no-repeat;
+            background-image: url('/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp');
         }
 
 .hero-video-container.is-video-fallback {
-            background-image: url('/assets/photos/experiences/server-heist-hero-poster-1200.webp');
+            background-image: url('/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp');
         }
 
 .hero-video-container video {
