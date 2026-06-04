@@ -97,14 +97,15 @@ function inspectHeroVideoCss(css, label = 'hero css') {
 function inspectHeroVideoRuntime(js, label = 'hero runtime') {
   const body = String(js || '');
   const errors = [];
-  const required = [
-    ['source[data-src]', 'copy data-src to src only after first paint'],
-    ["preload = 'none'", 'keep preload none before deferred load'],
-    ['loadeddata', 'wait for loadeddata before playback reveal'],
-    ['canplay', 'wait for canplay before playback reveal'],
-    ['is-video-ready', 'reveal video only after it can paint'],
-    ['is-video-fallback', 'show static fallback only when playback is limited or blocked'],
-  ];
+    const required = [
+        ['source[data-src]', 'copy data-src to src only after first paint'],
+        ['runAfterHeroPaint', 'defer source attachment only until the hero first paint'],
+        ["preload = 'auto'", 'load the hero video promptly after the poster paints'],
+        ['loadeddata', 'reveal the first decoded frame without waiting for canplay'],
+        ['playing', 'reveal the video once playback starts'],
+        ['is-video-ready', 'reveal video only after it can paint'],
+        ['is-video-fallback', 'show static fallback only when playback is limited or blocked'],
+    ];
   for (const [needle, description] of required) {
     if (!body.includes(needle)) errors.push(`${label}: must ${description}`);
   }
