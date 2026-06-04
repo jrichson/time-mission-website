@@ -4,8 +4,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const locationPageAssets = require('../../src/data/site/location-page-assets.json');
 
-const HERO_POSTER = '/assets/photos/experiences/ready-to-play-1200.webp';
-const AUTOPLAY_FALLBACK = '/assets/photos/experiences/ready-to-play-1200.webp';
+const HERO_POSTER = '/assets/photos/experiences/server-heist-hero-poster-1200.webp';
+const AUTOPLAY_FALLBACK = '/assets/photos/experiences/server-heist-hero-poster-1200.webp';
 
 function parseAttributes(tag) {
   const attrs = {};

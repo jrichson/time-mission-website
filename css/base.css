@@ -67,11 +67,11 @@ html {
 
 @media (max-width: 768px) {
     body .hero .hero-video-container {
-        background-image: url('/assets/photos/experiences/ready-to-play-1200.webp');
+        background-image: url('/assets/photos/experiences/server-heist-hero-poster-1200.webp');
     }
 
     body .hero .hero-video-container.is-video-fallback {
-        background-image: url('/assets/photos/experiences/ready-to-play-1200.webp');
+        background-image: url('/assets/photos/experiences/server-heist-hero-poster-1200.webp');
     }
 
     body .hero .hero-eyebrow,

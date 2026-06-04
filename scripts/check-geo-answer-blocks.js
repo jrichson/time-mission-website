@@ -114,7 +114,7 @@ const imageExpectations = [
   {
     rel: 'dist/index.html',
     id: 'https://www.timemission.com/#primaryimage',
-        url: 'https://www.timemission.com/assets/photos/experiences/ready-to-play.jpg',
+        url: 'https://www.timemission.com/assets/photos/experiences/server-heist-hero-poster.jpg',
   },
   {
     rel: 'dist/missions.html',
