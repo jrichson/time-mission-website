@@ -95,9 +95,11 @@
 
   .tm-admin-icon {
     display: block;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     flex: 0 0 auto;
+    overflow: visible;
+    padding: 2px;
   }
 
   .tm-admin-icon__frame {
@@ -458,7 +460,15 @@
       inset 0 1px 0 rgba(248, 244, 238, 0.12),
       0 24px 70px rgba(0, 0, 0, 0.22);
     backdrop-filter: blur(14px);
+    overflow: visible;
     padding-inline: 0.35rem;
+  }
+
+  .app-header__brand,
+  .app-header__logo,
+  .app-header__nav-toggler,
+  .app-header__mobile-nav-toggler {
+    overflow: visible;
   }
 
   .template-default,
@@ -496,8 +506,13 @@
   .collection-list__header,
   .list-header {
     margin-top: 0;
-    margin-bottom: 0.75rem;
-    padding-top: 0.25rem;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem 0.35rem;
+  }
+
+  .list-header__title {
+    margin: 0;
+    padding-inline: 0.35rem;
   }
 
   .collection-list__wrap,
