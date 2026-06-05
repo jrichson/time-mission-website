@@ -3,36 +3,40 @@
   html[data-theme='dark'],
   html[data-theme='light'] {
     --tm-black: #050505;
-    --tm-dark: #0d0d0d;
-    --tm-panel: #151515;
-    --tm-panel-raised: #1d1d1f;
-    --tm-line: rgba(255, 255, 255, 0.14);
-    --tm-line-strong: rgba(255, 107, 44, 0.45);
-    --tm-text: #f7f2eb;
-    --tm-muted: #a9a19a;
-    --tm-orange: #ff6b2c;
-    --tm-orange-soft: rgba(255, 107, 44, 0.14);
-    --tm-cyan: #00e5ff;
-    --tm-magenta: #ff2fb3;
+    --tm-dark: #090909;
+    --tm-panel: #111112;
+    --tm-panel-raised: #19191b;
+    --tm-tray: rgba(255, 255, 255, 0.055);
+    --tm-line: rgba(248, 244, 238, 0.13);
+    --tm-line-soft: rgba(248, 244, 238, 0.075);
+    --tm-line-strong: rgba(255, 122, 50, 0.48);
+    --tm-text: #f8f4ee;
+    --tm-muted: rgba(248, 244, 238, 0.68);
+    --tm-muted-strong: rgba(248, 244, 238, 0.82);
+    --tm-orange: #ff7a32;
+    --tm-orange-dark: #f35f22;
+    --tm-orange-soft: rgba(255, 122, 50, 0.13);
+    --tm-cyan: #7ee7f2;
+    --tm-ease: cubic-bezier(0.32, 0.72, 0, 1);
 
     --font-body:
-      -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --style-radius-s: 4px;
-    --style-radius-m: 6px;
-    --style-radius-l: 8px;
+      var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --style-radius-s: 10px;
+    --style-radius-m: 14px;
+    --style-radius-l: 22px;
     --accessibility-outline: 2px solid var(--tm-orange);
 
     --theme-bg: var(--tm-black);
-    --theme-input-bg: #101010;
+    --theme-input-bg: #0f0f10;
     --theme-text: var(--tm-text);
     --theme-border-color: var(--tm-line);
     --theme-overlay: rgba(0, 0, 0, 0.82);
 
     --theme-elevation-0: #070707;
     --theme-elevation-50: #0d0d0d;
-    --theme-elevation-100: #151515;
-    --theme-elevation-150: #1d1d1f;
-    --theme-elevation-200: #262629;
+    --theme-elevation-100: #111112;
+    --theme-elevation-150: #19191b;
+    --theme-elevation-200: #232326;
     --theme-elevation-250: #303034;
     --theme-elevation-300: #3b3b40;
     --theme-elevation-350: #515158;
@@ -68,10 +72,12 @@
 
   body {
     background:
-      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      radial-gradient(circle at 14% 0%, rgba(255, 122, 50, 0.16), transparent 30rem),
+      radial-gradient(circle at 92% 16%, rgba(126, 231, 242, 0.11), transparent 24rem),
+      linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
       var(--tm-black);
-    background-size: 48px 48px;
+    background-size: auto, auto, 56px 56px, 56px 56px, auto;
   }
 
   body::before {
@@ -173,6 +179,7 @@
     border: 1px solid rgba(0, 229, 255, 0.42);
     border-radius: 4px;
     color: var(--tm-cyan);
+    font-family: var(--font-geist-mono), monospace;
     font-size: 0.68rem;
     font-weight: 800;
     line-height: 1;
@@ -180,12 +187,27 @@
 
   .tm-landing-wizard-card {
     display: grid;
-    gap: 1rem;
     margin: 0 0 1.5rem;
     border: 1px solid var(--tm-line);
-    border-radius: 8px;
-    background: rgba(13, 13, 13, 0.88);
-    padding: clamp(1rem, 2vw, 1.35rem);
+    border-radius: 28px;
+    background: var(--tm-tray);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 30px 90px rgba(0, 0, 0, 0.28);
+    padding: 7px;
+  }
+
+  .tm-landing-wizard-card__inner {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+    border: 1px solid var(--tm-line-soft);
+    border-radius: 21px;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0)),
+      rgba(17, 17, 18, 0.92);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.09);
+    padding: clamp(1.05rem, 2vw, 1.5rem);
   }
 
   .tm-landing-wizard-card__header,
@@ -199,15 +221,17 @@
   .tm-landing-wizard-card__eyebrow {
     margin: 0 0 0.45rem;
     color: var(--tm-cyan);
-    font-size: 0.76rem;
-    font-weight: 850;
-    letter-spacing: 0;
-    text-transform: uppercase;
+    font-family: var(--font-geist-mono), monospace;
+    font-size: 0.72rem;
+    font-weight: 680;
+    letter-spacing: 0.02em;
   }
 
   .tm-landing-wizard-card h2 {
     margin: 0;
-    font-size: clamp(1.35rem, 2.2vw, 2rem);
+    font-size: clamp(1.28rem, 2vw, 1.82rem);
+    font-weight: 760;
+    letter-spacing: -0.025em;
     line-height: 1.08;
   }
 
@@ -226,16 +250,27 @@
 
   .tm-landing-wizard-card__button {
     display: inline-flex;
+    appearance: none;
     min-height: 44px;
     flex: 0 0 auto;
     align-items: center;
     justify-content: center;
     border: 1px solid var(--tm-orange);
-    border-radius: 6px;
-    background: var(--tm-orange);
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--tm-orange), var(--tm-orange-dark));
     color: var(--tm-black);
-    font-weight: 850;
-    padding: 0 1rem;
+    font-weight: 760;
+    padding: 0 1.08rem;
+    transition:
+      background 420ms var(--tm-ease),
+      color 420ms var(--tm-ease),
+      transform 420ms var(--tm-ease);
+  }
+
+  .tm-landing-wizard-card__button,
+  .tm-landing-wizard-card__action,
+  .tm-landing-wizard-card__manage {
+    cursor: pointer;
   }
 
   .tm-landing-wizard-card__steps {
@@ -253,9 +288,9 @@
     min-height: 34px;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--tm-line);
-    border-radius: 6px;
-    background: rgba(5, 5, 5, 0.38);
+    border: 1px solid var(--tm-line-soft);
+    border-radius: 999px;
+    background: rgba(5, 5, 5, 0.36);
     color: var(--tm-text);
     font-size: 0.78rem;
     font-weight: 800;
@@ -272,15 +307,22 @@
     gap: 0.35rem;
     min-height: 112px;
     align-content: start;
-    border: 1px solid var(--tm-line);
-    border-radius: 8px;
-    background: rgba(5, 5, 5, 0.34);
+    border: 1px solid var(--tm-line-soft);
+    border-radius: 18px;
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0)),
+      rgba(5, 5, 5, 0.34);
     color: var(--tm-text);
     padding: 0.9rem;
+    transition:
+      background 420ms var(--tm-ease),
+      border-color 420ms var(--tm-ease),
+      color 420ms var(--tm-ease),
+      transform 420ms var(--tm-ease);
   }
 
   .tm-landing-wizard-card__action strong {
-    color: var(--tm-orange);
+    color: var(--tm-text);
     line-height: 1.2;
   }
 
@@ -292,20 +334,26 @@
 
   .tm-landing-wizard-card__manage {
     width: fit-content;
+    border: 1px solid var(--tm-line);
+    border-radius: 999px;
     color: var(--tm-orange);
-    font-weight: 800;
+    font-weight: 760;
+    padding: 0.65rem 0.95rem;
   }
 
   .tm-landing-wizard-card__button:hover,
   .tm-landing-wizard-card__button:focus-visible {
-    background: #ff8a50;
+    background: #ff935c;
     color: var(--tm-black);
+    transform: translateY(-1px);
   }
 
   .tm-landing-wizard-card__action:hover,
   .tm-landing-wizard-card__manage:hover {
     border-color: var(--tm-line-strong);
+    background: var(--tm-orange-soft);
     color: var(--tm-orange);
+    transform: translateY(-2px);
   }
 
   .tm-landing-wizard-card__button:focus-visible,
@@ -327,8 +375,14 @@
   }
 
   .app-header {
-    border-bottom: 1px solid var(--tm-line);
-    background: rgba(5, 5, 5, 0.86);
+    width: min(calc(100% - 32px), 1480px);
+    margin: 16px auto 0;
+    border: 1px solid var(--tm-line);
+    border-radius: 999px;
+    background: rgba(5, 5, 5, 0.78);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 24px 80px rgba(0, 0, 0, 0.32);
     backdrop-filter: blur(18px);
   }
 
@@ -352,6 +406,7 @@
     --hover-bg: #ff8a50;
     --hover-color: var(--tm-black);
     font-weight: 800;
+    border-radius: 999px;
   }
 
   .btn--style-secondary,
@@ -361,6 +416,7 @@
     --hover-btn-border: 1px solid var(--tm-line-strong);
     --hover-color: var(--tm-orange);
     --hover-bg: var(--tm-orange-soft);
+    border-radius: 999px;
   }
 
   input,
@@ -371,6 +427,7 @@
   .rich-text-lexical {
     border-color: var(--tm-line);
     background-color: var(--theme-input-bg);
+    border-radius: 14px;
   }
 
   input:focus,
@@ -388,6 +445,17 @@
     background-color: rgba(13, 13, 13, 0.72);
   }
 
+  .collection-list__wrap,
+  .collection-edit__main,
+  .card,
+  .drawer,
+  .popup__content {
+    border-radius: 22px;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0)),
+      rgba(17, 17, 18, 0.9);
+  }
+
   .table tbody tr:hover {
     background: rgba(255, 107, 44, 0.06);
   }
@@ -395,10 +463,57 @@
   .banner,
   .toast,
   .popup__content {
-    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.36);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+  }
+
+  .tm-landing-wizard-card__button,
+  .tm-landing-wizard-card__action,
+  .tm-landing-wizard-card__manage,
+  .app-header__account,
+  .btn {
+    transition:
+      background 420ms var(--tm-ease),
+      border-color 420ms var(--tm-ease),
+      color 420ms var(--tm-ease),
+      transform 420ms var(--tm-ease),
+      box-shadow 420ms var(--tm-ease);
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn:active,
+  .tm-landing-wizard-card__button:active,
+  .tm-landing-wizard-card__action:active,
+  .tm-landing-wizard-card__manage:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tm-landing-wizard-card__button,
+    .tm-landing-wizard-card__action,
+    .tm-landing-wizard-card__manage,
+    .app-header__account,
+    .btn {
+      transition: none;
+    }
+
+    .btn:hover,
+    .tm-landing-wizard-card__button:hover,
+    .tm-landing-wizard-card__action:hover,
+    .tm-landing-wizard-card__manage:hover {
+      transform: none;
+    }
   }
 
   @media (max-width: 768px) {
+    .app-header {
+      width: calc(100% - 16px);
+      margin-top: 8px;
+      border-radius: 22px;
+    }
+
     .tm-landing-wizard-card__header,
     .tm-landing-wizard-card__body {
       flex-direction: column;

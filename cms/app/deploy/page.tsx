@@ -66,13 +66,24 @@ export default async function DeployPage({ searchParams }: PageProps) {
 
   return (
     <main className={styles.shell}>
+      <nav className={styles.topbar} aria-label="CMS shortcuts">
+        <Link className={styles.brandMark} href="/">
+          <span>Time Mission</span>
+          <strong>CMS</strong>
+        </Link>
+        <div className={styles.topbarActions}>
+          <Link href="/admin">Admin</Link>
+          <Link href="/admin/collections/landings">Landings</Link>
+        </div>
+      </nav>
+
       <section className={styles.hero} aria-labelledby="deploy-title">
         <div className={styles.heroCopy}>
-          <p className={styles.kicker}>CMS Deploy Gate</p>
-          <h1 id="deploy-title">Publish approved CMS changes to the public site</h1>
+          <p className={styles.kicker}>Release control</p>
+          <h1 id="deploy-title">Publish approved CMS changes deliberately</h1>
           <p className={styles.lede}>
-            Use this only after content is Published in CMS and ready to become Live after deploy. The deploy
-            permission is separate from role access.
+            Use this after content is Published in CMS and ready to become Live after deploy. Permission stays separate
+            from role access.
           </p>
           <div className={styles.actions}>
             <form action={triggerDeployAction}>
@@ -98,6 +109,24 @@ export default async function DeployPage({ searchParams }: PageProps) {
             {message || (canDeploy ? 'You can trigger deploys from this account.' : 'Ask the CMS owner to grant deploy permission.')}
           </p>
         </aside>
+      </section>
+
+      <section className={styles.statGrid} aria-label="Deploy safeguards">
+        <article className={styles.statCard}>
+          <span>Current account</span>
+          <strong>{canDeploy ? 'Ready' : 'Locked'}</strong>
+          <p>{canDeploy ? 'This user can trigger the remote deploy runner.' : 'Owner approval is required before deploy.'}</p>
+        </article>
+        <article className={styles.statCard}>
+          <span>Release state</span>
+          <strong>Manual</strong>
+          <p>CMS saves never publish the static site until this gate runs.</p>
+        </article>
+        <article className={styles.statCard}>
+          <span>Remote runner</span>
+          <strong>Wrangler</strong>
+          <p>The public site updates after the GitHub Actions build and upload finish.</p>
+        </article>
       </section>
     </main>
   );

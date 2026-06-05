@@ -55,113 +55,112 @@ const ownerActions = [
   },
 ];
 
+const dashboardPanels = [
+  {
+    actions: siteSurfaceActions,
+    aria: 'Reusable site surface shortcuts',
+    buttonHref: '/admin/collections/location-details',
+    buttonLabel: 'Location details',
+    id: 'tm-site-surfaces-title',
+    intro:
+      'Location detail records only update address and hours for existing locations. Pages, booking links, providers, and location status stay code-owned.',
+    steps: ['Edit', 'Preview', 'Published in CMS', 'Live after deploy'],
+    title: 'Update shared public details',
+  },
+  {
+    actions: landingActions,
+    aria: 'Start a landing draft by template',
+    buttonHref: '/landings/new',
+    buttonLabel: 'Start brief',
+    id: 'tm-landing-wizard-title',
+    intro:
+      'Pick the campaign job, capture the promise and proof, then preview the saved page before anything is published.',
+    manageHref: '/admin/collections/landings',
+    manageLabel: 'Manage all landing pages',
+    steps: ['Brief', 'Draft', 'Preview', 'Publish'],
+    title: 'Create a draft from a marketing brief',
+  },
+  {
+    actions: ownerActions,
+    aria: 'CMS user management shortcuts',
+    buttonHref: '/admin/collections/user-invites/create',
+    buttonLabel: 'Invite people',
+    id: 'tm-owner-tools-title',
+    intro:
+      'Invite approved CMS users, review setup links, and keep access controlled after the content workflow is configured.',
+    steps: ['Invite', 'Role', 'Setup link', 'Access'],
+    title: 'Manage CMS access',
+  },
+];
+
+function panelButton(panel: (typeof dashboardPanels)[number]) {
+  if (panel.id === 'tm-owner-tools-title') {
+    return (
+      <Link className="tm-landing-wizard-card__button" href="/admin/collections/user-invites/create">
+        Invite people
+      </Link>
+    );
+  }
+
+  if (panel.id === 'tm-landing-wizard-title') {
+    return (
+      <Link className="tm-landing-wizard-card__button" href="/landings/new">
+        Start brief
+      </Link>
+    );
+  }
+
+  return (
+    <Link className="tm-landing-wizard-card__button" href={panel.buttonHref}>
+      {panel.buttonLabel}
+    </Link>
+  );
+}
+
 export function LandingWizardDashboard() {
   return (
     <>
-      <section className="tm-landing-wizard-card tm-landing-wizard-card--operations" aria-labelledby="tm-owner-tools-title">
-        <div className="tm-landing-wizard-card__header">
-          <div>
-            <p className="tm-landing-wizard-card__eyebrow">Owner tools</p>
-            <h2 id="tm-owner-tools-title">Invite approved CMS users</h2>
+      {dashboardPanels.map((panel) => (
+        <section
+          className="tm-landing-wizard-card"
+          aria-labelledby={panel.id}
+          key={panel.id}
+        >
+          <div className="tm-landing-wizard-card__inner">
+            <div className="tm-landing-wizard-card__header">
+              <div>
+                {panel.eyebrow ? <p className="tm-landing-wizard-card__eyebrow">{panel.eyebrow}</p> : null}
+                <h2 id={panel.id}>{panel.title}</h2>
+              </div>
+              {panelButton(panel)}
+            </div>
+
+            <div className="tm-landing-wizard-card__body">
+              <p>{panel.intro}</p>
+              <ol className="tm-landing-wizard-card__steps" aria-label={`${panel.title} workflow`}>
+                {panel.steps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="tm-landing-wizard-card__actions" aria-label={panel.aria}>
+              {panel.actions.map((action) => (
+                <Link className="tm-landing-wizard-card__action" href={action.href} key={action.href}>
+                  <strong>{action.label}</strong>
+                  <span>{action.text}</span>
+                </Link>
+              ))}
+            </div>
+
+            {panel.manageHref && panel.manageLabel ? (
+              <Link className="tm-landing-wizard-card__manage" href={panel.manageHref}>
+                {panel.manageLabel}
+              </Link>
+            ) : null}
           </div>
-          <Link className="tm-landing-wizard-card__button" href="/admin/collections/user-invites/create">
-            Invite people
-          </Link>
-        </div>
-
-        <div className="tm-landing-wizard-card__body">
-          <p>
-            User invites are owner-only. Create an invite record, choose email delivery or a copyable 24-hour setup
-            link, then Payload creates or updates the user account.
-          </p>
-          <ol className="tm-landing-wizard-card__steps" aria-label="Invite workflow">
-            <li>Invite</li>
-            <li>Role</li>
-            <li>Setup link</li>
-            <li>Access</li>
-          </ol>
-        </div>
-
-        <div className="tm-landing-wizard-card__actions" aria-label="CMS user management shortcuts">
-          {ownerActions.map((action) => (
-            <Link className="tm-landing-wizard-card__action" href={action.href} key={action.href}>
-              <strong>{action.label}</strong>
-              <span>{action.text}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="tm-landing-wizard-card" aria-labelledby="tm-site-surfaces-title">
-        <div className="tm-landing-wizard-card__header">
-          <div>
-            <p className="tm-landing-wizard-card__eyebrow">Reusable site surfaces</p>
-            <h2 id="tm-site-surfaces-title">Update shared public details</h2>
-          </div>
-          <Link className="tm-landing-wizard-card__button" href="/admin/collections/location-details">
-            Location details
-          </Link>
-        </div>
-
-        <div className="tm-landing-wizard-card__body">
-          <p>
-            Location detail records only update address and hours for existing locations. Pages, booking links,
-            providers, and location status stay code-owned.
-          </p>
-          <ol className="tm-landing-wizard-card__steps" aria-label="Site surface workflow">
-            <li>Edit</li>
-            <li>Preview</li>
-            <li>Published in CMS</li>
-            <li>Live after deploy</li>
-          </ol>
-        </div>
-
-        <div className="tm-landing-wizard-card__actions" aria-label="Reusable site surface shortcuts">
-          {siteSurfaceActions.map((action) => (
-            <Link className="tm-landing-wizard-card__action" href={action.href} key={action.href}>
-              <strong>{action.label}</strong>
-              <span>{action.text}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="tm-landing-wizard-card" aria-labelledby="tm-landing-wizard-title">
-        <div className="tm-landing-wizard-card__header">
-          <div>
-            <p className="tm-landing-wizard-card__eyebrow">Landing launch workflow</p>
-            <h2 id="tm-landing-wizard-title">Create a draft from a marketing brief</h2>
-          </div>
-          <Link className="tm-landing-wizard-card__button" href="/landings/new">
-            Start brief
-          </Link>
-        </div>
-
-        <div className="tm-landing-wizard-card__body">
-          <p>
-            Pick the campaign job, capture the promise and proof, then preview the saved page before anything is published.
-          </p>
-          <ol className="tm-landing-wizard-card__steps" aria-label="Landing workflow">
-            <li>Brief</li>
-            <li>Draft</li>
-            <li>Preview</li>
-            <li>Publish</li>
-          </ol>
-        </div>
-
-        <div className="tm-landing-wizard-card__actions" aria-label="Start a landing draft by template">
-          {landingActions.map((action) => (
-            <Link className="tm-landing-wizard-card__action" href={action.href} key={action.href}>
-              <strong>{action.label}</strong>
-              <span>{action.text}</span>
-            </Link>
-          ))}
-        </div>
-
-        <Link className="tm-landing-wizard-card__manage" href="/admin/collections/landings">
-          Manage all landing pages
-        </Link>
-      </section>
+        </section>
+      ))}
     </>
   );
 }
