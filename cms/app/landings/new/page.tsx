@@ -224,6 +224,17 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
 
   return (
     <main className={styles.shell}>
+      <nav className={styles.topbar} aria-label="CMS shortcuts">
+        <Link className={styles.brandMark} href="/">
+          <span>Time Mission</span>
+          <strong>CMS</strong>
+        </Link>
+        <div className={styles.topbarActions}>
+          <Link href="/admin">Payload</Link>
+          <Link href="/admin/collections/landings">Landings</Link>
+        </div>
+      </nav>
+
       <header className={styles.header}>
         <div>
           <p className={styles.kicker}>Landing launch wizard</p>

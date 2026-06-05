@@ -8,15 +8,19 @@ type DashboardAction = {
   text: string;
 };
 
-type DashboardGroup = {
-  actions: DashboardAction[];
-  aria: string;
-  id: string;
-  intro: string;
-  title: string;
-};
-
-const landingActions: DashboardAction[] = [
+const primaryActions: DashboardAction[] = [
+  {
+    href: '/admin/collections/location-details',
+    label: 'Location details',
+    meta: 'Locations',
+    text: 'Update public address and hours for existing locations.',
+  },
+  {
+    href: '/admin/collections/announcement-banners',
+    label: 'Announcement banners',
+    meta: 'Ticker',
+    text: 'Manage top banner copy, targeting, priority, and scheduling.',
+  },
   {
     href: '/landings/new',
     label: 'Start brief',
@@ -29,6 +33,9 @@ const landingActions: DashboardAction[] = [
     meta: 'Collection',
     text: 'Review drafts, previews, publish state, and saved campaign pages.',
   },
+];
+
+const landingTemplateActions: DashboardAction[] = [
   {
     href: '/landings/new?template=paid_social_campaign',
     label: 'Paid/social',
@@ -49,28 +56,13 @@ const landingActions: DashboardAction[] = [
   },
 ];
 
-const siteSurfaceActions: DashboardAction[] = [
-  {
-    href: '/admin/collections/location-details',
-    label: 'Location details',
-    meta: 'Locations',
-    text: 'Update public address and hours for existing code-owned locations.',
-  },
-  {
-    href: '/admin/collections/announcement-banners',
-    label: 'Announcement banners',
-    meta: 'Shared surface',
-    text: 'Manage text-only top banner copy, targeting, priority, and scheduling.',
-  },
+const advancedActions: DashboardAction[] = [
   {
     href: '/admin/collections/site-pages',
-    label: 'Page SEO overrides',
+    label: 'Page SEO Overrides',
     meta: 'SEO',
     text: 'Update metadata for code-owned pages without changing body copy or layout.',
   },
-];
-
-const ownerActions: DashboardAction[] = [
   {
     href: '/admin/collections/user-invites/create',
     label: 'Invite people',
@@ -88,33 +80,6 @@ const ownerActions: DashboardAction[] = [
     label: 'Manage users',
     meta: 'Users',
     text: 'Review roles and owner-granted permissions for existing CMS accounts.',
-  },
-];
-
-const dashboardGroups: DashboardGroup[] = [
-  {
-    actions: siteSurfaceActions,
-    aria: 'Reusable site surface shortcuts',
-    id: 'tm-site-surfaces-title',
-    intro:
-      'Location detail records only update address and hours for existing locations. Pages, booking links, providers, and location status stay code-owned.',
-    title: 'Site content',
-  },
-  {
-    actions: landingActions,
-    aria: 'Start a landing draft by template',
-    id: 'tm-landing-wizard-title',
-    intro:
-      'Pick the campaign job, capture the promise and proof, then preview the saved page before anything is published.',
-    title: 'Landing pages',
-  },
-  {
-    actions: ownerActions,
-    aria: 'CMS user management shortcuts',
-    id: 'tm-owner-tools-title',
-    intro:
-      'Invite approved CMS users, review setup links, and keep access controlled after the content workflow is configured.',
-    title: 'Manage CMS access',
   },
 ];
 
@@ -173,22 +138,53 @@ export function LandingWizardDashboard() {
       </section>
 
       <div className="tm-landing-wizard__groups">
-        {dashboardGroups.map((group) => (
-          <section
-            className="tm-landing-wizard-card"
-            aria-labelledby={group.id}
-            key={group.id}
-          >
-            <div className="tm-landing-wizard-card__header">
-              <h2 id={group.id}>{group.title}</h2>
-              <p>{group.intro}</p>
-            </div>
+        <section className="tm-landing-wizard-card" aria-labelledby="tm-primary-cms-title">
+          <div className="tm-landing-wizard-card__header">
+            <h2 id="tm-primary-cms-title">Start here</h2>
+            <p>Use these for routine content updates and landing page work.</p>
+          </div>
 
-            <div className="tm-landing-wizard-card__actions" aria-label={group.aria}>
-              {group.actions.map((action) => actionRow(action))}
-            </div>
-          </section>
-        ))}
+          <div className="tm-landing-wizard-card__actions" aria-label="Primary CMS shortcuts">
+            {primaryActions.map((action) => actionRow(action))}
+          </div>
+        </section>
+
+        <section
+          className="tm-landing-wizard-card tm-landing-wizard-card--templates"
+          aria-labelledby="tm-landing-wizard-title"
+        >
+          <div className="tm-landing-wizard-card__header">
+            <h2 id="tm-landing-wizard-title">Landing page templates</h2>
+            <p>Optional starters for common campaign pages.</p>
+          </div>
+
+          <div
+            className="tm-landing-wizard-card__actions tm-landing-wizard-card__actions--templates"
+            aria-label="Start a landing draft by template"
+          >
+            {landingTemplateActions.map((action) => actionRow(action))}
+          </div>
+        </section>
+
+        <section
+          className="tm-landing-wizard-card tm-landing-wizard-card--advanced"
+          aria-labelledby="tm-owner-tools-title"
+        >
+          <div className="tm-landing-wizard-card__header">
+            <p className="tm-landing-wizard-card__eyebrow">Advanced</p>
+            <h2 id="tm-owner-tools-title">Manage CMS access</h2>
+            <p>
+              Invite approved CMS users, review setup links, and keep access controlled after the content workflow is configured.
+            </p>
+          </div>
+
+          <div
+            className="tm-landing-wizard-card__actions tm-landing-wizard-card__actions--compact"
+            aria-label="CMS user management shortcuts"
+          >
+            {advancedActions.map((action) => actionRow(action))}
+          </div>
+        </section>
       </div>
     </div>
   );

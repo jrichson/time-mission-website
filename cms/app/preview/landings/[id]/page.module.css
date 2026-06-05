@@ -16,8 +16,9 @@
   min-height: 100vh;
   background: var(--preview-bg);
   color: var(--preview-text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   overflow-x: clip;
+  padding-bottom: 48px;
 }
 
 .campaignTemplate,
@@ -36,14 +37,14 @@
   top: 0;
   z-index: 20;
   display: flex;
-  min-height: 64px;
+  min-height: 54px;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   border-bottom: 1px solid var(--preview-line);
-  background: rgba(5, 5, 5, 0.92);
-  padding: 12px 24px;
-  backdrop-filter: blur(16px);
+  background: rgba(5, 5, 5, 0.82);
+  padding: 8px 24px;
+  backdrop-filter: blur(14px);
 }
 
 .previewBar > div,
@@ -91,11 +92,11 @@
 .primaryAction,
 .secondaryAction {
   display: inline-flex;
-  min-height: 44px;
+  min-height: 36px;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
-  padding: 0 18px;
+  border-radius: 9px;
+  padding: 0 13px;
   font-size: 14px;
   font-weight: 750;
   text-align: center;
@@ -129,12 +130,13 @@
 .statusPanel {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1px;
+  margin-top: 12px;
 }
 
 .statusPanel div {
-  min-height: 94px;
+  min-height: 76px;
   background: rgba(247, 242, 235, 0.045);
-  padding: 18px;
+  padding: 14px;
 }
 
 .statusPanel span {
@@ -155,14 +157,14 @@
 
 .briefPanel {
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: 24px;
-  margin-top: 16px;
-  padding: 22px;
+  gap: 16px;
+  margin-top: 12px;
+  padding: 18px;
 }
 
 .briefPanel h2 {
   margin: 8px 0 10px;
-  font-size: 1.8rem;
+  font-size: 1.35rem;
   line-height: 1.08;
 }
 
@@ -175,16 +177,16 @@
 .briefPanel dl {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
   margin: 0;
 }
 
 .briefPanel dl div {
-  min-height: 112px;
+  min-height: 88px;
   border: 1px solid var(--preview-line);
   border-radius: 8px;
   background: var(--preview-panel-soft);
-  padding: 16px;
+  padding: 12px;
 }
 
 .briefPanel dt {
@@ -201,10 +203,10 @@
 }
 
 .warningPanel {
-  gap: 12px;
-  margin-top: 16px;
+  gap: 10px;
+  margin-top: 12px;
   border-color: rgba(255, 122, 47, 0.48);
-  padding: 20px;
+  padding: 16px;
 }
 
 .warningPanel h2 {
@@ -225,10 +227,10 @@
 .hero {
   position: relative;
   display: grid;
-  min-height: 72vh;
+  min-height: 58vh;
   place-items: center;
   overflow: hidden;
-  padding: clamp(96px, 13vw, 144px) 24px clamp(64px, 8vw, 96px);
+  padding: clamp(64px, 9vw, 104px) 24px clamp(46px, 6vw, 72px);
   text-align: center;
 }
 
@@ -267,8 +269,8 @@
 
 .hero h1 {
   margin: 18px 0 16px;
-  font-size: 5.5rem;
-  line-height: 0.94;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  line-height: 0.98;
   overflow-wrap: anywhere;
   text-wrap: balance;
 }
@@ -277,7 +279,7 @@
   width: min(100%, 680px);
   margin: 0 auto;
   color: var(--preview-muted-strong);
-  font-size: 1.25rem;
+  font-size: 1.08rem;
   line-height: 1.6;
 }
 
@@ -299,7 +301,7 @@
 .proofSection,
 .splitSection,
 .previewTemplateBlock {
-  padding: clamp(56px, 8vw, 96px) 24px;
+  padding: clamp(40px, 6vw, 72px) 24px;
 }
 
 .sectionHeader {
@@ -311,8 +313,8 @@
 .sectionHeader h2,
 .splitCopy h2 {
   margin: 16px 0 12px;
-  font-size: 3.75rem;
-  line-height: 0.98;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.02;
   text-wrap: balance;
 }
 
@@ -392,8 +394,8 @@
 
 .previewCopyPanel h2 {
   margin: 16px 0 12px;
-  font-size: 3.35rem;
-  line-height: 0.98;
+  font-size: clamp(1.9rem, 3.6vw, 2.65rem);
+  line-height: 1.03;
 }
 
 .previewCopyPanel p,
