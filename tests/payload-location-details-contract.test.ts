@@ -31,11 +31,13 @@ const baseLocation = {
         tue: { label: 'Temporarily closed' },
     },
     bookingUrl: '',
+    bookingProvider: 'roller',
     navLabel: 'Philadelphia',
     mapUrl: '',
     faqs: [],
     ticker: '',
     giftCardUrl: '',
+    groupFormUrls: {},
     countryCode: null,
     locale: null,
     timeZone: null,
@@ -87,6 +89,35 @@ describe('Payload location details contract', () => {
         );
     });
 
+    it('applies sanitized external link overrides and merges group form URLs', () => {
+        const [location] = applyLocationDetailsOverrides(
+            [baseLocation],
+            [
+                {
+                    ...baseDoc,
+                    address: null,
+                    hours: null,
+                    externalLinks: {
+                        bookingUrl: 'https://checkout.example/philly',
+                        giftCardUrl: ' https://gift.example/philly ',
+                        waiverUrl: 'javascript:alert(1)',
+                    },
+                    groupFormUrls: [
+                        { formKey: 'default', url: 'https://forms.example/philly/default' },
+                        { formKey: 'bad key', url: 'https://forms.example/philly/bad' },
+                    ],
+                },
+            ],
+        );
+
+        expect(location.bookingUrl).toBe('https://checkout.example/philly');
+        expect(location.rollerCheckoutUrl).toBe('https://checkout.example/philly');
+        expect(location.giftCardUrl).toBe('https://gift.example/philly');
+        expect(location.waiverUrl).toBeUndefined();
+        expect(location.groupFormUrls?.default).toBe('https://forms.example/philly/default');
+        expect(location.groupFormUrls?.['bad key']).toBeUndefined();
+    });
+
     it('ignores unpublished docs and docs for non-code-owned locations', () => {
         const changed = applyLocationDetailsOverrides(
             [baseLocation],
@@ -102,6 +133,14 @@ describe('Payload location details contract', () => {
     it('treats address or displayable hours as usable content', () => {
         expect(locationDetailsDocLooksUsable(baseDoc)).toBe(true);
         expect(locationDetailsDocLooksUsable({ ...baseDoc, address: null, hours: null })).toBe(false);
+        expect(
+            locationDetailsDocLooksUsable({
+                ...baseDoc,
+                address: null,
+                hours: null,
+                externalLinks: { bookingUrl: 'https://checkout.example/philly' },
+            }),
+        ).toBe(true);
         expect(
             locationDetailsDocLooksUsable({
                 ...baseDoc,

@@ -43,21 +43,35 @@ describe('CMS location details', () => {
         const locationSlugField = findField(LocationDetails.fields, 'locationSlug');
         const addressField = findField(LocationDetails.fields, 'address');
         const hoursField = findField(LocationDetails.fields, 'hours');
+        const externalLinksField = findField(LocationDetails.fields, 'externalLinks');
+        const bookingUrlField = findField(LocationDetails.fields, 'bookingUrl');
+        const groupFormUrlsField = findField(LocationDetails.fields, 'groupFormUrls');
+        const formKeyField = findField(LocationDetails.fields, 'formKey');
         const publishedField = findField(LocationDetails.fields, 'published');
 
         expect(config).toContain('LocationDetails as CollectionConfig');
         expect(LocationDetails.labels.singular).toBe('Location Detail');
         expect(LocationDetails.admin.description).toContain('existing code-owned locations only');
         expect(LocationDetails.admin.description).toContain('does not create new public pages');
+        expect(LocationDetails.admin.description).toContain('external links');
         expect(locationSlugField).toMatchObject({ name: 'locationSlug', type: 'select', required: true, unique: true });
         expect(locationSlugField?.options).toContainEqual({ label: 'Time Mission Philadelphia', value: 'philadelphia' });
         expect(addressField?.admin?.description).toContain('directions link is generated from this address');
-        expect(addressField?.admin?.description).toContain('booking URLs and contact settings stay code-owned');
+        expect(addressField?.admin?.description).toContain('booking URLs are managed below');
         expect(hoursField?.type).toBe('group');
+        expect(externalLinksField?.admin?.description).toContain('booking provider settings stay code-owned');
+        expect(externalLinksField?.access?.update).toBeTypeOf('function');
+        expect(bookingUrlField?.label).toBe('Ticket booking URL');
+        expect(groupFormUrlsField?.type).toBe('array');
+        expect(groupFormUrlsField?.access?.update).toBeTypeOf('function');
+        expect(formKeyField?.admin?.description || formKeyField?.label).toBeTruthy();
         expect(publishedField?.label).toBe('Published in CMS');
         expect(publishedField?.admin?.description).toContain('Live after deploy');
         expect(migration).toContain('CREATE TABLE "location_details"');
         expect(migration).toContain("('Time Mission Philadelphia', 'philadelphia'");
+        expect(read('cms/migrations/20260605_160000_location_details_external_links.ts')).toContain(
+            'CREATE TABLE IF NOT EXISTS "location_details_group_form_urls"',
+        );
     });
 
     it('keeps CMS location options aligned with the code-owned location roster', () => {

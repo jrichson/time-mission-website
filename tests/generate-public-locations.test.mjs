@@ -35,6 +35,16 @@ describe('public location data generator', () => {
               hours: {
                 mon: { label: '1pm - 5pm', open: '13:00', close: '17:00' },
               },
+              externalLinks: {
+                bookingUrl: 'https://checkout.example/philadelphia',
+                rollerCheckoutUrl: 'https://checkout.example/philadelphia/roller',
+                giftCardUrl: 'javascript:alert(1)',
+              },
+              groupFormUrls: [
+                { formKey: 'default', url: 'https://forms.example/philadelphia/default' },
+                { formKey: 'bad key', url: 'https://forms.example/philadelphia/bad' },
+                { formKey: 'birthdays', url: 'data:text/html,bad' },
+              ],
             },
           ],
         }),
@@ -61,6 +71,11 @@ describe('public location data generator', () => {
     );
     expect(philadelphia.hours.mon).toEqual({ label: '1pm - 5pm', open: '13:00', close: '17:00' });
     expect(philadelphia.status).toBe('temporarily-closed');
+    expect(philadelphia.bookingUrl).toBe('https://checkout.example/philadelphia');
+    expect(philadelphia.rollerCheckoutUrl).toBe('https://checkout.example/philadelphia/roller');
+    expect(philadelphia.giftCardUrl).toBe('');
+    expect(philadelphia.groupFormUrls.default).toBe('https://forms.example/philadelphia/default');
+    expect(philadelphia.groupFormUrls.birthdays).toBeUndefined();
 
     fs.rmSync(tempDir, { force: true, recursive: true });
   });

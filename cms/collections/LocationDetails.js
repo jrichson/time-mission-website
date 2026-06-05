@@ -3,6 +3,7 @@ import { markCmsDeployNeeded } from '../lib/cms-deploy-gate.js';
 import { LOCATION_DETAIL_OPTIONS, LOCATION_HOUR_DAYS } from '../lib/location-details-options.js';
 
 const TIME_24_HOUR_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
+const GROUP_FORM_KEY_PATTERN = /^[a-z0-9-]+$/;
 
 function isCmsAdmin(user) {
   return user?.collection === 'users' && user?.role === 'admin';
@@ -23,6 +24,40 @@ function validateOptionalTime(value) {
   if (typeof value !== 'string') return 'Use 24-hour HH:mm, for example 09:00 or 23:30.';
 
   return TIME_24_HOUR_PATTERN.test(value.trim()) || 'Use 24-hour HH:mm, for example 09:00 or 23:30.';
+}
+
+function validateOptionalHttpsUrl(value) {
+  if (value == null || value === '') return true;
+  if (typeof value !== 'string') return 'Use a credential-free https:// URL.';
+
+  const cleaned = value.trim();
+  if (!cleaned) return true;
+  if (cleaned.length > 2048 || /[<>"'\\\s]/.test(cleaned)) return 'Use a credential-free https:// URL.';
+
+  let url;
+  try {
+    url = new URL(cleaned);
+  } catch {
+    return 'Use a credential-free https:// URL.';
+  }
+
+  if (url.protocol !== 'https:') return 'External links must use https://.';
+  if (url.username || url.password) return 'External links must not include credentials.';
+
+  return true;
+}
+
+function validateRequiredHttpsUrl(value) {
+  if (value == null || String(value).trim() === '') return 'Add a credential-free https:// URL.';
+
+  return validateOptionalHttpsUrl(value);
+}
+
+function validateGroupFormKey(value) {
+  const cleaned = typeof value === 'string' ? value.trim() : '';
+  if (!cleaned) return 'Add the group form key, such as default or bachelor-ette.';
+
+  return GROUP_FORM_KEY_PATTERN.test(cleaned) || 'Use lowercase kebab-case, such as bachelor-ette.';
 }
 
 function validateHoursLabel(value, { siblingData } = {}) {
@@ -85,7 +120,7 @@ export const LocationDetails = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'locationSlug', 'published', 'updatedAt'],
     description:
-      'Address and hours for existing code-owned locations only. This does not create new public pages or change booking settings.',
+      'Address, hours, and external links for existing code-owned locations only. This does not create new public pages or change booking provider settings.',
   },
   access: {
     admin: canManageLocationDetails,
@@ -139,7 +174,7 @@ export const LocationDetails = {
       label: 'Address',
       admin: {
         description:
-          'Public address text for the existing location. The directions link is generated from this address; booking URLs and contact settings stay code-owned.',
+          'Public address text for the existing location. The directions link is generated from this address; booking URLs are managed below and contact settings stay code-owned.',
       },
       fields: [
         {
@@ -199,6 +234,108 @@ export const LocationDetails = {
           'Public hours display for each day. Leave a day blank only when that location does not have public hours yet.',
       },
       fields: LOCATION_HOUR_DAYS.map(dayHoursField),
+    },
+    {
+      name: 'externalLinks',
+      type: 'group',
+      label: 'External links',
+      access: {
+        update: ({ req: { user } }) => isCmsAdmin(user),
+      },
+      admin: {
+        description:
+          'Admin-editable public destinations for the existing location. These can change booking, gift card, waiver, and external site URLs after deploy; booking provider settings stay code-owned.',
+      },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'bookingUrl',
+              type: 'text',
+              maxLength: 2048,
+              label: 'Ticket booking URL',
+              admin: {
+                description:
+                  'Primary ticket checkout URL. For Roller locations, this also feeds the Roller checkout URL when that field is blank.',
+              },
+              validate: validateOptionalHttpsUrl,
+            },
+            {
+              name: 'rollerCheckoutUrl',
+              type: 'text',
+              maxLength: 2048,
+              label: 'Roller checkout URL',
+              admin: {
+                description:
+                  'Optional Roller-specific checkout override. Leave blank when it should match Ticket booking URL.',
+              },
+              validate: validateOptionalHttpsUrl,
+            },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'giftCardUrl',
+              type: 'text',
+              maxLength: 2048,
+              label: 'Gift card URL',
+              validate: validateOptionalHttpsUrl,
+            },
+            {
+              name: 'waiverUrl',
+              type: 'text',
+              maxLength: 2048,
+              label: 'Waiver URL',
+              validate: validateOptionalHttpsUrl,
+            },
+          ],
+        },
+        {
+          name: 'externalUrl',
+          type: 'text',
+          maxLength: 2048,
+          label: 'External location page URL',
+          admin: {
+            description:
+              'Use only when the location page should send visitors to another public site, such as timemission.eu.',
+          },
+          validate: validateOptionalHttpsUrl,
+        },
+      ],
+    },
+    {
+      name: 'groupFormUrls',
+      type: 'array',
+      maxRows: 20,
+      labels: { singular: 'Group form URL', plural: 'Group form URLs' },
+      access: {
+        update: ({ req: { user } }) => isCmsAdmin(user),
+      },
+      admin: {
+        description:
+          'Admin-editable Pipedrive, Roller, or provider form destinations by group type. Keys use lowercase kebab-case: default, birthdays, corporate, field-trips, bachelor-ette, private-events, holidays.',
+      },
+      fields: [
+        {
+          name: 'formKey',
+          type: 'text',
+          required: true,
+          maxLength: 80,
+          label: 'Form key',
+          validate: validateGroupFormKey,
+        },
+        {
+          name: 'url',
+          type: 'text',
+          required: true,
+          maxLength: 2048,
+          label: 'Form URL',
+          validate: validateRequiredHttpsUrl,
+        },
+      ],
     },
   ],
   hooks: {

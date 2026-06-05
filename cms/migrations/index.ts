@@ -9,6 +9,7 @@ import * as migration_20260526_120000_cms_scope_and_announcements from './202605
 import * as migration_20260529_090000_location_details from './20260529_090000_location_details';
 import * as migration_20260605_101500_announcement_banner_ticker_behavior from './20260605_101500_announcement_banner_ticker_behavior';
 import * as migration_20260605_143000_sync_current_cms_content from './20260605_143000_sync_current_cms_content';
+import * as migration_20260605_160000_location_details_external_links from './20260605_160000_location_details_external_links';
 
 export const migrations = [
   {
@@ -65,5 +66,10 @@ export const migrations = [
     up: migration_20260605_143000_sync_current_cms_content.up,
     down: migration_20260605_143000_sync_current_cms_content.down,
     name: '20260605_143000_sync_current_cms_content'
+  },
+  {
+    up: migration_20260605_160000_location_details_external_links.up,
+    down: migration_20260605_160000_location_details_external_links.down,
+    name: '20260605_160000_location_details_external_links'
   },
 ];
