@@ -4,6 +4,7 @@ import LanguageSwitcher from './LanguageSwitcher.astro';
 interface Props {
     announcementBanner?: {
         message: string;
+        tickerBehavior?: 'auto' | 'static' | 'animated' | null;
         linkLabel?: string | null;
         linkUrl?: string | null;
     } | null;
@@ -32,6 +33,7 @@ const bookingCtaAttrs = {
 type TickerMessage =
     | { text: string; href?: string | null; linkLabel?: string | null }
     | { label: string; date: string; separator?: string; labelI18n?: string; dateI18n?: string };
+type TickerBehavior = 'auto' | 'static' | 'animated';
 
 const tickerBaseMessages: TickerMessage[] = [
     {
@@ -60,6 +62,15 @@ function tickerMessageFromText(text: string): TickerMessage | null {
     return value ? { text: value } : null;
 }
 
+function tickerMessageCanBeStatic(message: TickerMessage | null): boolean {
+    return Boolean(message && 'text' in message && !message.href && message.text.length <= 28);
+}
+
+function tickerBehavior(value: string | null | undefined): TickerBehavior {
+    if (value === 'static' || value === 'animated') return value;
+    return 'auto';
+}
+
 const locationTickerMessage = tickerMessageFromText(locationTicker);
 const cmsAnnouncementMessage: TickerMessage | null = announcementBanner?.message
     ? {
@@ -68,10 +79,20 @@ const cmsAnnouncementMessage: TickerMessage | null = announcementBanner?.message
         linkLabel: announcementBanner.linkLabel,
     }
     : null;
-const tickerMessages: TickerMessage[] = cmsAnnouncementMessage
-    ? Array.from({ length: tickerCycles }, () => cmsAnnouncementMessage)
-    : locationTickerMessage
-    ? Array.from({ length: tickerCycles }, () => locationTickerMessage)
+const activeTickerMessage = cmsAnnouncementMessage || locationTickerMessage;
+const activeTickerBehavior = cmsAnnouncementMessage ? tickerBehavior(announcementBanner?.tickerBehavior) : 'auto';
+const tickerSource = cmsAnnouncementMessage ? 'cms' : locationTickerMessage ? 'location' : 'default';
+const tickerIsStatic = Boolean(
+    activeTickerMessage &&
+    (
+        activeTickerBehavior === 'static' ||
+        (activeTickerBehavior === 'auto' && tickerMessageCanBeStatic(activeTickerMessage))
+    ),
+);
+const tickerMessages: TickerMessage[] = activeTickerMessage
+    ? tickerIsStatic
+        ? [activeTickerMessage]
+        : Array.from({ length: tickerCycles }, () => activeTickerMessage)
     : Array.from({ length: tickerCycles }, () => tickerBaseMessages).flat();
 
 function externalLinkAttrs(href: string | null | undefined) {
@@ -83,7 +104,11 @@ function externalLinkAttrs(href: string | null | undefined) {
 
 <!-- Announcement Ticker -->
 <div class="ticker-bar">
-    <div class="ticker-track">
+    <div
+        class={`ticker-track${tickerIsStatic ? ' ticker-track--static' : ''}`}
+        data-tm-ticker-source={tickerSource}
+        data-tm-ticker-behavior={activeTickerBehavior}
+    >
         {tickerMessages.map((m) => (
             <span class="ticker-item">
                 {'text' in m ? (

@@ -1,4 +1,5 @@
 export type AnnouncementBannerTargetScope = 'global' | 'regions' | 'locations';
+export type AnnouncementBannerTickerBehavior = 'auto' | 'static' | 'animated';
 
 export interface PayloadAnnouncementBannerRegionTarget {
     region?: string | null;
@@ -19,6 +20,7 @@ export interface PayloadAnnouncementBannerDoc {
     targetScope?: AnnouncementBannerTargetScope | string | null;
     targetRegions?: PayloadAnnouncementBannerRegionTarget[] | null;
     targetLocations?: PayloadAnnouncementBannerLocationTarget[] | null;
+    tickerBehavior?: AnnouncementBannerTickerBehavior | string | null;
     linkLabel?: string | null;
     linkUrl?: string | null;
 }
@@ -31,6 +33,7 @@ export interface AnnouncementBannerSelectionContext {
 
 export interface AnnouncementBannerView {
     message: string;
+    tickerBehavior: AnnouncementBannerTickerBehavior;
     linkLabel?: string | null;
     linkUrl?: string | null;
 }
@@ -61,6 +64,11 @@ function safeAnnouncementLink(value: string | null | undefined): string | null {
     } catch {
         return null;
     }
+}
+
+function safeTickerBehavior(value: string | null | undefined): AnnouncementBannerTickerBehavior {
+    if (value === 'static' || value === 'animated') return value;
+    return 'auto';
 }
 
 export function announcementBannerDocLooksUsable(doc: PayloadAnnouncementBannerDoc): boolean {
@@ -136,6 +144,7 @@ export function announcementBannerViewForDoc(doc: PayloadAnnouncementBannerDoc |
     const linkUrl = safeAnnouncementLink(doc.linkUrl);
     return {
         message: cleanString(doc.message),
+        tickerBehavior: safeTickerBehavior(doc.tickerBehavior),
         linkLabel: linkUrl ? cleanString(doc.linkLabel) || 'Learn more' : null,
         linkUrl,
     };

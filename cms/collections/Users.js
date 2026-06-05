@@ -34,19 +34,49 @@ function canAccessAdmin({ req: { user } }) {
   return isAdminOrEditor(user);
 }
 
-export function isOwner({ req: { user } }) {
+async function firstCmsUserId(req) {
+  if (!req?.payload?.find) return null;
+
+  try {
+    const result = await req.payload.find({
+      collection: USER_COLLECTION,
+      depth: 0,
+      limit: 1,
+      overrideAccess: true,
+      pagination: false,
+      req,
+      select: {
+        id: true,
+      },
+      sort: 'createdAt',
+    });
+
+    return result.docs?.[0]?.id ?? null;
+  } catch (error) {
+    req.payload.logger?.error?.(
+      `[users] failed to resolve bootstrap owner: ${error instanceof Error ? error.message : String(error)}`,
+    );
+    return null;
+  }
+}
+
+export async function isOwner({ req }) {
+  const user = req?.user;
   if (!isCMSUser(user)) return false;
 
   const configuredOwnerEmail = ownerEmail();
-  if (!configuredOwnerEmail) return false;
+  if (!configuredOwnerEmail) {
+    const firstUserId = await firstCmsUserId(req);
+    return firstUserId != null && String(user.id) === String(firstUserId);
+  }
 
   return normalizeEmail(user.email) === configuredOwnerEmail;
 }
 
-export function canTriggerCmsDeploy(args) {
+export async function canTriggerCmsDeploy(args) {
   const user = args?.req?.user;
   if (!isCMSUser(user)) return false;
-  if (isOwner(args)) return true;
+  if (await isOwner(args)) return true;
   return isAdmin(user) && user.canDeploy === true;
 }
 
@@ -56,16 +86,16 @@ function isSelf({ req: { user }, id }) {
   return String(user.id) === String(id);
 }
 
-function readOwnerOrSelf(args) {
-  if (isOwner(args)) return true;
+async function readOwnerOrSelf(args) {
+  if (await isOwner(args)) return true;
   if (!isCMSUser(args.req.user)) return false;
   if (args.id != null) return isSelf(args);
 
   return { id: { equals: args.req.user.id } };
 }
 
-function updateOwnerOrSelf(args) {
-  if (isOwner(args)) return true;
+async function updateOwnerOrSelf(args) {
+  if (await isOwner(args)) return true;
   if (!isCMSUser(args.req.user)) return false;
   if (args.id != null) return isSelf(args);
 

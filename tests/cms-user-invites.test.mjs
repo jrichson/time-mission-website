@@ -6,6 +6,9 @@ const originalOwnerEmail = process.env.CMS_OWNER_EMAIL;
 function ownerArgs({ email = 'owner@example.com', role = 'admin' } = {}) {
   return {
     req: {
+      payload: {
+        find: async () => ({ docs: [{ id: 1 }] }),
+      },
       user: {
         collection: 'users',
         email,
@@ -58,15 +61,25 @@ afterEach(() => {
 });
 
 describe('CMS user invites', () => {
-  it('allows only the configured owner account to manage invites', () => {
+  it('allows only the configured owner account to manage invites', async () => {
     process.env.CMS_OWNER_EMAIL = 'owner@example.com';
 
-    expect(UserInvites.access.admin(ownerArgs())).toBe(true);
-    expect(UserInvites.access.create(ownerArgs())).toBe(true);
-    expect(UserInvites.access.read(ownerArgs())).toBe(true);
-    expect(UserInvites.access.delete(ownerArgs())).toBe(true);
+    await expect(UserInvites.access.admin(ownerArgs())).resolves.toBe(true);
+    await expect(UserInvites.access.create(ownerArgs())).resolves.toBe(true);
+    await expect(UserInvites.access.read(ownerArgs())).resolves.toBe(true);
+    await expect(UserInvites.access.delete(ownerArgs())).resolves.toBe(true);
 
-    expect(UserInvites.access.create(ownerArgs({ email: 'editor@example.com', role: 'editor' }))).toBe(false);
+    await expect(UserInvites.access.create(ownerArgs({ email: 'editor@example.com', role: 'editor' }))).resolves.toBe(
+      false,
+    );
+  });
+
+  it('allows the first CMS user to manage invites when CMS_OWNER_EMAIL is unset', async () => {
+    delete process.env.CMS_OWNER_EMAIL;
+
+    await expect(UserInvites.access.admin(ownerArgs({ email: 'first@example.com', role: 'editor' }))).resolves.toBe(
+      true,
+    );
   });
 
   it('normalizes invite email before validation', () => {

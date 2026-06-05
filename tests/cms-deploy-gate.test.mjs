@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   markCmsDeployNeeded,
@@ -11,10 +11,14 @@ const originalGithubToken = process.env.GITHUB_ACTIONS_DEPLOY_TOKEN;
 const originalGithubRepo = process.env.GITHUB_ACTIONS_DEPLOY_REPO;
 const originalGithubWorkflow = process.env.GITHUB_ACTIONS_DEPLOY_WORKFLOW_ID;
 const originalGithubRef = process.env.GITHUB_ACTIONS_DEPLOY_REF;
+const originalOwnerEmail = process.env.CMS_OWNER_EMAIL;
 
 function reqFor(user) {
+  const { firstUserId = 999, ...userFields } = user;
+
   return {
     payload: {
+      find: async () => ({ docs: [{ id: firstUserId }] }),
       logger: {
         error: vi.fn(),
         info: vi.fn(),
@@ -24,10 +28,14 @@ function reqFor(user) {
       collection: 'users',
       id: 1,
       email: 'admin@example.com',
-      ...user,
+      ...userFields,
     },
   };
 }
+
+beforeEach(() => {
+  process.env.CMS_OWNER_EMAIL = 'owner@example.com';
+});
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -37,6 +45,7 @@ afterEach(() => {
   restoreEnv('GITHUB_ACTIONS_DEPLOY_REPO', originalGithubRepo);
   restoreEnv('GITHUB_ACTIONS_DEPLOY_WORKFLOW_ID', originalGithubWorkflow);
   restoreEnv('GITHUB_ACTIONS_DEPLOY_REF', originalGithubRef);
+  restoreEnv('CMS_OWNER_EMAIL', originalOwnerEmail);
 });
 
 function restoreEnv(name, value) {
@@ -84,6 +93,17 @@ describe('CMS deploy gate', () => {
     vi.stubGlobal('fetch', fetchSpy);
 
     await expect(triggerCmsDeploy({ req: reqFor({ role: 'admin', canDeploy: true }) }))
+      .resolves.toMatchObject({ ok: true, status: 'triggered', statusCode: 200 });
+    expect(fetchSpy).toHaveBeenCalledWith('https://deploy.example/hook', expect.objectContaining({ method: 'POST' }));
+  });
+
+  it('allows the bootstrap owner to trigger deploys when CMS_OWNER_EMAIL is unset', async () => {
+    delete process.env.CMS_OWNER_EMAIL;
+    process.env.CLOUDFLARE_PAGES_DEPLOY_HOOK_URL = 'https://deploy.example/hook';
+    const fetchSpy = vi.fn().mockResolvedValue({ ok: true, status: 200 });
+    vi.stubGlobal('fetch', fetchSpy);
+
+    await expect(triggerCmsDeploy({ req: reqFor({ firstUserId: 1, role: 'editor', canDeploy: false }) }))
       .resolves.toMatchObject({ ok: true, status: 'triggered', statusCode: 200 });
     expect(fetchSpy).toHaveBeenCalledWith('https://deploy.example/hook', expect.objectContaining({ method: 'POST' }));
   });

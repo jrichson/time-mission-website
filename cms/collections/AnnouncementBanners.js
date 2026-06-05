@@ -23,6 +23,11 @@ const bannerLocationOptions = [
   { label: 'Time Mission Philadelphia', value: 'philadelphia' },
   { label: 'Time Mission West Nyack', value: 'west-nyack' },
 ];
+const bannerTickerBehaviorOptions = [
+  { label: 'Auto', value: 'auto' },
+  { label: 'Static centered', value: 'static' },
+  { label: 'Animated scrolling', value: 'animated' },
+];
 
 function canManageAnnouncementBanners({ req: { user } }) {
   if (!user || user.collection !== 'users') return false;
@@ -70,7 +75,7 @@ export const AnnouncementBanners = {
   admin: {
     group: 'Site Surfaces',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'message', 'published', 'priority', 'targetScope', 'startsAt', 'endsAt', 'updatedAt'],
+    defaultColumns: ['title', 'message', 'tickerBehavior', 'published', 'priority', 'targetScope', 'startsAt', 'endsAt', 'updatedAt'],
     description:
       'Text-only top banner messages. Publish in CMS to approve; the public site shows the winning active banner after the next approved deploy.',
   },
@@ -109,6 +114,18 @@ export const AnnouncementBanners = {
       maxLength: 180,
       admin: {
         description: 'Text-only banner message. Keep it short enough to scan in the moving top banner.',
+      },
+    },
+    {
+      name: 'tickerBehavior',
+      type: 'select',
+      defaultValue: 'auto',
+      required: true,
+      label: 'Ticker behavior',
+      options: bannerTickerBehaviorOptions,
+      admin: {
+        description:
+          'Auto keeps short plain messages centered and animates longer messages. Use Static centered or Animated scrolling to force the behavior.',
       },
     },
     {

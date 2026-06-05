@@ -165,7 +165,7 @@ export function markCmsDeployNeeded({ action, collection, doc, previousDoc, req 
 }
 
 export async function triggerCmsDeploy({ reason = 'manual-cms-deploy', req }) {
-  if (!canTriggerCmsDeploy({ req })) {
+  if (!(await canTriggerCmsDeploy({ req }))) {
     return {
       ok: false,
       status: 'forbidden',

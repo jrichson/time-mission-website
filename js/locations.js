@@ -387,6 +387,7 @@
 
             if (loc && loc.ticker && pageLocationSlug === normalizeLocationId(loc.slug || loc.id)) {
                 document.querySelectorAll('.ticker-track').forEach(track => {
+                    if (track.dataset.tmTickerSource === 'cms') return;
                     const items = track.querySelectorAll('.ticker-item');
                     items.forEach(item => { renderTickerItem(item, loc.ticker); });
                 });

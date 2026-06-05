@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import { AnnouncementBanners } from '../cms/collections/AnnouncementBanners.js';
 import { Landings } from '../cms/collections/Landings.js';
@@ -6,9 +6,14 @@ import { LocationDetails } from '../cms/collections/LocationDetails.js';
 import { SitePages } from '../cms/collections/SitePages.js';
 import { Users, canTriggerCmsDeploy } from '../cms/collections/Users.js';
 
+const originalOwnerEmail = process.env.CMS_OWNER_EMAIL;
+
 function accessArgs(role) {
   return {
     req: {
+      payload: {
+        find: async () => ({ docs: [{ id: 999 }] }),
+      },
       user: {
         collection: 'users',
         email: 'editor@example.com',
@@ -18,6 +23,14 @@ function accessArgs(role) {
     },
   };
 }
+
+afterEach(() => {
+  if (originalOwnerEmail == null) {
+    delete process.env.CMS_OWNER_EMAIL;
+  } else {
+    process.env.CMS_OWNER_EMAIL = originalOwnerEmail;
+  }
+});
 
 describe('CMS role access', () => {
   it('requires an explicit admin or editor role for CMS admin access', () => {
@@ -45,10 +58,25 @@ describe('CMS role access', () => {
     expect(LocationDetails.access.read(accessArgs(undefined))).toEqual({ published: { equals: true } });
   });
 
-  it('keeps deploy permission separate from CMS role', () => {
-    expect(canTriggerCmsDeploy({ req: { user: { collection: 'users', role: 'admin', canDeploy: true } } })).toBe(true);
-    expect(canTriggerCmsDeploy({ req: { user: { collection: 'users', role: 'admin', canDeploy: false } } })).toBe(false);
-    expect(canTriggerCmsDeploy({ req: { user: { collection: 'users', role: 'editor', canDeploy: true } } })).toBe(false);
-    expect(canTriggerCmsDeploy({ req: { user: { collection: 'users', role: 'editor', canDeploy: false } } })).toBe(false);
+  it('keeps deploy permission separate from CMS role', async () => {
+    process.env.CMS_OWNER_EMAIL = 'owner@example.com';
+    const req = {
+      payload: {
+        find: async () => ({ docs: [{ id: 999 }] }),
+      },
+    };
+
+    await expect(
+      canTriggerCmsDeploy({ req: { ...req, user: { collection: 'users', id: 7, role: 'admin', canDeploy: true } } }),
+    ).resolves.toBe(true);
+    await expect(
+      canTriggerCmsDeploy({ req: { ...req, user: { collection: 'users', id: 7, role: 'admin', canDeploy: false } } }),
+    ).resolves.toBe(false);
+    await expect(
+      canTriggerCmsDeploy({ req: { ...req, user: { collection: 'users', id: 7, role: 'editor', canDeploy: true } } }),
+    ).resolves.toBe(false);
+    await expect(
+      canTriggerCmsDeploy({ req: { ...req, user: { collection: 'users', id: 7, role: 'editor', canDeploy: false } } }),
+    ).resolves.toBe(false);
   });
 });

@@ -180,6 +180,10 @@ export interface AnnouncementBanner {
    */
   message: string;
   /**
+   * Auto keeps short plain messages centered and animates longer messages. Use Static centered or Animated scrolling to force the behavior.
+   */
+  tickerBehavior: 'auto' | 'static' | 'animated';
+  /**
    * Published in CMS means approved. It is Live after deploy when the static public site rebuilds.
    */
   published?: boolean | null;

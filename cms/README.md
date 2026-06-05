@@ -42,7 +42,7 @@ CMS public states use shared language:
 Set these in Railway:
 
 - `PAYLOAD_SERVER_URL` — public CMS origin only, no path, e.g. `https://your-app.up.railway.app`. Production requires HTTPS.
-- `CMS_OWNER_EMAIL` — exact email address for the account allowed to create invites, update, delete, unlock, and assign roles for CMS users. If this is unset, user management fails closed while existing admins/editors can still use the admin panel for allowed content operations.
+- `CMS_OWNER_EMAIL` — exact email address for the account allowed to create invites, update, delete, unlock, and assign roles for CMS users. If this is unset, the first CMS account is treated as the bootstrap owner so the initial user can invite and manage approved users.
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` — SMTP settings for invite delivery. Without `SMTP_HOST`, new invite records are marked `failed` so you do not mistake a console-only email log for a real sent invite.
 - `SMTP_FROM_ADDRESS`, `SMTP_FROM_NAME` — optional sender identity for CMS invite emails. Defaults to `noreply@timemission.com` / `Time Mission CMS` when SMTP is configured.
 - `SMTP_SECURE` — optional boolean. Defaults to `true` when `SMTP_PORT=465`, otherwise `false`.
@@ -61,7 +61,7 @@ Production schema changes are handled by committed Payload migrations. `npm star
 
 ## Inviting CMS users
 
-1. Log in as the account matching `CMS_OWNER_EMAIL`.
+1. Log in as the account matching `CMS_OWNER_EMAIL`. If `CMS_OWNER_EMAIL` is not set yet, log in as the first CMS account.
 2. Go to **Settings -> User Invites**.
 3. Create a new invite with the recipient email, role, and delivery method.
 4. Choose **Send email** to email the 24-hour setup link, or **Create invite link** to generate a copyable link in the invite record.

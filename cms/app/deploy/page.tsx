@@ -61,7 +61,7 @@ export const metadata = {
 export default async function DeployPage({ searchParams }: PageProps) {
   const { payload, user } = await currentCmsUser();
   const params = await searchParams;
-  const canDeploy = canTriggerCmsDeploy({ req: { payload, user } });
+  const canDeploy = await canTriggerCmsDeploy({ req: { payload, user } });
   const message = statusCopy(params.status);
 
   return (
