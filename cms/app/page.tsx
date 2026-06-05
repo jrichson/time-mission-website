@@ -23,37 +23,10 @@ const landingActions = [
   },
 ];
 
-const commonTasks = [
-  {
-    href: '/admin/collections/location-details',
-    label: 'Update hours or address',
-    meta: 'Locations',
-    description: 'Change the public address and hours for an existing location.',
-  },
-  {
-    href: '/admin/collections/announcement-banners',
-    label: 'Change ticker or banner copy',
-    meta: 'Shared surface',
-    description: 'Edit top-banner messages, targeting, priority, and schedule.',
-  },
-  {
-    href: '/landings/new',
-    label: 'Start a landing page brief',
-    meta: 'Campaigns',
-    description: 'Open the brief-first wizard before choosing a campaign template.',
-  },
-  {
-    href: '/deploy',
-    label: 'Push approved content live',
-    meta: 'Release',
-    description: 'Deploy only after content is Published in CMS and ready for the public site.',
-  },
-];
-
-const workAreas = [
+const directoryGroups = [
   {
     title: 'Site content',
-    description: 'Reusable public-site surfaces editors can safely update without changing page layouts.',
+    intro: 'Routine public-site updates that do not change page layouts.',
     links: [
       {
         href: '/admin/collections/location-details',
@@ -78,7 +51,7 @@ const workAreas = [
   },
   {
     title: 'Landing pages',
-    description: 'Campaign pages start from a brief, preview privately, and publish through the CMS workflow.',
+    intro: 'Campaign pages that start from a brief and preview before publish.',
     links: [
       {
         href: '/admin/collections/landings',
@@ -87,6 +60,30 @@ const workAreas = [
         description: 'Review existing campaign pages, drafts, previews, and publish state.',
       },
       ...landingActions,
+    ],
+  },
+  {
+    title: 'Release and access',
+    intro: 'Publishing, invites, and user management. Keep these separate from content edits.',
+    links: [
+      {
+        href: '/deploy',
+        label: 'Deploy Gate',
+        meta: 'Release',
+        description: 'Push approved CMS content live after it is Published in CMS.',
+      },
+      {
+        href: '/admin/collections/user-invites',
+        label: 'User Invites',
+        meta: 'Access',
+        description: 'Invite editors, copy setup links, and review invite status.',
+      },
+      {
+        href: '/admin/collections/users',
+        label: 'Users',
+        meta: 'Permissions',
+        description: 'Review CMS accounts and owner-granted permissions.',
+      },
     ],
   },
 ];
@@ -125,61 +122,46 @@ export default function Home() {
         </div>
       </nav>
 
-      <section className={styles.hero} aria-labelledby="cms-home-title">
-        <div className={styles.heroCopy}>
+      <section className={styles.header} aria-labelledby="cms-home-title">
+        <div>
           <p className={styles.kicker}>CMS workbench</p>
-          <h1 id="cms-home-title">Find the right CMS task quickly.</h1>
+          <h1 id="cms-home-title">Choose the CMS area, then make the edit.</h1>
           <p className={styles.lede}>
-            Choose the thing you need to update, make the edit in Payload, then use the deploy gate when approved
-            content should become public.
+            One directory for editor-safe content, landing pages, release, and access. Rows show what each area changes
+            before you open Payload.
           </p>
         </div>
 
-        <aside className={styles.publishPanel} aria-label="Publishing workflow">
-          <p className={styles.panelLabel}>Publishing model</p>
-          <ol className={styles.stepList}>
-            {workflowSteps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-          <p className={styles.panelNote}>
-            Published in CMS means approved in Payload. Live after deploy means the static public site has rebuilt.
-          </p>
-        </aside>
-      </section>
-
-      <section className={styles.taskPanel} aria-labelledby="common-tasks-title">
-        <div className={styles.sectionHeader}>
-          <p className={styles.kicker}>Start here</p>
-          <h2 id="common-tasks-title">Common tasks</h2>
-          <p>Each row goes to one place. Pick the row that matches the work you came to do.</p>
-        </div>
-        <div className={styles.taskList}>
-          {commonTasks.map((item) => (
-            <Link className={styles.taskRow} href={item.href} key={item.href}>
-              <span className={styles.rowMeta}>{item.meta}</span>
-              <strong>{item.label}</strong>
-              <p>{item.description}</p>
-              <span className={styles.rowAction}>Open</span>
-            </Link>
+        <div className={styles.jumpList} aria-label="CMS section jump links">
+          {directoryGroups.map((group) => (
+            <a href={`#${group.title.replace(/\s+/g, '-').toLowerCase()}`} key={group.title}>
+              {group.title}
+            </a>
           ))}
         </div>
       </section>
 
-      <section className={styles.workspace} aria-label="CMS work areas">
-        <div className={styles.workAreaStack}>
-          {workAreas.map((area) => (
-            <section className={styles.workArea} aria-labelledby={`${area.title.replace(/\s+/g, '-')}-title`} key={area.title}>
-              <div className={styles.workAreaHeader}>
-                <h2 id={`${area.title.replace(/\s+/g, '-')}-title`}>{area.title}</h2>
-                <p>{area.description}</p>
+      <section className={styles.workspace} aria-label="CMS directory">
+        <div className={styles.directoryPanel}>
+          {directoryGroups.map((group) => (
+            <section
+              className={styles.directoryGroup}
+              aria-labelledby={`${group.title.replace(/\s+/g, '-').toLowerCase()}-title`}
+              id={group.title.replace(/\s+/g, '-').toLowerCase()}
+              key={group.title}
+            >
+              <div className={styles.groupHeader}>
+                <h2 id={`${group.title.replace(/\s+/g, '-').toLowerCase()}-title`}>{group.title}</h2>
+                <p>{group.intro}</p>
               </div>
+
               <div className={styles.linkList}>
-                {area.links.map((item) => (
+                {group.links.map((item) => (
                   <Link className={styles.linkRow} href={item.href} key={item.href}>
                     <span className={styles.rowMeta}>{item.meta}</span>
                     <strong>{item.label}</strong>
                     <p>{item.description}</p>
+                    <span className={styles.rowAction}>Open</span>
                   </Link>
                 ))}
               </div>
@@ -188,17 +170,22 @@ export default function Home() {
         </div>
 
         <aside className={styles.sideRail} aria-label="Admin utilities">
-          <section className={styles.sideCard}>
-            <h2>Release gate</h2>
-            <p>Use this after approved CMS content is ready to become public.</p>
-            <Link className={styles.railAction} href="/deploy">
-              Open deploy gate
-            </Link>
+          <section className={styles.sideCard} aria-labelledby="publishing-flow-title">
+            <p className={styles.panelLabel}>Publishing flow</p>
+            <h2 id="publishing-flow-title">What “live” means</h2>
+            <ol className={styles.stepList}>
+              {workflowSteps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+            <p className={styles.panelNote}>
+              Published in CMS means approved in Payload. Live after deploy means the static public site has rebuilt.
+            </p>
           </section>
 
-          <section className={styles.sideCard}>
-            <h2>Access</h2>
-            <p>Invites and user management stay here, separate from content editing.</p>
+          <section className={styles.sideCard} aria-labelledby="admin-shortcuts-title">
+            <p className={styles.panelLabel}>Shortcuts</p>
+            <h2 id="admin-shortcuts-title">Admin utilities</h2>
             <div className={styles.utilityList}>
               {utilityLinks.map((item) => (
                 <Link href={item.href} key={item.href}>
