@@ -8,6 +8,7 @@ import * as migration_20260511_201500_landing_brief_fields from './20260511_2015
 import * as migration_20260526_120000_cms_scope_and_announcements from './20260526_120000_cms_scope_and_announcements';
 import * as migration_20260529_090000_location_details from './20260529_090000_location_details';
 import * as migration_20260605_101500_announcement_banner_ticker_behavior from './20260605_101500_announcement_banner_ticker_behavior';
+import * as migration_20260605_143000_sync_current_cms_content from './20260605_143000_sync_current_cms_content';
 
 export const migrations = [
   {
@@ -59,5 +60,10 @@ export const migrations = [
     up: migration_20260605_101500_announcement_banner_ticker_behavior.up,
     down: migration_20260605_101500_announcement_banner_ticker_behavior.down,
     name: '20260605_101500_announcement_banner_ticker_behavior'
+  },
+  {
+    up: migration_20260605_143000_sync_current_cms_content.up,
+    down: migration_20260605_143000_sync_current_cms_content.down,
+    name: '20260605_143000_sync_current_cms_content'
   },
 ];
