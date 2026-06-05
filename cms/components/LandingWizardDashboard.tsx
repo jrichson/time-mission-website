@@ -1,7 +1,29 @@
 import Link from 'next/link';
 import React from 'react';
 
-const landingActions = [
+type DashboardAction = {
+  href: string;
+  label: string;
+  text: string;
+};
+
+type DashboardPanel = {
+  actions: DashboardAction[];
+  aria: string;
+  id: string;
+  intro: string;
+  manageHref?: string;
+  manageLabel?: string;
+  steps: string[];
+  title: string;
+};
+
+const landingActions: DashboardAction[] = [
+  {
+    href: '/landings/new',
+    label: 'Start brief',
+    text: 'Open the brief-first wizard and save a draft before choosing final page content.',
+  },
   {
     href: '/landings/new?template=paid_social_campaign',
     label: 'Paid/social',
@@ -19,7 +41,7 @@ const landingActions = [
   },
 ];
 
-const siteSurfaceActions = [
+const siteSurfaceActions: DashboardAction[] = [
   {
     href: '/admin/collections/location-details',
     label: 'Location details',
@@ -37,7 +59,7 @@ const siteSurfaceActions = [
   },
 ];
 
-const ownerActions = [
+const ownerActions: DashboardAction[] = [
   {
     href: '/admin/collections/user-invites/create',
     label: 'Invite people',
@@ -55,12 +77,10 @@ const ownerActions = [
   },
 ];
 
-const dashboardPanels = [
+const dashboardPanels: DashboardPanel[] = [
   {
     actions: siteSurfaceActions,
     aria: 'Reusable site surface shortcuts',
-    buttonHref: '/admin/collections/location-details',
-    buttonLabel: 'Location details',
     id: 'tm-site-surfaces-title',
     intro:
       'Location detail records only update address and hours for existing locations. Pages, booking links, providers, and location status stay code-owned.',
@@ -70,8 +90,6 @@ const dashboardPanels = [
   {
     actions: landingActions,
     aria: 'Start a landing draft by template',
-    buttonHref: '/landings/new',
-    buttonLabel: 'Start brief',
     id: 'tm-landing-wizard-title',
     intro:
       'Pick the campaign job, capture the promise and proof, then preview the saved page before anything is published.',
@@ -83,8 +101,6 @@ const dashboardPanels = [
   {
     actions: ownerActions,
     aria: 'CMS user management shortcuts',
-    buttonHref: '/admin/collections/user-invites/create',
-    buttonLabel: 'Invite people',
     id: 'tm-owner-tools-title',
     intro:
       'Invite approved CMS users, review setup links, and keep access controlled after the content workflow is configured.',
@@ -93,33 +109,50 @@ const dashboardPanels = [
   },
 ];
 
-function panelButton(panel: (typeof dashboardPanels)[number]) {
-  if (panel.id === 'tm-owner-tools-title') {
+function actionRow(action: DashboardAction) {
+  if (action.href === '/landings/new') {
     return (
-      <Link className="tm-landing-wizard-card__button" href="/admin/collections/user-invites/create">
-        Invite people
+      <Link className="tm-landing-wizard-card__action" href="/landings/new" key={action.href}>
+        <strong>{action.label}</strong>
+        <span>{action.text}</span>
+        <em>Open</em>
       </Link>
     );
   }
 
-  if (panel.id === 'tm-landing-wizard-title') {
+  if (action.href === '/admin/collections/user-invites/create') {
     return (
-      <Link className="tm-landing-wizard-card__button" href="/landings/new">
-        Start brief
+      <Link className="tm-landing-wizard-card__action" href="/admin/collections/user-invites/create" key={action.href}>
+        <strong>{action.label}</strong>
+        <span>{action.text}</span>
+        <em>Open</em>
       </Link>
     );
   }
 
   return (
-    <Link className="tm-landing-wizard-card__button" href={panel.buttonHref}>
-      {panel.buttonLabel}
+    <Link className="tm-landing-wizard-card__action" href={action.href} key={action.href}>
+      <strong>{action.label}</strong>
+      <span>{action.text}</span>
+      <em>Open</em>
     </Link>
   );
 }
 
 export function LandingWizardDashboard() {
   return (
-    <>
+    <div className="tm-landing-wizard">
+      <section className="tm-landing-wizard__intro" aria-labelledby="tm-cms-directory-title">
+        <div>
+          <p className="tm-landing-wizard__eyebrow">CMS directory</p>
+          <h2 id="tm-cms-directory-title">Choose the CMS area first.</h2>
+        </div>
+        <p>
+          Content work is grouped by job: reusable site details, campaign landing pages, then access. Each row opens
+          one destination.
+        </p>
+      </section>
+
       {dashboardPanels.map((panel) => (
         <section
           className="tm-landing-wizard-card"
@@ -129,14 +162,12 @@ export function LandingWizardDashboard() {
           <div className="tm-landing-wizard-card__inner">
             <div className="tm-landing-wizard-card__header">
               <div>
-                {panel.eyebrow ? <p className="tm-landing-wizard-card__eyebrow">{panel.eyebrow}</p> : null}
                 <h2 id={panel.id}>{panel.title}</h2>
+                <p>{panel.intro}</p>
               </div>
-              {panelButton(panel)}
             </div>
 
             <div className="tm-landing-wizard-card__body">
-              <p>{panel.intro}</p>
               <ol className="tm-landing-wizard-card__steps" aria-label={`${panel.title} workflow`}>
                 {panel.steps.map((step) => (
                   <li key={step}>{step}</li>
@@ -145,12 +176,7 @@ export function LandingWizardDashboard() {
             </div>
 
             <div className="tm-landing-wizard-card__actions" aria-label={panel.aria}>
-              {panel.actions.map((action) => (
-                <Link className="tm-landing-wizard-card__action" href={action.href} key={action.href}>
-                  <strong>{action.label}</strong>
-                  <span>{action.text}</span>
-                </Link>
-              ))}
+              {panel.actions.map((action) => actionRow(action))}
             </div>
 
             {panel.manageHref && panel.manageLabel ? (
@@ -161,7 +187,7 @@ export function LandingWizardDashboard() {
           </div>
         </section>
       ))}
-    </>
+    </div>
   );
 }
 

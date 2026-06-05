@@ -2,46 +2,6 @@ import Link from 'next/link';
 
 import styles from './home.module.css';
 
-const quickLinks = [
-  {
-    href: '/admin/collections/site-pages',
-    label: 'Page SEO Overrides',
-    meta: 'SEO',
-    description:
-      'Update search and social metadata for code-owned pages. Canonical page body copy, layouts, and booking settings stay code-owned.',
-  },
-  {
-    href: '/admin/collections/announcement-banners',
-    label: 'Announcement Banners',
-    meta: 'Shared surface',
-    description: 'Manage text-only top banner messages, scheduling, priority, and location or region targeting.',
-  },
-  {
-    href: '/admin/collections/location-details',
-    label: 'Location Details',
-    meta: 'Locations',
-    description: 'Update public address and hours for existing locations. Pages, booking links, and providers stay code-owned.',
-  },
-  {
-    href: '/admin/collections/landings',
-    label: 'Landing Pages',
-    meta: 'Campaigns',
-    description: 'Create campaign pages from a real brief, preview the public result, and publish when approved.',
-  },
-  {
-    href: '/admin/collections/user-invites',
-    label: 'User Invites',
-    meta: 'Access',
-    description: 'Invite editors, copy invite links, and keep CMS access limited to approved users.',
-  },
-  {
-    href: '/deploy',
-    label: 'Deploy Gate',
-    meta: 'Release',
-    description: 'Trigger the public-site deploy after approved CMS content is ready to go live.',
-  },
-];
-
 const landingActions = [
   {
     href: '/landings/new?template=paid_social_campaign',
@@ -63,25 +23,93 @@ const landingActions = [
   },
 ];
 
-const workflowSteps = ['Draft', 'Preview', 'Published in CMS', 'Live after deploy'];
-
-const systemStats = [
+const commonTasks = [
   {
-    label: 'Managed surfaces',
-    value: '4',
-    text: 'Banners, SEO, locations, and landings stay editable from the CMS.',
+    href: '/admin/collections/location-details',
+    label: 'Update hours or address',
+    meta: 'Locations',
+    description: 'Change the public address and hours for an existing location.',
   },
   {
-    label: 'Draft workflow',
-    value: 'Preview',
-    text: 'Campaign pages are reviewed before they are marked Published in CMS.',
+    href: '/admin/collections/announcement-banners',
+    label: 'Change ticker or banner copy',
+    meta: 'Shared surface',
+    description: 'Edit top-banner messages, targeting, priority, and schedule.',
   },
   {
-    label: 'Release model',
-    value: 'Gate',
-    text: 'Published CMS content goes live only after an approved deploy.',
+    href: '/landings/new',
+    label: 'Start a landing page brief',
+    meta: 'Campaigns',
+    description: 'Open the brief-first wizard before choosing a campaign template.',
+  },
+  {
+    href: '/deploy',
+    label: 'Push approved content live',
+    meta: 'Release',
+    description: 'Deploy only after content is Published in CMS and ready for the public site.',
   },
 ];
+
+const workAreas = [
+  {
+    title: 'Site content',
+    description: 'Reusable public-site surfaces editors can safely update without changing page layouts.',
+    links: [
+      {
+        href: '/admin/collections/location-details',
+        label: 'Location Details',
+        meta: 'Address and hours',
+        description: 'Pages, booking links, providers, and location status stay code-owned.',
+      },
+      {
+        href: '/admin/collections/announcement-banners',
+        label: 'Announcement Banners',
+        meta: 'Ticker and banner',
+        description: 'Text-only top banner messages with scheduling, priority, and location targeting.',
+      },
+      {
+        href: '/admin/collections/site-pages',
+        label: 'Page SEO Overrides',
+        meta: 'SEO metadata',
+        description:
+          'Update search and social metadata. Canonical page body copy, layouts, and booking settings stay code-owned.',
+      },
+    ],
+  },
+  {
+    title: 'Landing pages',
+    description: 'Campaign pages start from a brief, preview privately, and publish through the CMS workflow.',
+    links: [
+      {
+        href: '/admin/collections/landings',
+        label: 'Manage Landing Pages',
+        meta: 'All drafts and published pages',
+        description: 'Review existing campaign pages, drafts, previews, and publish state.',
+      },
+      ...landingActions,
+    ],
+  },
+];
+
+const utilityLinks = [
+  {
+    href: '/admin',
+    label: 'Open Payload admin',
+    meta: 'Admin',
+  },
+  {
+    href: '/admin/collections/user-invites',
+    label: 'Review invites',
+    meta: 'Access',
+  },
+  {
+    href: '/admin/collections/users',
+    label: 'Manage users',
+    meta: 'Users',
+  },
+];
+
+const workflowSteps = ['Draft', 'Preview', 'Published in CMS', 'Live after deploy'];
 
 export default function Home() {
   return (
@@ -99,73 +127,88 @@ export default function Home() {
 
       <section className={styles.hero} aria-labelledby="cms-home-title">
         <div className={styles.heroCopy}>
-          <p className={styles.kicker}>Operator console</p>
-          <h1 id="cms-home-title">Manage CMS content without blurring ownership</h1>
+          <p className={styles.kicker}>CMS workbench</p>
+          <h1 id="cms-home-title">Find the right CMS task quickly.</h1>
           <p className={styles.lede}>
-            Launch campaign pages, tune shared site surfaces, invite editors, and release approved changes through one
-            measured workflow.
+            Choose the thing you need to update, make the edit in Payload, then use the deploy gate when approved
+            content should become public.
           </p>
-          <div className={styles.actions}>
-            <Link className={styles.primaryAction} href="/landings/new">
-              Start landing brief
-            </Link>
-            <Link className={styles.secondaryAction} href="/admin">
-              Open admin
-            </Link>
-          </div>
         </div>
 
         <aside className={styles.publishPanel} aria-label="Publishing workflow">
-          <p className={styles.panelLabel}>Publishing flow</p>
+          <p className={styles.panelLabel}>Publishing model</p>
           <ol className={styles.stepList}>
             {workflowSteps.map((step) => (
               <li key={step}>{step}</li>
             ))}
           </ol>
           <p className={styles.panelNote}>
-            CMS saves create drafts and previews first. Published in CMS means approved; content is Live after deploy
-            when the static public site rebuilds.
+            Published in CMS means approved in Payload. Live after deploy means the static public site has rebuilt.
           </p>
         </aside>
       </section>
 
-      <section className={styles.statGrid} aria-label="CMS operating model">
-        {systemStats.map((item) => (
-          <article className={styles.statCard} key={item.label}>
-            <span>{item.label}</span>
-            <strong>{item.value}</strong>
-            <p>{item.text}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className={styles.landingBuilder} aria-labelledby="landing-builder-title">
-        <div className={styles.sectionIntro}>
-          <h2 id="landing-builder-title">Start with the campaign brief</h2>
-          <p>
-            Do not start from a blank template. Capture the source, visitor intent, and success metric
-            first, then choose the landing shape that fits the job.
-          </p>
+      <section className={styles.taskPanel} aria-labelledby="common-tasks-title">
+        <div className={styles.sectionHeader}>
+          <p className={styles.kicker}>Start here</p>
+          <h2 id="common-tasks-title">Common tasks</h2>
+          <p>Each row goes to one place. Pick the row that matches the work you came to do.</p>
         </div>
-        <div className={styles.landingGrid}>
-          {landingActions.map((item) => (
-            <Link className={styles.landingAction} href={item.href} key={item.href}>
-              <span className={styles.actionMeta}>{item.meta}</span>
+        <div className={styles.taskList}>
+          {commonTasks.map((item) => (
+            <Link className={styles.taskRow} href={item.href} key={item.href}>
+              <span className={styles.rowMeta}>{item.meta}</span>
               <strong>{item.label}</strong>
               <p>{item.description}</p>
+              <span className={styles.rowAction}>Open</span>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className={styles.quickLinks} aria-label="CMS work areas">
-        {quickLinks.map((item) => (
-          <Link className={styles.quickLink} href={item.href} key={item.href}>
-            <small>{item.meta}</small>
-            <span>{item.label}</span>
-            <p>{item.description}</p>
-          </Link>
-        ))}
+      <section className={styles.workspace} aria-label="CMS work areas">
+        <div className={styles.workAreaStack}>
+          {workAreas.map((area) => (
+            <section className={styles.workArea} aria-labelledby={`${area.title.replace(/\s+/g, '-')}-title`} key={area.title}>
+              <div className={styles.workAreaHeader}>
+                <h2 id={`${area.title.replace(/\s+/g, '-')}-title`}>{area.title}</h2>
+                <p>{area.description}</p>
+              </div>
+              <div className={styles.linkList}>
+                {area.links.map((item) => (
+                  <Link className={styles.linkRow} href={item.href} key={item.href}>
+                    <span className={styles.rowMeta}>{item.meta}</span>
+                    <strong>{item.label}</strong>
+                    <p>{item.description}</p>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+
+        <aside className={styles.sideRail} aria-label="Admin utilities">
+          <section className={styles.sideCard}>
+            <h2>Release gate</h2>
+            <p>Use this after approved CMS content is ready to become public.</p>
+            <Link className={styles.railAction} href="/deploy">
+              Open deploy gate
+            </Link>
+          </section>
+
+          <section className={styles.sideCard}>
+            <h2>Access</h2>
+            <p>Invites and user management stay here, separate from content editing.</p>
+            <div className={styles.utilityList}>
+              {utilityLinks.map((item) => (
+                <Link href={item.href} key={item.href}>
+                  <span>{item.meta}</span>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </section>
+        </aside>
       </section>
     </main>
   );
