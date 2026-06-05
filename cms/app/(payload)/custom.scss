@@ -166,6 +166,13 @@
     font-weight: 900;
     text-transform: uppercase;
     line-height: 0.9;
+    text-decoration: none;
+    transition: color 180ms var(--tm-ease);
+  }
+
+  .tm-admin-logo:hover,
+  .tm-admin-logo:focus-visible {
+    color: var(--tm-orange);
   }
 
   .tm-admin-logo span:last-of-type {

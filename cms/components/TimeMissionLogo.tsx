@@ -2,11 +2,11 @@ import React from 'react';
 
 export function TimeMissionLogo() {
   return (
-    <div className="tm-admin-logo" aria-label="Time Mission CMS">
+    <a className="tm-admin-logo" href="/" aria-label="CMS Home">
       <span>Time</span>
       <span>Mission</span>
       <small>CMS</small>
-    </div>
+    </a>
   );
 }
 

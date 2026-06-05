@@ -173,6 +173,9 @@ export default async function LandingPreviewPage({ params }: PageProps) {
           <p>{statusCopy}</p>
         </div>
         <div className={styles.previewActions}>
+          <a className={styles.previewAdminLink} href="/">
+            CMS Home
+          </a>
           <a className={styles.previewAdminLink} href={publicUrl}>
             Public path
           </a>

@@ -33,6 +33,12 @@ const primaryActions: DashboardAction[] = [
     meta: 'Collection',
     text: 'Review drafts, previews, publish state, and saved campaign pages.',
   },
+  {
+    href: '/deploy',
+    label: 'Deploy approved changes',
+    meta: 'Release',
+    text: 'Trigger the public site rebuild after content is Published in CMS.',
+  },
 ];
 
 const landingTemplateActions: DashboardAction[] = [
@@ -79,7 +85,7 @@ const advancedActions: DashboardAction[] = [
     href: '/admin/collections/users',
     label: 'Manage users',
     meta: 'Users',
-    text: 'Review roles and owner-granted permissions for existing CMS accounts.',
+    text: 'Review roles and owner-granted deploy permissions for existing CMS accounts.',
   },
 ];
 
