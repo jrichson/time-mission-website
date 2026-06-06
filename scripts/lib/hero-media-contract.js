@@ -44,8 +44,8 @@ function inspectHeroVideoMarkup(html, label = 'hero markup') {
   if (video.attrs.preload !== 'none') {
     errors.push(`${label}: hero video must keep preload="none" so the poster paints first`);
   }
-  if (Object.prototype.hasOwnProperty.call(video.attrs, 'autoplay')) {
-    errors.push(`${label}: hero video must not include autoplay in markup`);
+  if (!Object.prototype.hasOwnProperty.call(video.attrs, 'autoplay')) {
+    errors.push(`${label}: hero video must include autoplay so mobile Safari can use its native muted inline autoplay path`);
   }
   if (!video.sources.length) {
     errors.push(`${label}: hero video needs at least one <source data-src="...">`);
@@ -101,7 +101,7 @@ function inspectHeroVideoRuntime(js, label = 'hero runtime') {
         ['source[data-src]', 'copy data-src to src only after first paint'],
         ['runAfterHeroPaint', 'defer source attachment only until the hero first paint'],
         ["preload = 'auto'", 'load the hero video promptly after the poster paints'],
-        ['loadeddata', 'reveal the first decoded frame without waiting for canplay'],
+        ['setAttribute(\'autoplay\'', 'restore autoplay before attaching sources'],
         ['playing', 'reveal the video once playback starts'],
         ['is-video-ready', 'reveal video only after it can paint'],
         ['is-video-fallback', 'show static fallback only when playback is limited or blocked'],
