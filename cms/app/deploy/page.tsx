@@ -72,8 +72,8 @@ export default async function DeployPage({ searchParams }: PageProps) {
           <strong>CMS</strong>
         </Link>
         <div className={styles.topbarActions}>
-          <Link href="/">CMS Home</Link>
-          <Link href="/admin">Admin</Link>
+          <Link href="/">Mission Control</Link>
+          <Link href="/admin">Admin tools</Link>
           <Link href="/admin/collections/landings">Landings</Link>
         </div>
       </nav>
@@ -92,8 +92,8 @@ export default async function DeployPage({ searchParams }: PageProps) {
                 Trigger site deploy
               </button>
             </form>
-            <Link className={styles.secondaryAction} href="/admin">
-              Open admin
+            <Link className={styles.secondaryAction} href="/">
+              Mission Control
             </Link>
           </div>
         </div>

@@ -91,6 +91,13 @@ const advancedActions: DashboardAction[] = [
 
 const workflowSteps = ['Draft', 'Preview', 'Published in CMS', 'Live after deploy'];
 
+const missionControlAction: DashboardAction = {
+  href: '/',
+  label: 'Open Mission Control',
+  meta: 'Main home',
+  text: 'Use the designed CMS home for routine updates, releases, and editor shortcuts.',
+};
+
 function actionRow(action: DashboardAction) {
   if (action.href === '/landings/new') {
     return (
@@ -129,12 +136,12 @@ export function LandingWizardDashboard() {
     <div className="tm-landing-wizard">
       <section className="tm-landing-wizard__intro" aria-labelledby="tm-cms-directory-title">
         <div>
-          <p className="tm-landing-wizard__eyebrow">CMS directory</p>
-          <h2 id="tm-cms-directory-title">Choose the CMS area.</h2>
+          <p className="tm-landing-wizard__eyebrow">Payload admin</p>
+          <h2 id="tm-cms-directory-title">Mission Control is the main CMS home.</h2>
         </div>
         <p>
-          Content work is grouped by job. Use the workflow as a reminder: Published in CMS is approved, Live after
-          deploy is public.
+          This generated Payload dashboard is still available for deeper collection work. Start from Mission Control
+          for the designed editor workflow.
         </p>
         <ol className="tm-landing-wizard__workflow" aria-label="Publishing workflow">
           {workflowSteps.map((step) => (
@@ -144,10 +151,21 @@ export function LandingWizardDashboard() {
       </section>
 
       <div className="tm-landing-wizard__groups">
+        <section className="tm-landing-wizard-card tm-landing-wizard-card--mission" aria-labelledby="tm-mission-control-title">
+          <div className="tm-landing-wizard-card__header">
+            <h2 id="tm-mission-control-title">Start at Mission Control</h2>
+            <p>The custom CMS home is the primary dashboard. Payload stays here for raw admin screens.</p>
+          </div>
+
+          <div className="tm-landing-wizard-card__actions" aria-label="Open Mission Control">
+            {actionRow(missionControlAction)}
+          </div>
+        </section>
+
         <section className="tm-landing-wizard-card" aria-labelledby="tm-primary-cms-title">
           <div className="tm-landing-wizard-card__header">
-            <h2 id="tm-primary-cms-title">Start here</h2>
-            <p>Use these for routine content updates and landing page work.</p>
+            <h2 id="tm-primary-cms-title">Payload shortcuts</h2>
+            <p>Use these when you are already in Payload and need a specific collection screen.</p>
           </div>
 
           <div className="tm-landing-wizard-card__actions" aria-label="Primary CMS shortcuts">

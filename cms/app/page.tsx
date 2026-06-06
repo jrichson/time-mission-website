@@ -72,9 +72,9 @@ const advancedLinks = [
   },
   {
     href: '/admin',
-    label: 'Payload Admin',
+    label: 'Payload Admin Tools',
     meta: 'Admin',
-    description: 'Open the full Payload admin when you need the complete collection list.',
+    description: 'Use the lower-level Payload view only when Mission Control does not cover the task.',
   },
 ];
 
@@ -89,18 +89,18 @@ export default function Home() {
           <strong>CMS</strong>
         </Link>
         <div className={styles.topbarActions}>
-          <Link href="/admin">Payload</Link>
+          <Link href="/">Mission Control</Link>
+          <Link href="/admin">Admin tools</Link>
           <Link href="/deploy">Deploy</Link>
         </div>
       </nav>
 
       <section className={styles.header} aria-labelledby="cms-home-title">
         <div>
-          <p className={styles.kicker}>CMS workbench</p>
-          <h1 id="cms-home-title">Make the CMS change.</h1>
+          <p className={styles.kicker}>Mission Control</p>
+          <h1 id="cms-home-title">Run the CMS from here.</h1>
           <p className={styles.lede}>
-            Start with the edit type. SEO, access, and full admin tools stay in Advanced so routine content work is easy
-            to find.
+            This is the main CMS home. Start with the job, then drop into Payload only for the specific edit screen.
           </p>
         </div>
       </section>
@@ -110,7 +110,7 @@ export default function Home() {
           <section className={styles.directoryGroup} aria-labelledby="primary-cms-work-title">
             <div className={styles.groupHeader}>
               <h2 id="primary-cms-work-title">Start here</h2>
-              <p>The main CMS paths editors use most often.</p>
+              <p>The primary paths editors should use instead of starting from the raw Payload dashboard.</p>
             </div>
 
             <div className={styles.linkList}>
@@ -158,7 +158,7 @@ export default function Home() {
 
           <section className={styles.sideCard} aria-labelledby="admin-shortcuts-title">
             <p className={styles.panelLabel}>Advanced</p>
-            <h2 id="admin-shortcuts-title">Settings and access</h2>
+            <h2 id="admin-shortcuts-title">Admin tools</h2>
             <div className={styles.advancedList}>
               {advancedLinks.map((item) => (
                 <Link aria-label={`${item.label}: ${item.description}`} href={item.href} key={item.href}>

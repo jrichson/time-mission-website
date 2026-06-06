@@ -11,13 +11,16 @@ function read(rel) {
 }
 
 describe('CMS navigation', () => {
-  it('keeps CMS home reachable from custom workflow pages and Payload chrome', () => {
-    expect(read('cms/components/TimeMissionLogo.tsx')).toContain('href="/" aria-label="CMS Home"');
+  it('keeps Mission Control reachable from custom workflow pages and Payload chrome', () => {
+    expect(read('cms/components/TimeMissionLogo.tsx')).toContain('href="/" aria-label="Mission Control"');
+    expect(read('cms/app/page.tsx')).toContain('Mission Control');
+    expect(read('cms/app/page.tsx')).toContain('Run the CMS from here.');
     expect(read('cms/components/LandingWizardDashboard.tsx')).toContain("href: '/deploy'");
     expect(read('cms/components/LandingWizardDashboard.tsx')).toContain('Deploy approved changes');
     expect(read('cms/components/LandingWizardDashboard.tsx')).toContain('owner-granted deploy permissions');
-    expect(read('cms/app/deploy/page.tsx')).toContain('<Link href="/">CMS Home</Link>');
-    expect(read('cms/app/landings/new/page.tsx')).toContain('<Link href="/">CMS Home</Link>');
-    expect(read('cms/app/preview/landings/[id]/page.tsx')).toContain('CMS Home');
+    expect(read('cms/components/LandingWizardDashboard.tsx')).toContain('Mission Control is the main CMS home.');
+    expect(read('cms/app/deploy/page.tsx')).toContain('<Link href="/">Mission Control</Link>');
+    expect(read('cms/app/landings/new/page.tsx')).toContain('<Link href="/">Mission Control</Link>');
+    expect(read('cms/app/preview/landings/[id]/page.tsx')).toContain('Mission Control');
   });
 });
