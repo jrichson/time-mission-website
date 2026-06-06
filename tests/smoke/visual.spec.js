@@ -125,7 +125,7 @@ test.describe('visual regression (representative templates)', () => {
     });
   });
 
-  test('bookable launch location (Houston)', async ({ page }) => {
+  test('open bookable location (Houston)', async ({ page }) => {
     await page.goto('/houston');
     await expect(page).toHaveTitle(/Houston/i);
     await stabilizeForScreenshot(page);

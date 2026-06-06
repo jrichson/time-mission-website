@@ -11,7 +11,7 @@
 
         <h2>What You Get</h2>
         <p><strong>A Turnkey Attraction.</strong> Hardware, software, rooms, props, staff training, and ongoing support. Time Mission is a complete system, not a loose kit you assemble.</p>
-        <p><strong>Proven Model.</strong> Open locations in Philadelphia, Mount Prospect, West Nyack, Lincoln, Manassas, and Antwerp, with Houston opening 2026. Each venue serves thousands of players per month.</p>
+        <p><strong>Proven Model.</strong> Operating venues include Mount Prospect, Houston, West Nyack, Lincoln, Manassas, and Antwerp, with additional markets in development. Each venue serves thousands of players per month.</p>
         <p><strong>Brand Support.</strong> Marketing collateral, digital ad templates, and a shared brand voice that's being refined for national campaigns.</p>
         <p><strong>Flexible Footprint.</strong> From 6,000 to 20,000 sqft, integrated with existing attractions (karting, trampoline, mall entertainment) or as a standalone.</p>
 

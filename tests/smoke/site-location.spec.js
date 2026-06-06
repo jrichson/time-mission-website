@@ -46,6 +46,7 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
 
   const antwerp = page.locator('#locationDropdown a[data-tm-location-slug="antwerp"]').first();
   const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
+  const houston = page.locator('#locationDropdown a[data-tm-location-slug="houston"]').first();
 
   await expect(antwerp).toHaveAttribute('data-tm-external-location', 'true');
   await expect(antwerp).toHaveAttribute('data-city', 'Antwerp');
@@ -60,10 +61,38 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await expect(brussels).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
   await expect(brussels).toContainText('Belgium – Brussels');
   await expect(brussels).toContainText('Opening June 18, 2026');
+  await expect(houston).toContainText('TX – Houston');
+  await expect(houston.locator('.coming-soon-tag')).toHaveText('OPEN NOW!');
   await brussels.hover();
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Brussels');
   await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit EU Site');
   await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
+});
+
+test('short Houston ticker renders centered instead of scrolling from the edge', async ({ page }) => {
+  await page.goto('/houston');
+
+  const tickerTrack = page.locator('.ticker-track');
+  const tickerItem = page.locator('.ticker-item');
+
+  await expect(tickerTrack).toHaveClass(/ticker-track--static/);
+  await expect(tickerItem).toHaveCount(1);
+  await expect(tickerItem).toHaveText('HOUSTON NOW OPEN');
+
+  const metrics = await page.evaluate(() => {
+    const bar = document.querySelector('.ticker-bar');
+    const track = document.querySelector('.ticker-track');
+    const item = document.querySelector('.ticker-item');
+    const barRect = bar.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    return {
+      centerDelta: Math.abs((itemRect.left + itemRect.width / 2) - (barRect.left + barRect.width / 2)),
+      trackAnimation: getComputedStyle(track).animationName,
+    };
+  });
+
+  expect(metrics.trackAnimation).toBe('none');
+  expect(metrics.centerDelta).toBeLessThanOrEqual(2);
 });
 
 test('desktop location selector selects Brussels without leaving the page', async ({ page, isMobile }) => {

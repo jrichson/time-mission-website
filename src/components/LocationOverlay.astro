@@ -17,7 +17,20 @@ function statusLabel(loc: (typeof allLocations)[number]) {
     return locationStatusBadge(loc) || 'Coming Soon';
 }
 
+function selectorBadge(loc: (typeof allLocations)[number]) {
+    if (loc.slug === 'houston' && loc.status === 'open') return 'OPEN NOW!';
+    if (loc.status !== 'open') return statusLabel(loc);
+    return '';
+}
+
+function selectorBadgeI18n(loc: (typeof allLocations)[number]) {
+    if (loc.slug === 'houston' && loc.status === 'open') return 'location.openNow';
+    if (loc.status === 'coming-soon' && !locationOpeningLabel(loc)) return 'location.comingSoon';
+    return undefined;
+}
+
 function statusClass(loc: (typeof allLocations)[number]) {
+    if (loc.slug === 'houston' && loc.status === 'open') return 'location-open-now';
     if (loc.status === 'coming-soon') return 'location-coming-soon';
     if (loc.status === 'temporarily-closed') return 'location-temporarily-closed';
     return undefined;
@@ -40,7 +53,9 @@ function statusClass(loc: (typeof allLocations)[number]) {
         <div class="location-overlay-left">
             <div class="location-group">
                 <div class="location-group-title" data-i18n="location.unitedStates">United States</div>
-                {usLocations.map((loc) => (
+                {usLocations.map((loc) => {
+                    const badge = selectorBadge(loc);
+                    return (
                     <a
                         href={locationHref(loc)}
                         data-city={loc.shortName}
@@ -48,17 +63,20 @@ function statusClass(loc: (typeof allLocations)[number]) {
                         class={statusClass(loc)}
                     >
                         {locationListLabel(loc)}
-                        {loc.status !== 'open' && (
-                            <span class="coming-soon-tag" data-i18n={loc.status === 'coming-soon' && !locationOpeningLabel(loc) ? 'location.comingSoon' : undefined}>
-                                {' '}{statusLabel(loc)}
+                        {badge && (
+                            <span class="coming-soon-tag" data-i18n={selectorBadgeI18n(loc)}>
+                                {' '}{badge}
                             </span>
                         )}
                     </a>
-                ))}
+                    );
+                })}
             </div>
             <div class="location-group">
                 <div class="location-group-title" data-i18n="location.europe">Europe</div>
-                {euLocations.map((loc) => (
+                {euLocations.map((loc) => {
+                    const badge = selectorBadge(loc);
+                    return (
                     <a
                         href={locationHref(loc)}
                         data-city={loc.shortName}
@@ -69,13 +87,14 @@ function statusClass(loc: (typeof allLocations)[number]) {
                         rel={loc.externalUrl ? 'noopener' : undefined}
                     >
                         {locationListLabel(loc)}
-                        {loc.status !== 'open' && (
-                            <span class="coming-soon-tag" data-i18n={loc.status === 'coming-soon' && !locationOpeningLabel(loc) ? 'location.comingSoon' : undefined}>
-                                {' '}{statusLabel(loc)}
+                        {badge && (
+                            <span class="coming-soon-tag" data-i18n={selectorBadgeI18n(loc)}>
+                                {' '}{badge}
                             </span>
                         )}
                     </a>
-                ))}
+                    );
+                })}
             </div>
         </div>
         <div class="location-overlay-divider"></div>

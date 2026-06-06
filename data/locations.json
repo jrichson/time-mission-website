@@ -508,9 +508,7 @@
       "shortName": "Houston",
       "venueName": null,
       "region": "us",
-      "status": "coming-soon",
-      "openingDate": "2026-06-05",
-      "openingLabel": "Opening June 5, 2026",
+      "status": "open",
       "address": {
         "line1": "7620 Katy Fwy",
         "line2": "STE 355",
@@ -525,7 +523,7 @@
       },
       "contact": {
         "phone": "(713) 588-1630",
-        "email": ""
+        "email": "houston@timemission.com"
       },
       "hours": {
         "mon": {
@@ -578,7 +576,7 @@
       "navLabel": "TX – Houston",
       "mapUrl": "https://maps.google.com/?q=7620+Katy+Fwy+STE+355+Houston+TX+77024",
       "faqs": [],
-      "ticker": "GRAND OPENING JUNE 5! | 50% OFF ANY DATE — CODE OPEN50",
+      "ticker": "HOUSTON NOW OPEN",
       "giftCardUrl": "https://book.houston.timemission.com/giftcards/en-us/products",
       "waiverUrl": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
       "countryCode": "US",
@@ -587,7 +585,7 @@
       "currency": null,
       "phoneE164": "+17135881630",
       "hreflang": null,
-      "localBusinessSchemaEligible": false
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "antwerp",

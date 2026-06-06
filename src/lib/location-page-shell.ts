@@ -1,7 +1,7 @@
 import { allLocations, type LocationRecord } from '../data/locations';
 import { definePage } from './define-page';
 import { comingSoonLocationPageTaglines, locationPageTaglines } from './location-page-registry';
-import { hasTicketBooking, locationOpeningDateText, locationOpeningLabel } from './location-status';
+import { hasTicketBooking, locationDisplayStatus, locationOpeningDateText, locationOpeningLabel } from './location-status';
 import { locationCtaView, locationMarket } from './location-view';
 import { buildLocationGraph, serializeGraph } from './schema/graph';
 import { applyTmMediaBase } from './tm-media';
@@ -39,6 +39,60 @@ function escapeHtml(value: string): string {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
+}
+
+function replaceToken(source: string, token: string, value: unknown): string {
+    return source.replaceAll(`{{${token}}}`, escapeHtml(String(value ?? '')));
+}
+
+function replaceRawToken(source: string, token: string, value: string): string {
+    return source.replaceAll(`{{${token}}}`, value);
+}
+
+function locationPageStatusLabel(location: LocationRecord): string {
+    return location.status === 'open' ? 'Now Open' : locationDisplayStatus(location);
+}
+
+function locationPrimaryCtaAttrs(location: LocationRecord): string {
+    if (!hasTicketBooking(location)) return '';
+    const checkoutUrl = String(location.rollerCheckoutUrl || location.bookingUrl || '').trim();
+    return `data-tm-booking-trigger="" data-tm-booking-kind="tickets" data-tm-location="${escapeHtml(location.slug)}" data-tm-booking-url="${escapeHtml(checkoutUrl)}"`;
+}
+
+function withLocationTemplateTokens(mainRaw: string, location: LocationRecord): string {
+    if (!mainRaw.includes('{{')) return mainRaw;
+
+    const isBookable = hasTicketBooking(location);
+    const primaryCta = locationCtaView(location);
+    const openingLabel = location.status === 'open' ? '' : locationOpeningLabel(location);
+    const openingDateText = openingLabel ? locationOpeningDateText(location) : '';
+    const bookingFaqQuestion = isBookable ? 'Can I book now?' : 'When can I book?';
+    const bookingFaqAnswer = isBookable
+        ? openingLabel
+            ? `${location.shortName} opens ${openingDateText}. Online booking is available now, so use Book Now to choose your date and time through our secure checkout.`
+            : `Yes. Online booking is available for ${location.shortName}. Use Book Now to choose your date and time through our secure checkout.`
+        : `Booking opens closer to launch. Contact the ${location.shortName} team for opening updates and launch timing.`;
+    const finalCtaTitle = isBookable ? (openingLabel ? 'BOOK AHEAD' : 'BOOK YOUR MISSION') : 'STAY CLOSE TO LAUNCH';
+    const finalCtaText = isBookable
+        ? openingLabel
+            ? `${location.shortName} opens ${openingDateText}. Choose your date, rally your team, and get ready to play.`
+            : `Tickets for ${location.shortName} are available now. Choose your date, rally your team, and get ready to play.`
+        : `Reach out about ${location.shortName} and we will route your message to the right team.`;
+
+    let resolved = mainRaw;
+    resolved = replaceToken(resolved, 'LOCATION_NAME', location.name);
+    resolved = replaceToken(resolved, 'LOCATION_SHORT_NAME', location.shortName);
+    resolved = replaceToken(resolved, 'LOCATION_SLUG', location.slug);
+    resolved = replaceToken(resolved, 'LOCATION_PAGE_STATUS_LABEL', locationPageStatusLabel(location));
+    resolved = replaceToken(resolved, 'PRIMARY_CTA_LABEL', primaryCta.label);
+    resolved = replaceToken(resolved, 'PRIMARY_CTA_HREF', primaryCta.href);
+    resolved = replaceToken(resolved, 'PRIMARY_CTA_CLASS', isBookable ? 'btn-location-book' : 'btn-location-lead');
+    resolved = replaceRawToken(resolved, 'PRIMARY_CTA_ATTRS', locationPrimaryCtaAttrs(location));
+    resolved = replaceToken(resolved, 'BOOKING_FAQ_QUESTION', bookingFaqQuestion);
+    resolved = replaceToken(resolved, 'BOOKING_FAQ_ANSWER', bookingFaqAnswer);
+    resolved = replaceToken(resolved, 'FINAL_CTA_TITLE', finalCtaTitle);
+    resolved = replaceToken(resolved, 'FINAL_CTA_TEXT', finalCtaText);
+    return resolved;
 }
 
 function contactHref(slug: string, type = 'closure'): string {
@@ -87,7 +141,7 @@ export function buildOpenLocationPage({
         canonicalPath,
         ld: locationJsonLd(location),
         location,
-        mainHtml: applyTmMediaBase(withTemporaryClosureStrip(mainRaw, location)),
+        mainHtml: applyTmMediaBase(withTemporaryClosureStrip(withLocationTemplateTokens(mainRaw, location), location)),
         page: definePage({ canonicalPath }),
         pageInit: cityPageInit(location, locationPageTaglines(slug)),
     };

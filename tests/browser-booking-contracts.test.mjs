@@ -31,13 +31,12 @@ describe('browser booking contracts', () => {
             slug: 'houston',
             shortName: 'Houston',
             region: 'us',
-            status: 'coming-soon',
+            status: 'open',
             address: {
               city: 'Houston',
               state: 'TX',
               country: 'United States',
             },
-            openingLabel: 'Opening June 5, 2026',
             bookingUrl: 'https://checkout.example/houston',
             rollerCheckoutUrl: 'https://checkout.example/houston',
             giftCardUrl: '',
@@ -175,11 +174,11 @@ describe('browser booking contracts', () => {
       .toBe('https://checkout.example/houston');
     expect(window.LocationContext.getLocationView('houston'))
       .toMatchObject({
-        hoursText: 'Opening June 5, 2026',
-        openingLabel: 'Opening June 5, 2026',
+        hoursText: '',
+        openingLabel: '',
       });
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'houston')?.label)
-      .toBe('TX – Houston (Opening June 5, 2026)');
+      .toBe('TX – Houston');
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'antwerp')?.label)
       .toBe('Belgium – Antwerp');
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'brussels')?.label)

@@ -182,3 +182,23 @@
         text-overflow: ellipsis;
     }
 }
+
+.ticker-track.ticker-track--static {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    animation: none;
+}
+
+.ticker-track.ticker-track--static .ticker-item {
+    justify-content: center;
+    max-width: calc(100vw - 1.5rem);
+    padding: 0 1rem;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+}
+
+.ticker-track.ticker-track--static .ticker-item::before {
+    display: none;
+}

@@ -193,16 +193,6 @@ for (const route of schemaRoutes) {
     }
   }
 
-  if (cp === '/houston') {
-    if (findNodesByType(graph, 'EntertainmentBusiness').length) {
-      errors.push(`${outFile}: houston must not emit EntertainmentBusiness`);
-    }
-    const raw = graphBlock;
-    if (raw.includes('openingHoursSpecification')) {
-      errors.push(`${outFile}: houston must not contain openingHoursSpecification`);
-    }
-  }
-
   // Open schema-eligible locations must preserve brand naming and optional alternate names.
   const openLocationSlugs = locationsDoc.locations
     .filter((l) => l.status === 'open' && l.localBusinessSchemaEligible === true)
