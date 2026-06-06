@@ -18,8 +18,10 @@
     --tm-orange-soft: rgba(255, 122, 50, 0.13);
     --tm-cyan: #7ee7f2;
     --tm-ease: cubic-bezier(0.32, 0.72, 0, 1);
+    --tm-readable-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial,
+      sans-serif;
 
-    --font-body: var(--font-geist-sans), 'Plus Jakarta Sans', sans-serif;
+    --font-body: var(--tm-readable-sans);
     --style-radius-s: 12px;
     --style-radius-m: 18px;
     --style-radius-l: 28px;
@@ -654,7 +656,7 @@
 
   #app {
     color: var(--tm-text);
-    font-family: var(--font-geist-sans), 'Plus Jakarta Sans', sans-serif;
+    font-family: var(--tm-readable-sans);
     font-size: 16px;
     line-height: 1.5;
     text-rendering: optimizeLegibility;
@@ -749,6 +751,27 @@
     color: var(--tm-muted-strong);
   }
 
+  .doc-controls,
+  .list-controls,
+  .page-controls,
+  .collection-list__list-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 0;
+    margin: 0;
+    padding: 0.6rem;
+  }
+
+  .doc-controls > *,
+  .list-controls > *,
+  .page-controls > *,
+  .collection-list__list-selection > * {
+    margin-block: 0;
+  }
+
   .table {
     width: 100%;
     max-width: 100%;
@@ -768,6 +791,7 @@
     border-spacing: 0;
     background: transparent;
     color: var(--tm-text);
+    font-family: var(--tm-readable-sans);
     table-layout: auto;
   }
 
@@ -783,9 +807,9 @@
     z-index: 1;
     border-bottom: 1px solid var(--tm-line);
     color: var(--tm-cyan);
-    font-family: var(--font-geist-mono), monospace;
-    font-size: 0.76rem;
-    font-weight: 720;
+    font-family: var(--tm-readable-sans);
+    font-size: 0.82rem;
+    font-weight: 760;
     letter-spacing: 0;
     line-height: 1.2;
     padding: 1rem 1.05rem;
@@ -803,9 +827,10 @@
 
   .table tbody td {
     border-bottom: 1px solid var(--tm-line-soft);
-    color: var(--tm-muted-strong);
-    font-size: 0.94rem;
-    line-height: 1.45;
+    color: rgba(248, 244, 238, 0.9);
+    font-size: 0.98rem;
+    font-weight: 500;
+    line-height: 1.5;
     padding: 1rem 1.05rem;
     vertical-align: top;
   }
@@ -841,9 +866,11 @@
   .table .cell-updatedAt,
   .table .cell-status,
   .table .cell-_status {
-    color: var(--tm-muted);
-    font-family: var(--font-geist-mono), monospace;
-    font-size: 0.82rem;
+    color: var(--tm-muted-strong);
+    font-family: var(--tm-readable-sans);
+    font-size: 0.92rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 560;
     white-space: nowrap;
   }
 
@@ -875,8 +902,9 @@
   .rs__control {
     min-height: 46px;
     color: var(--tm-text);
-    font-family: var(--font-geist-sans), 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.96rem;
+    font-family: var(--tm-readable-sans);
+    font-size: 1rem;
+    font-weight: 500;
     line-height: 1.45;
   }
 
@@ -993,8 +1021,13 @@
   }
 
   .btn {
-    min-height: 42px;
-    font-weight: 760;
+    min-height: 38px;
+    font-family: var(--tm-readable-sans);
+    font-size: 0.9rem;
+    font-weight: 720;
+    line-height: 1.15;
+    margin-block: 0;
+    padding-block: 0.45rem;
   }
 
   .btn--style-icon-label {
