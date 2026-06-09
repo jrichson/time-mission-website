@@ -2,6 +2,7 @@
 import { allLocations } from '../data/locations';
 import { hasTicketBooking, locationDisplayStatus, locationOpeningDateText, locationOpeningLabel } from '../lib/location-status';
 import { locationContactHref, locationCtaView } from '../lib/location-view';
+import { locationPurchaseTermsFaqItemHtml } from '../lib/location-policy-faq';
 import { applyTmMediaBase } from '../lib/tm-media';
 import comingSoonMainRaw from '../partials/houston-main.frag.txt?raw';
 
@@ -73,6 +74,7 @@ comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_CLASS', primaryCtaCla
 comingSoonMain = replaceRawToken(comingSoonMain, 'PRIMARY_CTA_ATTRS', primaryCtaAttrs);
 comingSoonMain = replaceToken(comingSoonMain, 'BOOKING_FAQ_QUESTION', bookingFaqQuestion);
 comingSoonMain = replaceToken(comingSoonMain, 'BOOKING_FAQ_ANSWER', bookingFaqAnswer);
+comingSoonMain = replaceRawToken(comingSoonMain, 'LOCATION_POLICY_FAQ_ITEM', locationPurchaseTermsFaqItemHtml(location));
 comingSoonMain = replaceToken(comingSoonMain, 'FINAL_CTA_TITLE', finalCtaTitle);
 comingSoonMain = replaceToken(comingSoonMain, 'FINAL_CTA_TEXT', finalCtaText);
 ---

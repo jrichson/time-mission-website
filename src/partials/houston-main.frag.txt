@@ -398,6 +398,8 @@
                     <p>{{BOOKING_FAQ_ANSWER}}</p>
                 </div>
             </div>
+
+{{LOCATION_POLICY_FAQ_ITEM}}
         </div>
 
         <div class="mini-faq-cta">

@@ -64,7 +64,7 @@
       "rollerCheckoutUrl": "https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home",
       "bookingProvider": "roller",
       "groupFormUrls": {
-        "default": "https://webforms.pipedrive.com/f/bXEQpsMHJsOtiIdTnIOIuMINAj2jCuMpbJftCRoKl6naQBGsW8F6S0WOShrlXluKB55",
+        "default": "https://webforms.pipedrive.com/f/bXEQpsMHJsOtiIdTnIOIuMINAj2jCuMpbJftCRoKl6naQBGsW8F6S0WOShrlXluKB5",
         "birthdays": "https://webforms.pipedrive.com/f/6xKWqqzjoNTaJIqvmk5k2tRDTavPGnfToLuCSJCsKNa5PmDkPpfEWTYgx2MiTMmQjp",
         "corporate": "https://webforms.pipedrive.com/f/cB8Sz5ot9kA8JtNcE94AnSTFsbTniA4uo164AfyfQQiEUpFkQsd69VgGbk3YXE0syD",
         "field-trips": "https://webforms.pipedrive.com/f/6xMNvdcgOovmw2sKGrNi5BlnYH2OZXFFQLriH93v2osZRKm2DjvgYS8uq1QWw3w8aT",
@@ -86,6 +86,10 @@
         {
           "q": "How many people can play together at Time Mission Mount Prospect?",
           "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
+        },
+        {
+          "q": "What are the purchase terms and conditions?",
+          "a": "You can usually add players to your reservation upon arrival, subject to availability. Most reservations can be rescheduled up to 24 hours before the session starts. However, for Private Venue Takeovers, you can reschedule up to one week in advance. Please note that there are no refunds, but you can convert all or part of most bookings to a Time Mission Gift Card up to 24 hours before the session starts. For Private Venue Takeovers, you can do so up to one week before your booking date. If you need assistance, visit or call the original booking location."
         }
       ],
       "ticker": "SUMMER ADVENTURES AT TIME MISSION MOUNT PROSPECT",
@@ -488,6 +492,10 @@
         {
           "q": "How many people can play together at Time Mission Manassas?",
           "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
+        },
+        {
+          "q": "What are the purchase terms and conditions?",
+          "a": "You can usually add players to your reservation upon arrival, subject to availability. Most reservations can be rescheduled up to 24 hours before the session starts. However, for Private Venue Takeovers, you can reschedule up to one week in advance. Please note that there are no refunds, but you can convert all or part of most bookings to a Time Mission Gift Card up to 24 hours before the session starts. For Private Venue Takeovers, you can do so up to one week before your booking date. If you need assistance, visit or call the original booking location."
         }
       ],
       "ticker": "SUMMER ADVENTURES AT TIME MISSION MANASSAS",
@@ -726,7 +734,12 @@
       },
       "navLabel": "IL – Orland Park",
       "mapUrl": "https://maps.google.com/?q=66+Orland+Square+Dr+Suite+C+Orland+Park+IL+60462",
-      "faqs": [],
+      "faqs": [
+        {
+          "q": "What are the purchase terms and conditions?",
+          "a": "You can usually add players to your reservation upon arrival, subject to availability. Most reservations can be rescheduled up to 24 hours before the session starts. However, for Private Venue Takeovers, you can reschedule up to one week in advance. Please note that there are no refunds, but you can convert all or part of most bookings to a Time Mission Gift Card up to 24 hours before the session starts. For Private Venue Takeovers, you can do so up to one week before your booking date. If you need assistance, visit or call the original booking location."
+        }
+      ],
       "ticker": "Now Accepting Group Event Bookings!",
       "giftCardUrl": "https://book.orlandpark.timemission.com/giftcards/en-us/products",
       "waiverUrl": "https://waiver.roller.app/TimeMissionOrlandPark/home",
@@ -836,7 +849,12 @@
       "bookingUrl": "",
       "navLabel": "TN – Nashville",
       "mapUrl": "https://maps.google.com/?q=209+10th+Avenue+South+Nashville+TN+37203",
-      "faqs": [],
+      "faqs": [
+        {
+          "q": "What are the purchase terms and conditions?",
+          "a": "You can usually add players to your reservation upon arrival, subject to availability. Most reservations can be rescheduled up to 24 hours before the session starts. However, for Private Venue Takeovers, you can reschedule up to one week in advance. Please note that there are no refunds, but you can convert all or part of most bookings to a Time Mission Gift Card up to 24 hours before the session starts. For Private Venue Takeovers, you can do so up to one week before your booking date. If you need assistance, visit or call the original booking location."
+        }
+      ],
       "ticker": "NASHVILLE COMING SOON",
       "giftCardUrl": "",
       "countryCode": "US",

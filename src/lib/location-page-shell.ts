@@ -4,6 +4,7 @@ import { comingSoonLocationPageTaglines, locationPageTaglines } from './location
 import { hasTicketBooking, locationDisplayStatus, locationOpeningDateText, locationOpeningLabel } from './location-status';
 import { locationCtaView, locationMarket } from './location-view';
 import { buildLocationGraph, serializeGraph } from './schema/graph';
+import { locationPurchaseTermsFaqItemHtml } from './location-policy-faq';
 import { applyTmMediaBase } from './tm-media';
 
 function locationBySlug(slug: string): LocationRecord {
@@ -90,6 +91,7 @@ function withLocationTemplateTokens(mainRaw: string, location: LocationRecord): 
     resolved = replaceRawToken(resolved, 'PRIMARY_CTA_ATTRS', locationPrimaryCtaAttrs(location));
     resolved = replaceToken(resolved, 'BOOKING_FAQ_QUESTION', bookingFaqQuestion);
     resolved = replaceToken(resolved, 'BOOKING_FAQ_ANSWER', bookingFaqAnswer);
+    resolved = replaceRawToken(resolved, 'LOCATION_POLICY_FAQ_ITEM', locationPurchaseTermsFaqItemHtml(location));
     resolved = replaceToken(resolved, 'FINAL_CTA_TITLE', finalCtaTitle);
     resolved = replaceToken(resolved, 'FINAL_CTA_TEXT', finalCtaText);
     return resolved;

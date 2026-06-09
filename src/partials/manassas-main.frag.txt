@@ -422,6 +422,8 @@
                     <p>We recommend booking online to guarantee your spot, especially on weekends. Walk-ins are welcome based on availability.</p>
                 </div>
             </div>
+
+{{LOCATION_POLICY_FAQ_ITEM}}
         </div>
 
         <div class="mini-faq-cta">
