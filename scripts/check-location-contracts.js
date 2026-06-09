@@ -110,7 +110,11 @@ function validateGroupFormUrls(location) {
     errors.push(`${id}: groupFormUrls must be an object when present`);
     return;
   }
-  for (const [key, url] of Object.entries(location.groupFormUrls)) {
+  const entries = Object.entries(location.groupFormUrls);
+  if (entries.length > 0 && !Object.prototype.hasOwnProperty.call(location.groupFormUrls, 'default')) {
+    errors.push(`${id}: groupFormUrls.default is required for generic group CTAs`);
+  }
+  for (const [key, url] of entries) {
     if (!/^[a-z0-9-]+$/.test(key)) {
       errors.push(`${id}: groupFormUrls key ${key} must be kebab-case`);
     }
