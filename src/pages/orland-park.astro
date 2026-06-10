@@ -1,9 +1,10 @@
 ---
-import ComingSoonLocationPageShell from '../components/ComingSoonLocationPageShell.astro';
-import { buildComingSoonLocationPage } from '../lib/location-page-shell';
+import OpenLocationPageShell from '../components/OpenLocationPageShell.astro';
+import orlandParkMainRaw from '../partials/houston-main.frag.txt?raw';
+import { buildOpenLocationPage } from '../lib/location-page-shell';
 
 const slug = 'orland-park';
-const cityPage = buildComingSoonLocationPage(slug);
+const cityPage = buildOpenLocationPage({ slug, mainRaw: orlandParkMainRaw });
 ---
 
-<ComingSoonLocationPageShell cityPage={cityPage} />
+<OpenLocationPageShell cityPage={cityPage} />

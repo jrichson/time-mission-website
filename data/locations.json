@@ -704,9 +704,7 @@
       "shortName": "Orland Park",
       "venueName": null,
       "region": "us",
-      "status": "coming-soon",
-      "openingDate": "2026-06-11",
-      "openingLabel": "Opening June 11, 2026",
+      "status": "open",
       "address": {
         "line1": "66 Orland Square Dr",
         "line2": "Suite C",
@@ -723,7 +721,43 @@
         "phone": "(708) 294-8711",
         "email": "OrlandPark@TimeMission.com"
       },
-      "hours": {},
+      "hours": {
+        "mon": {
+          "open": "10:00",
+          "close": "21:00",
+          "label": "10am - 9pm"
+        },
+        "tue": {
+          "open": "10:00",
+          "close": "21:00",
+          "label": "10am - 9pm"
+        },
+        "wed": {
+          "open": "10:00",
+          "close": "21:00",
+          "label": "10am - 9pm"
+        },
+        "thu": {
+          "open": "10:00",
+          "close": "21:00",
+          "label": "10am - 9pm"
+        },
+        "fri": {
+          "open": "10:00",
+          "close": "00:00",
+          "label": "10am - Midnight"
+        },
+        "sat": {
+          "open": "10:00",
+          "close": "00:00",
+          "label": "10am - Midnight"
+        },
+        "sun": {
+          "open": "10:00",
+          "close": "20:00",
+          "label": "10am - 8pm"
+        }
+      },
       "bookingUrl": "https://book.orlandpark.timemission.com/timemissionorlandpark/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.orlandpark.timemission.com/timemissionorlandpark/onlinecheckout/en-us/home",
       "bookingProvider": "roller",
@@ -744,7 +778,7 @@
           "a": "You can usually add players to your reservation upon arrival, subject to availability. Most reservations can be rescheduled up to 24 hours before the session starts. However, for Private Venue Takeovers, you can reschedule up to one week in advance. Please note that there are no refunds, but you can convert all or part of most bookings to a Time Mission Gift Card up to 24 hours before the session starts. For Private Venue Takeovers, you can do so up to one week before your booking date. If you need assistance, visit or call the original booking location."
         }
       ],
-      "ticker": "Now Accepting Group Event Bookings!",
+      "ticker": "ORLAND PARK NOW OPEN",
       "giftCardUrl": "https://book.orlandpark.timemission.com/giftcards/en-us/products",
       "waiverUrl": "https://waiver.roller.app/TimeMissionOrlandPark/home",
       "countryCode": "US",
@@ -753,7 +787,7 @@
       "currency": null,
       "phoneE164": "+17082948711",
       "hreflang": null,
-      "localBusinessSchemaEligible": false
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "brussels",

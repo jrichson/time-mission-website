@@ -31,16 +31,14 @@ const bookingCtaAttrs = {
 };
 
 type TickerMessage =
-    | { text: string; href?: string | null; linkLabel?: string | null }
+    | { text: string; href?: string | null; linkLabel?: string | null; textI18n?: string }
     | { label: string; date: string; separator?: string; labelI18n?: string; dateI18n?: string };
 type TickerBehavior = 'auto' | 'static' | 'animated';
 
 const tickerBaseMessages: TickerMessage[] = [
     {
-        label: 'ORLAND PARK GRAND OPENING',
-        date: 'JUNE 11TH',
-        labelI18n: 'ticker.orlandParkGrandOpeningLabel',
-        dateI18n: 'ticker.orlandParkGrandOpeningDate',
+        text: 'ORLAND PARK NOW OPEN',
+        textI18n: 'ticker.orlandParkGrandOpening',
     },
     {
         label: 'BRUSSELS GRAND OPENING',
@@ -113,7 +111,7 @@ function externalLinkAttrs(href: string | null | undefined) {
             <span class="ticker-item">
                 {'text' in m ? (
                     <>
-                        <span>{m.text}</span>
+                        <span data-i18n={m.textI18n}>{m.text}</span>
                         {m.href && (
                             <>
                                 <span class="ticker-separator" aria-hidden="true">-</span>

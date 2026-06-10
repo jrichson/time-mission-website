@@ -17,20 +17,24 @@ function statusLabel(loc: (typeof allLocations)[number]) {
     return locationStatusBadge(loc) || 'Coming Soon';
 }
 
+function showsOpenNowBadge(loc: (typeof allLocations)[number]) {
+    return (loc.slug === 'houston' || loc.slug === 'orland-park') && loc.status === 'open';
+}
+
 function selectorBadge(loc: (typeof allLocations)[number]) {
-    if (loc.slug === 'houston' && loc.status === 'open') return 'OPEN NOW!';
+    if (showsOpenNowBadge(loc)) return 'OPEN NOW!';
     if (loc.status !== 'open') return statusLabel(loc);
     return '';
 }
 
 function selectorBadgeI18n(loc: (typeof allLocations)[number]) {
-    if (loc.slug === 'houston' && loc.status === 'open') return 'location.openNow';
+    if (showsOpenNowBadge(loc)) return 'location.openNow';
     if (loc.status === 'coming-soon' && !locationOpeningLabel(loc)) return 'location.comingSoon';
     return undefined;
 }
 
 function statusClass(loc: (typeof allLocations)[number]) {
-    if (loc.slug === 'houston' && loc.status === 'open') return 'location-open-now';
+    if (showsOpenNowBadge(loc)) return 'location-open-now';
     if (loc.status === 'coming-soon') return 'location-coming-soon';
     if (loc.status === 'temporarily-closed') return 'location-temporarily-closed';
     return undefined;

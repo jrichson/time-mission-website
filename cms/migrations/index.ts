@@ -10,6 +10,7 @@ import * as migration_20260529_090000_location_details from './20260529_090000_l
 import * as migration_20260605_101500_announcement_banner_ticker_behavior from './20260605_101500_announcement_banner_ticker_behavior';
 import * as migration_20260605_143000_sync_current_cms_content from './20260605_143000_sync_current_cms_content';
 import * as migration_20260605_160000_location_details_external_links from './20260605_160000_location_details_external_links';
+import * as migration_20260610_090000_orland_park_open from './20260610_090000_orland_park_open';
 
 export const migrations = [
   {
@@ -71,5 +72,10 @@ export const migrations = [
     up: migration_20260605_160000_location_details_external_links.up,
     down: migration_20260605_160000_location_details_external_links.down,
     name: '20260605_160000_location_details_external_links'
+  },
+  {
+    up: migration_20260610_090000_orland_park_open.up,
+    down: migration_20260610_090000_orland_park_open.down,
+    name: '20260610_090000_orland_park_open'
   },
 ];
