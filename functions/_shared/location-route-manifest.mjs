@@ -91,6 +91,7 @@ export const PREFIXABLE_CANONICAL_PATHS = [
   "/contact",
   "/contact-thank-you",
   "/locations",
+  "/houston/spinandscore/rules",
   "/privacy",
   "/terms",
   "/code-of-conduct",
@@ -163,6 +164,10 @@ export const PREFIXABLE_ROUTE_ALIASES = [
   [
     "/locations/index.html",
     "/locations"
+  ],
+  [
+    "/houston/spinandscore/rules.html",
+    "/houston/spinandscore/rules"
   ],
   [
     "/privacy.html",

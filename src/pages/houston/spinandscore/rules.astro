@@ -1,0 +1,29 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import { definePage } from '../../../lib/define-page';
+import rulesMain from '../../../partials/houston-spinandscore-rules-main.frag.txt?raw';
+import { buildSimpleGraph, serializeGraph } from '../../../lib/schema/graph';
+
+const ld = serializeGraph(
+    buildSimpleGraph([
+        { label: 'Home', href: '/' },
+        { label: 'Houston', href: '/houston' },
+        { label: 'Spin & Score Official Rules', href: '/houston/spinandscore/rules' },
+    ]),
+);
+const page = definePage({ canonicalPath: '/houston/spinandscore/rules' });
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyClass="has-noise"
+    bodyDataLocation="houston"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-legal.css?v=2" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={rulesMain} />
+</SiteLayout>

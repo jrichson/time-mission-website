@@ -39,6 +39,26 @@
     margin-bottom: 1rem;
 }
 
+.legal-page .legal-lede {
+    color: var(--white);
+    margin-bottom: 1.5rem;
+}
+
+.legal-page ul:not(.legal-contacts),
+.legal-page ol {
+    color: var(--gray);
+    margin: 0.5rem 0 1.25rem;
+    padding-left: 1.25rem;
+}
+
+.legal-page ul:not(.legal-contacts) li,
+.legal-page ol li {
+    color: var(--gray);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-bottom: 0.55rem;
+}
+
 .legal-page a {
     color: var(--cyan);
     text-decoration: underline;

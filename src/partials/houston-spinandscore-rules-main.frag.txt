@@ -1,0 +1,67 @@
+<!-- Page Header -->
+<section class="page-header">
+    <div class="reveal">
+        <h1 class="section-title section-title--display">SPIN &amp; SCORE OFFICIAL RULES</h1>
+    </div>
+</section>
+
+<!-- Content -->
+<section class="legal-page legal-page--rules">
+    <p class="legal-lede"><strong>NO PURCHASE OR PAYMENT OF ANY KIND IS NECESSARY TO ENTER OR WIN. A PURCHASE OR BOOKING WILL NOT IMPROVE YOUR CHANCES OF WINNING. VOID WHERE PROHIBITED.</strong></p>
+
+    <h2>1. Sponsor</h2>
+    <p>This promotion (the "Promotion") is sponsored by LOL Entertainment, LLC, 24 E Washington St Suite 823, Chicago, IL 60602 ("Sponsor"). The Promotion is in no way sponsored, endorsed, administered by, or associated with FIFA, the FIFA World Cup, or any soccer league, federation, team, or event organizer.</p>
+
+    <h2>2. Eligibility</h2>
+    <p>The Promotion is open only to legal residents of the United States who are 18 years of age or older at the time of entry. Employees, officers, and directors of Sponsor, its affiliates, and their immediate family members or household members are not eligible. The Promotion is void where prohibited or restricted by law.</p>
+
+    <h2>3. Promotion Period</h2>
+    <p>The Promotion begins on June 11, 2026 at 12:00 AM CT and ends on July 19, 2026 at 11:59 PM CT (the "Promotion Period"). Entries submitted before or after the Promotion Period will not be eligible. Sponsor's computer is the official time-keeping device for the Promotion.</p>
+
+    <h2>4. How to Enter</h2>
+    <p>To enter, visit the Time Mission Houston "Spin &amp; Score" entry form at <a href="https://www.timemission.com/houston/world-cup">timemission.com/houston/world-cup</a>, complete the entry form with the requested information (name, email address, mobile number, and ZIP code), and submit. Each entrant may enter one (1) time. Limit one (1) entry per person and per mobile number for the entire Promotion Period.</p>
+    <p>No purchase or booking is necessary to enter or win. Completing a booking or making a purchase is not required to enter the Promotion or to win a prize.</p>
+    <p>Consent to receive marketing communications is not required to enter and is not a condition of winning. Entrants may enter the Promotion without agreeing to receive marketing emails or text messages by emailing their name, ZIP code, and the words "Spin &amp; Score Entry" to <a href="mailto:houston@timemission.com">houston@timemission.com</a> during the Promotion Period. Entries submitted through the alternate method receive the same prize odds as online entries.</p>
+
+    <h2>5. Prizes</h2>
+    <p>Every entrant who completes a valid entry and spins the wheel will receive one (1) prize. Prizes consist of the following, awarded by random chance via the on-screen prize wheel:</p>
+    <ul>
+        <li>Time Mission branded mini soccer ball (redeemable in-store with a booking). Approximate Retail Value (ARV): $3.00.</li>
+        <li>10% off a Time Mission Houston booking. ARV: varies by purchase.</li>
+        <li>15% off a Time Mission Houston booking. ARV: varies by purchase.</li>
+        <li>One (1) free Time Mission Houston session ("Free Tix"). ARV: $34.95.</li>
+    </ul>
+    <p>Total number of prizes available is unlimited during the Promotion Period, subject to the "while supplies last" limitations stated below for physical mini soccer balls. Odds of winning a specific prize depend on the wheel configuration at the time of entry; every entrant wins a prize.</p>
+
+    <h2>6. Prize Conditions and Redemption</h2>
+    <p>All prizes are subject to the following conditions:</p>
+    <ul>
+        <li><strong>Mini soccer ball:</strong> Limit one (1) per order. Valid in-store at Time Mission Houston with a booking. Must be redeemed at the front desk during your visit by showing the voucher. Single use. No cash value. Not valid with other offers. While supplies last. Expires July 19, 2026.</li>
+        <li><strong>Discount codes (10% / 15% off):</strong> Valid toward a Time Mission Houston booking. One-time use. Not valid with other offers. Cannot be combined. No cash value. Subject to availability. Expires July 19, 2026.</li>
+        <li><strong>Free session:</strong> Valid for one (1) standard Time Mission Houston session, subject to availability and advance booking. Non-transferable. No cash value. Expires July 19, 2026.</li>
+    </ul>
+    <p>Booking or visiting to redeem a prize is a condition of collecting certain prizes and is not a condition of entry or of winning. Prizes are non-transferable and may not be substituted, except that Sponsor reserves the right to substitute a prize of equal or greater value if a prize becomes unavailable.</p>
+
+    <h2>7. Winner Notification</h2>
+    <p>Prizes are awarded instantly on-screen at the time of entry. The prize code and voucher are displayed on-screen immediately following a spin. Entrants are responsible for retaining their prize code and redeeming within the stated expiration period. Sponsor is not responsible for lost, stolen, or unredeemed prize codes.</p>
+
+    <h2>8. Marketing Consent (Separate from Entry)</h2>
+    <p>By providing your email address and mobile number and opting in, you consent to receive marketing emails and recurring automated marketing text messages from Time Mission at the contact information provided. Consent is not a condition of entry, winning, or any purchase. Message and data rates may apply. Message frequency varies. Reply STOP to cancel or HELP for help. See the Privacy Policy at <a href="/privacy">https://www.timemission.com/privacy</a> for details.</p>
+
+    <h2>9. General Conditions</h2>
+    <p>Sponsor reserves the right to cancel, suspend, or modify the Promotion if fraud, technical failures, or any other factor beyond Sponsor's reasonable control impairs the integrity of the Promotion. Sponsor reserves the right to disqualify any individual who tampers with the entry process or violates these Official Rules. Any attempt to obtain more than the stated number of entries by using multiple identities, mobile numbers, or any other method will void all of that entrant's entries.</p>
+
+    <h2>10. Limitation of Liability</h2>
+    <p>By entering, entrants agree to release and hold harmless Sponsor and its affiliates from any liability, loss, or damage arising out of participation in the Promotion or the acceptance, use, or misuse of any prize.</p>
+
+    <h2>11. Privacy</h2>
+    <p>Information collected from entrants is subject to Sponsor's Privacy Policy, available at <a href="/privacy">https://www.timemission.com/privacy</a>. Texas residents have certain rights under the Texas Data Privacy and Security Act, described in the Privacy Policy.</p>
+
+    <h2>12. Governing Law</h2>
+    <p>The Promotion and these Official Rules are governed by the laws of the State of Illinois, without regard to conflict of laws principles. Any disputes shall be resolved in the state or federal courts located in Cook County, Illinois.</p>
+
+    <h2>13. Sponsor Contact</h2>
+    <p>For questions about the Promotion, contact <a href="mailto:houston@timemission.com">houston@timemission.com</a> or LOL Entertainment, LLC, 24 E Washington St Suite 823, Chicago, IL 60602.</p>
+
+    <p>Time Mission is not affiliated with, endorsed by, or sponsored by FIFA or any official soccer organization. All team and tournament references are for general thematic purposes only.</p>
+</section>

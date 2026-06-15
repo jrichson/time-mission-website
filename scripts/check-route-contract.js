@@ -36,7 +36,9 @@ const SCOPE_FILES = {
     'src/pages/cookies.astro',
     'src/pages/accessibility.astro',
     'src/pages/waiver.astro',
+    'src/pages/houston/spinandscore/rules.astro',
     'src/partials/404-main.frag.txt',
+    'src/partials/houston-spinandscore-rules-main.frag.txt',
   ],
   locations: [
     'src/pages/antwerp.astro',

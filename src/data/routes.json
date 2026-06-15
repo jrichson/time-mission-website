@@ -205,6 +205,16 @@
       "status": 301
     },
     {
+      "id": "houston-spinandscore-rules",
+      "canonicalPath": "/houston/spinandscore/rules",
+      "redirectSources": [
+        "/houston/spinandscore/rules.html"
+      ],
+      "outputFile": "houston/spinandscore/rules.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "mount-prospect",
       "canonicalPath": "/mount-prospect",
       "locationAlternate": "mt-prospect",
