@@ -99,9 +99,11 @@ function notificationRows(rows) {
     .filter((row) => row.value)
     .map((row) => `
       <tr>
-        <td style="padding: 14px 0; border-bottom: 1px solid #E7E2D9;">
-          <div style="font: 700 11px/1.2 Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; color: #8A8378;">${htmlEscape(row.label)}</div>
-          <div style="margin-top: 5px; font: 600 16px/1.4 Arial, sans-serif; color: #17130F;">${htmlEscape(row.value)}</div>
+        <td style="padding: 0 0 12px;">
+          <div style="padding: 14px 16px; border-radius: 8px; background-color: #1B1714; border: 1px solid #3A2B22;">
+            <div style="font: 700 11px/1.2 Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; color: #FFB47F;">${htmlEscape(row.label)}</div>
+            <div style="margin-top: 6px; font: 700 16px/1.4 Arial, sans-serif; color: #FFF8EF;">${htmlEscape(row.value)}</div>
+          </div>
         </td>
       </tr>
     `)
@@ -119,8 +121,8 @@ function notificationEmailHtml({
   const messageHtml = message
     ? `
       <div style="margin-top: 24px;">
-        <div style="font: 700 11px/1.2 Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; color: #8A8378;">${htmlEscape(messageLabel)}</div>
-        <div style="margin-top: 8px; padding: 18px; border-radius: 8px; background: #F7F2EA; border: 1px solid #E7E2D9; font: 16px/1.6 Arial, sans-serif; color: #17130F;">${htmlEscape(message).replaceAll('\n', '<br>')}</div>
+        <div style="font: 700 11px/1.2 Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; color: #FFB47F;">${htmlEscape(messageLabel)}</div>
+        <div style="margin-top: 8px; padding: 18px; border-radius: 8px; background-color: #1B1714; border: 1px solid #3A2B22; font: 16px/1.6 Arial, sans-serif; color: #FFF8EF;">${htmlEscape(message).replaceAll('\n', '<br>')}</div>
       </div>
     `
     : '';
@@ -128,23 +130,37 @@ function notificationEmailHtml({
   return `
     <!doctype html>
     <html>
-      <body style="margin: 0; padding: 0; background: #0D0D0D;">
+      <head>
+        <meta name="color-scheme" content="dark">
+        <meta name="supported-color-schemes" content="dark">
+        <style>
+          :root {
+            color-scheme: dark;
+            supported-color-schemes: dark;
+          }
+          body {
+            background-color: #0D0D0D !important;
+            color: #FFF8EF !important;
+          }
+        </style>
+      </head>
+      <body bgcolor="#0D0D0D" style="margin: 0; padding: 0; background-color: #0D0D0D; color: #FFF8EF;">
         <div style="display: none; max-height: 0; overflow: hidden; opacity: 0;">${htmlEscape(preheader)}</div>
-        <div style="padding: 32px 14px; background: #0D0D0D;">
-          <div style="max-width: 640px; margin: 0 auto; overflow: hidden; border-radius: 12px; background: #FFF8EF; border: 1px solid #2E251F;">
-            <div style="background: #151515; padding: 26px 28px 24px; border-bottom: 4px solid #FF6B2C;">
+        <div style="padding: 32px 14px; background-color: #0D0D0D;">
+          <div style="max-width: 640px; margin: 0 auto; overflow: hidden; border-radius: 12px; background-color: #151515; border: 1px solid #3A2B22;">
+            <div style="background-color: #151515; padding: 26px 28px 24px; border-bottom: 4px solid #FF6B2C;">
               <div style="font: 700 12px/1.2 Arial, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: #FFB47F;">Time Mission Website</div>
               <h1 style="margin: 10px 0 0; font: 700 28px/1.1 Arial, sans-serif; color: #FFF8EF;">${htmlEscape(title)}</h1>
               <p style="margin: 12px 0 0; font: 15px/1.6 Arial, sans-serif; color: #D8D1C6;">${htmlEscape(intro)}</p>
             </div>
-            <div style="padding: 28px;">
+            <div style="padding: 28px; background-color: #151515; color: #FFF8EF;">
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
                 <tbody>
                   ${notificationRows(rows)}
                 </tbody>
               </table>
               ${messageHtml}
-              <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #E7E2D9; font: 13px/1.5 Arial, sans-serif; color: #6F665A;">
+              <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #3A2B22; font: 13px/1.5 Arial, sans-serif; color: #B8ADA0;">
                 Reply directly to this email to respond to the guest. This notification was sent by the Time Mission website form handler.
               </div>
             </div>

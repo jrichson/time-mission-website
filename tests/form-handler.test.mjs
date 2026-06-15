@@ -164,6 +164,9 @@ describe('Cloudflare form handler', () => {
     expect(emailPayload.html).toContain('New contact inquiry');
     expect(emailPayload.html).toContain('TX - Houston');
     expect(emailPayload.html).toContain('Question about groups');
+    expect(emailPayload.html).toContain('supported-color-schemes');
+    expect(emailPayload.html).toContain('background-color: #1B1714');
+    expect(emailPayload.html).toContain('color: #FFF8EF;">Guest</div>');
   });
 
   it('requires a Cloudflare D1 form archive unless explicitly disabled', async () => {
