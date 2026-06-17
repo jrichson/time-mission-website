@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { LocationDetails } from '../cms/collections/LocationDetails.js';
-import { LOCATION_DETAIL_OPTIONS } from '../cms/lib/location-details-options.js';
+import { LOCATION_DETAIL_OPTIONS, LOCATION_MISSION_OPTIONS } from '../cms/lib/location-details-options.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -47,6 +47,8 @@ describe('CMS location details', () => {
         const bookingUrlField = findField(LocationDetails.fields, 'bookingUrl');
         const groupFormUrlsField = findField(LocationDetails.fields, 'groupFormUrls');
         const formKeyField = findField(LocationDetails.fields, 'formKey');
+        const hiddenMissionIdsField = findField(LocationDetails.fields, 'hiddenMissionIds');
+        const missionIdField = findField(LocationDetails.fields, 'missionId');
         const publishedField = findField(LocationDetails.fields, 'published');
 
         expect(config).toContain('LocationDetails as CollectionConfig');
@@ -65,12 +67,19 @@ describe('CMS location details', () => {
         expect(groupFormUrlsField?.type).toBe('array');
         expect(groupFormUrlsField?.access?.update).toBeTypeOf('function');
         expect(formKeyField?.admin?.description || formKeyField?.label).toBeTruthy();
+        expect(hiddenMissionIdsField).toMatchObject({ name: 'hiddenMissionIds', type: 'array' });
+        expect(hiddenMissionIdsField?.admin?.description).toContain('hidden for this location');
+        expect(missionIdField).toMatchObject({ name: 'missionId', type: 'select', required: true });
+        expect(missionIdField?.options).toBe(LOCATION_MISSION_OPTIONS);
         expect(publishedField?.label).toBe('Published in CMS');
         expect(publishedField?.admin?.description).toContain('Live after deploy');
         expect(migration).toContain('CREATE TABLE "location_details"');
         expect(migration).toContain("('Time Mission Philadelphia', 'philadelphia'");
         expect(read('cms/migrations/20260605_160000_location_details_external_links.ts')).toContain(
             'CREATE TABLE IF NOT EXISTS "location_details_group_form_urls"',
+        );
+        expect(read('cms/migrations/20260617_090000_location_details_hidden_missions.ts')).toContain(
+            'CREATE TABLE IF NOT EXISTS "location_details_hidden_mission_ids"',
         );
     });
 
@@ -79,5 +88,13 @@ describe('CMS location details', () => {
         const rosterOptions = locations.map((loc) => ({ label: loc.name, value: loc.slug }));
 
         expect(LOCATION_DETAIL_OPTIONS).toEqual(rosterOptions);
+    });
+
+    it('keeps CMS mission options aligned with rendered mission cards', () => {
+        const missionsMain = read('src/partials/missions-main.frag.txt');
+        const renderedMissionIds = Array.from(missionsMain.matchAll(/data-mission-id="(\d{4})"/g), (match) => match[1]);
+
+        expect(new Set(renderedMissionIds).size).toBe(renderedMissionIds.length);
+        expect(LOCATION_MISSION_OPTIONS.map((option) => option.value)).toEqual(renderedMissionIds.sort());
     });
 });

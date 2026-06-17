@@ -74,6 +74,7 @@ export interface LocationRecord {
     alternateName?: string;
     openingDate?: string;
     openingLabel?: string;
+    hiddenMissionIds?: string[];
 }
 
 export interface LocationsDocument {

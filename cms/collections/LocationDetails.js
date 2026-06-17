@@ -1,6 +1,6 @@
 import { isAdminOrEditor } from './Users.js';
 import { markCmsDeployNeeded } from '../lib/cms-deploy-gate.js';
-import { LOCATION_DETAIL_OPTIONS, LOCATION_HOUR_DAYS } from '../lib/location-details-options.js';
+import { LOCATION_DETAIL_OPTIONS, LOCATION_HOUR_DAYS, LOCATION_MISSION_OPTIONS } from '../lib/location-details-options.js';
 
 const TIME_24_HOUR_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 const GROUP_FORM_KEY_PATTERN = /^[a-z0-9-]+$/;
@@ -334,6 +334,25 @@ export const LocationDetails = {
           maxLength: 2048,
           label: 'Form URL',
           validate: validateRequiredHttpsUrl,
+        },
+      ],
+    },
+    {
+      name: 'hiddenMissionIds',
+      type: 'array',
+      maxRows: LOCATION_MISSION_OPTIONS.length,
+      labels: { singular: 'Hidden mission', plural: 'Hidden missions' },
+      admin: {
+        description:
+          'Missions selected here are hidden for this location on the public Missions page after deploy. Leave empty to show every listed mission.',
+      },
+      fields: [
+        {
+          name: 'missionId',
+          type: 'select',
+          required: true,
+          label: 'Mission',
+          options: LOCATION_MISSION_OPTIONS,
         },
       ],
     },

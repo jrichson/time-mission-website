@@ -118,6 +118,32 @@ describe('Payload location details contract', () => {
         expect(location.groupFormUrls?.['bad key']).toBeUndefined();
     });
 
+    it('applies hidden mission overrides and allows editors to clear them', () => {
+        const [hiddenLocation] = applyLocationDetailsOverrides(
+            [baseLocation],
+            [
+                {
+                    ...baseDoc,
+                    address: null,
+                    hours: null,
+                    hiddenMissionIds: [
+                        { missionId: '1005' },
+                        { missionId: 'bad' },
+                        { missionId: '1005' },
+                        { missionId: '1011' },
+                    ],
+                },
+            ],
+        );
+        const [clearedLocation] = applyLocationDetailsOverrides(
+            [{ ...baseLocation, hiddenMissionIds: ['1005'] }],
+            [{ ...baseDoc, address: null, hours: null, hiddenMissionIds: [] }],
+        );
+
+        expect(hiddenLocation.hiddenMissionIds).toEqual(['1005', '1011']);
+        expect(clearedLocation.hiddenMissionIds).toEqual([]);
+    });
+
     it('ignores unpublished docs and docs for non-code-owned locations', () => {
         const changed = applyLocationDetailsOverrides(
             [baseLocation],
@@ -146,6 +172,14 @@ describe('Payload location details contract', () => {
                 ...baseDoc,
                 address: null,
                 hours: { mon: { label: 'Temporarily closed' } },
+            }),
+        ).toBe(true);
+        expect(
+            locationDetailsDocLooksUsable({
+                ...baseDoc,
+                address: null,
+                hours: null,
+                hiddenMissionIds: [],
             }),
         ).toBe(true);
     });

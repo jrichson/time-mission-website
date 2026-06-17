@@ -3,8 +3,12 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const dataPath = path.join(root, 'data', 'locations.json');
+const missionsPartialPath = path.join(root, 'src', 'partials', 'missions-main.frag.txt');
 const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 const locations = data.locations || [];
+const visibleMissionIds = new Set(
+  Array.from(fs.readFileSync(missionsPartialPath, 'utf8').matchAll(/data-mission-id="(\d{4})"/g), (match) => match[1])
+);
 
 const errors = [];
 const seen = new Set();
@@ -119,6 +123,30 @@ function validateGroupFormUrls(location) {
       errors.push(`${id}: groupFormUrls key ${key} must be kebab-case`);
     }
     assertSafeUrl(id, `groupFormUrls.${key}`, url);
+  }
+}
+
+function validateHiddenMissionIds(location) {
+  const id = location.id || '(unknown)';
+  if (location.hiddenMissionIds == null) return;
+  if (!Array.isArray(location.hiddenMissionIds)) {
+    errors.push(`${id}: hiddenMissionIds must be an array when present`);
+    return;
+  }
+
+  const seenMissionIds = new Set();
+  for (const missionId of location.hiddenMissionIds) {
+    if (typeof missionId !== 'string' || !/^\d{4}$/.test(missionId)) {
+      errors.push(`${id}: hiddenMissionIds values must be 4-digit strings`);
+      continue;
+    }
+    if (!visibleMissionIds.has(missionId)) {
+      errors.push(`${id}: hiddenMissionIds ${missionId} does not match a rendered mission card`);
+    }
+    if (seenMissionIds.has(missionId)) {
+      errors.push(`${id}: hiddenMissionIds must not include duplicate ${missionId}`);
+    }
+    seenMissionIds.add(missionId);
   }
 }
 
@@ -240,6 +268,7 @@ for (const location of locations) {
 
   validateIntlFields(location);
   validateLocationTicker(location);
+  validateHiddenMissionIds(location);
   const hasValidGeo = validateGeo(location);
 
   if (Object.prototype.hasOwnProperty.call(location, 'localBusinessSchemaEligible')) {
@@ -270,6 +299,10 @@ for (const location of locations) {
 
 if (!locations.length) {
   errors.push('data/locations.json does not define any locations');
+}
+
+if (!visibleMissionIds.size) {
+  errors.push('src/partials/missions-main.frag.txt does not define any mission cards with data-mission-id');
 }
 
 if (errors.length) {

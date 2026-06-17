@@ -34,6 +34,10 @@ export interface PayloadLocationDetailsGroupFormUrl {
     url?: string | null;
 }
 
+export interface PayloadLocationDetailsHiddenMissionId {
+    missionId?: string | null;
+}
+
 export interface PayloadLocationDetailsDoc {
     id: string | number;
     title?: string | null;
@@ -43,6 +47,7 @@ export interface PayloadLocationDetailsDoc {
     hours?: PayloadLocationDetailsHours | null;
     externalLinks?: PayloadLocationDetailsExternalLinks | null;
     groupFormUrls?: PayloadLocationDetailsGroupFormUrl[] | null;
+    hiddenMissionIds?: PayloadLocationDetailsHiddenMissionId[] | null;
 }
 
 interface LocationDetailsPatch {
@@ -53,11 +58,13 @@ interface LocationDetailsPatch {
         }
     >;
     hours?: Record<string, LocationDayHours>;
+    hiddenMissionIds?: string[];
     mapUrl?: string;
 }
 
 const TIME_24_HOUR_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 const GROUP_FORM_KEY_PATTERN = /^[a-z0-9-]+$/;
+const MISSION_ID_PATTERN = /^\d{4}$/;
 const EXTERNAL_LINK_FIELDS = ['externalUrl', 'bookingUrl', 'rollerCheckoutUrl', 'giftCardUrl', 'waiverUrl'] as const;
 
 function cleanString(value: unknown): string {
@@ -176,19 +183,29 @@ function externalLinksPatchForDoc(
     return Object.keys(patch).length > 0 ? patch : null;
 }
 
+function hiddenMissionIdsPatchForDoc(doc: PayloadLocationDetailsDoc): string[] | null {
+    if (!Array.isArray(doc.hiddenMissionIds)) return null;
+
+    return Array.from(new Set(doc.hiddenMissionIds
+        .map((row) => cleanString(row?.missionId))
+        .filter((missionId) => MISSION_ID_PATTERN.test(missionId))));
+}
+
 function patchForDoc(doc: PayloadLocationDetailsDoc): LocationDetailsPatch | null {
     if (!doc || doc.published !== true || !cleanString(doc.locationSlug)) return null;
 
     const address = addressPatchForDoc(doc);
     const hours = hoursPatchForDoc(doc);
     const externalLinks = externalLinksPatchForDoc(doc);
-    if (!address && !hours && !externalLinks) return null;
+    const hiddenMissionIds = hiddenMissionIdsPatchForDoc(doc);
+    if (!address && !hours && !externalLinks && hiddenMissionIds == null) return null;
 
     return {
         ...(address ? { address } : {}),
         ...(address ? { mapUrl: mapUrlForAddress(address) } : {}),
         ...(hours ? { hours } : {}),
         ...(externalLinks ? { externalLinks } : {}),
+        ...(hiddenMissionIds != null ? { hiddenMissionIds } : {}),
     };
 }
 
@@ -238,6 +255,7 @@ export function applyLocationDetailsOverrides(
             ...(externalLinks.groupFormUrls
                 ? { groupFormUrls: { ...(loc.groupFormUrls || {}), ...externalLinks.groupFormUrls } }
                 : {}),
+            ...(patch.hiddenMissionIds ? { hiddenMissionIds: patch.hiddenMissionIds } : {}),
         };
     });
 }

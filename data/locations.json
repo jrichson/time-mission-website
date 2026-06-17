@@ -63,6 +63,13 @@
       "bookingUrl": "https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home",
       "bookingProvider": "roller",
+      "hiddenMissionIds": [
+        "1005",
+        "1011",
+        "1017",
+        "1025",
+        "1027"
+      ],
       "groupFormUrls": {
         "default": "https://webforms.pipedrive.com/f/bXEQpsMHJsOtiIdTnIOIuMINAj2jCuMpbJftCRoKl6naQBGsW8F6S0WOShrlXluKB5",
         "birthdays": "https://webforms.pipedrive.com/f/6xKWqqzjoNTaJIqvmk5k2tRDTavPGnfToLuCSJCsKNa5PmDkPpfEWTYgx2MiTMmQjp",
@@ -174,6 +181,14 @@
       "bookingUrl": "",
       "rollerCheckoutUrl": "",
       "bookingProvider": "roller",
+      "hiddenMissionIds": [
+        "1004",
+        "1005",
+        "1011",
+        "1025",
+        "1027",
+        "1031"
+      ],
       "groupFormUrls": {},
       "navLabel": "PA – Philadelphia",
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
@@ -265,6 +280,9 @@
       },
       "bookingUrl": "https://timemission-palisades.briqbookings.com",
       "bookingProvider": "briq",
+      "hiddenMissionIds": [
+        "1011"
+      ],
       "briqWidgetDomain": "timemission-palisades",
       "briqWidget": {
         "domain": "timemission-palisades",
@@ -372,6 +390,16 @@
       },
       "bookingUrl": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
       "bookingProvider": "clubspeed",
+      "hiddenMissionIds": [
+        "1004",
+        "1005",
+        "1006",
+        "1017",
+        "1025",
+        "1026",
+        "1027",
+        "1033"
+      ],
       "groupFormUrls": {
         "default": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
         "birthdays": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
@@ -471,6 +499,12 @@
       "bookingUrl": "https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home",
       "bookingProvider": "roller",
+      "hiddenMissionIds": [
+        "1005",
+        "1011",
+        "1012",
+        "1025"
+      ],
       "groupFormUrls": {
         "default": "https://webforms.pipedrive.com/f/6WfZe3FsT5CpyAGlGQNeSnD8PZnbw9PpoyBG6Q1lAtqvD4ribAKRsWWceRYG0npA79",
         "birthdays": "https://webforms.pipedrive.com/f/6N8EVdwKhZ3emAlRGdOmUEk7TYKvBJm0eSzDnHwSrtksQPBFv9MmERzqt5UAPZYMJZ",
@@ -575,6 +609,14 @@
       "bookingUrl": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
       "bookingProvider": "roller",
+      "hiddenMissionIds": [
+        "1005",
+        "1011",
+        "1020",
+        "1025",
+        "1027",
+        "1030"
+      ],
       "groupFormUrls": {
         "default": "https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form",
         "birthdays": "https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form",
@@ -662,6 +704,14 @@
       "bookingUrl": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
       "externalUrl": "https://timemission.eu/antwerp",
       "bookingProvider": "experience-factory",
+      "hiddenMissionIds": [
+        "1003",
+        "1005",
+        "1012",
+        "1015",
+        "1016",
+        "1020"
+      ],
       "groupFormUrls": {
         "default": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
         "birthdays": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
@@ -761,6 +811,13 @@
       "bookingUrl": "https://book.orlandpark.timemission.com/timemissionorlandpark/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.orlandpark.timemission.com/timemissionorlandpark/onlinecheckout/en-us/home",
       "bookingProvider": "roller",
+      "hiddenMissionIds": [
+        "1002",
+        "1005",
+        "1006",
+        "1023",
+        "1025"
+      ],
       "groupFormUrls": {
         "default": "https://webforms.pipedrive.com/f/6qn4HwjvjuHH9aTSI0opXZlY9S6zSaww1No8AKIHefxbmVVTrc2EWOy4D4SWAztcVJ",
         "birthdays": "https://webforms.pipedrive.com/f/cealFU9H4iBjCwAYVuYu3cD2g1DA23TiYaNMI43BAFymCviOhdYqZvYMJB7HXUz9VV",
@@ -813,6 +870,15 @@
       "hours": {},
       "bookingUrl": "",
       "externalUrl": "https://timemission.eu/brussels",
+      "hiddenMissionIds": [
+        "1001",
+        "1005",
+        "1012",
+        "1015",
+        "1016",
+        "1018",
+        "1027"
+      ],
       "navLabel": "Belgium – Brussels",
       "mapUrl": "https://maps.google.com/?q=Av.+Imp%C3%A9ratrice+Charlotte+1020+Bruxelles+Belgium",
       "faqs": [],

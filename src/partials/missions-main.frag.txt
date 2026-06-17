@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="portals-grid">
-            <article class="portal-card reveal" data-category="mental speed">
+            <article class="portal-card reveal" data-mission-id="1013" data-category="mental speed">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp 480w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-800.webp 800w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Glitch-Matrix.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span><span class="portal-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span></div>
@@ -71,7 +71,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="physical skill">
+            <article class="portal-card reveal" data-mission-id="1017" data-category="physical skill">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Big-Bang-480.webp 480w, /assets/photos/experiences/Time-Mission_Big-Bang-800.webp 800w, /assets/photos/experiences/Time-Mission_Big-Bang-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Big-Bang.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span><span class="portal-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
@@ -87,7 +87,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="speed physical">
+            <article class="portal-card reveal" data-mission-id="1033" data-category="speed physical">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1-480.webp 480w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1-800.webp 800w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1-1200.webp 1200w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span><span class="portal-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span></div>
@@ -103,7 +103,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="mental">
+            <article class="portal-card reveal" data-mission-id="1019" data-category="mental">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Persian-0Palace-480.webp 480w, /assets/photos/experiences/Time-Mission_Persian-0Palace-800.webp 800w, /assets/photos/experiences/Time-Mission_Persian-0Palace-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Persian-0Palace.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Persian-0Palace.jpg" alt="Persian Palace" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental">
@@ -122,7 +122,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill">
+            <article class="portal-card reveal" data-mission-id="1007" data-category="skill">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Server_Heist5-480.webp 480w, /assets/photos/experiences/Time-Mission_Server_Heist5-800.webp 800w, /assets/photos/experiences/Time-Mission_Server_Heist5-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Server_Heist5.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill">
@@ -141,7 +141,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="physical">
+            <article class="portal-card reveal" data-mission-id="1012" data-category="physical">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Jungle-Temple-480.webp 480w, /assets/photos/experiences/Time-Mission_Jungle-Temple-800.webp 800w, /assets/photos/experiences/Time-Mission_Jungle-Temple-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Jungle-Temple.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical">
@@ -160,7 +160,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="mental">
+            <article class="portal-card reveal" data-mission-id="1002" data-category="mental">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Artificial_Intelligence-480.webp 480w, /assets/photos/experiences/Time-Mission_Artificial_Intelligence-800.webp 800w, /assets/photos/experiences/Time-Mission_Artificial_Intelligence-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Artificial_Intelligence.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Artificial_Intelligence.jpg" alt="Artificial Intelligence" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental">
@@ -179,7 +179,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill">
+            <article class="portal-card reveal" data-mission-id="1003" data-category="skill">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Pirates_Attack-480.webp 480w, /assets/photos/experiences/Time-Mission_Pirates_Attack-800.webp 800w, /assets/photos/experiences/Time-Mission_Pirates_Attack-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Pirates_Attack.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" width="1920" height="1440" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill">
@@ -198,7 +198,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill speed">
+            <article class="portal-card reveal" data-mission-id="1008" data-category="skill speed">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Control-Room-480.webp 480w, /assets/photos/experiences/Time-Mission_Control-Room-800.webp 800w, /assets/photos/experiences/Time-Mission_Control-Room-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Control-Room.webp 1280w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Control-Room.jpg" alt="Control Room" width="1280" height="1920" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span><span class="portal-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span></div>
@@ -214,7 +214,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="mental">
+            <article class="portal-card reveal" data-mission-id="1001" data-category="mental">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Paleontologists_Study-480.webp 480w, /assets/photos/experiences/Time-Mission_Paleontologists_Study-800.webp 800w, /assets/photos/experiences/Time-Mission_Paleontologists_Study-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Paleontologists_Study.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Paleontologists_Study.jpg" alt="Paleontologist's Study" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental">
@@ -233,7 +233,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill">
+            <article class="portal-card reveal" data-mission-id="1005" data-category="skill">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Sea_Lab-480.webp 480w, /assets/photos/experiences/Time-Mission_Sea_Lab-800.webp 800w, /assets/photos/experiences/Time-Mission_Sea_Lab-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Sea_Lab.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Sea_Lab.jpg" alt="Sea Lab" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill">
@@ -252,7 +252,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill">
+            <article class="portal-card reveal" data-mission-id="1004" data-category="skill">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Machine_Gut-480.webp 480w, /assets/photos/experiences/Time-Mission_Machine_Gut-800.webp 800w, /assets/photos/experiences/Time-Mission_Machine_Gut-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Machine_Gut.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Machine_Gut.jpg" alt="Machine Gut" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill">
@@ -271,7 +271,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill speed">
+            <article class="portal-card reveal" data-mission-id="1006" data-category="skill speed">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Submarine_Plunge-480.webp 480w, /assets/photos/experiences/Time-Mission_Submarine_Plunge-800.webp 800w, /assets/photos/experiences/Time-Mission_Submarine_Plunge-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Submarine_Plunge.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Submarine_Plunge.jpg" alt="Submarine Plunge" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span><span class="portal-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span></div>
@@ -287,7 +287,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="physical skill">
+            <article class="portal-card reveal" data-mission-id="1009" data-category="physical skill">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Koi_Gardens-480.webp 480w, /assets/photos/experiences/Time-Mission_Koi_Gardens-800.webp 800w, /assets/photos/experiences/Time-Mission_Koi_Gardens-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Koi_Gardens.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Koi_Gardens.jpg" alt="Koi Gardens" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span><span class="portal-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
@@ -303,7 +303,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="mental">
+            <article class="portal-card reveal" data-mission-id="1010" data-category="mental">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Egyptian_Tomb-480.webp 480w, /assets/photos/experiences/Time-Mission_Egyptian_Tomb-800.webp 800w, /assets/photos/experiences/Time-Mission_Egyptian_Tomb-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Egyptian_Tomb.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Egyptian_Tomb.jpg" alt="Egyptian Tomb" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental">
@@ -322,7 +322,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="physical">
+            <article class="portal-card reveal" data-mission-id="1011" data-category="physical">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Dystopian_Forest-480.webp 480w, /assets/photos/experiences/Time-Mission_Dystopian_Forest-800.webp 800w, /assets/photos/experiences/Time-Mission_Dystopian_Forest-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Dystopian_Forest.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Dystopian_Forest.jpg" alt="Dystopian Forest" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical">
@@ -341,7 +341,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill mental">
+            <article class="portal-card reveal" data-mission-id="1014" data-category="skill mental">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Piano_Piano-480.webp 480w, /assets/photos/experiences/Time-Mission_Piano_Piano-800.webp 800w, /assets/photos/experiences/Time-Mission_Piano_Piano-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Piano_Piano.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Piano_Piano.jpg" alt="Piano Piano" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span><span class="portal-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span></div>
@@ -357,7 +357,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="mental">
+            <article class="portal-card reveal" data-mission-id="1015" data-category="mental">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Lovecraft_Circle-480.webp 480w, /assets/photos/experiences/Time-Mission_Lovecraft_Circle-800.webp 800w, /assets/photos/experiences/Time-Mission_Lovecraft_Circle-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Lovecraft_Circle.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Lovecraft_Circle.jpg" alt="Lovecraft Circle" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental">
@@ -376,7 +376,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill">
+            <article class="portal-card reveal" data-mission-id="1016" data-category="skill">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Flash_Back-480.webp 480w, /assets/photos/experiences/Time-Mission_Flash_Back-800.webp 800w, /assets/photos/experiences/Time-Mission_Flash_Back-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Flash_Back.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Flash_Back.jpg" alt="Flash Back" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
@@ -392,7 +392,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill">
+            <article class="portal-card reveal" data-mission-id="1018" data-category="skill">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Alien_Awakening-480.webp 480w, /assets/photos/experiences/Time-Mission_Alien_Awakening-800.webp 800w, /assets/photos/experiences/Time-Mission_Alien_Awakening-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Alien_Awakening.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Alien_Awakening.jpg" alt="Alien Awakening" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill">
@@ -411,7 +411,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="mental speed">
+            <article class="portal-card reveal" data-mission-id="1020" data-category="mental speed">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Private_Eye-480.webp 480w, /assets/photos/experiences/Time-Mission_Private_Eye-800.webp 800w, /assets/photos/experiences/Time-Mission_Private_Eye-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Private_Eye.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Private_Eye.jpg" alt="Private Eye" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span><span class="portal-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span></div>
@@ -427,7 +427,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="physical skill">
+            <article class="portal-card reveal" data-mission-id="1021" data-category="physical skill">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Mayan_Court-480.webp 480w, /assets/photos/experiences/Time-Mission_Mayan_Court-800.webp 800w, /assets/photos/experiences/Time-Mission_Mayan_Court-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Mayan_Court.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Mayan_Court.jpg" alt="Mayan Court" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span><span class="portal-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
@@ -443,7 +443,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="mental">
+            <article class="portal-card reveal" data-mission-id="1022" data-category="mental">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Martian_Greenhouse-480.webp 480w, /assets/photos/experiences/Time-Mission_Martian_Greenhouse-800.webp 800w, /assets/photos/experiences/Time-Mission_Martian_Greenhouse-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Martian_Greenhouse.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Martian_Greenhouse.jpg" alt="Martian Greenhouse" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental">
@@ -462,7 +462,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill">
+            <article class="portal-card reveal" data-mission-id="1023" data-category="skill">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Tartarus_Abyss-480.webp 480w, /assets/photos/experiences/Time-Mission_Tartarus_Abyss-800.webp 800w, /assets/photos/experiences/Time-Mission_Tartarus_Abyss-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Tartarus_Abyss.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Tartarus_Abyss.jpg" alt="Tartarus Abyss" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span></div>
@@ -478,7 +478,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="physical">
+            <article class="portal-card reveal" data-mission-id="1025" data-category="physical">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Castle_Conquest-480.webp 480w, /assets/photos/experiences/Time-Mission_Castle_Conquest-800.webp 800w, /assets/photos/experiences/Time-Mission_Castle_Conquest-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Castle_Conquest.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Castle_Conquest.jpg" alt="Castle Conquest" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical">
@@ -497,7 +497,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="physical speed">
+            <article class="portal-card reveal" data-mission-id="1026" data-category="physical speed">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Head_Hunter-480.webp 480w, /assets/photos/experiences/Time-Mission_Head_Hunter-800.webp 800w, /assets/photos/experiences/Time-Mission_Head_Hunter-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Head_Hunter.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Head_Hunter.jpg" alt="Head Hunter" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span><span class="portal-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span></div>
@@ -513,7 +513,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="mental">
+            <article class="portal-card reveal" data-mission-id="1027" data-category="mental">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Element_Zero-480.webp 480w, /assets/photos/experiences/Time-Mission_Element_Zero-800.webp 800w, /assets/photos/experiences/Time-Mission_Element_Zero-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Element_Zero.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Element_Zero.jpg" alt="Element Zero" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span></div>
@@ -529,7 +529,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="mental speed">
+            <article class="portal-card reveal" data-mission-id="1030" data-category="mental speed">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Looking_Glass-480.webp 480w, /assets/photos/experiences/Time-Mission_Looking_Glass-800.webp 800w, /assets/photos/experiences/Time-Mission_Looking_Glass-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Looking_Glass.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Looking_Glass.jpg" alt="Looking Glass" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span><span class="portal-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span></div>
@@ -545,7 +545,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="skill mental">
+            <article class="portal-card reveal" data-mission-id="1031" data-category="skill mental">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Orbital_Relay-480.webp 480w, /assets/photos/experiences/Time-Mission_Orbital_Relay-800.webp 800w, /assets/photos/experiences/Time-Mission_Orbital_Relay-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Orbital_Relay.webp 1600w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Orbital_Relay.jpg" alt="Orbital Relay" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span><span class="portal-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span></div>
@@ -561,7 +561,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-category="physical">
+            <article class="portal-card reveal" data-mission-id="1024" data-category="physical">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Orbital_Pit-480.webp 480w, /assets/photos/experiences/Time-Mission_Orbital_Pit-800.webp 800w, /assets/photos/experiences/Time-Mission_Orbital_Pit-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Orbital_Pit.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Orbital_Pit.jpeg" alt="Orbital Pit" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span></div>
@@ -586,7 +586,7 @@
     <section class="cta-section">
         <div class="cta-content reveal">
             <h2 class="cta-title">READY TO <span>PLAY?</span></h2>
-            <p class="cta-text">Experience all 30 missions across 60, 90, or 120-minute sessions. Book your mission today.</p>
+            <p class="cta-text">Experience a lineup of missions across 60, 90, or 120-minute sessions. Book your mission today.</p>
             <a href="#" class="btn-primary btn-book-now" data-tm-booking-trigger data-tm-booking-kind="tickets">
                 Book Now
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -45,6 +45,11 @@ describe('public location data generator', () => {
                 { formKey: 'bad key', url: 'https://forms.example/philadelphia/bad' },
                 { formKey: 'birthdays', url: 'data:text/html,bad' },
               ],
+              hiddenMissionIds: [
+                { missionId: '1005' },
+                { missionId: 'bad' },
+                { missionId: '1011' },
+              ],
             },
           ],
         }),
@@ -76,6 +81,7 @@ describe('public location data generator', () => {
     expect(philadelphia.giftCardUrl).toBe('');
     expect(philadelphia.groupFormUrls.default).toBe('https://forms.example/philadelphia/default');
     expect(philadelphia.groupFormUrls.birthdays).toBeUndefined();
+    expect(philadelphia.hiddenMissionIds).toEqual(['1005', '1011']);
 
     fs.rmSync(tempDir, { force: true, recursive: true });
   });

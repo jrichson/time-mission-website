@@ -13,6 +13,7 @@ const publicLocationsPath = path.join(root, 'public', 'data', 'locations.json');
 const LOCATION_HOUR_DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const TIME_24_HOUR_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 const GROUP_FORM_KEY_PATTERN = /^[a-z0-9-]+$/;
+const MISSION_ID_PATTERN = /^\d{4}$/;
 const EXTERNAL_LINK_FIELDS = ['externalUrl', 'bookingUrl', 'rollerCheckoutUrl', 'giftCardUrl', 'waiverUrl'];
 
 function cleanString(value) {
@@ -153,19 +154,29 @@ function externalLinksPatchForDoc(doc) {
   return Object.keys(patch).length > 0 ? patch : null;
 }
 
+function hiddenMissionIdsPatchForDoc(doc) {
+  if (!Array.isArray(doc?.hiddenMissionIds)) return null;
+
+  return Array.from(new Set(doc.hiddenMissionIds
+    .map((row) => cleanString(row?.missionId))
+    .filter((missionId) => MISSION_ID_PATTERN.test(missionId))));
+}
+
 function patchForDoc(doc) {
   if (!doc || doc.published !== true || !cleanString(doc.locationSlug)) return null;
 
   const address = addressPatchForDoc(doc);
   const hours = hoursPatchForDoc(doc);
   const externalLinks = externalLinksPatchForDoc(doc);
-  if (!address && !hours && !externalLinks) return null;
+  const hiddenMissionIds = hiddenMissionIdsPatchForDoc(doc);
+  if (!address && !hours && !externalLinks && hiddenMissionIds == null) return null;
 
   return {
     ...(address ? { address } : {}),
     ...(address ? { mapUrl: mapUrlForAddress(address) } : {}),
     ...(hours ? { hours } : {}),
     ...(externalLinks ? { externalLinks } : {}),
+    ...(hiddenMissionIds != null ? { hiddenMissionIds } : {}),
   };
 }
 
@@ -209,6 +220,7 @@ function applyLocationDetailsOverrides(locations, docs) {
         ...(externalLinks.groupFormUrls
           ? { groupFormUrls: { ...(loc.groupFormUrls || {}), ...externalLinks.groupFormUrls } }
           : {}),
+        ...(patch.hiddenMissionIds ? { hiddenMissionIds: patch.hiddenMissionIds } : {}),
       };
     }),
   };
