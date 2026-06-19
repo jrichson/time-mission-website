@@ -1,7 +1,5 @@
 import type { APIRoute } from 'astro';
 import routes from '../data/routes.json';
-import seoRoutes from '../data/site/seo-routes.json';
-import geoAnswerBlocksData from '../data/site/geo-answer-blocks.json';
 
 export const prerender = true;
 
@@ -17,91 +15,31 @@ interface MachineReadableRouteEntry extends RouteEntry {
     id: string;
 }
 
-type SeoEntry = { title: string; description: string };
-type GeoAnswerBlock = { heading: string; text: string; publicPath: string };
-type LinkEntry = string | { canonicalPath: string; href: string };
-
-const citationBlocks = Object.values(geoAnswerBlocksData.blocks) as GeoAnswerBlock[];
-
-function decodeBasicEntities(s: string): string {
-    return s
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'");
-}
-
 function abs(baseUrl: string, canonicalPath: string): string {
     return canonicalPath === '/' ? `${baseUrl}/` : `${baseUrl}${canonicalPath}`;
 }
 
-function describe(canonicalPath: string): { title: string; description: string } | null {
-    const entry = (seoRoutes as Record<string, SeoEntry>)[canonicalPath];
-    if (!entry) return null;
-    return {
-        title: decodeBasicEntities(entry.title),
-        description: decodeBasicEntities(entry.description),
-    };
-}
-
-const SITEMAP_ELIGIBLE = new Set(
-    (routes.routes as RouteEntry[]).filter((r) => r.sitemap === true).map((r) => r.canonicalPath),
-);
-
-const CORE = ['/', '/missions', '/locations', '/faq', '/about', '/contact', '/groups', '/gift-cards'];
-const LOCATIONS_US = [
-    '/mount-prospect',
-    '/orland-park',
-    '/west-nyack',
-    '/philadelphia',
-    '/lincoln',
-    '/dallas',
-    '/nashville',
-    '/houston',
-    '/manassas',
-];
-const LOCATIONS_EU: LinkEntry[] = [
-    { canonicalPath: '/antwerp', href: 'https://timemission.eu/antwerp' },
-    { canonicalPath: '/brussels', href: 'https://timemission.eu/brussels' },
-];
-const GROUP_PAGES = [
-    '/groups/birthdays',
-    '/groups/corporate',
-    '/groups/private-events',
-    '/groups/field-trips',
-    '/groups/holidays',
-    '/groups/bachelor-ette',
-];
 const MACHINE_READABLE_COPY: Record<string, { label: string; description: string }> = {
     '/llms-full.txt': {
         label: 'Full AI context bundle',
-        description: 'Comprehensive machine-readable bundle with citation blocks, locations, FAQ facts, pricing caveats, and source links.',
+        description: 'Complete location facts, FAQ answers, source index, and citation guidance.',
     },
     '/ai-context.md': {
-        label: 'AI context',
-        description: 'Direct-answer markdown summary of Time Mission facts, locations, booking caveats, and citation guidance.',
+        label: 'Citation-ready AI context',
+        description: 'Direct-answer passages for AI citations and summaries.',
     },
     '/pricing.md': {
         label: 'Pricing facts',
-        description: 'Machine-readable pricing, booking, gift card, group quote, and live-checkout guidance.',
+        description: 'Machine-readable pricing, booking, gift-card, and group-quote guidance.',
     },
 };
 
-function bullet(baseUrl: string, entry: LinkEntry): string | null {
-    const canonicalPath = typeof entry === 'string' ? entry : entry.canonicalPath;
-    if (!SITEMAP_ELIGIBLE.has(canonicalPath)) return null;
-    const meta = describe(canonicalPath);
-    if (!meta) return null;
-    const href = typeof entry === 'string' ? abs(baseUrl, canonicalPath) : entry.href;
-    return `- [${meta.title}](${href}): ${meta.description}`;
-}
-
-function section(baseUrl: string, heading: string, paths: LinkEntry[]): string {
-    const lines = paths.map((p) => bullet(baseUrl, p)).filter((x): x is string => Boolean(x));
-    if (lines.length === 0) return '';
-    return `## ${heading}\n${lines.join('\n')}\n`;
-}
+const PRIMARY_PAGES = [
+    ['Home', '/', 'Overview of the Time Mission experience.'],
+    ['Locations', '/locations', 'Current venues, coming-soon markets, directions, and booking paths.'],
+    ['FAQ', '/faq', 'Age, team size, session length, booking, and visit questions.'],
+    ['Groups', '/groups', 'Birthdays, corporate events, field trips, private events, holidays, and bach parties.'],
+] as const;
 
 function machineReadableSection(baseUrl: string): string {
     const registryRoutes = ((routes as typeof routes & { machineReadableRoutes?: MachineReadableRouteEntry[] })
@@ -117,8 +55,17 @@ function machineReadableSection(baseUrl: string): string {
 }
 
 function citationReadySection(): string {
-    const lines = citationBlocks.flatMap((block) => [`### ${block.heading}`, block.text, '']);
+    const baseUrl = routes.baseUrl as string;
+    const lines = [
+        `- [Citation-ready AI context](${abs(baseUrl, '/ai-context.md')}): Short answer blocks for what Time Mission is, how mission rooms work, locations, visiting, pricing, and groups.`,
+        `- [Full AI context bundle](${abs(baseUrl, '/llms-full.txt')}): Complete facts for location-specific and FAQ-specific answers.`,
+    ];
     return `## Citation-Ready Answer Blocks\n${lines.join('\n')}`;
+}
+
+function primaryPagesSection(baseUrl: string): string {
+    const lines = PRIMARY_PAGES.map(([label, path, description]) => `- [${label}](${abs(baseUrl, path)}): ${description}`);
+    return `## Primary Pages\n${lines.join('\n')}\n`;
 }
 
 export const GET: APIRoute = () => {
@@ -130,7 +77,7 @@ export const GET: APIRoute = () => {
         'Time Mission is an active entertainment venue where teams of 2 to 5 players complete 25+ short mission rooms in 60, 90, or 120 minute sessions. It is used for families, friends, birthdays, corporate team building, field trips, private events, and group outings.',
         '',
     );
-    out.push(citationReadySection());
+    out.push(citationReadySection(), '');
     out.push(
         '## Key Facts',
         '- Teams: 2 to 5 players per team; larger groups split into multiple teams.',
@@ -142,9 +89,16 @@ export const GET: APIRoute = () => {
         '',
     );
     out.push(machineReadableSection(baseUrl));
-    out.push(section(baseUrl, 'Core Pages', CORE));
-    out.push(section(baseUrl, 'Locations', [...LOCATIONS_US, ...LOCATIONS_EU]));
-    out.push(section(baseUrl, 'Group & Event Pages', GROUP_PAGES));
+    out.push(
+        '## Public GET Endpoints',
+        `- GET [llms.txt](${abs(baseUrl, '/llms.txt')}): Compact AI navigation index.`,
+        `- GET [llms-full.txt](${abs(baseUrl, '/llms-full.txt')}): Full machine-readable context.`,
+        `- GET [ai-context.md](${abs(baseUrl, '/ai-context.md')}): Citation-ready answer blocks.`,
+        `- GET [pricing.md](${abs(baseUrl, '/pricing.md')}): Pricing and booking facts.`,
+        '- No authenticated public API is advertised for agent actions; booking uses the selected location checkout.',
+        '',
+    );
+    out.push(primaryPagesSection(baseUrl));
     return new Response(out.join('\n').replace(/\n{3,}/g, '\n\n').trimEnd() + '\n', {
         headers: { 'Content-Type': 'text/plain; charset=utf-8' },
     });

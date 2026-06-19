@@ -96,7 +96,7 @@ for (const [key, block] of publicBlocks) {
   }
 }
 
-for (const rel of ['dist/llms.txt', 'dist/llms-full.txt', 'dist/ai-context.md']) {
+for (const rel of ['dist/llms-full.txt', 'dist/ai-context.md']) {
   const body = requireFile(rel);
   if (!body) continue;
   const normalizedBody = normalize(body);

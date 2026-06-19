@@ -22,6 +22,7 @@ if (!fs.existsSync(distPath)) {
 }
 
 const body = fs.readFileSync(distPath, 'utf8');
+const LLMS_TXT_MAX_BYTES = 3 * 1024;
 
 const allowlist = new Set();
 for (const route of registry.routes) {
@@ -52,6 +53,10 @@ for (const heading of ['## Direct Answer Summary', '## Key Facts', '## Machine-R
 }
 if (!body.includes('## Citation-Ready Answer Blocks')) {
     errors.push('llms.txt must include citation-ready answer blocks');
+}
+const byteLength = Buffer.byteLength(body, 'utf8');
+if (byteLength > LLMS_TXT_MAX_BYTES) {
+    errors.push(`llms.txt must stay under ${LLMS_TXT_MAX_BYTES} bytes as a compact AI navigation index (found ${byteLength})`);
 }
 for (const route of machineReadableRoutes.filter((entry) => entry.canonicalPath !== '/llms.txt')) {
     const requiredUrl = routeUrl(route);
