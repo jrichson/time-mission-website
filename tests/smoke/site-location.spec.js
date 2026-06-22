@@ -60,7 +60,7 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await expect(brussels).toHaveAttribute('data-city', 'Brussels');
   await expect(brussels).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
   await expect(brussels).toContainText('Belgium – Brussels');
-  await expect(brussels).toContainText('Opening June 18, 2026');
+  await expect(brussels.locator('.coming-soon-tag')).toHaveText('OPEN NOW!');
   await expect(houston).toContainText('TX – Houston');
   await expect(houston.locator('.coming-soon-tag')).toHaveText('OPEN NOW!');
   await brussels.hover();

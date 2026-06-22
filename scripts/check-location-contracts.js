@@ -150,6 +150,12 @@ function validateHiddenMissionIds(location) {
   }
 }
 
+function isExternalSiteOnlyOpenLocation(location) {
+  const externalUrl = typeof location.externalUrl === 'string' ? location.externalUrl.trim() : '';
+  const bookingUrl = typeof location.bookingUrl === 'string' ? location.bookingUrl.trim() : '';
+  return location.status === 'open' && externalUrl && bookingUrl === externalUrl;
+}
+
 function validateOpenLocation(location) {
   const id = location.id;
   requireString(location, 'bookingUrl', location.bookingUrl);
@@ -157,6 +163,7 @@ function validateOpenLocation(location) {
     assertSafeUrl(id, 'bookingUrl', location.bookingUrl, { allowMailtoBooking: true });
   }
   assertSafeUrl(id, 'mapUrl', location.mapUrl);
+  if (isExternalSiteOnlyOpenLocation(location)) return;
   requireString(location, 'contact.phone', location.contact && location.contact.phone);
   requireString(location, 'contact.email', location.contact && location.contact.email);
   if (typeof location.giftCardUrl !== 'string') {
@@ -272,7 +279,11 @@ for (const location of locations) {
   const hasValidGeo = validateGeo(location);
 
   if (Object.prototype.hasOwnProperty.call(location, 'localBusinessSchemaEligible')) {
-    if (location.status === 'open' && location.localBusinessSchemaEligible !== true) {
+    if (
+      location.status === 'open'
+      && location.localBusinessSchemaEligible !== true
+      && !isExternalSiteOnlyOpenLocation(location)
+    ) {
       errors.push(`${location.id}: open location must have localBusinessSchemaEligible true`);
     }
     if (location.status === 'coming-soon' && location.localBusinessSchemaEligible !== false) {

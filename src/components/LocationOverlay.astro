@@ -18,7 +18,7 @@ function statusLabel(loc: (typeof allLocations)[number]) {
 }
 
 function showsOpenNowBadge(loc: (typeof allLocations)[number]) {
-    return (loc.slug === 'houston' || loc.slug === 'orland-park') && loc.status === 'open';
+    return ['houston', 'orland-park', 'brussels'].includes(loc.slug) && loc.status === 'open';
 }
 
 function selectorBadge(loc: (typeof allLocations)[number]) {

@@ -62,8 +62,8 @@ describe('browser data, consent, and i18n contracts', () => {
     expect(byId.get('antwerp')?.externalUrl).toBe('https://timemission.eu/antwerp');
     expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu/brussels');
     expect(byId.get('brussels')?.navLabel).toBe('Belgium – Brussels');
-    expect(byId.get('brussels')?.openingDate).toBe('2026-06-18');
-    expect(byId.get('brussels')?.openingLabel).toBe('Opening June 18, 2026');
+    expect(byId.get('brussels')?.status).toBe('open');
+    expect(byId.get('brussels')?.ticker).toBe('BRUSSELS NOW OPEN');
   });
 
   it('TMConsent.update notifies document and window listeners with the same state', () => {

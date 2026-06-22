@@ -69,7 +69,7 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await expect(page.locator('#locationText')).toContainText('Manassas');
 
   await expect(page.locator('#ticketLocation option[value="antwerp"]')).toHaveText('Belgium – Antwerp');
-  await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveText('Belgium – Brussels (Opening June 18, 2026)');
+  await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveText('Belgium – Brussels');
 });
 
 test('ticket panel routes Europe selections to the right external destination with UTMs', async ({ page }) => {

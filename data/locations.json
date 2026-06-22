@@ -853,9 +853,7 @@
       "shortName": "Brussels",
       "venueName": null,
       "region": "europe",
-      "status": "coming-soon",
-      "openingDate": "2026-06-18",
-      "openingLabel": "Opening June 18, 2026",
+      "status": "open",
       "address": {
         "line1": "Av. Impératrice Charlotte",
         "city": "Bruxelles",
@@ -868,7 +866,7 @@
         "email": ""
       },
       "hours": {},
-      "bookingUrl": "",
+      "bookingUrl": "https://timemission.eu/brussels",
       "externalUrl": "https://timemission.eu/brussels",
       "hiddenMissionIds": [
         "1001",
@@ -882,7 +880,7 @@
       "navLabel": "Belgium – Brussels",
       "mapUrl": "https://maps.google.com/?q=Av.+Imp%C3%A9ratrice+Charlotte+1020+Bruxelles+Belgium",
       "faqs": [],
-      "ticker": "BRUSSELS GRAND OPENING - JUNE 18TH",
+      "ticker": "BRUSSELS NOW OPEN",
       "giftCardUrl": "",
       "countryCode": "BE",
       "locale": null,

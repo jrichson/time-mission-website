@@ -60,12 +60,10 @@ describe('browser booking contracts', () => {
             slug: 'brussels',
             shortName: 'Brussels',
             region: 'europe',
-            status: 'coming-soon',
-            openingDate: '2026-06-18',
-            openingLabel: 'Opening June 18, 2026',
+            status: 'open',
             externalUrl: 'https://timemission.eu/brussels',
             navLabel: 'Belgium – Brussels',
-            bookingUrl: '',
+            bookingUrl: 'https://timemission.eu/brussels',
             giftCardUrl: '',
             groupFormUrls: {},
           },
@@ -182,7 +180,7 @@ describe('browser booking contracts', () => {
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'antwerp')?.label)
       .toBe('Belgium – Antwerp');
     expect(window.LocationContext.listTicketOptions().find((opt) => opt.value === 'brussels')?.label)
-      .toBe('Belgium – Brussels (Opening June 18, 2026)');
+      .toBe('Belgium – Brussels');
     expect(window.TMBooking.getDestination({ kind: 'groups', locationId: 'houston' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'houston' }))
