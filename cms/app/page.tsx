@@ -4,55 +4,73 @@ import styles from './home.module.css';
 
 const landingActions = [
   {
-    href: '/landings/new?template=paid_social_campaign',
-    label: 'Create Paid/Social Campaign',
-    meta: 'Ad/social',
-    description: 'Ad, post, email, or seasonal offer.',
+    href: '/landings/new?preset=general-ticket-booking',
+    label: 'Simple ticket page',
+    meta: 'Fast start',
+    description: 'Use this when the goal is getting visitors to book.',
   },
   {
-    href: '/landings/new?template=local_venue_city',
-    label: 'Create Local Venue/City Landing',
-    meta: 'Local',
-    description: 'City, venue opening, or local SEO push.',
-  },
-  {
-    href: '/landings/new?template=group_event',
-    label: 'Create Group/Event Landing',
+    href: '/landings/new?preset=general-group-inquiry',
+    label: 'Group inquiry page',
     meta: 'Groups',
-    description: 'Private events, planners, and group buyers.',
+    description: 'Use this for parties, teams, schools, or private events.',
+  },
+  {
+    href: '/landings/new?preset=local-venue-booking',
+    label: 'Local venue page',
+    meta: 'Location',
+    description: 'Use this for a city or venue booking page.',
+  },
+  {
+    href: '/admin/collections/landings',
+    label: 'Review existing drafts',
+    meta: 'Groups',
+    description: 'Open saved drafts, previews, and published pages.',
   },
 ];
 
 const primaryTasks = [
   {
+    href: '/landings/new?preset=general-ticket-booking',
+    label: 'Create a landing page',
+    meta: 'New page',
+    description: 'Start from a short form. Most brief details are optional.',
+    action: 'Create',
+  },
+  {
     href: '/admin/collections/location-details',
-    label: 'Update location details',
+    label: 'Change location info',
     meta: 'Addresses and hours',
-    description: 'Update public address and hours for existing locations.',
+    description: 'Edit address, hours, booking links, and location page details.',
+    action: 'Edit',
   },
   {
     href: '/admin/collections/announcement-banners',
-    label: 'Schedule announcement banners',
+    label: 'Add a website banner',
     meta: 'Ticker and banner',
-    description: 'Edit scheduled top-banner messages by priority and location.',
+    description: 'Show a short message at the top of the public website.',
+    action: 'Edit',
   },
   {
     href: '/admin/collections/landings',
-    label: 'Review landing pages',
+    label: 'Review landing drafts',
     meta: 'Campaign pages',
-    description: 'Review drafts, previews, publish state, and saved campaign pages.',
+    description: 'Open saved campaign pages, previews, and publish settings.',
+    action: 'Review',
   },
   {
     href: '/admin/collections/blog-posts',
-    label: 'Publish blog posts',
+    label: 'Write a blog post',
     meta: 'Location updates',
     description: 'Publish local blog posts for location news, openings, and event ideas.',
+    action: 'Write',
   },
   {
     href: '/deploy',
-    label: 'Deploy approved changes',
+    label: 'Make approved changes live',
     meta: 'Release',
-    description: 'Push approved content live after it is Published in CMS.',
+    description: 'Use this after edits are reviewed and marked Published in CMS.',
+    action: 'Deploy',
   },
 ];
 
@@ -96,9 +114,10 @@ export default function Home() {
       <section className={styles.header} aria-labelledby="cms-home-title">
         <div>
           <p className={styles.kicker}>Mission Control</p>
-          <h1 id="cms-home-title">Run the CMS from here.</h1>
+          <h1 id="cms-home-title">What do you need to update?</h1>
           <p className={styles.lede}>
-            This is the main CMS home. Start with the job, then open the exact CMS edit screen you need.
+            Pick the plain-English job. If you are not sure where something lives, start here instead of hunting
+            through CMS collections.
           </p>
         </div>
       </section>
@@ -107,8 +126,8 @@ export default function Home() {
         <div className={styles.directoryPanel}>
           <section className={styles.directoryGroup} aria-labelledby="primary-cms-work-title">
             <div className={styles.groupHeader}>
-              <h2 id="primary-cms-work-title">Start here</h2>
-              <p>The primary paths editors should use.</p>
+              <h2 id="primary-cms-work-title">Common jobs</h2>
+              <p>These cover the normal editing work.</p>
             </div>
 
             <div className={styles.linkList}>
@@ -117,7 +136,7 @@ export default function Home() {
                   <span className={styles.rowMeta}>{item.meta}</span>
                   <strong>{item.label}</strong>
                   <p>{item.description}</p>
-                  <span className={styles.rowAction}>Open</span>
+                  <span className={styles.rowAction}>{item.action}</span>
                 </Link>
               ))}
             </div>
@@ -125,8 +144,8 @@ export default function Home() {
 
           <section className={styles.templatePanel} aria-labelledby="campaign-starters-title">
             <div>
-              <p className={styles.panelLabel}>Landing page templates</p>
-              <h2 id="campaign-starters-title">Campaign starters</h2>
+              <p className={styles.panelLabel}>Landing pages</p>
+              <h2 id="campaign-starters-title">Start with a shortcut</h2>
             </div>
             <div className={styles.templateList}>
               {landingActions.map((item) => (
@@ -141,6 +160,16 @@ export default function Home() {
         </div>
 
         <aside className={styles.sideRail} aria-label="Admin utilities">
+          <section className={styles.sideCard} aria-labelledby="help-title">
+            <p className={styles.panelLabel}>If you are unsure</p>
+            <h2 id="help-title">Use the shortest path</h2>
+            <div className={styles.helpList}>
+              <p>Need a top message? Use Add a website banner.</p>
+              <p>Need a new campaign page? Use Create a landing page.</p>
+              <p>Need public changes visible? Publish first, then deploy.</p>
+            </div>
+          </section>
+
           <section className={styles.sideCard} aria-labelledby="publishing-flow-title">
             <p className={styles.panelLabel}>Publishing flow</p>
             <h2 id="publishing-flow-title">What live means</h2>
@@ -155,16 +184,20 @@ export default function Home() {
           </section>
 
           <section className={styles.sideCard} aria-labelledby="admin-shortcuts-title">
-            <p className={styles.panelLabel}>Advanced</p>
-            <h2 id="admin-shortcuts-title">Advanced work</h2>
-            <div className={styles.advancedList}>
-              {advancedLinks.map((item) => (
-                <Link aria-label={`${item.label}: ${item.description}`} href={item.href} key={item.href}>
-                  <span>{item.meta}</span>
-                  <strong>{item.label}</strong>
-                </Link>
-              ))}
-            </div>
+            <details className={styles.advancedDetails}>
+              <summary>
+                <span className={styles.panelLabel}>Advanced</span>
+                <strong id="admin-shortcuts-title">Less common work</strong>
+              </summary>
+              <div className={styles.advancedList}>
+                {advancedLinks.map((item) => (
+                  <Link aria-label={`${item.label}: ${item.description}`} href={item.href} key={item.href}>
+                    <span>{item.meta}</span>
+                    <strong>{item.label}</strong>
+                  </Link>
+                ))}
+              </div>
+            </details>
           </section>
         </aside>
       </section>

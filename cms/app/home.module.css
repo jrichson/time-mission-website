@@ -60,7 +60,8 @@
 .header,
 .workspace,
 .hero,
-.statGrid {
+.statGrid,
+.statusNotice {
   position: relative;
   z-index: 1;
   width: min(100%, 1180px);
@@ -367,9 +368,67 @@
   padding: var(--tm-space-4);
 }
 
+.statusNotice {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.28fr) minmax(0, 1fr);
+  gap: var(--tm-space-3);
+  align-items: center;
+  margin-top: 16px;
+  border: 1px solid var(--tm-line);
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, rgba(248, 244, 238, 0.07), rgba(248, 244, 238, 0.012)),
+    rgba(17, 17, 18, 0.94);
+  box-shadow:
+    inset 0 1px 0 rgba(248, 244, 238, 0.11),
+    inset 0 0 0 5px rgba(248, 244, 238, 0.024);
+  padding: var(--tm-space-3);
+}
+
+.statusNotice div {
+  display: grid;
+  gap: 6px;
+}
+
+.statusNotice span {
+  color: var(--tm-cyan);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.74rem;
+  font-weight: 740;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.statusNotice strong {
+  color: var(--tm-text);
+  font-size: 1.04rem;
+  line-height: 1.2;
+}
+
+.statusNotice p {
+  margin: 0;
+  color: var(--tm-muted-strong);
+  line-height: 1.52;
+}
+
+.statusNoticeSuccess {
+  border-color: rgba(126, 231, 242, 0.38);
+}
+
+.statusNoticeWarning {
+  border-color: rgba(255, 122, 50, 0.5);
+}
+
+.statusNoticeError {
+  border-color: rgba(255, 90, 64, 0.62);
+  background:
+    linear-gradient(145deg, rgba(255, 90, 64, 0.12), rgba(255, 90, 64, 0.025)),
+    rgba(17, 17, 18, 0.94);
+}
+
 .statGrid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: var(--tm-space-3);
   margin-top: var(--tm-space-3);
   animation: tm-rise 980ms var(--tm-ease) 120ms both;
@@ -607,6 +666,58 @@
   gap: 4px;
 }
 
+.helpList {
+  display: grid;
+  gap: 8px;
+}
+
+.helpList p {
+  margin: 0;
+  border: 1px solid var(--tm-line-soft);
+  border-radius: 14px;
+  background: rgba(5, 5, 5, 0.34);
+  color: var(--tm-muted-strong);
+  font-size: 0.9rem;
+  line-height: 1.42;
+  padding: 10px 12px;
+}
+
+.advancedDetails summary {
+  display: grid;
+  gap: 4px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.advancedDetails summary::-webkit-details-marker {
+  display: none;
+}
+
+.advancedDetails summary strong {
+  color: var(--tm-text);
+  font-size: 1.02rem;
+}
+
+.advancedDetails summary::after {
+  content: "Show";
+  width: fit-content;
+  border: 1px solid var(--tm-line-hot);
+  border-radius: var(--tm-radius-pill);
+  color: var(--tm-orange);
+  font-size: 0.78rem;
+  font-weight: 780;
+  margin-top: 8px;
+  padding: 5px 10px;
+}
+
+.advancedDetails[open] summary::after {
+  content: "Hide";
+}
+
+.advancedDetails[open] .advancedList {
+  margin-top: 14px;
+}
+
 .advancedList a {
   display: grid;
   gap: 5px;
@@ -648,7 +759,8 @@
 .topbarActions a,
 .linkRow,
 .templateList a,
-.advancedList a {
+.advancedList a,
+.advancedDetails summary {
   cursor: pointer;
 }
 
@@ -657,6 +769,7 @@
 .linkRow:focus-visible,
 .templateList a:focus-visible,
 .advancedList a:focus-visible,
+.advancedDetails summary:focus-visible,
 .primaryAction:focus-visible,
 .secondaryAction:focus-visible {
   outline: 2px solid var(--tm-orange);
@@ -677,7 +790,8 @@
 
 @media (max-width: 980px) {
   .workspace,
-  .hero {
+  .hero,
+  .statusNotice {
     grid-template-columns: 1fr;
   }
 

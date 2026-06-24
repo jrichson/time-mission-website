@@ -70,6 +70,7 @@ const sourceChannelLabels: Record<PayloadLandingSourceChannel, string> = {
 
 type PageProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ status?: string }>;
 };
 
 function publicAssetURL(path: string | null | undefined): string {
@@ -118,8 +119,9 @@ async function loadLanding(id: string): Promise<Landing> {
   return doc;
 }
 
-export default async function LandingPreviewPage({ params }: PageProps) {
+export default async function LandingPreviewPage({ params, searchParams }: PageProps) {
   const { id } = await params;
+  const query = await searchParams;
   const doc = await loadLanding(id);
   const template = landingArchetypeForDoc(doc);
   const launchState = landingLaunchStateForDoc(doc);
@@ -140,6 +142,15 @@ export default async function LandingPreviewPage({ params }: PageProps) {
   if (publicAssetWasRepaired(doc.seo?.ogImage)) {
     reviewWarnings.push('Use a root-relative /assets/... hero image path.');
   }
+  const reviewStatus = reviewWarnings.length ? 'Needs review' : 'Ready to publish';
+  const saveMessage = query.status === 'draft-created'
+    ? {
+        body: reviewWarnings.length
+          ? 'Your draft was saved. Review the warnings below before publishing it for the next site deploy.'
+          : 'Your draft was saved. No blocking warnings were detected in the preview checks.',
+        title: 'Draft saved',
+      }
+    : null;
   const sourceChannel = (brief.sourceChannel || 'paid_ad') as PayloadLandingSourceChannel;
   const sourceLabel = sourceChannelLabels[sourceChannel] || 'Campaign source';
   const cta = {
@@ -193,7 +204,21 @@ export default async function LandingPreviewPage({ params }: PageProps) {
         <span aria-current="page">Preview</span>
       </nav>
 
+      {saveMessage ? (
+        <section className={styles.savePanel} aria-live="polite" role="status">
+          <div>
+            <span className={styles.previewEyebrow}>Save status</span>
+            <h2>{saveMessage.title}</h2>
+          </div>
+          <p>{saveMessage.body}</p>
+        </section>
+      ) : null}
+
       <section className={styles.statusPanel} aria-label="Landing review status">
+        <div>
+          <span>Review</span>
+          <strong>{reviewStatus}</strong>
+        </div>
         <div>
           <span>Archetype</span>
           <strong>{templateLabel}</strong>

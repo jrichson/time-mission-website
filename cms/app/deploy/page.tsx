@@ -16,6 +16,12 @@ type PageProps = {
   }>;
 };
 
+type DeployStatusMessage = {
+  body: string;
+  title: string;
+  tone: 'statusNoticeError' | 'statusNoticeSuccess' | 'statusNoticeWarning';
+};
+
 async function currentCmsUser() {
   const payload = await getPayload({ config });
   const auth = await payload.auth({ headers: await headers() });
@@ -39,12 +45,28 @@ async function triggerDeployAction() {
   redirect(`/deploy?status=${encodeURIComponent(result.status)}`);
 }
 
-function statusCopy(status: string | undefined): string | null {
-  const messages: Record<string, string> = {
-    failed: 'Deploy hook failed. Check Railway logs before trying again.',
-    forbidden: 'Your account does not have CMS Deploy Permission.',
-    not_configured: 'Deploy trigger is not configured. Keep using the manual Wrangler deploy path.',
-    triggered: 'Deploy trigger started. The public site updates after the Wrangler upload finishes.',
+function statusCopy(status: string | undefined): DeployStatusMessage | null {
+  const messages: Record<string, DeployStatusMessage> = {
+    failed: {
+      body: 'The CMS could not reach the deploy hook. Check the deploy service logs before trying again.',
+      title: 'Deploy request failed',
+      tone: 'statusNoticeError',
+    },
+    forbidden: {
+      body: 'Your account does not have CMS Deploy Permission. Ask the CMS owner to grant deploy access.',
+      title: 'Deploy blocked',
+      tone: 'statusNoticeWarning',
+    },
+    not_configured: {
+      body: 'The deploy trigger is not configured. Keep using the manual deploy path until the hook is connected.',
+      title: 'Deploy not connected',
+      tone: 'statusNoticeWarning',
+    },
+    triggered: {
+      body: 'The CMS sent the request to the remote deploy runner. The public site updates only after that build and upload finish.',
+      title: 'Deploy request sent',
+      tone: 'statusNoticeSuccess',
+    },
   };
 
   return status ? messages[status] || null : null;
@@ -63,6 +85,7 @@ export default async function DeployPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const canDeploy = await canTriggerCmsDeploy({ req: { payload, user } });
   const message = statusCopy(params.status);
+  const publicSiteOrigin = process.env.PAYLOAD_PUBLIC_SITE_ORIGIN?.trim().replace(/\/+$/, '') || 'https://www.timemission.com';
 
   return (
     <main className={styles.shell}>
@@ -82,6 +105,16 @@ export default async function DeployPage({ searchParams }: PageProps) {
         <span aria-current="page">Deploy</span>
       </nav>
 
+      {message ? (
+        <section className={`${styles.statusNotice} ${styles[message.tone]}`} role="status" aria-live="polite">
+          <div>
+            <span>Deploy status</span>
+            <strong>{message.title}</strong>
+          </div>
+          <p>{message.body}</p>
+        </section>
+      ) : null}
+
       <section className={styles.hero} aria-labelledby="deploy-title">
         <div className={styles.heroCopy}>
           <p className={styles.kicker}>Release control</p>
@@ -96,6 +129,9 @@ export default async function DeployPage({ searchParams }: PageProps) {
                 Trigger site deploy
               </button>
             </form>
+            <a className={styles.secondaryAction} href={publicSiteOrigin} rel="noreferrer" target="_blank">
+              Open public site
+            </a>
           </div>
         </div>
 
@@ -108,7 +144,7 @@ export default async function DeployPage({ searchParams }: PageProps) {
             <li>Live after deploy</li>
           </ol>
           <p className={styles.panelNote}>
-            {message || (canDeploy ? 'You can trigger deploys from this account.' : 'Ask the CMS owner to grant deploy permission.')}
+            {message?.body || (canDeploy ? 'You can trigger deploys from this account.' : 'Ask the CMS owner to grant deploy permission.')}
           </p>
         </aside>
       </section>
@@ -126,8 +162,13 @@ export default async function DeployPage({ searchParams }: PageProps) {
         </article>
         <article className={styles.statCard}>
           <span>Remote runner</span>
-          <strong>Wrangler</strong>
+          <strong>External build</strong>
           <p>The public site updates after the GitHub Actions build and upload finish.</p>
+        </article>
+        <article className={styles.statCard}>
+          <span>Final check</span>
+          <strong>Open the site</strong>
+          <p>After the runner finishes, open the public site and confirm the published change is visible.</p>
         </article>
       </section>
     </main>

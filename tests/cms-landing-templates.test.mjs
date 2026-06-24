@@ -65,6 +65,9 @@ describe('CMS landing templates', () => {
     expect(previewRoute).toContain('payload.auth');
     expect(previewRoute).toContain('overrideAccess: false');
     expect(previewRoute).toContain('/admin/login?redirect=');
+    expect(previewRoute).toContain('searchParams: Promise<{ status?: string }>');
+    expect(previewRoute).toContain('Draft saved');
+    expect(previewRoute).toContain('reviewStatus');
     expect(previewRoute).toContain('Public path');
     expect(previewRoute).toContain('Open public URL');
     expect(previewRoute).toContain('Campaign brief');
@@ -89,8 +92,8 @@ describe('CMS landing templates', () => {
     const dashboardCard = read('cms/components/LandingWizardDashboard.tsx');
     const importMap = read('cms/app/(payload)/admin/importMap.js');
 
-    for (const template of ['paid_social_campaign', 'local_venue_city', 'group_event']) {
-      expect(home).toContain(`/landings/new?template=${template}`);
+    for (const preset of ['general-ticket-booking', 'general-group-inquiry', 'local-venue-booking']) {
+      expect(home).toContain(`/landings/new?preset=${preset}`);
     }
 
     expect(wizard).toContain('Landing launch wizard');
@@ -107,10 +110,14 @@ describe('CMS landing templates', () => {
     expect(wizard).toContain('create-failed');
     expect(wizard).toContain('sourcePromise');
     expect(wizard).toContain('visitorIntent');
+    expect(wizard).toContain('proofPointsFromForm');
     expect(wizard).toContain('LANDING_CAMPAIGN_PRESETS');
     expect(wizard).toContain("name=\"preset\"");
-    expect(wizard).toContain('Recommended campaign pages');
-    expect(wizard).toContain('redirect(`/preview/landings/${created.id}`)');
+    expect(wizard).toContain('Fast starters');
+    expect(wizard).toContain('Only four fields are required');
+    expect(wizard).toContain('Optional details');
+    expect(wizard).toContain('redirect(`/preview/landings/${created.id}?status=draft-created`)');
+    expect(wizard).not.toContain("'missing-proof-points'");
     expect(payloadConfig).toContain("beforeDashboard: ['/components/LandingWizardDashboard.tsx']");
     expect(collection).toContain("beforeList: ['/components/LandingWizardDashboard.tsx']");
     expect(dashboardCard).toContain('Back to Mission Control');

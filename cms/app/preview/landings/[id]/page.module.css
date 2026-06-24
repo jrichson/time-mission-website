@@ -82,6 +82,8 @@
 .previewBar > div,
 .previewActions,
 .statusPanel div,
+.savePanel,
+.savePanel > div,
 .briefPanel,
 .briefPanel > div,
 .briefPanel dl,
@@ -210,6 +212,7 @@
 }
 
 .statusPanel,
+.savePanel,
 .briefPanel,
 .warningPanel {
   position: relative;
@@ -229,11 +232,33 @@
 }
 
 .statusPanel {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 1px;
   overflow: hidden;
   margin-top: 18px;
   animation: tm-preview-rise 820ms var(--preview-ease) both;
+}
+
+.savePanel {
+  grid-template-columns: minmax(170px, 0.28fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  margin-top: 18px;
+  border-color: rgba(126, 231, 242, 0.42);
+  padding: 20px;
+  animation: tm-preview-rise 800ms var(--preview-ease) both;
+}
+
+.savePanel h2 {
+  margin: 6px 0 0;
+  font-size: 1.36rem;
+  line-height: 1.12;
+}
+
+.savePanel p {
+  margin: 0;
+  color: var(--preview-muted-strong);
+  line-height: 1.54;
 }
 
 .statusPanel div {
@@ -628,6 +653,7 @@
   .splitSection,
   .previewSplit,
   .locationGrid,
+  .savePanel,
   .briefPanel,
   .briefPanel dl {
     grid-template-columns: 1fr;
