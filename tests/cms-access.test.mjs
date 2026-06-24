@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { AnnouncementBanners } from '../cms/collections/AnnouncementBanners.js';
+import { BlogPosts } from '../cms/collections/BlogPosts.js';
 import { Landings } from '../cms/collections/Landings.js';
 import { LocationDetails } from '../cms/collections/LocationDetails.js';
 import { SitePages } from '../cms/collections/SitePages.js';
@@ -42,6 +43,7 @@ describe('CMS role access', () => {
 
   it('requires explicit roles for landing and site-page management', () => {
     expect(Landings.access.create(accessArgs('editor'))).toBe(true);
+    expect(BlogPosts.access.create(accessArgs('editor'))).toBe(true);
     expect(SitePages.access.create(accessArgs('admin'))).toBe(true);
     expect(AnnouncementBanners.access.create(accessArgs('editor'))).toBe(true);
     expect(LocationDetails.access.create(accessArgs('admin'))).toBe(true);
@@ -49,10 +51,12 @@ describe('CMS role access', () => {
     expect(LocationDetails.access.delete(accessArgs('editor'))).toBe(false);
 
     expect(Landings.access.create(accessArgs(undefined))).toBe(false);
+    expect(BlogPosts.access.create(accessArgs(undefined))).toBe(false);
     expect(SitePages.access.create(accessArgs(undefined))).toBe(false);
     expect(AnnouncementBanners.access.create(accessArgs(undefined))).toBe(false);
     expect(LocationDetails.access.create(accessArgs(undefined))).toBe(false);
     expect(Landings.access.read(accessArgs(undefined))).toEqual({ published: { equals: true } });
+    expect(BlogPosts.access.read(accessArgs(undefined))).toEqual({ published: { equals: true } });
     expect(SitePages.access.read(accessArgs(undefined))).toEqual({ published: { equals: true } });
     expect(AnnouncementBanners.access.read(accessArgs(undefined))).toEqual({ published: { equals: true } });
     expect(LocationDetails.access.read(accessArgs(undefined))).toEqual({ published: { equals: true } });

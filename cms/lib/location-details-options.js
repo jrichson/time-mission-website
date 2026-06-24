@@ -8,6 +8,7 @@ export const LOCATION_DETAIL_OPTIONS = [
   { label: 'Time Mission Antwerp', value: 'antwerp' },
   { label: 'Time Mission Orland Park', value: 'orland-park' },
   { label: 'Time Mission Brussels', value: 'brussels' },
+  { label: 'Time Mission Eindhoven', value: 'eindhoven' },
   { label: 'Time Mission Dallas', value: 'dallas' },
   { label: 'Time Mission Nashville', value: 'nashville' },
 ];

@@ -43,6 +43,12 @@ const primaryTasks = [
     description: 'Review drafts, previews, publish state, and saved campaign pages.',
   },
   {
+    href: '/admin/collections/blog-posts',
+    label: 'Blog Posts',
+    meta: 'Location updates',
+    description: 'Publish local blog posts for location news, openings, and event ideas.',
+  },
+  {
     href: '/deploy',
     label: 'Deploy Gate',
     meta: 'Release',

@@ -64,6 +64,12 @@ export const LOCATION_ROUTE_ENTRIES = [
     "officialAlternate": "terminal1"
   },
   {
+    "canonicalPath": "/eindhoven",
+    "compatibilitySources": [],
+    "externalUrl": "",
+    "officialAlternate": ""
+  },
+  {
     "canonicalPath": "/dallas",
     "compatibilitySources": [],
     "externalUrl": "",
@@ -87,9 +93,16 @@ export const PREFIXABLE_CANONICAL_PATHS = [
   "/groups/holidays",
   "/groups/private-events",
   "/gift-cards",
+  "/donation",
+  "/blog",
   "/faq",
   "/contact",
   "/contact-thank-you",
+  "/press",
+  "/press/releases",
+  "/press/images",
+  "/press/in-the-news",
+  "/press/brand-guidelines",
   "/locations",
   "/houston/spinandscore/rules",
   "/privacy",
@@ -146,6 +159,14 @@ export const PREFIXABLE_ROUTE_ALIASES = [
     "/gift-cards"
   ],
   [
+    "/donation.html",
+    "/donation"
+  ],
+  [
+    "/blog.html",
+    "/blog"
+  ],
+  [
     "/faq.html",
     "/faq"
   ],
@@ -156,6 +177,26 @@ export const PREFIXABLE_ROUTE_ALIASES = [
   [
     "/contact-thank-you.html",
     "/contact-thank-you"
+  ],
+  [
+    "/press.html",
+    "/press"
+  ],
+  [
+    "/press/releases.html",
+    "/press/releases"
+  ],
+  [
+    "/press/images.html",
+    "/press/images"
+  ],
+  [
+    "/press/in-the-news.html",
+    "/press/in-the-news"
+  ],
+  [
+    "/press/brand-guidelines.html",
+    "/press/brand-guidelines"
   ],
   [
     "/locations.html",

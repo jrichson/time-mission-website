@@ -1,0 +1,35 @@
+    <section class="tm-resource-hero tm-resource-hero--compact">
+        <picture class="tm-resource-hero-media" aria-hidden="true">
+            <source srcset="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" type="image/jpeg">
+            <img src="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
+        <div class="tm-resource-shell tm-resource-hero-copy">
+            <p class="tm-resource-kicker">Media Library</p>
+            <h1>PRESS IMAGES</h1>
+            <p>Approved press images will be organized here for editorial use.</p>
+            <a href="/press" class="tm-resource-secondary">Press Home</a>
+        </div>
+    </section>
+
+    <section class="tm-resource-section">
+        <div class="tm-resource-shell">
+            <div class="tm-resource-grid">
+                <article class="tm-resource-tile">
+                    <span>Venues</span>
+                    <h3>Location images</h3>
+                    <p>Exterior, lobby, and guest-flow images will be added after approval.</p>
+                </article>
+                <article class="tm-resource-tile">
+                    <span>Missions</span>
+                    <h3>Experience images</h3>
+                    <p>Mission-room imagery will be grouped by approved use and caption.</p>
+                </article>
+                <article class="tm-resource-tile">
+                    <span>Brand</span>
+                    <h3>Logo package</h3>
+                    <p>Logo files and usage notes live with the brand guidelines.</p>
+                    <a href="/press/brand-guidelines">View guidelines</a>
+                </article>
+            </div>
+        </div>
+    </section>

@@ -1,7 +1,16 @@
 import type { APIRoute } from 'astro';
+import { allLocations } from '../data/locations';
 import routes from '../data/routes.json';
 import { cmsBuildStrict } from '../lib/payload/cms-origin';
-import { getPublishedLandings, landingCanonicalPath, landingShouldAppearInSitemap } from '../lib/payload/load';
+import {
+    blogLocationCanonicalPath,
+    blogPostCanonicalPath,
+    blogPostShouldAppearInSitemap,
+    getPublishedBlogPosts,
+    getPublishedLandings,
+    landingCanonicalPath,
+    landingShouldAppearInSitemap,
+} from '../lib/payload/load';
 import { compilePublicUrlSurface, type PublicUrlRegistry } from '../lib/public-url-surface';
 
 export const prerender = true;
@@ -20,6 +29,7 @@ export const GET: APIRoute = async () => {
 
     const items: string[] = [];
     items.push(...surface.sitemapUrls);
+    items.push(...allLocations.map((loc) => surface.publicUrlFor(blogLocationCanonicalPath(loc.slug))));
 
     try {
         const landings = await getPublishedLandings();
@@ -28,9 +38,14 @@ export const GET: APIRoute = async () => {
             const cp = landingCanonicalPath(doc.slug, surface.dynamicLandingPrefix);
             items.push(surface.publicUrlFor(cp));
         }
+        const blogPosts = await getPublishedBlogPosts();
+        for (const doc of blogPosts) {
+            if (!blogPostShouldAppearInSitemap(doc)) continue;
+            items.push(surface.publicUrlFor(blogPostCanonicalPath(String(doc.slug))));
+        }
     } catch (e) {
         if (cmsBuildStrict()) throw e;
-        /* Payload unavailable at build → registry-only sitemap (non-strict) */
+        /* Payload unavailable at build -> registry and location blog sitemap (non-strict) */
     }
 
     items.sort();

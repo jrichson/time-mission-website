@@ -1,0 +1,129 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { allLocations } from '../../data/locations';
+import { definePage } from '../../lib/define-page';
+import {
+    blogLocationCanonicalPath,
+    blogPostBodyHtml,
+    blogPostCanonicalPath,
+    blogPostDateLabel,
+    blogPostDocLooksRenderable,
+    blogPostExcerptForDoc,
+    blogPostHeadForDoc,
+    blogPostHeroImage,
+    blogPostLocationSlug,
+    getPublishedBlogPosts,
+    sortBlogPosts,
+    type PayloadBlogPostDoc,
+} from '../../lib/payload/load';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+    const posts = sortBlogPosts((await getPublishedBlogPosts()).filter(blogPostDocLooksRenderable));
+    const locationPaths = allLocations.map((location) => ({
+        params: { slug: location.slug },
+        props: {
+            kind: 'location',
+            locationSlug: location.slug,
+            posts: posts.filter((post) => blogPostLocationSlug(post) === location.slug),
+        },
+    }));
+    const postPaths = posts.map((post) => ({
+        params: { slug: post.slug },
+        props: { kind: 'post', post },
+    }));
+
+    return [...locationPaths, ...postPaths];
+}
+
+type BlogRouteProps =
+    | { kind: 'location'; locationSlug: string; posts: PayloadBlogPostDoc[] }
+    | { kind: 'post'; post: PayloadBlogPostDoc };
+
+const props = Astro.props as BlogRouteProps;
+const location =
+    props.kind === 'location'
+        ? allLocations.find((loc) => loc.slug === props.locationSlug)!
+        : allLocations.find((loc) => loc.slug === blogPostLocationSlug(props.post))!;
+const locationPosts = props.kind === 'location' ? props.posts : [];
+const page = definePage({
+    canonicalPath: props.kind === 'post'
+        ? blogPostCanonicalPath(String(props.post.slug))
+        : blogLocationCanonicalPath(location.slug),
+});
+const post = props.kind === 'post' ? props.post : null;
+const landingHead = post
+    ? blogPostHeadForDoc(post)
+    : {
+        metaTitle: `${location.shortName} Blog | Time Mission`,
+        metaDescription: `Updates and local news from Time Mission ${location.shortName}.`,
+        robots: 'index,follow',
+        ogImage: '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg',
+        twitterImage: '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg',
+    };
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} landingHead={landingHead} bodyClass="has-noise tm-blog-page">
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-blog.css?v=1" />
+    </Fragment>
+
+    {post ? (
+        <>
+            <article class="tm-blog-article">
+                <header class="tm-blog-article-hero">
+                    <picture class="tm-blog-article-media" aria-hidden="true">
+                        <source srcset={blogPostHeroImage(post)}>
+                        <img src={blogPostHeroImage(post)} alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
+                    </picture>
+                    <div class="tm-blog-shell tm-blog-article-copy">
+                        <a class="tm-blog-back" href={blogLocationCanonicalPath(location.slug)}>{location.shortName}</a>
+                        <p class="tm-blog-kicker">{blogPostDateLabel(post)}</p>
+                        <h1>{post.title}</h1>
+                        <p>{blogPostExcerptForDoc(post)}</p>
+                    </div>
+                </header>
+                <div class="tm-blog-shell tm-blog-body" set:html={blogPostBodyHtml(post)} />
+            </article>
+        </>
+    ) : (
+        <>
+            <section class="tm-blog-hero tm-blog-hero--compact">
+                <picture class="tm-blog-hero-media" aria-hidden="true">
+                    <source srcset="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" type="image/jpeg">
+                    <img src="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
+                </picture>
+                <div class="tm-blog-shell tm-blog-hero-copy">
+                    <p class="tm-blog-kicker">Location Blog</p>
+                    <h1>{location.shortName}</h1>
+                    <p>Updates and local notes from Time Mission {location.shortName}.</p>
+                </div>
+            </section>
+            <section class="tm-blog-section">
+                <div class="tm-blog-shell">
+                    {locationPosts.length ? (
+                        <div class="tm-blog-grid">
+                            {locationPosts.map((item) => (
+                                <article class="tm-blog-card">
+                                    <a href={blogPostCanonicalPath(String(item.slug))}>
+                                        <img src={blogPostHeroImage(item)} alt="" width="720" height="480" loading="lazy" decoding="async" />
+                                        <span>{blogPostDateLabel(item)}</span>
+                                        <h3>{item.title}</h3>
+                                        <p>{blogPostExcerptForDoc(item)}</p>
+                                    </a>
+                                </article>
+                            ))}
+                        </div>
+                    ) : (
+                        <div class="tm-blog-empty">
+                            <h2>{location.shortName} posts are coming soon.</h2>
+                            <p>Local stories and updates for this location will appear here soon.</p>
+                            <a href="/blog">Back to Blog</a>
+                        </div>
+                    )}
+                </div>
+            </section>
+        </>
+    )}
+</SiteLayout>

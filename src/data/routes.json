@@ -142,6 +142,26 @@
       "status": 301
     },
     {
+      "id": "donation",
+      "canonicalPath": "/donation",
+      "redirectSources": [
+        "/donation.html"
+      ],
+      "outputFile": "donation.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "blog",
+      "canonicalPath": "/blog",
+      "redirectSources": [
+        "/blog.html"
+      ],
+      "outputFile": "blog.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "faq",
       "canonicalPath": "/faq",
       "redirectSources": [
@@ -169,6 +189,56 @@
       ],
       "outputFile": "contact-thank-you.html",
       "sitemap": false,
+      "status": 301
+    },
+    {
+      "id": "press",
+      "canonicalPath": "/press",
+      "redirectSources": [
+        "/press.html"
+      ],
+      "outputFile": "press.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "press-releases",
+      "canonicalPath": "/press/releases",
+      "redirectSources": [
+        "/press/releases.html"
+      ],
+      "outputFile": "press/releases.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "press-images",
+      "canonicalPath": "/press/images",
+      "redirectSources": [
+        "/press/images.html"
+      ],
+      "outputFile": "press/images.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "press-in-the-news",
+      "canonicalPath": "/press/in-the-news",
+      "redirectSources": [
+        "/press/in-the-news.html"
+      ],
+      "outputFile": "press/in-the-news.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "press-brand-guidelines",
+      "canonicalPath": "/press/brand-guidelines",
+      "redirectSources": [
+        "/press/brand-guidelines.html"
+      ],
+      "outputFile": "press/brand-guidelines.html",
+      "sitemap": true,
       "status": 301
     },
     {
@@ -290,6 +360,16 @@
         "/orland-park.html"
       ],
       "outputFile": "orland-park.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "eindhoven",
+      "canonicalPath": "/eindhoven",
+      "redirectSources": [
+        "/eindhoven.html"
+      ],
+      "outputFile": "eindhoven.html",
       "sitemap": true,
       "status": 301
     },

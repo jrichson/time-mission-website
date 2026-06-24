@@ -1,0 +1,22 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import pressMain from '../partials/press-main.frag.txt?raw';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+
+const page = definePage({ canonicalPath: '/press' });
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Press', href: '/press' },
+]));
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-resource-page">
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-press.css?v=1" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={pressMain} />
+</SiteLayout>

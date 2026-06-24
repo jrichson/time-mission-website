@@ -1,0 +1,28 @@
+    <section class="tm-resource-hero tm-resource-hero--compact">
+        <picture class="tm-resource-hero-media" aria-hidden="true">
+            <source srcset="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" type="image/jpeg">
+            <img src="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
+        <div class="tm-resource-shell tm-resource-hero-copy">
+            <p class="tm-resource-kicker">Brand</p>
+            <h1>BRAND GUIDELINES</h1>
+            <p>Logo usage and brand resources for editorial and approved partner use.</p>
+            <a href="/press" class="tm-resource-secondary">Press Home</a>
+        </div>
+    </section>
+
+    <section class="tm-resource-section">
+        <div class="tm-resource-shell tm-resource-split">
+            <div>
+                <p class="tm-resource-kicker">Identity</p>
+                <h2>Use the Time Mission name and logo clearly.</h2>
+            </div>
+            <div class="tm-resource-copy">
+                <p>Use the full name “Time Mission” on first reference. Do not alter logo proportions, recolor marks, add effects, or place the logo on low-contrast backgrounds.</p>
+                <div class="tm-logo-row">
+                    <img src="/assets/logo/TM_Logo_White.svg" alt="Time Mission logo" width="214" height="72" loading="lazy" decoding="async">
+                </div>
+                <a href="/assets/logo/TM_Logo_White.svg" class="tm-resource-button" download>Download White Logo</a>
+            </div>
+        </div>
+    </section>

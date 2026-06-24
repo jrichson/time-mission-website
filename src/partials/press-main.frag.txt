@@ -1,0 +1,59 @@
+    <section class="tm-resource-hero">
+        <picture class="tm-resource-hero-media" aria-hidden="true">
+            <source srcset="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" type="image/jpeg">
+            <img src="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
+        <div class="tm-resource-shell tm-resource-hero-copy">
+            <p class="tm-resource-kicker">Press Room</p>
+            <h1>TIME MISSION PRESS</h1>
+            <p>Official resources for announcements, media coverage, approved imagery, and brand usage.</p>
+            <div class="tm-resource-actions">
+                <a href="/press/releases" class="tm-resource-button">Press Releases</a>
+                <a href="/press/images" class="tm-resource-secondary">Press Images</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="tm-resource-section">
+        <div class="tm-resource-shell">
+            <div class="tm-resource-section-head">
+                <p class="tm-resource-kicker">Resources</p>
+                <h2>Press center</h2>
+            </div>
+            <div class="tm-resource-grid">
+                <a class="tm-resource-tile tm-resource-tile--link" href="/press/releases">
+                    <span>Official</span>
+                    <h3>Press Releases</h3>
+                    <p>Company announcements, openings, and launch notes.</p>
+                </a>
+                <a class="tm-resource-tile tm-resource-tile--link" href="/press/images">
+                    <span>Media</span>
+                    <h3>Press Images</h3>
+                    <p>Approved venue, mission, and brand imagery.</p>
+                </a>
+                <a class="tm-resource-tile tm-resource-tile--link" href="/press/in-the-news">
+                    <span>Coverage</span>
+                    <h3>In the News</h3>
+                    <p>Editorial coverage and third-party mentions.</p>
+                </a>
+                <a class="tm-resource-tile tm-resource-tile--link" href="/press/brand-guidelines">
+                    <span>Brand</span>
+                    <h3>Brand Guidelines</h3>
+                    <p>Logo usage, naming, and press contact notes.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="tm-resource-section tm-resource-section--quiet">
+        <div class="tm-resource-shell tm-resource-split">
+            <div>
+                <p class="tm-resource-kicker">Media Contact</p>
+                <h2>Need a source, image, or quote?</h2>
+            </div>
+            <div class="tm-resource-copy">
+                <p>Send media inquiries through the main contact channel while the full press library is being populated.</p>
+                <a href="/contact" class="tm-resource-secondary">Contact Time Mission</a>
+            </div>
+        </div>
+    </section>

@@ -13,6 +13,7 @@ import * as migration_20260605_160000_location_details_external_links from './20
 import * as migration_20260610_090000_orland_park_open from './20260610_090000_orland_park_open';
 import * as migration_20260617_090000_location_details_hidden_missions from './20260617_090000_location_details_hidden_missions';
 import * as migration_20260622_090000_brussels_open from './20260622_090000_brussels_open';
+import * as migration_20260624_090000_blog_press_donation_eindhoven from './20260624_090000_blog_press_donation_eindhoven';
 
 export const migrations = [
   {
@@ -89,5 +90,10 @@ export const migrations = [
     up: migration_20260622_090000_brussels_open.up,
     down: migration_20260622_090000_brussels_open.down,
     name: '20260622_090000_brussels_open'
+  },
+  {
+    up: migration_20260624_090000_blog_press_donation_eindhoven.up,
+    down: migration_20260624_090000_blog_press_donation_eindhoven.down,
+    name: '20260624_090000_blog_press_donation_eindhoven'
   },
 ];

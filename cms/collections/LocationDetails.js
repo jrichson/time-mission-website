@@ -341,17 +341,18 @@ export const LocationDetails = {
       name: 'hiddenMissionIds',
       type: 'array',
       maxRows: LOCATION_MISSION_OPTIONS.length,
-      labels: { singular: 'Hidden mission', plural: 'Hidden missions' },
+      label: 'Portal availability by location',
+      labels: { singular: 'Unavailable portal', plural: 'Unavailable portals' },
       admin: {
         description:
-          'Missions selected here are hidden for this location on the public Missions page after deploy. Leave empty to show every listed mission.',
+          'Use this per-location portal selector to choose portals that are not available at this location. The public Missions page hides selected portals after deploy. Leave empty to show every listed portal.',
       },
       fields: [
         {
           name: 'missionId',
           type: 'select',
           required: true,
-          label: 'Mission',
+          label: 'Portal',
           options: LOCATION_MISSION_OPTIONS,
         },
       ],

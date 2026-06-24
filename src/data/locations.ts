@@ -44,6 +44,7 @@ export interface LocationRecord {
     };
     hours: Record<string, LocationDayHours>;
     bookingUrl: string;
+    donationUrl?: string;
     externalUrl?: string;
     rollerCheckoutUrl?: string;
     bookingProvider?: 'roller' | 'briq' | 'clubspeed' | 'experience-factory';

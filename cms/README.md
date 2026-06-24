@@ -1,6 +1,6 @@
 # Payload CMS (Railway)
 
-PostgreSQL-backed Payload 3 admin for **Page SEO Overrides**, **Announcement Banners**, **Location Details**, and **Landing Pages** consumed by the Astro site at build time.
+PostgreSQL-backed Payload 3 admin for **Page SEO Overrides**, **Announcement Banners**, **Location Details**, **Blog Posts**, and **Landing Pages** consumed by the Astro site at build time.
 
 ## Local
 
@@ -16,7 +16,8 @@ PostgreSQL-backed Payload 3 admin for **Page SEO Overrides**, **Announcement Ban
 
 - **Page SEO Overrides**: `path` matches a route-registry page such as `/`, `/about`, or `/groups/birthdays`. The production migration preloads one row per registered route. Published records override that code-owned page's SEO metadata at Astro build time; they do not edit page body copy or layout.
 - **Announcement Banners**: text-only top banner messages with scheduling, priority, and optional region/location targeting. If no CMS banner is active or the optional CMS endpoint is unavailable during rollout, the public site keeps the existing hardcoded ticker fallback.
-- **Location Details**: address, hours, and external destination URLs for existing code-owned locations only. Published records update public address/hour displays, generate the directions link from that address, and can override booking, gift card, waiver, external location-page, and group form URLs after deploy; they do not create new locations, change public pages, or change booking provider settings. If the optional CMS endpoint is unavailable, the public build keeps `data/locations.json` as the fallback.
+- **Location Details**: address, hours, external destination URLs, and per-location portal availability for existing code-owned locations only. Published records update public address/hour displays, generate the directions link from that address, can override booking, gift card, waiver, external location-page, and group form URLs, and can hide unavailable portals after deploy; they do not create new locations, change public pages, or change booking provider settings. If the optional CMS endpoint is unavailable, the public build keeps `data/locations.json` as the fallback.
+- **Blog Posts**: location-specific posts rendered at `/blog/{post-url}` and grouped under `/blog/{location}`. Published records appear after deploy; draft records stay in the CMS. During rollout, the public build treats the blog endpoint as optional so the site can still build when no posts exist yet.
 - **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Start new pages from `/landings/new`, which captures the campaign brief and creates a draft. Refine the saved record in Payload, use **Preview** to review the Railway-hosted page, then enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
 - **User Invites**: owner-only records that create or update a CMS user, then either email a 24-hour password setup link or create a copyable 24-hour invite link. Use this instead of manually creating users with temporary passwords.
 
@@ -89,6 +90,7 @@ The static build calls:
 - `GET {PAYLOAD_CMS_ORIGIN}/api/landings?limit=250&depth=0` for **published** landing documents.
 - `GET {PAYLOAD_CMS_ORIGIN}/api/announcement-banners?limit=250&depth=0` for optional **published** Announcement Banners. This fetch is non-fatal during rollout so the public build can fall back to the code-owned ticker if the collection is unavailable.
 - `GET {PAYLOAD_CMS_ORIGIN}/api/location-details?limit=250&depth=0` for optional **published** Location Details. This fetch is non-fatal so the public build can fall back to the code-owned location data if the collection is unavailable.
+- `GET {PAYLOAD_CMS_ORIGIN}/api/blog-posts?limit=250&depth=0` for optional **published** Blog Posts. This fetch is non-fatal during rollout so the public build can publish the static blog shell before posts exist.
 
 No API key is required for public published reads.
 

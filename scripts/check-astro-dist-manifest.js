@@ -83,7 +83,7 @@ for (const rel of astroRenderedHtml) {
 
 for (const htmlFile of htmlFiles()) {
   const rel = path.relative(distDir, htmlFile).split(path.sep).join('/');
-  if (!astroRenderedHtml.has(rel) && !rel.startsWith('c/')) {
+  if (!astroRenderedHtml.has(rel) && !rel.startsWith('c/') && !rel.startsWith('blog/')) {
     errors.push(`${rel}: unexpected HTML artifact in dist`);
   }
 }

@@ -891,6 +891,40 @@
       "localBusinessSchemaEligible": false
     },
     {
+      "id": "eindhoven",
+      "slug": "eindhoven",
+      "name": "Time Mission Eindhoven",
+      "shortName": "Eindhoven",
+      "venueName": null,
+      "region": "europe",
+      "status": "coming-soon",
+      "address": {
+        "line1": "",
+        "city": "Eindhoven",
+        "state": "",
+        "zip": "",
+        "country": "Netherlands"
+      },
+      "contact": {
+        "phone": "",
+        "email": ""
+      },
+      "hours": {},
+      "bookingUrl": "",
+      "navLabel": "Netherlands – Eindhoven",
+      "mapUrl": "https://maps.google.com/?q=Eindhoven+Netherlands",
+      "faqs": [],
+      "ticker": "EINDHOVEN COMING SOON",
+      "giftCardUrl": "",
+      "countryCode": "NL",
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": false
+    },
+    {
       "id": "dallas",
       "slug": "dallas",
       "name": "Time Mission Dallas",
@@ -899,10 +933,11 @@
       "region": "us",
       "status": "coming-soon",
       "address": {
-        "line1": "",
+        "line1": "5307 E. Mockingbird Ln",
+        "line2": "Ste 200 & 201",
         "city": "Dallas",
         "state": "TX",
-        "zip": "",
+        "zip": "75206",
         "country": "United States"
       },
       "contact": {
@@ -912,7 +947,7 @@
       "hours": {},
       "bookingUrl": "",
       "navLabel": "TX – Dallas",
-      "mapUrl": "https://maps.google.com/?q=Dallas+TX",
+      "mapUrl": "https://maps.google.com/?q=5307+E.+Mockingbird+Ln+Ste+200+%26+201+Dallas+TX+75206",
       "faqs": [],
       "ticker": "DALLAS COMING SOON",
       "giftCardUrl": "",

@@ -18,6 +18,7 @@ describe('CMS current content sync migration', () => {
 
     expect(migrationIndex).toContain('20260605_143000_sync_current_cms_content');
     expect(migrationIndex).toContain('20260622_090000_brussels_open');
+    expect(migrationIndex).toContain('20260624_090000_blog_press_donation_eindhoven');
     expect(migration).toContain('"location_slug" = \'houston\'');
     expect(migration).toContain("'10am - 10pm'");
     expect(migration).toContain('Time Mission Houston – 25+ Interactive Mission Rooms');

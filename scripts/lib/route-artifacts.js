@@ -96,6 +96,16 @@ function isDynamicLandingSitemapLoc(loc, contract) {
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
 }
 
+function isDynamicBlogSitemapLoc(loc, contract) {
+  const registry = contract.registry || {};
+  const base = String(registry.baseUrl || '').replace(/\/+$/, '');
+  const expectedPrefixNoSlash = `${base}/blog`;
+  if (!loc.startsWith(`${expectedPrefixNoSlash}/`)) return false;
+  const slug = loc.slice(expectedPrefixNoSlash.length + 1).replace(/\/+$/, '');
+  if (!slug || slug.includes('/') || slug.includes('.')) return false;
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+}
+
 function verifySitemapLocs(locs, contract, options = {}) {
   const errors = [];
   const opts = {
@@ -126,7 +136,11 @@ function verifySitemapLocs(locs, contract, options = {}) {
   }
 
   for (const loc of list) {
-    if (!contract.sitemapUrlSet.has(loc) && !isDynamicLandingSitemapLoc(loc, contract)) {
+    if (
+      !contract.sitemapUrlSet.has(loc)
+      && !isDynamicLandingSitemapLoc(loc, contract)
+      && !isDynamicBlogSitemapLoc(loc, contract)
+    ) {
       errors.push(`Unexpected sitemap URL: ${loc}`);
     }
   }
@@ -200,7 +214,10 @@ function resolveInternalDeployTarget(deployRoot, registry, href) {
   if (!staticPath.startsWith(deployNorm) && staticPath !== path.normalize(deployRoot)) {
     return null;
   }
-  return fs.existsSync(staticPath) ? staticPath : null;
+  if (fs.existsSync(staticPath)) return staticPath;
+  const staticHtmlPath = path.normalize(path.join(deployRoot, `${tail}.html`));
+  if (staticHtmlPath.startsWith(deployNorm) && fs.existsSync(staticHtmlPath)) return staticHtmlPath;
+  return null;
 }
 
 module.exports = {

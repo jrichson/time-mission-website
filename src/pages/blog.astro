@@ -1,0 +1,103 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { allLocations } from '../data/locations';
+import { definePage } from '../lib/define-page';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+import {
+    blogLocationCanonicalPath,
+    blogPostCanonicalPath,
+    blogPostDateLabel,
+    blogPostDocLooksRenderable,
+    blogPostExcerptForDoc,
+    blogPostHeroImage,
+    blogPostLocationSlug,
+    getPublishedBlogPosts,
+    sortBlogPosts,
+    type PayloadBlogPostDoc,
+} from '../lib/payload/load';
+
+export const prerender = true;
+
+const page = definePage({ canonicalPath: '/blog' });
+const posts = sortBlogPosts((await getPublishedBlogPosts()).filter(blogPostDocLooksRenderable));
+const postsByLocation = new Map<string, PayloadBlogPostDoc[]>();
+for (const post of posts) {
+    const locationSlug = blogPostLocationSlug(post);
+    if (!postsByLocation.has(locationSlug)) postsByLocation.set(locationSlug, []);
+    postsByLocation.get(locationSlug)!.push(post);
+}
+const locationsWithPosts = allLocations.filter((loc) => (postsByLocation.get(loc.slug) || []).length > 0);
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Blog', href: '/blog' },
+]));
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-blog-page">
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-blog.css?v=1" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+
+    <section class="tm-blog-hero">
+        <picture class="tm-blog-hero-media" aria-hidden="true">
+            <source srcset="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" type="image/jpeg">
+            <img src="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
+        <div class="tm-blog-shell tm-blog-hero-copy">
+            <p class="tm-blog-kicker">Field Notes</p>
+            <h1>TIME MISSION BLOG</h1>
+            <p>Local updates, opening notes, event ideas, and mission-room news from Time Mission teams.</p>
+        </div>
+    </section>
+
+    <section class="tm-blog-section">
+        <div class="tm-blog-shell">
+            <div class="tm-blog-section-head">
+                <p class="tm-blog-kicker">Latest</p>
+                <h2>Recent posts</h2>
+            </div>
+            {posts.length ? (
+                <div class="tm-blog-grid">
+                    {posts.map((post) => {
+                        const location = allLocations.find((loc) => loc.slug === blogPostLocationSlug(post));
+                        return (
+                            <article class="tm-blog-card">
+                                <a href={blogPostCanonicalPath(String(post.slug))}>
+                                    <img src={blogPostHeroImage(post)} alt="" width="720" height="480" loading="lazy" decoding="async" />
+                                    <span>{location?.shortName || 'Time Mission'} · {blogPostDateLabel(post)}</span>
+                                    <h3>{post.title}</h3>
+                                    <p>{blogPostExcerptForDoc(post)}</p>
+                                </a>
+                            </article>
+                        );
+                    })}
+                </div>
+            ) : (
+                <div class="tm-blog-empty">
+                    <h3>Posts are coming soon.</h3>
+                    <p>Local stories and updates from Time Mission teams will appear here soon.</p>
+                </div>
+            )}
+        </div>
+    </section>
+
+    <section class="tm-blog-section tm-blog-section--quiet">
+        <div class="tm-blog-shell">
+            <div class="tm-blog-section-head">
+                <p class="tm-blog-kicker">Locations</p>
+                <h2>Browse by location</h2>
+            </div>
+            <div class="tm-blog-location-list">
+                {(locationsWithPosts.length ? locationsWithPosts : allLocations).map((loc) => (
+                    <a href={blogLocationCanonicalPath(loc.slug)}>
+                        <span>{loc.navLabel}</span>
+                        <strong>{(postsByLocation.get(loc.slug) || []).length || 'No'} posts</strong>
+                    </a>
+                ))}
+            </div>
+        </div>
+    </section>
+</SiteLayout>

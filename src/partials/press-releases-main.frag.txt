@@ -1,0 +1,23 @@
+    <section class="tm-resource-hero tm-resource-hero--compact">
+        <picture class="tm-resource-hero-media" aria-hidden="true">
+            <source srcset="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" type="image/jpeg">
+            <img src="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
+        <div class="tm-resource-shell tm-resource-hero-copy">
+            <p class="tm-resource-kicker">Press Room</p>
+            <h1>PRESS RELEASES</h1>
+            <p>Official announcements will be posted here as the press library is populated.</p>
+            <a href="/press" class="tm-resource-secondary">Press Home</a>
+        </div>
+    </section>
+
+    <section class="tm-resource-section">
+        <div class="tm-resource-shell">
+            <div class="tm-resource-empty">
+                <p class="tm-resource-kicker">Coming Soon</p>
+                <h2>Release archive pending</h2>
+                <p>Official announcements will appear here once final release copy is available.</p>
+                <a href="/contact" class="tm-resource-button">Media Contact</a>
+            </div>
+        </div>
+    </section>

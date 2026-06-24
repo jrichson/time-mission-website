@@ -1,6 +1,7 @@
 /** Build-time Payload REST client for CMS landings (`cms/` workspace). */
 
 import type { PayloadAnnouncementBannerDoc } from './announcement-banner-contract';
+import type { PayloadBlogPostDoc } from './blog-post-contract';
 import {
     cmsBuildStrict,
     validatedCmsOriginBase,
@@ -14,6 +15,21 @@ export {
     announcementBannerViewForDoc,
     selectAnnouncementBanner,
 } from './announcement-banner-contract';
+export {
+    blogLocationCanonicalPath,
+    blogPostBodyHtml,
+    blogPostCanonicalPath,
+    blogPostDateLabel,
+    blogPostDocLooksRenderable,
+    blogPostExcerptForDoc,
+    blogPostHeadForDoc,
+    blogPostHeroImage,
+    blogPostLocationSlug,
+    blogPostPublishDate,
+    blogPostShouldAppearInSitemap,
+    slugIsValidForBlogPost,
+    sortBlogPosts,
+} from './blog-post-contract';
 export {
     DEFAULT_LANDING_TEMPLATE,
     LANDING_TEMPLATE_OPTIONS,
@@ -45,6 +61,7 @@ export type { PayloadLandingLaunchState } from './landing-contract';
 export type { PayloadLandingSourceChannel } from './landing-contract';
 export type { PayloadLandingTemplate } from './landing-contract';
 export type { PayloadAnnouncementBannerDoc } from './announcement-banner-contract';
+export type { PayloadBlogPostDoc } from './blog-post-contract';
 export type { PayloadLocationDetailsDoc } from './location-details-contract';
 
 const DEFAULT_ORIGIN_KEYS = ['PAYLOAD_CMS_ORIGIN', 'PAYLOAD_PUBLIC_CMS_ORIGIN'] as const;
@@ -221,6 +238,21 @@ export async function getPublishedLocationDetails(origin?: string): Promise<Payl
     return fetchPayloadCollection<PayloadLocationDetailsDoc>({
         collection: 'location-details',
         optionalLabel: 'location details',
+        origin: readOrigin.base,
+    });
+}
+
+/**
+ * Published blog posts are optional during CMS rollout.
+ * The public blog index stays valid when no published posts exist yet.
+ */
+export async function getPublishedBlogPosts(origin?: string): Promise<PayloadBlogPostDoc[]> {
+    const readOrigin = publishedCmsOrigin({ label: 'blog posts', optional: true, origin });
+    if (!readOrigin) return [];
+
+    return fetchPayloadCollection<PayloadBlogPostDoc>({
+        collection: 'blog-posts',
+        optionalLabel: 'blog posts',
         origin: readOrigin.base,
     });
 }

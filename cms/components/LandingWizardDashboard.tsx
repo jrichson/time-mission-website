@@ -34,6 +34,12 @@ const primaryActions: DashboardAction[] = [
     text: 'Review drafts, previews, publish state, and saved campaign pages.',
   },
   {
+    href: '/admin/collections/blog-posts',
+    label: 'Manage blog posts',
+    meta: 'Blog',
+    text: 'Publish location updates, opening notes, and local event ideas.',
+  },
+  {
     href: '/deploy',
     label: 'Deploy approved changes',
     meta: 'Release',

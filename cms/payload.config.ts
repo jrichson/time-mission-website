@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 
 import { AnnouncementBanners } from './collections/AnnouncementBanners.js';
+import { BlogPosts } from './collections/BlogPosts.js';
 import { Landings } from './collections/Landings.js';
 import { LocationDetails } from './collections/LocationDetails.js';
 import { SitePages } from './collections/SitePages.js';
@@ -159,6 +160,7 @@ export default buildConfig({
     SitePages as CollectionConfig,
     AnnouncementBanners as CollectionConfig,
     LocationDetails as CollectionConfig,
+    BlogPosts as CollectionConfig,
     Landings as CollectionConfig,
     UserInvites as CollectionConfig,
     Users as CollectionConfig,

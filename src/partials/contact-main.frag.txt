@@ -45,6 +45,7 @@
                                 <option value="manassas">VA – Manassas</option>
                                 <option value="antwerp">Belgium – Antwerp</option>
                                 <option value="brussels">Belgium – Brussels</option>
+                                <option value="eindhoven">Netherlands – Eindhoven</option>
                                 <option value="general">General Inquiry</option>
                             </select>
                         </div>

@@ -1,0 +1,23 @@
+    <section class="tm-resource-hero tm-resource-hero--compact">
+        <picture class="tm-resource-hero-media" aria-hidden="true">
+            <source srcset="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" type="image/jpeg">
+            <img src="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
+        <div class="tm-resource-shell tm-resource-hero-copy">
+            <p class="tm-resource-kicker">Coverage</p>
+            <h1>IN THE NEWS</h1>
+            <p>Media coverage and editorial mentions will be collected here.</p>
+            <a href="/press" class="tm-resource-secondary">Press Home</a>
+        </div>
+    </section>
+
+    <section class="tm-resource-section">
+        <div class="tm-resource-shell">
+            <div class="tm-resource-empty">
+                <p class="tm-resource-kicker">Coverage Archive</p>
+                <h2>News links pending</h2>
+                <p>Article links, local opening coverage, and broadcast segments will appear here once approved.</p>
+                <a href="/contact" class="tm-resource-button">Share a News Link</a>
+            </div>
+        </div>
+    </section>

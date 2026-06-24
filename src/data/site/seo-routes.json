@@ -65,6 +65,18 @@
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
+  "/donation": {
+    "title": "Donate | Time Mission",
+    "description": "Support Time Mission programs and community partnerships. Donation links are being connected by location.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/blog": {
+    "title": "Blog | Time Mission",
+    "description": "Updates from Time Mission locations, including openings, mission notes, group ideas, and local event news.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
   "/faq": {
     "title": "FAQ | Time Mission",
     "description": "Everything you need to know before your first Time Mission, age limits, pricing, what to wear, how teams work, and more.",
@@ -83,9 +95,39 @@
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
+  "/press": {
+    "title": "Press | Time Mission",
+    "description": "Time Mission press resources, including releases, approved images, in-the-news links, and brand guidelines.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/press/releases": {
+    "title": "Press Releases | Time Mission",
+    "description": "Official Time Mission press releases and company announcements.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/press/images": {
+    "title": "Press Images | Time Mission",
+    "description": "Approved Time Mission images for press and editorial use.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/press/in-the-news": {
+    "title": "In the News | Time Mission",
+    "description": "Media coverage and editorial mentions of Time Mission.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/press/brand-guidelines": {
+    "title": "Brand Guidelines | Time Mission",
+    "description": "Time Mission logos, brand guidance, and press usage notes.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
   "/locations": {
     "title": "Locations | Time Mission",
-    "description": "Find a Time Mission near you, locations in Philadelphia, Mount Prospect, Houston, West Nyack, Lincoln, Manassas, and Antwerp.",
+    "description": "Find a Time Mission near you, including open, temporarily closed, and coming-soon locations in the United States and Europe.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
@@ -145,7 +187,13 @@
   },
   "/dallas": {
     "title": "Time Mission Dallas | Coming Soon",
-    "description": "Time Mission Dallas is coming soon in Dallas, TX. Contact the location team for launch timing and opening updates.",
+    "description": "Time Mission Dallas is coming soon at 5307 E. Mockingbird Ln Ste 200 & 201 in Dallas, TX. Contact the location team for opening updates.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/eindhoven": {
+    "title": "Time Mission Eindhoven | Coming Soon",
+    "description": "Time Mission Eindhoven is coming soon in the Netherlands. Contact the location team for launch timing and opening updates.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },

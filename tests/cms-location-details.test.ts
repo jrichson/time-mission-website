@@ -18,6 +18,7 @@ type CollectionField = {
     admin?: { description?: string };
     fields?: CollectionField[];
     label?: string;
+    labels?: { plural?: string; singular?: string };
     name?: string;
     options?: unknown[];
     required?: boolean;
@@ -68,8 +69,15 @@ describe('CMS location details', () => {
         expect(groupFormUrlsField?.access?.update).toBeTypeOf('function');
         expect(formKeyField?.admin?.description || formKeyField?.label).toBeTruthy();
         expect(hiddenMissionIdsField).toMatchObject({ name: 'hiddenMissionIds', type: 'array' });
-        expect(hiddenMissionIdsField?.admin?.description).toContain('hidden for this location');
+        expect(hiddenMissionIdsField?.label).toBe('Portal availability by location');
+        expect(hiddenMissionIdsField?.labels).toEqual({
+            singular: 'Unavailable portal',
+            plural: 'Unavailable portals',
+        });
+        expect(hiddenMissionIdsField?.admin?.description).toContain('per-location portal selector');
+        expect(hiddenMissionIdsField?.admin?.description).toContain('not available at this location');
         expect(missionIdField).toMatchObject({ name: 'missionId', type: 'select', required: true });
+        expect(missionIdField?.label).toBe('Portal');
         expect(missionIdField?.options).toBe(LOCATION_MISSION_OPTIONS);
         expect(publishedField?.label).toBe('Published in CMS');
         expect(publishedField?.admin?.description).toContain('Live after deploy');

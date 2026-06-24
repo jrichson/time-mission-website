@@ -3,6 +3,7 @@
     "antwerp": "/css/page-west-nyack.css?v=2",
     "brussels": "/css/page-houston.css?v=2",
     "dallas": "/css/page-houston.css?v=2",
+    "eindhoven": "/css/page-houston.css?v=2",
     "houston": "/css/page-houston.css?v=2",
     "lincoln": "/css/page-mount-prospect.css?v=2",
     "manassas": "/css/page-west-nyack.css?v=2",
@@ -14,6 +15,7 @@
   },
   "lang": {
     "antwerp": "nl-BE",
-    "brussels": "fr-BE"
+    "brussels": "fr-BE",
+    "eindhoven": "nl-NL"
   }
 }

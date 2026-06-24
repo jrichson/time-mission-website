@@ -25,6 +25,7 @@
 /Houston /houston 301
 /Brussels https://timemission.eu/brussels 301
 /Dallas /dallas 301
+/Eindhoven /eindhoven 301
 /Nashville /nashville 301
 /Orland-Park /orland-park 301
 /OrlandPark /orland-park 301
@@ -41,9 +42,16 @@
 /groups/holidays.html /groups/holidays 301
 /groups/private-events.html /groups/private-events 301
 /gift-cards.html /gift-cards 301
+/donation.html /donation 301
+/blog.html /blog 301
 /faq.html /faq 301
 /contact.html /contact 301
 /contact-thank-you.html /contact-thank-you 301
+/press.html /press 301
+/press/releases.html /press/releases 301
+/press/images.html /press/images 301
+/press/in-the-news.html /press/in-the-news 301
+/press/brand-guidelines.html /press/brand-guidelines 301
 /locations.html /locations 301
 /locations/index.html /locations 301
 /philadelphia.html /philadelphia 301
@@ -57,6 +65,7 @@
 /brussels https://timemission.eu/brussels 301
 /antwerp.html https://timemission.eu/antwerp 301
 /orland-park.html /orland-park 301
+/eindhoven.html /eindhoven 301
 /dallas.html /dallas 301
 /nashville.html /nashville 301
 /brussels.html https://timemission.eu/brussels 301
