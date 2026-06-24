@@ -72,8 +72,7 @@ export default async function DeployPage({ searchParams }: PageProps) {
           <strong>CMS</strong>
         </Link>
         <div className={styles.topbarActions}>
-          <Link href="/">Mission Control</Link>
-          <Link href="/admin/collections/landings">Landings</Link>
+          <Link href="/">Back to Mission Control</Link>
         </div>
       </nav>
 

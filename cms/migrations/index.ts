@@ -15,6 +15,7 @@ import * as migration_20260617_090000_location_details_hidden_missions from './2
 import * as migration_20260622_090000_brussels_open from './20260622_090000_brussels_open';
 import * as migration_20260624_085000_add_eindhoven_location_enum from './20260624_085000_add_eindhoven_location_enum';
 import * as migration_20260624_090000_blog_press_donation_eindhoven from './20260624_090000_blog_press_donation_eindhoven';
+import * as migration_20260624_101500_seed_current_announcement_banners from './20260624_101500_seed_current_announcement_banners';
 
 export const migrations = [
   {
@@ -101,5 +102,10 @@ export const migrations = [
     up: migration_20260624_090000_blog_press_donation_eindhoven.up,
     down: migration_20260624_090000_blog_press_donation_eindhoven.down,
     name: '20260624_090000_blog_press_donation_eindhoven'
+  },
+  {
+    up: migration_20260624_101500_seed_current_announcement_banners.up,
+    down: migration_20260624_101500_seed_current_announcement_banners.down,
+    name: '20260624_101500_seed_current_announcement_banners'
   },
 ];

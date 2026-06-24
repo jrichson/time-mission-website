@@ -230,8 +230,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
           <strong>CMS</strong>
         </Link>
         <div className={styles.topbarActions}>
-          <Link href="/">Mission Control</Link>
-          <Link href="/admin/collections/landings">Landings</Link>
+          <Link href="/">Back to Mission Control</Link>
         </div>
       </nav>
 
@@ -249,7 +248,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
           <strong>{selectedTemplateOption.label}</strong>
           <p>Creates a saved CMS draft and opens preview before any public publish step.</p>
           <Link className={styles.secondaryLink} href="/admin/collections/landings">
-            Manage landing pages
+            View landing drafts
           </Link>
         </aside>
       </header>
