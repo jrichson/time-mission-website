@@ -798,14 +798,14 @@
           "label": "10am - Midnight"
         },
         "sat": {
-          "open": "10:00",
+          "open": "11:00",
           "close": "00:00",
-          "label": "10am - Midnight"
+          "label": "11am - Midnight"
         },
         "sun": {
-          "open": "10:00",
+          "open": "11:00",
           "close": "20:00",
-          "label": "10am - 8pm"
+          "label": "11am - 8pm"
         }
       },
       "bookingUrl": "https://book.orlandpark.timemission.com/timemissionorlandpark/onlinecheckout/en-us/home",

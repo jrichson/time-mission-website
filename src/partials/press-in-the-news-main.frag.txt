@@ -11,12 +11,21 @@
         </div>
     </section>
 
+    <nav class="tm-resource-subnav" aria-label="Press resources">
+        <div class="tm-resource-shell tm-resource-subnav-inner">
+            <a href="/press/releases">Press Releases</a>
+            <a href="/press/images">Press Images</a>
+            <a href="/press/in-the-news" aria-current="page">In the News</a>
+            <a href="/press/brand-guidelines">Brand Guidelines</a>
+        </div>
+    </nav>
+
     <section class="tm-resource-section">
         <div class="tm-resource-shell">
             <div class="tm-resource-empty">
                 <p class="tm-resource-kicker">Coverage Archive</p>
                 <h2>News links pending</h2>
-                <p>Article links, local opening coverage, and broadcast segments will appear here once approved.</p>
+                <p>Article links, local opening coverage, and broadcast segments will appear here once approved. Send coverage links through contact so the team can review and add them.</p>
                 <a href="/contact" class="tm-resource-button">Share a News Link</a>
             </div>
         </div>

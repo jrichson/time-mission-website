@@ -11,12 +11,21 @@
         </div>
     </section>
 
+    <nav class="tm-resource-subnav" aria-label="Press resources">
+        <div class="tm-resource-shell tm-resource-subnav-inner">
+            <a href="/press/releases" aria-current="page">Press Releases</a>
+            <a href="/press/images">Press Images</a>
+            <a href="/press/in-the-news">In the News</a>
+            <a href="/press/brand-guidelines">Brand Guidelines</a>
+        </div>
+    </nav>
+
     <section class="tm-resource-section">
         <div class="tm-resource-shell">
             <div class="tm-resource-empty">
                 <p class="tm-resource-kicker">Coming Soon</p>
                 <h2>Release archive pending</h2>
-                <p>Official announcements will appear here once final release copy is available.</p>
+                <p>Official announcements will appear here once final release copy is available. Until then, media inquiries can go through the main contact channel.</p>
                 <a href="/contact" class="tm-resource-button">Media Contact</a>
             </div>
         </div>

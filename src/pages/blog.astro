@@ -50,6 +50,10 @@ const ld = serializeGraph(buildSimpleGraph([
             <p class="tm-blog-kicker">Field Notes</p>
             <h1>TIME MISSION BLOG</h1>
             <p>Local updates, opening notes, event ideas, and mission-room news from Time Mission teams.</p>
+            <div class="tm-blog-actions">
+                <a href="#browse-by-location" class="tm-blog-button">Browse by Location</a>
+                <a href="/locations" class="tm-blog-secondary">Find a Location</a>
+            </div>
         </div>
     </section>
 
@@ -84,11 +88,12 @@ const ld = serializeGraph(buildSimpleGraph([
         </div>
     </section>
 
-    <section class="tm-blog-section tm-blog-section--quiet">
+    <section class="tm-blog-section tm-blog-section--quiet" id="browse-by-location">
         <div class="tm-blog-shell">
             <div class="tm-blog-section-head">
                 <p class="tm-blog-kicker">Locations</p>
                 <h2>Browse by location</h2>
+                <p>Each location has its own blog page. Posts appear as soon as the local team publishes them.</p>
             </div>
             <div class="tm-blog-location-list">
                 {(locationsWithPosts.length ? locationsWithPosts : allLocations).map((loc) => (

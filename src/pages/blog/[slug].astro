@@ -98,6 +98,10 @@ const landingHead = post
                     <p class="tm-blog-kicker">Location Blog</p>
                     <h1>{location.shortName}</h1>
                     <p>Updates and local notes from Time Mission {location.shortName}.</p>
+                    <div class="tm-blog-actions">
+                        <a href="/blog" class="tm-blog-secondary">All Blog Posts</a>
+                        <a href={`/${location.slug}`} class="tm-blog-button">Visit Location</a>
+                    </div>
                 </div>
             </section>
             <section class="tm-blog-section">
@@ -118,8 +122,11 @@ const landingHead = post
                     ) : (
                         <div class="tm-blog-empty">
                             <h2>{location.shortName} posts are coming soon.</h2>
-                            <p>Local stories and updates for this location will appear here soon.</p>
-                            <a href="/blog">Back to Blog</a>
+                            <p>Local stories and updates for this location will appear here once the team publishes them.</p>
+                            <div class="tm-blog-actions">
+                                <a href="/blog" class="tm-blog-secondary">Back to Blog</a>
+                                <a href={`/${location.slug}`} class="tm-blog-button">Visit Location</a>
+                            </div>
                         </div>
                     )}
                 </div>

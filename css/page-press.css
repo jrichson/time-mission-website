@@ -103,6 +103,41 @@ body.tm-resource-page {
     font-size: 0.92rem;
 }
 
+.tm-resource-subnav {
+    border-block: 1px solid var(--tm-resource-line);
+    background: rgba(5, 5, 8, 0.94);
+}
+
+.tm-resource-subnav-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    padding-block: 0.8rem;
+}
+
+.tm-resource-subnav a {
+    min-height: 44px;
+    border: 1px solid var(--tm-resource-line);
+    border-radius: 999px;
+    padding: 0.8rem 1rem;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.tm-resource-subnav a:hover,
+.tm-resource-subnav a[aria-current="page"] {
+    border-color: var(--tm-resource-line-strong);
+    background: rgba(255, 107, 44, 0.12);
+}
+
+.tm-resource-subnav a:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
 .tm-resource-actions {
     display: flex;
     flex-wrap: wrap;
@@ -179,6 +214,10 @@ body.tm-resource-page {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1rem;
+}
+
+.tm-resource-grid--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .tm-resource-tile {
@@ -258,6 +297,7 @@ body.tm-resource-page {
 
 @media (max-width: 920px) {
     .tm-resource-grid,
+    .tm-resource-grid--three,
     .tm-resource-split {
         grid-template-columns: 1fr;
     }

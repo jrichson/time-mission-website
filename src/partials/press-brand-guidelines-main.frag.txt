@@ -11,6 +11,15 @@
         </div>
     </section>
 
+    <nav class="tm-resource-subnav" aria-label="Press resources">
+        <div class="tm-resource-shell tm-resource-subnav-inner">
+            <a href="/press/releases">Press Releases</a>
+            <a href="/press/images">Press Images</a>
+            <a href="/press/in-the-news">In the News</a>
+            <a href="/press/brand-guidelines" aria-current="page">Brand Guidelines</a>
+        </div>
+    </nav>
+
     <section class="tm-resource-section">
         <div class="tm-resource-shell tm-resource-split">
             <div>
@@ -23,6 +32,28 @@
                     <img src="/assets/logo/TM_Logo_White.svg" alt="Time Mission logo" width="214" height="72" loading="lazy" decoding="async">
                 </div>
                 <a href="/assets/logo/TM_Logo_White.svg" class="tm-resource-button" download>Download White Logo</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="tm-resource-section tm-resource-section--quiet">
+        <div class="tm-resource-shell">
+            <div class="tm-resource-grid tm-resource-grid--three">
+                <article class="tm-resource-tile">
+                    <span>Do</span>
+                    <h3>Keep contrast</h3>
+                    <p>Use the logo on dark, clean backgrounds where the mark stays readable.</p>
+                </article>
+                <article class="tm-resource-tile">
+                    <span>Do not</span>
+                    <h3>Modify the mark</h3>
+                    <p>Do not stretch, recolor, outline, rotate, or add effects to the logo.</p>
+                </article>
+                <article class="tm-resource-tile">
+                    <span>Need approval?</span>
+                    <h3>Contact press</h3>
+                    <p>Send partner, sponsorship, and unusual usage questions through the contact channel.</p>
+                </article>
             </div>
         </div>
     </section>

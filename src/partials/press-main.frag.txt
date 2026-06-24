@@ -9,10 +9,19 @@
             <p>Official resources for announcements, media coverage, approved imagery, and brand usage.</p>
             <div class="tm-resource-actions">
                 <a href="/press/releases" class="tm-resource-button">Press Releases</a>
-                <a href="/press/images" class="tm-resource-secondary">Press Images</a>
+                <a href="/press/images" class="tm-resource-secondary">Media Library</a>
             </div>
         </div>
     </section>
+
+    <nav class="tm-resource-subnav" aria-label="Press resources">
+        <div class="tm-resource-shell tm-resource-subnav-inner">
+            <a href="/press/releases">Press Releases</a>
+            <a href="/press/images">Press Images</a>
+            <a href="/press/in-the-news">In the News</a>
+            <a href="/press/brand-guidelines">Brand Guidelines</a>
+        </div>
+    </nav>
 
     <section class="tm-resource-section">
         <div class="tm-resource-shell">
@@ -24,22 +33,22 @@
                 <a class="tm-resource-tile tm-resource-tile--link" href="/press/releases">
                     <span>Official</span>
                     <h3>Press Releases</h3>
-                    <p>Company announcements, openings, and launch notes.</p>
+                    <p>Company announcements, openings, and launch notes. The archive is ready for approved release copy.</p>
                 </a>
                 <a class="tm-resource-tile tm-resource-tile--link" href="/press/images">
                     <span>Media</span>
                     <h3>Press Images</h3>
-                    <p>Approved venue, mission, and brand imagery.</p>
+                    <p>Approved venue, mission, and brand imagery, organized for editorial use.</p>
                 </a>
                 <a class="tm-resource-tile tm-resource-tile--link" href="/press/in-the-news">
                     <span>Coverage</span>
                     <h3>In the News</h3>
-                    <p>Editorial coverage and third-party mentions.</p>
+                    <p>Editorial coverage, local opening stories, and third-party mentions.</p>
                 </a>
                 <a class="tm-resource-tile tm-resource-tile--link" href="/press/brand-guidelines">
                     <span>Brand</span>
                     <h3>Brand Guidelines</h3>
-                    <p>Logo usage, naming, and press contact notes.</p>
+                    <p>Logo usage, naming, downloads, and press contact notes.</p>
                 </a>
             </div>
         </div>

@@ -11,6 +11,15 @@
         </div>
     </section>
 
+    <nav class="tm-resource-subnav" aria-label="Press resources">
+        <div class="tm-resource-shell tm-resource-subnav-inner">
+            <a href="/press/releases">Press Releases</a>
+            <a href="/press/images" aria-current="page">Press Images</a>
+            <a href="/press/in-the-news">In the News</a>
+            <a href="/press/brand-guidelines">Brand Guidelines</a>
+        </div>
+    </nav>
+
     <section class="tm-resource-section">
         <div class="tm-resource-shell">
             <div class="tm-resource-grid">

@@ -6,10 +6,13 @@
         <div class="tm-resource-shell tm-resource-hero-copy">
             <p class="tm-resource-kicker">Community Support</p>
             <h1>SUPPORT THE MISSION</h1>
-            <p>Donation links are being connected for Time Mission locations. Select a location when available and we will route support to the right local program.</p>
-            <a href="#" class="tm-resource-button btn-donation is-disabled" aria-disabled="true" data-donation="1">
-                Donation Links Coming Soon
-            </a>
+            <p>Donation links will follow the selected Time Mission location, the same way gift-card checkout does. Links stay disabled until each local program is approved.</p>
+            <div class="tm-resource-actions">
+                <a href="#" class="tm-resource-button btn-donation is-disabled" aria-disabled="true" data-donation="1">
+                    Donation Links Coming Soon
+                </a>
+                <a href="/contact" class="tm-resource-secondary">Ask About Donations</a>
+            </div>
             <p class="tm-resource-note" id="donationLocationHint">Donation links are not available yet.</p>
         </div>
     </section>
@@ -21,8 +24,8 @@
                 <h2>Local donation paths are being prepared.</h2>
             </div>
             <div class="tm-resource-copy">
-                <p>Each donation link will be location-specific, so support can be routed cleanly once the final destinations are approved.</p>
-                <p>For time-sensitive partnership questions, contact the location team and we will route the request internally.</p>
+                <p>When links are ready, the button above will automatically switch to the current location's approved donation destination.</p>
+                <p>For time-sensitive partnership or community requests, contact the location team and we will route the request internally.</p>
                 <a href="/contact" class="tm-resource-secondary">Contact Time Mission</a>
             </div>
         </div>
@@ -36,19 +39,19 @@
             </div>
             <div class="tm-resource-grid">
                 <article class="tm-resource-tile">
-                    <span>Open locations</span>
-                    <h3>Links pending</h3>
-                    <p>Donation URLs will appear as soon as they are approved for each location.</p>
+                    <span>Step 1</span>
+                    <h3>Select location</h3>
+                    <p>Use the site location selector so the page knows which local program to check.</p>
                 </article>
                 <article class="tm-resource-tile">
-                    <span>Coming soon</span>
-                    <h3>Launch support</h3>
-                    <p>New-market support links will stay disabled until opening teams provide final destinations.</p>
+                    <span>Step 2</span>
+                    <h3>Use local link</h3>
+                    <p>Approved donation URLs will turn on by location, with unavailable links clearly disabled.</p>
                 </article>
                 <article class="tm-resource-tile">
-                    <span>Questions</span>
-                    <h3>Use contact</h3>
-                    <p>General partnership and community requests can go through the contact form for now.</p>
+                    <span>Step 3</span>
+                    <h3>Need help?</h3>
+                    <p>Community, school, nonprofit, and partnership questions can go through contact for now.</p>
                 </article>
             </div>
         </div>
