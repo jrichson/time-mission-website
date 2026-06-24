@@ -33,11 +33,11 @@
         var locationName = (loc && (loc.shortName || loc.name)) || '';
 
         if (!url) {
-            setButtons('#', true, 'Donation Links Coming Soon');
+            setButtons('#', true, 'Donation Request Form Coming Soon');
             if (hint) {
                 hint.textContent = locationName
-                    ? 'Donation links are not available for ' + locationName + ' yet.'
-                    : 'Donation links are not available yet.';
+                    ? 'The online donation request form is not ready for ' + locationName + ' yet. Use contact for now and include your organization, event date, and request type.'
+                    : 'The online donation request form is not ready yet. Use contact for now and include your location, organization, event date, and request type.';
             }
             return;
         }

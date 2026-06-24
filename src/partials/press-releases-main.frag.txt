@@ -6,8 +6,8 @@
         <div class="tm-resource-shell tm-resource-hero-copy">
             <p class="tm-resource-kicker">Press Room</p>
             <h1>PRESS RELEASES</h1>
-            <p>Official announcements will be posted here as the press library is populated.</p>
-            <a href="/press" class="tm-resource-secondary">Press Home</a>
+            <p>Official Time Mission announcements, opening updates, and company statements will live here as they are released.</p>
+            <a href="/press" class="tm-resource-secondary">Back to Press Room</a>
         </div>
     </section>
 
@@ -24,9 +24,9 @@
         <div class="tm-resource-shell">
             <div class="tm-resource-empty">
                 <p class="tm-resource-kicker">Coming Soon</p>
-                <h2>Release archive pending</h2>
-                <p>Official announcements will appear here once final release copy is available. Until then, media inquiries can go through the main contact channel.</p>
-                <a href="/contact" class="tm-resource-button">Media Contact</a>
+                <h2>No public releases yet</h2>
+                <p>We are preparing the release archive. For a current deadline, contact us and include your outlet, topic, and publish date.</p>
+                <a href="/contact" class="tm-resource-button">Contact Media Team</a>
             </div>
         </div>
     </section>

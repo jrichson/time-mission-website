@@ -81,8 +81,8 @@ const ld = serializeGraph(buildSimpleGraph([
                 </div>
             ) : (
                 <div class="tm-blog-empty">
-                    <h3>Posts are coming soon.</h3>
-                    <p>Local stories and updates from Time Mission teams will appear here soon.</p>
+                    <h3>Stories are on the way.</h3>
+                    <p>Check back for opening updates, event ideas, and mission-room news from Time Mission teams.</p>
                 </div>
             )}
         </div>
@@ -93,15 +93,18 @@ const ld = serializeGraph(buildSimpleGraph([
             <div class="tm-blog-section-head">
                 <p class="tm-blog-kicker">Locations</p>
                 <h2>Browse by location</h2>
-                <p>Each location has its own blog page. Posts appear as soon as the local team publishes them.</p>
+                <p>Choose your location for local news, opening updates, and event ideas.</p>
             </div>
             <div class="tm-blog-location-list">
-                {(locationsWithPosts.length ? locationsWithPosts : allLocations).map((loc) => (
-                    <a href={blogLocationCanonicalPath(loc.slug)}>
-                        <span>{loc.navLabel}</span>
-                        <strong>{(postsByLocation.get(loc.slug) || []).length || 'No'} posts</strong>
-                    </a>
-                ))}
+                {(locationsWithPosts.length ? locationsWithPosts : allLocations).map((loc) => {
+                    const postCount = (postsByLocation.get(loc.slug) || []).length;
+                    return (
+                        <a href={blogLocationCanonicalPath(loc.slug)}>
+                            <span>{loc.navLabel}</span>
+                            <strong>{postCount ? `${postCount} ${postCount === 1 ? 'post' : 'posts'}` : 'No posts yet'}</strong>
+                        </a>
+                    );
+                })}
             </div>
         </div>
     </section>

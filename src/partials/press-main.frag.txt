@@ -5,11 +5,12 @@
         </picture>
         <div class="tm-resource-shell tm-resource-hero-copy">
             <p class="tm-resource-kicker">Press Room</p>
-            <h1>TIME MISSION PRESS</h1>
-            <p>Official resources for announcements, media coverage, approved imagery, and brand usage.</p>
+            <h1>TIME MISSION PRESS ROOM</h1>
+            <p>Find official Time Mission news, images, logo files, brand guidance, and media contact information in one place.</p>
             <div class="tm-resource-actions">
-                <a href="/press/releases" class="tm-resource-button">Press Releases</a>
-                <a href="/press/images" class="tm-resource-secondary">Media Library</a>
+                <a href="/press/brand-guidelines" class="tm-resource-button">Open Brand Guide</a>
+                <a href="/press/images" class="tm-resource-secondary">Browse Press Images</a>
+                <a href="/press/releases" class="tm-resource-secondary">Read Press Releases</a>
             </div>
         </div>
     </section>
@@ -27,28 +28,28 @@
         <div class="tm-resource-shell">
             <div class="tm-resource-section-head">
                 <p class="tm-resource-kicker">Resources</p>
-                <h2>Press center</h2>
+                <h2>Everything media and partners need</h2>
             </div>
             <div class="tm-resource-grid">
                 <a class="tm-resource-tile tm-resource-tile--link" href="/press/releases">
                     <span>Official</span>
                     <h3>Press Releases</h3>
-                    <p>Company announcements, openings, and launch notes. The archive is ready for approved release copy.</p>
+                    <p>Official announcements about new locations, openings, and company updates.</p>
                 </a>
                 <a class="tm-resource-tile tm-resource-tile--link" href="/press/images">
                     <span>Media</span>
                     <h3>Press Images</h3>
-                    <p>Approved venue, mission, and brand imagery, organized for editorial use.</p>
+                    <p>Official photography and logo assets for stories about Time Mission.</p>
                 </a>
                 <a class="tm-resource-tile tm-resource-tile--link" href="/press/in-the-news">
                     <span>Coverage</span>
                     <h3>In the News</h3>
-                    <p>Editorial coverage, local opening stories, and third-party mentions.</p>
+                    <p>Recent coverage, local stories, and editorial mentions.</p>
                 </a>
                 <a class="tm-resource-tile tm-resource-tile--link" href="/press/brand-guidelines">
                     <span>Brand</span>
-                    <h3>Brand Guidelines</h3>
-                    <p>Logo usage, naming, downloads, and press contact notes.</p>
+                    <h3>Brand Guide</h3>
+                    <p>Logo files, naming guidance, and simple usage rules for media and partners.</p>
                 </a>
             </div>
         </div>
@@ -61,8 +62,8 @@
                 <h2>Need a source, image, or quote?</h2>
             </div>
             <div class="tm-resource-copy">
-                <p>Send media inquiries through the main contact channel while the full press library is being populated.</p>
-                <a href="/contact" class="tm-resource-secondary">Contact Time Mission</a>
+                <p>Working on a story? Send your deadline, outlet, topic, and image needs through contact. We will route it to the right team.</p>
+                <a href="/contact" class="tm-resource-secondary">Contact Media Team</a>
             </div>
         </div>
     </section>

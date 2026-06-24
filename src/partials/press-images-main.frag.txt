@@ -6,8 +6,8 @@
         <div class="tm-resource-shell tm-resource-hero-copy">
             <p class="tm-resource-kicker">Media Library</p>
             <h1>PRESS IMAGES</h1>
-            <p>Approved press images will be organized here for editorial use.</p>
-            <a href="/press" class="tm-resource-secondary">Press Home</a>
+            <p>Official photography and brand assets for stories about Time Mission. Full downloadable galleries are coming soon.</p>
+            <a href="/press" class="tm-resource-secondary">Back to Press Room</a>
         </div>
     </section>
 
@@ -25,19 +25,19 @@
             <div class="tm-resource-grid">
                 <article class="tm-resource-tile">
                     <span>Venues</span>
-                    <h3>Location images</h3>
-                    <p>Exterior, lobby, and guest-flow images will be added after approval.</p>
+                    <h3>Venue photography</h3>
+                    <p>Exterior, lobby, and guest-flow photos for local stories and event coverage.</p>
                 </article>
                 <article class="tm-resource-tile">
                     <span>Missions</span>
-                    <h3>Experience images</h3>
-                    <p>Mission-room imagery will be grouped by approved use and caption.</p>
+                    <h3>Experience photography</h3>
+                    <p>Mission-room and guest-action images available for editorial use.</p>
                 </article>
                 <article class="tm-resource-tile">
                     <span>Brand</span>
-                    <h3>Logo package</h3>
-                    <p>Logo files and usage notes live with the brand guidelines.</p>
-                    <a href="/press/brand-guidelines">View guidelines</a>
+                    <h3>Logo and brand assets</h3>
+                    <p>The brand guide includes the current white logo and usage notes.</p>
+                    <a href="/press/brand-guidelines">Open Brand Guide</a>
                 </article>
             </div>
         </div>

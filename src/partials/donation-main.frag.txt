@@ -4,28 +4,28 @@
             <img src="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
         </picture>
         <div class="tm-resource-shell tm-resource-hero-copy">
-            <p class="tm-resource-kicker">Community Support</p>
-            <h1>SUPPORT THE MISSION</h1>
-            <p>Donation links will follow the selected Time Mission location, the same way gift-card checkout does. Links stay disabled until each local program is approved.</p>
+            <p class="tm-resource-kicker">Community Requests</p>
+            <h1>DONATION REQUESTS</h1>
+            <p>Planning a school fundraiser, nonprofit event, community auction, or local partnership? Tell us what you are working on and the right Time Mission team will review it.</p>
             <div class="tm-resource-actions">
                 <a href="#" class="tm-resource-button btn-donation is-disabled" aria-disabled="true" data-donation="1">
-                    Donation Links Coming Soon
+                    Donation Request Form Coming Soon
                 </a>
-                <a href="/contact" class="tm-resource-secondary">Ask About Donations</a>
+                <a href="/contact" class="tm-resource-secondary">Contact Us About Donations</a>
             </div>
-            <p class="tm-resource-note" id="donationLocationHint">Donation links are not available yet.</p>
+            <p class="tm-resource-note" id="donationLocationHint">The online donation request form is not ready yet. Use contact for now and include your location, organization, event date, and request type.</p>
         </div>
     </section>
 
     <section class="tm-resource-section">
         <div class="tm-resource-shell tm-resource-split">
             <div>
-                <p class="tm-resource-kicker">Status</p>
-                <h2>Local donation paths are being prepared.</h2>
+                <p class="tm-resource-kicker">How To Request</p>
+                <h2>Have a community request?</h2>
             </div>
             <div class="tm-resource-copy">
-                <p>When links are ready, the button above will automatically switch to the current location's approved donation destination.</p>
-                <p>For time-sensitive partnership or community requests, contact the location team and we will route the request internally.</p>
+                <p>If your fundraiser, auction, school event, nonprofit, or local partnership has a deadline, contact us now and include the Time Mission location closest to your event.</p>
+                <p>When the online form is ready, this page will show the right request option for your selected location.</p>
                 <a href="/contact" class="tm-resource-secondary">Contact Time Mission</a>
             </div>
         </div>
@@ -34,24 +34,24 @@
     <section class="tm-resource-section tm-resource-section--quiet">
         <div class="tm-resource-shell">
             <div class="tm-resource-section-head">
-                <p class="tm-resource-kicker">Locations</p>
-                <h2>Donation availability</h2>
+                <p class="tm-resource-kicker">What To Send</p>
+                <h2>How requests work right now</h2>
             </div>
-            <div class="tm-resource-grid">
+            <div class="tm-resource-grid tm-resource-grid--three">
                 <article class="tm-resource-tile">
                     <span>Step 1</span>
-                    <h3>Select location</h3>
-                    <p>Use the site location selector so the page knows which local program to check.</p>
+                    <h3>Pick your location</h3>
+                    <p>Start with the Time Mission location closest to your event or organization.</p>
                 </article>
                 <article class="tm-resource-tile">
                     <span>Step 2</span>
-                    <h3>Use local link</h3>
-                    <p>Approved donation URLs will turn on by location, with unavailable links clearly disabled.</p>
+                    <h3>Share the basics</h3>
+                    <p>Send your organization name, event date, deadline, audience, and what you are requesting.</p>
                 </article>
                 <article class="tm-resource-tile">
                     <span>Step 3</span>
-                    <h3>Need help?</h3>
-                    <p>Community, school, nonprofit, and partnership questions can go through contact for now.</p>
+                    <h3>We will review</h3>
+                    <p>The local team will review the request and follow up when they have the details they need.</p>
                 </article>
             </div>
         </div>

@@ -4,10 +4,13 @@
             <img src="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
         </picture>
         <div class="tm-resource-shell tm-resource-hero-copy">
-            <p class="tm-resource-kicker">Brand</p>
-            <h1>BRAND GUIDELINES</h1>
-            <p>Logo usage and brand resources for editorial and approved partner use.</p>
-            <a href="/press" class="tm-resource-secondary">Press Home</a>
+            <p class="tm-resource-kicker">Brand Guide</p>
+            <h1>BRAND GUIDE</h1>
+            <p>Logo files and simple usage guidance for media, partners, and community groups creating Time Mission materials.</p>
+            <div class="tm-resource-actions">
+                <a href="/assets/logo/Time%20Mission%20Logo.svg" class="tm-resource-button" download>Download White Logo</a>
+                <a href="/press" class="tm-resource-secondary">Back to Press Room</a>
+            </div>
         </div>
     </section>
 
@@ -24,10 +27,11 @@
         <div class="tm-resource-shell tm-resource-split">
             <div>
                 <p class="tm-resource-kicker">Identity</p>
-                <h2>Use the Time Mission name and logo clearly.</h2>
+                <h2>Write and show the brand clearly.</h2>
             </div>
             <div class="tm-resource-copy">
-                <p>Use the full name “Time Mission” on first reference. Do not alter logo proportions, recolor marks, add effects, or place the logo on low-contrast backgrounds.</p>
+                <p>Use the full name "Time Mission" on first reference. Keep the white logo on a dark, uncluttered background and leave clear space around it.</p>
+                <p>Need another file format, a print-ready logo, or approval for a partner use? Contact us before publishing.</p>
                 <div class="tm-logo-row">
                     <img src="/assets/logo/Time%20Mission%20Logo.svg" alt="Time Mission logo" width="214" height="72" loading="lazy" decoding="async">
                 </div>
@@ -41,18 +45,18 @@
             <div class="tm-resource-grid tm-resource-grid--three">
                 <article class="tm-resource-tile">
                     <span>Do</span>
-                    <h3>Keep contrast</h3>
-                    <p>Use the logo on dark, clean backgrounds where the mark stays readable.</p>
+                    <h3>Use the full name</h3>
+                    <p>Write Time Mission on first reference. The full name is preferred over abbreviations.</p>
                 </article>
                 <article class="tm-resource-tile">
-                    <span>Do not</span>
-                    <h3>Modify the mark</h3>
-                    <p>Do not stretch, recolor, outline, rotate, or add effects to the logo.</p>
+                    <span>Do</span>
+                    <h3>Keep it readable</h3>
+                    <p>Use the logo on dark, high-contrast backgrounds and keep the proportions unchanged.</p>
                 </article>
                 <article class="tm-resource-tile">
-                    <span>Need approval?</span>
-                    <h3>Contact press</h3>
-                    <p>Send partner, sponsorship, and unusual usage questions through the contact channel.</p>
+                    <span>Ask First</span>
+                    <h3>Need another file?</h3>
+                    <p>For sponsorships, print, partner pages, or unusual logo usage, contact us before publishing.</p>
                 </article>
             </div>
         </div>
