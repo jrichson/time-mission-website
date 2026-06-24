@@ -8,6 +8,10 @@
 /css/page-lincoln.css /css/page-mount-prospect.css 200
 /css/page-manassas.css /css/page-west-nyack.css 200
 
+# Legacy logo filename. Keep old asset URL working while the site exposes a
+# descriptive crawlable logo filename for image search.
+/assets/logo/TM_Logo_White.svg /assets/logo/Time%20Mission%20Logo.svg 301
+
 # Case-variant location URLs (audit SEO #12 — duplicate-content risk)
 # Redirect title-case and all-caps spellings to canonical lowercase slug.
 # Arbitrary mixed-case and dash-insensitive location inputs are normalized by

@@ -63,6 +63,14 @@ if (!pages.length) {
   errors.push(`No ${useDist ? 'dist HTML' : 'source markup'} files found for internal link checking`);
 }
 
+function decodePathnameForFileLookup(value) {
+  try {
+    return decodeURI(value);
+  } catch (_) {
+    return value;
+  }
+}
+
 for (const filePath of pages) {
   const relative = path.relative(deployRoot, filePath);
   const html = fs.readFileSync(filePath, 'utf8');
@@ -84,7 +92,7 @@ for (const filePath of pages) {
       continue;
     }
 
-    const clean = stripQueryAndHash(raw);
+    const clean = decodePathnameForFileLookup(stripQueryAndHash(raw));
     if (!clean || clean === '/') continue;
 
     if (clean.startsWith('/')) {

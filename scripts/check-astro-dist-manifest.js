@@ -57,7 +57,7 @@ mustFile('data/locations.json');
 mustFile('css/base.css');
 mustDirHasFiles('css/bundles');
 mustFile('js/locations.js');
-mustFile('assets/logo/TM_Logo_White.svg');
+mustFile('assets/logo/Time Mission Logo.svg');
 mustDirHasFiles('assets/fonts');
 
 mustFile('about.html');

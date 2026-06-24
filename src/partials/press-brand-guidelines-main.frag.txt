@@ -29,9 +29,9 @@
             <div class="tm-resource-copy">
                 <p>Use the full name “Time Mission” on first reference. Do not alter logo proportions, recolor marks, add effects, or place the logo on low-contrast backgrounds.</p>
                 <div class="tm-logo-row">
-                    <img src="/assets/logo/TM_Logo_White.svg" alt="Time Mission logo" width="214" height="72" loading="lazy" decoding="async">
+                    <img src="/assets/logo/Time%20Mission%20Logo.svg" alt="Time Mission logo" width="214" height="72" loading="lazy" decoding="async">
                 </div>
-                <a href="/assets/logo/TM_Logo_White.svg" class="tm-resource-button" download>Download White Logo</a>
+                <a href="/assets/logo/Time%20Mission%20Logo.svg" class="tm-resource-button" download>Download White Logo</a>
             </div>
         </div>
     </section>
