@@ -56,6 +56,7 @@
 }
 
 .topbar,
+.breadcrumb,
 .header,
 .workspace,
 .hero,
@@ -155,6 +156,25 @@
   background: rgba(248, 244, 238, 0.075);
   color: var(--tm-text);
   transform: translateY(-1px);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 14px;
+  color: var(--tm-muted);
+  font-size: 0.86rem;
+  font-weight: 720;
+}
+
+.breadcrumb a {
+  color: var(--tm-muted-strong);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--tm-orange);
 }
 
 .header,
@@ -716,7 +736,7 @@
 
   .topbarActions {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   }
 
   .header,
@@ -752,6 +772,7 @@
   .header,
   .workspace,
   .hero,
+  .breadcrumb,
   .statGrid {
     animation: none;
   }

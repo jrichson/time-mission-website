@@ -66,6 +66,7 @@ describe('CMS announcement banners', () => {
     expect(config).toContain('AnnouncementBanners as CollectionConfig');
     expect(AnnouncementBanners.labels.singular).toBe('Announcement Banner');
     expect(AnnouncementBanners.admin.description).toContain('Text-only top banner messages');
+    expect(AnnouncementBanners.admin.description).toContain('Seeded Current ticker rows');
     expect(messageField).toMatchObject({ name: 'message', type: 'text', required: true });
     expect(tickerBehaviorField).toMatchObject({
       name: 'tickerBehavior',

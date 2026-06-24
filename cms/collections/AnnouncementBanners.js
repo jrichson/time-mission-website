@@ -78,7 +78,7 @@ export const AnnouncementBanners = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'message', 'tickerBehavior', 'published', 'priority', 'targetScope', 'startsAt', 'endsAt', 'updatedAt'],
     description:
-      'Text-only top banner messages. Publish in CMS to approve; the public site shows the winning active banner after the next approved deploy.',
+      'Text-only top banner messages. Publish in CMS to approve; the public site shows the winning active banner after the next approved deploy. Seeded Current ticker rows are low-priority fallbacks; editor-created banners override them with a higher priority.',
   },
   access: {
     admin: canManageAnnouncementBanners,
@@ -103,7 +103,7 @@ export const AnnouncementBanners = {
           type: 'number',
           defaultValue: 0,
           admin: {
-            description: 'Higher priority wins when multiple banners are active. Matching priorities use the newest start date.',
+            description: 'Higher priority wins when multiple banners are active. Matching priorities use the newest start date. Seeded fallback tickers use -100.',
           },
         },
       ],

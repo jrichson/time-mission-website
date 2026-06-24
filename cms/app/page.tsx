@@ -26,31 +26,31 @@ const landingActions = [
 const primaryTasks = [
   {
     href: '/admin/collections/location-details',
-    label: 'Location Details',
+    label: 'Update location details',
     meta: 'Addresses and hours',
     description: 'Update public address and hours for existing locations.',
   },
   {
     href: '/admin/collections/announcement-banners',
-    label: 'Announcement Banners',
+    label: 'Schedule announcement banners',
     meta: 'Ticker and banner',
     description: 'Edit scheduled top-banner messages by priority and location.',
   },
   {
     href: '/admin/collections/landings',
-    label: 'Landing Pages',
+    label: 'Review landing pages',
     meta: 'Campaign pages',
     description: 'Review drafts, previews, publish state, and saved campaign pages.',
   },
   {
     href: '/admin/collections/blog-posts',
-    label: 'Blog Posts',
+    label: 'Publish blog posts',
     meta: 'Location updates',
     description: 'Publish local blog posts for location news, openings, and event ideas.',
   },
   {
     href: '/deploy',
-    label: 'Deploy Gate',
+    label: 'Deploy approved changes',
     meta: 'Release',
     description: 'Push approved content live after it is Published in CMS.',
   },
@@ -89,7 +89,6 @@ export default function Home() {
           <strong>CMS</strong>
         </Link>
         <div className={styles.topbarActions}>
-          <Link href="/">Mission Control</Link>
           <Link href="/deploy">Deploy</Link>
         </div>
       </nav>
@@ -99,7 +98,7 @@ export default function Home() {
           <p className={styles.kicker}>Mission Control</p>
           <h1 id="cms-home-title">Run the CMS from here.</h1>
           <p className={styles.lede}>
-            This is the main CMS home. Start with the job, then drop into Payload only for the specific edit screen.
+            This is the main CMS home. Start with the job, then open the exact CMS edit screen you need.
           </p>
         </div>
       </section>
@@ -151,7 +150,7 @@ export default function Home() {
               ))}
             </ol>
             <p className={styles.panelNote}>
-              Published in CMS means approved in Payload. Live after deploy means the static public site has rebuilt.
+              Published in CMS means approved for release. Live after deploy means the static public site has rebuilt.
             </p>
           </section>
 

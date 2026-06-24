@@ -144,7 +144,7 @@
     box-shadow 520ms var(--preview-ease);
 }
 
-.previewAdminLink::after,
+.previewPublicLink::after,
 .primaryAction::after,
 .secondaryAction::after {
   content: "↗";
@@ -174,7 +174,7 @@
   transform: translateY(-2px);
 }
 
-.previewAdminLink:hover::after,
+.previewPublicLink:hover::after,
 .primaryAction:hover::after,
 .secondaryAction:hover::after {
   transform: translate(2px, -1px) scale(1.05);
@@ -185,6 +185,28 @@
 .secondaryAction:focus-visible {
   outline: 2px solid var(--preview-accent);
   outline-offset: 4px;
+}
+
+.previewBreadcrumb {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(calc(100% - 28px), 1180px);
+  align-items: center;
+  gap: 9px;
+  margin: 14px auto 0;
+  color: var(--preview-muted);
+  font-size: 0.86rem;
+  font-weight: 720;
+}
+
+.previewBreadcrumb a {
+  color: var(--preview-muted-strong);
+  text-decoration: none;
+}
+
+.previewBreadcrumb a:hover {
+  color: var(--preview-accent);
 }
 
 .statusPanel,
@@ -727,9 +749,10 @@
   }
 
   .previewAdminLink,
+  .previewPublicLink,
   .primaryAction,
   .secondaryAction,
-  .previewAdminLink::after,
+  .previewPublicLink::after,
   .primaryAction::after,
   .secondaryAction::after {
     transition: none;

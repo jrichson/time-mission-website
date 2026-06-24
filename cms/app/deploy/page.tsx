@@ -76,6 +76,12 @@ export default async function DeployPage({ searchParams }: PageProps) {
         </div>
       </nav>
 
+      <nav className={styles.breadcrumb} aria-label="Breadcrumb">
+        <Link href="/">Mission Control</Link>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Deploy</span>
+      </nav>
+
       <section className={styles.hero} aria-labelledby="deploy-title">
         <div className={styles.heroCopy}>
           <p className={styles.kicker}>Release control</p>
@@ -90,9 +96,6 @@ export default async function DeployPage({ searchParams }: PageProps) {
                 Trigger site deploy
               </button>
             </form>
-            <Link className={styles.secondaryAction} href="/">
-              Mission Control
-            </Link>
           </div>
         </div>
 

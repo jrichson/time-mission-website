@@ -174,16 +174,24 @@ export default async function LandingPreviewPage({ params }: PageProps) {
         </div>
         <div className={styles.previewActions}>
           <a className={styles.previewAdminLink} href="/">
-            Mission Control
+            Back to Mission Control
           </a>
-          <a className={styles.previewAdminLink} href={publicUrl}>
-            Public path
+          <a className={`${styles.previewAdminLink} ${styles.previewPublicLink}`} href={publicUrl}>
+            Open public URL
           </a>
           <a className={styles.previewAdminLink} href={`/admin/collections/landings/${doc.id}`}>
-            Edit landing page
+            Edit draft
           </a>
         </div>
       </div>
+
+      <nav className={styles.previewBreadcrumb} aria-label="Breadcrumb">
+        <a href="/">Mission Control</a>
+        <span aria-hidden="true">/</span>
+        <a href="/admin/collections/landings">Landing Pages</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Preview</span>
+      </nav>
 
       <section className={styles.statusPanel} aria-label="Landing review status">
         <div>
