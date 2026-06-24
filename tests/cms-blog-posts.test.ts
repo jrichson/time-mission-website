@@ -62,6 +62,7 @@ describe('CMS blog posts', () => {
   it('registers a location-specific Payload collection', () => {
     const config = read('cms/payload.config.ts');
     const migration = read('cms/migrations/20260624_090000_blog_press_donation_eindhoven.ts');
+    const enumMigration = read('cms/migrations/20260624_085000_add_eindhoven_location_enum.ts');
     const migrationIndex = read('cms/migrations/index.ts');
     const slugField = findField(BlogPosts.fields, 'slug');
     const locationField = findField(BlogPosts.fields, 'locationSlug');
@@ -79,7 +80,11 @@ describe('CMS blog posts', () => {
     expect(includeInSitemapField?.defaultValue).toBe(true);
     expect(migration).toContain('CREATE TABLE IF NOT EXISTS "blog_posts"');
     expect(migration).toContain('enum_blog_posts_location_slug');
-    expect(migration).toContain("ADD VALUE IF NOT EXISTS 'eindhoven'");
+    expect(migration).not.toContain('enum_location_details_location_slug" ADD VALUE');
+    expect(enumMigration).toContain("ADD VALUE IF NOT EXISTS 'eindhoven'");
+    expect(migrationIndex.indexOf('20260624_085000_add_eindhoven_location_enum')).toBeLessThan(
+      migrationIndex.indexOf('20260624_090000_blog_press_donation_eindhoven'),
+    );
     expect(migrationIndex).toContain('20260624_090000_blog_press_donation_eindhoven');
   });
 

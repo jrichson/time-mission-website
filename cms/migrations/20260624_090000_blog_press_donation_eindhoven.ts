@@ -2,10 +2,6 @@ import { MigrateDownArgs, MigrateUpArgs, sql } from '@payloadcms/db-postgres';
 
 export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-    ALTER TYPE "public"."enum_location_details_location_slug" ADD VALUE IF NOT EXISTS 'eindhoven';
-  `);
-
-  await db.execute(sql`
     DO $$
     BEGIN
       CREATE TYPE "public"."enum_blog_posts_location_slug" AS ENUM(
