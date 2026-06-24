@@ -231,7 +231,6 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
         </Link>
         <div className={styles.topbarActions}>
           <Link href="/">Mission Control</Link>
-          <Link href="/admin">Admin tools</Link>
           <Link href="/admin/collections/landings">Landings</Link>
         </div>
       </nav>

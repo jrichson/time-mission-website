@@ -23,4 +23,22 @@ describe('CMS navigation', () => {
     expect(read('cms/app/landings/new/page.tsx')).toContain('<Link href="/">Mission Control</Link>');
     expect(read('cms/app/preview/landings/[id]/page.tsx')).toContain('Mission Control');
   });
+
+  it('keeps the raw Payload dashboard out of the primary CMS workflow', () => {
+    const missionControl = read('cms/app/page.tsx');
+    const workflowPages = [
+      missionControl,
+      read('cms/app/deploy/page.tsx'),
+      read('cms/app/landings/new/page.tsx'),
+    ];
+    const middleware = read('cms/middleware.ts');
+
+    expect(workflowPages.join('\n')).not.toContain('href="/admin"');
+    expect(missionControl).not.toContain('Payload Admin Tools');
+    expect(missionControl).not.toContain('raw Payload dashboard');
+    expect(missionControl).toContain('Advanced work');
+    expect(missionControl).toContain('/admin/collections/location-details');
+    expect(middleware).toContain("NextResponse.redirect(new URL('/', request.url))");
+    expect(middleware).toContain("matcher: ['/admin', '/admin/']");
+  });
 });

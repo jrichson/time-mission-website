@@ -76,12 +76,6 @@ const advancedLinks = [
     meta: 'Permissions',
     description: 'Review CMS accounts and owner-granted permissions.',
   },
-  {
-    href: '/admin',
-    label: 'Payload Admin Tools',
-    meta: 'Admin',
-    description: 'Use the lower-level Payload view only when Mission Control does not cover the task.',
-  },
 ];
 
 const workflowSteps = ['Draft', 'Preview', 'Published in CMS', 'Live after deploy'];
@@ -96,7 +90,6 @@ export default function Home() {
         </Link>
         <div className={styles.topbarActions}>
           <Link href="/">Mission Control</Link>
-          <Link href="/admin">Admin tools</Link>
           <Link href="/deploy">Deploy</Link>
         </div>
       </nav>
@@ -116,7 +109,7 @@ export default function Home() {
           <section className={styles.directoryGroup} aria-labelledby="primary-cms-work-title">
             <div className={styles.groupHeader}>
               <h2 id="primary-cms-work-title">Start here</h2>
-              <p>The primary paths editors should use instead of starting from the raw Payload dashboard.</p>
+              <p>The primary paths editors should use.</p>
             </div>
 
             <div className={styles.linkList}>
@@ -164,7 +157,7 @@ export default function Home() {
 
           <section className={styles.sideCard} aria-labelledby="admin-shortcuts-title">
             <p className={styles.panelLabel}>Advanced</p>
-            <h2 id="admin-shortcuts-title">Admin tools</h2>
+            <h2 id="admin-shortcuts-title">Advanced work</h2>
             <div className={styles.advancedList}>
               {advancedLinks.map((item) => (
                 <Link aria-label={`${item.label}: ${item.description}`} href={item.href} key={item.href}>
