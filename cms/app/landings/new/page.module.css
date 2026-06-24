@@ -50,6 +50,7 @@
 }
 
 .topbar,
+.breadcrumb,
 .header,
 .form,
 .error {
@@ -147,6 +148,25 @@
   background: rgba(248, 244, 238, 0.075);
   color: var(--tm-text);
   transform: translateY(-1px);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 14px;
+  color: var(--tm-muted);
+  font-size: 0.86rem;
+  font-weight: 720;
+}
+
+.breadcrumb a {
+  color: var(--tm-muted-strong);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--tm-orange);
 }
 
 .header {
@@ -450,6 +470,81 @@
   overflow-wrap: anywhere;
 }
 
+.presetHeader {
+  display: grid;
+  gap: 7px;
+  margin-top: 28px;
+}
+
+.presetHeader span,
+.presetCard span {
+  color: var(--tm-orange);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.74rem;
+  font-weight: 740;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.presetHeader p,
+.presetCard p {
+  margin: 0;
+  color: var(--tm-muted);
+  line-height: 1.48;
+}
+
+.presetGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.presetCard {
+  display: grid;
+  min-height: 210px;
+  align-content: start;
+  gap: 10px;
+  border: 1px solid var(--tm-line-soft);
+  border-radius: var(--tm-radius-row);
+  background: rgba(248, 244, 238, 0.035);
+  color: var(--tm-text);
+  padding: 16px;
+  text-decoration: none;
+  transition:
+    background 520ms var(--tm-ease),
+    border-color 520ms var(--tm-ease),
+    transform 520ms var(--tm-ease);
+}
+
+.presetCard:hover,
+.presetCardActive {
+  border-color: var(--tm-line-hot);
+  background: rgba(255, 122, 50, 0.1);
+  transform: translateY(-2px);
+}
+
+.presetCard:focus-visible {
+  outline: 2px solid var(--tm-orange);
+  outline-offset: 4px;
+}
+
+.presetCard strong {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.presetCard em {
+  width: fit-content;
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius-pill);
+  color: var(--tm-muted-strong);
+  font-size: 0.82rem;
+  font-style: normal;
+  font-weight: 780;
+  padding: 6px 10px;
+}
+
 .fieldGrid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -556,6 +651,7 @@
 @media (max-width: 820px) {
   .header,
   .optionGrid,
+  .presetGrid,
   .fieldGrid {
     grid-template-columns: 1fr;
   }
@@ -595,7 +691,7 @@
 
   .topbarActions {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   }
 
   .header > div,
@@ -621,6 +717,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .header,
+  .breadcrumb,
   .form {
     animation: none;
   }

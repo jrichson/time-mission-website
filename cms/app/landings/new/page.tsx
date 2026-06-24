@@ -7,7 +7,9 @@ import { getPayload } from 'payload';
 import {
   CTA_SURFACE_OPTIONS,
   defaultLandingCtaLabel,
+  LANDING_CAMPAIGN_PRESETS,
   LANDING_TEMPLATE_OPTIONS,
+  landingCampaignPreset,
   landingCtaSurface,
   landingLaunchState,
   landingSourceChannel,
@@ -30,10 +32,40 @@ type LandingTemplate = 'paid_social_campaign' | 'local_venue_city' | 'group_even
 type SourceChannel = 'paid_ad' | 'organic_social' | 'email' | 'local_search' | 'partner' | 'internal' | 'other';
 type LaunchState = 'open' | 'coming_soon';
 type CtaSurface = 'book_panel' | 'missions' | 'groups' | 'contact' | 'gift_cards' | 'external';
+type CampaignPresetDefaults = {
+  audience: string;
+  ctaSurface: CtaSurface;
+  eventType: string;
+  groupSize: string;
+  headline: string;
+  launchState: LaunchState;
+  locationOrCity: string;
+  offerType: string;
+  ogImage: string;
+  primaryCtaLabel: string;
+  proofPoints: string[];
+  slug: string;
+  sourceChannel: SourceChannel;
+  sourceName: string;
+  sourcePromise: string;
+  subheadline: string;
+  successMetric: string;
+  title: string;
+  visitorIntent: string;
+};
+type CampaignPreset = {
+  id: string;
+  template: LandingTemplate;
+  label: string;
+  meta: string;
+  intent: string;
+  defaults: CampaignPresetDefaults;
+};
 
 type PageProps = {
   searchParams: Promise<{
     error?: string;
+    preset?: string;
     template?: string;
   }>;
 };
@@ -49,14 +81,16 @@ const templateOptions = LANDING_TEMPLATE_OPTIONS as Array<{
 }>;
 const sourceChannelOptions = SOURCE_CHANNEL_OPTIONS as Array<{ value: SourceChannel; label: string }>;
 const ctaSurfaceOptions = CTA_SURFACE_OPTIONS as Array<{ value: CtaSurface; label: string }>;
+const campaignPresets = LANDING_CAMPAIGN_PRESETS as unknown as CampaignPreset[];
 
 function formString(formData: FormData, key: string): string {
   const value = formData.get(key);
   return typeof value === 'string' ? value.trim() : '';
 }
 
-function wizardUrl(template: LandingTemplate, error: string): string {
+function wizardUrl(template: LandingTemplate, error: string, preset: string): string {
   const params = new URLSearchParams({ error, template });
+  if (preset) params.set('preset', preset);
   return `/landings/new?${params.toString()}`;
 }
 
@@ -74,6 +108,7 @@ async function requireCmsUser(redirectPath: string) {
 async function createLandingDraft(formData: FormData) {
   'use server';
 
+  const preset = formString(formData, 'preset');
   const template = landingTemplate(formString(formData, 'template')) as LandingTemplate;
   const state = landingLaunchState(formString(formData, 'launchState')) as LaunchState;
   const title = formString(formData, 'title');
@@ -90,16 +125,16 @@ async function createLandingDraft(formData: FormData) {
   const imagePath = formString(formData, 'ogImage') || DEFAULT_LANDING_HERO_IMAGE;
 
   if (!title || !slug || !headline || !subheadline || !sourcePromise || !visitorIntent || !successMetric) {
-    redirect(wizardUrl(template, 'missing-required-fields'));
+    redirect(wizardUrl(template, 'missing-required-fields', preset));
   }
   if (proofPoints.length < 3) {
-    redirect(wizardUrl(template, 'missing-proof-points'));
+    redirect(wizardUrl(template, 'missing-proof-points', preset));
   }
   if (!publicAssetPathIsValid(imagePath)) {
-    redirect(wizardUrl(template, 'invalid-image-path'));
+    redirect(wizardUrl(template, 'invalid-image-path', preset));
   }
   if (!validHttpsUrl(sourceUrl)) {
-    redirect(wizardUrl(template, 'invalid-source-url'));
+    redirect(wizardUrl(template, 'invalid-source-url', preset));
   }
 
   const { payload, user } = await requireCmsUser('/landings/new');
@@ -116,11 +151,11 @@ async function createLandingDraft(formData: FormData) {
     })
     .catch((error: unknown) => {
       console.error('[landings] draft slug lookup failed', error);
-      redirect(wizardUrl(template, 'lookup-failed'));
+      redirect(wizardUrl(template, 'lookup-failed', preset));
     });
 
   if (existing.totalDocs > 0) {
-    redirect(wizardUrl(template, 'slug-exists'));
+    redirect(wizardUrl(template, 'slug-exists', preset));
   }
 
   const selectedCtaSurface = landingCtaSurface(formString(formData, 'ctaSurface'), template, state) as CtaSurface;
@@ -187,7 +222,7 @@ async function createLandingDraft(formData: FormData) {
     })
     .catch((error: unknown) => {
       console.error('[landings] draft create failed', error);
-      redirect(wizardUrl(template, 'create-failed'));
+      redirect(wizardUrl(template, 'create-failed', preset));
     });
 
   redirect(`/preview/landings/${created.id}`);
@@ -218,7 +253,9 @@ export const metadata = {
 export default async function NewLandingPage({ searchParams }: PageProps) {
   await requireCmsUser('/landings/new');
   const params = await searchParams;
-  const selectedTemplate = landingTemplate(params.template || '');
+  const selectedPreset = landingCampaignPreset(params.preset || '') as CampaignPreset | null;
+  const defaults = (selectedPreset?.defaults || {}) as Partial<CampaignPresetDefaults>;
+  const selectedTemplate = landingTemplate(selectedPreset?.template || params.template || '') as LandingTemplate;
   const error = errorCopy(params.error);
   const selectedTemplateOption = templateOptions.find((option) => option.value === selectedTemplate) || templateOptions[0];
 
@@ -234,6 +271,14 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
         </div>
       </nav>
 
+      <nav className={styles.breadcrumb} aria-label="Breadcrumb">
+        <Link href="/">Mission Control</Link>
+        <span aria-hidden="true">/</span>
+        <Link href="/admin/collections/landings">Landing Pages</Link>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">New Draft</span>
+      </nav>
+
       <header className={styles.header}>
         <div>
           <p className={styles.kicker}>Landing launch wizard</p>
@@ -247,6 +292,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
           <span>Draft only</span>
           <strong>{selectedTemplateOption.label}</strong>
           <p>Creates a saved CMS draft and opens preview before any public publish step.</p>
+          {selectedPreset ? <p>Starter: {selectedPreset.label}</p> : null}
           <Link className={styles.secondaryLink} href="/admin/collections/landings">
             View landing drafts
           </Link>
@@ -262,7 +308,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
       <form action={createLandingDraft} className={styles.form}>
         <section className={styles.panel} aria-labelledby="shape-title">
           <div className={styles.panelIntro}>
-            <span>Step 1</span>
+            <span>Shape</span>
             <h2 id="shape-title">Choose the landing shape</h2>
             <p>The shape should follow the campaign job, not the other way around.</p>
           </div>
@@ -290,18 +336,38 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
               ))}
             </div>
           </fieldset>
+          <div className={styles.presetHeader}>
+            <span>Recommended campaign pages</span>
+            <p>Pick a starter to prefill the brief, copy, proof points, CTA, and image.</p>
+          </div>
+          <div className={styles.presetGrid}>
+            {campaignPresets.map((preset) => (
+              <Link
+                className={`${styles.presetCard} ${selectedPreset?.id === preset.id ? styles.presetCardActive : ''}`}
+                href={`/landings/new?preset=${preset.id}`}
+                key={preset.id}
+              >
+                <span>{preset.meta}</span>
+                <strong>{preset.label}</strong>
+                <p>{preset.intent}</p>
+                <em>{preset.defaults.primaryCtaLabel}</em>
+              </Link>
+            ))}
+          </div>
         </section>
+
+        <input name="preset" type="hidden" value={selectedPreset?.id || ''} />
 
         <section className={styles.panel} aria-labelledby="brief-title">
           <div className={styles.panelIntro}>
-            <span>Step 2</span>
+            <span>Brief</span>
             <h2 id="brief-title">Capture the campaign brief</h2>
             <p>This is the source of truth for the page. If the brief is fuzzy, the landing page will be fuzzy.</p>
           </div>
           <div className={styles.fieldGrid}>
             <label>
               Source channel
-              <select name="sourceChannel" defaultValue="paid_ad">
+              <select name="sourceChannel" defaultValue={defaults.sourceChannel || 'paid_ad'}>
                 {sourceChannelOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -311,16 +377,31 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             </label>
             <label>
               Source name
-              <input dir="auto" maxLength={120} name="sourceName" placeholder="Meta summer campaign" required />
+              <input
+                defaultValue={defaults.sourceName || ''}
+                dir="auto"
+                maxLength={120}
+                name="sourceName"
+                placeholder="Meta summer campaign"
+                required
+              />
               <span className={styles.fieldHelp}>The campaign, channel, request, or audience this page came from.</span>
             </label>
             <label>
               Page title
-              <input dir="auto" maxLength={120} name="title" placeholder="Summer Adventures at Time Mission" required />
+              <input
+                defaultValue={defaults.title || ''}
+                dir="auto"
+                maxLength={120}
+                name="title"
+                placeholder="Summer Adventures at Time Mission"
+                required
+              />
             </label>
             <label>
               Page URL
               <input
+                defaultValue={defaults.slug || ''}
                 dir="ltr"
                 maxLength={80}
                 name="slug"
@@ -346,6 +427,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             <label className={styles.wide}>
               Source promise
               <textarea
+                defaultValue={defaults.sourcePromise || ''}
                 dir="auto"
                 maxLength={280}
                 name="sourcePromise"
@@ -357,6 +439,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             <label className={styles.wide}>
               Visitor intent
               <textarea
+                defaultValue={defaults.visitorIntent || ''}
                 dir="auto"
                 maxLength={240}
                 name="visitorIntent"
@@ -368,6 +451,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             <label>
               Success metric
               <input
+                defaultValue={defaults.successMetric || ''}
                 dir="auto"
                 maxLength={120}
                 name="successMetric"
@@ -377,21 +461,28 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             </label>
             <label>
               Audience
-              <input dir="auto" maxLength={120} name="audience" placeholder="Parents, event planners, local friend groups" />
+              <input
+                defaultValue={defaults.audience || ''}
+                dir="auto"
+                maxLength={120}
+                name="audience"
+                placeholder="Parents, event planners, local friend groups"
+              />
             </label>
           </div>
         </section>
 
         <section className={styles.panel} aria-labelledby="copy-title">
           <div className={styles.panelIntro}>
-            <span>Step 3</span>
+            <span>Draft</span>
             <h2 id="copy-title">Write the first draft</h2>
-            <p>Use the brief. This draft opens in preview, then the detailed Payload editor can refine it.</p>
+            <p>Use the brief. This draft opens in preview, then the detailed CMS editor can refine it.</p>
           </div>
           <div className={styles.fieldGrid}>
             <label className={styles.wide}>
               Headline
               <input
+                defaultValue={defaults.headline || ''}
                 dir="auto"
                 maxLength={160}
                 name="headline"
@@ -402,6 +493,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             <label className={styles.wide}>
               Subheadline
               <textarea
+                defaultValue={defaults.subheadline || ''}
                 dir="auto"
                 maxLength={360}
                 name="subheadline"
@@ -411,23 +503,50 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             </label>
             <label>
               Proof point 1
-              <input dir="auto" maxLength={200} name="proofPoint1" placeholder="25+ interactive mission rooms" required />
+              <input
+                defaultValue={defaults.proofPoints?.[0] || ''}
+                dir="auto"
+                maxLength={200}
+                name="proofPoint1"
+                placeholder="25+ interactive mission rooms"
+                required
+              />
             </label>
             <label>
               Proof point 2
-              <input dir="auto" maxLength={200} name="proofPoint2" placeholder="Teams of 2-5 compete together" required />
+              <input
+                defaultValue={defaults.proofPoints?.[1] || ''}
+                dir="auto"
+                maxLength={200}
+                name="proofPoint2"
+                placeholder="Teams of 2-5 compete together"
+                required
+              />
             </label>
             <label>
               Proof point 3
-              <input dir="auto" maxLength={200} name="proofPoint3" placeholder="60, 90, and 120 minute sessions" required />
+              <input
+                defaultValue={defaults.proofPoints?.[2] || ''}
+                dir="auto"
+                maxLength={200}
+                name="proofPoint3"
+                placeholder="60, 90, and 120 minute sessions"
+                required
+              />
             </label>
             <label>
               Primary CTA label
-              <input dir="auto" maxLength={80} name="primaryCtaLabel" placeholder="Book Now" />
+              <input
+                defaultValue={defaults.primaryCtaLabel || ''}
+                dir="auto"
+                maxLength={80}
+                name="primaryCtaLabel"
+                placeholder="Book Now"
+              />
             </label>
             <label>
               CTA target
-              <select name="ctaSurface" defaultValue="">
+              <select name="ctaSurface" defaultValue={defaults.ctaSurface || ''}>
                 <option value="">Use recommended target</option>
                 {ctaSurfaceOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -439,7 +558,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             </label>
             <label>
               Launch state
-              <select name="launchState" defaultValue="open">
+              <select name="launchState" defaultValue={defaults.launchState || 'open'}>
                 <option value="open">Open for booking</option>
                 <option value="coming_soon">Coming soon</option>
               </select>
@@ -447,19 +566,43 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
             </label>
             <label>
               Location or city
-              <input dir="auto" maxLength={120} name="locationOrCity" placeholder="Philadelphia, Houston, Dallas" />
+              <input
+                defaultValue={defaults.locationOrCity || ''}
+                dir="auto"
+                maxLength={120}
+                name="locationOrCity"
+                placeholder="Philadelphia, Houston, Dallas"
+              />
             </label>
             <label>
               Event type
-              <input dir="auto" maxLength={120} name="eventType" placeholder="Birthday, corporate outing, school trip" />
+              <input
+                defaultValue={defaults.eventType || ''}
+                dir="auto"
+                maxLength={120}
+                name="eventType"
+                placeholder="Birthday, corporate outing, school trip"
+              />
             </label>
             <label>
               Offer type
-              <input dir="auto" maxLength={120} name="offerType" placeholder="Summer outing, grand opening, team building" />
+              <input
+                defaultValue={defaults.offerType || ''}
+                dir="auto"
+                maxLength={120}
+                name="offerType"
+                placeholder="Summer outing, grand opening, team building"
+              />
             </label>
             <label>
               Group-size framing
-              <input dir="auto" maxLength={120} name="groupSize" placeholder="Small crews, school groups, full-venue buyouts" />
+              <input
+                defaultValue={defaults.groupSize || ''}
+                dir="auto"
+                maxLength={120}
+                name="groupSize"
+                placeholder="Small crews, school groups, full-venue buyouts"
+              />
             </label>
             <label className={styles.wide}>
               Hero / social image
@@ -467,10 +610,11 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
                 dir="ltr"
                 maxLength={PUBLIC_ASSET_PATH_MAX_LENGTH}
                 name="ogImage"
-                defaultValue={DEFAULT_LANDING_HERO_IMAGE}
+                defaultValue={defaults.ogImage || DEFAULT_LANDING_HERO_IMAGE}
                 pattern="/assets/.*"
                 required
               />
+              <span className={styles.fieldHelp}>Use a root-relative public asset path, for example /assets/photos/example.webp.</span>
             </label>
           </div>
         </section>

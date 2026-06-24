@@ -3,8 +3,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
+  LANDING_CAMPAIGN_PRESETS,
   LANDING_TEMPLATE_OPTIONS,
   LEGACY_LANDING_TEMPLATE_OPTIONS,
+  landingCampaignPreset,
+  landingReviewWarningsForDoc,
   payloadLandingTemplateOptions,
   safeExternalLandingHref,
   validHttpsUrl,
@@ -63,6 +66,7 @@ describe('CMS landing templates', () => {
     expect(previewRoute).toContain('overrideAccess: false');
     expect(previewRoute).toContain('/admin/login?redirect=');
     expect(previewRoute).toContain('Public path');
+    expect(previewRoute).toContain('Open public URL');
     expect(previewRoute).toContain('Campaign brief');
     expect(previewRoute).toContain('Sitemap');
     expect(previewRoute).toContain('Review warnings');
@@ -90,6 +94,8 @@ describe('CMS landing templates', () => {
     }
 
     expect(wizard).toContain('Landing launch wizard');
+    expect(wizard).toContain('Mission Control');
+    expect(wizard).toContain('Landing Pages');
     expect(wizard).toContain("export const dynamic = 'force-dynamic'");
     expect(wizard).toContain('createLandingDraft');
     expect(wizard).toContain("collection: 'landings'");
@@ -101,6 +107,9 @@ describe('CMS landing templates', () => {
     expect(wizard).toContain('create-failed');
     expect(wizard).toContain('sourcePromise');
     expect(wizard).toContain('visitorIntent');
+    expect(wizard).toContain('LANDING_CAMPAIGN_PRESETS');
+    expect(wizard).toContain("name=\"preset\"");
+    expect(wizard).toContain('Recommended campaign pages');
     expect(wizard).toContain('redirect(`/preview/landings/${created.id}`)');
     expect(payloadConfig).toContain("beforeDashboard: ['/components/LandingWizardDashboard.tsx']");
     expect(collection).toContain("beforeList: ['/components/LandingWizardDashboard.tsx']");
@@ -115,6 +124,43 @@ describe('CMS landing templates', () => {
     expect(dashboardCard).toContain('/landings/new?template=local_venue_city');
     expect(dashboardCard).toContain('/landings/new?template=group_event');
     expect(importMap).toContain('/components/LandingWizardDashboard.tsx#default');
+  });
+
+  it('prefills high-intent campaign landing starters', () => {
+    const wizard = read('cms/app/landings/new/page.tsx');
+    const wizardStyles = read('cms/app/landings/new/page.module.css');
+    const presetIds = LANDING_CAMPAIGN_PRESETS.map((preset) => preset.id);
+
+    expect(presetIds).toEqual([
+      'friends-night-out',
+      'birthday-party-missions',
+      'corporate-team-building',
+      'grand-opening-updates',
+      'opening-offer-form',
+      'general-ticket-booking',
+      'general-group-inquiry',
+      'local-venue-booking',
+      'gift-card-campaign',
+    ]);
+    expect(landingCampaignPreset('corporate-team-building').defaults.primaryCtaLabel).toBe('Request Team Event Help');
+    expect(landingCampaignPreset('grand-opening-updates').defaults.launchState).toBe('coming_soon');
+    expect(landingCampaignPreset('opening-offer-form').defaults.ctaSurface).toBe('contact');
+    expect(landingCampaignPreset('opening-offer-form').defaults.successMetric).toBe('Opening offer form submissions');
+    expect(landingCampaignPreset('general-ticket-booking').defaults.ctaSurface).toBe('book_panel');
+    expect(landingCampaignPreset('gift-card-campaign').defaults.ctaSurface).toBe('gift_cards');
+    expect(landingCampaignPreset('missing')).toBeNull();
+    expect(wizard).toContain('href={`/landings/new?preset=${preset.id}`}');
+
+    for (const preset of LANDING_CAMPAIGN_PRESETS) {
+      expect(preset.defaults.proofPoints).toHaveLength(3);
+      expect(preset.defaults.primaryCtaLabel).not.toMatch(/^(learn more|submit|click here)$/i);
+      expect(preset.defaults.ogImage).toMatch(/^\/assets\//);
+    }
+
+    expect(wizard).toContain('selectedPreset?.defaults');
+    expect(wizard).toContain('defaultValue={defaults.headline ||');
+    expect(wizardStyles).toContain('.presetGrid');
+    expect(wizardStyles).toContain('.presetCardActive');
   });
 
   it('hardens CMS landing surfaces against unsafe URLs and long text', () => {
@@ -135,5 +181,8 @@ describe('CMS landing templates', () => {
     expect(wizardStyles).toContain('hyphens: auto');
     expect(previewStyles).toContain('overflow-wrap: anywhere');
     expect(previewStyles).toContain('hyphens: auto');
+    expect(landingReviewWarningsForDoc({
+      content: { primaryCtaLabel: 'Learn More' },
+    })).toContain('Use a verb-first CTA that names the action, such as Book Your Mission or Request Event Help.');
   });
 });
