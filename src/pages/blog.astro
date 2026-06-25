@@ -8,7 +8,7 @@ import {
     blogPostCanonicalPath,
     blogPostDateLabel,
     blogPostDocLooksRenderable,
-    blogPostExcerptForDoc,
+    blogPostExcerptHtmlForDoc,
     blogPostHeroImage,
     blogPostLocationSlug,
     getPublishedBlogPosts,
@@ -73,7 +73,7 @@ const ld = serializeGraph(buildSimpleGraph([
                                     <img src={blogPostHeroImage(post)} alt="" width="720" height="480" loading="lazy" decoding="async" />
                                     <span>{location?.shortName || 'Time Mission'} · {blogPostDateLabel(post)}</span>
                                     <h3>{post.title}</h3>
-                                    <p>{blogPostExcerptForDoc(post)}</p>
+                                    <div class="tm-blog-card-excerpt" set:html={blogPostExcerptHtmlForDoc(post)} />
                                 </a>
                             </article>
                         );

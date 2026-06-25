@@ -17,6 +17,7 @@ import * as migration_20260624_085000_add_eindhoven_location_enum from './202606
 import * as migration_20260624_090000_blog_press_donation_eindhoven from './20260624_090000_blog_press_donation_eindhoven';
 import * as migration_20260624_101500_seed_current_announcement_banners from './20260624_101500_seed_current_announcement_banners';
 import * as migration_20260624_120000_orland_park_weekend_hours from './20260624_120000_orland_park_weekend_hours';
+import * as migration_20260625_090000_blog_posts_rich_text from './20260625_090000_blog_posts_rich_text';
 
 export const migrations = [
   {
@@ -113,5 +114,10 @@ export const migrations = [
     up: migration_20260624_120000_orland_park_weekend_hours.up,
     down: migration_20260624_120000_orland_park_weekend_hours.down,
     name: '20260624_120000_orland_park_weekend_hours'
+  },
+  {
+    up: migration_20260625_090000_blog_posts_rich_text.up,
+    down: migration_20260625_090000_blog_posts_rich_text.down,
+    name: '20260625_090000_blog_posts_rich_text'
   },
 ];

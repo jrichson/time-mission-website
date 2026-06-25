@@ -22,6 +22,7 @@ export {
     blogPostDateLabel,
     blogPostDocLooksRenderable,
     blogPostExcerptForDoc,
+    blogPostExcerptHtmlForDoc,
     blogPostHeadForDoc,
     blogPostHeroImage,
     blogPostLocationSlug,

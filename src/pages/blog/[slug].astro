@@ -8,7 +8,7 @@ import {
     blogPostCanonicalPath,
     blogPostDateLabel,
     blogPostDocLooksRenderable,
-    blogPostExcerptForDoc,
+    blogPostExcerptHtmlForDoc,
     blogPostHeadForDoc,
     blogPostHeroImage,
     blogPostLocationSlug,
@@ -81,7 +81,7 @@ const landingHead = post
                         <a class="tm-blog-back" href={blogLocationCanonicalPath(location.slug)}>{location.shortName}</a>
                         <p class="tm-blog-kicker">{blogPostDateLabel(post)}</p>
                         <h1>{post.title}</h1>
-                        <p>{blogPostExcerptForDoc(post)}</p>
+                        <div class="tm-blog-article-excerpt" set:html={blogPostExcerptHtmlForDoc(post)} />
                     </div>
                 </header>
                 <div class="tm-blog-shell tm-blog-body" set:html={blogPostBodyHtml(post)} />
@@ -114,7 +114,7 @@ const landingHead = post
                                         <img src={blogPostHeroImage(item)} alt="" width="720" height="480" loading="lazy" decoding="async" />
                                         <span>{blogPostDateLabel(item)}</span>
                                         <h3>{item.title}</h3>
-                                        <p>{blogPostExcerptForDoc(item)}</p>
+                                        <div class="tm-blog-card-excerpt" set:html={blogPostExcerptHtmlForDoc(item)} />
                                     </a>
                                 </article>
                             ))}

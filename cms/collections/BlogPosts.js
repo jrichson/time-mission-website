@@ -111,11 +111,10 @@ export const BlogPosts = {
     },
     {
       name: 'excerpt',
-      type: 'textarea',
+      type: 'richText',
       required: true,
-      maxLength: 260,
       admin: {
-        description: 'Short summary shown on blog index pages.',
+        description: 'Short rich-text summary shown on blog index pages. Keep it to one or two sentences.',
       },
     },
     {
@@ -130,10 +129,10 @@ export const BlogPosts = {
     },
     {
       name: 'body',
-      type: 'textarea',
+      type: 'richText',
       required: true,
       admin: {
-        description: 'Plain-text article body. Separate paragraphs with blank lines.',
+        description: 'Rich-text article body rendered on the public blog post page after deploy.',
       },
     },
     {

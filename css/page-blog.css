@@ -93,7 +93,8 @@ body.tm-blog-page {
 
 .tm-blog-hero p,
 .tm-blog-article-copy p,
-.tm-blog-card p,
+.tm-blog-article-excerpt,
+.tm-blog-card-excerpt,
 .tm-blog-empty p,
 .tm-blog-location-list span,
 .tm-blog-body {
@@ -102,10 +103,15 @@ body.tm-blog-page {
 }
 
 .tm-blog-hero p,
-.tm-blog-article-copy p {
+.tm-blog-article-copy p,
+.tm-blog-article-excerpt {
     width: min(100%, 42rem);
     margin: 0 0 1.5rem;
     font-size: 1.16rem;
+}
+
+.tm-blog-article-excerpt :where(p, ul, ol, blockquote) {
+    margin: 0;
 }
 
 .tm-blog-actions {
@@ -199,7 +205,7 @@ body.tm-blog-page {
 
 .tm-blog-card span,
 .tm-blog-card h3,
-.tm-blog-card p {
+.tm-blog-card-excerpt {
     margin-inline: 1rem;
 }
 
@@ -213,8 +219,12 @@ body.tm-blog-page {
     line-height: 1;
 }
 
-.tm-blog-card p {
+.tm-blog-card-excerpt {
     margin-bottom: 1.1rem;
+}
+
+.tm-blog-card-excerpt :where(p, ul, ol, blockquote) {
+    margin: 0;
 }
 
 .tm-blog-empty {
@@ -259,6 +269,67 @@ body.tm-blog-page {
 
 .tm-blog-body p {
     margin: 0 0 1.4rem;
+}
+
+.tm-blog-body :where(h2, h3, h4, h5, h6) {
+    margin: 2.2rem 0 0.8rem;
+    color: #fff;
+    font-family: var(--display, "Bebas Neue", sans-serif);
+    letter-spacing: 0;
+    line-height: 1;
+    text-wrap: balance;
+}
+
+.tm-blog-body h2 {
+    font-size: 3rem;
+}
+
+.tm-blog-body h3 {
+    font-size: 2.35rem;
+}
+
+.tm-blog-body :where(h4, h5, h6) {
+    font-size: 1.9rem;
+}
+
+.tm-blog-body :where(ul, ol) {
+    margin: 0 0 1.4rem;
+    padding-left: 1.35rem;
+}
+
+.tm-blog-body li + li {
+    margin-top: 0.45rem;
+}
+
+.tm-blog-body blockquote {
+    margin: 2rem 0;
+    border-left: 3px solid var(--tm-blog-accent);
+    padding-left: 1.2rem;
+    color: var(--tm-blog-text);
+    font-size: 1.2rem;
+}
+
+.tm-blog-body a,
+.tm-blog-article-excerpt a,
+.tm-blog-card-excerpt a {
+    color: #fff;
+    font-weight: 800;
+    text-decoration-color: rgba(255, 107, 44, 0.9);
+    text-underline-offset: 0.18em;
+}
+
+.tm-blog-body code {
+    border: 1px solid var(--tm-blog-line);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 0.1rem 0.28rem;
+    color: #fff;
+}
+
+.tm-blog-body hr {
+    margin: 2.4rem 0;
+    border: 0;
+    border-top: 1px solid var(--tm-blog-line);
 }
 
 @media (max-width: 920px) {
