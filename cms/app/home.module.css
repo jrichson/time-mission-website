@@ -45,16 +45,6 @@
   box-sizing: border-box;
 }
 
-.shell::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
-  opacity: 0.035;
-}
-
 .topbar,
 .breadcrumb,
 .header,
@@ -102,8 +92,8 @@
   padding: 0 12px;
   text-decoration: none;
   transition:
-    background 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease);
 }
 
 .brandMark:hover {
@@ -146,10 +136,10 @@
   padding: 0 15px;
   text-decoration: none;
   transition:
-    background 520ms var(--tm-ease),
-    border-color 520ms var(--tm-ease),
-    color 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    border-color 180ms var(--tm-ease),
+    color 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease);
 }
 
 .topbarActions a:hover {
@@ -197,7 +187,6 @@
     inset 0 0 0 7px rgba(248, 244, 238, 0.035),
     0 30px 90px rgba(0, 0, 0, 0.2);
   padding: var(--tm-space-5);
-  animation: tm-rise 820ms var(--tm-ease) both;
 }
 
 .kicker,
@@ -244,7 +233,6 @@
   gap: var(--tm-space-3);
   align-items: start;
   margin-top: var(--tm-space-3);
-  animation: tm-rise 920ms var(--tm-ease) 80ms both;
 }
 
 .hero {
@@ -252,7 +240,6 @@
   grid-template-columns: minmax(0, 1fr) 340px;
   gap: var(--tm-space-3);
   align-items: stretch;
-  animation: tm-rise 880ms var(--tm-ease) both;
 }
 
 .heroCopy,
@@ -297,11 +284,11 @@
   text-align: center;
   text-decoration: none;
   transition:
-    background 520ms var(--tm-ease),
-    border-color 520ms var(--tm-ease),
-    color 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease),
-    box-shadow 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    border-color 180ms var(--tm-ease),
+    color 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease),
+    box-shadow 180ms var(--tm-ease);
 }
 
 .primaryAction::after,
@@ -314,8 +301,8 @@
   border-radius: 50%;
   font-size: 0.82rem;
   transition:
-    background 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease);
 }
 
 .primaryAction {
@@ -431,7 +418,6 @@
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: var(--tm-space-3);
   margin-top: var(--tm-space-3);
-  animation: tm-rise 980ms var(--tm-ease) 120ms both;
 }
 
 .statCard {
@@ -500,9 +486,9 @@
   padding: 15px;
   text-decoration: none;
   transition:
-    background 520ms var(--tm-ease),
-    border-color 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    border-color 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease);
 }
 
 .templateList a:hover {
@@ -574,9 +560,9 @@
   padding: 12px 14px;
   text-decoration: none;
   transition:
-    background 520ms var(--tm-ease),
-    border-color 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    border-color 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease);
 }
 
 .linkRow:hover {
@@ -726,9 +712,9 @@
   padding: 12px;
   text-decoration: none;
   transition:
-    background 520ms var(--tm-ease),
-    color 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    color 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease);
 }
 
 .advancedList a + a {

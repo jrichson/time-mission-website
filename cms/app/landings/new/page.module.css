@@ -39,16 +39,6 @@
   box-sizing: border-box;
 }
 
-.shell::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
-  opacity: 0.035;
-}
-
 .topbar,
 .breadcrumb,
 .header,
@@ -93,8 +83,8 @@
   padding: 0 12px;
   text-decoration: none;
   transition:
-    background 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease);
 }
 
 .brandMark:hover {
@@ -137,10 +127,10 @@
   padding: 0 15px;
   text-decoration: none;
   transition:
-    background 520ms var(--tm-ease),
-    border-color 520ms var(--tm-ease),
-    color 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    border-color 180ms var(--tm-ease),
+    color 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease);
 }
 
 .topbarActions a:hover {
@@ -176,7 +166,6 @@
   align-items: stretch;
   margin-top: 18px;
   margin-bottom: 22px;
-  animation: tm-rise 820ms var(--tm-ease) both;
 }
 
 .header > div,
@@ -294,11 +283,11 @@
   text-decoration: none;
   white-space: normal;
   transition:
-    background 520ms var(--tm-ease),
-    border-color 520ms var(--tm-ease),
-    color 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease),
-    box-shadow 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    border-color 180ms var(--tm-ease),
+    color 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease),
+    box-shadow 180ms var(--tm-ease);
 }
 
 .secondaryLink {
@@ -336,7 +325,6 @@
 .form {
   display: grid;
   gap: 18px;
-  animation: tm-rise 920ms var(--tm-ease) 80ms both;
 }
 
 .panel {
@@ -405,9 +393,9 @@
   cursor: pointer;
   padding: 18px;
   transition:
-    background 520ms var(--tm-ease),
-    border-color 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    border-color 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease);
 }
 
 .choice:hover {
@@ -522,9 +510,9 @@
   padding: 16px;
   text-decoration: none;
   transition:
-    background 520ms var(--tm-ease),
-    border-color 520ms var(--tm-ease),
-    transform 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    border-color 180ms var(--tm-ease),
+    transform 180ms var(--tm-ease);
 }
 
 .presetCard:hover,
@@ -662,9 +650,9 @@
   font: inherit;
   padding: 11px 13px;
   transition:
-    background 520ms var(--tm-ease),
-    border-color 520ms var(--tm-ease),
-    box-shadow 520ms var(--tm-ease);
+    background 180ms var(--tm-ease),
+    border-color 180ms var(--tm-ease),
+    box-shadow 180ms var(--tm-ease);
 }
 
 .form textarea {

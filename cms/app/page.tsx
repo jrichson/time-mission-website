@@ -24,7 +24,7 @@ const landingActions = [
   {
     href: '/admin/collections/landings',
     label: 'Review existing drafts',
-    meta: 'Groups',
+    meta: 'Drafts',
     description: 'Open saved drafts, previews, and published pages.',
   },
 ];
