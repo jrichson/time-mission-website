@@ -12,6 +12,7 @@ const errors = [];
 const labelPath = path.join(root, 'src', 'data', 'site', 'analytics-labels.json');
 const analyticsJs = path.join(root, 'js', 'analytics.js');
 const contactJs = path.join(root, 'js', 'contact-form-analytics.js');
+const registrationJs = path.join(root, 'js', 'form-registration-tracking.js');
 const groupThankYouJs = path.join(root, 'js', 'group-form-thank-you.js');
 
 function read(p) {
@@ -111,6 +112,7 @@ if (!errors.length) {
 
 scanNoPii(analyticsJs, 'js/analytics.js');
 scanNoPii(contactJs, 'js/contact-form-analytics.js');
+scanNoPii(registrationJs, 'js/form-registration-tracking.js');
 scanNoPii(groupThankYouJs, 'js/group-form-thank-you.js');
 
 if (errors.length) {

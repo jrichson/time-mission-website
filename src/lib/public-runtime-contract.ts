@@ -3,6 +3,7 @@ export type RuntimeScriptId =
     | 'language'
     | 'consent'
     | 'analytics'
+    | 'formRegistrationTracking'
     | 'bookingJourney'
     | 'bookingFrame'
     | 'bookingBriqProvider'
@@ -39,6 +40,7 @@ export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'language', src: '/js/language-switcher.js', version: 4 },
     { id: 'consent', src: '/js/consent-bridge.js', version: 1 },
     { id: 'analytics', src: '/js/analytics.js', version: 1 },
+    { id: 'formRegistrationTracking', src: '/js/form-registration-tracking.js', version: 1 },
     { id: 'bookingJourney', src: '/js/booking-journey.js', version: 11 },
     { id: 'bookingFrame', src: '/js/booking-frame.js', version: 1 },
     { id: 'bookingBriqProvider', src: '/js/booking-provider-briq.js', version: 1 },

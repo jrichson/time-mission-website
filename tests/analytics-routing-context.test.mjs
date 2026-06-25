@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { createHash, webcrypto } from 'node:crypto';
 import {
   createBrowserContext,
   locationRecords,
@@ -81,6 +82,68 @@ function createGroupThankYouCarrier({
       formSubject,
     },
   };
+}
+
+function createNewsletterForm({
+  emailValue = 'ada@example.com',
+  firstName = 'Ada',
+  lastName = 'Lovelace',
+  location = 'houston',
+} = {}) {
+  const attrs = new Map([
+    ['action', '/api/newsletter'],
+    ['data-tm-form', 'newsletter'],
+    ['method', 'POST'],
+    ['name', 'newsletter'],
+  ]);
+  const listeners = new Map();
+  const fields = {
+    email: { value: emailValue },
+    given_name: { value: firstName },
+    family_name: { value: lastName },
+    location: { value: location },
+    marketing_opt_in: { value: 'yes' },
+  };
+
+  return {
+    attrs,
+    fields,
+    checkValidity() {
+      return true;
+    },
+    getAttribute(name) {
+      return attrs.get(name) || null;
+    },
+    setAttribute(name, value) {
+      attrs.set(name, String(value));
+    },
+    removeAttribute(name) {
+      attrs.delete(name);
+    },
+    addEventListener(type, listener) {
+      const bucket = listeners.get(type) || [];
+      bucket.push(listener);
+      listeners.set(type, bucket);
+    },
+    dispatchSubmit() {
+      const event = { preventDefault() { this.defaultPrevented = true; } };
+      return Promise.all((listeners.get('submit') || []).map((listener) => listener(event)));
+    },
+  };
+}
+
+class FakeFormData {
+  constructor(form) {
+    this.fields = form.fields;
+  }
+
+  get(name) {
+    return this.fields[name] ? this.fields[name].value : '';
+  }
+}
+
+function sha256(value) {
+  return createHash('sha256').update(value).digest('hex');
 }
 
 describe('analytics routing context', () => {
@@ -170,5 +233,61 @@ describe('analytics routing context', () => {
     expect(successes[0].parameters).not.toHaveProperty('EMAIL');
     expect(successes[0].parameters).not.toHaveProperty('PHONE');
     expect(successes[0].parameters).not.toHaveProperty('MESSAGE');
+  });
+
+  it('pushes newsletter registrations to GTM with hashed user data after accepted submission', async () => {
+    const form = createNewsletterForm();
+    const redirects = [];
+    const fetchCalls = [];
+    const { context, window, document } = createBrowserContext(grantedConsentWindow({
+      crypto: webcrypto,
+      FormData: FakeFormData,
+      fetch(url, init) {
+        fetchCalls.push({ init, url });
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ ok: true }),
+        });
+      },
+      setTimeout(callback) {
+        callback();
+        return 1;
+      },
+    }));
+    window.location.pathname = '/groups/birthdays';
+    window.location.assign = (url) => redirects.push(url);
+    document.querySelectorAll = (selector) => (selector === 'form[data-tm-form="newsletter"]' ? [form] : []);
+    context.FormData = FakeFormData;
+    context.TextEncoder = TextEncoder;
+    context.fetch = window.fetch;
+
+    runScript('js/form-registration-tracking.js', context);
+    await form.dispatchSubmit();
+
+    expect(fetchCalls).toHaveLength(1);
+    expect(fetchCalls[0].url).toBe('/api/newsletter');
+    expect(fetchCalls[0].init.headers).toMatchObject({ accept: 'application/json' });
+    expect(redirects).toEqual(['/contact-thank-you']);
+
+    const event = window.dataLayer.find((entry) => entry && entry.event_name === 'COMPLETE_REGISTRATION');
+    expect(event).toMatchObject({
+      event: 'COMPLETE_REGISTRATION',
+      conversion_source: 'site_form',
+      form_name: 'newsletter',
+      ga4_event_name: 'complete_registration',
+      standard_event_name: 'CompleteRegistration',
+    });
+    expect(event.parameters).toMatchObject({
+      FORM_NAME: 'newsletter',
+      LOCATION_SLUG: 'houston',
+      PAGE_PATH: '/groups/birthdays',
+    });
+    expect(event.user_data).toMatchObject({
+      sha256_email_address: sha256('ada@example.com'),
+      sha256_first_name: sha256('ada'),
+      sha256_last_name: sha256('lovelace'),
+    });
+    expect(JSON.stringify(event)).not.toContain('ada@example.com');
+    expect(JSON.stringify(event)).not.toContain('Lovelace');
   });
 });
