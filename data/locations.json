@@ -899,10 +899,10 @@
       "region": "europe",
       "status": "coming-soon",
       "address": {
-        "line1": "",
+        "line1": "Hermanus Boexstraat 4",
         "city": "Eindhoven",
         "state": "",
-        "zip": "",
+        "zip": "5611 PJ",
         "country": "Netherlands"
       },
       "contact": {
@@ -912,9 +912,9 @@
       "hours": {},
       "bookingUrl": "",
       "navLabel": "Netherlands – Eindhoven",
-      "mapUrl": "https://maps.google.com/?q=Eindhoven+Netherlands",
+      "mapUrl": "https://maps.google.com/?q=Hermanus+Boexstraat+4+Eindhoven+5611+PJ+Netherlands",
       "faqs": [],
-      "ticker": "EINDHOVEN COMING SOON",
+      "ticker": "FIRST NETHERLANDS LOCATION OPENING OCTOBER 2026",
       "giftCardUrl": "",
       "countryCode": "NL",
       "locale": null,
@@ -922,7 +922,8 @@
       "currency": null,
       "phoneE164": null,
       "hreflang": null,
-      "localBusinessSchemaEligible": false
+      "localBusinessSchemaEligible": false,
+      "openingLabel": "Opening October 2026"
     },
     {
       "id": "dallas",
