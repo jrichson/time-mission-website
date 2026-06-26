@@ -160,6 +160,13 @@
         return LocationViews.listTicketOptions(TM.locations);
     }
 
+    function updateDonationLinks(loc) {
+        var hasDonationUrl = !!(loc && typeof loc.donationUrl === 'string' && loc.donationUrl.trim());
+        document.querySelectorAll('[data-tm-donation-link]').forEach(function (el) {
+            el.hidden = !hasDonationUrl;
+        });
+    }
+
     /** Must match src/lib/locations-fingerprint.ts (locationsFingerprintFromRecords). */
     function fingerprintRuntimeLocations(locs) {
         if (!locs || !locs.length) return '';
@@ -419,6 +426,7 @@
 
             TM.updateTestimonials();
             TM.updateFooterLocation();
+            updateDonationLinks(loc);
         },
 
         updateTestimonials() {

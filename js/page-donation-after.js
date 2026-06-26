@@ -1,6 +1,9 @@
 (function () {
     var buttons = Array.prototype.slice.call(document.querySelectorAll('.btn-donation, [data-donation="1"]'));
     var hint = document.getElementById('donationLocationHint');
+    var formSection = document.querySelector('[data-donation-form-section]');
+    var frame = document.getElementById('donationRequestFrame');
+    var formIntro = document.getElementById('donationFormIntro');
     if (!buttons.length) return;
 
     function setButtons(href, disabled, label) {
@@ -27,6 +30,20 @@
         return null;
     }
 
+    function setFrame(url, locationName) {
+        if (!formSection || !frame) return;
+        if (!url) {
+            formSection.hidden = true;
+            frame.removeAttribute('src');
+            return;
+        }
+
+        frame.setAttribute('src', url);
+        frame.setAttribute('title', 'Donation request form for ' + locationName);
+        formSection.hidden = false;
+        if (formIntro) formIntro.textContent = 'Complete the donation request form for ' + locationName + '.';
+    }
+
     function applySelectedLocation() {
         var loc = selectedLocation();
         var url = loc && typeof loc.donationUrl === 'string' ? loc.donationUrl.trim() : '';
@@ -34,6 +51,7 @@
 
         if (!url) {
             setButtons('#', true, 'Donation Request Form Coming Soon');
+            setFrame('', locationName);
             if (hint) {
                 hint.textContent = locationName
                     ? 'The online donation request form is not ready for ' + locationName + ' yet. Use contact for now and include your organization, event date, and request type.'
@@ -42,8 +60,9 @@
             return;
         }
 
-        setButtons(url, false, 'Donate to ' + locationName);
-        if (hint) hint.textContent = 'Donation support is routed to ' + locationName + '.';
+        setButtons(url, false, 'Open Donation Request Form');
+        setFrame(url, locationName);
+        if (hint) hint.textContent = 'Donation requests are routed to ' + locationName + '. Complete the form below or open it in a new tab.';
     }
 
     buttons.forEach(function (button) {

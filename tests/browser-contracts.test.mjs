@@ -46,6 +46,17 @@ describe('browser data, consent, and i18n contracts', () => {
       expect(byId.get(locationId)?.groupFormUrls).toMatchObject(forms);
     }
 
+    const donationForms = {
+      manassas: 'https://forms.roller.app/#/timemissionmanassasmall/648879c4625849e/form',
+      'mount-prospect': 'https://forms.roller.app/#/timemissionmountprospect/953cef02271145c/form',
+      'orland-park': 'https://forms.roller.app/#/timemissionorlandpark/953cef02271145c/form',
+    };
+    expect(locationRecords.filter((loc) => loc.donationUrl).map((loc) => loc.id).sort())
+      .toEqual(Object.keys(donationForms).sort());
+    for (const [locationId, url] of Object.entries(donationForms)) {
+      expect(byId.get(locationId)?.donationUrl).toBe(url);
+    }
+
     for (const locationId of ['mount-prospect', 'lincoln', 'manassas', 'orland-park']) {
       requireUrl(locationId, 'giftCardUrl', byId.get(locationId)?.giftCardUrl);
     }

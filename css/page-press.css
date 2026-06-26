@@ -303,6 +303,25 @@ body.tm-resource-page {
     margin-top: 1rem;
 }
 
+.tm-donation-form-section[hidden] {
+    display: none;
+}
+
+.tm-donation-frame {
+    overflow: hidden;
+    border: 1px solid var(--tm-resource-line);
+    border-radius: 8px;
+    background: #121217;
+}
+
+.tm-donation-frame iframe {
+    display: block;
+    width: 100%;
+    min-height: min(78vh, 52rem);
+    border: 0;
+    background: #fff;
+}
+
 .tm-logo-row {
     display: flex;
     width: min(100%, 18rem);

@@ -150,6 +150,16 @@ function validateHiddenMissionIds(location) {
   }
 }
 
+function validateDonationUrl(location) {
+  const id = location.id || '(unknown)';
+  if (location.donationUrl == null) return;
+  if (typeof location.donationUrl !== 'string' || location.donationUrl.trim() === '') {
+    errors.push(`${id}: donationUrl must be a non-empty string when present`);
+    return;
+  }
+  assertSafeUrl(id, 'donationUrl', location.donationUrl);
+}
+
 function isExternalSiteOnlyOpenLocation(location) {
   const externalUrl = typeof location.externalUrl === 'string' ? location.externalUrl.trim() : '';
   const bookingUrl = typeof location.bookingUrl === 'string' ? location.bookingUrl.trim() : '';
@@ -276,6 +286,7 @@ for (const location of locations) {
   validateIntlFields(location);
   validateLocationTicker(location);
   validateHiddenMissionIds(location);
+  validateDonationUrl(location);
   const hasValidGeo = validateGeo(location);
 
   if (Object.prototype.hasOwnProperty.call(location, 'localBusinessSchemaEligible')) {
