@@ -872,37 +872,37 @@
         "mon": {
           "open": "12:00",
           "close": "18:00",
-          "label": "12.00 - 18.00"
+          "label": "12pm - 6pm"
         },
         "tue": {
           "open": "12:00",
           "close": "18:00",
-          "label": "12.00 - 18.00"
+          "label": "12pm - 6pm"
         },
         "wed": {
           "open": "12:00",
           "close": "20:00",
-          "label": "12.00 - 20.00"
+          "label": "12pm - 8pm"
         },
         "thu": {
           "open": "12:00",
           "close": "20:00",
-          "label": "12.00 - 20.00"
+          "label": "12pm - 8pm"
         },
         "fri": {
           "open": "12:00",
           "close": "22:00",
-          "label": "12.00 - 22.00"
+          "label": "12pm - 10pm"
         },
         "sat": {
           "open": "10:00",
           "close": "22:00",
-          "label": "10.00 - 22.00"
+          "label": "10am - 10pm"
         },
         "sun": {
           "open": "10:00",
           "close": "20:00",
-          "label": "10.00 - 20.00"
+          "label": "10am - 8pm"
         }
       },
       "bookingUrl": "https://timemission.eu/brussels",
