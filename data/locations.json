@@ -446,7 +446,7 @@
       "status": "open",
       "address": {
         "line1": "8300 Sudley Rd",
-        "line2": "Unit A2",
+        "line2": "Suite A2",
         "city": "Manassas",
         "state": "VA",
         "zip": "20109",
@@ -517,7 +517,7 @@
         "holidays": "https://webforms.pipedrive.com/f/63f1HEKkrC42GkAS68wtfh9HcHWyi8c6TlESzmjbi3nKuXQ3xiIQXnr9WhZuTX5wlR"
       },
       "navLabel": "VA – Manassas",
-      "mapUrl": "https://maps.google.com/?q=8300+Sudley+Rd+Manassas+VA+20109",
+      "mapUrl": "https://maps.google.com/?q=8300+Sudley+Rd+Suite+A2+Manassas+VA+20109",
       "faqs": [
         {
           "q": "How do I book Time Mission Manassas?",
@@ -557,7 +557,7 @@
       "status": "open",
       "address": {
         "line1": "7620 Katy Fwy",
-        "line2": "STE 355",
+        "line2": "Suite 355",
         "city": "Houston",
         "state": "TX",
         "zip": "77024",
@@ -629,7 +629,7 @@
         "holidays": "https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form"
       },
       "navLabel": "TX – Houston",
-      "mapUrl": "https://maps.google.com/?q=7620+Katy+Fwy+STE+355+Houston+TX+77024",
+      "mapUrl": "https://maps.google.com/?q=7620+Katy+Fwy+Suite+355+Houston+TX+77024",
       "faqs": [],
       "ticker": "HOUSTON NOW OPEN",
       "giftCardUrl": "https://book.houston.timemission.com/giftcards/en-us/products",
@@ -938,7 +938,7 @@
       "status": "coming-soon",
       "address": {
         "line1": "5307 E. Mockingbird Ln",
-        "line2": "Ste 200 & 201",
+        "line2": "Suite 200 & 201",
         "city": "Dallas",
         "state": "TX",
         "zip": "75206",
@@ -951,7 +951,7 @@
       "hours": {},
       "bookingUrl": "",
       "navLabel": "TX – Dallas",
-      "mapUrl": "https://maps.google.com/?q=5307+E.+Mockingbird+Ln+Ste+200+%26+201+Dallas+TX+75206",
+      "mapUrl": "https://maps.google.com/?q=5307+E.+Mockingbird+Ln+Suite+200+%26+201+Dallas+TX+75206",
       "faqs": [],
       "ticker": "DALLAS COMING SOON",
       "giftCardUrl": "",
