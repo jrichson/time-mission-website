@@ -868,7 +868,43 @@
         "phone": "",
         "email": ""
       },
-      "hours": {},
+      "hours": {
+        "mon": {
+          "open": "12:00",
+          "close": "18:00",
+          "label": "12.00 - 18.00"
+        },
+        "tue": {
+          "open": "12:00",
+          "close": "18:00",
+          "label": "12.00 - 18.00"
+        },
+        "wed": {
+          "open": "12:00",
+          "close": "20:00",
+          "label": "12.00 - 20.00"
+        },
+        "thu": {
+          "open": "12:00",
+          "close": "20:00",
+          "label": "12.00 - 20.00"
+        },
+        "fri": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12.00 - 22.00"
+        },
+        "sat": {
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10.00 - 22.00"
+        },
+        "sun": {
+          "open": "10:00",
+          "close": "20:00",
+          "label": "10.00 - 20.00"
+        }
+      },
       "bookingUrl": "https://timemission.eu/brussels",
       "externalUrl": "https://timemission.eu/brussels",
       "hiddenMissionIds": [
