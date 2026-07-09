@@ -10,7 +10,7 @@
             </h1>
             <p class="hero-subtitle">Make the last night out legendary. 25+ head-to-head missions, team-based chaos, and a session that beats a bar crawl you'll forget by Saturday.</p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="group-tickets">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
@@ -185,7 +185,7 @@
             <h2>Ready to <span class="highlight">level up</span> the night?</h2>
             <p class="event-page-cta-subtitle">Tell us the date, city, and crew size, we'll handle the rest.</p>
             <div class="event-page-cta-buttons">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="group-tickets">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>

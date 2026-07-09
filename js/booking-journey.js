@@ -116,6 +116,12 @@
         return (loc.bookingUrl && String(loc.bookingUrl).trim()) || '';
     }
 
+    function resolveGroupCheckoutUrl(loc) {
+        if (!loc) return '';
+        var groupCheckout = (loc.groupCheckoutUrl && String(loc.groupCheckoutUrl).trim()) || '';
+        return groupCheckout || resolveOpenCheckoutUrl(loc);
+    }
+
     function isTemporarilyClosedLocation(loc) {
         return !!(loc && loc.status === 'temporarily-closed');
     }
@@ -202,6 +208,11 @@
             return '';
         }
 
+        if (kind === 'group-tickets') {
+            var groupCheckoutUrl = (loc.groupCheckoutUrl && String(loc.groupCheckoutUrl).trim()) || '';
+            if (groupCheckoutUrl) return groupCheckoutUrl;
+        }
+
         if (isBriqWidgetLocation(loc)) {
             return briqWidgetDestination(loc, slug, checkoutUrl);
         }
@@ -225,15 +236,20 @@
         return normalizeKind(kind) === 'tickets';
     }
 
+    function isGroupTicketKind(kind) {
+        return normalizeKind(kind) === 'group-tickets';
+    }
+
     function shouldUseRollerCheckout(loc, href, kind) {
-        if (!loc || normalizeKind(kind) !== 'tickets') return false;
+        if (!loc || !(isTicketKind(kind) || isGroupTicketKind(kind))) return false;
         var roller = (loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
-        return !!roller && href === roller;
+        var groupCheckout = (loc.groupCheckoutUrl && String(loc.groupCheckoutUrl).trim()) || '';
+        return !!roller && (href === roller || href === groupCheckout);
     }
 
     function shouldUseBriqWidget(loc, href, kind) {
         var normalizedKind = normalizeKind(kind);
-        return (normalizedKind === 'tickets' || normalizedKind === 'groups')
+        return (normalizedKind === 'tickets' || normalizedKind === 'groups' || normalizedKind === 'group-tickets')
             && isBriqWidgetLocation(loc)
             && String(href || '').trim() === '#briq-widget-container';
     }
@@ -248,7 +264,7 @@
         if (!isNavigableHref(href)) return 'panel';
         if (shouldUseBriqWidget(loc, href, kind)) return 'briq-widget';
         if (isLocationExternalSiteUrl(loc, href)) return 'external-site';
-        if (isTicketKind(kind) && shouldUseRollerCheckout(loc, href, kind)) return 'roller';
+        if ((isTicketKind(kind) || isGroupTicketKind(kind)) && shouldUseRollerCheckout(loc, href, kind)) return 'roller';
         return 'link';
     }
 
@@ -479,6 +495,7 @@
         temporaryClosureCtaLabel: temporaryClosureCtaLabel,
         isBookableLocation: isBookableLocation,
         isLeadOnlyComingSoon: isLeadOnlyComingSoon,
+        resolveGroupCheckoutUrl: resolveGroupCheckoutUrl,
         resolveLocationDestination: resolveLocationDestination,
         isTicketKind: isTicketKind,
         resolveIntent: resolveIntent,

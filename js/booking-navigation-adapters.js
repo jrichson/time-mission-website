@@ -61,8 +61,10 @@
         return !!(frame && typeof frame.show === 'function' && frame.show(loc, href));
     }
 
-    function loadRollerCheckout(loc, onReady, onError) {
-        var checkoutUrl = (loc && loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
+    function loadRollerCheckout(loc, href, onReady, onError) {
+        var checkoutUrl = String(href || '').trim()
+            || (loc && loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim())
+            || '';
         if (!checkoutUrl) {
             if (typeof onError === 'function') onError();
             return;
@@ -91,9 +93,10 @@
         document.head.appendChild(script);
     }
 
-    function showRollerCheckout(loc, fallback) {
+    function showRollerCheckout(loc, href, fallback) {
         loadRollerCheckout(
             loc,
+            href,
             function () {
                 if (window.RollerCheckout && typeof window.RollerCheckout.show === 'function') {
                     window.RollerCheckout.show();
@@ -115,7 +118,7 @@
             return true;
         },
         roller: function (action, loc) {
-            showRollerCheckout(loc, function () { showBookingFrame(loc, action.href); });
+            showRollerCheckout(loc, action.href, function () { showBookingFrame(loc, action.href); });
             return true;
         },
         iframe: function (action, loc) {

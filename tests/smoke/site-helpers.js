@@ -15,6 +15,10 @@ function groupFormUrl(locationId, groupType) {
   return locationById.get(locationId)?.groupFormUrls?.[groupType] || '';
 }
 
+function groupCheckoutUrl(locationId) {
+  return locationById.get(locationId)?.groupCheckoutUrl || '';
+}
+
 function waiverUrl(locationId) {
   return locationById.get(locationId)?.waiverUrl || '';
 }
@@ -88,6 +92,7 @@ module.exports = {
   fingerprintAnalyticsLabels,
   fs,
   gotoHome,
+  groupCheckoutUrl,
   groupFormUrl,
   i18nCatalog,
   locationById,

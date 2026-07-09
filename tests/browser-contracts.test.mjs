@@ -46,6 +46,15 @@ describe('browser data, consent, and i18n contracts', () => {
       expect(byId.get(locationId)?.groupFormUrls).toMatchObject(forms);
     }
 
+    const groupCheckoutUrls = {
+      manassas: 'https://book.manassas.timemission.com/groupcheckout/en-us/products',
+      'mount-prospect': 'https://book.mountprospect.timemission.com/groupcheckout/en-us/products',
+      'orland-park': 'https://book.orlandpark.timemission.com/groupcheckout/en-us/products',
+    };
+    for (const [locationId, url] of Object.entries(groupCheckoutUrls)) {
+      expect(byId.get(locationId)?.groupCheckoutUrl).toBe(url);
+    }
+
     const donationForms = {
       manassas: 'https://forms.roller.app/#/timemissionmanassasmall/648879c4625849e/form',
       'mount-prospect': 'https://forms.roller.app/#/timemissionmountprospect/953cef02271145c/form',

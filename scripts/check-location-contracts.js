@@ -197,6 +197,9 @@ function validateOpenLocation(location) {
       errors.push(`${id} rollerCheckoutUrl must be HTTPS`);
     }
   }
+  if (location.groupCheckoutUrl) {
+    assertSafeUrl(id, 'groupCheckoutUrl', location.groupCheckoutUrl);
+  }
   validateGroupFormUrls(location);
   if (location.waiverUrl) {
     assertSafeUrl(id, 'waiverUrl', location.waiverUrl);
@@ -228,6 +231,9 @@ function validateComingSoonLocation(location) {
       errors.push(`${id} rollerCheckoutUrl must be HTTPS`);
     }
   }
+  if (location.groupCheckoutUrl && String(location.groupCheckoutUrl).trim() !== '') {
+    assertSafeUrl(id, 'groupCheckoutUrl', location.groupCheckoutUrl);
+  }
 }
 
 function validateTemporaryClosure(location) {
@@ -244,6 +250,9 @@ function validateTemporaryClosure(location) {
   }
   if (location.rollerCheckoutUrl && String(location.rollerCheckoutUrl).trim() !== '') {
     errors.push(`${id}: temporarily-closed location must not expose rollerCheckoutUrl`);
+  }
+  if (location.groupCheckoutUrl && String(location.groupCheckoutUrl).trim() !== '') {
+    errors.push(`${id}: temporarily-closed location must not expose groupCheckoutUrl`);
   }
   if (location.giftCardUrl && String(location.giftCardUrl).trim() !== '') {
     errors.push(`${id}: temporarily-closed location must not expose giftCardUrl`);

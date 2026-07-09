@@ -10,7 +10,7 @@
             </h1>
             <p class="hero-subtitle">Better than a banquet hall. Whether it's the office holiday party, a family reunion, or a festive night out, Time Mission turns the season into something people actually look forward to.</p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="group-tickets">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
@@ -185,7 +185,7 @@
             <h2>Ready to upgrade the <span class="highlight">holiday party?</span></h2>
             <p class="event-page-cta-subtitle">Peak-season dates book fast, send us your date and headcount and we'll lock it in.</p>
             <div class="event-page-cta-buttons">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
+                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="group-tickets">
                     Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>

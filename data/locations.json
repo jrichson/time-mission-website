@@ -62,6 +62,7 @@
       },
       "bookingUrl": "https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home",
+      "groupCheckoutUrl": "https://book.mountprospect.timemission.com/groupcheckout/en-us/products",
       "donationUrl": "https://forms.roller.app/#/timemissionmountprospect/953cef02271145c/form",
       "bookingProvider": "roller",
       "hiddenMissionIds": [
@@ -499,6 +500,7 @@
       },
       "bookingUrl": "https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.manassas.timemission.com/timemissionmanassasmall/onlinecheckout/en-us/home",
+      "groupCheckoutUrl": "https://book.manassas.timemission.com/groupcheckout/en-us/products",
       "donationUrl": "https://forms.roller.app/#/timemissionmanassasmall/648879c4625849e/form",
       "bookingProvider": "roller",
       "hiddenMissionIds": [
@@ -812,6 +814,7 @@
       },
       "bookingUrl": "https://book.orlandpark.timemission.com/timemissionorlandpark/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.orlandpark.timemission.com/timemissionorlandpark/onlinecheckout/en-us/home",
+      "groupCheckoutUrl": "https://book.orlandpark.timemission.com/groupcheckout/en-us/products",
       "donationUrl": "https://forms.roller.app/#/timemissionorlandpark/953cef02271145c/form",
       "bookingProvider": "roller",
       "hiddenMissionIds": [

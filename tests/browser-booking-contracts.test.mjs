@@ -18,6 +18,7 @@ describe('browser booking contracts', () => {
             slug: 'manassas',
             status: 'open',
             rollerCheckoutUrl: 'https://checkout.example/manassas',
+            groupCheckoutUrl: 'https://checkout.example/manassas-groups',
             bookingUrl: 'https://fallback.example/manassas',
             giftCardUrl: 'https://gift.example/manassas',
             groupFormUrls: {
@@ -135,6 +136,26 @@ describe('browser booking contracts', () => {
       groupType: 'corporate',
       locationId: 'manassas',
     })).toBe('https://forms.example/manassas-corporate');
+    expect(window.TMBooking.getDestination({
+      kind: 'group-tickets',
+      locationId: 'manassas',
+    })).toBe('https://checkout.example/manassas-groups');
+    expect(window.TMBooking.resolveIntent({
+      kind: 'group-tickets',
+      locationId: 'manassas',
+    })).toMatchObject({
+      href: 'https://checkout.example/manassas-groups',
+      presentation: 'roller',
+      usesRollerCheckout: true,
+    });
+    expect(window.TMBookingJourney.ctaAttributesForIntent(window.TMBooking.resolveIntent({
+      kind: 'group-tickets',
+      locationId: 'manassas',
+    }))).toMatchObject({
+      href: '#',
+      bookingUrl: 'https://checkout.example/manassas-groups',
+      trigger: true,
+    });
     const manassasGroupIntent = window.TMBooking.resolveIntent({
       kind: 'groups',
       groupType: 'corporate',
@@ -170,6 +191,14 @@ describe('browser booking contracts', () => {
     expect(window.location.href).toBe('');
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'houston' }))
       .toBe('https://checkout.example/houston');
+    expect(window.TMBooking.getDestination({ kind: 'group-tickets', locationId: 'houston' }))
+      .toBe('https://checkout.example/houston');
+    expect(window.TMBooking.resolveIntent({ kind: 'group-tickets', locationId: 'houston' }))
+      .toMatchObject({
+        href: 'https://checkout.example/houston',
+        presentation: 'roller',
+        usesRollerCheckout: true,
+      });
     expect(window.LocationContext.getLocationView('houston'))
       .toMatchObject({
         hoursText: '',
@@ -226,6 +255,8 @@ describe('browser booking contracts', () => {
     expect(window.localStorage.getItem('tm_location')).toBeNull();
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'west-nyack' }))
       .toBe('#briq-widget-container');
+    expect(window.TMBooking.getDestination({ kind: 'group-tickets', locationId: 'west-nyack' }))
+      .toBe('#briq-widget-container');
     expect(window.TMBooking.resolveIntent({ kind: 'tickets', locationId: 'west-nyack' }))
       .toMatchObject({
         href: '#briq-widget-container',
@@ -261,6 +292,8 @@ describe('browser booking contracts', () => {
         trigger: true,
       });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'dallas' }))
+      .toBe('/contact#location=dallas&type=updates');
+    expect(window.TMBooking.getDestination({ kind: 'group-tickets', locationId: 'dallas' }))
       .toBe('/contact#location=dallas&type=updates');
     expect(window.TMBooking.getDestination({ kind: 'groups', groupType: 'corporate', locationId: 'dallas' }))
       .toBe('');
@@ -396,6 +429,35 @@ describe('browser booking contracts', () => {
     runScript('js/booking-controller.js', context);
     await Promise.resolve();
     await Promise.resolve();
+
+    for (const [locationId, loc] of byId) {
+      const slug = loc.slug || loc.id;
+      const expectedRuntimeHref = loc.status === 'temporarily-closed'
+        ? `/contact#location=${slug}&type=closure`
+        : loc.groupCheckoutUrl
+        ? loc.groupCheckoutUrl
+        : loc.bookingProvider === 'briq'
+        ? '#briq-widget-container'
+        : loc.externalUrl || loc.rollerCheckoutUrl || loc.bookingUrl || (loc.status === 'coming-soon' ? `/contact#location=${slug}&type=updates` : '');
+      const expectedPresentation = expectedRuntimeHref === '#briq-widget-container'
+        ? 'briq-widget'
+        : loc.externalUrl && expectedRuntimeHref === loc.externalUrl
+        ? 'external-site'
+        : loc.rollerCheckoutUrl && (expectedRuntimeHref === loc.rollerCheckoutUrl || expectedRuntimeHref === loc.groupCheckoutUrl)
+        ? 'roller'
+        : (expectedRuntimeHref ? 'link' : 'panel');
+      expect(window.TMBooking.getDestination({
+        kind: 'group-tickets',
+        locationId,
+      })).toBe(expectedRuntimeHref);
+      expect(window.TMBooking.resolveIntent({
+        kind: 'group-tickets',
+        locationId,
+      })).toMatchObject({
+        href: expectedRuntimeHref,
+        presentation: expectedPresentation,
+      });
+    }
 
     for (const [locationId, loc] of byId) {
       const groupUrls = loc.groupFormUrls || {};

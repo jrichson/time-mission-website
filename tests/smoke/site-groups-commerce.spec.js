@@ -4,6 +4,7 @@ const {
   expectPopupUrl,
   fingerprintAnalyticsLabels,
   gotoHome,
+  groupCheckoutUrl,
   groupFormUrl,
   i18nCatalog,
   locationById,
@@ -91,7 +92,10 @@ test('group event cards expose ticket booking and group inquiry triggers', async
   const cards = await page.locator('.event-type-card').evaluateAll((nodes) => nodes.map((card) => {
     const ticket = card.querySelector('.event-type-actions .btn-tickets');
     const inquiry = card.querySelector('.event-type-actions .ghost');
+    const actionKinds = Array.from(card.querySelectorAll('.event-type-actions a'))
+      .map((action) => action.getAttribute('data-tm-booking-kind') || '');
     return {
+      actionKinds,
       ticketIsTrigger: ticket?.hasAttribute('data-tm-booking-trigger') || false,
       ticketKind: ticket?.getAttribute('data-tm-booking-kind') || '',
       inquiryIsTrigger: inquiry?.hasAttribute('data-tm-booking-trigger') || false,
@@ -102,8 +106,9 @@ test('group event cards expose ticket booking and group inquiry triggers', async
 
   expect(cards.map((card) => card.groupType)).toEqual(expectedGroupTypes);
   for (const card of cards) {
+    expect(card.actionKinds).toEqual(['groups', 'group-tickets']);
     expect(card.ticketIsTrigger).toBe(true);
-    expect(card.ticketKind).toBe('tickets');
+    expect(card.ticketKind).toBe('group-tickets');
     expect(card.inquiryIsTrigger).toBe(true);
     expect(card.inquiryKind).toBe('groups');
   }
@@ -113,7 +118,7 @@ test('group event cards expose ticket booking and group inquiry triggers', async
   await expect(customEventCta).not.toHaveAttribute('data-tm-group-type', /./);
 });
 
-test('group event card Book Now keeps the standard ticket booking flow', async ({ page }) => {
+test('group event card Book Now uses group checkout when available', async ({ page }) => {
   await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
     await route.fulfill({
       contentType: 'application/javascript',
@@ -125,12 +130,14 @@ test('group event card Book Now keeps the standard ticket booking flow', async (
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
   await page.evaluate(() => window.TM.select('manassas'));
 
-  await page.locator('.event-type-actions .btn-tickets[data-tm-booking-kind="tickets"]').first().click();
+  const expectedHref = groupCheckoutUrl('manassas');
+  await page.locator('.event-type-actions .btn-tickets[data-tm-booking-kind="group-tickets"]').first().click();
   await page.waitForFunction(() => window.__rollerCheckoutShown === true);
+  await expect(page.locator('#roller-checkout')).toHaveAttribute('data-checkout', expectedHref);
   await expect(page).toHaveURL(/\/groups\.html$/);
 });
 
-test('group page Book Now CTAs keep the standard ticket booking flow', async ({ page }) => {
+test('group page Book Now CTAs use group checkout when available', async ({ page }) => {
   await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
     await route.fulfill({
       contentType: 'application/javascript',
@@ -142,14 +149,24 @@ test('group page Book Now CTAs keep the standard ticket booking flow', async ({ 
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
   await page.evaluate(() => window.TM.select('manassas'));
 
-  await page.locator('main .btn-primary.btn-tickets[data-tm-booking-kind="tickets"]').first().click();
+  const expectedHref = groupCheckoutUrl('manassas');
+  await page.locator('main .btn-primary.btn-tickets[data-tm-booking-kind="group-tickets"]').first().click();
   await page.waitForFunction(() => window.__rollerCheckoutShown === true);
+  await expect(page.locator('#roller-checkout')).toHaveAttribute('data-checkout', expectedHref);
   await expect(page).toHaveURL(/\/groups\/corporate$/);
 });
 
 test('Houston and Orland Park group CTAs resolve to location-data forms', async ({ page }) => {
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  for (const locationId of ['manassas', 'mount-prospect', 'orland-park']) {
+    const href = await page.evaluate((id) => window.TMBooking.getDestination({
+      kind: 'group-tickets',
+      locationId: id,
+    }), locationId);
+    expect(href).toBe(groupCheckoutUrl(locationId));
+  }
 
   const houstonCorporate = await page.evaluate(() => window.TMBooking.getDestination({
     kind: 'groups',

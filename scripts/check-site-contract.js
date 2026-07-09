@@ -162,9 +162,18 @@ for (const relPath of ['src/partials/groups-main.frag.txt']) {
   if (genericGroupCtas.length < 2) {
     errors.push(`${relPath}: generic group CTAs must use the default selected-location group form`);
   }
-  const eventCardTicketCtas = html.match(/class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets"/g) || [];
+  const eventCardTicketCtas = html.match(/class="event-type-cta btn-tickets" data-tm-booking-trigger data-tm-booking-kind="group-tickets"/g) || [];
   if (eventCardTicketCtas.length < 6) {
-    errors.push(`${relPath}: group event card Book Now CTAs must resolve through the standard ticket booking flow`);
+    errors.push(`${relPath}: group event card Book Now CTAs must resolve through the group ticket booking flow`);
+  }
+  const eventCardActions = html.match(/<div class="event-type-actions">.*?<\/div>/g) || [];
+  for (const actionHtml of eventCardActions) {
+    const inquiryIndex = actionHtml.indexOf('data-tm-booking-kind="groups"');
+    const bookingIndex = actionHtml.indexOf('data-tm-booking-kind="group-tickets"');
+    if (inquiryIndex === -1 || bookingIndex === -1 || inquiryIndex > bookingIndex) {
+      errors.push(`${relPath}: group event card actions must put inquiry before Book Now`);
+      break;
+    }
   }
   if (/formsubmit\.co|class="inquiry-form"|id="inquiry"/.test(html)) {
     errors.push(`${relPath}: embedded group inquiry form must not be rendered`);
