@@ -24,6 +24,24 @@ test('contact form uses configured submission endpoint', async ({ page }) => {
   await expect(form.locator('[data-tm-turnstile]')).toHaveCount(1);
 });
 
+test('Nashville publishes its direct email on contact surfaces', async ({ page }) => {
+  await page.goto('/contact#location=nashville&type=updates');
+
+  await expect(page.locator('#location')).toHaveValue('nashville');
+  await expect(page.locator('[data-location-contact-email-row]')).toBeVisible();
+  await expect(page.locator('[data-location-contact-email]')).toHaveText('nashville@timemission.com');
+  await expect(page.locator('[data-location-contact-email]')).toHaveAttribute(
+    'href',
+    'mailto:nashville@timemission.com',
+  );
+
+  await page.goto('/nashville');
+  await expect(page.locator('footer .footer-links a', { hasText: 'Contact Us' })).toHaveAttribute(
+    'href',
+    'mailto:nashville@timemission.com',
+  );
+});
+
 test('contact page only shows direct info for the selected location', async ({ page }) => {
   await page.goto('/contact#location=houston&type=updates');
 

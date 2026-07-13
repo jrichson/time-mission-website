@@ -45,6 +45,13 @@ function loadRuntimeLocationViews() {
 }
 
 describe('Location View contract', () => {
+    it('publishes the Nashville direct contact email', () => {
+        const nashville = allLocations.find((loc) => loc.id === 'nashville');
+        if (!nashville) throw new Error('Nashville location missing');
+
+        expect(nashville.contact.email).toBe('nashville@timemission.com');
+    });
+
     it('keeps runtime location views aligned with the typed build-time view model', () => {
         const runtime = loadRuntimeLocationViews();
 
