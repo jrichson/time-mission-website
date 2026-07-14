@@ -1012,7 +1012,7 @@
       "status": "coming-soon",
       "address": {
         "line1": "209 10th Avenue South",
-        "line2": "Suite 134",
+        "line2": "Suite 217A",
         "city": "Nashville",
         "state": "TN",
         "zip": "37203",
@@ -1029,7 +1029,7 @@
       "hours": {},
       "bookingUrl": "",
       "navLabel": "TN – Nashville",
-      "mapUrl": "https://maps.google.com/?q=209+10th+Avenue+South+Suite+134+Nashville+TN+37203",
+      "mapUrl": "https://maps.google.com/?q=209+10th+Avenue+South+Suite+217A+Nashville+TN+37203",
       "faqs": [
         {
           "q": "What are the purchase terms and conditions?",
