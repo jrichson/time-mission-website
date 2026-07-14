@@ -5,6 +5,14 @@
         return String(value || '').toLowerCase().trim().replace(/\s+/g, '-');
     }
 
+    function contactFormOnlyLocations() {
+        var meta = document.querySelector('meta[name="tm-contact-form-only-locations"]');
+        var values = meta ? String(meta.getAttribute('content') || '').split(',') : [];
+        return new Set(values.map(normalizeLocation).filter(Boolean));
+    }
+
+    var formOnlyLocations = contactFormOnlyLocations();
+
     function directContactLocations() {
         if (window.TM && window.TM.ready && typeof window.TM.ready.then === 'function') {
             return window.TM.ready.then(function () {
@@ -93,7 +101,7 @@
             var loc = byId[value];
             var contact = (loc && loc.contact) || {};
             var phone = String(contact.phone || '').trim();
-            var email = String(contact.email || '').trim();
+            var email = formOnlyLocations.has(value) ? '' : String(contact.email || '').trim();
             var locationName = (loc && (loc.shortName || loc.name)) || select.options[select.selectedIndex].text || 'this location';
 
             if (!phone && !email) {

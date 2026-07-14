@@ -278,6 +278,83 @@ describe('Cloudflare form handler', () => {
     expect(emailCall.body.html).toContain('NY - West Nyack');
   });
 
+  it('routes TM Ops group subjects to the shared groups inbox', async () => {
+    const calls = [];
+    const fetchImpl = (url, init) => {
+      calls.push({
+        body: typeof init.body === 'string' ? JSON.parse(init.body) : null,
+        url: String(url),
+      });
+      return fetchOk(url);
+    };
+    const tmOpsLocations = ['manassas', 'orland-park', 'mount-prospect'];
+    const groupSubjects = ['groups', 'birthday', 'corporate'];
+
+    for (const location of tmOpsLocations) {
+      for (const subject of groupSubjects) {
+        const response = await handleFormRequest({
+          env: {
+            ...env,
+            CONTACT_TO_EMAIL_MANASSAS: 'manassas@timemission.com',
+            CONTACT_TO_EMAIL_MOUNT_PROSPECT: 'mtprospect@timemission.com',
+            CONTACT_TO_EMAIL_ORLAND_PARK: 'orlandpark@timemission.com',
+            FORM_RATE_LIMIT_EMAIL_HOUR: '100',
+          },
+          fetchImpl,
+          formType: 'contact',
+          request: formRequest('/api/contact', {
+            'cf-turnstile-response': 'token',
+            email: 'guest@example.com',
+            location,
+            message: 'Question about a group event',
+            name: 'Guest',
+            subject,
+          }),
+        });
+
+        expect(response.status).toBe(200);
+      }
+    }
+
+    const emailCalls = calls.filter((call) => call.url === 'https://api.resend.com/emails');
+    expect(emailCalls).toHaveLength(tmOpsLocations.length * groupSubjects.length);
+    expect(emailCalls.every((call) => call.body.to?.[0] === 'Groups@TM-Ops.com')).toBe(true);
+  });
+
+  it('keeps non-group TM Ops subjects on the location recipient', async () => {
+    const calls = [];
+    const fetchImpl = (url, init) => {
+      calls.push({
+        body: typeof init.body === 'string' ? JSON.parse(init.body) : null,
+        url: String(url),
+      });
+      return fetchOk(url);
+    };
+
+    const response = await handleFormRequest({
+      env: {
+        ...env,
+        CONTACT_TO_EMAIL_MANASSAS: 'manassas@timemission.com',
+        FORM_RATE_LIMIT_EMAIL_HOUR: '100',
+      },
+      fetchImpl,
+      formType: 'contact',
+      request: formRequest('/api/contact', {
+        'cf-turnstile-response': 'token',
+        email: 'guest@example.com',
+        location: 'manassas',
+        message: 'Question about an existing booking',
+        name: 'Guest',
+        subject: 'booking',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    expect(calls.at(-1).body).toMatchObject({
+      to: ['manassas@timemission.com'],
+    });
+  });
+
   it('subscribes newsletter opt-ins to Klaviyo before sending fallback email', async () => {
     const calls = [];
     const fetchImpl = (url, init) => {

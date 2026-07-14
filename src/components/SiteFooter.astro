@@ -13,6 +13,7 @@ import {
     locationPhoneHref,
     locationStatusBadge,
 } from '../lib/location-view';
+import { isTmOpsContactFormLocation } from '../lib/contact-routing-policy.mjs';
 
 interface Props {
     pageLocation?: LocationRecord | null;
@@ -23,6 +24,7 @@ const { pageLocation = null } = Astro.props;
 
 function contactHrefForLocation(loc: LocationRecord | null): string {
     if (!loc) return '/contact';
+    if (isTmOpsContactFormLocation(loc.slug)) return locationContactHref(loc);
     const email = String(loc.contact.email || '').trim();
     if (email) return `mailto:${email}`;
     return locationContactHref(loc);

@@ -1,3 +1,5 @@
+import { tmOpsGroupsRecipient } from '../../src/lib/contact-routing-policy.mjs';
+
 const MAX_BODY_BYTES = 16 * 1024;
 const MAX_FIELD_LENGTH = 2000;
 const RATE_LIMIT_KEY_VERSION = 'v1';
@@ -586,6 +588,8 @@ async function sendResendEmail({ env, fetchImpl, formType, message }) {
 }
 
 function contactRecipientsFor(env, data) {
+  const groupsRecipient = tmOpsGroupsRecipient(data.location, data.subject);
+  if (groupsRecipient) return [groupsRecipient];
   const locationRecipients = locationSpecificEnv(env, 'CONTACT_TO_EMAIL', data.location, 'CONTACT_TO_EMAIL');
   return splitEmails(locationRecipients);
 }

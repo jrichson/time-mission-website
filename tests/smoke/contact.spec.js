@@ -5,6 +5,8 @@ const { prepareSmokePage } = require('./network');
 
 const REPO_ROOT = path.resolve(__dirname, '../..');
 const locationRecords = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'data', 'locations.json'), 'utf8')).locations || [];
+const tmOpsLocations = ['manassas', 'orland-park', 'mount-prospect'];
+const formOnlyContactLocations = new Set(tmOpsLocations);
 const contactLocations = locationRecords.filter((loc) => {
   const contact = loc.contact || {};
   return !loc.externalUrl && (String(contact.phone || '').trim() || String(contact.email || '').trim());
@@ -42,6 +44,21 @@ test('Nashville publishes its direct email on contact surfaces', async ({ page }
   );
 });
 
+test('TM Ops location footers open the preselected contact form', async ({ page }) => {
+  for (const location of tmOpsLocations) {
+    await page.goto(`/${location}`);
+    const contactLink = page.locator('footer .footer-links a', { hasText: 'Contact Us' });
+    await expect(contactLink).toHaveAttribute(
+      'href',
+      `/${location}/contact#location=${location}&type=updates`,
+    );
+    await expect(contactLink).toHaveAttribute(
+      'data-tm-location-base-href',
+      `/contact#location=${location}&type=updates`,
+    );
+  }
+});
+
 test('contact page only shows direct info for the selected location', async ({ page }) => {
   await page.goto('/contact#location=houston&type=updates');
 
@@ -57,7 +74,8 @@ test('contact page only shows direct info for the selected location', async ({ p
   await expect(page.locator('[data-location-contact-card]')).toBeVisible();
   await expect(page.locator('[data-location-contact-name]')).toHaveText('Orland Park');
   await expect(page.locator('[data-location-contact-phone]')).toHaveText('(708) 294-8711');
-  await expect(page.locator('[data-location-contact-email]')).toHaveText('OrlandPark@TimeMission.com');
+  await expect(page.locator('[data-location-contact-email-row]')).toBeHidden();
+  await expect(page.locator('[data-location-contact-card]')).not.toContainText('OrlandPark@TimeMission.com');
   await expect(page.locator('[data-location-contact-card]')).not.toContainText('Houston');
 
   await page.locator('#location').selectOption('dallas');
@@ -109,7 +127,7 @@ test('contact page displays configured direct info for every location that has i
       await expect(page.locator('[data-location-contact-phone-row]')).toBeHidden();
     }
 
-    if (email) {
+    if (email && !formOnlyContactLocations.has(loc.slug)) {
       await expect(page.locator('[data-location-contact-email-row]')).toBeVisible();
       await expect(page.locator('[data-location-contact-email]')).toHaveText(email);
     } else {
