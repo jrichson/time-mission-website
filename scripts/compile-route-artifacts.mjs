@@ -13,7 +13,10 @@ const routesPath = path.join(root, 'src', 'data', 'routes.json');
 const locationsPath = path.join(root, 'data', 'locations.json');
 const outPath = path.join(root, 'src', 'data', 'site', 'astro-rendered-output-files.json');
 const routeManifestPath = path.join(root, 'functions', '_shared', 'location-route-manifest.mjs');
-const specialStaticOutputFiles = new Set(['404.html']);
+const specialStaticOutputFiles = new Set([
+  '404.html',
+  'group-form-thank-you/jotform.html',
+]);
 
 function walkAstroFiles(dir, base = '') {
   const out = [];
@@ -57,6 +60,11 @@ function isPipedriveFormUrl(value) {
   return typeof value === 'string' && value.includes('webforms.pipedrive.com');
 }
 
+function isOnSiteGroupInquiryUrl(value) {
+  return typeof value === 'string'
+    && /^\/groups\/inquire\/[a-z0-9-]+\/[a-z0-9-]+\/?$/.test(value);
+}
+
 function groupFormThankYouOutputFiles(locationsDocument) {
   const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
   const files = [];
@@ -67,8 +75,23 @@ function groupFormThankYouOutputFiles(locationsDocument) {
       ? location.groupFormUrls
       : {};
     for (const [formKey, url] of Object.entries(formUrls)) {
-      if (!isPipedriveFormUrl(url)) continue;
+      if (!isPipedriveFormUrl(url) && !isOnSiteGroupInquiryUrl(url)) continue;
       files.push(`group-form-thank-you/${slug}/${formKey}.html`);
+    }
+  }
+  return files;
+}
+
+function groupInquiryOutputFiles(locationsDocument) {
+  const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
+  const files = [];
+  for (const location of locations) {
+    const formUrls = location.groupFormUrls && typeof location.groupFormUrls === 'object'
+      ? location.groupFormUrls
+      : {};
+    for (const url of Object.values(formUrls)) {
+      if (!isOnSiteGroupInquiryUrl(url)) continue;
+      files.push(`${url.replace(/^\/+|\/+$/g, '')}.html`);
     }
   }
   return files;
@@ -84,7 +107,11 @@ for (const out of staticOutputFiles) {
   }
 }
 
-const outputFiles = [...new Set([...staticOutputFiles, ...groupFormThankYouOutputFiles(locationsDocument)])].sort();
+const outputFiles = [...new Set([
+  ...staticOutputFiles,
+  ...groupFormThankYouOutputFiles(locationsDocument),
+  ...groupInquiryOutputFiles(locationsDocument),
+])].sort();
 
 if (errors.length) {
   console.error('compile-route-artifacts failed:');

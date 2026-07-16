@@ -73,13 +73,13 @@
         "1027"
       ],
       "groupFormUrls": {
-        "default": "https://webforms.pipedrive.com/f/bXEQpsMHJsOtiIdTnIOIuMINAj2jCuMpbJftCRoKl6naQBGsW8F6S0WOShrlXluKB5",
-        "birthdays": "https://webforms.pipedrive.com/f/6xKWqqzjoNTaJIqvmk5k2tRDTavPGnfToLuCSJCsKNa5PmDkPpfEWTYgx2MiTMmQjp",
-        "corporate": "https://webforms.pipedrive.com/f/cB8Sz5ot9kA8JtNcE94AnSTFsbTniA4uo164AfyfQQiEUpFkQsd69VgGbk3YXE0syD",
-        "field-trips": "https://webforms.pipedrive.com/f/6xMNvdcgOovmw2sKGrNi5BlnYH2OZXFFQLriH93v2osZRKm2DjvgYS8uq1QWw3w8aT",
-        "bachelor-ette": "https://webforms.pipedrive.com/f/6xQQ09bcb0js1I6hTdbWpRqgTSmYVdcrOCpsxG2cNBy4N128E5YWrEQiPOyt66osEP",
-        "private-events": "https://webforms.pipedrive.com/f/6GXSuNhFZD5Ep1YKjgbkzhtyyHT3rtD5bFu3SenbU7WtdMBlNK2ii0rTXXxlXLV5o7",
-        "holidays": "https://webforms.pipedrive.com/f/6rGnRlGiXrnS1NPUnGIZGiMCYrvpr8NrD3AdFSYa2I6qPMyRLsVhIFNrf2JM3vwmJB"
+        "default": "/groups/inquire/mount-prospect/default",
+        "birthdays": "/groups/inquire/mount-prospect/birthdays",
+        "corporate": "/groups/inquire/mount-prospect/corporate",
+        "field-trips": "/groups/inquire/mount-prospect/field-trips",
+        "bachelor-ette": "/groups/inquire/mount-prospect/bachelor-ette",
+        "private-events": "/groups/inquire/mount-prospect/private-events",
+        "holidays": "/groups/inquire/mount-prospect/holidays"
       },
       "navLabel": "IL – Mount Prospect",
       "mapUrl": "https://maps.google.com/?q=132+Randhurst+Village+Drive+Mount+Prospect+IL+60056",
@@ -510,13 +510,13 @@
         "1025"
       ],
       "groupFormUrls": {
-        "default": "https://webforms.pipedrive.com/f/6WfZe3FsT5CpyAGlGQNeSnD8PZnbw9PpoyBG6Q1lAtqvD4ribAKRsWWceRYG0npA79",
-        "birthdays": "https://webforms.pipedrive.com/f/6N8EVdwKhZ3emAlRGdOmUEk7TYKvBJm0eSzDnHwSrtksQPBFv9MmERzqt5UAPZYMJZ",
-        "corporate": "https://webforms.pipedrive.com/f/64NrjaZAs4GrLYSqpDDV0mzG46uGMN5cXrzEoAIjKKghJOzCRVmfw4mWkghflYR3Qn",
-        "field-trips": "https://webforms.pipedrive.com/f/73R7nQP4WEUC6gSinuhaFxCQ1QY1csAtXLwP7HumWL1oK3juIbEGdnPMyK7hAxRsT9",
-        "bachelor-ette": "https://webforms.pipedrive.com/f/ckkQF1aDmukXN8ONLfXIm42jCyUsBrQWGu9ahvtP9APRYBFhRG3WIiWLoy60tEZXY7",
-        "private-events": "https://webforms.pipedrive.com/f/6rClhKJC878Zy4wEQE4nx3rxHFl2oN1XCAwr5J647D5e6JZyz2dBibV21rAvu5pkn9",
-        "holidays": "https://webforms.pipedrive.com/f/63f1HEKkrC42GkAS68wtfh9HcHWyi8c6TlESzmjbi3nKuXQ3xiIQXnr9WhZuTX5wlR"
+        "default": "/groups/inquire/manassas/default",
+        "birthdays": "/groups/inquire/manassas/birthdays",
+        "corporate": "/groups/inquire/manassas/corporate",
+        "field-trips": "/groups/inquire/manassas/field-trips",
+        "bachelor-ette": "/groups/inquire/manassas/bachelor-ette",
+        "private-events": "/groups/inquire/manassas/private-events",
+        "holidays": "/groups/inquire/manassas/holidays"
       },
       "navLabel": "VA – Manassas",
       "mapUrl": "https://maps.google.com/?q=8300+Sudley+Rd+Suite+A2+Manassas+VA+20109",
@@ -825,13 +825,13 @@
         "1025"
       ],
       "groupFormUrls": {
-        "default": "https://webforms.pipedrive.com/f/6qn4HwjvjuHH9aTSI0opXZlY9S6zSaww1No8AKIHefxbmVVTrc2EWOy4D4SWAztcVJ",
-        "birthdays": "https://webforms.pipedrive.com/f/cealFU9H4iBjCwAYVuYu3cD2g1DA23TiYaNMI43BAFymCviOhdYqZvYMJB7HXUz9VV",
-        "corporate": "https://webforms.pipedrive.com/f/6N4XiyoDwhtosxmaSQyA8NjzKCVB9VXrPM8fXFI8aM2soYJh5aaV5AgT6IGV7nTInp",
-        "field-trips": "https://webforms.pipedrive.com/f/6NfIZkeDSHm6WL1Aj9drvKC9JjIp9CFDz3bS8aJN6aYNqflvCTiCwT5q4pm6Vu6FvZ",
-        "bachelor-ette": "https://webforms.pipedrive.com/f/clLuJoDhuRydeXauTqwp1lJ8DqEeWOjV9mQ8cfWIRQPZ2ok7o0dzQtcnNlvFuJpLb5",
-        "private-events": "https://webforms.pipedrive.com/f/czCBoZIYCV9RLnYgcPalyzr4UrH8eF7EV2LwETaisfp3lEkkuVtnZ6UqTjiZ9w9pSz",
-        "holidays": "https://webforms.pipedrive.com/f/6xQQrLhTsFkAoB1Os9dMge6hvvHKlouU8Kz12XSFqwTG4J6HRojT9rKKIMEKMERX0L"
+        "default": "/groups/inquire/orland-park/default",
+        "birthdays": "/groups/inquire/orland-park/birthdays",
+        "corporate": "/groups/inquire/orland-park/corporate",
+        "field-trips": "/groups/inquire/orland-park/field-trips",
+        "bachelor-ette": "/groups/inquire/orland-park/bachelor-ette",
+        "private-events": "/groups/inquire/orland-park/private-events",
+        "holidays": "/groups/inquire/orland-park/holidays"
       },
       "navLabel": "IL – Orland Park",
       "mapUrl": "https://maps.google.com/?q=66+Orland+Square+Dr+Suite+C+Orland+Park+IL+60462",

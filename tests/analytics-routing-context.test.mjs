@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createHash, webcrypto } from 'node:crypto';
 import {
+  createAnchor,
   createBrowserContext,
   locationRecords,
   runScript,
@@ -73,6 +74,9 @@ function createGroupThankYouCarrier({
   locationName = 'Orland Park',
   region = 'us',
   formSubject = 'corporate',
+  contextSource = '',
+  provider = '',
+  formName = '',
 } = {}) {
   return {
     dataset: {
@@ -80,6 +84,9 @@ function createGroupThankYouCarrier({
       locationName,
       region,
       formSubject,
+      contextSource,
+      provider,
+      formName,
     },
   };
 }
@@ -233,6 +240,62 @@ describe('analytics routing context', () => {
     expect(successes[0].parameters).not.toHaveProperty('EMAIL');
     expect(successes[0].parameters).not.toHaveProperty('PHONE');
     expect(successes[0].parameters).not.toHaveProperty('MESSAGE');
+  });
+
+  it('tracks Jotform group completions from the non-PII redirect context', () => {
+    const sessionStorage = createStorage();
+    const carrier = createGroupThankYouCarrier({ contextSource: 'query' });
+    const { context, window, document } = createBrowserContext(grantedConsentWindow({ sessionStorage }));
+    window.location.origin = 'https://www.timemission.com';
+    window.location.pathname = '/group-form-thank-you/jotform';
+    window.location.search = '?location=Orland%20Park&source=https%3A%2F%2Fwww.timemission.com%2Fgroups%2Finquire%2Forland-park%2Fcorporate';
+    document.querySelector = (selector) => {
+      if (selector === '[data-tm-group-form-thank-you]') return carrier;
+      return null;
+    };
+
+    runScript('js/analytics.js', context);
+    runScript('js/group-form-thank-you.js', context);
+    runScript('js/group-form-thank-you.js', context);
+
+    const successes = window.dataLayer.filter((entry) => entry && entry.event_name === 'GROUP_FORM_SUBMIT_SUCCESS');
+    expect(successes).toHaveLength(1);
+    expect(successes[0].parameters).toMatchObject({
+      PROVIDER: 'jotform',
+      FORM_NAME: 'jotform_group',
+      FORM_SUBJECT: 'corporate',
+      LOCATION_SLUG: 'orland-park',
+      LOCATION_NAME: 'Orland Park',
+      REGION: 'us',
+    });
+    expect(successes[0].parameters).not.toHaveProperty('EMAIL');
+    expect(successes[0].parameters).not.toHaveProperty('PHONE');
+    expect(successes[0].parameters).not.toHaveProperty('MESSAGE');
+  });
+
+  it('distinguishes the group-form telephone link from other phone clicks', () => {
+    const { context, window, document } = createBrowserContext(grantedConsentWindow());
+    document.body.dataset.location = 'manassas';
+    const anchor = createAnchor('tel:+18137735250', {
+      attrs: { 'data-tm-analytics-cta': 'group_form_phone' },
+    });
+
+    runScript('js/analytics.js', context);
+    document.dispatchEvent({
+      type: 'click',
+      target: {
+        closest(selector) {
+          return selector === 'a[href]' ? anchor : null;
+        },
+      },
+    });
+
+    const phoneClick = window.dataLayer.find((entry) => entry && entry.event_name === 'PHONE_CLICK');
+    expect(phoneClick.parameters).toMatchObject({
+      CTA_ID: 'group_form_phone',
+      LINK_PATH: 'tel',
+      LOCATION_SLUG: 'manassas',
+    });
   });
 
   it('pushes newsletter registrations to GTM with hashed user data after accepted submission', async () => {

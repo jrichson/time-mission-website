@@ -1,0 +1,173 @@
+---
+import { JOTFORM_GROUP_FORM_ID, type GroupFormKey } from '../lib/group-form-context';
+
+interface Props {
+    formKey: GroupFormKey;
+    formLabel: string;
+    locationName: string;
+    locationSlug: string;
+}
+
+const {
+    formKey,
+    formLabel,
+    locationName,
+    locationSlug,
+} = Astro.props;
+
+const formAction = `https://submit.jotform.com/submit/${JOTFORM_GROUP_FORM_ID}`;
+---
+
+<section class="group-inquiry" aria-labelledby="group-inquiry-title">
+    <div class="group-inquiry__grid">
+        <aside class="group-inquiry__intro">
+            <a class="group-inquiry__back" href={formKey === 'default' ? '/groups' : `/groups/${formKey}`}>
+                <span aria-hidden="true">←</span>
+                Back to group events
+            </a>
+            <p class="group-inquiry__eyebrow">{locationName} / Group inquiry</p>
+            <h1 id="group-inquiry-title">Let’s build your <span>{formLabel}</span></h1>
+            <p class="group-inquiry__lede">
+                Tell us what you have in mind. A Time Mission group specialist will follow up with availability and next steps.
+            </p>
+
+            <div class="group-inquiry__callout">
+                <span class="group-inquiry__callout-index" aria-hidden="true">01</span>
+                <div>
+                    <p>Rather talk it through?</p>
+                    <a
+                        href="tel:+18137735250"
+                        data-tm-analytics-cta="group_form_phone"
+                        rel="nofollow"
+                    >
+                        Call 813-773-5250
+                    </a>
+                    <span>Group Specialist team</span>
+                </div>
+            </div>
+        </aside>
+
+        <div class="group-inquiry__form-shell">
+            <div class="group-inquiry__form-heading">
+                <div>
+                    <p>Event details</p>
+                    <h2>Start the conversation</h2>
+                </div>
+                <span><strong>*</strong> Required</span>
+            </div>
+
+            <form
+                class="group-inquiry-form"
+                action={formAction}
+                method="post"
+                name={`form_${JOTFORM_GROUP_FORM_ID}`}
+                id={JOTFORM_GROUP_FORM_ID}
+                accept-charset="utf-8"
+                autocomplete="on"
+                data-tm-group-inquiry-form
+                data-form-subject={formKey}
+                data-location-name={locationName}
+                data-location-slug={locationSlug}
+            >
+                <input type="hidden" name="formID" value={JOTFORM_GROUP_FORM_ID} />
+                <input type="hidden" id="JWTContainer" value="" />
+                <input type="hidden" id="cardinalOrderNumber" value="" />
+                <input type="hidden" id="jsExecutionTracker" name="jsExecutionTracker" value="build-date-1784236513760" />
+                <input type="hidden" id="submitSource" name="submitSource" value="direct" />
+                <input type="hidden" id="submitDate" name="submitDate" value="" />
+                <input type="hidden" id="buildDate" name="buildDate" value="1784236513760" />
+                <input type="hidden" name="uploadServerUrl" value="https://upload.jotform.com/upload" />
+                <input type="hidden" name="eventObserver" value="1" />
+                <input type="hidden" id="input_21" name="q21_location" value={locationName} />
+                <input type="hidden" id="input_23" name="q23_typeA" value="" />
+                <input type="hidden" id="input_20" name="q20_dealTitle" value="" />
+                <input type="hidden" id="month_27" name="q27_date[month]" value="" />
+                <input type="hidden" id="day_27" name="q27_date[day]" value="" />
+                <input type="hidden" id="year_27" name="q27_date[year]" value="" />
+
+                <div class="group-inquiry-form__field group-inquiry-form__field--wide">
+                    <label for="input_8">First &amp; last name <span aria-hidden="true">*</span></label>
+                    <input
+                        type="text"
+                        id="input_8"
+                        name="q8_firstampamp"
+                        autocomplete="name"
+                        required
+                    />
+                </div>
+
+                <div class="group-inquiry-form__field">
+                    <label for="input_3">Email <span aria-hidden="true">*</span></label>
+                    <input
+                        type="email"
+                        id="input_3"
+                        name="q3_q3_email1"
+                        autocomplete="email"
+                        inputmode="email"
+                        required
+                    />
+                </div>
+
+                <div class="group-inquiry-form__field">
+                    <label for="input_9_full">Phone number <span aria-hidden="true">*</span></label>
+                    <input
+                        type="tel"
+                        id="input_9_full"
+                        name="q9_phoneNumber[full]"
+                        autocomplete="tel"
+                        inputmode="tel"
+                        placeholder="(000) 000-0000"
+                        required
+                    />
+                </div>
+
+                <div class="group-inquiry-form__field group-inquiry-form__field--wide">
+                    <label for="input_10">Organization <span>Optional</span></label>
+                    <input
+                        type="text"
+                        id="input_10"
+                        name="q10_organization"
+                        autocomplete="organization"
+                    />
+                </div>
+
+                <div class="group-inquiry-form__field group-inquiry-form__field--wide">
+                    <label for="input_17">Event details <span>Optional</span></label>
+                    <textarea
+                        id="input_17"
+                        name="q17_eventDetails"
+                        rows="6"
+                        placeholder="Estimated group size, preferred date, and anything else we should know."
+                    ></textarea>
+                </div>
+
+                <div class="group-inquiry-form__captcha group-inquiry-form__field--wide">
+                    <p>Please verify that you are human <span aria-hidden="true">*</span></p>
+                    <div
+                        id="hcaptcha_input_19"
+                        class="h-captcha"
+                        data-sitekey="772f4a50-7161-425e-8cd5-4d7e361ab765"
+                        data-callback="hcaptchaCallbackinput_19"
+                        data-expired-callback="hcaptchaExpiredCallbackinput_19"
+                    ></div>
+                    <input type="hidden" id="input_19" name="hcaptcha_visible" value="" required />
+                    <p class="group-inquiry-form__captcha-status" data-captcha-status aria-live="polite"></p>
+                </div>
+
+                <div class="group-inquiry-form__actions group-inquiry-form__field--wide">
+                    <button id="input_6" type="submit">
+                        Send inquiry
+                        <span aria-hidden="true">↗</span>
+                    </button>
+                    <p>By submitting, you agree that our team may contact you about this event request.</p>
+                </div>
+
+                <div class="group-inquiry-form__honeypot" aria-hidden="true">
+                    <label for="group-inquiry-website">Leave this field empty</label>
+                    <input id="group-inquiry-website" type="text" name="website" value="" tabindex="-1" autocomplete="off" />
+                </div>
+                <input type="hidden" class="simple_spc" name="simple_spc" value={`${JOTFORM_GROUP_FORM_ID}-${JOTFORM_GROUP_FORM_ID}`} />
+            </form>
+        </div>
+    </div>
+</section>

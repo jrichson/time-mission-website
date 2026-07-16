@@ -51,6 +51,30 @@ https://www.timemission.com/group-form-thank-you/{location_slug}/{form_subject}
 
 The generated pages emit `GROUP_FORM_SUBMIT_SUCCESS` with `parameters.LOCATION_SLUG`, `parameters.LOCATION_NAME`, `parameters.REGION`, `parameters.FORM_NAME`, `parameters.FORM_SUBJECT`, and `parameters.PROVIDER`. Use `parameters.LOCATION_SLUG` for location routing and `parameters.FORM_SUBJECT` for group-form type segmentation.
 
+## Shared Jotform group form
+
+Form `261936424348059` is rendered from its HTML source on the Time Mission site at:
+
+```text
+https://www.timemission.com/groups/inquire/{location_slug}/{form_subject}
+```
+
+The site fills Jotform's existing hidden `location` and `typeA` fields with the selected location and the non-PII on-site form URL. In Jotform, set **Settings → Thank You Page → Redirect to an external link after submission** to this exact URL and leave **Redirect with HTTP POST** off:
+
+```text
+https://www.timemission.com/group-form-thank-you/jotform?location={location}&source={typeA}
+```
+
+Jotform replaces `{location}` and `{typeA}` from the fields' unique names. The success page validates both values against the three allowed locations and seven controlled group-form subjects before it emits:
+
+- `event: "GROUP_FORM_SUBMIT_SUCCESS"`
+- `parameters.PROVIDER: "jotform"`
+- `parameters.FORM_NAME: "jotform_group"`
+- `parameters.LOCATION_SLUG`: `manassas`, `mount-prospect`, or `orland-park`
+- `parameters.FORM_SUBJECT`: the controlled event-type slug
+
+The top Group Specialist telephone link remains in the Time Mission page rather than a cross-origin iframe. It emits `PHONE_CLICK` with `parameters.CTA_ID: "group_form_phone"`; use the event's top-level `page_path` and `parameters.LOCATION_SLUG` to compare calls by route/location. The phone number itself is intentionally not sent to GTM.
+
 ## Staging vs production
 
 - Use separate containers or workspaces per environment when possible.

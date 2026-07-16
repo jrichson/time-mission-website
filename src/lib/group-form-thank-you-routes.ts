@@ -1,4 +1,9 @@
 import { allLocations, type LocationRecord } from '../data/locations';
+import {
+    GROUP_FORM_KEYS,
+    formLabelFor,
+    isGroupInquiryLocationSlug,
+} from './group-form-context';
 
 export type GroupFormThankYouPath = {
     location: LocationRecord;
@@ -7,19 +12,7 @@ export type GroupFormThankYouPath = {
     canonicalPath: string;
 };
 
-const FORM_LABELS: Record<string, string> = {
-    default: 'group event',
-    birthdays: 'birthday party',
-    corporate: 'corporate event',
-    'field-trips': 'field trip',
-    'bachelor-ette': 'bachelor or bachelorette event',
-    'private-events': 'private event',
-    holidays: 'holiday party',
-};
-
-export function formLabelFor(key: string): string {
-    return FORM_LABELS[key] || key.replace(/-/g, ' ');
-}
+export { formLabelFor } from './group-form-context';
 
 export function isPipedriveUrl(value: unknown): boolean {
     return typeof value === 'string' && value.includes('webforms.pipedrive.com');
@@ -29,13 +22,19 @@ export function groupFormThankYouPaths(): GroupFormThankYouPath[] {
     const paths: GroupFormThankYouPath[] = [];
     for (const location of allLocations) {
         const formUrls = location.groupFormUrls || {};
-        for (const [formKey, url] of Object.entries(formUrls)) {
-            if (!isPipedriveUrl(url)) continue;
+        const locationSlug = location.slug || location.id;
+        const formKeys = new Set(Object.keys(formUrls));
+        if (isGroupInquiryLocationSlug(locationSlug)) {
+            for (const formKey of GROUP_FORM_KEYS) formKeys.add(formKey);
+        }
+        for (const formKey of formKeys) {
+            const url = formUrls[formKey];
+            if (!isPipedriveUrl(url) && !isGroupInquiryLocationSlug(locationSlug)) continue;
             paths.push({
                 location,
                 formKey,
                 formLabel: formLabelFor(formKey),
-                canonicalPath: `/group-form-thank-you/${location.slug || location.id}/${formKey}`,
+                canonicalPath: `/group-form-thank-you/${locationSlug}/${formKey}`,
             });
         }
     }

@@ -1,0 +1,46 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { definePage } from '../../lib/define-page';
+
+const page = definePage({ canonicalPath: '/group-form-thank-you/jotform' });
+const landingHead = {
+    metaTitle: 'Group request received | Time Mission',
+    metaDescription: 'Time Mission received your group event request and will follow up with next steps.',
+    robots: 'noindex, nofollow',
+    canonicalOverride: null,
+    ogImage: '/assets/photos/groups/corporate-events-1200.webp',
+    twitterImage: '/assets/photos/groups/corporate-events-1200.webp',
+};
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyClass="has-noise"
+    landingHead={landingHead}
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-group-form-thank-you.css?v=1" />
+    </Fragment>
+
+    <section
+        class="group-form-thank-you"
+        data-tm-group-form-thank-you
+        data-context-source="query"
+    >
+        <div class="group-form-thank-you__inner">
+            <p class="group-form-thank-you__eyebrow" data-group-thank-you-eyebrow>Group event request</p>
+            <h1>Request Received</h1>
+            <p data-group-thank-you-copy>
+                Thanks. The Time Mission team received your group event request and will follow up with next steps.
+            </p>
+            <div class="group-form-thank-you__actions" aria-label="Next steps">
+                <a href="/groups">Back to group events</a>
+                <a href="/locations" data-group-thank-you-location-link>View locations</a>
+            </div>
+        </div>
+    </section>
+
+    <Fragment slot="after-site-scripts">
+        <script is:inline defer src="/js/group-form-thank-you.js?v=2"></script>
+    </Fragment>
+</SiteLayout>

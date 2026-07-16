@@ -1,0 +1,61 @@
+---
+import GroupInquiryForm from '../../../../components/GroupInquiryForm.astro';
+import SiteLayout from '../../../../layouts/SiteLayout.astro';
+import { definePage } from '../../../../lib/define-page';
+import {
+    groupInquiryPaths,
+    type GroupInquiryPath,
+} from '../../../../lib/group-form-context';
+
+export function getStaticPaths() {
+    return groupInquiryPaths().map((entry) => ({
+        params: {
+            location: entry.location.slug || entry.location.id,
+            form: entry.formKey,
+        },
+        props: entry,
+    }));
+}
+
+const {
+    location,
+    formKey,
+    formLabel,
+    canonicalPath,
+} = Astro.props as GroupInquiryPath;
+
+const page = definePage({ canonicalPath });
+const locationSlug = location.slug || location.id;
+const locationName = location.shortName || location.name;
+const landingHead = {
+    metaTitle: `Plan a ${formLabel} | Time Mission ${locationName}`,
+    metaDescription: `Tell the Time Mission ${locationName} group team about your ${formLabel} and get availability and next steps.`,
+    robots: 'noindex, nofollow',
+    canonicalOverride: null,
+    ogImage: '/assets/photos/groups/corporate-events-1200.webp',
+    twitterImage: '/assets/photos/groups/corporate-events-1200.webp',
+};
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyClass="has-noise group-inquiry-page"
+    bodyDataLocation={locationSlug}
+    landingHead={landingHead}
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-group-inquiry.css?v=1" />
+    </Fragment>
+
+    <GroupInquiryForm
+        formKey={formKey}
+        formLabel={formLabel}
+        locationName={locationName}
+        locationSlug={locationSlug}
+    />
+
+    <Fragment slot="after-site-scripts">
+        <script is:inline src="/js/group-inquiry-form.js?v=1"></script>
+        <script is:inline async defer src="https://hcaptcha.com/1/api.js"></script>
+    </Fragment>
+</SiteLayout>

@@ -511,7 +511,7 @@
 
                     if (href.indexOf('tel:') === 0) {
                         track('phone_click', {
-                            cta_id: 'phone_link',
+                            cta_id: a.getAttribute('data-tm-analytics-cta') || 'phone_link',
                             link_path: 'tel',
                         });
                         return;

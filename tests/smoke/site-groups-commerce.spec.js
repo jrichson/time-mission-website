@@ -1,7 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const {
   REPO_ROOT,
-  expectPopupUrl,
   fingerprintAnalyticsLabels,
   gotoHome,
   groupCheckoutUrl,
@@ -20,13 +19,6 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('group CTAs resolve to location-data form URLs for the selected location', async ({ page }) => {
-  await page.route('https://webforms.pipedrive.com/**', async (route) => {
-    await route.fulfill({
-      contentType: 'text/html',
-      body: '<!doctype html><title>Group inquiry</title><main>Group inquiry</main>',
-    });
-  });
-
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
   const expectedHref = groupFormUrl('manassas', 'corporate');
@@ -50,32 +42,23 @@ test('group CTAs resolve to location-data form URLs for the selected location', 
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', expectedHref);
   await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
 
-  await expectPopupUrl(page, () => page.locator('#ticketBookBtn').click(), expectedHref);
-  await expect(page).toHaveURL(/\/groups\/corporate$/);
+  await page.locator('#ticketBookBtn').click();
+  await expect(page).toHaveURL(new RegExp(`${expectedHref}$`));
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('corporate event');
 });
 
 test('group cards open the selected location event form as a direct link', async ({ page }) => {
-  await page.route('https://webforms.pipedrive.com/**', async (route) => {
-    await route.fulfill({
-      contentType: 'text/html',
-      body: '<!doctype html><title>Group inquiry</title><main>Group inquiry</main>',
-    });
-  });
-
   await page.goto('/groups.html');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
   await page.evaluate(() => window.TM.select('mount-prospect'));
 
   const expectedHref = groupFormUrl('mount-prospect', 'corporate');
-  await expectPopupUrl(
-    page,
-    () => page
-      .locator('.event-type-actions [data-tm-booking-kind="groups"][data-tm-group-type="corporate"]')
-      .first()
-      .click(),
-    expectedHref
-  );
-  await expect(page).toHaveURL(/\/groups\.html$/);
+  await page
+    .locator('.event-type-actions [data-tm-booking-kind="groups"][data-tm-group-type="corporate"]')
+    .first()
+    .click();
+  await expect(page).toHaveURL(new RegExp(`${expectedHref}$`));
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('corporate event');
 });
 
 test('group event cards expose ticket booking and group inquiry triggers', async ({ page }) => {
@@ -184,24 +167,39 @@ test('Houston and Orland Park group CTAs resolve to location-data forms', async 
 });
 
 test('main groups page inquiry CTAs use the default location form', async ({ page }) => {
-  await page.route('https://webforms.pipedrive.com/**', async (route) => {
-    await route.fulfill({
-      contentType: 'text/html',
-      body: '<!doctype html><title>Group inquiry</title><main>Group inquiry</main>',
-    });
-  });
-
   await page.goto('/groups.html');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
   await page.evaluate(() => window.TM.select('manassas'));
 
   const expectedHref = groupFormUrl('manassas', 'default');
-  await expectPopupUrl(
-    page,
-    () => page.locator('.hero-cta [data-tm-booking-kind="groups"]').click(),
-    expectedHref
-  );
-  await expect(page).toHaveURL(/\/groups\.html$/);
+  await page.locator('.hero-cta [data-tm-booking-kind="groups"]').click();
+  await expect(page).toHaveURL(new RegExp(`${expectedHref}$`));
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('group event');
+});
+
+test('on-site group inquiry carries Jotform attribution and tracks the call option', async ({ page }) => {
+  const expectedPath = groupFormUrl('manassas', 'corporate');
+  await page.goto(expectedPath);
+
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
+  await expect(page.locator('body')).toHaveAttribute('data-location', 'manassas');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('corporate event');
+
+  const form = page.locator('[data-tm-group-inquiry-form]');
+  await expect(form).toHaveAttribute('action', 'https://submit.jotform.com/submit/261936424348059');
+  await expect(form.locator('[name="q21_location"]')).toHaveValue('Manassas');
+  await expect(form.locator('[name="q23_typeA"]')).toHaveValue(new RegExp(`${expectedPath}$`));
+
+  const callLink = page.locator('[data-tm-analytics-cta="group_form_phone"]');
+  await expect(callLink).toHaveAttribute('href', 'tel:+18137735250');
+  await callLink.dispatchEvent('click');
+
+  const phoneEvent = await page.evaluate(() => window.dataLayer.find(
+    (entry) => entry && entry.event_name === 'PHONE_CLICK' && entry.parameters?.CTA_ID === 'group_form_phone',
+  ));
+  expect(phoneEvent).toBeTruthy();
+  expect(phoneEvent.page_path).toBe(expectedPath);
+  expect(phoneEvent.parameters.LINK_PATH).toBe('tel');
 });
 
 test('Dallas group CTAs stay disabled when location data has blank group rows', async ({ page }) => {

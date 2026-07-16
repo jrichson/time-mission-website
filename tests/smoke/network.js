@@ -7,6 +7,11 @@ const EXTERNAL_MARKETING_URLS = [
   /https:\/\/.*\.klaviyo\.com\/.*/i,
 ];
 
+const EXTERNAL_FORM_URLS = [
+  /https:\/\/hcaptcha\.com\/.*/i,
+  /https:\/\/.*\.hcaptcha\.com\/.*/i,
+];
+
 async function blockHeavyMedia(page) {
   await page.route(VIDEO_MEDIA_RE, (route) => route.abort());
 }
@@ -17,12 +22,20 @@ async function blockExternalMarketing(page) {
   }
 }
 
+async function blockExternalForms(page) {
+  for (const pattern of EXTERNAL_FORM_URLS) {
+    await page.route(pattern, (route) => route.abort());
+  }
+}
+
 async function prepareSmokePage(page) {
   await blockHeavyMedia(page);
   await blockExternalMarketing(page);
+  await blockExternalForms(page);
 }
 
 module.exports = {
+  blockExternalForms,
   blockExternalMarketing,
   blockHeavyMedia,
   prepareSmokePage,
