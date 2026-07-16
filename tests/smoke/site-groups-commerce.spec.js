@@ -175,6 +175,7 @@ test('main groups page inquiry CTAs use the default location form', async ({ pag
   await page.locator('.hero-cta [data-tm-booking-kind="groups"]').click();
   await expect(page).toHaveURL(new RegExp(`${expectedHref}$`));
   await expect(page.getByRole('heading', { level: 1 })).toContainText('group event');
+  await expect(page.locator('[name="q20_dealTitle"]')).toHaveValue(/\/ general-group-inquiry \/ FormDate:/);
 });
 
 test('on-site group inquiry carries Jotform attribution and tracks the call option', async ({ page }) => {
@@ -200,6 +201,11 @@ test('on-site group inquiry carries Jotform attribution and tracks the call opti
   expect(phoneEvent).toBeTruthy();
   expect(phoneEvent.page_path).toBe(expectedPath);
   expect(phoneEvent.parameters.LINK_PATH).toBe('tel');
+});
+
+test('Mount Prospect submits the exact Pipedrive location option', async ({ page }) => {
+  await page.goto(groupFormUrl('mount-prospect', 'corporate'));
+  await expect(page.locator('[name="q21_location"]')).toHaveValue('Mt Prospect');
 });
 
 test('Dallas group CTAs stay disabled when location data has blank group rows', async ({ page }) => {

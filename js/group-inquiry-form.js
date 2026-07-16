@@ -51,18 +51,20 @@
         var dates = dateParts();
         var locationName = cleanText(form.dataset.locationName, 120);
         var locationSlug = cleanText(form.dataset.locationSlug, 80);
+        var pipedriveLocationName = cleanText(form.dataset.pipedriveLocationName || locationName, 120);
         var fullName = cleanText((form.querySelector('#input_8') || {}).value, 120);
         var organization = cleanText((form.querySelector('#input_10') || {}).value, 120);
         var subject = cleanText(form.dataset.formSubject, 80);
+        var dealSubject = subject === 'default' ? 'general-group-inquiry' : subject;
         var leadLabel = organization || fullName || locationName;
 
         setValue(form, '#submitDate', new Date().toISOString());
-        setValue(form, '#input_21', locationName);
+        setValue(form, '#input_21', pipedriveLocationName);
         setValue(form, '#input_23', sourcePageUrl());
         setValue(
             form,
             '#input_20',
-            locationCode(locationSlug) + ': ' + leadLabel + ' / ' + subject + ' / FormDate: '
+            locationCode(locationSlug) + ': ' + leadLabel + ' / ' + dealSubject + ' / FormDate: '
                 + dates.month + '-' + dates.day + '-' + dates.year
         );
         setValue(form, '#month_27', dates.month);

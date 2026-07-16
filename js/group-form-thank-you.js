@@ -37,6 +37,7 @@
             return null;
         }
         var requestedLocation = normalizeToken(params.get('location'));
+        if (requestedLocation === 'mt-prospect') requestedLocation = 'mount-prospect';
         var source = String(params.get('source') || '');
         var pathname = '';
         try {

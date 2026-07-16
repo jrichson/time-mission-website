@@ -248,7 +248,7 @@ describe('analytics routing context', () => {
     const { context, window, document } = createBrowserContext(grantedConsentWindow({ sessionStorage }));
     window.location.origin = 'https://www.timemission.com';
     window.location.pathname = '/group-form-thank-you/jotform';
-    window.location.search = '?location=Orland%20Park&source=https%3A%2F%2Fwww.timemission.com%2Fgroups%2Finquire%2Forland-park%2Fcorporate';
+    window.location.search = '?location=Mt%20Prospect&source=https%3A%2F%2Fwww.timemission.com%2Fgroups%2Finquire%2Fmount-prospect%2Fcorporate';
     document.querySelector = (selector) => {
       if (selector === '[data-tm-group-form-thank-you]') return carrier;
       return null;
@@ -264,8 +264,8 @@ describe('analytics routing context', () => {
       PROVIDER: 'jotform',
       FORM_NAME: 'jotform_group',
       FORM_SUBJECT: 'corporate',
-      LOCATION_SLUG: 'orland-park',
-      LOCATION_NAME: 'Orland Park',
+      LOCATION_SLUG: 'mount-prospect',
+      LOCATION_NAME: 'Mount Prospect',
       REGION: 'us',
     });
     expect(successes[0].parameters).not.toHaveProperty('EMAIL');

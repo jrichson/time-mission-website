@@ -30,6 +30,12 @@ const FORM_LABELS: Record<GroupFormKey, string> = {
     holidays: 'holiday party',
 };
 
+const PIPEDRIVE_LOCATION_VALUES: Record<(typeof GROUP_INQUIRY_LOCATION_SLUGS)[number], string> = {
+    manassas: 'Manassas',
+    'mount-prospect': 'Mt Prospect',
+    'orland-park': 'Orland Park',
+};
+
 export function isGroupInquiryLocationSlug(value: string): value is (typeof GROUP_INQUIRY_LOCATION_SLUGS)[number] {
     return GROUP_INQUIRY_LOCATION_SLUGS.includes(value as (typeof GROUP_INQUIRY_LOCATION_SLUGS)[number]);
 }
@@ -44,6 +50,12 @@ export function formLabelFor(key: string): string {
 
 export function groupInquiryPath(locationSlug: string, formKey: string): string {
     return `/groups/inquire/${locationSlug}/${formKey}`;
+}
+
+export function pipedriveLocationValueFor(locationSlug: string, fallbackName: string): string {
+    return isGroupInquiryLocationSlug(locationSlug)
+        ? PIPEDRIVE_LOCATION_VALUES[locationSlug]
+        : fallbackName;
 }
 
 export type GroupInquiryPath = {

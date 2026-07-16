@@ -78,7 +78,7 @@
     margin: 0;
     color: var(--white);
     font-family: var(--display);
-    font-size: clamp(4.5rem, 8vw, 7.6rem);
+    font-size: clamp(4rem, 6.9vw, 6.5rem);
     font-weight: 400;
     letter-spacing: -0.02em;
     line-height: 0.82;
@@ -104,9 +104,10 @@
     gap: 1.1rem;
     align-items: start;
     max-width: 31rem;
-    margin-top: clamp(3rem, 7vw, 5.5rem);
-    padding-top: 1.4rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding: 1.25rem;
+    border: 1px solid rgba(255, 107, 44, 0.46);
+    background: linear-gradient(115deg, rgba(255, 107, 44, 0.14), rgba(255, 107, 44, 0.025) 72%);
 }
 
 .group-inquiry__callout-index {
@@ -116,28 +117,55 @@
     font-weight: 800;
 }
 
-.group-inquiry__callout p,
-.group-inquiry__callout span:last-child {
+.group-inquiry__callout p {
     margin: 0;
-    color: rgba(255, 255, 255, 0.48);
+    color: rgba(255, 255, 255, 0.78);
     font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.group-inquiry__callout span:last-child {
+    display: block;
+    margin: 0.6rem 0 0;
+    color: rgba(255, 255, 255, 0.52);
+    font-size: 0.7rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
 .group-inquiry__callout a {
-    display: block;
-    width: fit-content;
-    min-height: 44px;
-    margin: 0.35rem 0 0.15rem;
-    color: var(--white);
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 56px;
+    margin: 0.55rem 0 0;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--orange);
+    background: var(--orange);
+    color: var(--black);
     font-family: var(--display);
-    font-size: 2rem;
+    font-size: clamp(2rem, 3vw, 2.65rem);
     letter-spacing: 0.02em;
-    line-height: 1.25;
-    text-decoration-color: var(--orange);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.22em;
+    line-height: 1;
+    text-decoration: none;
+    transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.group-inquiry__callout a::after {
+    content: '→';
+    font-family: var(--tech);
+    font-size: 0.9rem;
+}
+
+.group-inquiry__callout a:hover,
+.group-inquiry__callout a:focus-visible {
+    background: transparent;
+    color: var(--white);
+    transform: translateY(-2px);
 }
 
 .group-inquiry__form-shell {
@@ -371,7 +399,17 @@
     }
 
     .group-inquiry__intro h1 {
-        font-size: clamp(4rem, 21vw, 6rem);
+        font-size: clamp(3.5rem, 18vw, 5rem);
+    }
+
+    .group-inquiry__callout {
+        grid-template-columns: 1fr;
+        gap: 0.55rem;
+        padding: 1rem;
+    }
+
+    .group-inquiry__callout a {
+        font-size: clamp(1.9rem, 9vw, 2.35rem);
     }
 
     .group-inquiry__form-heading,
@@ -395,6 +433,7 @@
 
 @media (prefers-reduced-motion: reduce) {
     .group-inquiry__back,
+    .group-inquiry__callout a,
     .group-inquiry-form input,
     .group-inquiry-form textarea,
     .group-inquiry-form__actions button {

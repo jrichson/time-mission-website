@@ -1,5 +1,9 @@
 ---
-import { JOTFORM_GROUP_FORM_ID, type GroupFormKey } from '../lib/group-form-context';
+import {
+    JOTFORM_GROUP_FORM_ID,
+    pipedriveLocationValueFor,
+    type GroupFormKey,
+} from '../lib/group-form-context';
 
 interface Props {
     formKey: GroupFormKey;
@@ -16,6 +20,7 @@ const {
 } = Astro.props;
 
 const formAction = `https://submit.jotform.com/submit/${JOTFORM_GROUP_FORM_ID}`;
+const pipedriveLocationName = pipedriveLocationValueFor(locationSlug, locationName);
 ---
 
 <section class="group-inquiry" aria-labelledby="group-inquiry-title">
@@ -68,6 +73,7 @@ const formAction = `https://submit.jotform.com/submit/${JOTFORM_GROUP_FORM_ID}`;
                 data-form-subject={formKey}
                 data-location-name={locationName}
                 data-location-slug={locationSlug}
+                data-pipedrive-location-name={pipedriveLocationName}
             >
                 <input type="hidden" name="formID" value={JOTFORM_GROUP_FORM_ID} />
                 <input type="hidden" id="JWTContainer" value="" />
@@ -78,7 +84,7 @@ const formAction = `https://submit.jotform.com/submit/${JOTFORM_GROUP_FORM_ID}`;
                 <input type="hidden" id="buildDate" name="buildDate" value="1784236513760" />
                 <input type="hidden" name="uploadServerUrl" value="https://upload.jotform.com/upload" />
                 <input type="hidden" name="eventObserver" value="1" />
-                <input type="hidden" id="input_21" name="q21_location" value={locationName} />
+                <input type="hidden" id="input_21" name="q21_location" value={pipedriveLocationName} />
                 <input type="hidden" id="input_23" name="q23_typeA" value="" />
                 <input type="hidden" id="input_20" name="q20_dealTitle" value="" />
                 <input type="hidden" id="month_27" name="q27_date[month]" value="" />
