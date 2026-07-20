@@ -41,7 +41,7 @@
         var codes = {
             manassas: 'MAN',
             'mount-prospect': 'MTP',
-            'orland-park': 'ORL',
+            'orland-park': 'OPK',
         };
         return codes[locationSlug] || String(locationSlug || '').toUpperCase().slice(0, 3);
     }

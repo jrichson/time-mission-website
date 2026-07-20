@@ -208,6 +208,34 @@ test('Mount Prospect submits the exact Pipedrive location option', async ({ page
   await expect(page.locator('[name="q21_location"]')).toHaveValue('Mt Prospect');
 });
 
+test('group inquiry deal titles use each CRM code and prefer organization over submitter', async ({ page }) => {
+  const locationCodes = {
+    manassas: 'MAN',
+    'mount-prospect': 'MTP',
+    'orland-park': 'OPK',
+  };
+
+  for (const [locationId, code] of Object.entries(locationCodes)) {
+    await page.goto(groupFormUrl(locationId, 'corporate'));
+    const form = page.locator('[data-tm-group-inquiry-form]');
+    const dealTitle = form.locator('[name="q20_dealTitle"]');
+
+    await form.locator('[name="q8_firstampamp"]').fill('Alex Morgan');
+    await form.evaluate((node) => node.dispatchEvent(new Event('submit', {
+      bubbles: true,
+      cancelable: true,
+    })));
+    await expect(dealTitle).toHaveValue(new RegExp(`^${code}: Alex Morgan / corporate / FormDate:`));
+
+    await form.locator('[name="q10_organization"]').fill('Acme Events');
+    await form.evaluate((node) => node.dispatchEvent(new Event('submit', {
+      bubbles: true,
+      cancelable: true,
+    })));
+    await expect(dealTitle).toHaveValue(new RegExp(`^${code}: Acme Events / corporate / FormDate:`));
+  }
+});
+
 test('Dallas group CTAs stay disabled when location data has blank group rows', async ({ page }) => {
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
