@@ -8,7 +8,7 @@
             <h1>BRAND GUIDE</h1>
             <p>Logo files and simple usage guidance for media, partners, and community groups creating Time Mission materials.</p>
             <div class="tm-resource-actions">
-                <a href="/assets/logo/Time%20Mission%20Logo.svg" class="tm-resource-button" download>Download White Logo</a>
+                <a href="/assets/logo/time-mission-logo-transparent.svg" class="tm-resource-button" download>Download White Logo</a>
                 <a href="/press" class="tm-resource-secondary">Back to Press Room</a>
             </div>
         </div>
@@ -33,9 +33,9 @@
                 <p>Use the full name "Time Mission" on first reference. Keep the white logo on a dark, uncluttered background and leave clear space around it.</p>
                 <p>Need another file format, a print-ready logo, or approval for a partner use? Contact us before publishing.</p>
                 <div class="tm-logo-row">
-                    <img src="/assets/logo/Time%20Mission%20Logo.svg" alt="Time Mission logo" width="214" height="72" loading="lazy" decoding="async">
+                    <img src="/assets/logo/time-mission-logo-transparent.svg" alt="Time Mission logo" width="214" height="72" loading="lazy" decoding="async">
                 </div>
-                <a href="/assets/logo/Time%20Mission%20Logo.svg" class="tm-resource-button" download>Download White Logo</a>
+                <a href="/assets/logo/time-mission-logo-transparent.svg" class="tm-resource-button" download>Download White Logo</a>
             </div>
         </div>
     </section>

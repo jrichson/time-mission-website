@@ -58,6 +58,7 @@ mustFile('css/base.css');
 mustDirHasFiles('css/bundles');
 mustFile('js/locations.js');
 mustFile('assets/logo/Time Mission Logo.svg');
+mustFile('assets/logo/time-mission-logo-transparent.svg');
 mustDirHasFiles('assets/fonts');
 
 mustFile('about.html');
