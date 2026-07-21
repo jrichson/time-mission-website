@@ -409,6 +409,13 @@ function assertEmail(email) {
   if (!EMAIL_RE.test(email)) throw new FormError('Enter a valid email address.');
 }
 
+function assertPhone(phone) {
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length < 7 || digits.length > 15) {
+    throw new FormError('Enter a valid phone number.');
+  }
+}
+
 function optInIsChecked(value) {
   const normalized = normalizeText(value, 20).toLowerCase();
   return ['1', 'true', 'yes', 'on'].includes(normalized);
@@ -420,11 +427,14 @@ export function validateContactSubmission(raw) {
     location: normalizeText(raw.location, 120),
     message: normalizeMultiline(raw.message, 4000),
     name: normalizeText(raw.name, 160),
+    phone: normalizeText(raw.phone, 40),
     subject: normalizeText(raw.subject, 160),
   };
 
   if (!data.name) throw new FormError('Name is required.');
   assertEmail(data.email);
+  if (!data.phone) throw new FormError('Phone number is required.');
+  assertPhone(data.phone);
   if (!data.location) throw new FormError('Location is required.');
   if (!data.subject) throw new FormError('Subject is required.');
   if (!data.message) throw new FormError('Message is required.');
@@ -490,6 +500,7 @@ function contactEmail(data) {
     '',
     `Name: ${data.name}`,
     `Email: ${data.email}`,
+    `Phone: ${data.phone}`,
     `Location: ${locationLabel}`,
     `Subject: ${subjectLabel}`,
     '',
@@ -503,6 +514,7 @@ function contactEmail(data) {
     rows: [
       { label: 'Name', value: data.name },
       { label: 'Email', value: data.email },
+      { label: 'Phone', value: data.phone },
       { label: 'Location', value: locationLabel },
       { label: 'Subject', value: subjectLabel },
     ],
@@ -629,6 +641,7 @@ function payloadForArchive(formType, data) {
     location: data.location,
     message: data.message,
     name: data.name,
+    phone: data.phone,
     subject: data.subject,
   };
 }

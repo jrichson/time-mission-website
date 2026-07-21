@@ -11,7 +11,7 @@
             <!-- Contact Form -->
             <div class="contact-form-card reveal">
                 <h2>Send Us a Message</h2>
-                <p>Fill out the form below and we'll get back to you within 24-48 hours.</p>
+                <p>Fill out the form below and we'll get back to you within 24-48 hours. All fields are required.</p>
 
                 <form class="contact-form" name="contact" method="POST" action="/api/contact" data-tm-form="contact">
                     <input type="hidden" name="form-name" value="contact">
@@ -21,12 +21,18 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Your Name</label>
-                            <input type="text" id="name" name="name" placeholder="John Doe" required>
+                            <input type="text" id="name" name="name" placeholder="John Doe" autocomplete="name" required>
                         </div>
                         <div class="form-group">
                             <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                            <input type="email" id="email" name="email" placeholder="john@example.com" autocomplete="email" required>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+1 555 123 4567" autocomplete="tel" inputmode="tel" aria-describedby="phone-help" maxlength="40" required>
+                        <span class="form-help" id="phone-help">We'll use this only to follow up about your inquiry.</span>
                     </div>
 
                     <div class="form-row">

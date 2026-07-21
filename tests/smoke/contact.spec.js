@@ -24,6 +24,10 @@ test('contact form uses configured submission endpoint', async ({ page }) => {
   await expect(form).toHaveAttribute('action', /\/api\/contact$/i);
   await expect(form).toHaveAttribute('data-tm-form', 'contact');
   await expect(form.locator('[data-tm-turnstile]')).toHaveCount(1);
+  await expect(form.locator('input[name="email"]')).toHaveAttribute('required', '');
+  await expect(form.locator('input[name="phone"]')).toHaveAttribute('required', '');
+  await expect(form.locator('input[name="phone"]')).toHaveAttribute('autocomplete', 'tel');
+  await expect(form.locator('#phone-help')).toContainText('follow up about your inquiry');
 });
 
 test('Nashville publishes its direct email on contact surfaces', async ({ page }) => {
@@ -66,7 +70,12 @@ test('contact page only shows direct info for the selected location', async ({ p
   await expect(page.locator('[data-location-contact-card]')).toBeVisible();
   await expect(page.locator('[data-location-contact-name]')).toHaveText('Houston');
   await expect(page.locator('[data-location-contact-phone]')).toHaveText('(713) 588-1630');
-  await expect(page.locator('[data-location-contact-email-row]')).toBeHidden();
+  await expect(page.locator('[data-location-contact-email-row]')).toBeVisible();
+  await expect(page.locator('[data-location-contact-email]')).toHaveText('houston@timemission.com');
+  await expect(page.locator('[data-location-contact-email]')).toHaveAttribute(
+    'href',
+    'mailto:houston@timemission.com',
+  );
   await expect(page.locator('[data-location-contact-card]')).not.toContainText('Philadelphia');
   await expect(page.locator('[data-location-contact-card]')).not.toContainText('Mount Prospect');
 

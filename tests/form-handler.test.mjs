@@ -78,14 +78,29 @@ describe('Cloudflare form handler', () => {
       location: 'philadelphia',
       message: '  Hello\nthere  ',
       name: ' Ari ',
+      phone: ' +1 (215) 867-5309 ',
       subject: 'booking',
     })).toMatchObject({
       email: 'ari@example.com',
       location: 'philadelphia',
       message: 'Hello\nthere',
       name: 'Ari',
+      phone: '+1 (215) 867-5309',
       subject: 'booking',
     });
+  });
+
+  it('requires a valid phone number for contact submissions', () => {
+    const submission = {
+      email: 'person@example.com',
+      location: 'philadelphia',
+      message: 'Question about a booking',
+      name: 'Ada',
+      subject: 'booking',
+    };
+
+    expect(() => validateContactSubmission(submission)).toThrow(/phone number is required/i);
+    expect(() => validateContactSubmission({ ...submission, phone: '123' })).toThrow(/valid phone number/i);
   });
 
   it('requires newsletter opt-in and a valid email', () => {
@@ -135,13 +150,15 @@ describe('Cloudflare form handler', () => {
         location: 'houston',
         message: 'Question about groups',
         name: 'Guest',
+        phone: '+1 (713) 555-0123',
         subject: 'groups',
       }),
     });
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true });
-    expect(env.FORM_SUBMISSIONS_DB.statements.at(-1).params).toEqual(expect.arrayContaining([
+    const archiveParams = env.FORM_SUBMISSIONS_DB.statements.at(-1).params;
+    expect(archiveParams).toEqual(expect.arrayContaining([
       'contact',
       'Guest',
       'guest@example.com',
@@ -149,6 +166,10 @@ describe('Cloudflare form handler', () => {
       'groups',
       'Question about groups',
     ]));
+    expect(JSON.parse(archiveParams.at(-1))).toMatchObject({
+      email: 'guest@example.com',
+      phone: '+1 (713) 555-0123',
+    });
     expect(calls.map((call) => call.url)).toEqual([
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       'https://api.resend.com/emails',
@@ -158,12 +179,13 @@ describe('Cloudflare form handler', () => {
     expect(emailPayload).toMatchObject({
       reply_to: 'guest@example.com',
       subject: 'Time Mission contact: TX - Houston - Group Events',
-      text: expect.stringContaining('Location: TX - Houston'),
+      text: expect.stringContaining('Phone: +1 (713) 555-0123'),
       to: ['ops@timemission.com'],
     });
     expect(emailPayload.html).toContain('New contact inquiry');
     expect(emailPayload.html).toContain('TX - Houston');
     expect(emailPayload.html).toContain('Question about groups');
+    expect(emailPayload.html).toContain('+1 (713) 555-0123');
     expect(emailPayload.html).toContain('supported-color-schemes');
     expect(emailPayload.html).toContain('background-color: #1B1714');
     expect(emailPayload.html).toContain('color: #FFF8EF;">Guest</div>');
@@ -183,6 +205,7 @@ describe('Cloudflare form handler', () => {
         location: 'houston',
         message: 'Question about groups',
         name: 'Guest',
+        phone: '+1 (713) 555-0123',
         subject: 'groups',
       }),
     });
@@ -208,6 +231,7 @@ describe('Cloudflare form handler', () => {
         location: 'houston',
         message: 'Question about groups',
         name: 'Guest',
+        phone: '+1 (713) 555-0123',
         subject: 'groups',
       }),
     });
@@ -264,6 +288,7 @@ describe('Cloudflare form handler', () => {
         location: 'west-nyack',
         message: 'Question about groups',
         name: 'Guest',
+        phone: '+1 (845) 555-0123',
         subject: 'groups',
       }),
     });
@@ -308,6 +333,7 @@ describe('Cloudflare form handler', () => {
             location,
             message: 'Question about a group event',
             name: 'Guest',
+            phone: '+1 (813) 555-0123',
             subject,
           }),
         });
@@ -345,6 +371,7 @@ describe('Cloudflare form handler', () => {
         location: 'manassas',
         message: 'Question about an existing booking',
         name: 'Guest',
+        phone: '+1 (703) 555-0123',
         subject: 'booking',
       }),
     });
@@ -433,6 +460,7 @@ describe('Cloudflare form handler', () => {
       location: 'houston',
       message: 'Question about groups',
       name: 'Guest',
+      phone: '+1 (713) 555-0123',
       subject: 'groups',
     };
 

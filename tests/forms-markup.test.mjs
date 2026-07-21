@@ -66,6 +66,13 @@ describe('production form markup', () => {
     expect(turnstileCount).toBe(formCount);
   });
 
+  it('requires both email and phone on the contact form', () => {
+    const contactForm = fs.readFileSync(path.join(root, 'src', 'partials', 'contact-main.frag.txt'), 'utf8');
+
+    expect(contactForm).toMatch(/<input[^>]+type="email"[^>]+name="email"[^>]+required>/);
+    expect(contactForm).toMatch(/<input[^>]+type="tel"[^>]+name="phone"[^>]+required>/);
+  });
+
   it('does not expose the deprecated group event FormSubmit form', () => {
     const offenders = groupsMarkup()
       .filter(({ text }) => /formsubmit\.co|class="inquiry-form"|id="inquiry"/.test(text))
