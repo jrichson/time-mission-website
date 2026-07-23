@@ -119,15 +119,9 @@
       "shortName": "Philadelphia",
       "venueName": null,
       "region": "us",
-      "status": "temporarily-closed",
-      "temporaryClosure": {
-        "label": "Important Mission Update",
-        "title": "⚠️ Important Mission Update:",
-        "summary": "Time Mission Philadelphia is temporarily closed due to unexpected maintenance-related issues within our space.",
-        "detail": "Ticket purchases are currently unavailable, and a reopening date will be announced as soon as possible. Existing ticket holders will be contacted by our customer support team shortly.",
-        "ctaLabel": "Get Closure Updates",
-        "contactLabel": "Contact Philadelphia"
-      },
+      "status": "coming-soon",
+      "openingDate": "2026-08-07",
+      "openingLabel": "Opening 8/7",
       "address": {
         "line1": "1530 Chestnut Street",
         "city": "Philadelphia",
@@ -180,8 +174,8 @@
           "label": "10am - 10pm"
         }
       },
-      "bookingUrl": "",
-      "rollerCheckoutUrl": "",
+      "bookingUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
+      "rollerCheckoutUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
       "bookingProvider": "roller",
       "hiddenMissionIds": [
         "1004",
@@ -196,8 +190,8 @@
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
       "faqs": [
         {
-          "q": "Is Time Mission Philadelphia open?",
-          "a": "Time Mission Philadelphia is temporarily closed while the venue is rebuilt. Ticket booking is paused until reopening timing is confirmed."
+          "q": "When does Time Mission Philadelphia reopen?",
+          "a": "Time Mission Philadelphia reopens August 7, 2026. Advance online booking is available now through the Philadelphia checkout."
         },
         {
           "q": "What ages can play at Time Mission Philadelphia?",
@@ -208,7 +202,7 @@
           "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
         }
       ],
-      "ticker": "PHILADELPHIA TEMPORARILY CLOSED",
+      "ticker": "PHILADELPHIA OPENING 8/7",
       "giftCardUrl": "",
       "waiverUrl": "",
       "countryCode": "US",
@@ -1043,6 +1037,40 @@
       "timeZone": null,
       "currency": null,
       "phoneE164": "+16292340123",
+      "hreflang": null,
+      "localBusinessSchemaEligible": false
+    },
+    {
+      "id": "boston",
+      "slug": "boston",
+      "name": "Time Mission Boston",
+      "shortName": "Boston",
+      "venueName": null,
+      "region": "us",
+      "status": "coming-soon",
+      "address": {
+        "line1": "200 State St",
+        "city": "Boston",
+        "state": "MA",
+        "zip": "02109",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "",
+        "email": ""
+      },
+      "hours": {},
+      "bookingUrl": "",
+      "navLabel": "MA – Boston",
+      "mapUrl": "https://maps.google.com/?q=200+State+St+Boston+MA+02109",
+      "faqs": [],
+      "ticker": "BOSTON COMING SOON",
+      "giftCardUrl": "",
+      "countryCode": "US",
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
       "hreflang": null,
       "localBusinessSchemaEligible": false
     }

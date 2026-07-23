@@ -1,6 +1,7 @@
 {
   "css": {
     "antwerp": "/css/page-west-nyack.css?v=2",
+    "boston": "/css/page-houston.css?v=2",
     "brussels": "/css/page-houston.css?v=2",
     "dallas": "/css/page-houston.css?v=2",
     "eindhoven": "/css/page-houston.css?v=2",

@@ -42,6 +42,7 @@
                                 <option value="">Select a Location</option>
                                 <option value="mount-prospect">IL – Mount Prospect</option>
                                 <option value="orland-park">IL – Orland Park</option>
+                                <option value="boston">MA – Boston</option>
                                 <option value="west-nyack">NY – West Nyack</option>
                                 <option value="philadelphia">PA – Philadelphia</option>
                                 <option value="lincoln">RI – Lincoln</option>

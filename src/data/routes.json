@@ -394,6 +394,16 @@
       "status": 301
     },
     {
+      "id": "boston",
+      "canonicalPath": "/boston",
+      "redirectSources": [
+        "/boston.html"
+      ],
+      "outputFile": "boston.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "brussels",
       "canonicalPath": "/brussels",
       "locationAlternate": "terminal1",

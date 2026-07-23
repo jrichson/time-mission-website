@@ -18,6 +18,9 @@ import * as migration_20260624_090000_blog_press_donation_eindhoven from './2026
 import * as migration_20260624_101500_seed_current_announcement_banners from './20260624_101500_seed_current_announcement_banners';
 import * as migration_20260624_120000_orland_park_weekend_hours from './20260624_120000_orland_park_weekend_hours';
 import * as migration_20260625_090000_blog_posts_rich_text from './20260625_090000_blog_posts_rich_text';
+import * as migration_20260723_090000_philadelphia_reopening from './20260723_090000_philadelphia_reopening';
+import * as migration_20260723_100000_add_boston_location_enums from './20260723_100000_add_boston_location_enums';
+import * as migration_20260723_101000_seed_boston_location from './20260723_101000_seed_boston_location';
 
 export const migrations = [
   {
@@ -119,5 +122,20 @@ export const migrations = [
     up: migration_20260625_090000_blog_posts_rich_text.up,
     down: migration_20260625_090000_blog_posts_rich_text.down,
     name: '20260625_090000_blog_posts_rich_text'
+  },
+  {
+    up: migration_20260723_090000_philadelphia_reopening.up,
+    down: migration_20260723_090000_philadelphia_reopening.down,
+    name: '20260723_090000_philadelphia_reopening'
+  },
+  {
+    up: migration_20260723_100000_add_boston_location_enums.up,
+    down: migration_20260723_100000_add_boston_location_enums.down,
+    name: '20260723_100000_add_boston_location_enums'
+  },
+  {
+    up: migration_20260723_101000_seed_boston_location.up,
+    down: migration_20260723_101000_seed_boston_location.down,
+    name: '20260723_101000_seed_boston_location'
   },
 ];

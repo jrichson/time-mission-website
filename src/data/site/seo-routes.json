@@ -132,8 +132,8 @@
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
   "/philadelphia": {
-    "title": "Time Mission Philadelphia | Temporarily Closed",
-    "description": "Time Mission Philadelphia is temporarily closed for the time being, and ticket sales are paused. Stay tuned for reopening updates.",
+    "title": "Time Mission Philadelphia – 25+ Interactive Mission Rooms",
+    "description": "Time Mission Philadelphia reopens August 7, 2026. Advance tickets are available now for 25+ immersive mission rooms.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
@@ -200,6 +200,12 @@
   "/nashville": {
     "title": "Time Mission Nashville | Coming Soon",
     "description": "Time Mission Nashville is coming soon in Nashville, TN. Contact the location team for launch timing and opening updates.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/boston": {
+    "title": "Time Mission Boston | Coming Soon",
+    "description": "Time Mission Boston is coming soon in Boston, MA. Contact the location team for launch timing and opening updates.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },

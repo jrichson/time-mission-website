@@ -62,10 +62,26 @@ describe('browser data, consent, and i18n contracts', () => {
       requireUrl(locationId, 'waiverUrl', byId.get(locationId)?.waiverUrl);
     }
 
-    expect(byId.get('philadelphia')?.status).toBe('temporarily-closed');
-    expect(byId.get('philadelphia')?.bookingUrl).toBe('');
-    expect(byId.get('philadelphia')?.rollerCheckoutUrl).toBe('');
+    expect(byId.get('philadelphia')?.status).toBe('coming-soon');
+    expect(byId.get('philadelphia')?.openingLabel).toBe('Opening 8/7');
+    expect(byId.get('philadelphia')?.bookingUrl)
+      .toBe('https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home');
+    expect(byId.get('philadelphia')?.rollerCheckoutUrl)
+      .toBe('https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home');
     expect(byId.get('philadelphia')?.groupFormUrls).toEqual({});
+    expect(byId.get('boston')).toMatchObject({
+      status: 'coming-soon',
+      navLabel: 'MA – Boston',
+      bookingUrl: '',
+      ticker: 'BOSTON COMING SOON',
+      address: {
+        line1: '200 State St',
+        city: 'Boston',
+        state: 'MA',
+        zip: '02109',
+        country: 'United States',
+      },
+    });
     expect(byId.get('west-nyack')?.briqWidget?.domain).toBe('timemission-palisades');
     expect(byId.get('antwerp')?.externalUrl).toBe('https://timemission.eu/antwerp');
     expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu/brussels');

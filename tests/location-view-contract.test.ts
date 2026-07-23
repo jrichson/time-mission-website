@@ -73,19 +73,20 @@ describe('Location View contract', () => {
         }
     });
 
-    it('keeps stored Philadelphia hours hidden while the location is temporarily closed', () => {
+    it('shows Philadelphia reopening hours and opening label while advance booking is live', () => {
         const philadelphia = allLocations.find((loc) => loc.id === 'philadelphia');
         if (!philadelphia) throw new Error('Philadelphia location missing');
 
         const runtime = loadRuntimeLocationViews();
 
-        expect(philadelphia.status).toBe('temporarily-closed');
+        expect(philadelphia.status).toBe('coming-soon');
+        expect(philadelphia.openingLabel).toBe('Opening 8/7');
         expect(philadelphia.hours.mon).toMatchObject({
             open: '10:00',
             close: '22:00',
             label: '10am - 10pm',
         });
-        expect(locationHoursRows(philadelphia)).toEqual([]);
-        expect(runtime.hoursTextForLocation(philadelphia)).toBe('Important Mission Update');
+        expect(locationHoursRows(philadelphia)).toHaveLength(7);
+        expect(runtime.hoursTextForLocation(philadelphia)).toContain('Mon: 10am - 10pm');
     });
 });

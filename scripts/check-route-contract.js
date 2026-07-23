@@ -56,6 +56,7 @@ const SCOPE_FILES = {
   ],
   locations: [
     'src/pages/antwerp.astro',
+    'src/pages/boston.astro',
     'src/pages/brussels.astro',
     'src/pages/dallas.astro',
     'src/pages/eindhoven.astro',

@@ -27,6 +27,7 @@
         { "label": "All Locations", "href": "/locations" },
         { "label": "IL – Mount Prospect", "href": "/mount-prospect" },
         { "label": "IL – Orland Park", "href": "/orland-park" },
+        { "label": "MA – Boston", "href": "/boston" },
         { "label": "NY – West Nyack", "href": "/west-nyack" },
         { "label": "PA – Philadelphia", "href": "/philadelphia" },
         { "label": "RI – Lincoln", "href": "/lincoln" },

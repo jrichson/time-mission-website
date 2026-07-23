@@ -196,21 +196,47 @@ test('location page drives nav state and ticket panel default location', async (
   );
 });
 
-test('Philadelphia page makes closure state visible and disables ticket booking CTAs', async ({ page }) => {
-  const closure = locationById.get('philadelphia')?.temporaryClosure || {};
-
+test('Philadelphia page shows the August 7 opening and restores ticket booking CTAs', async ({ page }) => {
   await page.goto('/philadelphia');
 
-  await expect(page.locator('.tm-closure-strip')).toBeVisible();
-  await expect(page.locator('.tm-closure-strip')).toContainText(closure.label);
-  await expect(page.locator('.tm-closure-strip')).toContainText(closure.detail);
-  await expect(page.locator('.hero-cta .btn-tickets')).toHaveAttribute('href', '/contact#location=philadelphia&type=closure');
-  await expect(page.locator('.hero-cta .btn-tickets')).not.toHaveAttribute('data-tm-booking-trigger', '');
-  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('href', '/contact#location=philadelphia&type=closure');
+  const checkoutUrl = 'https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home';
+  const philadelphiaMenuLink = page.locator('#locationDropdown a[data-tm-location-slug="philadelphia"]').first();
+
+  await expect(page).toHaveTitle('Time Mission Philadelphia – 25+ Interactive Mission Rooms');
+  await expect(page.locator('.tm-closure-strip')).toHaveCount(0);
+  await expect(page.locator('#temporaryClosureModal')).toHaveCount(0);
+  await expect(page.locator('.ticker-item').first()).toContainText('PHILADELPHIA OPENING 8/7');
+  await expect(philadelphiaMenuLink.locator('.coming-soon-tag')).toHaveText('Opening 8/7');
+  await expect(page.locator('.hero-cta .btn-tickets')).toHaveAttribute('href', '#');
+  await expect(page.locator('.hero-cta .btn-tickets')).toHaveAttribute('data-tm-booking-trigger', '');
+  await expect(page.locator('.hero-cta .btn-tickets')).toHaveAttribute('data-tm-booking-url', checkoutUrl);
+  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('href', '#');
+  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('data-tm-booking-trigger', '');
+});
+
+test('Boston coming-soon page publishes the address and lead-only CTAs', async ({ page }) => {
+  await page.goto('/boston');
+
+  const bostonMenuLink = page.locator('#locationDropdown a[data-tm-location-slug="boston"]').first();
+  const footer = page.locator('footer.footer');
+
+  await expect(page).toHaveTitle('Time Mission Boston | Coming Soon');
+  await expect(page.locator('.ticker-item').first()).toContainText('BOSTON COMING SOON');
+  await expect(bostonMenuLink.locator('.coming-soon-tag')).toHaveText('Coming Soon');
+  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
+    'href',
+    '/contact#location=boston&type=updates'
+  );
   await expect(page.locator('.nav-right .btn-tickets')).not.toHaveAttribute('data-tm-booking-trigger', '');
-  await expect(page.locator('#temporaryClosureModal .tm-closure-button--primary')).toHaveAttribute('href', '/contact#location=philadelphia&type=closure');
-  await expect(page.locator('.tm-closure-strip .tm-closure-button--primary')).toHaveAttribute('href', '/contact#location=philadelphia&type=closure');
-  await expect(page.locator('#temporaryClosureModal')).toHaveClass(/is-active/);
+  await expect(footer.locator('.footer-locations-title')).toHaveText('Boston');
+  await expect(footer.locator('.footer-loc-address')).toContainText('200 State St');
+  await expect(footer.locator('.footer-loc-address')).toContainText('Boston, MA 02109');
+
+  await page.goto('/locations');
+  const bostonLocationRow = page.locator('.loc-row[href="/boston"]');
+  await expect(bostonLocationRow).toContainText('Boston');
+  await expect(bostonLocationRow).toContainText('Coming Soon');
+  await expect(bostonLocationRow).toContainText('200 State St, Boston, MA 02109');
 });
 
 test('location pages render footer contact details with accordion hours', async ({ page }) => {

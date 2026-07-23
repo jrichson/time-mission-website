@@ -146,21 +146,18 @@ test('open location ?book=1 opens embedded checkout without offsite navigation',
   await expect(page).toHaveURL(/\/mount-prospect$/);
 });
 
-test('temporarily closed Philadelphia ?book=1 opens the closure notice instead of checkout', async ({ page }) => {
+test('Philadelphia reopening ?book=1 opens Roller checkout without a closure popup', async ({ page }) => {
   await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
-    throw new Error(`Philadelphia closure must not load Roller checkout: ${route.request().url()}`);
+    await route.fulfill({
+      contentType: 'application/javascript',
+      body: 'window.RollerCheckout = { show: function () { window.__rollerCheckoutShown = true; } };',
+    });
   });
 
   await page.goto('/philadelphia?book=1');
+  await page.waitForFunction(() => window.__rollerCheckoutShown === true);
   await expect(page).toHaveURL(/\/philadelphia$/);
-  await expect(page.locator('#temporaryClosureModal')).toHaveClass(/is-active/);
-  await expect(page.locator('#temporaryClosureModalTitle')).toHaveText('⚠️ Important Mission Update:');
-  await expect(page.locator('#temporaryClosureModalCopy')).toContainText(
-    'Time Mission Philadelphia is temporarily closed due to unexpected maintenance-related issues within our space.',
-  );
-  await expect(page.locator('#temporaryClosureModalCopy')).toContainText(
-    'Existing ticket holders will be contacted by our customer support team shortly.',
-  );
+  await expect(page.locator('#temporaryClosureModal')).toHaveCount(0);
 });
 
 test('non-Roller external ticket booking renders direct provider links', async ({ page }) => {

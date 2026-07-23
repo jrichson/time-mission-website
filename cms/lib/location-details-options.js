@@ -11,6 +11,7 @@ export const LOCATION_DETAIL_OPTIONS = [
   { label: 'Time Mission Eindhoven', value: 'eindhoven' },
   { label: 'Time Mission Dallas', value: 'dallas' },
   { label: 'Time Mission Nashville', value: 'nashville' },
+  { label: 'Time Mission Boston', value: 'boston' },
 ];
 
 export const LOCATION_MISSION_OPTIONS = [

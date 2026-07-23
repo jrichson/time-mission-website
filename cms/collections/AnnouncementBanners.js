@@ -12,6 +12,7 @@ const bannerRegionOptions = [
 ];
 const bannerLocationOptions = [
   { label: 'Time Mission Antwerp', value: 'antwerp' },
+  { label: 'Time Mission Boston', value: 'boston' },
   { label: 'Time Mission Brussels', value: 'brussels' },
   { label: 'Time Mission Dallas', value: 'dallas' },
   { label: 'Time Mission Eindhoven', value: 'eindhoven' },
