@@ -21,6 +21,7 @@ import * as migration_20260625_090000_blog_posts_rich_text from './20260625_0900
 import * as migration_20260723_090000_philadelphia_reopening from './20260723_090000_philadelphia_reopening';
 import * as migration_20260723_100000_add_boston_location_enums from './20260723_100000_add_boston_location_enums';
 import * as migration_20260723_101000_seed_boston_location from './20260723_101000_seed_boston_location';
+import * as migration_20260727_090000_philadelphia_opening_promotion from './20260727_090000_philadelphia_opening_promotion';
 
 export const migrations = [
   {
@@ -137,5 +138,10 @@ export const migrations = [
     up: migration_20260723_101000_seed_boston_location.up,
     down: migration_20260723_101000_seed_boston_location.down,
     name: '20260723_101000_seed_boston_location'
+  },
+  {
+    up: migration_20260727_090000_philadelphia_opening_promotion.up,
+    down: migration_20260727_090000_philadelphia_opening_promotion.down,
+    name: '20260727_090000_philadelphia_opening_promotion'
   },
 ];

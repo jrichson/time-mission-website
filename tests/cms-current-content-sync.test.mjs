@@ -18,6 +18,9 @@ describe('CMS current content sync migration', () => {
     const philadelphiaReopeningMigration = read('cms/migrations/20260723_090000_philadelphia_reopening.ts');
     const bostonEnumsMigration = read('cms/migrations/20260723_100000_add_boston_location_enums.ts');
     const bostonSeedMigration = read('cms/migrations/20260723_101000_seed_boston_location.ts');
+    const philadelphiaOpeningPromotionMigration = read(
+      'cms/migrations/20260727_090000_philadelphia_opening_promotion.ts',
+    );
     const migrationIndex = read('cms/migrations/index.ts');
 
     expect(migrationIndex).toContain('20260605_143000_sync_current_cms_content');
@@ -27,6 +30,7 @@ describe('CMS current content sync migration', () => {
     expect(migrationIndex).toContain('20260723_090000_philadelphia_reopening');
     expect(migrationIndex).toContain('20260723_100000_add_boston_location_enums');
     expect(migrationIndex).toContain('20260723_101000_seed_boston_location');
+    expect(migrationIndex).toContain('20260727_090000_philadelphia_opening_promotion');
     expect(migration).toContain('"location_slug" = \'houston\'');
     expect(migration).toContain("'10am - 10pm'");
     expect(migration).toContain('Time Mission Houston – 25+ Interactive Mission Rooms');
@@ -54,5 +58,12 @@ describe('CMS current content sync migration', () => {
     expect(bostonSeedMigration).toContain('Time Mission Boston | Coming Soon');
     expect(bostonSeedMigration).toContain('200 State St');
     expect(bostonSeedMigration).toContain('BOSTON COMING SOON');
+    expect(philadelphiaOpeningPromotionMigration).toContain(
+      'OPENING AUGUST 7TH — USE CODE PHILLY50 for 50% OFF',
+    );
+    expect(philadelphiaOpeningPromotionMigration).toContain('"location_slug" = \'philadelphia\'');
+    expect(philadelphiaOpeningPromotionMigration).toContain(
+      "'animated'::\"public\".\"enum_announcement_banners_ticker_behavior\"",
+    );
   });
 });
