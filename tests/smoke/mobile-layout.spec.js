@@ -205,4 +205,39 @@ test.describe('small mobile (375x667)', () => {
     expect(box).not.toBeNull();
     expect(box.height).toBeGreaterThanOrEqual(48);
   });
+
+  test('open menu keeps the location label clear of the booking action', async ({ page }) => {
+    const viewports = [320, 360, 375, 390, 430];
+    const states = [
+      { path: '/', label: 'Select Location' },
+      { path: '/mount-prospect', label: 'Mount Prospect' },
+    ];
+
+    for (const width of viewports) {
+      await page.setViewportSize({ width, height: 667 });
+
+      for (const state of states) {
+        await page.goto(state.path);
+        await page.locator('.nav-menu-btn').click();
+
+        const locationButton = page.locator('#locationBtn');
+        const locationText = page.locator('#locationText');
+        const navTickets = page.locator('.nav-right .btn-tickets');
+
+        await expect(locationText).toBeVisible();
+        await expect(locationText).toContainText(state.label);
+        await expect(navTickets).toBeHidden();
+
+        const [buttonBox, labelBox] = await Promise.all([
+          locationButton.boundingBox(),
+          locationText.boundingBox(),
+        ]);
+        expect(buttonBox, `${width}px ${state.label} location button`).not.toBeNull();
+        expect(labelBox, `${width}px ${state.label} location label`).not.toBeNull();
+        expect(labelBox.x, `${width}px ${state.label} left edge`).toBeGreaterThanOrEqual(buttonBox.x - 1);
+        expect(labelBox.x + labelBox.width, `${width}px ${state.label} right edge`)
+          .toBeLessThanOrEqual(buttonBox.x + buttonBox.width + 1);
+      }
+    }
+  });
 });

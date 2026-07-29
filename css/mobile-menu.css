@@ -47,7 +47,7 @@
 
     /* Hide tickets when mobile menu is open */
     .nav.menu-open .btn-tickets {
-        display: none;
+        display: none !important;
     }
 
     /* Show city name next to pin when menu is open */
