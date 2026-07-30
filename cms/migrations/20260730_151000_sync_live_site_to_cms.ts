@@ -3,7 +3,7 @@ import { MigrateDownArgs, MigrateUpArgs, sql } from '@payloadcms/db-postgres';
 import {
   LIVE_SITE_LOCATION_SNAPSHOT,
   LIVE_SITE_PAGE_SNAPSHOT,
-} from './20260730_150000_live_site_snapshot';
+} from '../migration-data/20260730_live_site_snapshot';
 
 const HOUR_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 type HourDay = (typeof HOUR_DAYS)[number];

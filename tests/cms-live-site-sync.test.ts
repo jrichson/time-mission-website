@@ -7,7 +7,7 @@ import {
     LIVE_SITE_LOCATION_SNAPSHOT,
     LIVE_SITE_PAGE_SNAPSHOT,
     LIVE_SITE_SYNC_SOURCE,
-} from '../cms/migrations/20260730_150000_live_site_snapshot';
+} from '../cms/migration-data/20260730_live_site_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
