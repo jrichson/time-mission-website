@@ -1,0 +1,59 @@
+name: CMS Wrangler Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: Reason shown in the run summary.
+        required: false
+        default: manual-cms-deploy
+
+concurrency:
+  group: cms-wrangler-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build and direct-upload Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      PAYLOAD_CMS_ALLOWED_HOSTS: railway.app
+      PAYLOAD_CMS_BUILD_STRICT: "true"
+      PAYLOAD_CMS_ORIGIN: https://time-mission-website-production.up.railway.app
+      PUBLIC_TM_MEDIA_BASE: ${{ vars.PUBLIC_TM_MEDIA_BASE }}
+    steps:
+      - name: Check out site source
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build public site
+        run: npm run build:astro
+
+      - name: Verify published CMS artifacts
+        run: npm run check:payload-dist
+
+      - name: Deploy with Wrangler Direct Upload
+        run: npx wrangler pages deploy dist --project-name time-mission-website
+
+      - name: Summarize deploy
+        run: |
+          {
+            echo "### CMS deploy"
+            echo "- Reason: ${{ inputs.reason || 'manual-cms-deploy' }}"
+            echo "- CMS origin: $PAYLOAD_CMS_ORIGIN"
+            echo "- Cloudflare Pages project: time-mission-website"
+          } >> "$GITHUB_STEP_SUMMARY"
