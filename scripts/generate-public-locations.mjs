@@ -13,6 +13,7 @@ const publicLocationsPath = path.join(root, 'public', 'data', 'locations.json');
 const LOCATION_HOUR_DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const TIME_24_HOUR_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 const GROUP_FORM_KEY_PATTERN = /^[a-z0-9-]+$/;
+const INTERNAL_PUBLIC_PATH_PATTERN = /^\/[a-z0-9-]+(?:\/[a-z0-9-]+)*$/;
 const MISSION_ID_PATTERN = /^\d{4}$/;
 const EXTERNAL_LINK_FIELDS = ['externalUrl', 'bookingUrl', 'rollerCheckoutUrl', 'giftCardUrl', 'waiverUrl'];
 
@@ -37,10 +38,17 @@ function cleanHttpsUrl(value) {
   try {
     const url = new URL(cleaned);
     if (url.protocol !== 'https:' || url.username || url.password) return '';
-    return url.toString();
+    return cleaned;
   } catch {
     return '';
   }
+}
+
+function cleanGroupFormUrl(value) {
+  const cleaned = cleanString(value);
+  if (!cleaned || cleaned.length > 2048 || /[<>"'\\\s]/.test(cleaned)) return '';
+  if (INTERNAL_PUBLIC_PATH_PATTERN.test(cleaned)) return cleaned;
+  return cleanHttpsUrl(cleaned);
 }
 
 function cmsOriginFromEnv() {
@@ -130,7 +138,7 @@ function groupFormUrlsPatchForDoc(doc) {
   const patch = {};
   for (const row of rows) {
     const formKey = cleanString(row?.formKey);
-    const url = cleanHttpsUrl(row?.url);
+    const url = cleanGroupFormUrl(row?.url);
     if (!GROUP_FORM_KEY_PATTERN.test(formKey) || !url) continue;
     patch[formKey] = url;
   }
@@ -180,6 +188,11 @@ function patchForDoc(doc) {
   };
 }
 
+function addressesMatch(left, right) {
+  return ['line1', 'line2', 'city', 'state', 'zip', 'country']
+    .every((field) => cleanString(left?.[field]) === cleanString(right?.[field]));
+}
+
 function applyLocationDetailsOverrides(locations, docs) {
   if (!Array.isArray(docs) || docs.length === 0) return { locations, appliedCount: 0 };
 
@@ -202,12 +215,17 @@ function applyLocationDetailsOverrides(locations, docs) {
       if (!patch) return loc;
       const externalLinks = patch.externalLinks || {};
       const hasLink = (field) => Object.prototype.hasOwnProperty.call(externalLinks, field);
+      const addressChanged = Boolean(patch.address && !addressesMatch(loc.address, patch.address));
+      const applyHiddenMissionIds = Boolean(
+        patch.hiddenMissionIds &&
+        (patch.hiddenMissionIds.length > 0 || Array.isArray(loc.hiddenMissionIds)),
+      );
 
       return {
         ...loc,
         ...(patch.address ? { address: { ...loc.address, ...patch.address } } : {}),
         ...(patch.hours ? { hours: { ...(loc.hours || {}), ...patch.hours } } : {}),
-        ...(patch.mapUrl ? { mapUrl: patch.mapUrl } : {}),
+        ...(addressChanged && patch.mapUrl ? { mapUrl: patch.mapUrl } : {}),
         ...(hasLink('externalUrl') ? { externalUrl: externalLinks.externalUrl } : {}),
         ...(hasLink('bookingUrl') ? { bookingUrl: externalLinks.bookingUrl } : {}),
         ...(hasLink('rollerCheckoutUrl')
@@ -220,7 +238,7 @@ function applyLocationDetailsOverrides(locations, docs) {
         ...(externalLinks.groupFormUrls
           ? { groupFormUrls: { ...(loc.groupFormUrls || {}), ...externalLinks.groupFormUrls } }
           : {}),
-        ...(patch.hiddenMissionIds ? { hiddenMissionIds: patch.hiddenMissionIds } : {}),
+        ...(applyHiddenMissionIds ? { hiddenMissionIds: patch.hiddenMissionIds } : {}),
       };
     }),
   };

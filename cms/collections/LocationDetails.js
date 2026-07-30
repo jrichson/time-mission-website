@@ -4,6 +4,7 @@ import { LOCATION_DETAIL_OPTIONS, LOCATION_HOUR_DAYS, LOCATION_MISSION_OPTIONS }
 
 const TIME_24_HOUR_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 const GROUP_FORM_KEY_PATTERN = /^[a-z0-9-]+$/;
+const INTERNAL_PUBLIC_PATH_PATTERN = /^\/[a-z0-9-]+(?:\/[a-z0-9-]+)*$/;
 
 function isCmsAdmin(user) {
   return user?.collection === 'users' && user?.role === 'admin';
@@ -47,10 +48,16 @@ function validateOptionalHttpsUrl(value) {
   return true;
 }
 
-function validateRequiredHttpsUrl(value) {
-  if (value == null || String(value).trim() === '') return 'Add a credential-free https:// URL.';
+function validateRequiredGroupFormUrl(value) {
+  if (value == null || String(value).trim() === '') {
+    return 'Add a same-site /path or credential-free https:// URL.';
+  }
 
-  return validateOptionalHttpsUrl(value);
+  const cleaned = String(value).trim();
+  if (INTERNAL_PUBLIC_PATH_PATTERN.test(cleaned)) return true;
+
+  const result = validateOptionalHttpsUrl(cleaned);
+  return result === true ? true : 'Use a same-site /path or credential-free https:// URL.';
 }
 
 function validateGroupFormKey(value) {
@@ -316,7 +323,7 @@ export const LocationDetails = {
       },
       admin: {
         description:
-          'Admin-editable Pipedrive, Roller, or provider form destinations by group type. Keys use lowercase kebab-case: default, birthdays, corporate, field-trips, bachelor-ette, private-events, holidays.',
+          'Admin-editable same-site inquiry paths, Pipedrive, Roller, or provider form destinations by group type. Keys use lowercase kebab-case: default, birthdays, corporate, field-trips, bachelor-ette, private-events, holidays.',
       },
       fields: [
         {
@@ -333,7 +340,7 @@ export const LocationDetails = {
           required: true,
           maxLength: 2048,
           label: 'Form URL',
-          validate: validateRequiredHttpsUrl,
+          validate: validateRequiredGroupFormUrl,
         },
       ],
     },

@@ -64,6 +64,7 @@ interface LocationDetailsPatch {
 
 const TIME_24_HOUR_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 const GROUP_FORM_KEY_PATTERN = /^[a-z0-9-]+$/;
+const INTERNAL_PUBLIC_PATH_PATTERN = /^\/[a-z0-9-]+(?:\/[a-z0-9-]+)*$/;
 const MISSION_ID_PATTERN = /^\d{4}$/;
 const EXTERNAL_LINK_FIELDS = ['externalUrl', 'bookingUrl', 'rollerCheckoutUrl', 'giftCardUrl', 'waiverUrl'] as const;
 
@@ -88,10 +89,17 @@ function cleanHttpsUrl(value: unknown): string {
     try {
         const url = new URL(cleaned);
         if (url.protocol !== 'https:' || url.username || url.password) return '';
-        return url.toString();
+        return cleaned;
     } catch {
         return '';
     }
+}
+
+function cleanGroupFormUrl(value: unknown): string {
+    const cleaned = cleanString(value);
+    if (!cleaned || cleaned.length > 2048 || /[<>"'\\\s]/.test(cleaned)) return '';
+    if (INTERNAL_PUBLIC_PATH_PATTERN.test(cleaned)) return cleaned;
+    return cleanHttpsUrl(cleaned);
 }
 
 function addressPatchForDoc(doc: PayloadLocationDetailsDoc): LocationRecord['address'] | null {
@@ -157,7 +165,7 @@ function groupFormUrlsPatchForDoc(doc: PayloadLocationDetailsDoc): Record<string
     const patch: Record<string, string> = {};
     for (const row of rows) {
         const formKey = cleanString(row?.formKey);
-        const url = cleanHttpsUrl(row?.url);
+        const url = cleanGroupFormUrl(row?.url);
         if (!GROUP_FORM_KEY_PATTERN.test(formKey) || !url) continue;
         patch[formKey] = url;
     }
@@ -209,6 +217,17 @@ function patchForDoc(doc: PayloadLocationDetailsDoc): LocationDetailsPatch | nul
     };
 }
 
+function addressesMatch(
+    left: LocationRecord['address'],
+    right: LocationRecord['address'],
+): boolean {
+    return ['line1', 'line2', 'city', 'state', 'zip', 'country'].every(
+        (field) =>
+            cleanString(left?.[field as keyof LocationRecord['address']]) ===
+            cleanString(right?.[field as keyof LocationRecord['address']]),
+    );
+}
+
 export function locationDetailsDocLooksUsable(doc: PayloadLocationDetailsDoc): boolean {
     return Boolean(patchForDoc(doc));
 }
@@ -237,12 +256,17 @@ export function applyLocationDetailsOverrides(
         const externalLinks = patch.externalLinks || {};
         const hasLink = (field: keyof PayloadLocationDetailsExternalLinks): boolean =>
             Object.prototype.hasOwnProperty.call(externalLinks, field);
+        const addressChanged = Boolean(patch.address && !addressesMatch(loc.address, patch.address));
+        const applyHiddenMissionIds = Boolean(
+            patch.hiddenMissionIds &&
+            (patch.hiddenMissionIds.length > 0 || Array.isArray(loc.hiddenMissionIds)),
+        );
 
         return {
             ...loc,
             ...(patch.address ? { address: { ...loc.address, ...patch.address } } : {}),
             ...(patch.hours ? { hours: { ...(loc.hours || {}), ...patch.hours } } : {}),
-            ...(patch.mapUrl ? { mapUrl: patch.mapUrl } : {}),
+            ...(addressChanged && patch.mapUrl ? { mapUrl: patch.mapUrl } : {}),
             ...(hasLink('externalUrl') ? { externalUrl: externalLinks.externalUrl } : {}),
             ...(hasLink('bookingUrl') ? { bookingUrl: externalLinks.bookingUrl } : {}),
             ...(hasLink('rollerCheckoutUrl')
@@ -255,7 +279,7 @@ export function applyLocationDetailsOverrides(
             ...(externalLinks.groupFormUrls
                 ? { groupFormUrls: { ...(loc.groupFormUrls || {}), ...externalLinks.groupFormUrls } }
                 : {}),
-            ...(patch.hiddenMissionIds ? { hiddenMissionIds: patch.hiddenMissionIds } : {}),
+            ...(applyHiddenMissionIds ? { hiddenMissionIds: patch.hiddenMissionIds } : {}),
         };
     });
 }

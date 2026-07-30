@@ -104,6 +104,7 @@ describe('Payload location details contract', () => {
                     },
                     groupFormUrls: [
                         { formKey: 'default', url: 'https://forms.example/philly/default' },
+                        { formKey: 'birthdays', url: '/groups/inquire/philadelphia/birthdays' },
                         { formKey: 'bad key', url: 'https://forms.example/philly/bad' },
                     ],
                 },
@@ -115,7 +116,22 @@ describe('Payload location details contract', () => {
         expect(location.giftCardUrl).toBe('https://gift.example/philly');
         expect(location.waiverUrl).toBeUndefined();
         expect(location.groupFormUrls?.default).toBe('https://forms.example/philly/default');
+        expect(location.groupFormUrls?.birthdays).toBe('/groups/inquire/philadelphia/birthdays');
         expect(location.groupFormUrls?.['bad key']).toBeUndefined();
+    });
+
+    it('preserves the source map URL when the CMS address is unchanged', () => {
+        const sourceMapUrl = 'https://maps.google.com/?q=1530+Chestnut+Street';
+        const [location] = applyLocationDetailsOverrides(
+            [{ ...baseLocation, mapUrl: sourceMapUrl }],
+            [{
+                ...baseDoc,
+                address: { ...baseLocation.address },
+                hours: null,
+            }],
+        );
+
+        expect(location.mapUrl).toBe(sourceMapUrl);
     });
 
     it('applies hidden mission overrides and allows editors to clear them', () => {

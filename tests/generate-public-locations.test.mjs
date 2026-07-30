@@ -42,6 +42,7 @@ describe('public location data generator', () => {
               },
               groupFormUrls: [
                 { formKey: 'default', url: 'https://forms.example/philadelphia/default' },
+                { formKey: 'private-events', url: '/groups/inquire/philadelphia/private-events' },
                 { formKey: 'bad key', url: 'https://forms.example/philadelphia/bad' },
                 { formKey: 'birthdays', url: 'data:text/html,bad' },
               ],
@@ -80,6 +81,9 @@ describe('public location data generator', () => {
     expect(philadelphia.rollerCheckoutUrl).toBe('https://checkout.example/philadelphia/roller');
     expect(philadelphia.giftCardUrl).toBe('');
     expect(philadelphia.groupFormUrls.default).toBe('https://forms.example/philadelphia/default');
+    expect(philadelphia.groupFormUrls['private-events']).toBe(
+      '/groups/inquire/philadelphia/private-events',
+    );
     expect(philadelphia.groupFormUrls.birthdays).toBe(
       'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form',
     );

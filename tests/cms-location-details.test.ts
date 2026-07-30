@@ -24,6 +24,7 @@ type CollectionField = {
     required?: boolean;
     type?: string;
     unique?: boolean;
+    validate?: (value: unknown) => boolean | string;
 };
 
 function findField(fields: CollectionField[], name: string): CollectionField | null {
@@ -48,6 +49,7 @@ describe('CMS location details', () => {
         const bookingUrlField = findField(LocationDetails.fields, 'bookingUrl');
         const groupFormUrlsField = findField(LocationDetails.fields, 'groupFormUrls');
         const formKeyField = findField(LocationDetails.fields, 'formKey');
+        const formUrlField = findField(LocationDetails.fields, 'url');
         const hiddenMissionIdsField = findField(LocationDetails.fields, 'hiddenMissionIds');
         const missionIdField = findField(LocationDetails.fields, 'missionId');
         const publishedField = findField(LocationDetails.fields, 'published');
@@ -68,6 +70,9 @@ describe('CMS location details', () => {
         expect(groupFormUrlsField?.type).toBe('array');
         expect(groupFormUrlsField?.access?.update).toBeTypeOf('function');
         expect(formKeyField?.admin?.description || formKeyField?.label).toBeTruthy();
+        expect(formUrlField?.validate?.('/groups/inquire/manassas/default')).toBe(true);
+        expect(formUrlField?.validate?.('https://forms.example/manassas')).toBe(true);
+        expect(formUrlField?.validate?.('javascript:alert(1)')).toContain('same-site /path');
         expect(hiddenMissionIdsField).toMatchObject({ name: 'hiddenMissionIds', type: 'array' });
         expect(hiddenMissionIdsField?.label).toBe('Portal availability by location');
         expect(hiddenMissionIdsField?.labels).toEqual({
