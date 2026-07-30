@@ -177,8 +177,6 @@ body {
 }
 
 .ticket-panel-close,
-.game-popup-close,
-.game-popup-skip,
 .geo-disclosure summary,
 .nav-logo,
 .btn-subscribe,
@@ -196,7 +194,6 @@ body {
     min-height: var(--target-min) !important;
 }
 
-.game-popup-skip,
 .geo-disclosure summary,
 .nav-logo,
 .btn-subscribe,
@@ -292,10 +289,6 @@ body {
     .hero-cta .btn-outline {
         --button-current-padding-x: var(--button-padding-x-compact);
     }
-}
-
-.game-popup-skip {
-    padding: 0.5rem 0.75rem;
 }
 
 #cc-main input[type='checkbox'],

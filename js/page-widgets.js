@@ -21,7 +21,6 @@
     var initPressTicker = requireWidget('initPressTicker');
     var initRevealOnScroll = requireWidget('initRevealOnScroll');
     var initSmoothScroll = requireWidget('initSmoothScroll');
-    var initGamePopup = requireWidget('initGamePopup');
 
     function initCommonPage(config, options) {
         var opts = options || {};
@@ -52,7 +51,6 @@
         initPressTicker();
         initRevealOnScroll();
         initSmoothScroll();
-        initGamePopup(config.gamePopup === true);
     }
 
     function initCity(config) {

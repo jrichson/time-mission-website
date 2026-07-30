@@ -3,7 +3,6 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import indexMainRaw from '../partials/index-main.frag.txt?raw';
 import { applyTmMediaBase } from '../lib/tm-media';
-import indexPrenav from '../partials/index-prenav.frag.txt?raw';
 import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 import { homePageTaglines } from '../lib/page-taglines';
 import PageWidgetsScripts from '../components/PageWidgetsScripts.astro';
@@ -35,7 +34,6 @@ const pageInit = {
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
-    <Fragment slot="pre-nav" set:html={indexPrenav} />
     <div class="home-main" set:html={indexMain} />
     <Fragment slot="after-site-scripts">
         <PageWidgetsScripts pageInit={pageInit} />

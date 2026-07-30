@@ -118,48 +118,7 @@
         });
     }
 
-    // ==========================================
-    // GAME PROMO POPUP
-    // ==========================================
-    function initGamePopup(enabled) {
-        var gamePopup = document.getElementById('gamePopup');
-        var gamePopupClose = document.getElementById('gamePopupClose');
-        var gamePopupSkip = document.getElementById('gamePopupSkip');
-
-        if (!gamePopup || !gamePopupClose || !gamePopupSkip) return;
-
-        function showGamePopup() {
-            if (sessionStorage.getItem('gamePopupDismissed')) return;
-            gamePopup.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function hideGamePopup() {
-            gamePopup.classList.remove('active');
-            document.body.style.overflow = '';
-            sessionStorage.setItem('gamePopupDismissed', 'true');
-        }
-
-        if (enabled) setTimeout(showGamePopup, 8000);
-
-        gamePopupClose.addEventListener('click', hideGamePopup);
-        gamePopupSkip.addEventListener('click', hideGamePopup);
-
-        gamePopup.addEventListener('click', function (e) {
-            if (e.target === gamePopup) {
-                hideGamePopup();
-            }
-        });
-
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && gamePopup.classList.contains('active')) {
-                hideGamePopup();
-            }
-        });
-    }
-
     widgets.initPressTicker = initPressTicker;
     widgets.initRevealOnScroll = initRevealOnScroll;
     widgets.initSmoothScroll = initSmoothScroll;
-    widgets.initGamePopup = initGamePopup;
 })();

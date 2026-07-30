@@ -42,7 +42,6 @@ describe('css architecture contract', () => {
       'css/base.css',
       'css/layout-guards.css',
       'css/social-proof.css',
-      'css/game-popup.css',
       'css/small-viewport-overrides.css',
       'css/page-shell.css',
     ];
@@ -53,14 +52,13 @@ describe('css architecture contract', () => {
     }
 
     const linkedAssets = siteCoreCss()
-      .filter((href) => /^\/css\/(?:base|layout-guards|social-proof|game-popup|small-viewport-overrides|page-shell)\.css/.test(href))
+      .filter((href) => /^\/css\/(?:base|layout-guards|social-proof|small-viewport-overrides|page-shell)\.css/.test(href))
       .map((href) => href.split('?')[0]);
 
     expect(linkedAssets).toEqual([
       '/css/base.css',
       '/css/layout-guards.css',
       '/css/social-proof.css',
-      '/css/game-popup.css',
       '/css/small-viewport-overrides.css',
       '/css/page-shell.css',
     ]);
