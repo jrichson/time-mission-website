@@ -26,6 +26,7 @@ type CollectionField = {
   name?: string;
   options?: unknown[];
   required?: boolean;
+  tabs?: Array<{ fields?: CollectionField[] }>;
   type?: string;
 };
 
@@ -34,6 +35,10 @@ function findField(fields: CollectionField[], name: string): CollectionField | n
     if (field?.name === name) return field;
     if (Array.isArray(field?.fields)) {
       const nested = findField(field.fields, name);
+      if (nested) return nested;
+    }
+    for (const tab of field?.tabs ?? []) {
+      const nested = findField(tab.fields ?? [], name);
       if (nested) return nested;
     }
   }
@@ -64,9 +69,15 @@ describe('CMS announcement banners', () => {
     const locationField = findField(AnnouncementBanners.fields, 'locationSlug');
 
     expect(config).toContain('AnnouncementBanners as CollectionConfig');
-    expect(AnnouncementBanners.labels.singular).toBe('Announcement Banner');
-    expect(AnnouncementBanners.admin.description).toContain('Text-only top banner messages');
-    expect(AnnouncementBanners.admin.description).toContain('Seeded Current ticker rows');
+    expect(AnnouncementBanners.labels.singular).toBe('Website Announcement');
+    expect(AnnouncementBanners.admin.description).toContain('ticker at the top');
+    expect(AnnouncementBanners.admin.defaultColumns).toEqual([
+      'title',
+      'message',
+      'published',
+      'targetScope',
+      'updatedAt',
+    ]);
     expect(messageField).toMatchObject({ name: 'message', type: 'text', required: true });
     expect(tickerBehaviorField).toMatchObject({
       name: 'tickerBehavior',
@@ -75,9 +86,9 @@ describe('CMS announcement banners', () => {
       defaultValue: 'auto',
     });
     expect(tickerBehaviorField?.options).toEqual([
-      { label: 'Auto', value: 'auto' },
-      { label: 'Static centered', value: 'static' },
-      { label: 'Animated scrolling', value: 'animated' },
+      { label: 'Automatic (recommended)', value: 'auto' },
+      { label: 'Keep centered', value: 'static' },
+      { label: 'Scroll across the screen', value: 'animated' },
     ]);
     expect(publishedField?.label).toBe('Published in CMS');
     expect(publishedField?.admin?.description).toContain('Live after deploy');

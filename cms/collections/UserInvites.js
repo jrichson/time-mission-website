@@ -210,7 +210,7 @@ export const UserInvites = {
     plural: 'User Invites',
   },
   admin: {
-    group: 'Settings',
+    group: 'Access & Settings',
     useAsTitle: 'email',
     defaultColumns: ['email', 'role', 'deliveryMethod', 'status', 'sentAt', 'createdAt'],
     description: 'Owner-only invites for CMS access. Send an email or create a copyable password setup link.',
@@ -249,7 +249,7 @@ export const UserInvites = {
             { label: 'Editor', value: 'editor' },
           ],
           admin: {
-            description: 'Editors manage page content. Admins can also access admin-level CMS areas.',
+            description: 'Editors manage website content. Admins can also manage access and protected settings.',
           },
         },
       ],

@@ -119,15 +119,18 @@ function dayHoursField(day) {
 export const LocationDetails = {
   slug: 'location-details',
   labels: {
-    singular: 'Location Detail',
-    plural: 'Location Details',
+    singular: 'Location',
+    plural: 'Locations',
   },
   admin: {
-    group: 'Site Surfaces',
+    group: 'Website Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'locationSlug', 'published', 'updatedAt'],
+    components: {
+      beforeList: ['/components/AdminCollectionGuides.tsx#LocationDetailsGuide'],
+    },
     description:
-      'Address, hours, and external links for existing code-owned locations only. This does not create new public pages or change booking provider settings.',
+      'Public address, hours, booking links, and mission availability for existing locations.',
   },
   access: {
     admin: canManageLocationDetails,
@@ -145,7 +148,7 @@ export const LocationDetails = {
           type: 'text',
           required: true,
           maxLength: 120,
-          admin: { description: 'Internal label for editors. This is not shown on the public site.' },
+          admin: { description: 'Editor label only. Visitors will not see this title.' },
         },
         {
           name: 'locationSlug',
@@ -159,7 +162,7 @@ export const LocationDetails = {
           },
           admin: {
             description:
-              'Maps this address and hours to an existing code-owned location. It does not create a new location page.',
+              'The public location this information belongs to. Only an administrator can change it.',
           },
         },
       ],
@@ -171,196 +174,228 @@ export const LocationDetails = {
       label: 'Published in CMS',
       admin: {
         position: 'sidebar',
+        components: {
+          Cell: '/components/AdminListCells.tsx#PublishedStatusCell',
+        },
         description:
           'Published in CMS means approved. Address and hours are Live after deploy when the static public site rebuilds.',
       },
     },
     {
-      name: 'address',
-      type: 'group',
-      label: 'Address',
-      admin: {
-        description:
-          'Public address text for the existing location. The directions link is generated from this address; booking URLs are managed below and contact settings stay code-owned.',
-      },
-      fields: [
+      type: 'tabs',
+      tabs: [
         {
-          type: 'row',
+          label: 'Address',
+          description: 'Update the public address. The directions link is created from these fields.',
           fields: [
             {
-              name: 'line1',
-              type: 'text',
-              maxLength: 160,
-              label: 'Address line 1',
-            },
-            {
-              name: 'line2',
-              type: 'text',
-              maxLength: 120,
-              label: 'Address line 2',
+              name: 'address',
+              type: 'group',
+              label: 'Public address',
+              admin: {
+                description: 'Booking and inquiry destinations are under the Booking & forms tab.',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'line1',
+                      type: 'text',
+                      maxLength: 160,
+                      label: 'Address line 1',
+                    },
+                    {
+                      name: 'line2',
+                      type: 'text',
+                      maxLength: 120,
+                      label: 'Address line 2',
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'city',
+                      type: 'text',
+                      required: true,
+                      maxLength: 120,
+                    },
+                    {
+                      name: 'state',
+                      type: 'text',
+                      maxLength: 80,
+                      label: 'State / province',
+                    },
+                    {
+                      name: 'zip',
+                      type: 'text',
+                      maxLength: 32,
+                      label: 'ZIP / postal code',
+                    },
+                    {
+                      name: 'country',
+                      type: 'text',
+                      required: true,
+                      maxLength: 80,
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
         {
-          type: 'row',
+          label: 'Hours',
+          description: 'Update the text visitors see for each day.',
           fields: [
             {
-              name: 'city',
-              type: 'text',
-              required: true,
-              maxLength: 120,
-            },
-            {
-              name: 'state',
-              type: 'text',
-              maxLength: 80,
-              label: 'State / province',
-            },
-            {
-              name: 'zip',
-              type: 'text',
-              maxLength: 32,
-              label: 'ZIP / postal code',
-            },
-            {
-              name: 'country',
-              type: 'text',
-              required: true,
-              maxLength: 80,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      name: 'hours',
-      type: 'group',
-      label: 'Hours',
-      admin: {
-        description:
-          'Public hours display for each day. Leave a day blank only when that location does not have public hours yet.',
-      },
-      fields: LOCATION_HOUR_DAYS.map(dayHoursField),
-    },
-    {
-      name: 'externalLinks',
-      type: 'group',
-      label: 'External links',
-      access: {
-        update: ({ req: { user } }) => isCmsAdmin(user),
-      },
-      admin: {
-        description:
-          'Admin-editable public destinations for the existing location. These can change booking, gift card, waiver, and external site URLs after deploy; booking provider settings stay code-owned.',
-      },
-      fields: [
-        {
-          type: 'row',
-          fields: [
-            {
-              name: 'bookingUrl',
-              type: 'text',
-              maxLength: 2048,
-              label: 'Ticket booking URL',
+              name: 'hours',
+              type: 'group',
+              label: 'Public hours',
               admin: {
                 description:
-                  'Primary ticket checkout URL. For Roller locations, this also feeds the Roller checkout URL when that field is blank.',
+                  'Leave a day blank only when this location does not have public hours yet.',
               },
-              validate: validateOptionalHttpsUrl,
-            },
-            {
-              name: 'rollerCheckoutUrl',
-              type: 'text',
-              maxLength: 2048,
-              label: 'Roller checkout URL',
-              admin: {
-                description:
-                  'Optional Roller-specific checkout override. Leave blank when it should match Ticket booking URL.',
-              },
-              validate: validateOptionalHttpsUrl,
+              fields: LOCATION_HOUR_DAYS.map(dayHoursField),
             },
           ],
         },
         {
-          type: 'row',
+          label: 'Booking & forms',
+          description: 'Administrative settings for public booking, gift card, waiver, and group inquiry links.',
           fields: [
             {
-              name: 'giftCardUrl',
-              type: 'text',
-              maxLength: 2048,
-              label: 'Gift card URL',
-              validate: validateOptionalHttpsUrl,
+              name: 'externalLinks',
+              type: 'group',
+              label: 'Booking and visitor links',
+              access: {
+                update: ({ req: { user } }) => isCmsAdmin(user),
+              },
+              admin: {
+                description: 'Only administrators can change these destinations.',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'bookingUrl',
+                      type: 'text',
+                      maxLength: 2048,
+                      label: 'Ticket booking URL',
+                      admin: {
+                        description:
+                          'Primary ticket checkout. For Roller locations, this is also used when the Roller override is blank.',
+                      },
+                      validate: validateOptionalHttpsUrl,
+                    },
+                    {
+                      name: 'rollerCheckoutUrl',
+                      type: 'text',
+                      maxLength: 2048,
+                      label: 'Roller checkout override',
+                      admin: {
+                        description: 'Optional. Leave blank when it should match the ticket booking URL.',
+                      },
+                      validate: validateOptionalHttpsUrl,
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'giftCardUrl',
+                      type: 'text',
+                      maxLength: 2048,
+                      label: 'Gift card URL',
+                      validate: validateOptionalHttpsUrl,
+                    },
+                    {
+                      name: 'waiverUrl',
+                      type: 'text',
+                      maxLength: 2048,
+                      label: 'Waiver URL',
+                      validate: validateOptionalHttpsUrl,
+                    },
+                  ],
+                },
+                {
+                  name: 'externalUrl',
+                  type: 'text',
+                  maxLength: 2048,
+                  label: 'External location page URL',
+                  admin: {
+                    description:
+                      'Use only when this location sends visitors to another public website, such as timemission.eu.',
+                  },
+                  validate: validateOptionalHttpsUrl,
+                },
+              ],
             },
             {
-              name: 'waiverUrl',
-              type: 'text',
-              maxLength: 2048,
-              label: 'Waiver URL',
-              validate: validateOptionalHttpsUrl,
+              name: 'groupFormUrls',
+              type: 'array',
+              maxRows: 20,
+              labels: { singular: 'Group inquiry destination', plural: 'Group inquiry destinations' },
+              access: {
+                update: ({ req: { user } }) => isCmsAdmin(user),
+              },
+              admin: {
+                description:
+                  'Only administrators can change these destinations. Use a group type such as default, birthdays, corporate, or field-trips.',
+              },
+              fields: [
+                {
+                  name: 'formKey',
+                  type: 'text',
+                  required: true,
+                  maxLength: 80,
+                  label: 'Group type',
+                  admin: {
+                    description: 'Lowercase words with hyphens, such as field-trips.',
+                  },
+                  validate: validateGroupFormKey,
+                },
+                {
+                  name: 'url',
+                  type: 'text',
+                  required: true,
+                  maxLength: 2048,
+                  label: 'Form destination',
+                  validate: validateRequiredGroupFormUrl,
+                },
+              ],
             },
           ],
         },
         {
-          name: 'externalUrl',
-          type: 'text',
-          maxLength: 2048,
-          label: 'External location page URL',
-          admin: {
-            description:
-              'Use only when the location page should send visitors to another public site, such as timemission.eu.',
-          },
-          validate: validateOptionalHttpsUrl,
-        },
-      ],
-    },
-    {
-      name: 'groupFormUrls',
-      type: 'array',
-      maxRows: 20,
-      labels: { singular: 'Group form URL', plural: 'Group form URLs' },
-      access: {
-        update: ({ req: { user } }) => isCmsAdmin(user),
-      },
-      admin: {
-        description:
-          'Admin-editable same-site inquiry paths, Pipedrive, Roller, or provider form destinations by group type. Keys use lowercase kebab-case: default, birthdays, corporate, field-trips, bachelor-ette, private-events, holidays.',
-      },
-      fields: [
-        {
-          name: 'formKey',
-          type: 'text',
-          required: true,
-          maxLength: 80,
-          label: 'Form key',
-          validate: validateGroupFormKey,
-        },
-        {
-          name: 'url',
-          type: 'text',
-          required: true,
-          maxLength: 2048,
-          label: 'Form URL',
-          validate: validateRequiredGroupFormUrl,
-        },
-      ],
-    },
-    {
-      name: 'hiddenMissionIds',
-      type: 'array',
-      maxRows: LOCATION_MISSION_OPTIONS.length,
-      label: 'Portal availability by location',
-      labels: { singular: 'Unavailable portal', plural: 'Unavailable portals' },
-      admin: {
-        description:
-          'Use this per-location portal selector to choose portals that are not available at this location. The public Missions page hides selected portals after deploy. Leave empty to show every listed portal.',
-      },
-      fields: [
-        {
-          name: 'missionId',
-          type: 'select',
-          required: true,
-          label: 'Portal',
-          options: LOCATION_MISSION_OPTIONS,
+          label: 'Mission availability',
+          description: 'Hide mission portals that are not available at this location.',
+          fields: [
+            {
+              name: 'hiddenMissionIds',
+              type: 'array',
+              maxRows: LOCATION_MISSION_OPTIONS.length,
+              label: 'Unavailable missions',
+              labels: { singular: 'Unavailable mission', plural: 'Unavailable missions' },
+              admin: {
+                description:
+                  'Selected missions are hidden from this location after deploy. Leave empty to show every mission.',
+              },
+              fields: [
+                {
+                  name: 'missionId',
+                  type: 'select',
+                  required: true,
+                  label: 'Mission',
+                  options: LOCATION_MISSION_OPTIONS,
+                },
+              ],
+            },
+          ],
         },
       ],
     },

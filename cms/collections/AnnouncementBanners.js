@@ -27,9 +27,9 @@ const bannerLocationOptions = [
   { label: 'Time Mission West Nyack', value: 'west-nyack' },
 ];
 const bannerTickerBehaviorOptions = [
-  { label: 'Auto', value: 'auto' },
-  { label: 'Static centered', value: 'static' },
-  { label: 'Animated scrolling', value: 'animated' },
+  { label: 'Automatic (recommended)', value: 'auto' },
+  { label: 'Keep centered', value: 'static' },
+  { label: 'Scroll across the screen', value: 'animated' },
 ];
 
 function canManageAnnouncementBanners({ req: { user } }) {
@@ -72,15 +72,18 @@ function validateEndDate(val, { siblingData } = {}) {
 export const AnnouncementBanners = {
   slug: 'announcement-banners',
   labels: {
-    singular: 'Announcement Banner',
-    plural: 'Announcement Banners',
+    singular: 'Website Announcement',
+    plural: 'Website Announcements',
   },
   admin: {
-    group: 'Site Surfaces',
+    group: 'Website Content',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'message', 'tickerBehavior', 'published', 'priority', 'targetScope', 'startsAt', 'endsAt', 'updatedAt'],
+    defaultColumns: ['title', 'message', 'published', 'targetScope', 'updatedAt'],
+    components: {
+      beforeList: ['/components/AdminCollectionGuides.tsx#AnnouncementBannersGuide'],
+    },
     description:
-      'Text-only top banner messages. Publish in CMS to approve; the public site shows the winning active banner after the next approved deploy. Seeded Current ticker rows are low-priority fallbacks; editor-created banners override them with a higher priority.',
+      'Short messages shown in the ticker at the top of the public website.',
   },
   access: {
     admin: canManageAnnouncementBanners,
@@ -91,45 +94,11 @@ export const AnnouncementBanners = {
   },
   fields: [
     {
-      type: 'row',
-      fields: [
-        {
-          name: 'title',
-          type: 'text',
-          required: true,
-          maxLength: 120,
-          admin: { description: 'Internal label for editors. This is not shown on the public site.' },
-        },
-        {
-          name: 'priority',
-          type: 'number',
-          defaultValue: 0,
-          admin: {
-            description: 'Higher priority wins when multiple banners are active. Matching priorities use the newest start date. Seeded fallback tickers use -100.',
-          },
-        },
-      ],
-    },
-    {
-      name: 'message',
+      name: 'title',
       type: 'text',
       required: true,
-      maxLength: 180,
-      admin: {
-        description: 'Text-only banner message. Keep it short enough to scan in the moving top banner.',
-      },
-    },
-    {
-      name: 'tickerBehavior',
-      type: 'select',
-      defaultValue: 'auto',
-      required: true,
-      label: 'Ticker behavior',
-      options: bannerTickerBehaviorOptions,
-      admin: {
-        description:
-          'Auto keeps short plain messages centered and animates longer messages. Use Static centered or Animated scrolling to force the behavior.',
-      },
+      maxLength: 120,
+      admin: { description: 'Editor label only. Visitors will not see this title.' },
     },
     {
       name: 'published',
@@ -138,94 +107,156 @@ export const AnnouncementBanners = {
       label: 'Published in CMS',
       admin: {
         position: 'sidebar',
+        components: {
+          Cell: '/components/AdminListCells.tsx#PublishedStatusCell',
+        },
         description: 'Published in CMS means approved. It is Live after deploy when the static public site rebuilds.',
       },
     },
     {
-      type: 'row',
-      fields: [
+      type: 'tabs',
+      tabs: [
         {
-          name: 'startsAt',
-          type: 'date',
-          label: 'Start date',
-          admin: {
-            date: { pickerAppearance: 'dayAndTime' },
-            description: 'Optional. Leave empty to make the banner eligible immediately after deploy.',
-          },
+          label: 'Message',
+          description: 'Write the public message and choose how it moves.',
+          fields: [
+            {
+              name: 'message',
+              type: 'text',
+              required: true,
+              maxLength: 180,
+              admin: {
+                description: 'Public message. Keep it short enough to read at a glance.',
+              },
+            },
+            {
+              name: 'tickerBehavior',
+              type: 'select',
+              defaultValue: 'auto',
+              required: true,
+              label: 'Movement',
+              options: bannerTickerBehaviorOptions,
+              admin: {
+                description:
+                  'Automatic keeps short messages centered and scrolls longer messages.',
+              },
+            },
+          ],
         },
         {
-          name: 'endsAt',
-          type: 'date',
-          label: 'End date',
-          admin: {
-            date: { pickerAppearance: 'dayAndTime' },
-            description: 'Optional. Leave empty for no scheduled end.',
-          },
-          validate: validateEndDate,
+          label: 'Audience & schedule',
+          description: 'Choose who sees the announcement and when it is eligible to appear.',
+          fields: [
+            {
+              name: 'targetScope',
+              type: 'select',
+              defaultValue: 'global',
+              required: true,
+              label: 'Who should see it?',
+              options: bannerTargetScopeOptions,
+              admin: {
+                components: {
+                  Cell: '/components/AdminListCells.tsx#AnnouncementAudienceCell',
+                },
+                description: 'Use All visitors unless this message is specific to a region or location.',
+              },
+            },
+            {
+              name: 'targetRegions',
+              type: 'array',
+              labels: { singular: 'Target region', plural: 'Target regions' },
+              admin: {
+                condition: (_, siblingData) => siblingData?.targetScope === 'regions',
+                description: 'The announcement appears only on pages for these regions.',
+              },
+              fields: [
+                {
+                  name: 'region',
+                  type: 'select',
+                  required: true,
+                  options: bannerRegionOptions,
+                },
+              ],
+            },
+            {
+              name: 'targetLocations',
+              type: 'array',
+              labels: { singular: 'Target location', plural: 'Target locations' },
+              admin: {
+                condition: (_, siblingData) => siblingData?.targetScope === 'locations',
+                description: 'The announcement appears only on these location pages.',
+              },
+              fields: [
+                {
+                  name: 'locationSlug',
+                  type: 'select',
+                  required: true,
+                  label: 'Location',
+                  options: bannerLocationOptions,
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'startsAt',
+                  type: 'date',
+                  label: 'Starts',
+                  admin: {
+                    date: { pickerAppearance: 'dayAndTime' },
+                    description: 'Optional. Leave empty to start as soon as the site is deployed.',
+                  },
+                },
+                {
+                  name: 'endsAt',
+                  type: 'date',
+                  label: 'Ends',
+                  admin: {
+                    date: { pickerAppearance: 'dayAndTime' },
+                    description: 'Optional. Leave empty for no scheduled end.',
+                  },
+                  validate: validateEndDate,
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'linkLabel',
+                  type: 'text',
+                  maxLength: 80,
+                  label: 'Link text',
+                  admin: { description: 'Optional. Example: Learn more.' },
+                },
+                {
+                  name: 'linkUrl',
+                  type: 'text',
+                  maxLength: 2048,
+                  label: 'Link destination',
+                  admin: { description: 'Optional. Use a website path or secure https URL.' },
+                  validate: validateInternalOrHttpsUrl,
+                },
+              ],
+            },
+          ],
         },
-      ],
-    },
-    {
-      name: 'targetScope',
-      type: 'select',
-      defaultValue: 'global',
-      required: true,
-      label: 'Targeting',
-      options: bannerTargetScopeOptions,
-      admin: {
-        description: 'Use all visitors unless this announcement is specific to a region or location page.',
-      },
-    },
-    {
-      name: 'targetRegions',
-      type: 'array',
-      labels: { singular: 'Target region', plural: 'Target regions' },
-      admin: {
-        condition: (_, siblingData) => siblingData?.targetScope === 'regions',
-        description: 'The banner is eligible only on pages associated with these regions.',
-      },
-      fields: [
         {
-          name: 'region',
-          type: 'select',
-          required: true,
-          options: bannerRegionOptions,
-        },
-      ],
-    },
-    {
-      name: 'targetLocations',
-      type: 'array',
-      labels: { singular: 'Target location', plural: 'Target locations' },
-      admin: {
-        condition: (_, siblingData) => siblingData?.targetScope === 'locations',
-        description: 'The banner is eligible only on these location pages.',
-      },
-      fields: [
-        {
-          name: 'locationSlug',
-          type: 'select',
-          required: true,
-          label: 'Location slug',
-          options: bannerLocationOptions,
-        },
-      ],
-    },
-    {
-      type: 'row',
-      fields: [
-        {
-          name: 'linkLabel',
-          type: 'text',
-          maxLength: 80,
-          admin: { description: 'Optional text link label. Example: Learn more.' },
-        },
-        {
-          name: 'linkUrl',
-          type: 'text',
-          maxLength: 2048,
-          admin: { description: 'Optional clean internal path or credential-free https URL.' },
-          validate: validateInternalOrHttpsUrl,
+          label: 'Advanced',
+          description: 'Most announcements should keep the default priority.',
+          fields: [
+            {
+              name: 'priority',
+              type: 'number',
+              defaultValue: 0,
+              label: 'Display priority',
+              admin: {
+                description:
+                  'Higher numbers win when more than one announcement is active. Keep 0 unless an announcement must override another.',
+              },
+            },
+          ],
         },
       ],
     },

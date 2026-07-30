@@ -147,7 +147,7 @@ export const Users = {
     plural: 'Users',
   },
   admin: {
-    group: 'Settings',
+    group: 'Access & Settings',
     useAsTitle: 'email',
   },
   access: {
@@ -188,7 +188,7 @@ export const Users = {
       },
       admin: {
         position: 'sidebar',
-        description: 'Only the CMS owner can assign roles. Editors manage landing content only.',
+        description: 'Only the CMS owner can assign roles. Editors manage website content.',
       },
     },
     {

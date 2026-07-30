@@ -33,6 +33,7 @@ type CollectionField = {
   name?: string;
   options?: unknown[];
   required?: boolean;
+  tabs?: Array<{ fields?: CollectionField[] }>;
   type?: string;
   unique?: boolean;
 };
@@ -42,6 +43,10 @@ function findField(fields: CollectionField[], name: string): CollectionField | n
     if (field?.name === name) return field;
     if (Array.isArray(field?.fields)) {
       const nested = findField(field.fields, name);
+      if (nested) return nested;
+    }
+    for (const tab of field?.tabs ?? []) {
+      const nested = findField(tab.fields ?? [], name);
       if (nested) return nested;
     }
   }
@@ -112,7 +117,14 @@ describe('CMS blog posts', () => {
 
     expect(config).toContain('BlogPosts as CollectionConfig');
     expect(BlogPosts.labels.singular).toBe('Blog Post');
-    expect(BlogPosts.admin.description).toContain('/blog/{post-url}');
+    expect(BlogPosts.admin.description).toContain('main blog');
+    expect(BlogPosts.admin.defaultColumns).toEqual([
+      'title',
+      'locationSlug',
+      'published',
+      'publishDate',
+      'updatedAt',
+    ]);
     expect(slugField).toMatchObject({ name: 'slug', type: 'text', required: true, unique: true });
     expect(locationField).toMatchObject({ name: 'locationSlug', type: 'select', required: true });
     expect(locationField?.options).toContainEqual({ label: 'Time Mission Eindhoven', value: 'eindhoven' });

@@ -22,6 +22,7 @@ type CollectionField = {
     name?: string;
     options?: unknown[];
     required?: boolean;
+    tabs?: Array<{ fields?: CollectionField[] }>;
     type?: string;
     unique?: boolean;
     validate?: (value: unknown) => boolean | string;
@@ -32,6 +33,10 @@ function findField(fields: CollectionField[], name: string): CollectionField | n
         if (field?.name === name) return field;
         if (Array.isArray(field?.fields)) {
             const nested = findField(field.fields, name);
+            if (nested) return nested;
+        }
+        for (const tab of field?.tabs ?? []) {
+            const nested = findField(tab.fields ?? [], name);
             if (nested) return nested;
         }
     }
@@ -55,16 +60,16 @@ describe('CMS location details', () => {
         const publishedField = findField(LocationDetails.fields, 'published');
 
         expect(config).toContain('LocationDetails as CollectionConfig');
-        expect(LocationDetails.labels.singular).toBe('Location Detail');
-        expect(LocationDetails.admin.description).toContain('existing code-owned locations only');
-        expect(LocationDetails.admin.description).toContain('does not create new public pages');
-        expect(LocationDetails.admin.description).toContain('external links');
+        expect(LocationDetails.labels.singular).toBe('Location');
+        expect(LocationDetails.admin.description).toContain('existing locations');
+        expect(LocationDetails.admin.components.beforeList).toContain(
+            '/components/AdminCollectionGuides.tsx#LocationDetailsGuide',
+        );
         expect(locationSlugField).toMatchObject({ name: 'locationSlug', type: 'select', required: true, unique: true });
         expect(locationSlugField?.options).toContainEqual({ label: 'Time Mission Philadelphia', value: 'philadelphia' });
-        expect(addressField?.admin?.description).toContain('directions link is generated from this address');
-        expect(addressField?.admin?.description).toContain('booking URLs are managed below');
+        expect(addressField?.admin?.description).toContain('Booking and inquiry destinations');
         expect(hoursField?.type).toBe('group');
-        expect(externalLinksField?.admin?.description).toContain('booking provider settings stay code-owned');
+        expect(externalLinksField?.admin?.description).toContain('Only administrators');
         expect(externalLinksField?.access?.update).toBeTypeOf('function');
         expect(bookingUrlField?.label).toBe('Ticket booking URL');
         expect(groupFormUrlsField?.type).toBe('array');
@@ -74,15 +79,14 @@ describe('CMS location details', () => {
         expect(formUrlField?.validate?.('https://forms.example/manassas')).toBe(true);
         expect(formUrlField?.validate?.('javascript:alert(1)')).toContain('same-site /path');
         expect(hiddenMissionIdsField).toMatchObject({ name: 'hiddenMissionIds', type: 'array' });
-        expect(hiddenMissionIdsField?.label).toBe('Portal availability by location');
+        expect(hiddenMissionIdsField?.label).toBe('Unavailable missions');
         expect(hiddenMissionIdsField?.labels).toEqual({
-            singular: 'Unavailable portal',
-            plural: 'Unavailable portals',
+            singular: 'Unavailable mission',
+            plural: 'Unavailable missions',
         });
-        expect(hiddenMissionIdsField?.admin?.description).toContain('per-location portal selector');
-        expect(hiddenMissionIdsField?.admin?.description).toContain('not available at this location');
+        expect(hiddenMissionIdsField?.admin?.description).toContain('hidden from this location');
         expect(missionIdField).toMatchObject({ name: 'missionId', type: 'select', required: true });
-        expect(missionIdField?.label).toBe('Portal');
+        expect(missionIdField?.label).toBe('Mission');
         expect(missionIdField?.options).toBe(LOCATION_MISSION_OPTIONS);
         expect(publishedField?.label).toBe('Published in CMS');
         expect(publishedField?.admin?.description).toContain('Live after deploy');

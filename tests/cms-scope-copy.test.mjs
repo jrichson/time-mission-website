@@ -11,16 +11,16 @@ function read(rel) {
 }
 
 describe('CMS scope copy', () => {
-  it('makes page SEO overrides distinct from page editing', () => {
+  it('makes search and sharing settings distinct from page editing', () => {
     const sitePages = read('cms/collections/SitePages.js');
     const home = read('cms/app/page.tsx');
 
-    expect(sitePages).toContain("singular: 'Page SEO Override'");
-    expect(sitePages).toContain("plural: 'Page SEO Overrides'");
-    expect(sitePages).toContain('does not change page body copy or layout');
+    expect(sitePages).toContain("singular: 'Search & Sharing Page'");
+    expect(sitePages).toContain("plural: 'Search & Sharing'");
+    expect(sitePages).toContain('does not change page copy or layout');
     expect(sitePages).not.toContain("singular: 'Existing Page'");
-    expect(home).toContain('Page SEO Overrides');
-    expect(home).toContain('Canonical page body copy, layouts, and booking settings stay code-owned.');
+    expect(home).toContain('Search & sharing');
+    expect(home).toContain('without changing page copy or layout');
   });
 
   it('uses deploy-gated CMS publishing language', () => {

@@ -146,6 +146,7 @@ export default buildConfig({
     },
     components: {
       beforeDashboard: ['/components/LandingWizardDashboard.tsx'],
+      beforeNavLinks: ['/components/AdminNavigation.tsx'],
       graphics: {
         Icon: '/components/TimeMissionIcon.tsx',
         Logo: '/components/TimeMissionLogo.tsx',

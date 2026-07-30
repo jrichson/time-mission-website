@@ -58,7 +58,7 @@ export const Landings = {
     plural: 'Landing Pages',
   },
   admin: {
-    group: 'Pages',
+    group: 'Website Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'template', 'published', 'content.ctaSurface', 'updatedAt'],
     components: {
@@ -121,6 +121,9 @@ export const Landings = {
       label: 'Published in CMS',
       admin: {
         position: 'sidebar',
+        components: {
+          Cell: '/components/AdminListCells.tsx#PublishedStatusCell',
+        },
         description: 'Published in CMS means approved. It is Live after deploy when the static public site rebuilds.',
       },
     },

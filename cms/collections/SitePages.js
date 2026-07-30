@@ -47,15 +47,18 @@ function canManageSensitiveSeoFields({ req: { user } }) {
 export const SitePages = {
   slug: 'site-pages',
   labels: {
-    singular: 'Page SEO Override',
-    plural: 'Page SEO Overrides',
+    singular: 'Search & Sharing Page',
+    plural: 'Search & Sharing',
   },
   admin: {
-    group: 'Site Surfaces',
+    group: 'Website Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'path', 'published', 'updatedAt'],
+    components: {
+      beforeList: ['/components/AdminCollectionGuides.tsx#SitePagesGuide'],
+    },
     description:
-      'Search and social metadata for code-owned public pages. This does not change page body copy or layout.',
+      'Search-result and social-sharing settings for existing public pages. This does not change page copy or layout.',
   },
   access: {
     admin: canManageSitePages,
@@ -73,7 +76,7 @@ export const SitePages = {
           type: 'text',
           required: true,
           maxLength: 120,
-          admin: { description: 'Internal label for this SEO override. It is not page body content.' },
+          admin: { description: 'Editor label only. This does not change the page heading.' },
         },
         {
           name: 'path',
@@ -81,13 +84,13 @@ export const SitePages = {
           required: true,
           unique: true,
           index: true,
-          label: 'Code-owned page path',
+          label: 'Page URL',
           access: {
             update: canManageSensitiveSeoFields,
           },
           admin: {
             description:
-              'Admin-only. Match a known code-owned page path, e.g. /, /about, /groups/birthdays. Landing pages use /c/* instead.',
+              'Administrator setting. Use an existing page path such as /about or /groups/birthdays.',
           },
           validate: validateExistingPagePath,
         },
@@ -100,6 +103,9 @@ export const SitePages = {
       label: 'Published in CMS',
       admin: {
         position: 'sidebar',
+        components: {
+          Cell: '/components/AdminListCells.tsx#PublishedStatusCell',
+        },
         description:
           'Published in CMS means this metadata is approved. It is Live after deploy when the static public site rebuilds.',
       },
@@ -107,47 +113,55 @@ export const SitePages = {
     {
       name: 'seo',
       type: 'group',
-      label: 'SEO',
+      label: 'Search and social preview',
+      admin: {
+        description: 'How this page is titled and described outside the website.',
+      },
       fields: [
         {
           name: 'metaTitle',
           type: 'text',
           required: true,
           maxLength: 90,
-          admin: { description: '<title> and og:title for the code-owned page' },
+          label: 'Search title',
+          admin: { description: 'Used in browser tabs, search results, and social shares.' },
         },
         {
           name: 'metaDescription',
           type: 'textarea',
           required: true,
           maxLength: 220,
+          label: 'Search description',
         },
         {
           name: 'robots',
           type: 'select',
           defaultValue: 'index,follow',
+          label: 'Search visibility',
           access: {
             update: canManageSensitiveSeoFields,
           },
           admin: {
-            description: 'Admin-only. Indexing changes can affect crawlability.',
+            description: 'Administrator setting. Hiding a page removes it from search results.',
           },
           options: [
-            { label: 'index, follow', value: 'index,follow' },
-            { label: 'noindex, follow', value: 'noindex,follow' },
+            { label: 'Show in search results', value: 'index,follow' },
+            { label: 'Hide from search results', value: 'noindex,follow' },
           ],
         },
         {
           name: 'ogImage',
           type: 'text',
           required: true,
-          admin: { description: 'Root-relative path, e.g. /assets/photos/...' },
+          label: 'Social image path',
+          admin: { description: 'Use an approved /assets/... image path.' },
           validate: validatePublicAssetPath,
         },
         {
           name: 'twitterImage',
           type: 'text',
-          admin: { description: 'Defaults to og:image if empty' },
+          label: 'X / Twitter image path',
+          admin: { description: 'Optional. Defaults to the social image.' },
           validate: validateOptionalPublicAssetPath,
         },
       ],

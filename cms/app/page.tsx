@@ -77,14 +77,14 @@ const primaryTasks = [
 const advancedLinks = [
   {
     href: '/admin/collections/site-pages',
-    label: 'Page SEO Overrides',
-    meta: 'SEO',
+    label: 'Search & sharing',
+    meta: 'Page previews',
     description:
-      'Search and social metadata only. Canonical page body copy, layouts, and booking settings stay code-owned.',
+      'Update search-result and social-sharing previews without changing page copy or layout.',
   },
   {
     href: '/admin/collections/user-invites',
-    label: 'User Invites',
+    label: 'User invitations',
     meta: 'Access',
     description: 'Invite editors, copy setup links, and review invite status.',
   },
