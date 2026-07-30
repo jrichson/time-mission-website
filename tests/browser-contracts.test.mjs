@@ -16,6 +16,7 @@ describe('browser data, consent, and i18n contracts', () => {
     for (const locationId of [
       'west-nyack',
       'lincoln',
+      'philadelphia',
       'houston',
       'antwerp',
     ]) {
@@ -68,7 +69,17 @@ describe('browser data, consent, and i18n contracts', () => {
       .toBe('https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home');
     expect(byId.get('philadelphia')?.rollerCheckoutUrl)
       .toBe('https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home');
-    expect(byId.get('philadelphia')?.groupFormUrls).toEqual({});
+    const philadelphiaGroupFormUrl =
+      'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form';
+    expect(byId.get('philadelphia')?.groupFormUrls).toEqual({
+      default: philadelphiaGroupFormUrl,
+      birthdays: philadelphiaGroupFormUrl,
+      corporate: philadelphiaGroupFormUrl,
+      'field-trips': philadelphiaGroupFormUrl,
+      'bachelor-ette': philadelphiaGroupFormUrl,
+      'private-events': philadelphiaGroupFormUrl,
+      holidays: philadelphiaGroupFormUrl,
+    });
     expect(byId.get('boston')).toMatchObject({
       status: 'coming-soon',
       navLabel: 'MA – Boston',
@@ -79,6 +90,20 @@ describe('browser data, consent, and i18n contracts', () => {
         city: 'Boston',
         state: 'MA',
         zip: '02109',
+        country: 'United States',
+      },
+    });
+    expect(byId.get('edison')).toMatchObject({
+      status: 'coming-soon',
+      navLabel: 'NJ – Edison',
+      bookingUrl: '',
+      externalUrl: 'https://www.superchargednj.com/',
+      ticker: 'EDISON COMING SOON',
+      address: {
+        line1: '987 US-1',
+        city: 'Edison',
+        state: 'NJ',
+        zip: '08817',
         country: 'United States',
       },
     });

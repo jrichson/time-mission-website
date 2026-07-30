@@ -80,7 +80,9 @@ describe('public location data generator', () => {
     expect(philadelphia.rollerCheckoutUrl).toBe('https://checkout.example/philadelphia/roller');
     expect(philadelphia.giftCardUrl).toBe('');
     expect(philadelphia.groupFormUrls.default).toBe('https://forms.example/philadelphia/default');
-    expect(philadelphia.groupFormUrls.birthdays).toBeUndefined();
+    expect(philadelphia.groupFormUrls.birthdays).toBe(
+      'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form',
+    );
     expect(philadelphia.hiddenMissionIds).toEqual(['1005', '1011']);
 
     fs.rmSync(tempDir, { force: true, recursive: true });

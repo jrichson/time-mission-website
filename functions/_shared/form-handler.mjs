@@ -23,6 +23,7 @@ const CONTACT_LOCATION_LABELS = {
   antwerp: 'Belgium - Antwerp',
   brussels: 'Belgium - Brussels',
   dallas: 'TX - Dallas',
+  edison: 'NJ - Edison',
   general: 'General Inquiry',
   houston: 'TX - Houston',
   lincoln: 'RI - Lincoln',

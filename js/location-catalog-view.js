@@ -172,6 +172,7 @@
         var slug = loc.slug || loc.id || normalizeLocation(id);
         var mapQuery = getMapQuery(loc);
         var externalUrl = BookingJourney.getExternalLocationUrl(loc);
+        var externalSiteLabel = loc.region === 'europe' ? 'Visit EU Site' : 'Visit Location Site';
         var pageUrl = externalUrl || (slug ? '/' + slug : '/');
         var comingSoon = loc.status === 'coming-soon';
         var temporarilyClosed = loc.status === 'temporarily-closed';
@@ -196,7 +197,7 @@
             bookLabel: temporarilyClosed
                 ? BookingJourney.temporaryClosureCtaLabel(loc)
                 : externalUrl
-                ? 'Visit EU Site'
+                ? externalSiteLabel
                 : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
             mapQuery: mapQuery,
             mapDirectionsUrl: mapQuery ? 'https://www.google.com/maps/dir/?api=1&destination=' + mapQuery : '',
@@ -238,7 +239,7 @@
             pageLocationSlug: options && options.pageLocationSlug,
         });
         var labelKey = view.externalUrl
-            ? 'location.visitEuSite'
+            ? (loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite')
             : view.comingSoon
             ? 'location.contactUs'
             : 'nav.bookNow';
@@ -246,7 +247,7 @@
             location: view,
             cta: cta,
             bookLabelKey: labelKey,
-            bookLabelFallback: view.bookLabel || (view.externalUrl ? 'Visit EU Site' : view.comingSoon ? 'Contact Us' : 'Book Now'),
+            bookLabelFallback: view.bookLabel || (view.externalUrl ? 'Visit Location Site' : view.comingSoon ? 'Contact Us' : 'Book Now'),
         };
     }
 

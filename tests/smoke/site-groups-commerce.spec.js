@@ -47,6 +47,22 @@ test('group CTAs resolve to location-data form URLs for the selected location', 
   await expect(page.getByRole('heading', { level: 1 })).toContainText('corporate event');
 });
 
+test('Philadelphia group inquiries use the shared Roller form link', async ({ page }) => {
+  const expectedHref =
+    'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form';
+
+  await page.goto('/groups/corporate');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  await page.evaluate(() => window.TMBooking.open({ kind: 'groups', groupType: 'corporate' }));
+  await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
+  await page.locator('#ticketLocation').selectOption('philadelphia');
+
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', expectedHref);
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('target', '_blank');
+  await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
+});
+
 test('group cards open the selected location event form as a direct link', async ({ page }) => {
   await page.goto('/groups.html');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);

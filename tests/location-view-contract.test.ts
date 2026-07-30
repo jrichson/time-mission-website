@@ -52,6 +52,18 @@ describe('Location View contract', () => {
         expect(nashville.contact.email).toBe('nashville@timemission.com');
     });
 
+    it('routes Edison to the Supercharged NJ site with a US-safe external label', () => {
+        const edison = allLocations.find((loc) => loc.id === 'edison');
+        if (!edison) throw new Error('Edison location missing');
+
+        const view = locationViewModel(edison);
+
+        expect(edison.status).toBe('coming-soon');
+        expect(view.externalUrl).toBe('https://www.superchargednj.com/');
+        expect(view.pageUrl).toBe('https://www.superchargednj.com/');
+        expect(view.bookLabel).toBe('Visit Location Site');
+    });
+
     it('keeps runtime location views aligned with the typed build-time view model', () => {
         const runtime = loadRuntimeLocationViews();
 

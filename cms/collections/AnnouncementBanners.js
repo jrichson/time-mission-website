@@ -15,6 +15,7 @@ const bannerLocationOptions = [
   { label: 'Time Mission Boston', value: 'boston' },
   { label: 'Time Mission Brussels', value: 'brussels' },
   { label: 'Time Mission Dallas', value: 'dallas' },
+  { label: 'Time Mission Edison', value: 'edison' },
   { label: 'Time Mission Eindhoven', value: 'eindhoven' },
   { label: 'Time Mission Houston', value: 'houston' },
   { label: 'Time Mission Lincoln', value: 'lincoln' },

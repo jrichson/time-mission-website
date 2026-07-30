@@ -151,6 +151,7 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
 export function locationViewModel(loc: LocationRecord): LocationViewModel {
     const bookable = hasTicketBooking(loc);
     const externalUrl = String(loc.externalUrl || '').trim();
+    const externalSiteLabel = loc.region === 'europe' ? 'Visit EU Site' : 'Visit Location Site';
     const comingSoon = loc.status === 'coming-soon';
     const temporarilyClosed = loc.status === 'temporarily-closed';
 
@@ -159,7 +160,7 @@ export function locationViewModel(loc: LocationRecord): LocationViewModel {
         bookLabel: temporarilyClosed
             ? loc.temporaryClosure?.ctaLabel || 'Get Closure Updates'
             : externalUrl
-            ? 'Visit EU Site'
+            ? externalSiteLabel
             : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
         bookable,
         externalUrl,

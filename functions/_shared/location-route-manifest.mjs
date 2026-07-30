@@ -86,6 +86,12 @@ export const LOCATION_ROUTE_ENTRIES = [
     "compatibilitySources": [],
     "externalUrl": "",
     "officialAlternate": ""
+  },
+  {
+    "canonicalPath": "/edison",
+    "compatibilitySources": [],
+    "externalUrl": "https://www.superchargednj.com/",
+    "officialAlternate": ""
   }
 ];
 export const PREFIXABLE_CANONICAL_PATHS = [

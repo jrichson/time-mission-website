@@ -404,6 +404,17 @@
       "status": 301
     },
     {
+      "id": "edison",
+      "canonicalPath": "/edison",
+      "externalUrl": "https://www.superchargednj.com/",
+      "redirectSources": [
+        "/edison.html"
+      ],
+      "outputFile": "edison.html",
+      "sitemap": false,
+      "status": 301
+    },
+    {
       "id": "brussels",
       "canonicalPath": "/brussels",
       "locationAlternate": "terminal1",

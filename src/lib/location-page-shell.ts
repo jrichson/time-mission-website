@@ -2,8 +2,9 @@ import { allLocations, type LocationRecord } from '../data/locations';
 import { definePage } from './define-page';
 import { comingSoonLocationPageTaglines, locationPageTaglines } from './location-page-registry';
 import { hasTicketBooking, locationDisplayStatus, locationOpeningDateText, locationOpeningLabel } from './location-status';
-import { locationCtaView, locationMarket } from './location-view';
+import { locationCtaView } from './location-view';
 import { buildLocationGraph, serializeGraph } from './schema/graph';
+import { getSeoForRoute } from './seo/catalog';
 import { locationPurchaseTermsFaqItemHtml } from './location-policy-faq';
 import { applyTmMediaBase } from './tm-media';
 
@@ -155,13 +156,8 @@ export function buildComingSoonLocationPage(slug: string) {
     const isBookable = hasTicketBooking(location);
     const openingLabel = locationOpeningLabel(location);
     const openingDateText = locationOpeningDateText(location);
-    const market = locationMarket(location);
     const statusLabel = openingLabel || (isBookable ? 'Now Booking' : 'Coming Soon');
-    const pageDescription = openingLabel
-        ? `${location.name} opens ${openingDateText}${market ? ` in ${market}` : ''}. Advance tickets are available for 25+ immersive mission rooms.`
-        : isBookable
-        ? `${location.name} is now booking${market ? ` in ${market}` : ''}. Reserve tickets for 25+ immersive mission rooms.`
-        : `${location.name} is coming soon${market ? ` in ${market}` : ''}. Contact the location team for launch timing and opening updates.`;
+    const seo = getSeoForRoute(canonicalPath);
 
     return {
         canonicalPath,
@@ -172,8 +168,8 @@ export function buildComingSoonLocationPage(slug: string) {
         openingDateText,
         openingLabel,
         page: definePage({ canonicalPath }),
-        pageDescription,
+        pageDescription: seo.description,
         pageInit: cityPageInit(location, comingSoonLocationPageTaglines(statusLabel)),
-        pageTitle: `${location.name} | ${statusLabel}`,
+        pageTitle: seo.title,
     };
 }

@@ -69,6 +69,19 @@ describe('browser booking contracts', () => {
             groupFormUrls: {},
           },
           {
+            id: 'edison',
+            slug: 'edison',
+            name: 'Time Mission Edison',
+            shortName: 'Edison',
+            region: 'us',
+            status: 'coming-soon',
+            externalUrl: 'https://www.superchargednj.com/',
+            navLabel: 'NJ – Edison',
+            bookingUrl: '',
+            giftCardUrl: '',
+            groupFormUrls: {},
+          },
+          {
             id: 'west-nyack',
             slug: 'west-nyack',
             status: 'open',
@@ -247,6 +260,19 @@ describe('browser booking contracts', () => {
         bookingUrl: '',
         trigger: false,
         externalLocation: true,
+      });
+    expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'edison' }))
+      .toBe('https://www.superchargednj.com/');
+    expect(window.LocationContext.getOverlayView('edison'))
+      .toMatchObject({
+        bookLabelKey: 'location.visitLocationSite',
+        bookLabelFallback: 'Visit Location Site',
+        cta: {
+          href: 'https://www.superchargednj.com/',
+          bookingUrl: '',
+          trigger: false,
+          externalLocation: true,
+        },
       });
     window.localStorage.setItem('tm_location', 'antwerp');
     window.LocationContext.select('antwerp');

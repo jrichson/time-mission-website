@@ -196,6 +196,13 @@
             };
         }
         if (kind === 'tickets' && BookingJourney.getExternalLocationUrl(loc)) {
+            if (loc.region !== 'europe') {
+                return {
+                    title: loc.name || loc.shortName || 'Visit Location Site',
+                    intro: translate('booking.external.intro', 'Continue to the location website for updates and details.'),
+                    cta: translate('booking.external.cta', 'Visit Location Site'),
+                };
+            }
             return {
                 title: translate('booking.eu.title', 'Time Mission Europe'),
                 intro: translate('booking.eu.intro', 'Continue to the EU-hosted site for this location.'),

@@ -21,6 +21,10 @@ describe('CMS current content sync migration', () => {
     const philadelphiaOpeningPromotionMigration = read(
       'cms/migrations/20260727_090000_philadelphia_opening_promotion.ts',
     );
+    const edisonEnumsMigration = read('cms/migrations/20260730_090000_add_edison_location_enums.ts');
+    const edisonAndPhiladelphiaMigration = read(
+      'cms/migrations/20260730_091000_seed_edison_and_philadelphia_group_form.ts',
+    );
     const migrationIndex = read('cms/migrations/index.ts');
 
     expect(migrationIndex).toContain('20260605_143000_sync_current_cms_content');
@@ -31,6 +35,8 @@ describe('CMS current content sync migration', () => {
     expect(migrationIndex).toContain('20260723_100000_add_boston_location_enums');
     expect(migrationIndex).toContain('20260723_101000_seed_boston_location');
     expect(migrationIndex).toContain('20260727_090000_philadelphia_opening_promotion');
+    expect(migrationIndex).toContain('20260730_090000_add_edison_location_enums');
+    expect(migrationIndex).toContain('20260730_091000_seed_edison_and_philadelphia_group_form');
     expect(migration).toContain('"location_slug" = \'houston\'');
     expect(migration).toContain("'10am - 10pm'");
     expect(migration).toContain('Time Mission Houston – 25+ Interactive Mission Rooms');
@@ -64,6 +70,14 @@ describe('CMS current content sync migration', () => {
     expect(philadelphiaOpeningPromotionMigration).toContain('"location_slug" = \'philadelphia\'');
     expect(philadelphiaOpeningPromotionMigration).toContain(
       "'animated'::\"public\".\"enum_announcement_banners_ticker_behavior\"",
+    );
+    expect(edisonEnumsMigration).toContain("'edison'");
+    expect(edisonAndPhiladelphiaMigration).toContain('Time Mission Edison | Coming Soon');
+    expect(edisonAndPhiladelphiaMigration).toContain('987 US-1');
+    expect(edisonAndPhiladelphiaMigration).toContain('https://www.superchargednj.com/');
+    expect(edisonAndPhiladelphiaMigration).toContain('EDISON COMING SOON');
+    expect(edisonAndPhiladelphiaMigration).toContain(
+      'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form',
     );
   });
 });

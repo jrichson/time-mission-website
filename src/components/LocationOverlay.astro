@@ -64,7 +64,10 @@ function statusClass(loc: (typeof allLocations)[number]) {
                         href={locationHref(loc)}
                         data-city={loc.shortName}
                         data-tm-location-slug={loc.slug}
+                        data-tm-external-location={loc.externalUrl ? 'true' : undefined}
                         class={statusClass(loc)}
+                        target={loc.externalUrl ? '_blank' : undefined}
+                        rel={loc.externalUrl ? 'noopener' : undefined}
                     >
                         {locationListLabel(loc)}
                         {badge && (
