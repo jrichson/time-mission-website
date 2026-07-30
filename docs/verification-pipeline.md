@@ -19,7 +19,7 @@ Order is fixed in `scripts/lib/cloudflare-artifact-contract.cjs` and exposed thr
 | 7 | `npm run check:astro-dist` | Astro dist manifest and hosting expectations |
 | 8 | `npm run check:analytics-output` | Built GTM placement |
 | 9 | `npm run check:css-bundles` | Built stylesheet bundling |
-| 10 | `npm run check:payload-dist` | Payload landing dist artifacts when CMS origin is configured |
+| 10 | `npm run check:payload-dist` | Payload landing and blog-post dist artifacts when CMS origin is configured |
 | 11 | `npm run check:ticket-panel-parity` | Ticket panel markup parity vs built output |
 | 12 | `npm run check:seo-output` | Built HTML SEO metadata vs catalog |
 | 13 | `npm run check:schema-output` | JSON-LD in `dist/` |

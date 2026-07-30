@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   getPublishedAnnouncementBanners,
+  getPublishedBlogPosts,
   getPublishedLandings,
   getPublishedSitePages,
 } from '../src/lib/payload/load';
@@ -34,6 +35,9 @@ describe('Payload CMS origin resolution', () => {
     await expect(getPublishedSitePages()).rejects.toThrow(
       'PAYLOAD_CMS_BUILD_STRICT is set but PAYLOAD_CMS_ORIGIN is missing, invalid, or not allowed by PAYLOAD_CMS_ALLOWED_HOSTS.',
     );
+    await expect(getPublishedBlogPosts()).rejects.toThrow(
+      'PAYLOAD_CMS_BUILD_STRICT is set but PAYLOAD_CMS_ORIGIN is missing, invalid, or not allowed by PAYLOAD_CMS_ALLOWED_HOSTS.',
+    );
   });
 
   it('fetches required published reads through a validated CMS origin', async () => {
@@ -60,6 +64,15 @@ describe('Payload CMS origin resolution', () => {
     expect(fetchMock).not.toHaveBeenCalled();
     expect(warn).toHaveBeenCalledWith(
       '[payload] skipping optional announcement banners: invalid or disallowed PAYLOAD_CMS_ORIGIN',
+    );
+  });
+
+  it('fails blog reads when strict mode cannot reach the published collection', async () => {
+    process.env.PAYLOAD_CMS_BUILD_STRICT = 'true';
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 503 }));
+
+    await expect(getPublishedBlogPosts('https://strict-blog-origin.example')).rejects.toThrow(
+      'GET https://strict-blog-origin.example/api/blog-posts?depth=0&limit=250 failed: 503',
     );
   });
 });

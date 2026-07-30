@@ -33,7 +33,9 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       "external_links_roller_checkout_url" = ${PHILADELPHIA_CHECKOUT_URL},
       "updated_at" = now()
     WHERE "location_slug" = 'philadelphia';
+  `)
 
+  await db.execute(sql`
     UPDATE "site_pages"
     SET
       "title" = 'Time Mission Philadelphia – 25+ Interactive Mission Rooms',
@@ -41,7 +43,9 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       "seo_meta_description" = 'Time Mission Philadelphia reopens August 7, 2026. Advance tickets are available now for 25+ immersive mission rooms.',
       "updated_at" = now()
     WHERE "path" = '/philadelphia';
+  `)
 
+  await db.execute(sql`
     WITH stale_philadelphia_promos AS (
       SELECT DISTINCT banners."id"
       FROM "announcement_banners" banners

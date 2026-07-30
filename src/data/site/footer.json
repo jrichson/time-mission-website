@@ -15,6 +15,7 @@
       "title": "INFO",
       "links": [
         { "label": "Contact Us", "href": "/contact" },
+        { "label": "Blog", "href": "/blog" },
         { "label": "Press", "href": "/press" },
         { "label": "Donation", "href": "/donation" },
         { "label": "Waiver", "href": "/waiver" },

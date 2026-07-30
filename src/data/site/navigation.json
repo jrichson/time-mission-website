@@ -4,6 +4,7 @@
     { "label": "About", "href": "/about" },
     { "label": "Missions", "href": "/missions" },
     { "label": "Groups", "href": "/groups" },
+    { "label": "Blog", "href": "/blog" },
     { "label": "FAQ", "href": "/faq" },
     { "label": "Gift Cards", "href": "/gift-cards" },
     { "label": "Locations", "href": "/locations" },

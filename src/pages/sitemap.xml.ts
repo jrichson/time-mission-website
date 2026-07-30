@@ -5,6 +5,8 @@ import { cmsBuildStrict } from '../lib/payload/cms-origin';
 import {
     blogLocationCanonicalPath,
     blogPostCanonicalPath,
+    blogPostDocLooksRenderable,
+    blogPostLocationSlug,
     blogPostShouldAppearInSitemap,
     getPublishedBlogPosts,
     getPublishedLandings,
@@ -29,7 +31,6 @@ export const GET: APIRoute = async () => {
 
     const items: string[] = [];
     items.push(...surface.sitemapUrls);
-    items.push(...allLocations.map((loc) => surface.publicUrlFor(blogLocationCanonicalPath(loc.slug))));
 
     try {
         const landings = await getPublishedLandings();
@@ -39,13 +40,22 @@ export const GET: APIRoute = async () => {
             items.push(surface.publicUrlFor(cp));
         }
         const blogPosts = await getPublishedBlogPosts();
+        const renderableBlogPosts = blogPosts.filter(blogPostDocLooksRenderable);
+        if (renderableBlogPosts.length > 0) {
+            items.push(surface.publicUrlFor('/blog'));
+        }
+        const locationSlugsWithPosts = new Set(renderableBlogPosts.map(blogPostLocationSlug));
+        for (const location of allLocations) {
+            if (!locationSlugsWithPosts.has(location.slug)) continue;
+            items.push(surface.publicUrlFor(blogLocationCanonicalPath(location.slug)));
+        }
         for (const doc of blogPosts) {
             if (!blogPostShouldAppearInSitemap(doc)) continue;
             items.push(surface.publicUrlFor(blogPostCanonicalPath(String(doc.slug))));
         }
     } catch (e) {
         if (cmsBuildStrict()) throw e;
-        /* Payload unavailable at build -> registry and location blog sitemap (non-strict) */
+        /* Payload unavailable at build -> code-owned registry sitemap only (non-strict) */
     }
 
     items.sort();

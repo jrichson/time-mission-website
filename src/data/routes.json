@@ -158,7 +158,7 @@
         "/blog.html"
       ],
       "outputFile": "blog.html",
-      "sitemap": true,
+      "sitemap": false,
       "status": 301
     },
     {

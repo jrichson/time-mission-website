@@ -51,7 +51,9 @@ const ld = serializeGraph(buildSimpleGraph([
             <h1>TIME MISSION BLOG</h1>
             <p>Local updates, opening notes, event ideas, and mission-room news from Time Mission teams.</p>
             <div class="tm-blog-actions">
-                <a href="#browse-by-location" class="tm-blog-button">Browse by Location</a>
+                {locationsWithPosts.length ? (
+                    <a href="#browse-by-location" class="tm-blog-button">Browse by Location</a>
+                ) : null}
                 <a href="/locations" class="tm-blog-secondary">Find a Location</a>
             </div>
         </div>
@@ -88,24 +90,26 @@ const ld = serializeGraph(buildSimpleGraph([
         </div>
     </section>
 
-    <section class="tm-blog-section tm-blog-section--quiet" id="browse-by-location">
-        <div class="tm-blog-shell">
-            <div class="tm-blog-section-head">
-                <p class="tm-blog-kicker">Locations</p>
-                <h2>Browse by location</h2>
-                <p>Choose your location for local news, opening updates, and event ideas.</p>
+    {locationsWithPosts.length ? (
+        <section class="tm-blog-section tm-blog-section--quiet" id="browse-by-location">
+            <div class="tm-blog-shell">
+                <div class="tm-blog-section-head">
+                    <p class="tm-blog-kicker">Locations</p>
+                    <h2>Browse by location</h2>
+                    <p>Choose your location for local news, opening updates, and event ideas.</p>
+                </div>
+                <div class="tm-blog-location-list">
+                    {locationsWithPosts.map((loc) => {
+                        const postCount = (postsByLocation.get(loc.slug) || []).length;
+                        return (
+                            <a href={blogLocationCanonicalPath(loc.slug)}>
+                                <span>{loc.navLabel}</span>
+                                <strong>{`${postCount} ${postCount === 1 ? 'post' : 'posts'}`}</strong>
+                            </a>
+                        );
+                    })}
+                </div>
             </div>
-            <div class="tm-blog-location-list">
-                {(locationsWithPosts.length ? locationsWithPosts : allLocations).map((loc) => {
-                    const postCount = (postsByLocation.get(loc.slug) || []).length;
-                    return (
-                        <a href={blogLocationCanonicalPath(loc.slug)}>
-                            <span>{loc.navLabel}</span>
-                            <strong>{postCount ? `${postCount} ${postCount === 1 ? 'post' : 'posts'}` : 'No posts yet'}</strong>
-                        </a>
-                    );
-                })}
-            </div>
-        </div>
-    </section>
+        </section>
+    ) : null}
 </SiteLayout>

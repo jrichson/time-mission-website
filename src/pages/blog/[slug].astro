@@ -21,14 +21,16 @@ export const prerender = true;
 
 export async function getStaticPaths() {
     const posts = sortBlogPosts((await getPublishedBlogPosts()).filter(blogPostDocLooksRenderable));
-    const locationPaths = allLocations.map((location) => ({
-        params: { slug: location.slug },
-        props: {
-            kind: 'location',
-            locationSlug: location.slug,
-            posts: posts.filter((post) => blogPostLocationSlug(post) === location.slug),
-        },
-    }));
+    const locationPaths = allLocations
+        .filter((location) => posts.some((post) => blogPostLocationSlug(post) === location.slug))
+        .map((location) => ({
+            params: { slug: location.slug },
+            props: {
+                kind: 'location',
+                locationSlug: location.slug,
+                posts: posts.filter((post) => blogPostLocationSlug(post) === location.slug),
+            },
+        }));
     const postPaths = posts.map((post) => ({
         params: { slug: post.slug },
         props: { kind: 'post', post },

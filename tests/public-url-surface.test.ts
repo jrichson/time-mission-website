@@ -33,6 +33,7 @@ describe('Public URL Surface', () => {
     expect(surface.sitemapUrls).toContain(publicUrlForPath('/locations', registry));
     expect(surface.sitemapUrls).not.toContain(publicUrlForPath('/antwerp', registry));
     expect(surface.sitemapUrls).not.toContain(publicUrlForPath('/brussels', registry));
+    expect(surface.sitemapUrls).not.toContain(publicUrlForPath('/blog', registry));
   });
 
   it('normalizes the dynamic landing prefix consistently', () => {

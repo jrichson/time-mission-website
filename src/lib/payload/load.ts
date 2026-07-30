@@ -244,17 +244,18 @@ export async function getPublishedLocationDetails(origin?: string): Promise<Payl
 }
 
 /**
- * Published blog posts are optional during CMS rollout.
- * The public blog index stays valid when no published posts exist yet.
+ * Published blog posts stay optional for loose local builds, but production
+ * builds must fail when strict CMS mode is enabled and the collection cannot
+ * be read. This prevents a temporary CMS outage from deploying an empty blog.
  */
 export async function getPublishedBlogPosts(origin?: string): Promise<PayloadBlogPostDoc[]> {
-    const readOrigin = publishedCmsOrigin({ label: 'blog posts', optional: true, origin });
+    const readOrigin = publishedCmsOrigin({ label: 'blog posts', origin });
     if (!readOrigin) return [];
 
     return fetchPayloadCollection<PayloadBlogPostDoc>({
         collection: 'blog-posts',
-        optionalLabel: 'blog posts',
         origin: readOrigin.base,
+        strict: readOrigin.strict,
     });
 }
 

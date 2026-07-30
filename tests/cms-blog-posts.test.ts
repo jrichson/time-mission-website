@@ -245,4 +245,28 @@ describe('CMS blog posts', () => {
       twitterImage: '/assets/photos/blog-twitter.jpg',
     });
   });
+
+  it('keeps the production blog launch discoverable and deployment-gated', () => {
+    const routes = JSON.parse(read('src/data/routes.json'));
+    const navigation = JSON.parse(read('src/data/site/navigation.json'));
+    const footer = JSON.parse(read('src/data/site/footer.json'));
+    const blogRoute = routes.routes.find((route: { id?: string }) => route.id === 'blog');
+    const workflow = read('.github/workflows/cms-wrangler-deploy.yml');
+    const payloadDistCheck = read('scripts/check-payload-dist.mjs');
+    const locationBlogPage = read('src/pages/blog/[slug].astro');
+
+    expect(blogRoute?.sitemap).toBe(false);
+    expect(navigation.primary).toContainEqual({ label: 'Blog', href: '/blog' });
+    expect(footer.columns.flatMap((column: { links: unknown[] }) => column.links))
+      .toContainEqual({ label: 'Blog', href: '/blog' });
+    expect(workflow.indexOf('npm run check:payload-dist')).toBeLessThan(
+      workflow.indexOf('npx wrangler pages deploy dist'),
+    );
+    expect(payloadDistCheck).toContain("fetchPublishedDocs('blog-posts')");
+    expect(payloadDistCheck).toContain('blogPostDocLooksRenderable');
+    expect(payloadDistCheck).toContain('dist/blog/${slug}.html');
+    expect(locationBlogPage).toContain(
+      ".filter((location) => posts.some((post) => blogPostLocationSlug(post) === location.slug))",
+    );
+  });
 });
