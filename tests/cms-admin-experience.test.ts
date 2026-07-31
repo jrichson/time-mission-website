@@ -21,6 +21,7 @@ describe('CMS admin experience', () => {
     const home = read('cms/app/page.tsx');
     const navigation = read('cms/components/AdminNavigation.tsx');
     const importMap = read('cms/app/(payload)/admin/importMap.js');
+    const nextConfig = read('cms/next.config.mjs');
 
     expect(config).toContain("beforeNavLinks: ['/components/AdminNavigation.tsx']");
     expect(navigation).toContain('Mission Control');
@@ -29,6 +30,12 @@ describe('CMS admin experience', () => {
     expect(importMap).toContain('/components/AdminListCells.tsx#PublishedStatusCell');
     expect(home).toContain("href: '/locations/bulk'");
     expect(home).toContain('Edit locations in bulk');
+    expect(nextConfig).toContain(
+      "style-src 'self' 'unsafe-inline'${publicSiteOrigin ? ` ${publicSiteOrigin}` : ''}",
+    );
+    expect(nextConfig).toContain(
+      "font-src 'self' data:${publicSiteOrigin ? ` ${publicSiteOrigin}` : ''}",
+    );
   });
 
   it('provides an atomic bulk workspace for location operations', () => {

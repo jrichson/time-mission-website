@@ -24,9 +24,9 @@ const publicSiteOrigin = optionalCspOrigin('PAYLOAD_PUBLIC_SITE_ORIGIN');
 const cspDirectives = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ''}`,
-  "style-src 'self' 'unsafe-inline'",
+  `style-src 'self' 'unsafe-inline'${publicSiteOrigin ? ` ${publicSiteOrigin}` : ''}`,
   `img-src 'self' data: blob:${publicSiteOrigin ? ` ${publicSiteOrigin}` : ''}`,
-  "font-src 'self' data:",
+  `font-src 'self' data:${publicSiteOrigin ? ` ${publicSiteOrigin}` : ''}`,
   `connect-src 'self'${isDevelopment ? ' ws: http:' : ''}`,
   "worker-src 'self' blob:",
   "object-src 'none'",
