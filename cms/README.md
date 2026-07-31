@@ -43,6 +43,7 @@ CMS public states use shared language:
 Set these in Railway:
 
 - `PAYLOAD_SERVER_URL` — public CMS origin only, no path, e.g. `https://your-app.up.railway.app`. Production requires HTTPS.
+- `PAYLOAD_MEDIA_DIR` — durable filesystem path for CMS image uploads. Production uses the mounted Railway volume path `/data/media`.
 - `CMS_OWNER_EMAIL` — exact email address for the account allowed to create invites, update, delete, unlock, and assign roles for CMS users. If this is unset, the first CMS account is treated as the bootstrap owner so the initial user can invite and manage approved users.
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` — SMTP settings for invite delivery. Without `SMTP_HOST`, new invite records are marked `failed` so you do not mistake a console-only email log for a real sent invite.
 - `SMTP_FROM_ADDRESS`, `SMTP_FROM_NAME` — optional sender identity for CMS invite emails. Defaults to `noreply@timemission.com` / `Time Mission CMS` when SMTP is configured.

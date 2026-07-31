@@ -72,7 +72,7 @@ describe('Payload CMS origin resolution', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 503 }));
 
     await expect(getPublishedBlogPosts('https://strict-blog-origin.example')).rejects.toThrow(
-      'GET https://strict-blog-origin.example/api/blog-posts?depth=0&limit=250 failed: 503',
+      'GET https://strict-blog-origin.example/api/blog-posts?depth=1&limit=250 failed: 503',
     );
   });
 });

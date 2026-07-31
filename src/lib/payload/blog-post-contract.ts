@@ -19,6 +19,7 @@ interface PayloadLexicalEditorState {
 interface PayloadLexicalNode {
     children?: PayloadLexicalNode[] | null;
     fields?: {
+        caption?: string | null;
         newTab?: boolean | null;
         url?: string | null;
     } | null;
@@ -28,6 +29,19 @@ interface PayloadLexicalNode {
     text?: string | null;
     type?: string | null;
     url?: string | null;
+    relationTo?: string | null;
+    value?: string | number | PayloadMediaDoc | null;
+}
+
+interface PayloadMediaDoc {
+    alt?: string | null;
+    caption?: string | null;
+    filename?: string | null;
+    height?: number | null;
+    id?: string | number | null;
+    mimeType?: string | null;
+    url?: string | null;
+    width?: number | null;
 }
 
 export interface PayloadBlogPostDoc {
@@ -39,6 +53,10 @@ export interface PayloadBlogPostDoc {
     publishDate?: string | null;
     locationSlug?: string | null;
     heroImage?: string | null;
+    heroMedia?: string | number | PayloadMediaDoc | null;
+    postType?: 'article' | 'external' | string | null;
+    externalPublisher?: string | null;
+    externalUrl?: string | null;
     published?: boolean | null;
     includeInSitemap?: boolean | null;
     seo?: {
@@ -80,6 +98,29 @@ function publicAssetPath(value: unknown): string {
         return raw;
     }
     return '';
+}
+
+function safeHttpsUrl(value: unknown): string {
+    const raw = cleanString(value);
+    if (!raw || raw.length > 2048 || /[<>"'\\\s]/.test(raw)) return '';
+
+    let url: URL;
+    try {
+        url = new URL(raw);
+    } catch {
+        return '';
+    }
+
+    if (url.protocol !== 'https:' || url.username || url.password) return '';
+    return url.toString();
+}
+
+function mediaDoc(value: unknown): PayloadMediaDoc | null {
+    return isRecord(value) ? value as PayloadMediaDoc : null;
+}
+
+function mediaUrl(value: unknown): string {
+    return safeHttpsUrl(mediaDoc(value)?.url);
 }
 
 function escapeHtml(value: string): string {
@@ -169,6 +210,24 @@ function renderLexicalNodeHtml(node: PayloadLexicalNode): string {
         return `<a href="${escapeAttribute(href)}"${newTabAttrs}>${inner}</a>`;
     }
 
+    if (type === 'upload' && cleanString(node.relationTo) === 'media') {
+        const media = mediaDoc(node.value);
+        const src = mediaUrl(media);
+        if (!media || !src) return '';
+
+        const alt = escapeAttribute(cleanString(media.alt));
+        const caption = cleanString(node.fields?.caption) || cleanString(media.caption);
+        const width = Number.isFinite(media.width) && Number(media.width) > 0
+            ? ` width="${Math.round(Number(media.width))}"`
+            : '';
+        const height = Number.isFinite(media.height) && Number(media.height) > 0
+            ? ` height="${Math.round(Number(media.height))}"`
+            : '';
+        const captionHtml = caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : '';
+
+        return `<figure class="tm-blog-inline-image"><img src="${escapeAttribute(src)}" alt="${alt}"${width}${height} loading="lazy" decoding="async">${captionHtml}</figure>`;
+    }
+
     return renderLexicalChildren(node);
 }
 
@@ -230,7 +289,7 @@ export function blogPostLocationSlug(doc: PayloadBlogPostDoc): string {
 }
 
 export function blogPostHeroImage(doc: PayloadBlogPostDoc): string {
-    return publicAssetPath(doc.heroImage) || DEFAULT_BLOG_HERO_IMAGE;
+    return mediaUrl(doc.heroMedia) || publicAssetPath(doc.heroImage) || DEFAULT_BLOG_HERO_IMAGE;
 }
 
 function blogPostSocialImage(doc: PayloadBlogPostDoc): string {
@@ -267,12 +326,36 @@ export function blogPostBodyHtml(doc: PayloadBlogPostDoc): string {
     return richTextHtml(doc.body);
 }
 
+export function blogPostIsExternal(doc: PayloadBlogPostDoc): boolean {
+    return cleanString(doc.postType) === 'external';
+}
+
+export function blogPostExternalUrl(doc: PayloadBlogPostDoc): string {
+    return blogPostIsExternal(doc) ? safeHttpsUrl(doc.externalUrl) : '';
+}
+
+export function blogPostExternalPublisher(doc: PayloadBlogPostDoc): string {
+    const publisher = cleanString(doc.externalPublisher);
+    if (publisher) return publisher;
+
+    const externalUrl = blogPostExternalUrl(doc);
+    if (!externalUrl) return '';
+
+    try {
+        return new URL(externalUrl).hostname.replace(/^www\./, '');
+    } catch {
+        return '';
+    }
+}
+
 export function blogPostDocLooksRenderable(doc: PayloadBlogPostDoc): boolean {
     if (!doc || doc.published !== true) return false;
     if (!cleanString(doc.title) || !slugIsValidForBlogPost(cleanString(doc.slug))) return false;
     if (!blogPostLocationSlug(doc)) return false;
     if (!blogPostPublishDate(doc)) return false;
-    if (!blogPostExcerptForDoc(doc) || !richTextPlainText(doc.body)) return false;
+    if (!blogPostExcerptForDoc(doc)) return false;
+    if (blogPostIsExternal(doc)) return Boolean(blogPostExternalUrl(doc));
+    if (!richTextPlainText(doc.body)) return false;
     return true;
 }
 

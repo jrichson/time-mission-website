@@ -45,7 +45,7 @@ describe('CMS navigation', () => {
     expect(missionControl).not.toContain('raw Payload dashboard');
     expect(missionControl).not.toContain('drop into Payload');
     expect(missionControl).toContain('Less common work');
-    expect(missionControl).toContain('/admin/collections/location-details');
+    expect(missionControl).toContain('/locations/bulk');
     expect(middleware).toContain("NextResponse.redirect(new URL('/', request.url))");
     expect(middleware).toContain("matcher: ['/admin', '/admin/']");
   });

@@ -18,6 +18,7 @@ function read(rel: string): string {
 describe('CMS admin experience', () => {
   it('keeps Mission Control accessible from the Payload admin', () => {
     const config = read('cms/payload.config.ts');
+    const home = read('cms/app/page.tsx');
     const navigation = read('cms/components/AdminNavigation.tsx');
     const importMap = read('cms/app/(payload)/admin/importMap.js');
 
@@ -26,6 +27,24 @@ describe('CMS admin experience', () => {
     expect(navigation).toContain('Make changes live');
     expect(importMap).toContain('/components/AdminNavigation.tsx#default');
     expect(importMap).toContain('/components/AdminListCells.tsx#PublishedStatusCell');
+    expect(home).toContain("href: '/locations/bulk'");
+    expect(home).toContain('Edit locations in bulk');
+  });
+
+  it('provides an atomic bulk workspace for location operations', () => {
+    const bulkPage = read('cms/app/locations/bulk/page.tsx');
+    const bulkStyles = read('cms/app/locations/bulk/page.module.css');
+    const guides = read('cms/components/AdminCollectionGuides.tsx');
+
+    expect(bulkPage).toContain('Save all location changes');
+    expect(bulkPage).toContain('payload.db.beginTransaction()');
+    expect(bulkPage).toContain('payload.db.commitTransaction(transactionID)');
+    expect(bulkPage).toContain('payload.db.rollbackTransaction(transactionID)');
+    expect(bulkPage).toContain("overrideAccess: false");
+    expect(bulkPage).toContain("user.role === 'admin'");
+    expect(guides).toContain('actionHref="/locations/bulk"');
+    expect(bulkStyles).toContain('@media (max-width: 520px)');
+    expect(bulkStyles).toContain(':focus-visible');
   });
 
   it('organizes website collections around editor tasks', () => {
@@ -47,7 +66,7 @@ describe('CMS admin experience', () => {
       expect.objectContaining({
         type: 'tabs',
         tabs: expect.arrayContaining([
-          expect.objectContaining({ label: 'Article' }),
+          expect.objectContaining({ label: 'Write' }),
           expect.objectContaining({ label: 'Image & search' }),
         ]),
       }),

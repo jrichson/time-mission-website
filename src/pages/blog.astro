@@ -9,6 +9,7 @@ import {
     blogPostDateLabel,
     blogPostDocLooksRenderable,
     blogPostExcerptHtmlForDoc,
+    blogPostExternalPublisher,
     blogPostHeroImage,
     blogPostLocationSlug,
     getPublishedBlogPosts,
@@ -35,7 +36,7 @@ const ld = serializeGraph(buildSimpleGraph([
 
 <SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-blog-page">
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-blog.css?v=1" />
+        <link rel="stylesheet" href="/css/page-blog.css?v=2" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
@@ -73,7 +74,13 @@ const ld = serializeGraph(buildSimpleGraph([
                             <article class="tm-blog-card">
                                 <a href={blogPostCanonicalPath(String(post.slug))}>
                                     <img src={blogPostHeroImage(post)} alt="" width="720" height="480" loading="lazy" decoding="async" />
-                                    <span>{location?.shortName || 'Time Mission'} · {blogPostDateLabel(post)}</span>
+                                    <span>
+                                        {blogPostExternalPublisher(post)
+                                            ? `Shared from ${blogPostExternalPublisher(post)}`
+                                            : location?.shortName || 'Time Mission'}
+                                        {' · '}
+                                        {blogPostDateLabel(post)}
+                                    </span>
                                     <h3>{post.title}</h3>
                                     <div class="tm-blog-card-excerpt" set:html={blogPostExcerptHtmlForDoc(post)} />
                                 </a>

@@ -1,10 +1,17 @@
 import { isAdminOrEditor } from './Users.js';
+import {
+  FixedToolbarFeature,
+  UploadFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical';
 import { markCmsDeployNeeded } from '../lib/cms-deploy-gate.js';
 import { LOCATION_DETAIL_OPTIONS } from '../lib/location-details-options.js';
 import { DEFAULT_LANDING_HERO_IMAGE, validateOptionalPublicAssetPath } from '../lib/media-library.js';
 
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const reservedBlogSlugs = new Set(LOCATION_DETAIL_OPTIONS.map((option) => option.value));
+const POST_TYPE_ARTICLE = 'article';
+const POST_TYPE_EXTERNAL = 'external';
 
 function canManageBlogPosts({ req: { user } }) {
   if (!user || user.collection !== 'users') return false;
@@ -22,6 +29,82 @@ function validateBlogSlug(val) {
   return true;
 }
 
+function validateOptionalHttpsUrl(value) {
+  if (value == null || String(value).trim() === '') return true;
+
+  const cleaned = String(value).trim();
+  if (cleaned.length > 2048 || /[<>"'\\\s]/.test(cleaned)) {
+    return 'Use a credential-free https:// URL.';
+  }
+
+  let url;
+  try {
+    url = new URL(cleaned);
+  } catch {
+    return 'Use a credential-free https:// URL.';
+  }
+
+  if (url.protocol !== 'https:' || url.username || url.password) {
+    return 'Use a credential-free https:// URL.';
+  }
+
+  return true;
+}
+
+function validateExternalPostUrl(value, { data, siblingData } = {}) {
+  const postType = data?.postType ?? siblingData?.postType;
+  if (postType !== POST_TYPE_EXTERNAL) return validateOptionalHttpsUrl(value);
+  const published = data?.published ?? siblingData?.published;
+  if (published !== true && !String(value ?? '').trim()) return true;
+  if (!String(value ?? '').trim()) return 'Add the external article or press release URL.';
+
+  return validateOptionalHttpsUrl(value);
+}
+
+function richTextHasText(value) {
+  const children = value?.root?.children;
+  if (!Array.isArray(children)) return false;
+
+  const containsText = (node) => {
+    if (typeof node?.text === 'string' && node.text.trim()) return true;
+    return Array.isArray(node?.children) && node.children.some(containsText);
+  };
+
+  return children.some(containsText);
+}
+
+function validateArticleBody(value, { data, siblingData } = {}) {
+  const postType = data?.postType ?? siblingData?.postType;
+  if (postType === POST_TYPE_EXTERNAL) return true;
+  const published = data?.published ?? siblingData?.published;
+  if (published !== true && !richTextHasText(value)) return true;
+
+  return richTextHasText(value) || 'Write the article body before publishing this post.';
+}
+
+const articleEditor = lexicalEditor({
+  features: ({ defaultFeatures }) => [
+    ...defaultFeatures,
+    FixedToolbarFeature(),
+    UploadFeature({
+      enabledCollections: ['media'],
+      maxDepth: 1,
+      collections: {
+        media: {
+          fields: [
+            {
+              name: 'caption',
+              type: 'text',
+              maxLength: 240,
+              label: 'Caption',
+            },
+          ],
+        },
+      },
+    }),
+  ],
+});
+
 export const BlogPosts = {
   slug: 'blog-posts',
   labels: {
@@ -35,8 +118,9 @@ export const BlogPosts = {
     components: {
       beforeList: ['/components/AdminCollectionGuides.tsx#BlogPostsGuide'],
     },
+    preview: (data) => (data?.id ? `/preview/blog/${data.id}` : null),
     description:
-      'Location updates that appear on the main blog and the selected location blog after deploy.',
+      'Rich articles and shared links that use the public Time Mission design on the main blog and location blogs after deploy.',
   },
   access: {
     admin: canManageBlogPosts,
@@ -72,9 +156,30 @@ export const BlogPosts = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Article',
-          description: 'Write the post and choose where it belongs.',
+          label: 'Write',
+          description: 'Choose an original article or shared link, then add the public content.',
           fields: [
+            {
+              name: 'postType',
+              type: 'radio',
+              required: true,
+              defaultValue: POST_TYPE_ARTICLE,
+              label: 'Post type',
+              options: [
+                {
+                  label: 'Original article',
+                  value: POST_TYPE_ARTICLE,
+                },
+                {
+                  label: 'Shared link',
+                  value: POST_TYPE_EXTERNAL,
+                },
+              ],
+              admin: {
+                description:
+                  'Original articles are written here. Shared links wrap a press release or external story in the Time Mission blog design.',
+              },
+            },
             {
               type: 'row',
               fields: [
@@ -132,13 +237,43 @@ export const BlogPosts = {
               },
             },
             {
+              type: 'row',
+              admin: {
+                condition: (data) => data?.postType === POST_TYPE_EXTERNAL,
+              },
+              fields: [
+                {
+                  name: 'externalUrl',
+                  type: 'text',
+                  maxLength: 2048,
+                  label: 'Article or press release URL',
+                  admin: {
+                    description: 'The public post will show this as a prominent embedded source card.',
+                  },
+                  validate: validateExternalPostUrl,
+                },
+                {
+                  name: 'externalPublisher',
+                  type: 'text',
+                  maxLength: 120,
+                  label: 'Publisher',
+                  admin: {
+                    description: 'Examples: PR Newswire, Chicago Tribune, or a partner organization.',
+                  },
+                },
+              ],
+            },
+            {
               name: 'body',
               type: 'richText',
-              required: true,
               label: 'Article',
+              editor: articleEditor,
               admin: {
-                description: 'The full blog post.',
+                condition: (data) => data?.postType !== POST_TYPE_EXTERNAL,
+                description:
+                  'Write and format the full article. Use the image button in the fixed toolbar to place uploaded images inside the story.',
               },
+              validate: validateArticleBody,
             },
           ],
         },
@@ -147,12 +282,21 @@ export const BlogPosts = {
           description: 'Keep the defaults unless this post needs a custom image or search preview.',
           fields: [
             {
+              name: 'heroMedia',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Hero image',
+              admin: {
+                description: 'Shown at the top of the post and on blog cards.',
+              },
+            },
+            {
               name: 'heroImage',
               type: 'text',
               defaultValue: DEFAULT_LANDING_HERO_IMAGE,
-              label: 'Hero image path',
+              label: 'Legacy hero image path',
               admin: {
-                description: 'Keep the default, or use an approved /assets/... image path.',
+                description: 'Fallback for older posts. A selected hero image above takes priority.',
               },
               validate: validateOptionalPublicAssetPath,
             },

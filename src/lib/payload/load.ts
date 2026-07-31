@@ -23,8 +23,11 @@ export {
     blogPostDocLooksRenderable,
     blogPostExcerptForDoc,
     blogPostExcerptHtmlForDoc,
+    blogPostExternalPublisher,
+    blogPostExternalUrl,
     blogPostHeadForDoc,
     blogPostHeroImage,
+    blogPostIsExternal,
     blogPostLocationSlug,
     blogPostPublishDate,
     blogPostShouldAppearInSitemap,
@@ -254,6 +257,7 @@ export async function getPublishedBlogPosts(origin?: string): Promise<PayloadBlo
 
     return fetchPayloadCollection<PayloadBlogPostDoc>({
         collection: 'blog-posts',
+        depth: 1,
         origin: readOrigin.base,
         strict: readOrigin.strict,
     });

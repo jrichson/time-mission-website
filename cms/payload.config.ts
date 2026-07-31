@@ -12,6 +12,7 @@ import { AnnouncementBanners } from './collections/AnnouncementBanners.js';
 import { BlogPosts } from './collections/BlogPosts.js';
 import { Landings } from './collections/Landings.js';
 import { LocationDetails } from './collections/LocationDetails.js';
+import { Media } from './collections/Media.js';
 import { SitePages } from './collections/SitePages.js';
 import { UserInvites } from './collections/UserInvites.js';
 import { Users } from './collections/Users.js';
@@ -162,6 +163,7 @@ export default buildConfig({
     AnnouncementBanners as CollectionConfig,
     LocationDetails as CollectionConfig,
     BlogPosts as CollectionConfig,
+    Media as CollectionConfig,
     Landings as CollectionConfig,
     UserInvites as CollectionConfig,
     Users as CollectionConfig,

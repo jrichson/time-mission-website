@@ -9,6 +9,8 @@ import {
     blogPostDateLabel,
     blogPostDocLooksRenderable,
     blogPostExcerptHtmlForDoc,
+    blogPostExternalPublisher,
+    blogPostExternalUrl,
     blogPostHeadForDoc,
     blogPostHeroImage,
     blogPostLocationSlug,
@@ -55,6 +57,8 @@ const page = definePage({
         : blogLocationCanonicalPath(location.slug),
 });
 const post = props.kind === 'post' ? props.post : null;
+const externalUrl = post ? blogPostExternalUrl(post) : '';
+const externalPublisher = post ? blogPostExternalPublisher(post) : '';
 const landingHead = post
     ? blogPostHeadForDoc(post)
     : {
@@ -68,7 +72,7 @@ const landingHead = post
 
 <SiteLayout canonicalPath={page.canonicalPath} landingHead={landingHead} bodyClass="has-noise tm-blog-page">
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-blog.css?v=1" />
+        <link rel="stylesheet" href="/css/page-blog.css?v=2" />
     </Fragment>
 
     {post ? (
@@ -86,7 +90,18 @@ const landingHead = post
                         <div class="tm-blog-article-excerpt" set:html={blogPostExcerptHtmlForDoc(post)} />
                     </div>
                 </header>
-                <div class="tm-blog-shell tm-blog-body" set:html={blogPostBodyHtml(post)} />
+                {externalUrl ? (
+                    <div class="tm-blog-shell tm-blog-body">
+                        <aside class="tm-blog-source-card">
+                            <p class="tm-blog-kicker">Shared from the source</p>
+                            <h2>{externalPublisher || 'External coverage'}</h2>
+                            <p>This story is hosted by the original publisher. Open it there to read the complete article.</p>
+                            <a href={externalUrl} target="_blank" rel="noopener noreferrer">Read the original story</a>
+                        </aside>
+                    </div>
+                ) : (
+                    <div class="tm-blog-shell tm-blog-body" set:html={blogPostBodyHtml(post)} />
+                )}
             </article>
         </>
     ) : (
@@ -114,7 +129,12 @@ const landingHead = post
                                 <article class="tm-blog-card">
                                     <a href={blogPostCanonicalPath(String(item.slug))}>
                                         <img src={blogPostHeroImage(item)} alt="" width="720" height="480" loading="lazy" decoding="async" />
-                                        <span>{blogPostDateLabel(item)}</span>
+                                        <span>
+                                            {blogPostExternalPublisher(item)
+                                                ? `Shared from ${blogPostExternalPublisher(item)} · `
+                                                : ''}
+                                            {blogPostDateLabel(item)}
+                                        </span>
                                         <h3>{item.title}</h3>
                                         <div class="tm-blog-card-excerpt" set:html={blogPostExcerptHtmlForDoc(item)} />
                                     </a>

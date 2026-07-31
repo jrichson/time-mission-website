@@ -38,11 +38,11 @@ const primaryTasks = [
     action: 'Create',
   },
   {
-    href: '/admin/collections/location-details',
-    label: 'Change location info',
-    meta: 'Addresses and hours',
-    description: 'Edit address, hours, booking links, and location page details.',
-    action: 'Edit',
+    href: '/locations/bulk',
+    label: 'Edit locations in bulk',
+    meta: 'All venues',
+    description: 'Compare and update addresses, hours, mission availability, and approval state together.',
+    action: 'Bulk edit',
   },
   {
     href: '/admin/collections/announcement-banners',
@@ -61,8 +61,8 @@ const primaryTasks = [
   {
     href: '/admin/collections/blog-posts',
     label: 'Write a blog post',
-    meta: 'Location updates',
-    description: 'Publish local blog posts for location news, openings, and event ideas.',
+    meta: 'Articles and links',
+    description: 'Write a rich article, add inline images, or share external coverage.',
     action: 'Write',
   },
   {

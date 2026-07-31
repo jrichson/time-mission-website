@@ -70,10 +70,12 @@ export function AnnouncementBannersGuide() {
 export function LocationDetailsGuide() {
   return (
     <CollectionGuide
+      actionHref="/locations/bulk"
+      actionLabel="Edit all locations together"
       eyebrow="Locations"
       goesLive="Save the location, then use Make changes live."
-      intro="Choose an existing location below. Address, hours, booking links, and availability are organized into separate tabs."
-      title="Update an existing location."
+      intro="Use the bulk workspace for normal location updates. Open an individual record only for an advanced exception."
+      title="Compare and update every venue."
       whatChanges="Public location information. This does not create a new venue page."
     />
   );
@@ -86,9 +88,9 @@ export function BlogPostsGuide() {
       actionLabel="Write a blog post"
       eyebrow="Blog posts"
       goesLive="Mark it Published in CMS, then use Make changes live."
-      intro="Draft the article first. Images and search settings are kept in a separate tab so they do not interrupt writing."
-      title="Write a location update."
-      whatChanges="A post on the main blog and the selected location blog."
+      intro="Write a formatted article with inline images, or create a shared-link post for press and external coverage. Save before previewing."
+      title="Publish an article or shared link."
+      whatChanges="A designed post on the main blog and the selected location blog."
     />
   );
 }

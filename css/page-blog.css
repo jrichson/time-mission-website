@@ -1,4 +1,5 @@
-body.tm-blog-page {
+body.tm-blog-page,
+.tm-blog-page {
     --tm-blog-bg: #050508;
     --tm-blog-panel: rgba(17, 17, 22, 0.92);
     --tm-blog-line: rgba(255, 255, 255, 0.14);
@@ -316,6 +317,70 @@ body.tm-blog-page {
     font-weight: 800;
     text-decoration-color: rgba(255, 107, 44, 0.9);
     text-underline-offset: 0.18em;
+}
+
+.tm-blog-inline-image {
+    width: min(100%, 58rem);
+    margin: 2.2rem 0 2.2rem 50%;
+    transform: translateX(-50%);
+}
+
+.tm-blog-inline-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 46rem;
+    border: 1px solid var(--tm-blog-line);
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.tm-blog-inline-image figcaption {
+    margin-top: 0.75rem;
+    color: var(--tm-blog-muted);
+    font-size: 0.84rem;
+    line-height: 1.5;
+}
+
+.tm-blog-source-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--tm-blog-line);
+    border-left: 4px solid var(--tm-blog-accent);
+    border-radius: 8px;
+    background:
+        linear-gradient(135deg, rgba(255, 107, 44, 0.12), transparent 46%),
+        var(--tm-blog-panel);
+    padding: clamp(1.4rem, 4vw, 2.4rem);
+}
+
+.tm-blog-source-card h2 {
+    margin-top: 0.25rem;
+}
+
+.tm-blog-source-card > p:not(.tm-blog-kicker) {
+    width: min(100%, 38rem);
+}
+
+.tm-blog-source-card > a {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.6rem;
+    border-radius: 999px;
+    background: var(--gradient-primary, linear-gradient(135deg, #f9a41a, #ef4b23));
+    color: #160804;
+    font-size: 0.84rem;
+    font-weight: 900;
+    padding: 0 1.25rem;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.tm-blog-source-card > a:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
 }
 
 .tm-blog-body code {

@@ -6,6 +6,7 @@ interface PayloadListResponse {
 
 interface PayloadCollectionFetchOptions {
     collection: string;
+    depth?: number;
     origin: string;
     optionalLabel?: string;
     strict?: boolean;
@@ -13,21 +14,22 @@ interface PayloadCollectionFetchOptions {
 
 const collectionCache = new Map<string, Promise<unknown[]>>();
 
-function collectionUrl(origin: string, collection: string): URL {
+function collectionUrl(origin: string, collection: string, depth = 0): URL {
     const url = new URL(`/api/${collection}`, `${origin}/`);
     url.searchParams.set('limit', '250');
-    url.searchParams.set('depth', '0');
+    url.searchParams.set('depth', String(depth));
     url.searchParams.sort();
     return url;
 }
 
 async function fetchPayloadCollectionRaw({
     collection,
+    depth = 0,
     optionalLabel,
     origin,
     strict = false,
 }: PayloadCollectionFetchOptions): Promise<unknown[]> {
-    const url = collectionUrl(origin, collection);
+    const url = collectionUrl(origin, collection, depth);
     const label = optionalLabel || collection;
 
     try {
@@ -54,7 +56,7 @@ async function fetchPayloadCollectionRaw({
 }
 
 export async function fetchPayloadCollection<T>(options: PayloadCollectionFetchOptions): Promise<T[]> {
-    const cacheKey = `${options.origin}::${options.collection}::${options.strict ? 'strict' : 'loose'}::${options.optionalLabel || ''}`;
+    const cacheKey = `${options.origin}::${options.collection}::${options.depth ?? 0}::${options.strict ? 'strict' : 'loose'}::${options.optionalLabel || ''}`;
     const cached = collectionCache.get(cacheKey);
     if (cached) return (await cached) as T[];
 

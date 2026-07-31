@@ -4,13 +4,25 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { BlogPosts } from '../cms/collections/BlogPosts.js';
+import { Media } from '../cms/collections/Media.js';
 import {
+  previewBlogPostBodyHtml,
+  previewBlogPostDateLabel,
+  previewBlogPostExcerptHtml,
+  previewBlogPostExternalPublisher,
+  previewBlogPostExternalUrl,
+  previewBlogPostHeroImage,
+} from '../cms/lib/blog-preview-contract';
+import {
+  blogPostDateLabel,
   blogLocationCanonicalPath,
   blogPostBodyHtml,
   blogPostCanonicalPath,
   blogPostDocLooksRenderable,
   blogPostExcerptForDoc,
   blogPostExcerptHtmlForDoc,
+  blogPostExternalPublisher,
+  blogPostExternalUrl,
   blogPostHeadForDoc,
   blogPostHeroImage,
   blogPostShouldAppearInSitemap,
@@ -32,10 +44,12 @@ type CollectionField = {
   label?: string;
   name?: string;
   options?: unknown[];
+  relationTo?: string;
   required?: boolean;
   tabs?: Array<{ fields?: CollectionField[] }>;
   type?: string;
   unique?: boolean;
+  validate?: (...args: unknown[]) => boolean | string;
 };
 
 function findField(fields: CollectionField[], name: string): CollectionField | null {
@@ -106,6 +120,7 @@ describe('CMS blog posts', () => {
     const config = read('cms/payload.config.ts');
     const migration = read('cms/migrations/20260624_090000_blog_press_donation_eindhoven.ts');
     const richTextMigration = read('cms/migrations/20260625_090000_blog_posts_rich_text.ts');
+    const authoringMigration = read('cms/migrations/20260730_170000_blog_authoring_and_media.ts');
     const enumMigration = read('cms/migrations/20260624_085000_add_eindhoven_location_enum.ts');
     const migrationIndex = read('cms/migrations/index.ts');
     const slugField = findField(BlogPosts.fields, 'slug');
@@ -114,6 +129,9 @@ describe('CMS blog posts', () => {
     const includeInSitemapField = findField(BlogPosts.fields, 'includeInSitemap');
     const excerptField = findField(BlogPosts.fields, 'excerpt');
     const bodyField = findField(BlogPosts.fields, 'body');
+    const postTypeField = findField(BlogPosts.fields, 'postType');
+    const externalUrlField = findField(BlogPosts.fields, 'externalUrl');
+    const heroMediaField = findField(BlogPosts.fields, 'heroMedia');
 
     expect(config).toContain('BlogPosts as CollectionConfig');
     expect(BlogPosts.labels.singular).toBe('Blog Post');
@@ -132,12 +150,23 @@ describe('CMS blog posts', () => {
     expect(publishedField?.admin?.description).toContain('Live after deploy');
     expect(includeInSitemapField?.defaultValue).toBe(true);
     expect(excerptField).toMatchObject({ name: 'excerpt', type: 'richText', required: true });
-    expect(bodyField).toMatchObject({ name: 'body', type: 'richText', required: true });
+    expect(bodyField).toMatchObject({ name: 'body', type: 'richText' });
+    expect(bodyField?.validate).toBeTypeOf('function');
+    expect(postTypeField).toMatchObject({ name: 'postType', type: 'radio', required: true });
+    expect(externalUrlField?.validate).toBeTypeOf('function');
+    expect(heroMediaField).toMatchObject({ name: 'heroMedia', type: 'upload', relationTo: 'media' });
+    expect(BlogPosts.admin.preview({ id: 42 })).toBe('/preview/blog/42');
+    expect(Media.upload.mimeTypes).toContain('image/webp');
+    expect(Media.fields).toContainEqual(expect.objectContaining({ name: 'alt', required: true }));
     expect(migration).toContain('CREATE TABLE IF NOT EXISTS "blog_posts"');
     expect(migration).toContain('enum_blog_posts_location_slug');
     expect(migration).not.toContain('enum_location_details_location_slug" ADD VALUE');
     expect(richTextMigration).toContain('ADD COLUMN IF NOT EXISTS "excerpt_rich" jsonb');
     expect(richTextMigration).toContain('RENAME COLUMN "body_rich" TO "body"');
+    expect(authoringMigration).toContain('CREATE TABLE IF NOT EXISTS "media"');
+    expect(authoringMigration).toContain('CREATE TABLE IF NOT EXISTS "blog_posts_rels"');
+    expect(authoringMigration).toContain('ADD COLUMN IF NOT EXISTS "post_type"');
+    expect(authoringMigration).toContain('ALTER COLUMN "body" DROP NOT NULL');
     expect(enumMigration).toContain("ADD VALUE IF NOT EXISTS 'eindhoven'");
     expect(migrationIndex.indexOf('20260624_085000_add_eindhoven_location_enum')).toBeLessThan(
       migrationIndex.indexOf('20260624_090000_blog_press_donation_eindhoven'),
@@ -147,6 +176,18 @@ describe('CMS blog posts', () => {
     );
     expect(migrationIndex).toContain('20260624_090000_blog_press_donation_eindhoven');
     expect(migrationIndex).toContain('20260625_090000_blog_posts_rich_text');
+    expect(migrationIndex).toContain('20260730_170000_blog_authoring_and_media');
+
+    expect(bodyField?.validate?.(null, { data: { postType: 'article', published: false } })).toBe(true);
+    expect(bodyField?.validate?.(null, { data: { postType: 'article', published: true } })).toContain(
+      'before publishing',
+    );
+    expect(externalUrlField?.validate?.(null, { data: { postType: 'external', published: false } })).toBe(
+      true,
+    );
+    expect(
+      externalUrlField?.validate?.(null, { data: { postType: 'external', published: true } }),
+    ).toContain('external article');
   });
 
   it('validates renderable posts and reserved location slugs', () => {
@@ -256,6 +297,59 @@ describe('CMS blog posts', () => {
       ogImage: '/assets/photos/blog-og.jpg',
       twitterImage: '/assets/photos/blog-twitter.jpg',
     });
+  });
+
+  it('renders uploaded article images and shared-link posts safely', () => {
+    const articleWithImage: PayloadBlogPostDoc = {
+      ...basePost,
+      heroMedia: {
+        alt: 'Teams moving through a Time Mission room',
+        height: 800,
+        id: 9,
+        url: 'https://time-mission-website-production.up.railway.app/api/media/file/mission-room.webp',
+        width: 1200,
+      },
+      body: richText([
+        paragraph([text('Before the image.')]),
+        {
+          fields: { caption: 'Teams take on a timed challenge.' },
+          relationTo: 'media',
+          type: 'upload',
+          value: {
+            alt: 'Two teams inside a glowing mission room',
+            height: 900,
+            id: 10,
+            url: 'https://time-mission-website-production.up.railway.app/api/media/file/teams.webp',
+            width: 1400,
+          },
+        },
+      ]),
+    };
+
+    expect(blogPostHeroImage(articleWithImage)).toContain('/api/media/file/mission-room.webp');
+    expect(blogPostBodyHtml(articleWithImage)).toContain('class="tm-blog-inline-image"');
+    expect(blogPostBodyHtml(articleWithImage)).toContain('alt="Two teams inside a glowing mission room"');
+    expect(blogPostBodyHtml(articleWithImage)).toContain('<figcaption>Teams take on a timed challenge.</figcaption>');
+
+    const sharedLink: PayloadBlogPostDoc = {
+      ...basePost,
+      body: null,
+      externalPublisher: 'PR Newswire',
+      externalUrl: 'https://www.prnewswire.com/news-releases/time-mission-opens-123.html',
+      postType: 'external',
+    };
+
+    expect(blogPostDocLooksRenderable(sharedLink)).toBe(true);
+    expect(blogPostExternalPublisher(sharedLink)).toBe('PR Newswire');
+    expect(blogPostExternalUrl(sharedLink)).toContain('prnewswire.com');
+    expect(blogPostDocLooksRenderable({ ...sharedLink, externalUrl: 'javascript:alert(1)' })).toBe(false);
+
+    expect(previewBlogPostHeroImage(articleWithImage)).toBe(blogPostHeroImage(articleWithImage));
+    expect(previewBlogPostExcerptHtml(articleWithImage)).toBe(blogPostExcerptHtmlForDoc(articleWithImage));
+    expect(previewBlogPostBodyHtml(articleWithImage)).toBe(blogPostBodyHtml(articleWithImage));
+    expect(previewBlogPostDateLabel(articleWithImage)).toBe(blogPostDateLabel(articleWithImage));
+    expect(previewBlogPostExternalPublisher(sharedLink)).toBe(blogPostExternalPublisher(sharedLink));
+    expect(previewBlogPostExternalUrl(sharedLink)).toBe(blogPostExternalUrl(sharedLink));
   });
 
   it('keeps the production blog launch discoverable and deployment-gated', () => {
