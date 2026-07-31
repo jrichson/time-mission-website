@@ -50,6 +50,26 @@ test.describe('Mobile location selector', () => {
     await expect(page.locator('#locationText')).toContainText('Brussels');
     await expect(page.locator('nav .btn-tickets')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
   });
+
+  test('tapping Edison opens its local page and keeps Supercharged as the action destination', async ({ page }) => {
+    await page.goto('/?utm_source=paid&utm_campaign=edison');
+    await page.locator('#locationBtn').first().click();
+    await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
+
+    const edison = page.locator('#locationDropdown a[data-tm-location-slug="edison"]').first();
+    await expect(edison).toHaveAttribute('href', '/edison?utm_source=paid&utm_campaign=edison');
+    await edison.tap();
+
+    await expect(page).toHaveURL(/\/edison\?utm_source=paid&utm_campaign=edison$/);
+    await expect(page.locator('.hero .btn-location-lead')).toHaveAttribute(
+      'href',
+      'https://www.superchargednj.com/',
+    );
+    await expect(page.locator('nav .btn-tickets')).toHaveAttribute(
+      'href',
+      'https://www.superchargednj.com/?utm_source=paid&utm_campaign=edison',
+    );
+  });
 });
 
 test.describe('small mobile (375x667)', () => {

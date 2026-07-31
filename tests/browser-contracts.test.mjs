@@ -98,6 +98,7 @@ describe('browser data, consent, and i18n contracts', () => {
       navLabel: 'NJ – Edison',
       bookingUrl: '',
       externalUrl: 'https://www.superchargednj.com/',
+      pagePath: '/edison',
       ticker: 'EDISON COMING SOON',
       address: {
         line1: '987 US-1',

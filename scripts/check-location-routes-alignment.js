@@ -19,12 +19,23 @@ for (const loc of locData.locations || []) {
     errors.push(`Missing route for location ${loc.id}: canonicalPath must be ${expected}`);
     continue;
   }
-  if (loc.externalUrl) {
+  if (loc.externalUrl && !loc.pagePath) {
     if (route.externalUrl !== loc.externalUrl) {
       errors.push(`External location ${loc.id}: route.externalUrl must be ${loc.externalUrl}`);
     }
     if (route.sitemap !== false) {
       errors.push(`External location ${loc.id}: route.sitemap must be false because the public page redirects off-site`);
+    }
+  }
+  if (loc.pagePath) {
+    if (loc.pagePath !== expected) {
+      errors.push(`Location ${loc.id}: pagePath must match its canonical route ${expected}`);
+    }
+    if (route.externalUrl) {
+      errors.push(`Location ${loc.id}: route.externalUrl must be empty when pagePath is configured`);
+    }
+    if (route.sitemap !== true) {
+      errors.push(`Location ${loc.id}: route.sitemap must be true when pagePath is configured`);
     }
   }
 }

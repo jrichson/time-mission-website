@@ -1104,6 +1104,7 @@
       "hours": {},
       "bookingUrl": "",
       "externalUrl": "https://www.superchargednj.com/",
+      "pagePath": "/edison",
       "navLabel": "NJ – Edison",
       "mapUrl": "https://maps.google.com/?q=987+US-1+Edison+NJ+08817",
       "faqs": [],

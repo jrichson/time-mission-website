@@ -7,6 +7,7 @@ import {
     locationAddressText,
     locationContactItems,
     locationHref,
+    locationHrefIsExternal,
     locationStateBadge,
     locationStatusBadge,
     locationHeadlineStatus,
@@ -69,8 +70,8 @@ const page = definePage({ canonicalPath: '/locations' });
                         usLocs.map((loc) => (
                             <a
                                 href={locationHref(loc)}
-                                target={loc.externalUrl ? '_blank' : undefined}
-                                rel={loc.externalUrl ? 'noopener' : undefined}
+                                target={locationHrefIsExternal(loc) ? '_blank' : undefined}
+                                rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
                                 class:list={[
                                     'loc-row',
                                     'reveal',
@@ -123,8 +124,8 @@ const page = definePage({ canonicalPath: '/locations' });
                         euLocs.map((loc) => (
                             <a
                                 href={locationHref(loc)}
-                                target={loc.externalUrl ? '_blank' : undefined}
-                                rel={loc.externalUrl ? 'noopener' : undefined}
+                                target={locationHrefIsExternal(loc) ? '_blank' : undefined}
+                                rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
                                 class:list={[
                                     'loc-row',
                                     'reveal',

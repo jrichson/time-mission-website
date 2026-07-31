@@ -10,6 +10,7 @@ import {
     locationContactHref,
     locationHoursRows,
     locationHref,
+    locationHrefIsExternal,
     locationPhoneHref,
     locationStatusBadge,
 } from '../lib/location-view';
@@ -119,8 +120,8 @@ const hasPageLocation = Boolean(pageLocation);
                                 <a
                                     href={locationHref(loc)}
                                     class={statusLabel ? 'coming-soon' : undefined}
-                                    target={loc.externalUrl ? '_blank' : undefined}
-                                    rel={loc.externalUrl ? 'noopener' : undefined}
+                                    target={locationHrefIsExternal(loc) ? '_blank' : undefined}
+                                    rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
                                 >
                                     {locationListLabel(loc)} {statusLabel && <span class="coming-soon-tag">{statusLabel}</span>}
                                 </a>
@@ -142,8 +143,8 @@ const hasPageLocation = Boolean(pageLocation);
                                 <a
                                     href={locationHref(loc)}
                                     class={statusLabel ? 'coming-soon' : undefined}
-                                    target={loc.externalUrl ? '_blank' : undefined}
-                                    rel={loc.externalUrl ? 'noopener' : undefined}
+                                    target={locationHrefIsExternal(loc) ? '_blank' : undefined}
+                                    rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
                                 >
                                     {locationListLabel(loc)} {statusLabel && <span class="coming-soon-tag">{statusLabel}</span>}
                                 </a>

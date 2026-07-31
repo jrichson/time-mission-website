@@ -90,7 +90,7 @@ export const LOCATION_ROUTE_ENTRIES = [
   {
     "canonicalPath": "/edison",
     "compatibilitySources": [],
-    "externalUrl": "https://www.superchargednj.com/",
+    "externalUrl": "",
     "officialAlternate": ""
   }
 ];

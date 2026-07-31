@@ -173,7 +173,7 @@
         var mapQuery = getMapQuery(loc);
         var externalUrl = BookingJourney.getExternalLocationUrl(loc);
         var externalSiteLabel = loc.region === 'europe' ? 'Visit EU Site' : 'Visit Location Site';
-        var pageUrl = externalUrl || (slug ? '/' + slug : '/');
+        var pageUrl = loc.pagePath || externalUrl || (slug ? '/' + slug : '/');
         var comingSoon = loc.status === 'coming-soon';
         var temporarilyClosed = loc.status === 'temporarily-closed';
         var bookable = BookingJourney.isBookableLocation(loc);

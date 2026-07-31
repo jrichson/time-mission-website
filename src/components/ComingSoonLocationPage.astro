@@ -41,26 +41,35 @@ function replaceRawToken(source: string, token: string, value: string) {
 const checkoutUrl = String(location.rollerCheckoutUrl || location.bookingUrl || '').trim();
 const isBookable = hasTicketBooking(location);
 const primaryCta = locationCtaView(location);
+const hasExternalLocationSite = Boolean(String(location.externalUrl || '').trim());
 const openingLabel = locationOpeningLabel(location);
 const openingDateText = locationOpeningDateText(location);
-const primaryCtaLabel = isBookable ? primaryCta.label : 'Contact This Location';
-const primaryCtaHref = isBookable ? primaryCta.href : locationContactHref(location);
+const primaryCtaLabel = isBookable || hasExternalLocationSite ? primaryCta.label : 'Contact This Location';
+const primaryCtaHref = isBookable || hasExternalLocationSite ? primaryCta.href : locationContactHref(location);
 const primaryCtaClass = isBookable ? 'btn-location-book' : 'btn-location-lead';
 const primaryCtaAttrs = isBookable
     ? `data-tm-booking-trigger="" data-tm-booking-kind="tickets" data-tm-location="${escapeHtml(location.slug)}" data-tm-booking-url="${escapeHtml(checkoutUrl)}"`
     : '';
 const pageStatusLabel = locationDisplayStatus(location);
-const bookingFaqQuestion = isBookable ? 'Can I book now?' : 'When can I book?';
+const bookingFaqQuestion = isBookable
+    ? 'Can I book now?'
+    : hasExternalLocationSite
+    ? 'Where can I get location updates?'
+    : 'When can I book?';
 const bookingFaqAnswer = isBookable
     ? openingLabel
         ? `${location.shortName} opens ${openingDateText}. Online booking is available now, so use Book Now to choose your date and time through our secure checkout.`
         : `Yes. Online booking is available for ${location.shortName}. Use Book Now to choose your date and time through our secure checkout.`
+    : hasExternalLocationSite
+    ? `Visit the ${location.venueName || location.shortName} website for opening updates and location details.`
     : `Booking opens closer to launch. Contact the ${location.shortName} team for opening updates and launch timing.`;
 const finalCtaTitle = isBookable ? (openingLabel ? 'BOOK AHEAD' : 'BOOK YOUR MISSION') : 'STAY CLOSE TO LAUNCH';
 const finalCtaText = isBookable
     ? openingLabel
         ? `${location.shortName} opens ${openingDateText}. Choose your date, rally your team, and get ready to play.`
         : `Tickets for ${location.shortName} are available now. Choose your date, rally your team, and get ready to play.`
+    : hasExternalLocationSite
+    ? `Visit the ${location.venueName || location.shortName} website for opening updates and location details.`
     : `Reach out about ${location.shortName} and we will route your message to the right team.`;
 
 let comingSoonMain = applyTmMediaBase(comingSoonMainRaw);

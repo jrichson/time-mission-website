@@ -274,6 +274,12 @@ for (const location of locations) {
   requireString(location, 'shortName', location.shortName);
   requireString(location, 'name', location.name);
   requireString(location, 'navLabel', location.navLabel);
+  if (location.pagePath != null) {
+    assertSafeUrl(location.id, 'pagePath', location.pagePath);
+    if (location.pagePath !== `/${location.slug}`) {
+      errors.push(`${location.id}: pagePath must match /${location.slug}`);
+    }
+  }
 
   if (seen.has(location.id)) {
     errors.push(`Duplicate location id: ${location.id}`);

@@ -69,6 +69,51 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
 });
 
+test('Edison has a local location page whose action links lead to Supercharged NJ', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'desktop-only overlay path');
+
+  await page.goto('/?utm_source=paid&utm_campaign=edison');
+  await page.locator('#locationBtn').click();
+
+  const edison = page.locator('#locationDropdown a[data-tm-location-slug="edison"]').first();
+  await expect(edison).toContainText('NJ – Edison');
+  await expect(edison.locator('.coming-soon-tag')).toHaveText('Coming Soon');
+  await expect(edison).not.toHaveAttribute('data-tm-external-location', 'true');
+  await expect(edison).toHaveAttribute('href', '/edison?utm_source=paid&utm_campaign=edison');
+
+  await edison.hover();
+  await expect(page.locator('#locationInfo .location-info-name')).toContainText('Edison');
+  await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit Location Site');
+  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute(
+    'href',
+    'https://www.superchargednj.com/?utm_source=paid&utm_campaign=edison',
+  );
+
+  await edison.click();
+  await expect(page).toHaveURL(/\/edison\?utm_source=paid&utm_campaign=edison$/);
+  await expect(page).toHaveTitle('Time Mission Edison | Coming Soon');
+  await expect(page.locator('.ticker-item').first()).toContainText('EDISON COMING SOON');
+  await expect(page.locator('.hero .btn-location-lead')).toHaveAttribute(
+    'href',
+    'https://www.superchargednj.com/',
+  );
+  await expect(page.locator('.final-cta .btn-location-lead')).toHaveAttribute(
+    'href',
+    'https://www.superchargednj.com/',
+  );
+  await expect(page.locator('nav .btn-tickets')).toHaveAttribute(
+    'href',
+    'https://www.superchargednj.com/?utm_source=paid&utm_campaign=edison',
+  );
+
+  await page.goto('/locations');
+  const locationRow = page.locator('.loc-row[href="/edison"]');
+  await expect(locationRow).toContainText('NJ – Edison');
+  await expect(locationRow).toContainText('Coming Soon');
+  await expect(locationRow).toContainText('987 US-1, Edison, NJ 08817');
+  await expect(locationRow).not.toHaveAttribute('target', '_blank');
+});
+
 test('short Houston ticker renders centered instead of scrolling from the edge', async ({ page }) => {
   await page.goto('/houston');
 

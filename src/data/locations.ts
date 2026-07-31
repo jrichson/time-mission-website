@@ -46,6 +46,7 @@ export interface LocationRecord {
     bookingUrl: string;
     donationUrl?: string;
     externalUrl?: string;
+    pagePath?: string;
     rollerCheckoutUrl?: string;
     groupCheckoutUrl?: string;
     bookingProvider?: 'roller' | 'briq' | 'clubspeed' | 'experience-factory';

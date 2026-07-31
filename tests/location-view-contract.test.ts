@@ -4,7 +4,12 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { allLocations, type LocationRecord } from '../src/data/locations';
-import { locationHoursRows, locationViewModel, type LocationViewModel } from '../src/lib/location-view';
+import {
+    locationCtaView,
+    locationHoursRows,
+    locationViewModel,
+    type LocationViewModel,
+} from '../src/lib/location-view';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -52,7 +57,7 @@ describe('Location View contract', () => {
         expect(nashville.contact.email).toBe('nashville@timemission.com');
     });
 
-    it('routes Edison to the Supercharged NJ site with a US-safe external label', () => {
+    it('gives Edison a local page while keeping its Supercharged NJ action', () => {
         const edison = allLocations.find((loc) => loc.id === 'edison');
         if (!edison) throw new Error('Edison location missing');
 
@@ -60,8 +65,14 @@ describe('Location View contract', () => {
 
         expect(edison.status).toBe('coming-soon');
         expect(view.externalUrl).toBe('https://www.superchargednj.com/');
-        expect(view.pageUrl).toBe('https://www.superchargednj.com/');
+        expect(view.pageUrl).toBe('/edison');
         expect(view.bookLabel).toBe('Visit Location Site');
+        expect(locationCtaView(edison)).toEqual({
+            href: 'https://www.superchargednj.com/',
+            isBookingTrigger: false,
+            label: 'Visit Location Site',
+            i18n: 'location.visitLocationSite',
+        });
     });
 
     it('keeps runtime location views aligned with the typed build-time view model', () => {

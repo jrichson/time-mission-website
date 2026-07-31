@@ -49,8 +49,14 @@ export function locationSlug(loc: Pick<LocationRecord, 'id' | 'slug'>): string {
     return loc.slug || loc.id;
 }
 
-export function locationHref(loc: Pick<LocationRecord, 'externalUrl' | 'id' | 'slug'>): string {
-    return loc.externalUrl || `/${locationSlug(loc)}`;
+export function locationHref(loc: Pick<LocationRecord, 'externalUrl' | 'id' | 'pagePath' | 'slug'>): string {
+    return loc.pagePath || loc.externalUrl || `/${locationSlug(loc)}`;
+}
+
+export function locationHrefIsExternal(
+    loc: Pick<LocationRecord, 'externalUrl' | 'id' | 'pagePath' | 'slug'>,
+): boolean {
+    return /^https?:\/\//i.test(locationHref(loc));
 }
 
 export function locationAddressText(loc: Pick<LocationRecord, 'address'>, separator = ', '): string {
@@ -129,6 +135,15 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
             isBookingTrigger: false,
             label: loc.temporaryClosure?.ctaLabel || 'Get Closure Updates',
             i18n: '',
+        };
+    }
+    const externalUrl = String(loc.externalUrl || '').trim();
+    if (externalUrl) {
+        return {
+            href: externalUrl,
+            isBookingTrigger: false,
+            label: loc.region === 'europe' ? 'Visit EU Site' : 'Visit Location Site',
+            i18n: loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite',
         };
     }
     const isBookable = hasTicketBooking(loc);
