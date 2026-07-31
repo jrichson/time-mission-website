@@ -394,6 +394,8 @@ describe('CMS blog posts', () => {
     const footer = JSON.parse(read('src/data/site/footer.json'));
     const blogRoute = routes.routes.find((route: { id?: string }) => route.id === 'blog');
     const workflow = read('.github/workflows/cms-wrangler-deploy.yml');
+    const deployScript = read('scripts/deploy-pages-profile.mjs');
+    const verifyPipeline = read('scripts/lib/verify-pipeline.cjs');
     const payloadDistCheck = read('scripts/check-payload-dist.mjs');
     const locationBlogPage = read('src/pages/blog/[slug].astro');
 
@@ -401,8 +403,10 @@ describe('CMS blog posts', () => {
     expect(navigation.primary).toContainEqual({ label: 'Blog', href: '/blog' });
     expect(footer.columns.flatMap((column: { links: unknown[] }) => column.links))
       .toContainEqual({ label: 'Blog', href: '/blog' });
-    expect(workflow.indexOf('npm run check:payload-dist')).toBeLessThan(
-      workflow.indexOf('npx wrangler pages deploy dist'),
+    expect(workflow).toContain('npm run deploy:pages');
+    expect(verifyPipeline).toContain("['check:payload-dist', []]");
+    expect(deployScript.indexOf("['scripts/verify-site-output.mjs', '--artifact-only']")).toBeLessThan(
+      deployScript.indexOf('createCloudflareDeploymentArtifact(root'),
     );
     expect(payloadDistCheck).toContain("fetchPublishedDocs('blog-posts')");
     expect(payloadDistCheck).toContain('blogPostDocLooksRenderable');

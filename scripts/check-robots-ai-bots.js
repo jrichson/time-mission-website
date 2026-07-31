@@ -1,8 +1,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { resolveSiteProfile } = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
 const distRobots = path.join(root, 'dist', 'robots.txt');
+const profile = resolveSiteProfile(process.env);
 
 if (!fs.existsSync(distRobots)) {
     console.error('robots.txt AI bot check failed:');
@@ -30,9 +32,10 @@ const REQUIRED_BOTS = [
 ];
 
 const sitemapLines = lines.filter((l) => l.trim().startsWith('Sitemap:'));
+const expectedSitemapLine = `Sitemap: ${profile.origin}/sitemap.xml`;
 if (sitemapLines.length !== 1) {
     errors.push(`Expected exactly one Sitemap: line, found ${sitemapLines.length}`);
-} else if (sitemapLines[0].trim() !== 'Sitemap: https://www.timemission.com/sitemap.xml') {
+} else if (sitemapLines[0].trim() !== expectedSitemapLine) {
     errors.push(`Unexpected Sitemap line: ${sitemapLines[0].trim()}`);
 }
 

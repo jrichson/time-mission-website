@@ -6,6 +6,7 @@ import LocationOverlay from '../components/LocationOverlay.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import TicketPanel from '../components/TicketPanel.astro';
 import SiteScripts from '../components/SiteScripts.astro';
+import LanguageSuggestion from '../components/LanguageSuggestion.astro';
 import { allLocations } from '../data/locations';
 import { resolveLastUpdated } from '../lib/last-updated';
 import {
@@ -15,6 +16,7 @@ import {
     selectAnnouncementBanner,
     sitePageHeadForDoc,
 } from '../lib/payload/load';
+import { activeSiteProfile } from '../lib/site-profile';
 
 interface Props {
     canonicalPath: string;
@@ -49,7 +51,7 @@ const {
     bookingCtaIsBookingTrigger = true,
     bookingCtaI18n = 'nav.bookNow',
     landingHead,
-    lang = 'en',
+    lang = activeSiteProfile.defaultLocale,
     lastUpdated,
 } = Astro.props;
 
@@ -68,7 +70,9 @@ const announcementBanner = announcementBannerViewForDoc(
     }),
 );
 const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocation.briqWidget;
-const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQPWRNJB').trim();
+const defaultGtmContainerId = activeSiteProfile.id === 'us' ? 'GTM-WQPWRNJB' : '';
+const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || defaultGtmContainerId).trim();
+const rendersGtmNoscript = activeSiteProfile.consentProfile === 'us_open' && Boolean(gtmContainerId);
 ---
 
 <!DOCTYPE html>
@@ -119,7 +123,7 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQ
     </head>
     <body class={bodyClass} data-location={bodyDataLocation}>
         <!-- Google Tag Manager (noscript) -->
-        {gtmContainerId ? (
+        {rendersGtmNoscript ? (
             <noscript>
                 <iframe
                     class="gtm-noscript-frame"
@@ -152,6 +156,7 @@ const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQ
                 <LocationOverlay currentLang={lang} />
             </slot>
         </header>
+        <LanguageSuggestion />
         <main id="main" tabindex="-1">
             <slot />
         </main>

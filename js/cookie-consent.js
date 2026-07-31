@@ -18,6 +18,12 @@
     if (getProfile() === 'us_open') return;
 
     if (!window.CookieConsent || typeof window.CookieConsent.run !== 'function') return;
+    var documentLanguage = String(
+        (document.documentElement && document.documentElement.lang) || 'en'
+    ).toLowerCase().split('-')[0];
+    var consentLanguage = ['en', 'nl', 'fr', 'es'].indexOf(documentLanguage) !== -1
+        ? documentLanguage
+        : 'en';
 
     function applyConsentUpdate(update) {
         if (window.TMConsent && typeof window.TMConsent.update === 'function') {
@@ -43,7 +49,54 @@
         applyConsentUpdate(update);
     }
 
-    window.CookieConsent.run({
+    function translation(key, language) {
+        if (!window.TMI18n || typeof window.TMI18n.t !== 'function') return '';
+        return window.TMI18n.t(key, language) || '';
+    }
+
+    function consentCopy(language) {
+        return {
+            consentModal: {
+                title: translation('consent.title', language),
+                description: translation('consent.description', language),
+                acceptAllBtn: translation('consent.acceptAll', language),
+                acceptNecessaryBtn: translation('consent.rejectAll', language),
+                showPreferencesBtn: translation('consent.manage', language),
+            },
+            preferencesModal: {
+                title: translation('consent.preferencesTitle', language),
+                acceptAllBtn: translation('consent.acceptAll', language),
+                acceptNecessaryBtn: translation('consent.rejectAll', language),
+                savePreferencesBtn: translation('consent.save', language),
+                closeIconLabel: translation('consent.close', language),
+                sections: [
+                    {
+                        title: translation('consent.necessaryTitle', language),
+                        description: translation('consent.necessaryDescription', language),
+                        linkedCategory: 'necessary',
+                    },
+                    {
+                        title: translation('consent.analyticsTitle', language),
+                        description: translation('consent.analyticsDescription', language),
+                        linkedCategory: 'analytics',
+                    },
+                    {
+                        title: translation('consent.marketingTitle', language),
+                        description: translation('consent.marketingDescription', language),
+                        linkedCategory: 'marketing',
+                    },
+                ],
+            },
+        };
+    }
+
+    function runConsent() {
+      var translations = {};
+      ['en', 'nl', 'fr', 'es'].forEach(function (language) {
+          translations[language] = consentCopy(language);
+      });
+
+      window.CookieConsent.run({
         cookie: { name: 'tm_consent_v1' },
         guiOptions: {
             consentModal: { layout: 'box', position: 'bottom center' },
@@ -55,33 +108,18 @@
             marketing: {},
         },
         language: {
-            default: 'en',
-            translations: {
-                en: {
-                    consentModal: {
-                        title: 'We use cookies',
-                        description: 'We use cookies to improve your experience and measure site performance. You can accept all cookies, reject non-essential cookies, or manage your preferences.',
-                        acceptAllBtn: 'Accept all',
-                        acceptNecessaryBtn: 'Reject all',
-                        showPreferencesBtn: 'Manage Preferences',
-                    },
-                    preferencesModal: {
-                        title: 'Cookie Preferences',
-                        acceptAllBtn: 'Accept all',
-                        acceptNecessaryBtn: 'Reject all',
-                        savePreferencesBtn: 'Save preferences',
-                        closeIconLabel: 'Close',
-                        sections: [
-                            { title: 'Necessary', description: 'Required for the site to function. Cannot be disabled.', linkedCategory: 'necessary' },
-                            { title: 'Analytics', description: 'Help us understand how visitors use the site. Off by default.', linkedCategory: 'analytics' },
-                            { title: 'Marketing', description: 'Used to deliver relevant ads. Off by default.', linkedCategory: 'marketing' },
-                        ],
-                    },
-                },
-            },
+            default: consentLanguage,
+            translations: translations,
         },
         onFirstConsent: function (params) { applyConsent(params.cookie); },
         onConsent: function (params) { applyConsent(params.cookie); },
         onChange: function (params) { applyConsent(params.cookie); },
-    });
+      });
+    }
+
+    if (window.TMI18n && window.TMI18n.ready && typeof window.TMI18n.ready.then === 'function') {
+        window.TMI18n.ready.then(runConsent);
+    } else {
+        runConsent();
+    }
 })();

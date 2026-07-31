@@ -3,6 +3,16 @@ name: CMS Wrangler Deploy
 on:
   workflow_dispatch:
     inputs:
+      target:
+        description: Regional Pages deployment target.
+        required: true
+        default: us
+        type: choice
+        options:
+          - us
+          - eu
+          - eu-preview
+          - both
       reason:
         description: Reason shown in the run summary.
         required: false
@@ -16,8 +26,9 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
-    name: Build and direct-upload Pages
+  deploy-us:
+    if: ${{ inputs.target == 'us' || inputs.target == 'both' }}
+    name: Build and direct-upload US Pages
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -27,6 +38,7 @@ jobs:
       PAYLOAD_CMS_BUILD_STRICT: "true"
       PAYLOAD_CMS_ORIGIN: https://time-mission-website-production.up.railway.app
       PUBLIC_TM_MEDIA_BASE: ${{ vars.PUBLIC_TM_MEDIA_BASE }}
+      TM_SITE_PROFILE: us
     steps:
       - name: Check out site source
         uses: actions/checkout@v4
@@ -40,14 +52,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build public site
-        run: npm run build:astro
-
-      - name: Verify published CMS artifacts
-        run: npm run check:payload-dist
-
-      - name: Deploy with Wrangler Direct Upload
-        run: npx wrangler pages deploy dist --project-name time-mission-website
+      - name: Build, verify, and deploy US artifact
+        run: npm run deploy:pages:us
 
       - name: Summarize deploy
         run: |
@@ -56,4 +62,98 @@ jobs:
             echo "- Reason: ${{ inputs.reason || 'manual-cms-deploy' }}"
             echo "- CMS origin: $PAYLOAD_CMS_ORIGIN"
             echo "- Cloudflare Pages project: time-mission-website"
+            echo "- Site profile: us"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy-eu:
+    if: ${{ inputs.target == 'eu' || inputs.target == 'both' }}
+    name: Build and direct-upload EU Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      EU_D1_DATABASE_ID: ${{ secrets.EU_D1_DATABASE_ID }}
+      EU_TURNSTILE_SITE_KEY: ${{ vars.EU_TURNSTILE_SITE_KEY }}
+      PAYLOAD_CMS_ALLOWED_HOSTS: railway.app
+      PAYLOAD_CMS_BUILD_STRICT: "true"
+      PAYLOAD_CMS_ORIGIN: https://time-mission-website-production.up.railway.app
+      PUBLIC_SITE_ORIGIN: https://www.timemission.eu
+      EU_GTM_CONTAINER_ID: ${{ vars.EU_GTM_CONTAINER_ID }}
+      EU_SGTM_COLLECT_PATH: ${{ vars.EU_SGTM_COLLECT_PATH }}
+      EU_SGTM_CONTAINER_URL: ${{ vars.EU_SGTM_CONTAINER_URL }}
+      PUBLIC_TM_MEDIA_BASE: ${{ vars.PUBLIC_TM_MEDIA_BASE }}
+      TM_REQUIRE_TRANSLATION_APPROVAL: "true"
+      TM_SITE_PROFILE: eu
+    steps:
+      - name: Check out site source
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build, verify, and deploy EU artifact
+        run: npm run deploy:pages:eu
+
+      - name: Summarize deploy
+        run: |
+          {
+            echo "### CMS deploy"
+            echo "- Reason: ${{ inputs.reason || 'manual-cms-deploy' }}"
+            echo "- CMS origin: $PAYLOAD_CMS_ORIGIN"
+            echo "- Cloudflare Pages project: time-mission-website-eu"
+            echo "- Site profile: eu"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy-eu-preview:
+    if: ${{ inputs.target == 'eu-preview' }}
+    name: Build and direct-upload EU Pages preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      EU_D1_DATABASE_ID: ${{ secrets.EU_D1_DATABASE_ID }}
+      EU_TURNSTILE_SITE_KEY: ${{ vars.EU_TURNSTILE_SITE_KEY }}
+      PAYLOAD_CMS_ALLOWED_HOSTS: railway.app
+      PAYLOAD_CMS_BUILD_STRICT: "true"
+      PAYLOAD_CMS_ORIGIN: https://time-mission-website-production.up.railway.app
+      PUBLIC_SITE_ORIGIN: https://www.timemission.eu
+      EU_GTM_CONTAINER_ID: ${{ vars.EU_GTM_CONTAINER_ID }}
+      EU_SGTM_COLLECT_PATH: ${{ vars.EU_SGTM_COLLECT_PATH }}
+      EU_SGTM_CONTAINER_URL: ${{ vars.EU_SGTM_CONTAINER_URL }}
+      PUBLIC_TM_MEDIA_BASE: ${{ vars.PUBLIC_TM_MEDIA_BASE }}
+      TM_REQUIRE_TRANSLATION_APPROVAL: "false"
+      TM_SITE_PROFILE: eu
+    steps:
+      - name: Check out site source
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build, verify, and deploy EU preview artifact
+        run: npm run deploy:pages:eu:preview
+
+      - name: Summarize deploy
+        run: |
+          {
+            echo "### EU Pages preview"
+            echo "- Reason: ${{ inputs.reason || 'manual-cms-deploy' }}"
+            echo "- Cloudflare Pages project: time-mission-website-eu"
+            echo "- Pages branch: eu-preview"
+            echo "- Translation approval: not asserted"
+            echo "- Indexing: Cloudflare preview noindex header expected"
           } >> "$GITHUB_STEP_SUMMARY"

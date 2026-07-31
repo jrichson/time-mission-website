@@ -1,5 +1,6 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
+import { activeSiteProfile } from '../lib/site-profile';
 
 interface Props {
     announcementBanner?: {
@@ -35,16 +36,15 @@ type TickerMessage =
     | { label: string; date: string; separator?: string; labelI18n?: string; dateI18n?: string };
 type TickerBehavior = 'auto' | 'static' | 'animated';
 
-const tickerBaseMessages: TickerMessage[] = [
-    {
-        text: 'ORLAND PARK NOW OPEN',
-        textI18n: 'ticker.orlandParkGrandOpening',
-    },
-    {
+const tickerBaseMessages: TickerMessage[] = activeSiteProfile.id === 'eu'
+    ? [{
         text: 'BRUSSELS NOW OPEN',
         textI18n: 'ticker.brusselsGrandOpening',
-    },
-];
+    }]
+    : [{
+        text: 'ORLAND PARK NOW OPEN',
+        textI18n: 'ticker.orlandParkGrandOpening',
+    }];
 const tickerCycles = 4;
 
 function tickerMessageFromText(text: string): TickerMessage | null {

@@ -63,7 +63,7 @@ test('homepage loads core navigation and booking panel', async ({ page }) => {
       videoReady: el.classList.contains('is-video-ready'),
     };
   });
-  expect(heroMedia.backgroundImage).toMatch(/hero-poster(?:-960\.webp|\.jpg)/);
+  expect(heroMedia.backgroundImage).toMatch(/hero-poster(?:-(?:960|1200)\.webp|\.jpg)/);
   expect(heroMedia.videoFallback).toBe(false);
   expect(heroMedia.videoReady).toBe(false);
   expect(heroMedia.videoOpacity).toBe('0');

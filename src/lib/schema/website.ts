@@ -4,6 +4,7 @@
  * per-page schema nodes without adding unsupported search actions.
  */
 import org from '../../data/site/seo-organization.json';
+import { activeSiteProfile } from '../site-profile';
 
 export interface WebSiteNode {
     '@type': 'WebSite';
@@ -17,10 +18,10 @@ export interface WebSiteNode {
 export function websiteNode(): WebSiteNode {
     return {
         '@type': 'WebSite',
-        '@id': `${org.url}/#website`,
-        url: org.url,
+        '@id': `${activeSiteProfile.origin}/#website`,
+        url: activeSiteProfile.origin,
         name: org.name,
-        inLanguage: 'en-US',
+        inLanguage: activeSiteProfile.id === 'us' ? 'en-US' : activeSiteProfile.defaultLocale,
         publisher: { '@id': org['@id'] },
     };
 }

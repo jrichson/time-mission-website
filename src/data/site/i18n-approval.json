@@ -1,0 +1,16 @@
+{
+  "_policy": {
+    "scope": "All public route copy, metadata, shared UI, forms, and legal text",
+    "approvedMeaning": "A human language owner reviewed the complete built locale, not only the shared i18n catalog"
+  },
+  "us": {
+    "en": "approved",
+    "es": "approved"
+  },
+  "eu": {
+    "en": "review_required",
+    "nl": "review_required",
+    "fr": "review_required",
+    "es": "review_required"
+  }
+}

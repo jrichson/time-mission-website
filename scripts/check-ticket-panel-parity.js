@@ -4,10 +4,12 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
+const { resolveSiteProfile } = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
 const distDir = path.join(root, 'dist');
 const errors = [];
+const profile = resolveSiteProfile(process.env);
 
 function walk(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -30,14 +32,20 @@ const ASTRO_RENDERED_DIST_HTML = loadAstroRenderedOutputFilesSet(root);
 
 function isAstroRenderedDistHtml(rel) {
   const norm = rel.split(path.sep).join('/');
-  return ASTRO_RENDERED_DIST_HTML.has(norm);
+  const parts = norm.split('/');
+  const base = profile.localizedRoutes
+    && profile.locales.includes(parts[0])
+    && parts[0] !== profile.defaultLocale
+    ? parts.slice(1).join('/')
+    : norm;
+  return ASTRO_RENDERED_DIST_HTML.has(base);
 }
 
 const REQUIRED_SUBSTRINGS = [
   ['<!-- Ticket Popup Panel -->', 'marker comment'],
   ['id="ticketOverlay"', '#ticketOverlay'],
   ['id="ticketPanel"', '#ticketPanel'],
-  ['id="ticketClose" aria-label="Close ticket panel"', 'labeled close button (#ticketClose)'],
+  ['id="ticketClose"', '#ticketClose button'],
   ['id="ticketLocation"', '#ticketLocation select'],
   ['id="ticketBookBtn"', '#ticketBookBtn anchor'],
 ];
@@ -59,6 +67,9 @@ for (const file of allHtml) {
   );
   for (const [needle, label] of checkSets) {
     if (!html.includes(needle)) errors.push(`${rel}: missing ${label}`);
+  }
+  if (!/<button\b[^>]*id="ticketClose"[^>]*aria-label="[^"]+"[^>]*data-i18n-aria-label="booking\.close"/i.test(html)) {
+    errors.push(`${rel}: #ticketClose must keep a localized accessible label`);
   }
   if (/\/_astro\/[^"]*ticket-panel[^"]*\.js/.test(html)) {
     errors.push(`${rel}: ticket-panel.js was bundled by Astro (use is:inline)`);

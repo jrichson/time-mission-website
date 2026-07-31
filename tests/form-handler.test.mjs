@@ -133,6 +133,18 @@ describe('Cloudflare form handler', () => {
     }), env)).toBe(false);
   });
 
+  it('keeps EU form origins isolated from the US site', () => {
+    const euEnv = { ...env, TM_SITE_PROFILE: 'eu' };
+    const euRequest = (origin) => new Request('https://www.timemission.eu/api/contact', {
+      headers: { origin },
+      method: 'POST',
+    });
+
+    expect(isAllowedOrigin(euRequest('https://timemission.eu'), euEnv)).toBe(true);
+    expect(isAllowedOrigin(euRequest('https://www.timemission.eu'), euEnv)).toBe(true);
+    expect(isAllowedOrigin(euRequest('https://www.timemission.com'), euEnv)).toBe(false);
+  });
+
   it('sends contact submissions after Turnstile verification', async () => {
     const calls = [];
     const fetchImpl = (url, init) => {

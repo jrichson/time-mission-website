@@ -2,6 +2,7 @@ import defaults from '../../data/site/seo-defaults.json';
 import routes from '../../data/site/seo-routes.json';
 import robots from '../../data/site/seo-robots.json';
 import { resolveRobotsForRoute } from './route-patterns';
+import { activeSiteProfile } from '../site-profile';
 
 export interface EntryShape {
     title: string;
@@ -31,7 +32,7 @@ export interface LandingHeadInput {
     twitterImage?: string | null;
 }
 
-const baseUrl = 'https://www.timemission.com';
+const baseUrl = activeSiteProfile.origin;
 
 function toAbsolute(rootRelative: string): string {
     if (/^https?:\/\//.test(rootRelative)) return rootRelative;

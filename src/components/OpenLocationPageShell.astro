@@ -6,6 +6,7 @@ import { locationPageCssHref, locationPageLang } from '../lib/location-page-regi
 import { locationCtaView } from '../lib/location-view';
 import TemporaryClosureNotice from './TemporaryClosureNotice.astro';
 import type { LocationRecord } from '../data/locations';
+import { activeSiteProfile } from '../lib/site-profile';
 
 interface Props {
     cityPage: {
@@ -19,15 +20,17 @@ interface Props {
 
 const { cityPage } = Astro.props;
 const slug = cityPage.location.slug;
-const lang = locationPageLang(slug);
 const pageCss = locationPageCssHref(slug);
+const pageLang = activeSiteProfile.localizedRoutes
+    ? activeSiteProfile.defaultLocale
+    : locationPageLang(slug);
 const bookingCta = locationCtaView(cityPage.location);
 const isTemporarilyClosed = cityPage.location.status === 'temporarily-closed';
 ---
 
 <SiteLayout
     canonicalPath={cityPage.page.canonicalPath}
-    lang={lang}
+    lang={pageLang}
     bodyDataLocation={cityPage.location.slug}
     bookingCtaHref={bookingCta.href}
     bookingCtaLabel={bookingCta.label}

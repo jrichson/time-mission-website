@@ -50,15 +50,15 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
 
   await expect(antwerp).toHaveAttribute('data-tm-external-location', 'true');
   await expect(antwerp).toHaveAttribute('data-city', 'Antwerp');
-  await expect(antwerp).toHaveAttribute('href', 'https://timemission.eu/antwerp?utm_source=paid&utm_campaign=eu');
+  await expect(antwerp).toHaveAttribute('href', 'https://www.timemission.eu/antwerp?utm_source=paid&utm_campaign=eu');
   await antwerp.hover();
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Antwerp');
   await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit EU Site');
-  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/antwerp?utm_source=paid&utm_campaign=eu');
+  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://www.timemission.eu/antwerp?utm_source=paid&utm_campaign=eu');
 
   await expect(brussels).toHaveAttribute('data-tm-external-location', 'true');
   await expect(brussels).toHaveAttribute('data-city', 'Brussels');
-  await expect(brussels).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
+  await expect(brussels).toHaveAttribute('href', 'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
   await expect(brussels).toContainText('Belgium – Brussels');
   await expect(brussels.locator('.coming-soon-tag')).toHaveText('OPEN NOW!');
   await expect(houston).toContainText('TX – Houston');
@@ -66,7 +66,7 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await brussels.hover();
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Brussels');
   await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit EU Site');
-  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
+  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
 });
 
 test('Edison has a local location page whose action links lead to Supercharged NJ', async ({ page, isMobile }) => {
@@ -140,7 +140,7 @@ test('short Houston ticker renders centered instead of scrolling from the edge',
   expect(metrics.centerDelta).toBeLessThanOrEqual(2);
 });
 
-test('desktop location selector selects Brussels without leaving the page', async ({ page, isMobile }) => {
+test('desktop location selector hands Brussels off to the EU site', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop-only overlay path');
 
   await page.goto('/?utm_source=paid&utm_campaign=eu');
@@ -148,11 +148,17 @@ test('desktop location selector selects Brussels without leaving the page', asyn
 
   const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
 
-  await brussels.click();
+  await page.route('https://www.timemission.eu/**', async (route) => {
+    await route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Time Mission EU</title>' });
+  });
+  await expectPopupUrl(
+    page,
+    () => brussels.click(),
+    'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu',
+  );
   await expect(page).toHaveURL(/\/\?utm_source=paid&utm_campaign=eu$/);
-  await expect(page.locator('#locationText')).toContainText('Brussels');
-  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('brussels');
-  await expect(page.locator('nav .btn-tickets')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
+  await expect(page.locator('#locationText')).toContainText('Select Location');
+  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBeNull();
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });
 
@@ -163,9 +169,9 @@ test('Europe location fallback links preserve tracking params', async ({ page, i
   await page.locator('#locationBtn').click();
 
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="antwerp"]'))
-    .toHaveAttribute('href', 'https://timemission.eu/antwerp?utm_source=paid&utm_campaign=spring');
+    .toHaveAttribute('href', 'https://www.timemission.eu/antwerp?utm_source=paid&utm_campaign=spring');
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="brussels"]'))
-    .toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=spring');
+    .toHaveAttribute('href', 'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=spring');
 });
 
 test('hard refresh on shared pages clears stale saved location', async ({ page }) => {

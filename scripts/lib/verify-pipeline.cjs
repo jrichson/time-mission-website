@@ -3,6 +3,7 @@
 const VERIFY_STEPS = [
   ['check', []],
   ['build:astro', []],
+  ['check:site-profile-output', []],
   ['check:csp-hashes', []],
   ['check:best-practices', ['--', '--dist']],
   ['check:routes', ['--', '--dist']],
@@ -26,6 +27,8 @@ const VERIFY_STEPS = [
   ['test:smoke', []],
 ];
 
+const VERIFY_ARTIFACT_STEPS = VERIFY_STEPS.slice(2);
+
 const VERIFY_SUCCESS_MESSAGE = 'verify-site-output.mjs: all steps passed.';
 
 function resolveNpmStep(step, platform = process.platform) {
@@ -43,6 +46,7 @@ function formatNpmStep(step) {
 
 module.exports = {
   VERIFY_STEPS,
+  VERIFY_ARTIFACT_STEPS,
   VERIFY_SUCCESS_MESSAGE,
   formatNpmStep,
   resolveNpmStep,

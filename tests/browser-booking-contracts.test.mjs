@@ -230,21 +230,21 @@ describe('browser booking contracts', () => {
     expect(window.TMBooking.getDestination({ kind: 'waiver', locationId: 'houston' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'antwerp' }))
-      .toBe('https://experience.example/antwerp');
+      .toBe('https://timemission.eu/antwerp');
     expect(window.TMBooking.resolveIntent({ kind: 'tickets', locationId: 'antwerp' }))
       .toMatchObject({
-        href: 'https://experience.example/antwerp',
-        presentation: 'link',
-        externalLocationSite: false,
+        href: 'https://timemission.eu/antwerp',
+        presentation: 'external-site',
+        externalLocationSite: true,
       });
     expect(window.TMBooking.getDestination({
       kind: 'groups',
       groupType: 'corporate',
       locationId: 'antwerp',
     }))
-      .toBe('https://experience.example/antwerp-corporate');
+      .toBe('https://timemission.eu/antwerp');
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'antwerp' }))
-      .toBe('');
+      .toBe('https://timemission.eu/antwerp');
     expect(window.LocationContext.getOverlayView('antwerp').cta)
       .toMatchObject({
         href: 'https://timemission.eu/antwerp',
@@ -458,7 +458,10 @@ describe('browser booking contracts', () => {
 
     for (const [locationId, loc] of byId) {
       const slug = loc.slug || loc.id;
-      const expectedRuntimeHref = loc.status === 'temporarily-closed'
+      const externalLocation = loc.externalUrl && !loc.pagePath;
+      const expectedRuntimeHref = externalLocation
+        ? loc.externalUrl
+        : loc.status === 'temporarily-closed'
         ? `/contact#location=${slug}&type=closure`
         : loc.groupCheckoutUrl
         ? loc.groupCheckoutUrl
@@ -489,12 +492,17 @@ describe('browser booking contracts', () => {
       const groupUrls = loc.groupFormUrls || {};
       for (const groupType of groupTypes) {
         const isWestNyackBriq = locationId === 'west-nyack' && !!groupUrls[groupType];
-        const expectedRuntimeHref = loc.status === 'temporarily-closed'
+        const externalLocation = loc.externalUrl && !loc.pagePath;
+        const expectedRuntimeHref = externalLocation
+          ? loc.externalUrl
+          : loc.status === 'temporarily-closed'
           ? `/contact#location=${loc.slug || loc.id}&type=closure`
           : isWestNyackBriq
           ? '#briq-widget-container'
           : (groupUrls[groupType] || '');
-        const expectedPresentation = isWestNyackBriq
+        const expectedPresentation = externalLocation
+          ? 'external-site'
+          : isWestNyackBriq
           ? 'briq-widget'
           : (expectedRuntimeHref ? 'link' : 'panel');
         expect(window.TMBooking.getDestination({
@@ -526,14 +534,18 @@ describe('browser booking contracts', () => {
     }
 
     for (const [locationId, loc] of byId) {
-      const expected = loc.status === 'temporarily-closed'
+      const expected = loc.externalUrl && !loc.pagePath
+        ? loc.externalUrl
+        : loc.status === 'temporarily-closed'
         ? `/contact#location=${loc.slug || loc.id}&type=closure`
         : loc.giftCardUrl || '';
       expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId })).toBe(expected);
     }
 
     for (const [locationId, loc] of byId) {
-      const expected = loc.status === 'temporarily-closed'
+      const expected = loc.externalUrl && !loc.pagePath
+        ? loc.externalUrl
+        : loc.status === 'temporarily-closed'
         ? `/contact#location=${loc.slug || loc.id}&type=closure`
         : loc.waiverUrl || '';
       expect(window.TMBooking.getDestination({ kind: 'waiver', locationId })).toBe(expected);

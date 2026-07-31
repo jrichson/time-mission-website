@@ -8,6 +8,10 @@ const {
   verifySitemapLocs,
 } = require('./lib/route-artifacts');
 const { normalizeCanonicalPath } = require('./lib/validation-core');
+const {
+  isInternalLocation,
+  resolveSiteProfile,
+} = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
 
@@ -389,7 +393,19 @@ function validateDist(registry, errors) {
   }
 
   const surface = compilePublicUrlSurface(registry);
+  const locationsDocument = JSON.parse(
+    fs.readFileSync(path.join(root, 'data', 'locations.json'), 'utf8'),
+  );
+  const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
+  const profile = resolveSiteProfile(process.env);
   for (const route of surface.routes) {
+    const location = locations.find(({ slug, id }) => {
+      const locationPath = `/${slug || id}`;
+      return route.canonicalPath === locationPath
+        || route.canonicalPath.startsWith(`${locationPath}/`);
+    });
+    if (location && !isInternalLocation(location, profile)) continue;
+
     const outputFile = surface.outputFileFor(route.canonicalPath) || route.outputFile;
     const target = path.join(distRoot, outputFile);
     if (!fs.existsSync(target)) {

@@ -405,13 +405,6 @@
             const slug = getLocationSlug(link);
             if (cityName) {
                 const overlayTrack = slug ? { cta_id: 'nav_location_overlay' } : undefined;
-                if (isExternalLocationLink(link) && isPlainPrimaryClick(e)) {
-                    e.preventDefault();
-                    syncAllLocations(cityName, slug, overlayTrack);
-                    closeLocationOverlay();
-                    return;
-                }
-
                 if (!isSameWindowNavigationClick(e, link)) {
                     closeLocationOverlay();
                     return;

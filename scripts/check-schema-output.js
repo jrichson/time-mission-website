@@ -6,6 +6,10 @@ const {
   findNodesByType,
   typesInGraph,
 } = require('./lib/rendered-page-contract');
+const {
+  isInternalLocation,
+  resolveSiteProfile,
+} = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -22,6 +26,7 @@ const SCHEMA_CHECK_OUTPUT_FILES = new Set(
 const routesData = loadJson('src/data/routes.json');
 const locationsDoc = loadJson(fs.existsSync(path.join(root, 'public/data/locations.json')) ? 'public/data/locations.json' : 'data/locations.json');
 const orgSeed = loadJson('src/data/site/seo-organization.json');
+const profile = resolveSiteProfile(process.env);
 
 const distDir = path.join(root, 'dist');
 if (!fs.existsSync(distDir)) {
@@ -46,6 +51,12 @@ function assertOrg(graph) {
   return o;
 }
 
+function assertProfileUrl(outFile, label, value) {
+  if (typeof value !== 'string' || !value.startsWith(profile.origin)) {
+    errors.push(`${outFile}: ${label} must use ${profile.origin}`);
+  }
+}
+
 function schemaClockTime(time) {
   return time === '00:00' ? '23:59' : time;
 }
@@ -67,9 +78,15 @@ function assertGeoMatches(outFile, label, emitted, sourceGeo) {
   }
 }
 
-const schemaRoutes = routesData.routes.filter((r) =>
-  SCHEMA_CHECK_OUTPUT_FILES.has(r.outputFile.replace(/^\//, '')),
-);
+const schemaRoutes = routesData.routes.filter((route) => {
+  if (!SCHEMA_CHECK_OUTPUT_FILES.has(route.outputFile.replace(/^\//, ''))) return false;
+  const location = (locationsDoc.locations || []).find(({ slug, id }) => {
+    const locationPath = `/${slug || id}`;
+    return route.canonicalPath === locationPath
+      || route.canonicalPath.startsWith(`${locationPath}/`);
+  });
+  return !location || isInternalLocation(location, profile);
+});
 
 for (const route of schemaRoutes) {
   const cp = route.canonicalPath;
@@ -97,6 +114,30 @@ for (const route of schemaRoutes) {
 
   assertOrg(graph);
   const has = (t) => types.includes(t);
+
+  for (const breadcrumb of findNodesByType(graph, 'BreadcrumbList')) {
+    for (const item of breadcrumb.itemListElement || []) {
+      assertProfileUrl(outFile, 'BreadcrumbList item', item.item);
+    }
+  }
+  for (const business of findNodesByType(graph, 'EntertainmentBusiness')) {
+    assertProfileUrl(outFile, 'EntertainmentBusiness @id', business['@id']);
+    assertProfileUrl(outFile, 'EntertainmentBusiness url', business.url);
+  }
+  for (const service of findNodesByType(graph, 'Service')) {
+    assertProfileUrl(outFile, 'Service @id', service['@id']);
+    assertProfileUrl(outFile, 'Service url', service.url);
+  }
+  for (const website of findNodesByType(graph, 'WebSite')) {
+    assertProfileUrl(outFile, 'WebSite @id', website['@id']);
+    assertProfileUrl(outFile, 'WebSite url', website.url);
+  }
+  for (const image of findNodesByType(graph, 'ImageObject')) {
+    assertProfileUrl(outFile, 'ImageObject @id', image['@id']);
+  }
+  for (const video of findNodesByType(graph, 'VideoObject')) {
+    assertProfileUrl(outFile, 'VideoObject @id', video['@id']);
+  }
 
   if (has('FAQPage')) {
     errors.push(`${outFile}: FAQPage schema is intentionally disabled for current Google rich-result eligibility`);

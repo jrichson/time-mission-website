@@ -1,15 +1,15 @@
 import type { APIRoute } from 'astro';
 import { allLocations, type LocationRecord } from '../data/locations';
-import routes from '../data/routes.json';
 import faqsData from '../data/site/faqs.json';
 import geoAnswerBlocksData from '../data/site/geo-answer-blocks.json';
+import { activeSiteProfile } from '../lib/site-profile';
 
 export const prerender = true;
 
 type FaqItem = { q: string; a: string };
 type FaqSection = { id: string; heading: string; items: FaqItem[] };
 
-const baseUrl = routes.baseUrl as string;
+const baseUrl = activeSiteProfile.origin;
 const pricingAnswer = geoAnswerBlocksData.blocks.pricing;
 
 function canonicalUrl(path: string): string {

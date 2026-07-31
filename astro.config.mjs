@@ -2,6 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import { applyTmDotEnvToProcess } from './scripts/tm-dotenv.mjs';
+import { resolveSiteProfile } from './config/site-profiles.mjs';
 
 const repoRoot = path.dirname(fileURLToPath(import.meta.url));
 
@@ -16,10 +17,11 @@ const repoRoot = path.dirname(fileURLToPath(import.meta.url));
 })();
 
 applyTmDotEnvToProcess(repoRoot);
+const siteProfile = resolveSiteProfile(process.env);
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
-  site: 'https://www.timemission.com',
+  site: siteProfile.origin,
   output: 'static',
   trailingSlash: 'never',
   build: {

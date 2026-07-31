@@ -1,6 +1,7 @@
 import { tmMediaBase } from '../tm-media';
+import { activeSiteProfile } from '../site-profile';
 
-const BASE_URL = 'https://www.timemission.com';
+const BASE_URL = activeSiteProfile.origin;
 
 export interface ImageObjectNode {
     '@type': 'ImageObject';

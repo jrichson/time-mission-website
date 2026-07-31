@@ -1,6 +1,7 @@
 ---
 import i18n from '../data/site/i18n.json';
 import { compileLanguageSurface, type I18nCatalog } from '../lib/i18n-surface';
+import { activeSiteProfile } from '../lib/site-profile';
 
 interface Props {
     currentLang?: string;
@@ -8,7 +9,7 @@ interface Props {
 }
 
 const { currentLang = i18n.defaultLanguage, placement = 'desktop' } = Astro.props;
-const languages = i18n.languages;
+const languages = i18n.languages.filter((language) => activeSiteProfile.locales.includes(language.code));
 const languageSurface = compileLanguageSurface(i18n as I18nCatalog);
 const currentCode = languageSurface.resolveLanguage(currentLang)?.code || languageSurface.defaultLanguage;
 const switcherId = `language-select-${placement}`;

@@ -23,10 +23,12 @@ import {
   planVideoArtifacts,
   pruneExcludedArtifacts,
 } from './lib/cloudflare-artifact-policy.mjs';
+import { resolveSiteProfile } from '../config/site-profiles.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const publicDir = path.join(root, 'public');
+const siteProfile = resolveSiteProfile(process.env);
 
 applyTmDotEnvToProcess(root);
 
@@ -70,6 +72,7 @@ for (const f of mandatoryFiles) {
 {
   const headersTmpl = fs.readFileSync(path.join(root, '_headers.tmpl'), 'utf8');
   const headersPreBuild = headersTmpl
+    .replace(/\{\{SITE_ORIGIN\}\}/g, siteProfile.origin)
     .replace(/\{\{SCRIPT_HASHES\}\}/g, "'unsafe-inline'")
     .replace(/\{\{STYLE_HASHES\}\}/g, "'unsafe-inline'");
   fs.writeFileSync(path.join(publicDir, '_headers'), headersPreBuild);

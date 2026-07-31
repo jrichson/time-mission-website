@@ -3,6 +3,7 @@ import analyticsLabels from '../data/site/analytics-labels.json';
 import siteCssAssets from '../data/site/site-css-assets.json';
 import { allLocations } from '../data/locations';
 import { getSeoForRoute, resolveLandingHeadSeo, type LandingHeadInput } from '../lib/seo/catalog';
+import { activeSiteProfile } from '../lib/site-profile';
 
 interface Props {
     canonicalPath: string;
@@ -42,7 +43,8 @@ const siteDesigner = 'Jefferson Richardson';
 const siteDeveloper = 'Converge Digital';
 const siteCoreCss = siteCssAssets.core;
 
-const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || 'GTM-WQPWRNJB').trim();
+const defaultGtmContainerId = activeSiteProfile.id === 'us' ? 'GTM-WQPWRNJB' : '';
+const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || defaultGtmContainerId).trim();
 const sgtmContainerUrl = String(import.meta.env.PUBLIC_SGTM_CONTAINER_URL || '').trim().replace(/\/+$/, '');
 const sgtmCollectPath = String(import.meta.env.PUBLIC_SGTM_COLLECT_PATH || '/g/collect').trim();
 
@@ -64,7 +66,7 @@ for (const entry of allLocations) {
 }
 const currentRegion = pathRegionMap.get(canonicalPath) || '';
 const consentProfile: ConsentProfile =
-    currentRegion === 'europe'
+    activeSiteProfile.consentProfile === 'eu_strict' || currentRegion === 'europe'
         ? 'eu_strict'
         : 'us_open';
 
@@ -87,7 +89,8 @@ const consentDefaults: ConsentDefaults =
               functionality_storage: 'granted',
               security_storage: 'granted',
               wait_for_update: 500,
-          };
+        };
+const gtmRequiresConsent = consentProfile !== 'us_open';
 ---
 
 <meta charset="UTF-8" />
@@ -120,16 +123,29 @@ const consentDefaults: ConsentDefaults =
 </script>
 <!-- Google Tag Manager -->
 {gtmContainerId ? (
-    <script is:inline define:vars={{ gtmContainerId }}>
+    <script is:inline define:vars={{ gtmContainerId, gtmRequiresConsent }}>
         (function (w, d, s, l, i) {
+            var loaded = false;
+            function load() {
+                if (loaded) return;
+                loaded = true;
+                w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            }
             w[l] = w[l] || [];
-            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
+            if (!gtmRequiresConsent) {
+                load();
+                return;
+            }
+            w.addEventListener('tm:consent-updated', function (event) {
+                var state = event && event.detail ? event.detail : {};
+                if (state.analytics_storage === 'granted' || state.ad_storage === 'granted') load();
+            });
         })(window, document, 'script', 'dataLayer', gtmContainerId);
     </script>
 ) : null}

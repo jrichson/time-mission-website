@@ -42,8 +42,13 @@ npm run test:smoke
 - Future internal API work should start from [HANDOFF.md](HANDOFF.md), [docs/tm-public-api.md](docs/tm-public-api.md), and [docs/analytics-event-contract.md](docs/analytics-event-contract.md). Replace data adapters at the documented seams rather than bypassing the Location Catalog, Booking Journey, or `window.TM` browser contract.
 - `_headers` contains Cloudflare Pages security headers and is generated from `_headers.tmpl` during `npm run build:astro`.
 - `_redirects` is written for Netlify/Cloudflare Pages style routing.
-- Contact and newsletter forms are handled by Cloudflare Pages Functions in `functions/api/`. Wrangler Direct Upload must be run from the repo root so the sibling `functions/` directory is uploaded with `dist/`.
+- Contact and newsletter forms are handled by Cloudflare Pages Functions in `functions/api/`. Production uploads must use `npm run deploy:pages:us` or `npm run deploy:pages:eu`; pre-approval EU testing uses `npm run deploy:pages:eu:preview`. The deployment wrapper verifies and stages `dist/`, `functions/`, migrations, and the root Wrangler configuration together before Direct Upload.
 - Required Pages Function secrets: `FORM_EMAIL_API_KEY`, `FORM_FROM_EMAIL`, `CONTACT_TO_EMAIL`, `NEWSLETTER_TO_EMAIL`, `TURNSTILE_SECRET_KEY`. `FORM_FROM_EMAIL` can use the verified Resend sender, for example `Time Mission <info@converge-notifications.com>`. Contact submissions can route by the selected contact-form location with optional `CONTACT_TO_EMAIL_<LOCATION>` secrets, where `<LOCATION>` is the uppercase selector value with hyphens converted to underscores, such as `CONTACT_TO_EMAIL_MOUNT_PROSPECT`, `CONTACT_TO_EMAIL_ORLAND_PARK`, `CONTACT_TO_EMAIL_BOSTON`, `CONTACT_TO_EMAIL_WEST_NYACK`, `CONTACT_TO_EMAIL_PHILADELPHIA`, `CONTACT_TO_EMAIL_LINCOLN`, `CONTACT_TO_EMAIL_NASHVILLE`, `CONTACT_TO_EMAIL_DALLAS`, `CONTACT_TO_EMAIL_HOUSTON`, `CONTACT_TO_EMAIL_MANASSAS`, `CONTACT_TO_EMAIL_ANTWERP`, `CONTACT_TO_EMAIL_BRUSSELS`, or `CONTACT_TO_EMAIL_GENERAL`; unset locations fall back to `CONTACT_TO_EMAIL`. Group Events, Birthday Parties, and Corporate Events submissions for Manassas, Mount Prospect, and Orland Park override the location recipient with `Groups@TM-Ops.com`. Required public build var: `PUBLIC_TURNSTILE_SITE_KEY`. Required form archive binding: Cloudflare D1 database bound as `FORM_SUBMISSIONS_DB` with migrations in `migrations/`. Recommended abuse-control binding: Cloudflare KV namespace bound as `FORM_RATE_LIMIT_KV`; optional limit overrides are `FORM_RATE_LIMIT_IP_10M`, `FORM_RATE_LIMIT_IP_HOUR`, and `FORM_RATE_LIMIT_EMAIL_HOUR`.
+
+The `.com` and `.eu` deployments share this codebase and are selected with
+`npm run build:us` or `npm run build:eu`. See
+[`docs/eu-cloudflare-deployment.md`](docs/eu-cloudflare-deployment.md) for the separate
+EU Pages project, EU D1, language, consent, DNS, deployment, and rollback runbook.
 
 ## Remaining Modernization Risks
 

@@ -36,19 +36,18 @@ test.describe('Mobile location selector', () => {
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
   });
 
-  test('tapping an EU location selects it without leaving the current page', async ({ page }) => {
+  test('EU locations expose the counterpart-site handoff', async ({ page }) => {
     await page.goto('/groups?utm_source=paid&utm_campaign=eu');
     await page.locator('#locationBtn').first().click();
     await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
 
     const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
-    await expect(brussels).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
-    await brussels.tap();
-
-    await expect(page).toHaveURL(/\/groups\?utm_source=paid&utm_campaign=eu$/);
-    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('brussels');
-    await expect(page.locator('#locationText')).toContainText('Brussels');
-    await expect(page.locator('nav .btn-tickets')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
+    await expect(brussels).toHaveAttribute(
+      'href',
+      'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu',
+    );
+    await expect(brussels).toHaveAttribute('target', '_blank');
+    await expect(brussels).toHaveAttribute('data-tm-external-location', 'true');
   });
 
   test('tapping Edison opens its local page and keeps Supercharged as the action destination', async ({ page }) => {
@@ -75,7 +74,7 @@ test.describe('Mobile location selector', () => {
 test.describe('small mobile (375x667)', () => {
   test.use({ viewport: { width: 375, height: 667 } });
 
-  const REPRESENTATIVE_PAGES = ['/', '/antwerp', '/faq', '/locations'];
+  const REPRESENTATIVE_PAGES = ['/', '/houston', '/faq', '/locations'];
 
   for (const url of REPRESENTATIVE_PAGES) {
     test(`no horizontal scroll on ${url}`, async ({ page }) => {
@@ -92,7 +91,7 @@ test.describe('small mobile (375x667)', () => {
   }
 
   test('experience tiles keep the same mobile sizing across public and location pages', async ({ page }) => {
-    const urls = ['/', '/philadelphia', '/houston', '/mount-prospect', '/antwerp', '/nashville'];
+    const urls = ['/', '/philadelphia', '/houston', '/mount-prospect', '/lincoln', '/nashville'];
     const measured = [];
 
     for (const url of urls) {

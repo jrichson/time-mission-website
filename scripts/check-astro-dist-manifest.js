@@ -5,11 +5,31 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { walkDeployFiles } = require('./lib/cloudflare-artifact-contract.cjs');
+const {
+  isInternalLocation,
+  resolveSiteProfile,
+} = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
 const distDir = path.join(root, 'dist');
 const astroManifest = JSON.parse(fs.readFileSync(path.join(root, 'src/data/site/astro-rendered-output-files.json'), 'utf8'));
 const astroRenderedHtml = new Set(astroManifest.outputFiles || []);
+const routesDocument = JSON.parse(fs.readFileSync(path.join(root, 'src/data/routes.json'), 'utf8'));
+const locationsDocument = JSON.parse(fs.readFileSync(path.join(root, 'data/locations.json'), 'utf8'));
+const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
+const profile = resolveSiteProfile(process.env);
+const externalRouteOutputs = new Set(
+  (routesDocument.routes || [])
+    .filter((route) => {
+      const location = locations.find(({ slug, id }) => {
+        const locationPath = `/${slug || id}`;
+        return route.canonicalPath === locationPath
+          || route.canonicalPath.startsWith(`${locationPath}/`);
+      });
+      return location && !isInternalLocation(location, profile);
+    })
+    .map((route) => route.outputFile),
+);
 
 const errors = [];
 
@@ -66,7 +86,6 @@ mustFile('index.html');
 mustFile('faq.html');
 mustFile('contact.html');
 mustFile('privacy.html');
-mustFile('houston.html');
 mustFile('missions.html');
 mustFile('groups/corporate.html');
 mustFile('groups/birthdays.html');
@@ -75,16 +94,29 @@ mustFile('groups/holidays.html');
 mustFile('groups/private-events.html');
 mustFile('groups/bachelor-ette.html');
 mustFile('locations.html');
-mustFile('philadelphia.html');
 mustFile('contact-thank-you.html');
+for (const rel of profile.id === 'eu'
+  ? ['antwerp.html', 'brussels.html', 'eindhoven.html']
+  : ['houston.html', 'philadelphia.html']) {
+  mustFile(rel);
+}
 
 for (const rel of astroRenderedHtml) {
+  if (externalRouteOutputs.has(rel)) continue;
   mustFile(rel);
 }
 
 for (const htmlFile of htmlFiles()) {
   const rel = path.relative(distDir, htmlFile).split(path.sep).join('/');
-  if (!astroRenderedHtml.has(rel) && !rel.startsWith('c/') && !rel.startsWith('blog/')) {
+  const segments = rel.split('/');
+  const localized = profile.localizedRoutes
+    && profile.locales.includes(segments[0])
+    && segments[0] !== profile.defaultLocale;
+  const baseRel = localized ? segments.slice(1).join('/') : rel;
+  const expected = astroRenderedHtml.has(baseRel)
+    || baseRel.startsWith('c/')
+    || baseRel.startsWith('blog/');
+  if (!expected) {
     errors.push(`${rel}: unexpected HTML artifact in dist`);
   }
 }

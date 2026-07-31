@@ -20,16 +20,16 @@ describe('Language Surface', () => {
       code: 'es',
       htmlLang: 'es',
     });
-    expect(surface.resolveLanguage('nl')).toBeNull();
-    expect(surface.translateString('nav.about', 'fr-CA')).toBe('About');
+    expect(surface.resolveLanguage('nl')).toMatchObject({ code: 'nl', htmlLang: 'nl' });
+    expect(surface.translateString('nav.about', 'fr-CA')).toBe('À propos');
     expect(surface.translateString('missing.key', 'es')).toBeNull();
   });
 
-  it('only exposes English and Spanish as public switcher options for the US launch', () => {
+  it('keeps the shared catalog ready for both regional language sets', () => {
     const surface = compileLanguageSurface(catalog);
 
-    expect(surface.languageCodes).toEqual(['en', 'es']);
-    expect(Object.keys(catalog.translations).sort()).toEqual(['en', 'es']);
+    expect(surface.languageCodes).toEqual(['en', 'es', 'nl', 'fr']);
+    expect(Object.keys(catalog.translations).sort()).toEqual(['en', 'es', 'fr', 'nl']);
   });
 
   it('keeps every configured language aligned with default translation keys', () => {
@@ -53,8 +53,9 @@ describe('Language Surface', () => {
       defaultLanguage: 'en',
       storageKey: 'tm_language',
     });
-    expect(runtimeConfig.languages.map((language) => language.code)).toEqual(['en', 'es']);
+    expect(runtimeConfig.languages.map((language) => language.code)).toEqual(['en', 'es', 'nl', 'fr']);
     expect(runtimeConfig.translations.es['booking.chooseLocation.title']).toBeTruthy();
+    expect(runtimeConfig.translations.fr['consent.preferencesTitle']).toBe('Préférences de cookies');
   });
 
   it('keeps translated rich text on the approved HTML allowlist', () => {

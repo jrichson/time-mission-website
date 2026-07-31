@@ -1,0 +1,62 @@
+.language-suggestion {
+    position: fixed;
+    z-index: 1200;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 2.75rem;
+    align-items: center;
+    gap: 0.75rem;
+    width: min(31rem, calc(100vw - 2rem));
+    min-height: 3.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-left: 3px solid var(--orange);
+    border-radius: 6px;
+    background: #171717;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    color: #fff;
+}
+
+.language-suggestion[hidden] {
+    display: none;
+}
+
+.language-suggestion p {
+    min-width: 0;
+    margin: 0;
+    font: 600 0.95rem/1.35 var(--body);
+}
+
+.language-suggestion-action {
+    color: var(--orange);
+    font: 700 0.82rem/1 var(--body);
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.language-suggestion-action:hover,
+.language-suggestion-action:focus-visible {
+    text-decoration: underline;
+}
+
+.language-suggestion-dismiss {
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+@media (max-width: 480px) {
+    .language-suggestion {
+        right: 0.75rem;
+        bottom: max(0.75rem, env(safe-area-inset-bottom));
+        width: calc(100vw - 1.5rem);
+    }
+}

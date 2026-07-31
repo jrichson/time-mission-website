@@ -180,6 +180,8 @@
         if (!loc) return '';
         var kind = normalizeKind(opts.kind || 'tickets');
         var slug = loc.slug || loc.id || normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
+        var externalUrl = getExternalLocationUrl(loc);
+        if (externalUrl && !loc.pagePath) return externalUrl;
         var checkoutUrl = resolveOpenCheckoutUrl(loc);
         var bookable = !!checkoutUrl;
 
@@ -220,7 +222,6 @@
             return appendTrackingParams('/' + slug + '?book=1', { includeInternal: true });
         }
         if (isTicketKind(kind) && bookable) return checkoutUrl;
-        var externalUrl = getExternalLocationUrl(loc);
         if (externalUrl) return externalUrl;
         if (bookable) return checkoutUrl;
         if (loc.status === 'coming-soon') return resolveComingSoonLeadUrl(loc, slug);

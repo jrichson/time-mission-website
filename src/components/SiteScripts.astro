@@ -1,6 +1,7 @@
 ---
 import { getPublicSiteContract } from '../lib/site-contract';
 import { lazyRuntimeScripts, publicRuntimeScripts, versionedRuntimeSrc } from '../lib/public-runtime-contract';
+import { activeSiteProfile } from '../lib/site-profile';
 
 const siteContract = getPublicSiteContract();
 const formConfig = {
@@ -10,10 +11,20 @@ const lazyRuntimeConfig = lazyRuntimeScripts.map((script) => ({
     ...script,
     src: versionedRuntimeSrc(script),
 }));
+const publicSiteProfile = {
+    id: activeSiteProfile.id,
+    origin: activeSiteProfile.origin,
+    locales: activeSiteProfile.locales,
+    defaultLocale: activeSiteProfile.defaultLocale,
+    localizedRoutes: activeSiteProfile.localizedRoutes,
+};
 ---
 
 <script is:inline define:vars={{ siteContract }}>
     window.__TM_SITE_CONTRACT__ = siteContract;
+</script>
+<script is:inline define:vars={{ publicSiteProfile }}>
+    window.__TM_SITE_PROFILE__ = publicSiteProfile;
 </script>
 <script is:inline define:vars={{ formConfig }}>
     window.__TM_FORM_CONFIG__ = formConfig;

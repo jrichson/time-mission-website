@@ -55,7 +55,7 @@ export const publicRuntimeScripts: RuntimeScript[] = [
 
 export const lazyRuntimeScripts: LazyRuntimeScript[] = [
     { id: 'cookieconsent', trigger: 'consent-ui', src: '/js/cookieconsent.umd.js', version: null },
-    { id: 'cookieConsent', trigger: 'consent-ui', src: '/js/cookie-consent.js', version: 1, dependsOn: ['cookieconsent'] },
+    { id: 'cookieConsent', trigger: 'consent-ui', src: '/js/cookie-consent.js', version: 2, dependsOn: ['cookieconsent'] },
     { id: 'contactFormAnalytics', trigger: 'contact-form', src: '/js/contact-form-analytics.js', version: 1 },
     { id: 'formProtection', trigger: 'turnstile-form', src: '/js/form-protection.js', version: 1 },
     { id: 'webVitalsLibrary', trigger: 'web-vitals', src: '/js/web-vitals.iife.js', version: null },

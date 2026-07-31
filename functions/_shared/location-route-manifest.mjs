@@ -46,7 +46,7 @@ export const LOCATION_ROUTE_ENTRIES = [
   {
     "canonicalPath": "/antwerp",
     "compatibilitySources": [],
-    "externalUrl": "https://timemission.eu/antwerp",
+    "externalUrl": "https://www.timemission.eu/antwerp",
     "officialAlternate": "experience-factory-antwerp"
   },
   {
@@ -60,13 +60,13 @@ export const LOCATION_ROUTE_ENTRIES = [
   {
     "canonicalPath": "/brussels",
     "compatibilitySources": [],
-    "externalUrl": "https://timemission.eu/brussels",
+    "externalUrl": "https://www.timemission.eu/brussels",
     "officialAlternate": "terminal1"
   },
   {
     "canonicalPath": "/eindhoven",
     "compatibilitySources": [],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.eu/eindhoven",
     "officialAlternate": ""
   },
   {
@@ -90,7 +90,7 @@ export const LOCATION_ROUTE_ENTRIES = [
   {
     "canonicalPath": "/edison",
     "compatibilitySources": [],
-    "externalUrl": "",
+    "externalUrl": "https://www.superchargednj.com/",
     "officialAlternate": ""
   }
 ];
@@ -116,7 +116,6 @@ export const PREFIXABLE_CANONICAL_PATHS = [
   "/press/in-the-news",
   "/press/brand-guidelines",
   "/locations",
-  "/houston/spinandscore/rules",
   "/privacy",
   "/terms",
   "/code-of-conduct",
@@ -217,10 +216,6 @@ export const PREFIXABLE_ROUTE_ALIASES = [
   [
     "/locations/index.html",
     "/locations"
-  ],
-  [
-    "/houston/spinandscore/rules.html",
-    "/houston/spinandscore/rules"
   ],
   [
     "/privacy.html",

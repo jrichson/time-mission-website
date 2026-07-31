@@ -65,11 +65,11 @@ describe('location route normalizer', () => {
     expect(entriesWithAlternates).toHaveLength(8);
     expect(resolveLocationCanonicalPath('/R1-indoor-karting')).toBe('/lincoln');
     expect(resolveLocationCanonicalPath('/Palisades-center')).toBe('/west-nyack');
-    expect(resolveLocationCanonicalPath('/Terminal1')).toBe('https://timemission.eu/brussels');
+    expect(resolveLocationCanonicalPath('/Terminal1')).toBe('https://www.timemission.eu/brussels');
     expect(resolveLocationCanonicalPath('/Manassas-mall')).toBe('/manassas');
     expect(resolveLocationCanonicalPath('/Philly')).toBe('/philadelphia');
     expect(resolveLocationCanonicalPath('/Mt-Prospect')).toBe('/mount-prospect');
-    expect(resolveLocationCanonicalPath('/Experience-factory-antwerp')).toBe('https://timemission.eu/antwerp');
+    expect(resolveLocationCanonicalPath('/Experience-factory-antwerp')).toBe('https://www.timemission.eu/antwerp');
     expect(resolveLocationCanonicalPath('/Marq-E')).toBe('/houston');
   });
 
@@ -82,15 +82,15 @@ describe('location route normalizer', () => {
 
   it('redirects EU location prefixes to the EU site instead of serving local pages', () => {
     expect(resolveLocationRedirectUrl('https://timemission.com/antwerp?utm_source=test#book'))
-      .toBe('https://timemission.eu/antwerp?utm_source=test');
+      .toBe('https://www.timemission.eu/antwerp?utm_source=test');
     expect(resolveLocationRedirectUrl('https://timemission.com/antwerp/groups/corporate?utm_source=test'))
-      .toBe('https://timemission.eu/antwerp?utm_source=test');
+      .toBe('https://www.timemission.eu/antwerp?utm_source=test');
     expect(resolveLocationRedirectUrl('https://timemission.com/brussels?utm_source=test'))
-      .toBe('https://timemission.eu/brussels?utm_source=test');
+      .toBe('https://www.timemission.eu/brussels?utm_source=test');
     expect(resolveLocationRedirectUrl('https://timemission.com/Terminal1/missions?utm_source=test'))
-      .toBe('https://timemission.eu/brussels?utm_source=test');
+      .toBe('https://www.timemission.eu/brussels?utm_source=test');
     expect(resolveLocationRouteRequest('https://timemission.com/brussels/css/nav.css?v=17'))
-      .toEqual({ redirectUrl: 'https://timemission.eu/brussels?v=17', assetPath: '' });
+      .toEqual({ redirectUrl: 'https://www.timemission.eu/brussels?v=17', assetPath: '' });
   });
 
   it('passes through already canonical or unrelated paths', () => {

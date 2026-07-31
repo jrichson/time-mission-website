@@ -14,6 +14,7 @@ import {
     landingShouldAppearInSitemap,
 } from '../lib/payload/load';
 import { compilePublicUrlSurface, type PublicUrlRegistry } from '../lib/public-url-surface';
+import { activeSiteProfile, isInternalLocation, localizedPath } from '../lib/site-profile';
 
 export const prerender = true;
 
@@ -30,28 +31,46 @@ export const GET: APIRoute = async () => {
     const surface = compilePublicUrlSurface(routes as PublicUrlRegistry);
 
     const items: string[] = [];
-    items.push(...surface.sitemapUrls);
+    const addLocalizedUrls = (canonicalPath: string) => {
+        for (const locale of activeSiteProfile.locales) {
+            items.push(
+                `${activeSiteProfile.origin}${localizedPath(canonicalPath, locale, activeSiteProfile)}`,
+            );
+        }
+    };
+    for (const route of surface.routes) {
+        const canonicalPath = route.canonicalPath;
+        const location = allLocations.find(({ slug }) => (
+            canonicalPath === `/${slug}` || canonicalPath.startsWith(`/${slug}/`)
+        ));
+        const shouldInclude = location
+            ? isInternalLocation(location, activeSiteProfile)
+            : route.sitemap === true;
+        if (!shouldInclude) continue;
+
+        addLocalizedUrls(canonicalPath);
+    }
 
     try {
         const landings = await getPublishedLandings();
         for (const doc of landings) {
             if (!landingShouldAppearInSitemap(doc)) continue;
             const cp = landingCanonicalPath(doc.slug, surface.dynamicLandingPrefix);
-            items.push(surface.publicUrlFor(cp));
+            addLocalizedUrls(cp);
         }
         const blogPosts = await getPublishedBlogPosts();
         const renderableBlogPosts = blogPosts.filter(blogPostDocLooksRenderable);
         if (renderableBlogPosts.length > 0) {
-            items.push(surface.publicUrlFor('/blog'));
+            addLocalizedUrls('/blog');
         }
         const locationSlugsWithPosts = new Set(renderableBlogPosts.map(blogPostLocationSlug));
         for (const location of allLocations) {
             if (!locationSlugsWithPosts.has(location.slug)) continue;
-            items.push(surface.publicUrlFor(blogLocationCanonicalPath(location.slug)));
+            addLocalizedUrls(blogLocationCanonicalPath(location.slug));
         }
         for (const doc of blogPosts) {
             if (!blogPostShouldAppearInSitemap(doc)) continue;
-            items.push(surface.publicUrlFor(blogPostCanonicalPath(String(doc.slug))));
+            addLocalizedUrls(blogPostCanonicalPath(String(doc.slug)));
         }
     } catch (e) {
         if (cmsBuildStrict()) throw e;

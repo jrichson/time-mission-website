@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import routes from '../data/routes.json';
+import { activeSiteProfile } from '../lib/site-profile';
 
 export const prerender = true;
 
@@ -55,7 +56,7 @@ function machineReadableSection(baseUrl: string): string {
 }
 
 function citationReadySection(): string {
-    const baseUrl = routes.baseUrl as string;
+    const baseUrl = activeSiteProfile.origin;
     const lines = [
         `- [Citation-ready AI context](${abs(baseUrl, '/ai-context.md')}): Short answer blocks for what Time Mission is, how mission rooms work, locations, visiting, pricing, and groups.`,
         `- [Full AI context bundle](${abs(baseUrl, '/llms-full.txt')}): Complete facts for location-specific and FAQ-specific answers.`,
@@ -69,7 +70,7 @@ function primaryPagesSection(baseUrl: string): string {
 }
 
 export const GET: APIRoute = () => {
-    const baseUrl = routes.baseUrl as string;
+    const baseUrl = activeSiteProfile.origin;
     const out: string[] = [];
     out.push('# Time Mission', '', `> ${HOME_BLURB}`, '');
     out.push(

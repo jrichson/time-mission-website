@@ -2,6 +2,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
 const { findJsonLdNodes } = require('./lib/rendered-page-contract');
+const {
+  isInternalLocation,
+  resolveSiteProfile,
+} = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -13,7 +17,8 @@ const locationsDoc = JSON.parse(
   fs.readFileSync(fs.existsSync(publicLocationsPath) ? publicLocationsPath : path.join(root, 'data/locations.json'), 'utf8'),
 );
 const routesData = JSON.parse(fs.readFileSync(path.join(root, 'src/data/routes.json'), 'utf8'));
-const baseUrl = routesData.baseUrl;
+const profile = resolveSiteProfile(process.env);
+const baseUrl = profile.origin;
 
 const dayOfWeekMap = {
   mon: 'Monday',
@@ -113,7 +118,10 @@ const locationSlugSet = new Set(locationsDoc.locations.map((l) => l.slug));
 const locationRoutes = routesData.routes.filter((r) => {
   const out = r.outputFile.replace(/^\//, '');
   const slug = r.canonicalPath.replace(/^\//, '');
-  return ASTRO_RENDERED_OUTPUT_FILES.has(out) && locationSlugSet.has(slug);
+  const location = locationsDoc.locations.find((item) => item.slug === slug);
+  return ASTRO_RENDERED_OUTPUT_FILES.has(out)
+    && locationSlugSet.has(slug)
+    && isInternalLocation(location, profile);
 });
 
 let count = 0;

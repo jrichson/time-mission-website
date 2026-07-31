@@ -1,5 +1,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const {
+    isInternalLocation,
+    publicLocationsForProfile,
+    resolveSiteProfile,
+} = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -7,11 +12,24 @@ const errors = [];
 const registryPath = path.join(root, 'src/data/routes.json');
 const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
 const machineReadableRoutes = registry.machineReadableRoutes || [];
+const locationsDocument = JSON.parse(
+    fs.readFileSync(path.join(root, 'data/locations.json'), 'utf8'),
+);
+const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
+const profile = resolveSiteProfile(process.env);
+const profiledLocations = publicLocationsForProfile(locations, profile);
 
 function routeUrl(route) {
     return route.canonicalPath === '/'
-        ? `${registry.baseUrl}/`
-        : `${registry.baseUrl}${route.canonicalPath}`;
+        ? `${profile.origin}/`
+        : `${profile.origin}${route.canonicalPath}`;
+}
+
+function locationForCanonicalPath(canonicalPath) {
+    return locations.find(({ slug, id }) => {
+        const locationPath = `/${slug || id}`;
+        return canonicalPath === locationPath || canonicalPath.startsWith(`${locationPath}/`);
+    });
 }
 
 const distPath = path.join(root, 'dist', 'llms.txt');
@@ -26,7 +44,8 @@ const LLMS_TXT_MAX_BYTES = 3 * 1024;
 
 const allowlist = new Set();
 for (const route of registry.routes) {
-    if (!route.sitemap) continue;
+    const location = locationForCanonicalPath(route.canonicalPath);
+    if (location ? !isInternalLocation(location, profile) : !route.sitemap) continue;
     allowlist.add(routeUrl(route));
 }
 for (const route of machineReadableRoutes) {
@@ -121,11 +140,11 @@ if (fs.existsSync(aiContextPath)) {
 const pricingPath = path.join(root, 'dist', 'pricing.md');
 if (fs.existsSync(pricingPath)) {
     const pricingBody = fs.readFileSync(pricingPath, 'utf8');
-    if (!pricingBody.includes('| Antwerp | https://timemission.eu/antwerp |')) {
-        errors.push('pricing.md must use the external EU public URL for Antwerp');
-    }
-    if (/https:\/\/(?:www\.)?timemission\.com\/(?:antwerp|brussels)\b/.test(pricingBody)) {
-        errors.push('pricing.md must not publish on-site public URLs for EU locations');
+    for (const location of profiledLocations.filter((item) => item.status === 'open')) {
+        const publicUrl = location.externalUrl || `${profile.origin}/${location.slug}`;
+        if (!pricingBody.includes(`| ${location.shortName} | ${publicUrl} |`)) {
+            errors.push(`pricing.md must use ${publicUrl} for ${location.shortName}`);
+        }
     }
 }
 
@@ -146,7 +165,8 @@ if (!fs.existsSync(crawlerChecklistPath)) {
     }
 }
 
-const urlRe = /https:\/\/www\.timemission\.com[^\s\)`'"]+/g;
+const escapedOrigin = profile.origin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const urlRe = new RegExp(`${escapedOrigin}[^\\s\\)\\\`'"]+`, 'g');
 function validateKnownUrls(label, text) {
     const urls = [...text.matchAll(urlRe)].map((m) => m[0]);
     for (const u of urls) {

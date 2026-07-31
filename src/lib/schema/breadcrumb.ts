@@ -13,7 +13,7 @@ export interface BreadcrumbNode {
     }>;
 }
 
-const baseUrl = 'https://www.timemission.com';
+const baseUrl = activeSiteProfile.origin;
 
 function toAbsolute(href: string): string {
     if (/^https?:\/\//.test(href)) return href;
@@ -31,3 +31,4 @@ export function breadcrumbNode(crumbs: Crumb[]): BreadcrumbNode {
         })),
     };
 }
+import { activeSiteProfile } from '../site-profile';

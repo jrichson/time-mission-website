@@ -6,6 +6,7 @@
  */
 import org from '../../data/site/seo-organization.json';
 import { allLocations } from '../../data/locations';
+import { activeSiteProfile, isInternalLocation } from '../site-profile';
 
 export interface ServiceNode {
     '@type': 'Service';
@@ -21,6 +22,7 @@ export interface ServiceNode {
 const openCities = (): string[] =>
     allLocations
         .filter((l) => l.status === 'open')
+        .filter((l) => isInternalLocation(l, activeSiteProfile))
         .map((l) => `${l.shortName}, ${l.address.state || l.address.country}`);
 
 export function serviceNode(opts: {
@@ -31,12 +33,12 @@ export function serviceNode(opts: {
 }): ServiceNode {
     return {
         '@type': 'Service',
-        '@id': `${org.url}${opts.canonicalPath}#service`,
+        '@id': `${activeSiteProfile.origin}${opts.canonicalPath}#service`,
         name: opts.name,
         serviceType: opts.serviceType,
         description: opts.description,
         provider: { '@id': org['@id'] },
         areaServed: openCities(),
-        url: `${org.url}${opts.canonicalPath}`,
+        url: `${activeSiteProfile.origin}${opts.canonicalPath}`,
     };
 }

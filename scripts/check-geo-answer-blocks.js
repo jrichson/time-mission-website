@@ -2,10 +2,12 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { resolveSiteProfile } = require('../config/site-profiles.mjs');
 const { findJsonLdNodes } = require('./lib/rendered-page-contract');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
+const profile = resolveSiteProfile(process.env);
 
 function loadJson(rel) {
   return JSON.parse(fs.readFileSync(path.join(root, rel), 'utf8'));
@@ -113,18 +115,18 @@ for (const rel of ['dist/llms-full.txt', 'dist/ai-context.md']) {
 const imageExpectations = [
   {
     rel: 'dist/index.html',
-    id: 'https://www.timemission.com/#primaryimage',
-        url: 'https://www.timemission.com/assets/photos/experiences/magma-mayhem-hero-poster.jpg',
+    id: `${profile.origin}/#primaryimage`,
+    url: `${profile.origin}/assets/photos/experiences/magma-mayhem-hero-poster.jpg`,
   },
   {
     rel: 'dist/missions.html',
-    id: 'https://www.timemission.com/missions#primaryimage',
-    url: 'https://www.timemission.com/assets/photos/experiences/experiences-hero.jpg',
+    id: `${profile.origin}/missions#primaryimage`,
+    url: `${profile.origin}/assets/photos/experiences/experiences-hero.jpg`,
   },
   {
     rel: 'dist/groups.html',
-    id: 'https://www.timemission.com/groups#primaryimage',
-    url: 'https://www.timemission.com/assets/video/groups-hero-poster.jpg',
+    id: `${profile.origin}/groups#primaryimage`,
+    url: `${profile.origin}/assets/video/groups-hero-poster.jpg`,
   },
 ];
 

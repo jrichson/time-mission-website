@@ -3,10 +3,7 @@
 # First-time setup:
 #   1. npx wrangler login
 #   2. Create the project if needed: npx wrangler pages project create time-mission-website
-#   3. npm run deploy:pages
-#
-# Different Pages project without editing name below:
-#   npm run deploy:pages -- --project-name=my-staging-site
+#   3. npm run deploy:pages:us
 # Hero MP4s on R2 (Pages 25 MiB/file limit): copy `.env.example` → `.env` and set
 # PUBLIC_TM_MEDIA_BASE to your public bucket URL (no trailing slash). Object keys in R2
 # must match site paths, e.g. `assets/video/TM-Hero-bg-web-hero.mp4`.
@@ -19,10 +16,13 @@ pages_build_output_dir = "dist"
 compatibility_date = "2026-05-09"
 
 [vars]
+TM_SITE_PROFILE = "us"
+PUBLIC_SITE_ORIGIN = "https://www.timemission.com"
 PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAADdV7UFMRdD_WvXW"
+FORM_ALLOWED_ORIGINS = "https://www.timemission.com,https://timemission.com"
 
-# Wrangler Direct Upload deploys `dist/` and, when run from this repo root, also uploads
-# the sibling `functions/` directory for Pages Functions.
+# The deployment wrapper stages this root configuration beside verified copies of
+# `dist/`, `functions/`, and `migrations/` before Wrangler Direct Upload.
 #
 # Form archive setup:
 #   1. npx wrangler d1 create time-mission-forms

@@ -9,9 +9,7 @@ const RESEND_EMAIL_URL = 'https://api.resend.com/emails';
 const KLAVIYO_SUBSCRIBE_URL = 'https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/';
 const KLAVIYO_REVISION = '2026-04-15';
 
-const DEFAULT_ALLOWED_ORIGINS = [
-  'https://timemission.com',
-  'https://www.timemission.com',
+const LOCAL_ALLOWED_ORIGINS = [
   'http://localhost:4321',
   'http://127.0.0.1:4321',
 ];
@@ -24,6 +22,7 @@ const CONTACT_LOCATION_LABELS = {
   brussels: 'Belgium - Brussels',
   dallas: 'TX - Dallas',
   edison: 'NJ - Edison',
+  eindhoven: 'Netherlands - Eindhoven',
   general: 'General Inquiry',
   houston: 'TX - Houston',
   lincoln: 'RI - Lincoln',
@@ -359,9 +358,14 @@ export function isAllowedOrigin(request, env = {}) {
     return false;
   }
 
+  const profile = stringValue(env.TM_SITE_PROFILE).trim().toLowerCase();
+  const regionalOrigins = profile === 'eu'
+    ? ['https://timemission.eu', 'https://www.timemission.eu']
+    : ['https://timemission.com', 'https://www.timemission.com'];
   const allowed = new Set([
     requestOrigin(request),
-    ...DEFAULT_ALLOWED_ORIGINS,
+    ...regionalOrigins,
+    ...LOCAL_ALLOWED_ORIGINS,
     ...envList(env.FORM_ALLOWED_ORIGINS),
   ].filter(Boolean));
 

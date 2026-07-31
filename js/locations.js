@@ -490,6 +490,7 @@
 
         document.querySelectorAll('[data-tm-location]').forEach(el => {
             el.addEventListener('click', (e) => {
+                if (el.dataset.tmExternalLocation === 'true') return;
                 e.preventDefault();
                 TM.select(el.dataset.tmLocation);
             });

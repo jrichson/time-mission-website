@@ -280,14 +280,13 @@ test('gift card page reflects enabled, paused, and unavailable locations', async
 
   await page.evaluate(() => window.TM.select('philadelphia'));
   await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('aria-disabled', 'true');
-  await expect(page.locator('#giftCardLocationHint')).toContainText('temporarily paused');
-  await expect(redemptionAnswer).toContainText('Gift cards are temporarily paused for Philadelphia');
-
-  await page.evaluate(() => window.TM.select('antwerp'));
-  await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('antwerp');
-  await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('#giftCardLocationHint')).toContainText('not available');
-  await expect(redemptionAnswer).toContainText('Gift cards are not available for Antwerp yet');
+  await expect(redemptionAnswer).toContainText('Gift cards are not available for Philadelphia yet');
+
+  expect(await page.evaluate(() => window.TMBooking.getDestination({
+    kind: 'gift-cards',
+    locationId: 'antwerp',
+  }))).toBe('https://www.timemission.eu/antwerp');
 
   await page.evaluate(() => window.TM.select('houston'));
   await expect(page.locator('#giftCardBuyBtn')).not.toHaveAttribute('aria-disabled', 'true');

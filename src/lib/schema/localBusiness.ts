@@ -1,7 +1,8 @@
 import type { LocationRecord } from '../../data/locations';
 import org from '../../data/site/seo-organization.json';
+import { activeSiteProfile } from '../site-profile';
 
-const baseUrl = 'https://www.timemission.com';
+const baseUrl = activeSiteProfile.origin;
 
 const dayOfWeekMap: Record<string, string> = {
     mon: 'Monday',
@@ -47,7 +48,7 @@ export interface LocalBusinessNode {
     sameAs?: string[];
 }
 
-const DEFAULT_VENUE_IMAGE = 'https://www.timemission.com/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
+const DEFAULT_VENUE_IMAGE = `${baseUrl}/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg`;
 const DEFAULT_PRICE_RANGE = '$$';
 
 function schemaClockTime(time: string): string {

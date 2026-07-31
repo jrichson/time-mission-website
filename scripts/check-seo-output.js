@@ -1,6 +1,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { extractHeadMetadata, readDistRouteHtml } = require('./lib/rendered-page-contract');
+const {
+  isInternalLocation,
+  resolveSiteProfile,
+} = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -22,7 +26,10 @@ function resolveRobotsForRoute(canonicalPath, table) {
 const routesData = loadJson('src/data/routes.json');
 const seoRoutes = loadJson('src/data/site/seo-routes.json');
 const robotsTable = loadJson('src/data/site/seo-robots.json');
-const baseUrl = routesData.baseUrl || 'https://www.timemission.com';
+const locationsDocument = loadJson('data/locations.json');
+const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
+const profile = resolveSiteProfile(process.env);
+const baseUrl = profile.origin;
 const siteCredits = {
   author: 'Ari Simon',
   designer: 'Jefferson Richardson',
@@ -44,8 +51,15 @@ if (!fs.existsSync(distDir)) {
   process.exit(1);
 }
 
+let validated = 0;
 for (const route of routesData.routes) {
   const cp = route.canonicalPath;
+  const location = locations.find(({ slug, id }) => {
+    const locationPath = `/${slug || id}`;
+    return cp === locationPath || cp.startsWith(`${locationPath}/`);
+  });
+  if (location && !isInternalLocation(location, profile)) continue;
+
   const { outFile, exists, html } = readDistRouteHtml(root, route);
   if (!exists) {
     errors.push(`missing dist file: ${outFile}`);
@@ -74,6 +88,7 @@ for (const route of routesData.routes) {
   if (meta.ogImage !== expectOg) errors.push(`${outFile}: og:image mismatch`);
   if (meta.twitterImage !== expectTw) errors.push(`${outFile}: twitter:image mismatch`);
   if (meta.robots !== expectRB) errors.push(`${outFile}: robots mismatch (got ${meta.robots}, expected ${expectRB})`);
+  validated += 1;
 }
 
 if (errors.length) {
@@ -82,4 +97,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`SEO output check passed for ${routesData.routes.length} public routes.`);
+console.log(`SEO output check passed for ${validated} ${profile.id} public routes.`);

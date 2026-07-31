@@ -73,13 +73,7 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
 });
 
 test('ticket panel routes Europe selections to the right external destination with UTMs', async ({ page }) => {
-  await page.route('https://www.experience-factory.com/**', async (route) => {
-    await route.fulfill({
-      contentType: 'text/html',
-      body: '<!doctype html><title>Experience Factory booking</title><h1>Experience Factory booking</h1>',
-    });
-  });
-  await page.route('https://timemission.eu/**', async (route) => {
+  await page.route('https://www.timemission.eu/**', async (route) => {
     await route.fulfill({
       contentType: 'text/html',
       body: '<!doctype html><title>Time Mission EU</title><h1>Time Mission EU</h1>',
@@ -91,7 +85,7 @@ test('ticket panel routes Europe selections to the right external destination wi
   await expectPopupUrl(
     page,
     () => page.locator('#ticketLocation').selectOption('antwerp'),
-    'https://www.experience-factory.com/antwerp/online-booking/?utm_source=paid&utm_campaign=eu#your-group=groups-of-friends&your-favorite-experience=time-mission'
+    'https://www.timemission.eu/antwerp?utm_source=paid&utm_campaign=eu'
   );
   await expect(page).toHaveURL(/\/\?utm_source=paid&utm_campaign=eu$/);
 
@@ -101,7 +95,7 @@ test('ticket panel routes Europe selections to the right external destination wi
   await expectPopupUrl(
     page,
     () => page.locator('#ticketLocation').selectOption('brussels'),
-    'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu'
+    'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu'
   );
   await expect(page).toHaveURL(/\/\?utm_source=paid&utm_campaign=eu$/);
 });

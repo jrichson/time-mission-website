@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
 import { allLocations, type LocationRecord } from '../data/locations';
-import routes from '../data/routes.json';
 import faqsData from '../data/site/faqs.json';
 import groupsData from '../data/site/groups.json';
 import geoAnswerBlocksData from '../data/site/geo-answer-blocks.json';
+import { activeSiteProfile } from '../lib/site-profile';
 
 export const prerender = true;
 
@@ -12,7 +12,7 @@ type FaqSection = { id: string; heading: string; items: FaqItem[] };
 type GroupItem = { id: string; title: string; blurb: string; canonicalPath: string; badge?: string };
 type GeoAnswerBlock = { heading: string; text: string; publicPath: string };
 
-const baseUrl = routes.baseUrl as string;
+const baseUrl = activeSiteProfile.origin;
 const citationBlocks = Object.values(geoAnswerBlocksData.blocks) as GeoAnswerBlock[];
 
 function canonicalUrl(path: string): string {

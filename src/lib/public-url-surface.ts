@@ -1,4 +1,5 @@
 import routesRegistry from '../data/routes.json';
+import { activeSiteProfile } from './site-profile';
 
 export interface PublicUrlRoute {
     id?: string;
@@ -58,12 +59,15 @@ export interface PublicUrlSurface {
     isKnownCanonical(canonicalPath: string): boolean;
 }
 
-const defaultRegistry = routesRegistry as PublicUrlRegistry;
+const defaultRegistry = {
+    ...(routesRegistry as PublicUrlRegistry),
+    baseUrl: activeSiteProfile.origin,
+} as PublicUrlRegistry;
 
 export function normalizePublicPath(value: string): string {
     const raw = String(value || '').trim();
     if (!raw || raw === '/') return '/';
-    const withoutHost = raw.replace(/^https?:\/\/(?:www\.)?timemission\.com/i, '');
+    const withoutHost = raw.replace(/^https?:\/\/(?:www\.)?timemission\.(?:com|eu)/i, '');
     const path = withoutHost.split('#')[0].split('?')[0] || '/';
     const withSlash = path.startsWith('/') ? path : `/${path}`;
     return withSlash.length > 1 ? withSlash.replace(/\/+$/, '') : '/';

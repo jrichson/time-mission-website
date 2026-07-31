@@ -5,6 +5,7 @@ import faqsData from '../data/site/faqs.json';
 import groupsData from '../data/site/groups.json';
 import seoRoutes from '../data/site/seo-routes.json';
 import geoAnswerBlocksData from '../data/site/geo-answer-blocks.json';
+import { activeSiteProfile, isInternalLocation } from '../lib/site-profile';
 
 export const prerender = true;
 
@@ -15,7 +16,7 @@ type GeoAnswerBlock = { heading: string; text: string; publicPath: string };
 type SeoEntry = { title: string; description: string };
 type RouteEntry = { canonicalPath: string; sitemap: boolean };
 
-const baseUrl = routes.baseUrl as string;
+const baseUrl = activeSiteProfile.origin;
 const citationBlocks = Object.values(geoAnswerBlocksData.blocks) as GeoAnswerBlock[];
 
 function canonicalUrl(path: string): string {
@@ -112,7 +113,12 @@ function faqSections(): string {
 
 function seoRows(): string {
     const sitemapRoutes = (routes.routes as RouteEntry[])
-        .filter((route) => route.sitemap === true)
+        .filter((route) => {
+            const location = allLocations.find(({ slug }) =>
+                route.canonicalPath === `/${slug}` || route.canonicalPath.startsWith(`/${slug}/`),
+            );
+            return location ? isInternalLocation(location, activeSiteProfile) : route.sitemap === true;
+        })
         .map((route) => route.canonicalPath)
         .sort((a, b) => a.localeCompare(b));
     const entries = sitemapRoutes

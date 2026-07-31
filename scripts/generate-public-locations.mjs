@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { PAYLOAD_FETCH_TIMEOUT_MS, validatedCmsOriginBase } from './lib/payload-origin.mjs';
+import { publicLocationsForProfile, resolveSiteProfile } from '../config/site-profiles.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -285,7 +286,12 @@ export async function generatePublicLocations({ origin = cmsOriginFromEnv(), out
   const baseLocations = Array.isArray(baseDocument.locations) ? baseDocument.locations : [];
   const docs = await fetchLocationDetails(origin);
   const { locations, appliedCount } = applyLocationDetailsOverrides(baseLocations, docs);
-  const resolvedDocument = { ...baseDocument, locations };
+  const profile = resolveSiteProfile(process.env);
+  const resolvedDocument = {
+    ...baseDocument,
+    siteProfile: profile.id,
+    locations: publicLocationsForProfile(locations, profile),
+  };
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   fs.writeFileSync(outputPath, `${JSON.stringify(resolvedDocument, null, 2)}\n`);

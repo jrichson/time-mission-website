@@ -66,4 +66,30 @@ PUBLIC_TURNSTILE_SITE_KEY = "wrangler-key"
       else process.env.PUBLIC_TURNSTILE_SITE_KEY = oldValue;
     }
   });
+
+  it('maps EU analytics and Turnstile values without inheriting US profile defaults', () => {
+    const root = tempRoot();
+    fs.writeFileSync(path.join(root, 'wrangler.toml'), `
+[vars]
+PUBLIC_SITE_ORIGIN = "https://www.timemission.com"
+PUBLIC_GTM_CONTAINER_ID = "GTM-US"
+PUBLIC_SGTM_CONTAINER_URL = "https://sgtm.timemission.com"
+PUBLIC_TURNSTILE_SITE_KEY = "us-key"
+`);
+    fs.writeFileSync(path.join(root, '.env'), [
+      'EU_TURNSTILE_SITE_KEY="eu-key"',
+      'EU_GTM_CONTAINER_ID="GTM-EU"',
+      'EU_SGTM_CONTAINER_URL="https://sgtm.timemission.eu"',
+      '',
+    ].join('\n'));
+
+    const env = { TM_SITE_PROFILE: 'eu' };
+    applyTmDotEnvToProcess(root, env);
+
+    expect(env.PUBLIC_SITE_ORIGIN).toBeUndefined();
+    expect(env.PUBLIC_TURNSTILE_SITE_KEY).toBe('eu-key');
+    expect(env.PUBLIC_GTM_CONTAINER_ID).toBe('GTM-EU');
+    expect(env.PUBLIC_SGTM_CONTAINER_URL).toBe('https://sgtm.timemission.eu');
+    expect(env.EU_TURNSTILE_SITE_KEY).toBe('eu-key');
+  });
 });

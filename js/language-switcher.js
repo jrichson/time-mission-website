@@ -2,6 +2,7 @@
     'use strict';
 
     var config = window.__TM_I18N__ || {};
+    var siteProfile = window.__TM_SITE_PROFILE__ || {};
     var languages = Array.isArray(config.languages) ? config.languages : [];
     var translations = config.translations || {};
     var defaultLanguage = config.defaultLanguage || (languages[0] && languages[0].code) || 'en';
@@ -79,6 +80,26 @@
         return defaultLanguage;
     }
 
+    function localeFromPath() {
+        if (!siteProfile.localizedRoutes) return defaultLanguage;
+        var first = String(window.location.pathname || '/').split('/')[1] || '';
+        var language = findLanguage(first);
+        return language && language.code !== defaultLanguage ? language.code : defaultLanguage;
+    }
+
+    function localizedUrl(code) {
+        var target = findLanguage(code);
+        var targetCode = target ? target.code : defaultLanguage;
+        var url = new URL(window.location.href);
+        var parts = url.pathname.split('/').filter(Boolean);
+        var first = findLanguage(parts[0]);
+        if (first && first.code !== defaultLanguage) parts.shift();
+        if (targetCode !== defaultLanguage) parts.unshift(targetCode);
+        url.pathname = '/' + parts.join('/');
+        if (url.pathname !== '/' && /\/$/.test(window.location.pathname)) url.pathname += '/';
+        return url.toString();
+    }
+
     function readSavedLanguage() {
         try {
             return window.localStorage.getItem(storageKey);
@@ -104,6 +125,8 @@
     }
 
     function getInitialLanguage() {
+        if (siteProfile.localizedRoutes) return localeFromPath();
+
         var urlLang = findLanguage(getUrlLanguage());
         if (urlLang) return urlLang.code;
 
@@ -114,6 +137,67 @@
         if (pageLang && pageLang.code !== defaultLanguage) return pageLang.code;
 
         return getBrowserLanguage();
+    }
+
+    function suggestedLanguage() {
+        var saved = findLanguage(readSavedLanguage());
+        if (saved && saved.code !== currentLanguage) return saved.code;
+
+        var browser = findLanguage(getBrowserLanguage());
+        if (browser && browser.code !== currentLanguage) return browser.code;
+
+        var locationFallback = {
+            antwerp: 'nl',
+            brussels: 'fr',
+            eindhoven: 'nl'
+        };
+        var locationCode = document.body && locationFallback[document.body.dataset.location];
+        var locationLanguage = findLanguage(locationCode);
+        return locationLanguage && locationLanguage.code !== currentLanguage
+            ? locationLanguage.code
+            : '';
+    }
+
+    function setupLanguageSuggestion() {
+        if (!siteProfile.localizedRoutes || currentLanguage !== defaultLanguage) return;
+        var suggestion = document.querySelector('[data-language-suggestion]');
+        if (!suggestion) return;
+        try {
+            if (window.sessionStorage.getItem('tm_language_suggestion_dismissed') === '1') return;
+        } catch (e) {
+            // A suggestion can still be shown when session storage is unavailable.
+        }
+
+        var code = suggestedLanguage();
+        var view = languageView(findLanguage(code));
+        if (!view) return;
+
+        var copy = suggestion.querySelector('[data-language-suggestion-copy]');
+        var link = suggestion.querySelector('[data-language-suggestion-link]');
+        var dismiss = suggestion.querySelector('[data-language-suggestion-dismiss]');
+        if (!copy || !link || !dismiss) return;
+
+        copy.textContent = text('language.suggestion', 'Prefer {language}?', {
+            language: view.nativeLabel
+        });
+        link.textContent = translateText('language.switch', 'View site');
+        link.href = localizedUrl(code);
+        link.addEventListener('click', function () {
+            writeSavedLanguage(code);
+        });
+        dismiss.setAttribute(
+            'aria-label',
+            translateText('language.dismiss', 'Dismiss language suggestion')
+        );
+        dismiss.addEventListener('click', function () {
+            suggestion.hidden = true;
+            try {
+                window.sessionStorage.setItem('tm_language_suggestion_dismissed', '1');
+            } catch (e) {
+                // Dismissal remains effective for the current page.
+            }
+        });
+        suggestion.hidden = false;
     }
 
     function translate(key, langCode) {
@@ -209,15 +293,22 @@
         if (!language) language = findLanguage(defaultLanguage);
         if (!language) return;
 
+        var renderedHtmlLang = typeof document.documentElement.getAttribute === 'function'
+            ? (document.documentElement.getAttribute('lang') || '')
+            : (document.documentElement.lang || '');
+        var htmlLang = siteProfile.localizedRoutes
+            && languageBase(renderedHtmlLang) === languageBase(language.code)
+            ? renderedHtmlLang
+            : (language.htmlLang || language.code);
         currentLanguage = language.code;
-        document.documentElement.lang = language.htmlLang || language.code;
+        document.documentElement.lang = htmlLang;
         document.documentElement.dataset.tmLanguage = language.code;
         if (!options || options.persist !== false) writeSavedLanguage(language.code);
         syncControls();
         applyTextTranslations();
         updateStatus();
         document.dispatchEvent(new CustomEvent('tm:language-changed', {
-            detail: { language: language.code, htmlLang: language.htmlLang || language.code }
+            detail: { language: language.code, htmlLang: htmlLang }
         }));
     }
 
@@ -231,12 +322,18 @@
         document.querySelectorAll('[data-language-select]').forEach(function (select) {
             function handleLanguageSelection() {
                 if (select.value === currentLanguage) return;
+                if (siteProfile.localizedRoutes) {
+                    writeSavedLanguage(select.value);
+                    window.location.assign(localizedUrl(select.value));
+                    return;
+                }
                 setLanguage(select.value);
             }
             select.addEventListener('change', handleLanguageSelection);
             select.addEventListener('input', handleLanguageSelection);
         });
         setLanguage(getInitialLanguage(), { persist: false });
+        setupLanguageSuggestion();
         readyResolve();
     }
 

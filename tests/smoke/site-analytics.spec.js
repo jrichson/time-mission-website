@@ -18,7 +18,7 @@ test.beforeEach(async ({ page }) => {
   await prepareSiteSmoke(page);
 });
 
-test('startup tagging config exposes consent profile by route type', async ({ page }) => {
+test('US deployment exposes its open consent profile on published routes', async ({ page }) => {
   await page.goto('/houston');
   await expect.poll(async () => readTaggingConsentProfile(page)).toBe('us_open');
 
@@ -31,22 +31,6 @@ test('startup tagging config exposes consent profile by route type', async ({ pa
   await page.goto('/faq');
   await expect.poll(async () => readTaggingConsentProfile(page)).toBe('us_open');
 
-  await page.goto('/antwerp');
-  await expect.poll(async () => readTaggingConsentProfile(page)).toBe('eu_strict');
-});
-
-test('strict profiles do not persist paid attribution before consent grant', async ({ page }) => {
-  await page.goto('/faq?utm_source=google&utm_campaign=spring');
-  await page.waitForFunction(() => typeof window.TMConsent === 'object');
-  const raw = await page.evaluate(() => localStorage.getItem('tm_attribution_v1'));
-  expect(raw).toBeNull();
-
-  await page.evaluate(() => {
-    window.TMConsent.update({ ad_storage: 'granted' });
-  });
-  await page.waitForTimeout(50);
-  const afterGrant = await page.evaluate(() => localStorage.getItem('tm_attribution_v1'));
-  expect(afterGrant).not.toBeNull();
 });
 
 test('analytics click delegation tracks phone and email clicks without PII', async ({ page }) => {

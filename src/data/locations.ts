@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import fallbackLocationsJson from '../../data/locations.json';
+import { publicLocationsForProfile } from '../lib/site-profile';
 
 export interface LocationDayHours {
     open?: string;
@@ -115,5 +116,9 @@ function readLocationsDocument(): LocationsDocument {
     return fallbackLocationsJson as LocationsDocument;
 }
 
-export const locationsDocument = readLocationsDocument();
+const sourceLocationsDocument = readLocationsDocument();
+export const locationsDocument = {
+    ...sourceLocationsDocument,
+    locations: publicLocationsForProfile(sourceLocationsDocument.locations) as LocationRecord[],
+};
 export const allLocations = locationsDocument.locations;

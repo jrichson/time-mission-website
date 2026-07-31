@@ -13,6 +13,10 @@ const { locationsFingerprintFromRecords } = require('../src/lib/locations-finger
 const { ticketPanelSelectOptions } = require('../src/lib/ticket-options.ts');
 const { fingerprintAnalyticsLabels } = require('./lib/analytics-labels-fingerprint.cjs');
 const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
+const {
+  publicLocationsForProfile,
+  resolveSiteProfile,
+} = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -68,11 +72,15 @@ const locationIds = (locDoc.locations || []).map((loc) => loc.id);
 if (JSON.stringify(publicContract.locationIds) !== JSON.stringify(locationIds)) {
   errors.push('public site contract locationIds must match data/locations.json order');
 }
-const externalLocationIds = (locDoc.locations || []).filter((loc) => loc.externalUrl).map((loc) => loc.id);
+const profiledLocations = publicLocationsForProfile(
+  locDoc.locations || [],
+  resolveSiteProfile(process.env),
+);
+const externalLocationIds = profiledLocations.filter((loc) => loc.externalUrl).map((loc) => loc.id);
 if (JSON.stringify(publicContract.externalLocationIds) !== JSON.stringify(externalLocationIds)) {
-  errors.push('public site contract externalLocationIds must match data/locations.json externalUrl rows');
+  errors.push('public site contract externalLocationIds must match the active regional profile');
 }
-const externalLocations = (locDoc.locations || []).filter((loc) => loc.externalUrl);
+const externalLocations = profiledLocations.filter((loc) => loc.externalUrl);
 const sourceLinkFiles = [
   ...walkFiles(path.join(root, 'src', 'components'), (file) => file.endsWith('.astro')),
   ...walkFiles(path.join(root, 'src', 'pages'), (file) => file.endsWith('.astro') || file.endsWith('.ts')),

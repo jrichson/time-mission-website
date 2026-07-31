@@ -43,6 +43,7 @@ function runStep({ label, command, args, env }) {
 
 const steps = [
   { label: 'Clean build output', ...nodeStep('scripts/clean-build-output.mjs') },
+  { label: 'Check translation readiness', ...nodeStep('scripts/check-i18n-readiness.mjs') },
   { label: 'Sync static assets', ...nodeStep('scripts/sync-static-to-public.mjs') },
   {
     label: 'Build Astro output',
@@ -50,6 +51,9 @@ const steps = [
     args: ['build'],
     env: { TM_RESOLVED_LOCATIONS_PATH: path.join(root, 'public', 'data', 'locations.json') },
   },
+  { label: 'Finalize regional and localized output', ...nodeStep('scripts/finalize-site-profile.mjs') },
+  { label: 'Verify built translation approval', ...nodeStep('scripts/check-i18n-artifact-approval.mjs') },
+  { label: 'Verify regional artifact identity and isolation', ...nodeStep('scripts/check-site-profile-output.mjs') },
   { label: 'Prune excluded artifacts', ...nodeStep('scripts/prune-excluded-artifacts.mjs', ['dist', 'public']) },
   { label: 'Minify copied CSS and JS', ...nodeStep('scripts/minify-dist-assets.mjs') },
   { label: 'Bundle route CSS', ...nodeStep('scripts/bundle-dist-css.mjs') },

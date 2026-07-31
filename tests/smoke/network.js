@@ -12,6 +12,8 @@ const EXTERNAL_FORM_URLS = [
   /https:\/\/.*\.hcaptcha\.com\/.*/i,
 ];
 
+const TURNSTILE_API_URL = /https:\/\/challenges\.cloudflare\.com\/turnstile\/v0\/api\.js.*/i;
+
 async function blockHeavyMedia(page) {
   await page.route(VIDEO_MEDIA_RE, (route) => route.abort());
 }
@@ -26,6 +28,17 @@ async function blockExternalForms(page) {
   for (const pattern of EXTERNAL_FORM_URLS) {
     await page.route(pattern, (route) => route.abort());
   }
+
+  await page.route(TURNSTILE_API_URL, (route) => route.fulfill({
+    body: [
+      'window.turnstile = window.turnstile || {',
+      '  render: function () { return "tm-smoke-widget"; },',
+      '  remove: function () {},',
+      '  reset: function () {}',
+      '};',
+    ].join('\n'),
+    contentType: 'application/javascript',
+  }));
 }
 
 async function prepareSmokePage(page) {

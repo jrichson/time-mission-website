@@ -1,0 +1,18 @@
+# Rendered to a temporary file by scripts/deploy-pages-profile.mjs.
+# Do not put API keys or secret values in this template.
+name = "time-mission-website-eu"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-05-09"
+
+[vars]
+TM_SITE_PROFILE = "eu"
+PUBLIC_SITE_ORIGIN = "https://www.timemission.eu"
+PUBLIC_TURNSTILE_SITE_KEY = "{{EU_TURNSTILE_SITE_KEY}}"
+FORM_ALLOWED_ORIGINS = "https://www.timemission.eu,https://timemission.eu"
+FORM_ARCHIVE_REQUIRED = "1"
+
+[[d1_databases]]
+binding = "FORM_SUBMISSIONS_DB"
+database_name = "time-mission-forms-eu"
+database_id = "{{EU_D1_DATABASE_ID}}"
+migrations_dir = "migrations"

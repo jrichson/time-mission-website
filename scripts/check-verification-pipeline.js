@@ -19,8 +19,17 @@ runCheck({
     if (pkg.scripts['build:astro'] !== 'node scripts/build-site-output.mjs') {
       errors.push('package.json script "build:astro" must run scripts/build-site-output.mjs');
     }
-    if (pkg.scripts['deploy:pages'] !== 'npm run build:astro && wrangler pages deploy dist') {
-      errors.push('package.json script "deploy:pages" must not duplicate artifact pruning');
+    if (pkg.scripts['deploy:pages'] !== 'node scripts/deploy-pages-profile.mjs us --build') {
+      errors.push('package.json script "deploy:pages" must use the verified US deployment interface');
+    }
+    if (pkg.scripts['deploy:pages:eu'] !== 'node scripts/deploy-pages-profile.mjs eu --build') {
+      errors.push('package.json script "deploy:pages:eu" must use the verified EU deployment interface');
+    }
+    if (pkg.scripts['deploy:pages:eu:preview'] !== 'node scripts/deploy-pages-profile.mjs eu --build --preview') {
+      errors.push('package.json script "deploy:pages:eu:preview" must use the verified EU preview interface');
+    }
+    if (pkg.scripts['verify:artifact'] !== 'node scripts/verify-site-output.mjs --artifact-only') {
+      errors.push('package.json script "verify:artifact" must run the artifact-only verification gate');
     }
 
     for (const [scriptName] of VERIFY_STEPS) {

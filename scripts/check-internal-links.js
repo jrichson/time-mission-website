@@ -104,9 +104,11 @@ for (const filePath of pages) {
       continue;
     }
 
-    const target = !useDist && /^(assets|css|js|data|fonts)\//.test(clean)
-      ? path.join(root, clean)
-      : path.resolve(path.dirname(filePath), clean);
+    if (!useDist && /^(assets|css|js|data|fonts)\//.test(clean)) {
+      errors.push(`${relative} must use a root-relative deploy path: /${clean}`);
+      continue;
+    }
+    const target = path.resolve(path.dirname(filePath), clean);
     const exists = fs.existsSync(target) || fs.existsSync(path.join(target, 'index.html'));
     if (!exists) {
       errors.push(`${relative} references missing internal asset/page: ${raw}`);

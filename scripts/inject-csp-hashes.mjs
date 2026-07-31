@@ -4,6 +4,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { walkDeployFiles } from './lib/cloudflare-artifact-policy.mjs';
+import { resolveSiteProfile } from '../config/site-profiles.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -13,6 +14,7 @@ const distDir = path.join(root, 'dist');
 const tmplPath = path.join(root, '_headers.tmpl');
 const rootHeadersPath = path.join(root, '_headers');
 const distHeadersPath = path.join(distDir, '_headers');
+const siteProfile = resolveSiteProfile(process.env);
 
 if (!fs.existsSync(tmplPath)) {
   console.error('inject-csp-hashes: _headers.tmpl not found — cannot inject hashes.');
@@ -45,6 +47,7 @@ const sortedScriptHashes = Array.from(scriptHashes).sort().join(' ');
 const sortedStyleHashes = Array.from(styleHashes).sort().join(' ');
 
 const rendered = tmpl
+  .replace(/\{\{SITE_ORIGIN\}\}/g, siteProfile.origin)
   .replace(/\{\{SCRIPT_HASHES\}\}/g, sortedScriptHashes)
   .replace(/\{\{STYLE_HASHES\}\}/g, sortedStyleHashes);
 

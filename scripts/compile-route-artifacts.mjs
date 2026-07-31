@@ -5,6 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { publicLocationsForProfile, resolveSiteProfile } from '../config/site-profiles.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -52,6 +53,11 @@ const staticAstroRels = astroRels.filter((rel) => !hasDynamicSegment(rel));
 
 const registry = JSON.parse(fs.readFileSync(routesPath, 'utf8'));
 const locationsDocument = JSON.parse(fs.readFileSync(locationsPath, 'utf8'));
+const siteProfile = resolveSiteProfile(process.env);
+const profiledLocationsDocument = {
+  ...locationsDocument,
+  locations: publicLocationsForProfile(locationsDocument.locations, siteProfile),
+};
 const routeOutputs = new Set(
   (registry.routes || []).map((r) => String(r.outputFile || '').replace(/^\//, '')),
 );
@@ -109,8 +115,8 @@ for (const out of staticOutputFiles) {
 
 const outputFiles = [...new Set([
   ...staticOutputFiles,
-  ...groupFormThankYouOutputFiles(locationsDocument),
-  ...groupInquiryOutputFiles(locationsDocument),
+  ...groupFormThankYouOutputFiles(profiledLocationsDocument),
+  ...groupInquiryOutputFiles(profiledLocationsDocument),
 ])].sort();
 
 if (errors.length) {
@@ -135,28 +141,32 @@ function normalizePath(value) {
 
 function compileLocationRouteManifest(registry, locationsDocument) {
   const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
-  const locationPaths = new Set(locations.map((loc) => normalizePath(`/${loc.slug || loc.id}`)));
+  const locationPaths = locations.map((loc) => normalizePath(`/${loc.slug || loc.id}`));
   const routes = Array.isArray(registry.routes) ? registry.routes : [];
   const aliases = Array.isArray(registry.aliases) ? registry.aliases : [];
   const routeByPath = new Map(routes.map((route) => [normalizePath(route.canonicalPath), route]));
+  const locationOwnsPath = (canonicalPath) =>
+    locationPaths.some((locationPath) =>
+      canonicalPath === locationPath || canonicalPath.startsWith(`${locationPath}/`),
+    );
 
   const locationRouteEntries = locations
     .map((loc) => {
       const canonicalPath = normalizePath(`/${loc.slug || loc.id}`);
       const route = routeByPath.get(canonicalPath);
       if (!route) return null;
-      return {
-        canonicalPath,
-        compatibilitySources: route.locationCompatibilitySources || [],
-        externalUrl: route.externalUrl || '',
-        officialAlternate: route.locationAlternate || '',
-      };
+        return {
+          canonicalPath,
+          compatibilitySources: route.locationCompatibilitySources || [],
+          externalUrl: loc.externalUrl || route.externalUrl || '',
+          officialAlternate: route.locationAlternate || '',
+        };
     })
     .filter(Boolean);
 
   const prefixableCanonicalPaths = routes
     .map((route) => normalizePath(route.canonicalPath))
-    .filter((canonicalPath) => canonicalPath !== '/' && !locationPaths.has(canonicalPath));
+    .filter((canonicalPath) => canonicalPath !== '/' && !locationOwnsPath(canonicalPath));
   const prefixableTargets = new Set(['/', ...prefixableCanonicalPaths]);
   const prefixableRouteAliases = [];
 
@@ -195,7 +205,7 @@ function writeLocationRouteManifest(manifest) {
 
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, JSON.stringify(payload, null, 2) + '\n', 'utf8');
-writeLocationRouteManifest(compileLocationRouteManifest(registry, locationsDocument));
+writeLocationRouteManifest(compileLocationRouteManifest(registry, profiledLocationsDocument));
 console.log(
   `Wrote ${outputFiles.length} static entries + ${dynamicLandingModules.length} dynamic module(s) to ${path.relative(root, outPath)}`,
 );
