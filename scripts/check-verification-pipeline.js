@@ -12,6 +12,10 @@ runCheck({
   run(errors) {
     const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
     const docs = fs.readFileSync(path.join(root, 'docs', 'verification-pipeline.md'), 'utf8');
+    const deployWorkflow = fs.readFileSync(
+      path.join(root, '.github', 'workflows', 'cms-wrangler-deploy.yml'),
+      'utf8',
+    );
 
     if (pkg.scripts.verify !== 'node scripts/verify-site-output.mjs') {
       errors.push('package.json script "verify" must run scripts/verify-site-output.mjs');
@@ -30,6 +34,13 @@ runCheck({
     }
     if (pkg.scripts['verify:artifact'] !== 'node scripts/verify-site-output.mjs --artifact-only') {
       errors.push('package.json script "verify:artifact" must run the artifact-only verification gate');
+    }
+    const cmsInstallCount = deployWorkflow.split('run: npm ci --prefix cms').length - 1;
+    if (cmsInstallCount !== 3) {
+      errors.push('CMS Wrangler deploy jobs must install the nested CMS test dependencies');
+    }
+    if (!deployWorkflow.includes('cms/package-lock.json')) {
+      errors.push('CMS Wrangler deploy dependency cache must include cms/package-lock.json');
     }
 
     for (const [scriptName] of VERIFY_STEPS) {

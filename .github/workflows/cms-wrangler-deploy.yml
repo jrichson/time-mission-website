@@ -48,9 +48,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            cms/package-lock.json
 
-      - name: Install dependencies
+      - name: Install site dependencies
         run: npm ci
+
+      - name: Install CMS test dependencies
+        run: npm ci --prefix cms
 
       - name: Build, verify, and deploy US artifact
         run: npm run deploy:pages:us
@@ -94,9 +100,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            cms/package-lock.json
 
-      - name: Install dependencies
+      - name: Install site dependencies
         run: npm ci
+
+      - name: Install CMS test dependencies
+        run: npm ci --prefix cms
 
       - name: Build, verify, and deploy EU artifact
         run: npm run deploy:pages:eu
@@ -140,9 +152,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            cms/package-lock.json
 
-      - name: Install dependencies
+      - name: Install site dependencies
         run: npm ci
+
+      - name: Install CMS test dependencies
+        run: npm ci --prefix cms
 
       - name: Build, verify, and deploy EU preview artifact
         run: npm run deploy:pages:eu:preview
