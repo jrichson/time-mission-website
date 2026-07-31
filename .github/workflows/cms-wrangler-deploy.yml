@@ -58,6 +58,9 @@ jobs:
       - name: Install CMS test dependencies
         run: npm ci --prefix cms
 
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
       - name: Build, verify, and deploy US artifact
         run: npm run deploy:pages:us
 
@@ -110,6 +113,9 @@ jobs:
       - name: Install CMS test dependencies
         run: npm ci --prefix cms
 
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
       - name: Build, verify, and deploy EU artifact
         run: npm run deploy:pages:eu
 
@@ -161,6 +167,9 @@ jobs:
 
       - name: Install CMS test dependencies
         run: npm ci --prefix cms
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Build, verify, and deploy EU preview artifact
         run: npm run deploy:pages:eu:preview

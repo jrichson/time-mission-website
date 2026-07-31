@@ -42,6 +42,12 @@ runCheck({
     if (!deployWorkflow.includes('cms/package-lock.json')) {
       errors.push('CMS Wrangler deploy dependency cache must include cms/package-lock.json');
     }
+    const playwrightInstallCount = deployWorkflow.split(
+      'run: npx playwright install --with-deps chromium',
+    ).length - 1;
+    if (playwrightInstallCount !== 3) {
+      errors.push('CMS Wrangler deploy jobs must install Playwright Chromium and its system dependencies');
+    }
 
     for (const [scriptName] of VERIFY_STEPS) {
       if (!pkg.scripts[scriptName]) {

@@ -44,7 +44,9 @@ Order is fixed in `scripts/lib/cloudflare-artifact-contract.cjs` and exposed thr
 
 The GitHub workflow installs both the root `package-lock.json` and
 `cms/package-lock.json` dependency trees because the shared source gate imports and tests
-Payload CMS collection contracts before building the public artifact.
+Payload CMS collection contracts before building the public artifact. Each deployment job
+also installs Playwright Chromium and its system dependencies for the source and artifact
+browser checks.
 
 1. Run `npm run check` against source and deployment contracts.
 2. Build the selected profile with `TM_DEPLOYMENT_BUILD=true`; EU builds also enforce
