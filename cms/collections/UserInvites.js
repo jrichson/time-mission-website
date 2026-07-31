@@ -36,13 +36,11 @@ function randomPassword() {
   return crypto.randomBytes(32).toString('base64url');
 }
 
-function adminResetURL(req, token) {
+function cmsResetURL(req, token) {
   const config = req.payload.config;
   const serverURL = config.serverURL || process.env.PAYLOAD_SERVER_URL || '';
-  const adminRoute = config.routes?.admin || '/admin';
-  const resetRoute = config.admin?.routes?.reset || '/reset';
 
-  return `${serverURL.replace(/\/+$/, '')}${adminRoute}${resetRoute}/${encodeURIComponent(token)}`;
+  return `${serverURL.replace(/\/+$/, '')}/reset/${encodeURIComponent(token)}`;
 }
 
 async function findUserByEmail(req, email) {
@@ -177,7 +175,7 @@ async function sendInviteAfterCreate({ doc, operation, req }) {
         overrideAccess: true,
         req,
       });
-      await updateInviteLinkStatus({ id: doc.id, inviteLink: adminResetURL(req, token), req });
+      await updateInviteLinkStatus({ id: doc.id, inviteLink: cmsResetURL(req, token), req });
 
       req.payload.logger.info(`[user-invites] created CMS invite link for ${email}`);
       return doc;

@@ -1,8 +1,5 @@
-import config from '@payload-config';
-import { headers } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { getPayload } from 'payload';
 
 import {
   CTA_SURFACE_OPTIONS,
@@ -24,6 +21,7 @@ import {
   publicAssetPathIsValid,
   PUBLIC_ASSET_PATH_MAX_LENGTH,
 } from '../../../lib/media-library.js';
+import { requireCmsUser } from '../../../lib/cms-auth';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -118,17 +116,6 @@ function wizardUrl(template: LandingTemplate, error: string, preset: string): st
   const params = new URLSearchParams({ error, template });
   if (preset) params.set('preset', preset);
   return `/landings/new?${params.toString()}`;
-}
-
-async function requireCmsUser(redirectPath: string) {
-  const payload = await getPayload({ config });
-  const auth = await payload.auth({ headers: await headers() });
-
-  if (!auth.user) {
-    redirect(`/admin/login?redirect=${encodeURIComponent(redirectPath)}`);
-  }
-
-  return { payload, user: auth.user };
 }
 
 async function createLandingDraft(formData: FormData) {
@@ -315,7 +302,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
       <nav className={styles.breadcrumb} aria-label="Breadcrumb">
         <Link href="/">Mission Control</Link>
         <span aria-hidden="true">/</span>
-        <Link href="/admin/collections/landings">Landing Pages</Link>
+        <Link href="/landings">Landing Pages</Link>
         <span aria-hidden="true">/</span>
         <span aria-current="page">New Draft</span>
       </nav>
@@ -334,7 +321,7 @@ export default async function NewLandingPage({ searchParams }: PageProps) {
           <strong>{selectedTemplateOption.label}</strong>
           <p>Creates a saved CMS draft and opens preview before any public publish step.</p>
           {selectedPreset ? <p>Starter: {selectedPreset.label}</p> : null}
-          <Link className={styles.secondaryLink} href="/admin/collections/landings">
+          <Link className={styles.secondaryLink} href="/landings">
             View landing drafts
           </Link>
         </aside>

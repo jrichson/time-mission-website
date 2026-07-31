@@ -61,10 +61,12 @@ describe('CMS landing templates', () => {
 
   it('requires an authenticated Payload user for CMS preview pages', () => {
     const previewRoute = read('cms/app/preview/landings/[id]/page.tsx');
+    const auth = read('cms/lib/cms-auth.ts');
 
-    expect(previewRoute).toContain('payload.auth');
+    expect(previewRoute).toContain('requireCmsUser');
+    expect(auth).toContain('payload.auth');
     expect(previewRoute).toContain('overrideAccess: false');
-    expect(previewRoute).toContain('/admin/login?redirect=');
+    expect(auth).toContain('/login?redirect=');
     expect(previewRoute).toContain('searchParams: Promise<{ status?: string }>');
     expect(previewRoute).toContain('Draft saved');
     expect(previewRoute).toContain('reviewStatus');
@@ -87,6 +89,7 @@ describe('CMS landing templates', () => {
   it('routes marketing landing creation through a brief-first wizard', () => {
     const home = read('cms/app/page.tsx');
     const wizard = read('cms/app/landings/new/page.tsx');
+    const auth = read('cms/lib/cms-auth.ts');
     const collection = read('cms/collections/Landings.js');
     const payloadConfig = read('cms/payload.config.ts');
     const dashboardCard = read('cms/components/LandingWizardDashboard.tsx');
@@ -102,7 +105,8 @@ describe('CMS landing templates', () => {
     expect(wizard).toContain("export const dynamic = 'force-dynamic'");
     expect(wizard).toContain('createLandingDraft');
     expect(wizard).toContain("collection: 'landings'");
-    expect(wizard).toContain('payload.auth');
+    expect(wizard).toContain('requireCmsUser');
+    expect(auth).toContain('payload.auth');
     expect(wizard).toContain('overrideAccess: false');
     expect(wizard).toContain('validHttpsUrl');
     expect(wizard).toContain('invalid-source-url');

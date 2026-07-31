@@ -16,20 +16,42 @@ function read(rel: string): string {
 }
 
 describe('CMS admin experience', () => {
-  it('keeps Mission Control accessible from the Payload admin', () => {
-    const config = read('cms/payload.config.ts');
+  it('makes custom Mission Control the only editor-facing admin', () => {
     const home = read('cms/app/page.tsx');
-    const navigation = read('cms/components/AdminNavigation.tsx');
-    const importMap = read('cms/app/(payload)/admin/importMap.js');
+    const proxy = read('cms/proxy.ts');
+    const login = read('cms/app/login/page.tsx');
+    const setup = read('cms/app/setup/page.tsx');
+    const blog = read('cms/app/blog/page.tsx');
+    const announcements = read('cms/app/announcements/page.tsx');
+    const search = read('cms/app/search/page.tsx');
+    const access = read('cms/app/access/page.tsx');
+    const payloadAdmin = read('cms/app/(payload)/admin/[[...segments]]/page.tsx');
+    const payloadLayout = read('cms/app/(payload)/layout.tsx');
     const nextConfig = read('cms/next.config.mjs');
 
-    expect(config).toContain("beforeNavLinks: ['/components/AdminNavigation.tsx']");
-    expect(navigation).toContain('Mission Control');
-    expect(navigation).toContain('Make changes live');
-    expect(importMap).toContain('/components/AdminNavigation.tsx#default');
-    expect(importMap).toContain('/components/AdminListCells.tsx#PublishedStatusCell');
+    expect(proxy).toContain('export function proxy');
+    expect(proxy).toContain("matcher: ['/admin/:path*']");
+    expect(proxy).toContain("collection === 'blog-posts'");
+    expect(proxy).toContain("destination = record === 'create'");
+    expect(proxy).toContain("'/blog/new'");
+    expect(home).not.toContain('/admin/collections/');
     expect(home).toContain("href: '/locations/bulk'");
+    expect(home).toContain("href: '/blog'");
+    expect(home).toContain("href: '/announcements'");
+    expect(home).toContain("href: '/search'");
+    expect(home).toContain("href: '/access'");
     expect(home).toContain('Edit locations in bulk');
+    expect(login).toContain('Enter Mission Control');
+    expect(setup).toContain('Create the CMS owner.');
+    expect(setup).toContain('no CMS users');
+    expect(blog).toContain('Stories, not database records.');
+    expect(announcements).toContain('Edit every announcement together.');
+    expect(search).toContain('Edit page previews in bulk.');
+    expect(access).toContain('CMS access without the control panel.');
+    expect(payloadAdmin).toContain('DeprecatedPayloadAdminPage');
+    expect(payloadAdmin).toContain("redirect('/')");
+    expect(payloadAdmin).not.toContain('RootPage');
+    expect(payloadLayout).not.toContain('RootLayout');
     expect(nextConfig).toContain(
       "style-src 'self' 'unsafe-inline'${publicSiteOrigin ? ` ${publicSiteOrigin}` : ''}",
     );
@@ -91,16 +113,19 @@ describe('CMS admin experience', () => {
     );
   });
 
-  it('uses flatter admin surfaces and responsive tables', () => {
-    const chrome = read('cms/app/(payload)/custom/admin-chrome.scss');
-    const guides = read('cms/app/(payload)/custom/admin-guides.scss');
+  it('uses responsive custom task workspaces instead of native collection forms', () => {
+    const blogStyles = read('cms/app/blog/blog.module.css');
+    const authoringStyles = read('cms/components/BlogAuthoringForm.module.css');
+    const announcementStyles = read('cms/app/announcements/page.module.css');
+    const searchStyles = read('cms/app/search/page.module.css');
 
-    expect(chrome).toContain('min-width: 760px');
-    expect(chrome).not.toContain('min-width: 980px');
-    expect(chrome).toContain('.tabs-field {');
-    expect(guides).toContain('.tm-collection-guide');
-    expect(guides).toContain(':focus-visible');
-    expect(guides).toContain('@media (max-width: 768px)');
+    for (const stylesheet of [blogStyles, authoringStyles, announcementStyles, searchStyles]) {
+      expect(stylesheet).toContain(':focus-visible');
+      expect(stylesheet).toContain('@media');
+    }
+    expect(authoringStyles).toContain('min-height: 46px');
+    expect(announcementStyles).toContain('.targets');
+    expect(searchStyles).toContain('.pageList');
   });
 
   it('shows editor-facing list states instead of raw booleans', () => {

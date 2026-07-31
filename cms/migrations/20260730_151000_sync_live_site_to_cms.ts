@@ -5,8 +5,7 @@ import {
   LIVE_SITE_PAGE_SNAPSHOT,
 } from '../migration-data/20260730_live_site_snapshot';
 
-const HOUR_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
-type HourDay = (typeof HOUR_DAYS)[number];
+type HourDay = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 type HourValue = { close?: string; label?: string; open?: string };
 type LocationSnapshot = {
   address: {

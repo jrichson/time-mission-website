@@ -221,7 +221,7 @@ describe('CMS user invites', () => {
         collection: 'user-invites',
         data: expect.objectContaining({
           errorMessage: null,
-          inviteLink: 'https://cms.example.com/admin/reset/manual-token',
+          inviteLink: 'https://cms.example.com/reset/manual-token',
           linkCreatedAt: expect.any(String),
           sentAt: null,
           status: 'link_created',
@@ -235,7 +235,7 @@ describe('CMS user invites', () => {
     const hook = UserInvites.hooks.afterRead[0];
     const fresh = hook({
       doc: {
-        inviteLink: 'https://cms.example.com/admin/reset/fresh-token',
+        inviteLink: 'https://cms.example.com/reset/fresh-token',
         linkCreatedAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
       },
     });
@@ -246,7 +246,7 @@ describe('CMS user invites', () => {
       },
     });
 
-    expect(fresh.inviteLink).toBe('https://cms.example.com/admin/reset/fresh-token');
+    expect(fresh.inviteLink).toBe('https://cms.example.com/reset/fresh-token');
     expect(expired.inviteLink).toBeNull();
   });
 

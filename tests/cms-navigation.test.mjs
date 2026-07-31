@@ -38,7 +38,7 @@ describe('CMS navigation', () => {
       read('cms/app/deploy/page.tsx'),
       read('cms/app/landings/new/page.tsx'),
     ];
-    const middleware = read('cms/middleware.ts');
+    const proxy = read('cms/proxy.ts');
 
     expect(workflowPages.join('\n')).not.toContain('href="/admin"');
     expect(missionControl).not.toContain('Payload Admin Tools');
@@ -46,7 +46,9 @@ describe('CMS navigation', () => {
     expect(missionControl).not.toContain('drop into Payload');
     expect(missionControl).toContain('Less common work');
     expect(missionControl).toContain('/locations/bulk');
-    expect(middleware).toContain("NextResponse.redirect(new URL('/', request.url))");
-    expect(middleware).toContain("matcher: ['/admin', '/admin/']");
+    expect(proxy).toContain('export function proxy');
+    expect(proxy).toContain("matcher: ['/admin/:path*']");
+    expect(proxy).toContain("collection === 'blog-posts'");
+    expect(proxy).toContain("destination = '/announcements'");
   });
 });

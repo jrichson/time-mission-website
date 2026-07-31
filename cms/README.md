@@ -1,6 +1,6 @@
-# Payload CMS (Railway)
+# Time Mission CMS (Railway)
 
-PostgreSQL-backed Payload 3 admin for **Page SEO Overrides**, **Announcement Banners**, **Location Details**, **Blog Posts**, and **Landing Pages** consumed by the Astro site at build time.
+Custom Mission Control for **Page SEO Overrides**, **Announcement Banners**, **Location Details**, **Blog Posts**, **Landing Pages**, and **CMS Access**, backed by Payload 3 and PostgreSQL and consumed by the Astro site at build time.
 
 ## Local
 
@@ -10,15 +10,32 @@ PostgreSQL-backed Payload 3 admin for **Page SEO Overrides**, **Announcement Ban
    npm install
    npm run dev
    ```
-3. Open [http://localhost:3000/admin](http://localhost:3000/admin) and create the first admin user. Use the same email as `CMS_OWNER_EMAIL` if you want that account to add or manage users.
+3. For a new empty database, open [http://localhost:3000/setup](http://localhost:3000/setup) and create the first owner. When `CMS_OWNER_EMAIL` is set, the email must match it.
+4. After setup, use [http://localhost:3000/login](http://localhost:3000/login). The generated Payload `/admin/*` interface is deprecated and cannot render; legacy admin URLs redirect to their matching custom task screens.
+
+## Editor surfaces
+
+Payload remains the authenticated data, migration, and REST API layer. Editors work only in the custom CMS:
+
+- `/` — Mission Control task directory
+- `/blog`, `/blog/new`, `/blog/{id}` — blog list and rich authoring with inline images, shared links, and public-design preview
+- `/announcements` — bulk website-announcement editor
+- `/locations/bulk` — bulk location editor
+- `/landings`, `/landings/new`, `/landings/{id}` — landing list, guided creation, and editing
+- `/search` — bulk search and social preview editor
+- `/access` — invitations and owner-managed user permissions
+- `/deploy` — deliberate public-site deploy gate
+- `/login`, `/reset/{token}`, `/setup` — custom account lifecycle
+
+The proxy maps old `/admin/collections/...` bookmarks into these routes, and the `/admin` page implementation itself redirects to Mission Control as a second safeguard. Payload REST APIs under `/api` remain available subject to collection access rules.
 
 ## Content model
 
 - **Page SEO Overrides**: `path` matches a route-registry page such as `/`, `/about`, or `/groups/birthdays`. The production migration preloads one row per registered route. Published records override that code-owned page's SEO metadata at Astro build time; they do not edit page body copy or layout.
 - **Announcement Banners**: text-only top banner messages with scheduling, priority, and optional region/location targeting. If no CMS banner is active or the optional CMS endpoint is unavailable during rollout, the public site keeps the existing hardcoded ticker fallback.
 - **Location Details**: address, hours, external destination URLs, and per-location portal availability for existing code-owned locations only. Published records update public address/hour displays, generate the directions link from that address, can override booking, gift card, waiver, external location-page, and group form URLs, and can hide unavailable portals after deploy; they do not create new locations, change public pages, or change booking provider settings. If the optional CMS endpoint is unavailable, the public build keeps `data/locations.json` as the fallback.
-- **Blog Posts**: location-specific posts rendered at `/blog/{post-url}` and grouped under `/blog/{location}`. Published records appear after deploy; draft records stay in the CMS. During rollout, the public build treats the blog endpoint as optional so the site can still build when no posts exist yet.
-- **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Start new pages from `/landings/new`, which captures the campaign brief and creates a draft. Refine the saved record in Payload, use **Preview** to review the Railway-hosted page, then enable **Published** for the page to appear in the public API (unauthenticated reads only return published docs).
+- **Blog Posts**: location-specific posts rendered at `/blog/{post-url}` and grouped under `/blog/{location}`. The custom editor supports formatted original articles, inline image uploads, hero images, and external press/news links. Published records appear after deploy; drafts stay private.
+- **Landing Pages**: `slug` becomes `https://timemission.com/c/{slug}` after a successful Pages build. Start from `/landings/new`, refine saved copy at `/landings/{id}`, use **Preview** to review the Railway-hosted design, then enable **Published in CMS** for the page to appear in the public API.
 - **User Invites**: owner-only records that create or update a CMS user, then either email a 24-hour password setup link or create a copyable 24-hour invite link. Use this instead of manually creating users with temporary passwords.
 
 CMS public states use shared language:
@@ -34,8 +51,8 @@ CMS public states use shared language:
 3. Fill the campaign brief: source channel, source name, source promise, visitor intent, and success metric.
 4. Fill first-draft page copy: headline, subheadline, three proof points, CTA, launch state, image, and any location/event context.
 5. Submit the wizard. It creates a **draft** `Landing Page` record and redirects to `/preview/landings/{id}`.
-6. Review the preview warnings, then use **Edit landing page** for detailed Payload edits if needed.
-7. Check **Published** only after approval.
+6. Review the preview warnings, then use **Edit landing page** for public copy and release settings.
+7. Check **Published in CMS** only after approval.
 8. Run the public Astro/Cloudflare deploy path. The page is live at `/c/{slug}` after the static site rebuild fetches published CMS landings.
 
 ## Railway
@@ -64,7 +81,7 @@ Production schema changes are handled by committed Payload migrations. `npm star
 ## Inviting CMS users
 
 1. Log in as the account matching `CMS_OWNER_EMAIL`. If `CMS_OWNER_EMAIL` is not set yet, log in as the first CMS account.
-2. Go to **Settings -> User Invites**.
+2. Open `/access` from Mission Control.
 3. Create a new invite with the recipient email, role, and delivery method.
 4. Choose **Send email** to email the 24-hour setup link, or **Create invite link** to generate a copyable link in the invite record.
 5. Payload creates the user if needed, then marks the invite as `sent`, `link_created`, or `failed`.

@@ -46,7 +46,7 @@ const createDraftAction: DashboardAction = {
 };
 
 const reviewDraftsAction: DashboardAction = {
-  href: '/admin/collections/landings',
+    href: '/landings',
   label: 'Review landing drafts',
   meta: 'Drafts',
   text: 'Open saved landing pages to preview, refine, publish, or unpublish.',

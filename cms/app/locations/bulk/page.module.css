@@ -303,6 +303,14 @@
   color: var(--text);
 }
 
+.recordNote {
+  color: var(--cyan);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
 .locationNumber {
   display: inline-grid;
   width: 40px;

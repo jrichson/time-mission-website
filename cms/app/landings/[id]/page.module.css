@@ -1,0 +1,243 @@
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.panel {
+  display: grid;
+  gap: 20px;
+  border: 1px solid rgba(248, 244, 238, 0.14);
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, rgba(248, 244, 238, 0.055), rgba(248, 244, 238, 0.012)),
+    rgba(9, 9, 9, 0.94);
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.panelHeader {
+  display: grid;
+  grid-template-columns: 1fr minmax(220px, 0.7fr);
+  gap: 20px;
+  align-items: end;
+  border-bottom: 1px solid rgba(248, 244, 238, 0.1);
+  padding-bottom: 18px;
+}
+
+.panelHeader span {
+  color: #7ee7f2;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+  font-weight: 740;
+  text-transform: uppercase;
+}
+
+.panelHeader h2 {
+  margin: 6px 0 0;
+  color: #f8f4ee;
+  font-size: 1.45rem;
+}
+
+.panelHeader p {
+  margin: 0;
+  color: rgba(248, 244, 238, 0.58);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.fields label {
+  display: grid;
+  gap: 8px;
+}
+
+.fields label > span {
+  color: rgba(248, 244, 238, 0.8);
+  font-size: 0.76rem;
+  font-weight: 730;
+}
+
+.fields small {
+  color: rgba(248, 244, 238, 0.46);
+  font-weight: 500;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.fields :where(input, textarea, select),
+.slug {
+  width: 100%;
+  border: 1px solid rgba(248, 244, 238, 0.15);
+  border-radius: 10px;
+  background: rgba(5, 5, 5, 0.72);
+  color: #f8f4ee;
+  font: inherit;
+  font-size: 0.88rem;
+}
+
+.fields :where(input, select) {
+  min-height: 48px;
+  padding: 0 13px;
+}
+
+.fields textarea {
+  line-height: 1.55;
+  padding: 13px;
+  resize: vertical;
+}
+
+.slug {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.slug small {
+  padding-left: 13px;
+}
+
+.slug input {
+  border: 0;
+  background: transparent;
+}
+
+.fields :where(input, textarea, select):focus-visible,
+.actions button:focus-visible,
+.checks input:focus-visible {
+  outline: 2px solid #ff7a32;
+  outline-offset: 2px;
+}
+
+.checks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.checks label {
+  position: relative;
+  display: grid;
+  min-height: 92px;
+  align-items: center;
+  border: 1px solid rgba(248, 244, 238, 0.13);
+  border-radius: 12px;
+  cursor: pointer;
+  padding: 16px 16px 16px 50px;
+}
+
+.checks input {
+  position: absolute;
+  left: 18px;
+  width: 20px;
+  height: 20px;
+  accent-color: #ff7a32;
+}
+
+.checks span {
+  display: grid;
+  gap: 4px;
+}
+
+.checks strong {
+  font-size: 0.84rem;
+}
+
+.checks small {
+  color: rgba(248, 244, 238, 0.55);
+  font-size: 0.74rem;
+}
+
+.actions {
+  position: sticky;
+  z-index: 8;
+  bottom: 14px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(248, 244, 238, 0.19);
+  border-radius: 17px;
+  background: rgba(13, 13, 14, 0.94);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.44);
+  padding: 12px 14px 12px 18px;
+}
+
+.actions > div {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actions > div:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.actions strong {
+  font-size: 0.82rem;
+}
+
+.actions span {
+  color: rgba(248, 244, 238, 0.52);
+  font-size: 0.73rem;
+}
+
+.actions button {
+  min-height: 46px;
+  border: 1px solid rgba(248, 244, 238, 0.16);
+  border-radius: 10px;
+  background: rgba(248, 244, 238, 0.04);
+  color: #f8f4ee;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 770;
+  padding: 0 17px;
+}
+
+.actions .primary {
+  border-color: #ff7a32;
+  background: #ff7a32;
+  color: #180904;
+}
+
+.success,
+.error {
+  margin: 0;
+  border: 1px solid rgba(126, 231, 242, 0.3);
+  border-radius: 10px;
+  background: rgba(126, 231, 242, 0.07);
+  color: #bff7fc;
+  font-size: 0.82rem;
+  padding: 13px 15px;
+}
+
+.error {
+  border-color: rgba(255, 112, 102, 0.3);
+  background: rgba(255, 112, 102, 0.08);
+  color: #ffc0bb;
+}
+
+@media (max-width: 760px) {
+  .panelHeader,
+  .fields,
+  .checks {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+
+  .actions {
+    position: static;
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

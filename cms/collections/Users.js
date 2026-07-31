@@ -111,17 +111,15 @@ function escapeHTML(value) {
     .replaceAll("'", '&#39;');
 }
 
-function adminResetURL(req, token) {
+function cmsResetURL(req, token) {
   const config = req.payload.config;
   const serverURL = config.serverURL || process.env.PAYLOAD_SERVER_URL || '';
-  const adminRoute = config.routes?.admin || '/admin';
-  const resetRoute = config.admin?.routes?.reset || '/reset';
 
-  return `${serverURL.replace(/\/+$/, '')}${adminRoute}${resetRoute}/${encodeURIComponent(token)}`;
+  return `${serverURL.replace(/\/+$/, '')}/reset/${encodeURIComponent(token)}`;
 }
 
 function generatePasswordEmailHTML({ req, token, user }) {
-  const resetURL = adminResetURL(req, token);
+  const resetURL = cmsResetURL(req, token);
   const email = escapeHTML(user.email);
 
   return `<!doctype html>

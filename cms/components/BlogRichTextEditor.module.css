@@ -1,0 +1,272 @@
+.editor {
+  display: grid;
+  gap: 0;
+  border: 1px solid rgba(248, 244, 238, 0.16);
+  border-radius: 14px;
+  background: #0d0d0e;
+  overflow: hidden;
+}
+
+.toolbar {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid rgba(248, 244, 238, 0.12);
+  background: #151516;
+  padding: 10px;
+}
+
+.formatGroup,
+.linkControl {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.formatGroup + .formatGroup,
+.linkControl {
+  padding-left: 8px;
+  border-left: 1px solid rgba(248, 244, 238, 0.12);
+}
+
+.toolbar button,
+.uploadPanel button {
+  min-height: 42px;
+  border: 1px solid rgba(248, 244, 238, 0.15);
+  border-radius: 8px;
+  background: rgba(248, 244, 238, 0.045);
+  color: #f8f4ee;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 760;
+  padding: 0 12px;
+}
+
+.toolbar button:hover,
+.uploadPanel button:hover {
+  border-color: rgba(255, 107, 44, 0.6);
+  background: rgba(255, 107, 44, 0.1);
+}
+
+.toolbar button:focus-visible,
+.uploadPanel button:focus-visible,
+.toolbar input:focus-visible,
+.uploadPanel input:focus-visible,
+.surface:focus-visible {
+  outline: 2px solid #ff6b2c;
+  outline-offset: 2px;
+}
+
+.toolbar button:active,
+.uploadPanel button:active {
+  transform: translateY(1px);
+}
+
+.toolbar button:disabled,
+.uploadPanel button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.linkControl {
+  flex: 1 1 260px;
+}
+
+.linkControl label {
+  flex: 1 1 auto;
+}
+
+.toolbar input,
+.uploadPanel input {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid rgba(248, 244, 238, 0.15);
+  border-radius: 8px;
+  background: rgba(5, 5, 5, 0.72);
+  color: #f8f4ee;
+  font: inherit;
+  font-size: 0.84rem;
+  padding: 0 11px;
+}
+
+.imageButton {
+  border-color: rgba(255, 107, 44, 0.55) !important;
+  color: #ff9a68 !important;
+}
+
+.uploadPanel {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.75fr) minmax(220px, 1fr) minmax(220px, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+  border-bottom: 1px solid rgba(248, 244, 238, 0.12);
+  background: rgba(255, 107, 44, 0.06);
+  padding: 14px;
+}
+
+.uploadPanel label {
+  display: grid;
+  gap: 6px;
+}
+
+.uploadPanel label > span {
+  color: rgba(248, 244, 238, 0.76);
+  font-size: 0.73rem;
+  font-weight: 760;
+}
+
+.uploadPanel small {
+  color: rgba(248, 244, 238, 0.52);
+  font-weight: 500;
+}
+
+.uploadPanel input[type="file"] {
+  padding: 8px;
+}
+
+.uploadPanel button {
+  min-height: 44px;
+  border-color: #ff6b2c;
+  background: #ff6b2c;
+  color: #160804;
+}
+
+.error {
+  margin: 0;
+  border-bottom: 1px solid rgba(255, 112, 102, 0.25);
+  background: rgba(255, 112, 102, 0.08);
+  color: #ffc0bb;
+  font-size: 0.84rem;
+  padding: 10px 14px;
+}
+
+.surface {
+  min-height: 520px;
+  color: rgba(248, 244, 238, 0.88);
+  font-size: 1.05rem;
+  line-height: 1.72;
+  padding: clamp(24px, 5vw, 54px);
+}
+
+.surface :where(p, ul, ol, blockquote) {
+  margin: 0 0 1.25rem;
+}
+
+.surface :where(h2, h3, h4) {
+  margin: 2rem 0 0.75rem;
+  color: #f8f4ee;
+  font-family: var(--font-geist-sans), sans-serif;
+  line-height: 1.15;
+}
+
+.surface h2 {
+  font-size: 2rem;
+}
+
+.surface h3 {
+  font-size: 1.45rem;
+}
+
+.surface blockquote {
+  border-left: 3px solid #ff6b2c;
+  color: rgba(248, 244, 238, 0.72);
+  padding-left: 18px;
+}
+
+.surface a {
+  color: #ff9a68;
+}
+
+.surface figure {
+  margin: 2rem 0;
+}
+
+.surface figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 620px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.surface figcaption {
+  min-height: 24px;
+  margin-top: 8px;
+  color: rgba(248, 244, 238, 0.58);
+  font-size: 0.82rem;
+}
+
+.surface figcaption:empty::before {
+  content: "Add a caption (optional)";
+  color: rgba(248, 244, 238, 0.34);
+}
+
+.help {
+  margin: 0;
+  border-top: 1px solid rgba(248, 244, 238, 0.1);
+  color: rgba(248, 244, 238, 0.56);
+  font-size: 0.78rem;
+  padding: 10px 14px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 920px) {
+  .uploadPanel {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .uploadPanel button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 620px) {
+  .toolbar {
+    align-items: stretch;
+  }
+
+  .formatGroup,
+  .linkControl {
+    width: 100%;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .formatGroup {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  }
+
+  .linkControl {
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
+
+  .imageButton {
+    width: 100%;
+  }
+
+  .uploadPanel {
+    grid-template-columns: 1fr;
+  }
+
+  .surface {
+    min-height: 420px;
+    padding: 22px 18px;
+  }
+}

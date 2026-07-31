@@ -1,7 +1,5 @@
-import config from '@payload-config';
-import { headers } from 'next/headers';
-import { notFound, redirect } from 'next/navigation';
-import { getPayload } from 'payload';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
 
 import type { Landing } from '../../../../payload-types';
 import {
@@ -16,6 +14,7 @@ import {
   publicAssetURL as mediaPublicAssetURL,
   publicAssetWasRepaired,
 } from '../../../../lib/media-library.js';
+import { requireCmsUser } from '../../../../lib/cms-auth';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -99,12 +98,7 @@ function landingBullets(doc: Landing): string[] {
 }
 
 async function loadLanding(id: string): Promise<Landing> {
-  const payload = await getPayload({ config });
-  const auth = await payload.auth({ headers: await headers() });
-
-  if (!auth.user) {
-    redirect(`/admin/login?redirect=${encodeURIComponent(`/preview/landings/${id}`)}`);
-  }
+  const { payload, user } = await requireCmsUser(`/preview/landings/${id}`);
 
   const doc = (await payload.findByID({
     collection: 'landings',
@@ -112,7 +106,7 @@ async function loadLanding(id: string): Promise<Landing> {
     disableErrors: true,
     id,
     overrideAccess: false,
-    user: auth.user,
+    user,
   })) as Landing | null;
 
   if (!doc) notFound();
@@ -184,22 +178,22 @@ export default async function LandingPreviewPage({ params, searchParams }: PageP
           <p>{statusCopy}</p>
         </div>
         <div className={styles.previewActions}>
-          <a className={styles.previewAdminLink} href="/">
+          <Link className={styles.previewAdminLink} href="/">
             Back to Mission Control
-          </a>
+          </Link>
           <a className={`${styles.previewAdminLink} ${styles.previewPublicLink}`} href={publicUrl}>
             Open public URL
           </a>
-          <a className={styles.previewAdminLink} href={`/admin/collections/landings/${doc.id}`}>
+          <Link className={styles.previewAdminLink} href={`/landings/${doc.id}`}>
             Edit draft
-          </a>
+          </Link>
         </div>
       </div>
 
       <nav className={styles.previewBreadcrumb} aria-label="Breadcrumb">
-        <a href="/">Mission Control</a>
+        <Link href="/">Mission Control</Link>
         <span aria-hidden="true">/</span>
-        <a href="/admin/collections/landings">Landing Pages</a>
+        <Link href="/landings">Landing Pages</Link>
         <span aria-hidden="true">/</span>
         <span aria-current="page">Preview</span>
       </nav>

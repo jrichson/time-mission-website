@@ -14,6 +14,12 @@ import {
   previewBlogPostHeroImage,
 } from '../cms/lib/blog-preview-contract';
 import {
+  blogSlug,
+  lexicalPlainText,
+  parseLexicalState,
+  plainTextLexicalState,
+} from '../cms/lib/blog-authoring';
+import {
   blogPostDateLabel,
   blogLocationCanonicalPath,
   blogPostBodyHtml,
@@ -116,6 +122,36 @@ function text(value: string, format = 0): RichTextNode {
 }
 
 describe('CMS blog posts', () => {
+  it('provides a custom editorial workspace with rich text, uploads, and previews', () => {
+    const home = read('cms/app/page.tsx');
+    const list = read('cms/app/blog/page.tsx');
+    const create = read('cms/app/blog/new/page.tsx');
+    const editor = read('cms/components/BlogAuthoringForm.tsx');
+    const richTextEditor = read('cms/components/BlogRichTextEditor.tsx');
+    const heroPicker = read('cms/components/BlogHeroPicker.tsx');
+    const uploadRoute = read('cms/app/blog/media/route.ts');
+    const preview = read('cms/app/preview/blog/[id]/page.tsx');
+
+    expect(home).toContain("href: '/blog'");
+    expect(home).not.toContain('/admin/collections/blog-posts');
+    expect(list).toContain('New post');
+    expect(create).toContain('Make it worth the click.');
+    expect(editor).toContain('Original article');
+    expect(editor).toContain('Shared link');
+    expect(editor).toContain('Save and preview');
+    expect(richTextEditor).toContain('contentEditable');
+    expect(richTextEditor).toContain('Add image');
+    expect(heroPicker).toContain('Upload and select');
+    expect(uploadRoute).toContain("collection: 'media'");
+    expect(uploadRoute).toContain('MAX_UPLOAD_BYTES');
+    expect(preview).toContain('href={`/blog/${post.id}`}');
+
+    expect(blogSlug('A New Story!')).toBe('a-new-story');
+    const summary = plainTextLexicalState('First sentence.\n\nSecond sentence.');
+    expect(lexicalPlainText(summary)).toBe('First sentence.\n\nSecond sentence.');
+    expect(parseLexicalState(JSON.stringify(summary))).toEqual(summary);
+  });
+
   it('registers a location-specific Payload collection', () => {
     const config = read('cms/payload.config.ts');
     const migration = read('cms/migrations/20260624_090000_blog_press_donation_eindhoven.ts');

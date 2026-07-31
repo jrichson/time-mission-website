@@ -1,13 +1,11 @@
-import config from '@payload-config';
-import { headers } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { getPayload } from 'payload';
 
 import {
   LOCATION_HOUR_DAYS,
   LOCATION_MISSION_OPTIONS,
 } from '../../../lib/location-details-options.js';
+import { requireCmsUser } from '../../../lib/cms-auth';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -156,17 +154,6 @@ function locationChanged(
   };
 
   return JSON.stringify(current) !== JSON.stringify(data);
-}
-
-async function requireCmsUser(redirectPath: string) {
-  const payload = await getPayload({ config });
-  const auth = await payload.auth({ headers: await headers() });
-
-  if (!auth.user) {
-    redirect(`/admin/login?redirect=${encodeURIComponent(redirectPath)}`);
-  }
-
-  return { payload, user: auth.user };
 }
 
 async function saveBulkLocations(formData: FormData) {
@@ -321,7 +308,6 @@ export default async function BulkLocationsPage({ searchParams }: PageProps) {
           <strong>CMS</strong>
         </Link>
         <div className={styles.topbarActions}>
-          <Link href="/admin/collections/location-details">Detailed records</Link>
           <Link href="/deploy">Make changes live</Link>
         </div>
       </nav>
@@ -394,7 +380,7 @@ export default async function BulkLocationsPage({ searchParams }: PageProps) {
                       <p>{addressSummary(location)}</p>
                     </div>
                   </div>
-                  <Link href={`/admin/collections/location-details/${location.id}`}>Open full record</Link>
+                  <span className={styles.recordNote}>Complete editor</span>
                 </div>
 
                 <div className={styles.quickGrid}>

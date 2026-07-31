@@ -56,7 +56,7 @@ function CollectionGuide({
 export function AnnouncementBannersGuide() {
   return (
     <CollectionGuide
-      actionHref="/admin/collections/announcement-banners/create"
+      actionHref="/announcements"
       actionLabel="Create announcement"
       eyebrow="Website announcements"
       goesLive="Mark it Published in CMS, then use Make changes live."
@@ -84,7 +84,7 @@ export function LocationDetailsGuide() {
 export function BlogPostsGuide() {
   return (
     <CollectionGuide
-      actionHref="/admin/collections/blog-posts/create"
+      actionHref="/blog/new"
       actionLabel="Write a blog post"
       eyebrow="Blog posts"
       goesLive="Mark it Published in CMS, then use Make changes live."

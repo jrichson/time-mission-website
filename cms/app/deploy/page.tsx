@@ -1,10 +1,8 @@
-import config from '@payload-config';
-import { headers } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { getPayload } from 'payload';
 
 import { canTriggerCmsDeploy } from '../../collections/Users.js';
+import { requireCmsUser } from '../../lib/cms-auth';
 import { triggerCmsDeploy } from '../../lib/cms-deploy-gate.js';
 import styles from '../home.module.css';
 
@@ -22,21 +20,10 @@ type DeployStatusMessage = {
   tone: 'statusNoticeError' | 'statusNoticeSuccess' | 'statusNoticeWarning';
 };
 
-async function currentCmsUser() {
-  const payload = await getPayload({ config });
-  const auth = await payload.auth({ headers: await headers() });
-
-  if (!auth.user) {
-    redirect(`/admin/login?redirect=${encodeURIComponent('/deploy')}`);
-  }
-
-  return { payload, user: auth.user };
-}
-
 async function triggerDeployAction() {
   'use server';
 
-  const { payload, user } = await currentCmsUser();
+  const { payload, user } = await requireCmsUser('/deploy');
   const result = await triggerCmsDeploy({
     reason: 'manual-cms-deploy',
     req: { payload, user },
@@ -81,7 +68,7 @@ export const metadata = {
 };
 
 export default async function DeployPage({ searchParams }: PageProps) {
-  const { payload, user } = await currentCmsUser();
+  const { payload, user } = await requireCmsUser('/deploy');
   const params = await searchParams;
   const canDeploy = await canTriggerCmsDeploy({ req: { payload, user } });
   const message = statusCopy(params.status);

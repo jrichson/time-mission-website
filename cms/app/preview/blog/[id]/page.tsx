@@ -1,8 +1,5 @@
-import config from '@payload-config';
-import { headers } from 'next/headers';
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
-import { getPayload } from 'payload';
+import { notFound } from 'next/navigation';
 
 import {
   previewBlogPostBodyHtml,
@@ -13,6 +10,7 @@ import {
   previewBlogPostHeroImage,
   type PreviewBlogPostDoc,
 } from '../../../../lib/blog-preview-contract';
+import { requireCmsUser } from '../../../../lib/cms-auth';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -25,17 +23,6 @@ type PageProps = {
 
 function absoluteAssetUrl(value: string, publicOrigin: string): string {
   return value.startsWith('/') ? `${publicOrigin}${value}` : value;
-}
-
-async function requireCmsUser(redirectPath: string) {
-  const payload = await getPayload({ config });
-  const auth = await payload.auth({ headers: await headers() });
-
-  if (!auth.user) {
-    redirect(`/admin/login?redirect=${encodeURIComponent(redirectPath)}`);
-  }
-
-  return { payload, user: auth.user };
 }
 
 export const metadata = {
@@ -80,7 +67,7 @@ export default async function BlogPreviewPage({ params }: PageProps) {
         </div>
         <p>This uses the public blog layout. Save the post again to refresh this preview.</p>
         <div className={styles.previewActions}>
-          <Link href={`/admin/collections/blog-posts/${post.id}`}>Edit post</Link>
+          <Link href={`/blog/${post.id}`}>Edit post</Link>
           <Link href="/deploy">Make changes live</Link>
         </div>
       </nav>
@@ -88,7 +75,7 @@ export default async function BlogPreviewPage({ params }: PageProps) {
       <div className="tm-blog-page">
         <article className="tm-blog-article">
           <header className="tm-blog-article-hero">
-            <picture className="tm-blog-article-media" aria-hidden="true">
+            <picture className="tm-blog-article-media">
               <img
                 alt=""
                 decoding="async"

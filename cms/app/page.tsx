@@ -1,6 +1,10 @@
 import Link from 'next/link';
 
+import { signOut } from './logout/actions';
+import { requireCmsUser } from '../lib/cms-auth';
 import styles from './home.module.css';
+
+export const dynamic = 'force-dynamic';
 
 const landingActions = [
   {
@@ -22,7 +26,7 @@ const landingActions = [
     description: 'Use this for a city or venue booking page.',
   },
   {
-    href: '/admin/collections/landings',
+    href: '/landings',
     label: 'Review existing drafts',
     meta: 'Drafts',
     description: 'Open saved drafts, previews, and published pages.',
@@ -45,21 +49,21 @@ const primaryTasks = [
     action: 'Bulk edit',
   },
   {
-    href: '/admin/collections/announcement-banners',
+    href: '/announcements',
     label: 'Add a website banner',
     meta: 'Ticker and banner',
     description: 'Show a short message at the top of the public website.',
     action: 'Edit',
   },
   {
-    href: '/admin/collections/landings',
+    href: '/landings',
     label: 'Review landing drafts',
     meta: 'Campaign pages',
     description: 'Open saved campaign pages, previews, and publish settings.',
     action: 'Review',
   },
   {
-    href: '/admin/collections/blog-posts',
+    href: '/blog',
     label: 'Write a blog post',
     meta: 'Articles and links',
     description: 'Write a rich article, add inline images, or share external coverage.',
@@ -76,29 +80,25 @@ const primaryTasks = [
 
 const advancedLinks = [
   {
-    href: '/admin/collections/site-pages',
+    href: '/search',
     label: 'Search & sharing',
     meta: 'Page previews',
     description:
       'Update search-result and social-sharing previews without changing page copy or layout.',
   },
   {
-    href: '/admin/collections/user-invites',
-    label: 'User invitations',
+    href: '/access',
+    label: 'Access & permissions',
     meta: 'Access',
-    description: 'Invite editors, copy setup links, and review invite status.',
-  },
-  {
-    href: '/admin/collections/users',
-    label: 'Users',
-    meta: 'Permissions',
-    description: 'Review CMS accounts and owner-granted permissions.',
+    description: 'Invite editors, copy setup links, and manage owner-granted permissions.',
   },
 ];
 
 const workflowSteps = ['Draft', 'Preview', 'Published in CMS', 'Live after deploy'];
 
-export default function Home() {
+export default async function Home() {
+  const { user } = await requireCmsUser('/');
+
   return (
     <main className={styles.shell}>
       <nav className={styles.topbar} aria-label="CMS shortcuts">
@@ -108,6 +108,9 @@ export default function Home() {
         </Link>
         <div className={styles.topbarActions}>
           <Link href="/deploy">Deploy</Link>
+          <form action={signOut}>
+            <button type="submit">Sign out {user.email ? `· ${user.email}` : ''}</button>
+          </form>
         </div>
       </nav>
 

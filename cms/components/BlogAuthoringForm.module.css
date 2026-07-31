@@ -1,0 +1,345 @@
+.form {
+  display: grid;
+  gap: 18px;
+}
+
+.section {
+  display: grid;
+  gap: 20px;
+  border: 1px solid rgba(248, 244, 238, 0.14);
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(248, 244, 238, 0.055), rgba(248, 244, 238, 0.015)),
+    rgba(9, 9, 9, 0.94);
+  box-shadow: inset 0 1px 0 rgba(248, 244, 238, 0.1);
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.sectionHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.7fr);
+  gap: 20px;
+  align-items: end;
+  border-bottom: 1px solid rgba(248, 244, 238, 0.1);
+  padding-bottom: 18px;
+}
+
+.sectionHeader > div {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.sectionHeader span {
+  color: #7ee7f2;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.7rem;
+  font-weight: 760;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  color: #f8f4ee;
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+  letter-spacing: -0.03em;
+}
+
+.sectionHeader p {
+  margin: 0;
+  color: rgba(248, 244, 238, 0.6);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.typeSwitch,
+.releaseGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.typeSwitch label,
+.checkField {
+  position: relative;
+  display: grid;
+  gap: 7px;
+  min-height: 112px;
+  border: 1px solid rgba(248, 244, 238, 0.13);
+  border-radius: 14px;
+  background: rgba(248, 244, 238, 0.025);
+  cursor: pointer;
+  padding: 20px 20px 20px 50px;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.typeSwitch label:hover,
+.checkField:hover {
+  border-color: rgba(255, 122, 50, 0.44);
+  transform: translateY(-1px);
+}
+
+.typeSwitch .typeSelected {
+  border-color: #ff7a32;
+  background: rgba(255, 122, 50, 0.09);
+  box-shadow: inset 0 0 0 1px rgba(255, 122, 50, 0.3);
+}
+
+.typeSwitch input,
+.checkField > input {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 20px;
+  height: 20px;
+  accent-color: #ff7a32;
+}
+
+.typeSwitch span,
+.checkField strong {
+  color: #f8f4ee;
+  font-size: 0.95rem;
+  font-weight: 760;
+}
+
+.typeSwitch small,
+.checkField small {
+  color: rgba(248, 244, 238, 0.58);
+  font-size: 0.79rem;
+  line-height: 1.5;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.fieldGrid label {
+  display: grid;
+  gap: 8px;
+}
+
+.fieldGrid label > span {
+  color: rgba(248, 244, 238, 0.82);
+  font-size: 0.78rem;
+  font-weight: 740;
+}
+
+.fieldGrid small {
+  color: rgba(248, 244, 238, 0.46);
+  font-weight: 500;
+}
+
+.fullField {
+  grid-column: 1 / -1;
+}
+
+.fieldGrid :where(input, select, textarea),
+.slugField {
+  width: 100%;
+  border: 1px solid rgba(248, 244, 238, 0.15);
+  border-radius: 10px;
+  background: rgba(5, 5, 5, 0.74);
+  color: #f8f4ee;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.fieldGrid :where(input, select) {
+  min-height: 48px;
+  padding: 0 13px;
+}
+
+.fieldGrid textarea {
+  min-height: 106px;
+  line-height: 1.55;
+  padding: 13px;
+  resize: vertical;
+}
+
+.fieldGrid select {
+  appearance: auto;
+}
+
+.fieldGrid :where(input, select, textarea):focus-visible,
+.typeSwitch input:focus-visible,
+.checkField input:focus-visible,
+.searchDetails summary:focus-visible,
+.actionBar button:focus-visible {
+  border-color: #ff7a32;
+  outline: 2px solid #ff7a32;
+  outline-offset: 2px;
+}
+
+.slugField {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.slugField small {
+  flex: 0 0 auto;
+  color: rgba(248, 244, 238, 0.48);
+  font-family: var(--font-geist-mono), monospace;
+  padding-left: 13px;
+}
+
+.slugField input {
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: 0 !important;
+}
+
+.checkField {
+  min-height: 96px;
+}
+
+.checkField > span {
+  display: grid;
+  gap: 5px;
+}
+
+.searchDetails {
+  border: 1px solid rgba(248, 244, 238, 0.11);
+  border-radius: 12px;
+  background: rgba(248, 244, 238, 0.02);
+}
+
+.searchDetails summary {
+  min-height: 48px;
+  cursor: pointer;
+  color: rgba(248, 244, 238, 0.78);
+  font-size: 0.82rem;
+  font-weight: 740;
+  padding: 15px 17px;
+}
+
+.searchDetails .fieldGrid {
+  border-top: 1px solid rgba(248, 244, 238, 0.09);
+  padding: 18px;
+}
+
+.success,
+.error {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  border: 1px solid rgba(126, 231, 242, 0.3);
+  border-radius: 12px;
+  background: rgba(126, 231, 242, 0.07);
+  color: #bff7fc;
+  padding: 14px 18px;
+}
+
+.error {
+  border-color: rgba(255, 112, 102, 0.3);
+  background: rgba(255, 112, 102, 0.08);
+  color: #ffc0bb;
+}
+
+.success span,
+.error span {
+  color: rgba(248, 244, 238, 0.7);
+  font-size: 0.82rem;
+}
+
+.actionBar {
+  position: sticky;
+  z-index: 10;
+  bottom: 14px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(248, 244, 238, 0.19);
+  border-radius: 18px;
+  background: rgba(13, 13, 14, 0.94);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(18px);
+  padding: 12px 14px 12px 18px;
+}
+
+.actionBar > div {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actionBar > div:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.actionBar strong {
+  color: #f8f4ee;
+  font-size: 0.82rem;
+}
+
+.actionBar span {
+  color: rgba(248, 244, 238, 0.52);
+  font-size: 0.74rem;
+}
+
+.actionBar button {
+  min-height: 46px;
+  border: 1px solid rgba(248, 244, 238, 0.17);
+  border-radius: 10px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 780;
+  padding: 0 18px;
+}
+
+.secondaryAction {
+  background: rgba(248, 244, 238, 0.04);
+  color: #f8f4ee;
+}
+
+.primaryAction {
+  border-color: #ff7a32 !important;
+  background: #ff7a32;
+  color: #160804;
+}
+
+@media (max-width: 760px) {
+  .sectionHeader,
+  .typeSwitch,
+  .releaseGrid,
+  .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .fullField {
+    grid-column: auto;
+  }
+
+  .actionBar {
+    position: static;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .actionBar > div:last-child {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .typeSwitch,
+  .releaseGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .success,
+  .error {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .actionBar > div:last-child {
+    grid-template-columns: 1fr;
+  }
+}

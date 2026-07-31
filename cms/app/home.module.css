@@ -124,7 +124,8 @@
   gap: 6px;
 }
 
-.topbarActions a {
+.topbarActions a,
+.topbarActions button {
   display: inline-grid;
   min-height: 42px;
   place-items: center;
@@ -142,11 +143,21 @@
     transform 180ms var(--tm-ease);
 }
 
-.topbarActions a:hover {
+.topbarActions button {
+  cursor: pointer;
+  font: inherit;
+}
+
+.topbarActions a:hover,
+.topbarActions button:hover {
   border-color: var(--tm-line-soft);
   background: rgba(248, 244, 238, 0.075);
   color: var(--tm-text);
   transform: translateY(-1px);
+}
+
+.topbarActions form {
+  margin: 0;
 }
 
 .breadcrumb {

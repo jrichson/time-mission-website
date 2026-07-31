@@ -1,0 +1,262 @@
+.picker {
+  display: grid;
+  gap: 16px;
+}
+
+.current {
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  gap: 18px;
+  align-items: center;
+  border: 1px solid rgba(248, 244, 238, 0.14);
+  border-radius: 16px;
+  background: rgba(248, 244, 238, 0.035);
+  padding: 12px;
+}
+
+.currentMedia {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid rgba(248, 244, 238, 0.12);
+  border-radius: 10px;
+  background: #070707;
+}
+
+.currentMedia img,
+.mediaGrid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder {
+  display: grid;
+  height: 100%;
+  place-content: center;
+  color: rgba(248, 244, 238, 0.54);
+  text-align: center;
+}
+
+.placeholder span,
+.placeholder strong {
+  display: block;
+}
+
+.placeholder strong {
+  margin-top: 4px;
+  color: #7ee7f2;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.current > div:last-child {
+  display: grid;
+  gap: 5px;
+}
+
+.current strong {
+  color: #f8f4ee;
+  font-size: 0.94rem;
+}
+
+.current p,
+.library p {
+  margin: 0;
+  color: rgba(248, 244, 238, 0.62);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.current button {
+  width: fit-content;
+  margin-top: 4px;
+  border: 0;
+  background: transparent;
+  color: #ff9a68;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 720;
+  padding: 4px 0;
+}
+
+.eyebrow {
+  color: #7ee7f2;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.69rem;
+  font-weight: 720;
+  text-transform: uppercase;
+}
+
+.library {
+  display: grid;
+  gap: 10px;
+}
+
+.mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mediaGrid button {
+  position: relative;
+  display: grid;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid rgba(248, 244, 238, 0.13);
+  border-radius: 10px;
+  background: rgba(248, 244, 238, 0.035);
+  color: rgba(248, 244, 238, 0.58);
+  cursor: pointer;
+  padding: 0;
+}
+
+.mediaGrid button::after {
+  position: absolute;
+  inset: 0;
+  border: 3px solid transparent;
+  border-radius: 9px;
+  content: "";
+  pointer-events: none;
+}
+
+.mediaGrid button:hover,
+.mediaGrid button:focus-visible,
+.mediaGrid .selected {
+  border-color: #ff7a32;
+  outline: 0;
+}
+
+.mediaGrid .selected::after {
+  border-color: #ff7a32;
+}
+
+.mediaGrid small {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  left: 4px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: rgba(5, 5, 5, 0.82);
+  color: #f8f4ee;
+  font-size: 0.62rem;
+  padding: 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload {
+  border: 1px solid rgba(248, 244, 238, 0.12);
+  border-radius: 12px;
+  background: rgba(248, 244, 238, 0.025);
+}
+
+.upload summary {
+  min-height: 46px;
+  cursor: pointer;
+  color: rgba(248, 244, 238, 0.82);
+  font-size: 0.82rem;
+  font-weight: 720;
+  padding: 14px 16px;
+}
+
+.uploadGrid {
+  display: grid;
+  grid-template-columns: 0.8fr 1fr 1fr auto;
+  gap: 10px;
+  align-items: end;
+  border-top: 1px solid rgba(248, 244, 238, 0.1);
+  padding: 14px;
+}
+
+.uploadGrid label {
+  display: grid;
+  gap: 6px;
+}
+
+.uploadGrid label > span {
+  color: rgba(248, 244, 238, 0.72);
+  font-size: 0.72rem;
+  font-weight: 720;
+}
+
+.uploadGrid small {
+  color: rgba(248, 244, 238, 0.48);
+  font-weight: 500;
+}
+
+.uploadGrid input,
+.uploadGrid button {
+  min-height: 44px;
+  border: 1px solid rgba(248, 244, 238, 0.15);
+  border-radius: 8px;
+  background: rgba(5, 5, 5, 0.72);
+  color: #f8f4ee;
+  font: inherit;
+}
+
+.uploadGrid input {
+  width: 100%;
+  padding: 0 11px;
+}
+
+.uploadGrid input[type="file"] {
+  padding: 8px;
+}
+
+.uploadGrid button {
+  border-color: #ff7a32;
+  background: #ff7a32;
+  color: #160804;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 760;
+  padding: 0 14px;
+}
+
+.uploadGrid :where(input, button):focus-visible,
+.current button:focus-visible {
+  outline: 2px solid #ff7a32;
+  outline-offset: 2px;
+}
+
+.error {
+  margin: 0;
+  border: 1px solid rgba(255, 112, 102, 0.26);
+  border-radius: 8px;
+  background: rgba(255, 112, 102, 0.08);
+  color: #ffc0bb;
+  font-size: 0.82rem;
+  padding: 10px 12px;
+}
+
+@media (max-width: 920px) {
+  .mediaGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .uploadGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .current {
+    grid-template-columns: 1fr;
+  }
+
+  .currentMedia {
+    max-width: 260px;
+  }
+
+  .mediaGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .uploadGrid {
+    grid-template-columns: 1fr;
+  }
+}
