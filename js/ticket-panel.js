@@ -6,6 +6,7 @@
     var ticketClose    = document.getElementById('ticketClose');
     var ticketLocSel   = document.getElementById('ticketLocation');
     var ticketBookBtn  = document.getElementById('ticketBookBtn');
+    var ticketPlayersInfo = document.getElementById('ticketPlayersInfo');
     var pageLocation   = (document.body && document.body.dataset.location) || '';
     var lastFocusedBeforePanel = null;
 
@@ -28,6 +29,23 @@
         };
     }
 
+    function syncPlayersInfo() {
+        if (!ticketPlayersInfo || !window.TM || !Array.isArray(window.TM.locations)) return;
+        var locationId = ticketLocSel.value || pageLocation;
+        var location = window.TM.locations.find(function (entry) {
+            return entry && (entry.id === locationId || entry.slug === locationId);
+        });
+        if (!location) return;
+
+        var teamSize = location.teamSize || { min: 2, max: 5 };
+        var key = location.teamSize
+            ? 'booking.info.players.' + location.slug
+            : 'booking.info.players';
+        var fallback = 'Teams of ' + teamSize.min + '-' + teamSize.max + ' players per mission';
+        ticketPlayersInfo.setAttribute('data-i18n', key);
+        ticketPlayersInfo.textContent = translate(key, fallback);
+    }
+
     function syncLocationOptions() {
         var context = getLocationContext();
         var options = [];
@@ -41,7 +59,10 @@
         ) {
             options = window.TMLocationViews.listTicketOptions(window.TM.locations);
         }
-        if (!options.length) return;
+        if (!options.length) {
+            syncPlayersInfo();
+            return;
+        }
         var prev = ticketLocSel.value;
         ticketLocSel.textContent = '';
         var placeholder = document.createElement('option');
@@ -56,6 +77,7 @@
             ticketLocSel.appendChild(opt);
         });
         if (prev) ticketLocSel.value = prev;
+        syncPlayersInfo();
     }
 
     function openTicketPanel(e) {
@@ -71,6 +93,7 @@
         if (activeLocation && ticketLocSel) {
             ticketLocSel.value = String(activeLocation).toLowerCase().trim().replace(/\s+/g, '-');
         }
+        syncPlayersInfo();
         ticketPanel.removeAttribute('aria-hidden');
         ticketPanel.removeAttribute('inert');
         ticketPanel.classList.add('active');
@@ -129,6 +152,7 @@
 
     if (ticketClose)   ticketClose.addEventListener('click', closeTicketPanel);
     if (ticketOverlay) ticketOverlay.addEventListener('click', closeTicketPanel);
+    ticketLocSel.addEventListener('change', syncPlayersInfo);
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && ticketPanel.classList.contains('active')) closeTicketPanel();
     });

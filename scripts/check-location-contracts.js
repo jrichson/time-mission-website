@@ -150,6 +150,20 @@ function validateHiddenMissionIds(location) {
   }
 }
 
+function validateTeamSize(location) {
+  const id = location.id || '(unknown)';
+  if (location.teamSize == null) return;
+  if (!location.teamSize || typeof location.teamSize !== 'object' || Array.isArray(location.teamSize)) {
+    errors.push(`${id}: teamSize must be an object when present`);
+    return;
+  }
+
+  const { min, max } = location.teamSize;
+  if (!Number.isInteger(min) || !Number.isInteger(max) || min < 1 || max < min) {
+    errors.push(`${id}: teamSize must contain positive integer min/max values with max >= min`);
+  }
+}
+
 function validateDonationUrl(location) {
   const id = location.id || '(unknown)';
   if (location.donationUrl == null) return;
@@ -301,6 +315,7 @@ for (const location of locations) {
   validateIntlFields(location);
   validateLocationTicker(location);
   validateHiddenMissionIds(location);
+  validateTeamSize(location);
   validateDonationUrl(location);
   const hasValidGeo = validateGeo(location);
 

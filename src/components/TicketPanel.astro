@@ -1,5 +1,6 @@
 ---
 import { allLocations } from '../data/locations';
+import { locationTeamSizeLabel } from '../lib/location-team-size';
 import { ticketPanelSelectOptions } from '../lib/site-contract';
 
 interface Props {
@@ -11,6 +12,10 @@ const ticketOptions = ticketPanelSelectOptions(allLocations);
 const pageLocation = pageLocationSlug
     ? allLocations.find((loc) => loc.id === pageLocationSlug || loc.slug === pageLocationSlug)
     : null;
+const playerInfoI18nKey = pageLocation?.teamSize
+    ? `booking.info.players.${pageLocation.slug}`
+    : 'booking.info.players';
+const playerInfoText = `Teams of ${locationTeamSizeLabel(pageLocation)} players per mission`;
 const briqWidget = pageLocation?.bookingProvider === 'briq' ? pageLocation.briqWidget : null;
 const briqToggleState = briqWidget
     ? `bwr=bu|is|${briqWidget.domain}|and|o|is|true`
@@ -72,7 +77,7 @@ const briqToggleState = briqWidget
                         <circle cx="9" cy="7" r="4"></circle>
                         <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
-                    <span data-i18n="booking.info.players">Teams of 2-5 players per mission</span>
+                    <span id="ticketPlayersInfo" data-i18n={playerInfoI18nKey}>{playerInfoText}</span>
                 </div>
                 <div class="ticket-info-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -1026,7 +1026,7 @@ export const LIVE_SITE_PAGE_SNAPSHOT = [
     "path": "/lincoln",
     "title": "Time Mission Lincoln – 25+ Interactive Mission Rooms",
     "metaTitle": "Time Mission Lincoln – 25+ Interactive Mission Rooms",
-    "metaDescription": "Time Mission Lincoln, 25+ immersive challenge rooms for groups of 2–5. Book your mission today.",
+    "metaDescription": "Time Mission Lincoln, 25+ immersive challenge rooms for groups of 2–4. Book your mission today.",
     "robots": "index,follow",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"

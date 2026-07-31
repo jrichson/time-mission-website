@@ -16,7 +16,7 @@
                 <span class="line-1" aria-hidden="true">STEP INTO THE</span>
                 <span class="line-2" aria-hidden="true" role="presentation"></span>
             </h1>
-            <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive missions. Test your speed, strength, skill, and&nbsp;smarts.</p>
+            <p class="hero-subtitle">Teams of {{TEAM_SIZE_MIN}}-{{TEAM_SIZE_MAX}} compete through 25+ immersive missions. Test your speed, strength, skill, and&nbsp;smarts.</p>
             <div class="hero-cta">
                 <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets" data-tm-location="lincoln">
                     Book Now
@@ -85,7 +85,7 @@
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                     </svg>
                 </div>
-                <div class="stat-number">2<span class="stat-range-separator">-</span>5</div>
+                <div class="stat-number">{{TEAM_SIZE_MIN}}<span class="stat-range-separator">-</span>{{TEAM_SIZE_MAX}}</div>
                 <div class="stat-label">Players Per Team</div>
             </div>
             <div class="stat-card reveal">

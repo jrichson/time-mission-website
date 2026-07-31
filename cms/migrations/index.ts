@@ -22,6 +22,7 @@ import * as migration_20260723_090000_philadelphia_reopening from './20260723_09
 import * as migration_20260723_100000_add_boston_location_enums from './20260723_100000_add_boston_location_enums';
 import * as migration_20260723_101000_seed_boston_location from './20260723_101000_seed_boston_location';
 import * as migration_20260727_090000_philadelphia_opening_promotion from './20260727_090000_philadelphia_opening_promotion';
+import * as migration_20260729_090000_lincoln_team_size from './20260729_090000_lincoln_team_size';
 import * as migration_20260730_090000_add_edison_location_enums from './20260730_090000_add_edison_location_enums';
 import * as migration_20260730_091000_seed_edison_and_philadelphia_group_form from './20260730_091000_seed_edison_and_philadelphia_group_form';
 import * as migration_20260730_151000_sync_live_site_to_cms from './20260730_151000_sync_live_site_to_cms';
@@ -147,6 +148,11 @@ export const migrations = [
     up: migration_20260727_090000_philadelphia_opening_promotion.up,
     down: migration_20260727_090000_philadelphia_opening_promotion.down,
     name: '20260727_090000_philadelphia_opening_promotion'
+  },
+  {
+    up: migration_20260729_090000_lincoln_team_size.up,
+    down: migration_20260729_090000_lincoln_team_size.down,
+    name: '20260729_090000_lincoln_team_size'
   },
   {
     up: migration_20260730_090000_add_edison_location_enums.up,

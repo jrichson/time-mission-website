@@ -63,6 +63,26 @@ test('TM Ops location footers open the preselected contact form', async ({ page 
   }
 });
 
+test('supported location footers link to their Connecteam job applications', async ({ page }) => {
+  const applicationLink = page.locator('footer .footer-links a', { hasText: 'Join Our Team' });
+  const applicationUrls = {
+    manassas: 'https://app.connecteam.com/#/apply?link=ac7fa1ce-9e24-4c69-a1ef-bfdbc1bb2a54',
+    'mount-prospect': 'https://app.connecteam.com/#/apply?link=1a51944c-ebf3-4927-9cdb-5f212e0210ba',
+    'orland-park': 'https://app.connecteam.com/#/apply?link=027bf82b-de3d-4134-b151-fcb8ddbe84d5',
+    nashville: 'https://app.connecteam.com/#/apply?link=7d0b94ee-d43c-461f-aad4-424e8544e699',
+  };
+
+  for (const [location, applicationUrl] of Object.entries(applicationUrls)) {
+    await page.goto(`/${location}`);
+    await expect(applicationLink).toHaveAttribute('href', applicationUrl);
+    await expect(applicationLink).toHaveAttribute('target', '_blank');
+    await expect(applicationLink).toHaveAttribute('rel', 'noopener');
+  }
+
+  await page.goto('/houston');
+  await expect(applicationLink).toHaveCount(0);
+});
+
 test('contact page only shows direct info for the selected location', async ({ page }) => {
   await page.goto('/contact#location=houston&type=updates');
 

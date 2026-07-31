@@ -162,9 +162,9 @@ test('Europe location fallback links preserve tracking params', async ({ page, i
   await page.goto('/groups/corporate?utm_source=paid&utm_campaign=spring&book=1');
   await page.locator('#locationBtn').click();
 
-  await expect(page.locator('#locationDropdown a[data-tm-external-location="true"]').first())
+  await expect(page.locator('#locationDropdown a[data-tm-location-slug="antwerp"]'))
     .toHaveAttribute('href', 'https://timemission.eu/antwerp?utm_source=paid&utm_campaign=spring');
-  await expect(page.locator('#locationDropdown a[data-tm-external-location="true"]').nth(1))
+  await expect(page.locator('#locationDropdown a[data-tm-location-slug="brussels"]'))
     .toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=spring');
 });
 
@@ -239,6 +239,24 @@ test('location page drives nav state and ticket panel default location', async (
     'data-tm-booking-url',
     'https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home'
   );
+});
+
+test('Lincoln publishes its 2-4 player limit across the location experience', async ({ page }) => {
+  await page.goto('/lincoln');
+
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /groups of 2–4/);
+  await expect(page.locator('.hero-subtitle')).toContainText('Teams of 2-4');
+  await expect(page.locator('.stat-card').filter({ hasText: 'Players Per Team' }).locator('.stat-number'))
+    .toHaveText('2-4');
+  await expect(page.locator('#ticketPlayersInfo')).toHaveText('Teams of 2-4 players per mission');
+
+  await page.locator('#ticketLocation').selectOption('manassas', { force: true });
+  await expect(page.locator('#ticketPlayersInfo')).toHaveText('Teams of 2-5 players per mission');
+  await page.locator('#ticketLocation').selectOption('lincoln', { force: true });
+  await expect(page.locator('#ticketPlayersInfo')).toHaveText('Teams of 2-4 players per mission');
+
+  await page.evaluate(() => window.TMI18n.setLanguage('es'));
+  await expect(page.locator('#ticketPlayersInfo')).toHaveText('Equipos de 2 a 4 jugadores por misión');
 });
 
 test('Philadelphia page shows the August 7 opening and restores ticket booking CTAs', async ({ page }) => {

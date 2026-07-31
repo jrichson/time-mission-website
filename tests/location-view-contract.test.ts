@@ -50,6 +50,16 @@ function loadRuntimeLocationViews() {
 }
 
 describe('Location View contract', () => {
+    it('keeps Lincoln team sizes capped at four players', () => {
+        const lincoln = allLocations.find((loc) => loc.id === 'lincoln');
+        if (!lincoln) throw new Error('Lincoln location missing');
+
+        expect(lincoln.teamSize).toEqual({ min: 2, max: 4 });
+        expect(lincoln.faqs).toContainEqual(expect.objectContaining({
+            a: expect.stringContaining('Teams are 2 to 4 players.'),
+        }));
+    });
+
     it('publishes the Nashville direct contact email', () => {
         const nashville = allLocations.find((loc) => loc.id === 'nashville');
         if (!nashville) throw new Error('Nashville location missing');

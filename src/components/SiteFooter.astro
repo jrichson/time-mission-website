@@ -32,6 +32,13 @@ function contactHrefForLocation(loc: LocationRecord | null): string {
 }
 
 const contactHref = contactHrefForLocation(pageLocation);
+const teamApplicationUrls: Record<string, string> = {
+    manassas: 'https://app.connecteam.com/#/apply?link=ac7fa1ce-9e24-4c69-a1ef-bfdbc1bb2a54',
+    'mount-prospect': 'https://app.connecteam.com/#/apply?link=1a51944c-ebf3-4927-9cdb-5f212e0210ba',
+    'orland-park': 'https://app.connecteam.com/#/apply?link=027bf82b-de3d-4134-b151-fcb8ddbe84d5',
+    nashville: 'https://app.connecteam.com/#/apply?link=7d0b94ee-d43c-461f-aad4-424e8544e699',
+};
+const teamApplicationUrl = pageLocation ? teamApplicationUrls[pageLocation.slug] || '' : '';
 const footerUsLocations = locationsForRegion(allLocations, 'us');
 const footerEuropeLocations = locationsForRegion(allLocations, 'europe');
 
@@ -97,6 +104,13 @@ const hasPageLocation = Boolean(pageLocation);
             <h3 class="footer-title">INFO</h3>
             <ul class="footer-links">
                 <li><a href={contactHref}>Contact Us</a></li>
+                {teamApplicationUrl && (
+                    <li>
+                        <a href={teamApplicationUrl} target="_blank" rel="noopener">
+                            Join Our Team
+                        </a>
+                    </li>
+                )}
                 <li><a href="/press">Press</a></li>
                 <li data-tm-donation-link hidden><a href="/donation">Donation</a></li>
                 <li><a href="/waiver">Waiver</a></li>

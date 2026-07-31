@@ -184,6 +184,11 @@ body.tm-resource-page {
     pointer-events: none;
 }
 
+.tm-resource-button[hidden],
+.tm-resource-secondary[hidden] {
+    display: none;
+}
+
 .tm-resource-button:focus-visible,
 .tm-resource-secondary:focus-visible,
 .tm-resource-tile--link:focus-visible {

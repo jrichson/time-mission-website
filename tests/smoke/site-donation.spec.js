@@ -16,17 +16,23 @@ test('donation page embeds only selected donation-enabled locations', async ({ p
 
   const section = page.locator('[data-donation-form-section]');
   const frame = page.locator('#donationRequestFrame');
+  const formButton = page.locator('.btn-donation').first();
   await expect(section).toBeHidden();
+  await expect(formButton).toBeVisible();
+  await expect(formButton).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('[data-tm-donation-link]')).toBeHidden();
 
   await page.evaluate(() => window.TM.select('mount-prospect'));
   await expect(section).toBeVisible();
   await expect(frame).toHaveAttribute('src', url);
+  await expect(formButton).toBeHidden();
   await expect(page.locator('#donationLocationHint')).toContainText('Mount Prospect');
   await expect(page.locator('[data-tm-donation-link]')).toBeVisible();
 
   await page.evaluate(() => window.TM.select('houston'));
   await expect(section).toBeHidden();
   expect(await frame.getAttribute('src')).toBeNull();
+  await expect(formButton).toBeVisible();
+  await expect(formButton).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('[data-tm-donation-link]')).toBeHidden();
 });

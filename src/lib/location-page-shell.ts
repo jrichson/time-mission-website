@@ -6,6 +6,7 @@ import { locationCtaView } from './location-view';
 import { buildLocationGraph, serializeGraph } from './schema/graph';
 import { getSeoForRoute } from './seo/catalog';
 import { locationPurchaseTermsFaqItemHtml } from './location-policy-faq';
+import { locationTeamSize } from './location-team-size';
 import { applyTmMediaBase } from './tm-media';
 
 function locationBySlug(slug: string): LocationRecord {
@@ -65,6 +66,7 @@ function withLocationTemplateTokens(mainRaw: string, location: LocationRecord): 
     if (!mainRaw.includes('{{')) return mainRaw;
 
     const isBookable = hasTicketBooking(location);
+    const teamSize = locationTeamSize(location);
     const primaryCta = locationCtaView(location);
     const openingLabel = location.status === 'open' ? '' : locationOpeningLabel(location);
     const openingDateText = openingLabel ? locationOpeningDateText(location) : '';
@@ -85,6 +87,8 @@ function withLocationTemplateTokens(mainRaw: string, location: LocationRecord): 
     resolved = replaceToken(resolved, 'LOCATION_NAME', location.name);
     resolved = replaceToken(resolved, 'LOCATION_SHORT_NAME', location.shortName);
     resolved = replaceToken(resolved, 'LOCATION_SLUG', location.slug);
+    resolved = replaceToken(resolved, 'TEAM_SIZE_MIN', teamSize.min);
+    resolved = replaceToken(resolved, 'TEAM_SIZE_MAX', teamSize.max);
     resolved = replaceToken(resolved, 'LOCATION_PAGE_STATUS_LABEL', locationPageStatusLabel(location));
     resolved = replaceToken(resolved, 'PRIMARY_CTA_LABEL', primaryCta.label);
     resolved = replaceToken(resolved, 'PRIMARY_CTA_HREF', primaryCta.href);

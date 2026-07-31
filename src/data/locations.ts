@@ -43,6 +43,10 @@ export interface LocationRecord {
         email: string;
     };
     hours: Record<string, LocationDayHours>;
+    teamSize?: {
+        min: number;
+        max: number;
+    };
     bookingUrl: string;
     donationUrl?: string;
     externalUrl?: string;

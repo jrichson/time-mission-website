@@ -392,6 +392,10 @@
           "label": "9am - 11pm"
         }
       },
+      "teamSize": {
+        "min": 2,
+        "max": 4
+      },
       "bookingUrl": "https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959",
       "bookingProvider": "clubspeed",
       "hiddenMissionIds": [
@@ -426,7 +430,7 @@
         },
         {
           "q": "How many people can play together at Time Mission Lincoln?",
-          "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
+          "a": "Teams are 2 to 4 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
         }
       ],
       "ticker": "SUMMER ADVENTURES AT TIME MISSION LINCOLN",
