@@ -7,6 +7,7 @@ import {
   createCloudflareDeploymentArtifact,
   localWranglerBin,
 } from './lib/cloudflare-deployment-artifact.mjs';
+import { sourceCheckEnvironment } from './lib/deployment-environment.mjs';
 import { mergeTmPublicBuildEnvFromDisk } from './tm-dotenv.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -24,9 +25,14 @@ if (preview && requestedProfile !== 'eu') {
 }
 
 function run(command, args, options = {}) {
+  const env = {
+    ...(options.baseEnv || process.env),
+    TM_SITE_PROFILE: requestedProfile,
+    ...(options.env || {}),
+  };
   const result = spawnSync(command, args, {
     cwd: options.cwd || root,
-    env: { ...process.env, TM_SITE_PROFILE: requestedProfile, ...(options.env || {}) },
+    env,
     stdio: 'inherit',
   });
   if (result.error) throw result.error;
@@ -41,7 +47,10 @@ function run(command, args, options = {}) {
 let artifact;
 try {
   if (buildBeforeDeploy) {
-    run(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'check']);
+    run(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'check'], {
+      baseEnv: sourceCheckEnvironment(process.env),
+      env: { TM_SITE_PROFILE: 'us' },
+    });
     run(
       process.execPath,
       [
