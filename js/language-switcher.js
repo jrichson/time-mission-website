@@ -177,17 +177,22 @@
         var dismiss = suggestion.querySelector('[data-language-suggestion-dismiss]');
         if (!copy || !link || !dismiss) return;
 
-        copy.textContent = text('language.suggestion', 'Prefer {language}?', {
+        copy.textContent = text('language.suggestion', 'View this site in {language}?', {
             language: view.nativeLabel
-        });
-        link.textContent = translateText('language.switch', 'View site');
+        }, code);
+        link.textContent = translateText(
+            'language.switch',
+            'View in ' + view.nativeLabel,
+            code
+        );
         link.href = localizedUrl(code);
         link.addEventListener('click', function () {
             writeSavedLanguage(code);
         });
+        suggestion.setAttribute('lang', view.htmlLang || view.code);
         dismiss.setAttribute(
             'aria-label',
-            translateText('language.dismiss', 'Dismiss language suggestion')
+            translateText('language.dismiss', 'Dismiss language suggestion', code)
         );
         dismiss.addEventListener('click', function () {
             suggestion.hidden = true;

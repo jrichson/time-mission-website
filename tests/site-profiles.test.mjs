@@ -10,6 +10,7 @@ import {
   resolveSiteProfile,
 } from '../config/site-profiles.mjs';
 import { renderEuWranglerConfig } from '../scripts/lib/eu-wrangler-config.mjs';
+import { orderedLocationRegions } from '../src/lib/location-list';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 
@@ -46,6 +47,11 @@ describe('site deployment profiles', () => {
     expect(localizedPath('/', 'nl', profile)).toBe('/nl');
     expect(localizedPath('/antwerp/', 'fr', profile)).toBe('/fr/antwerp');
     expect(localizedPath('/antwerp', 'en', profile)).toBe('/antwerp');
+  });
+
+  it('orders the active region first in location navigation', () => {
+    expect(orderedLocationRegions('us')).toEqual(['us', 'europe']);
+    expect(orderedLocationRegions('europe')).toEqual(['europe', 'us']);
   });
 
   it('keeps only regional locations operational on each site', () => {

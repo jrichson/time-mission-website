@@ -1,17 +1,29 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import { allLocations } from '../data/locations';
-import { locationsForRegion, locationListLabel } from '../lib/location-list';
+import {
+    locationsForRegion,
+    locationListLabel,
+    orderedLocationRegions,
+} from '../lib/location-list';
 import { locationOpeningLabel } from '../lib/location-status';
 import { locationHref, locationHrefIsExternal, locationStatusBadge } from '../lib/location-view';
+import { activeSiteProfile } from '../lib/site-profile';
 
 interface Props {
     currentLang?: string;
 }
 
 const { currentLang = 'en' } = Astro.props;
-const usLocations = locationsForRegion(allLocations, 'us');
-const euLocations = locationsForRegion(allLocations, 'europe');
+const regionMetadata = {
+    us: { i18n: 'location.unitedStates', label: 'United States' },
+    europe: { i18n: 'location.europe', label: 'Europe' },
+} as const;
+const locationGroups = orderedLocationRegions(activeSiteProfile.internalRegion).map((region) => ({
+    ...regionMetadata[region],
+    locations: locationsForRegion(allLocations, region),
+    region,
+}));
 
 function statusLabel(loc: (typeof allLocations)[number]) {
     return locationStatusBadge(loc) || 'Coming Soon';
@@ -55,9 +67,10 @@ function statusClass(loc: (typeof allLocations)[number]) {
     <div class="location-dropdown-title" data-i18n="location.title">Select Your Location</div>
     <div class="location-overlay-body">
         <div class="location-overlay-left">
-            <div class="location-group">
-                <div class="location-group-title" data-i18n="location.unitedStates">United States</div>
-                {usLocations.map((loc) => {
+            {locationGroups.map((group) => (
+                <div class="location-group" data-location-region={group.region}>
+                    <div class="location-group-title" data-i18n={group.i18n}>{group.label}</div>
+                    {group.locations.map((loc) => {
                     const badge = selectorBadge(loc);
                     const externalLocationHref = locationHrefIsExternal(loc);
                     return (
@@ -78,33 +91,9 @@ function statusClass(loc: (typeof allLocations)[number]) {
                         )}
                     </a>
                     );
-                })}
-            </div>
-            <div class="location-group">
-                <div class="location-group-title" data-i18n="location.europe">Europe</div>
-                {euLocations.map((loc) => {
-                    const badge = selectorBadge(loc);
-                    const externalLocationHref = locationHrefIsExternal(loc);
-                    return (
-                    <a
-                        href={locationHref(loc)}
-                        data-city={loc.shortName}
-                        data-tm-location-slug={loc.slug}
-                        data-tm-external-location={externalLocationHref ? 'true' : undefined}
-                        class={statusClass(loc)}
-                        target={externalLocationHref ? '_blank' : undefined}
-                        rel={externalLocationHref ? 'noopener' : undefined}
-                    >
-                        {locationListLabel(loc)}
-                        {badge && (
-                            <span class="coming-soon-tag" data-i18n={selectorBadgeI18n(loc)}>
-                                {' '}{badge}
-                            </span>
-                        )}
-                    </a>
-                    );
-                })}
-            </div>
+                    })}
+                </div>
+            ))}
         </div>
         <div class="location-overlay-divider"></div>
         <div class="location-overlay-right" id="locationInfo">

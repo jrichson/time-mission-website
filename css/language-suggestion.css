@@ -26,13 +26,21 @@
     min-width: 0;
     margin: 0;
     font: 600 0.95rem/1.35 var(--body);
+    overflow-wrap: anywhere;
 }
 
 .language-suggestion-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    max-width: 100%;
+    padding: 0 0.25rem;
     color: var(--orange);
     font: 700 0.82rem/1 var(--body);
     text-decoration: none;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .language-suggestion-action:hover,
@@ -55,8 +63,32 @@
 
 @media (max-width: 480px) {
     .language-suggestion {
-        right: 0.75rem;
+        right: max(0.75rem, env(safe-area-inset-right));
+        left: max(0.75rem, env(safe-area-inset-left));
         bottom: max(0.75rem, env(safe-area-inset-bottom));
-        width: calc(100vw - 1.5rem);
+        grid-template-areas:
+            "message dismiss"
+            "action action";
+        grid-template-columns: minmax(0, 1fr) 2.75rem;
+        row-gap: 0.25rem;
+        width: auto;
+        padding: 0.75rem 0.5rem 0.75rem 1rem;
+    }
+
+    .language-suggestion p {
+        grid-area: message;
+    }
+
+    .language-suggestion-action {
+        grid-area: action;
+        justify-self: start;
+        min-height: 2.5rem;
+        padding: 0.35rem 0;
+        line-height: 1.25;
+        white-space: normal;
+    }
+
+    .language-suggestion-dismiss {
+        grid-area: dismiss;
     }
 }

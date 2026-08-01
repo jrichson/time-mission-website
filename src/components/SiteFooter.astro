@@ -4,7 +4,11 @@
  * Canonical site footer rendered by SiteLayout.
  */
 import { allLocations, type LocationRecord } from '../data/locations';
-import { locationsForRegion, locationListLabel } from '../lib/location-list';
+import {
+    locationsForRegion,
+    locationListLabel,
+    orderedLocationRegions,
+} from '../lib/location-list';
 import {
     locationAddressLines,
     locationContactHref,
@@ -15,6 +19,7 @@ import {
     locationStatusBadge,
 } from '../lib/location-view';
 import { isTmOpsContactFormLocation } from '../lib/contact-routing-policy.mjs';
+import { activeSiteProfile } from '../lib/site-profile';
 
 interface Props {
     pageLocation?: LocationRecord | null;
@@ -39,8 +44,15 @@ const teamApplicationUrls: Record<string, string> = {
     nashville: 'https://app.connecteam.com/#/apply?link=7d0b94ee-d43c-461f-aad4-424e8544e699',
 };
 const teamApplicationUrl = pageLocation ? teamApplicationUrls[pageLocation.slug] || '' : '';
-const footerUsLocations = locationsForRegion(allLocations, 'us');
-const footerEuropeLocations = locationsForRegion(allLocations, 'europe');
+const footerRegionMetadata = {
+    us: { i18n: 'location.unitedStates', label: 'United States' },
+    europe: { i18n: 'location.europe', label: 'Europe' },
+} as const;
+const footerLocationGroups = orderedLocationRegions(activeSiteProfile.internalRegion).map((region) => ({
+    ...footerRegionMetadata[region],
+    locations: locationsForRegion(allLocations, region),
+    region,
+}));
 
 function hoursFallbackForLocation(loc: LocationRecord | null): string {
     if (!loc) return '';
@@ -120,52 +132,31 @@ const hasPageLocation = Boolean(pageLocation);
         <div class="footer-column footer-locations-column">
             <h3 class="footer-locations-title">{footerLocationName || 'LOCATIONS'}</h3>
             <div class="footer-locations-dropdown" hidden={hasPageLocation}>
-                <div class="footer-location-group">
-                    <button type="button" class="footer-location-toggle">
-                        United States
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 9l6 6 6-6"></path>
-                        </svg>
-                    </button>
-                    <div class="footer-location-list">
-                        {footerUsLocations.map((loc) => {
-                            const statusLabel = locationStatusBadge(loc);
-                            return (
-                                <a
-                                    href={locationHref(loc)}
-                                    class={statusLabel ? 'coming-soon' : undefined}
-                                    target={locationHrefIsExternal(loc) ? '_blank' : undefined}
-                                    rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
-                                >
-                                    {locationListLabel(loc)} {statusLabel && <span class="coming-soon-tag">{statusLabel}</span>}
-                                </a>
-                            );
-                        })}
+                {footerLocationGroups.map((group) => (
+                    <div class="footer-location-group" data-location-region={group.region}>
+                        <button type="button" class="footer-location-toggle">
+                            <span data-i18n={group.i18n}>{group.label}</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"></path>
+                            </svg>
+                        </button>
+                        <div class="footer-location-list">
+                            {group.locations.map((loc) => {
+                                const statusLabel = locationStatusBadge(loc);
+                                return (
+                                    <a
+                                        href={locationHref(loc)}
+                                        class={statusLabel ? 'coming-soon' : undefined}
+                                        target={locationHrefIsExternal(loc) ? '_blank' : undefined}
+                                        rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
+                                    >
+                                        {locationListLabel(loc)} {statusLabel && <span class="coming-soon-tag">{statusLabel}</span>}
+                                    </a>
+                                );
+                            })}
+                        </div>
                     </div>
-                </div>
-                <div class="footer-location-group">
-                    <button type="button" class="footer-location-toggle">
-                        Europe
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 9l6 6 6-6"></path>
-                        </svg>
-                    </button>
-                    <div class="footer-location-list">
-                        {footerEuropeLocations.map((loc) => {
-                            const statusLabel = locationStatusBadge(loc);
-                            return (
-                                <a
-                                    href={locationHref(loc)}
-                                    class={statusLabel ? 'coming-soon' : undefined}
-                                    target={locationHrefIsExternal(loc) ? '_blank' : undefined}
-                                    rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
-                                >
-                                    {locationListLabel(loc)} {statusLabel && <span class="coming-soon-tag">{statusLabel}</span>}
-                                </a>
-                            );
-                        })}
-                    </div>
-                </div>
+                ))}
             </div>
             <div class="footer-location-info" hidden={!hasPageLocation}>
                 <div class="footer-loc-detail">

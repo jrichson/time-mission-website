@@ -5,6 +5,12 @@ const REGION_ORDER: Record<string, number> = {
     europe: 1,
 };
 
+export type LocationRegion = 'us' | 'europe';
+
+export function orderedLocationRegions(primaryRegion: string): LocationRegion[] {
+    return primaryRegion === 'europe' ? ['europe', 'us'] : ['us', 'europe'];
+}
+
 function cityName(loc: LocationRecord): string {
     return loc.shortName || loc.address.city || loc.name || loc.id;
 }

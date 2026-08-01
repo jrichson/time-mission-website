@@ -66,11 +66,48 @@ test('browser language produces a suggestion instead of a forced redirect', asyn
   await expect(page).toHaveURL(/\/antwerp$/);
   const suggestion = page.locator('[data-language-suggestion]');
   await expect(suggestion).toBeVisible();
-  await expect(suggestion).toContainText('Nederlands');
-  await expect(suggestion.locator('[data-language-suggestion-link]')).toHaveAttribute(
-    'href',
-    /\/nl\/antwerp$/,
-  );
+  await expect(suggestion).toHaveAttribute('lang', 'nl');
+  await expect(suggestion.locator('[data-language-suggestion-copy]'))
+    .toHaveText('Deze site in het Nederlands bekijken?');
+  const action = suggestion.locator('[data-language-suggestion-link]');
+  await expect(action).toHaveText('Bekijk in het Nederlands');
+  await expect(action).toHaveAttribute('href', /\/nl\/antwerp$/);
+
+  const layout = await suggestion.evaluate((element) => {
+    const card = element.getBoundingClientRect();
+    const copy = element.querySelector('[data-language-suggestion-copy]').getBoundingClientRect();
+    const link = element.querySelector('[data-language-suggestion-link]').getBoundingClientRect();
+    return {
+      card: { bottom: card.bottom, left: card.left, right: card.right, top: card.top },
+      copyBottom: copy.bottom,
+      linkTop: link.top,
+      viewportHeight: window.innerHeight,
+      viewportWidth: window.innerWidth,
+    };
+  });
+  expect(layout.card.left).toBeGreaterThanOrEqual(0);
+  expect(layout.card.right).toBeLessThanOrEqual(layout.viewportWidth);
+  expect(layout.card.top).toBeGreaterThanOrEqual(0);
+  expect(layout.card.bottom).toBeLessThanOrEqual(layout.viewportHeight);
+  if (layout.viewportWidth <= 480) {
+    expect(layout.linkTop).toBeGreaterThanOrEqual(layout.copyBottom - 1);
+  }
+});
+
+test('EU navigation lists Europe before the United States', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page.locator('.location-overlay-left .location-group').first())
+    .toHaveAttribute('data-location-region', 'europe');
+  await expect(page.locator('.footer-locations-dropdown .footer-location-group').first())
+    .toHaveAttribute('data-location-region', 'europe');
+
+  const overlayOrder = await page.locator('.location-overlay-left .location-group')
+    .evaluateAll((groups) => groups.map((group) => group.getAttribute('data-location-region')));
+  const footerOrder = await page.locator('.footer-locations-dropdown .footer-location-group')
+    .evaluateAll((groups) => groups.map((group) => group.getAttribute('data-location-region')));
+  expect(overlayOrder).toEqual(['europe', 'us']);
+  expect(footerOrder).toEqual(['europe', 'us']);
 });
 
 test('EU consent starts denied and GTM is not requested before opt-in', async ({ page }) => {

@@ -35,8 +35,8 @@
     "en": {
       "language.label": "Language",
       "language.changed": "Language set to {language}",
-      "language.suggestion": "Prefer {language}?",
-      "language.switch": "View site",
+      "language.suggestion": "View this site in English?",
+      "language.switch": "View in English",
       "language.dismiss": "Dismiss language suggestion",
       "consent.title": "We use cookies",
       "consent.description": "We use cookies to improve your experience and measure site performance. You can accept all cookies, reject non-essential cookies, or manage your preferences.",
@@ -214,8 +214,8 @@
     "es": {
       "language.label": "Idioma",
       "language.changed": "Idioma cambiado a {language}",
-      "language.suggestion": "¿Prefieres {language}?",
-      "language.switch": "Ver sitio",
+      "language.suggestion": "¿Ver este sitio en español?",
+      "language.switch": "Ver en español",
       "language.dismiss": "Cerrar sugerencia de idioma",
       "consent.title": "Usamos cookies",
       "consent.description": "Usamos cookies para mejorar tu experiencia y medir el rendimiento del sitio. Puedes aceptar todas, rechazar las no esenciales o administrar tus preferencias.",
@@ -393,8 +393,8 @@
     "nl": {
       "language.label": "Taal",
       "language.changed": "Taal ingesteld op {language}",
-      "language.suggestion": "Liever {language}?",
-      "language.switch": "Website bekijken",
+      "language.suggestion": "Deze site in het Nederlands bekijken?",
+      "language.switch": "Bekijk in het Nederlands",
       "language.dismiss": "Taalsuggestie sluiten",
       "consent.title": "Wij gebruiken cookies",
       "consent.description": "We gebruiken cookies om je ervaring te verbeteren en de prestaties van de website te meten. Je kunt alle cookies accepteren, niet-essentiële cookies weigeren of je voorkeuren beheren.",
@@ -572,8 +572,8 @@
     "fr": {
       "language.label": "Langue",
       "language.changed": "Langue définie sur {language}",
-      "language.suggestion": "Vous préférez {language} ?",
-      "language.switch": "Voir le site",
+      "language.suggestion": "Voir ce site en français ?",
+      "language.switch": "Voir en français",
       "language.dismiss": "Fermer la suggestion de langue",
       "consent.title": "Nous utilisons des cookies",
       "consent.description": "Nous utilisons des cookies pour améliorer votre expérience et mesurer les performances du site. Vous pouvez tout accepter, refuser les cookies non essentiels ou gérer vos préférences.",
