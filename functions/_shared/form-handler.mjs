@@ -1,4 +1,4 @@
-import { tmOpsGroupsRecipient } from '../../src/lib/contact-routing-policy.mjs';
+import { tmOpsGroupsRecipient } from './contact-routing-policy.mjs';
 
 const MAX_BODY_BYTES = 16 * 1024;
 const MAX_FIELD_LENGTH = 2000;
