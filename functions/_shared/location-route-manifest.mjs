@@ -5,13 +5,13 @@ export const LOCATION_ROUTE_ENTRIES = [
     "compatibilitySources": [
       "mountprospect"
     ],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.com/mount-prospect",
     "officialAlternate": "mt-prospect"
   },
   {
     "canonicalPath": "/philadelphia",
     "compatibilitySources": [],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.com/philadelphia",
     "officialAlternate": "philly"
   },
   {
@@ -20,7 +20,7 @@ export const LOCATION_ROUTE_ENTRIES = [
       "westnyack",
       "palisades"
     ],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.com/west-nyack",
     "officialAlternate": "palisades-center"
   },
   {
@@ -28,25 +28,25 @@ export const LOCATION_ROUTE_ENTRIES = [
     "compatibilitySources": [
       "providence"
     ],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.com/lincoln",
     "officialAlternate": "r1-indoor-karting"
   },
   {
     "canonicalPath": "/manassas",
     "compatibilitySources": [],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.com/manassas",
     "officialAlternate": "manassas-mall"
   },
   {
     "canonicalPath": "/houston",
     "compatibilitySources": [],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.com/houston",
     "officialAlternate": "marq-e"
   },
   {
     "canonicalPath": "/antwerp",
     "compatibilitySources": [],
-    "externalUrl": "https://www.timemission.eu/antwerp",
+    "externalUrl": "",
     "officialAlternate": "experience-factory-antwerp"
   },
   {
@@ -54,43 +54,43 @@ export const LOCATION_ROUTE_ENTRIES = [
     "compatibilitySources": [
       "orlandpark"
     ],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.com/orland-park",
     "officialAlternate": ""
   },
   {
     "canonicalPath": "/brussels",
     "compatibilitySources": [],
-    "externalUrl": "https://www.timemission.eu/brussels",
+    "externalUrl": "",
     "officialAlternate": "terminal1"
   },
   {
     "canonicalPath": "/eindhoven",
     "compatibilitySources": [],
-    "externalUrl": "https://www.timemission.eu/eindhoven",
+    "externalUrl": "",
     "officialAlternate": ""
   },
   {
     "canonicalPath": "/dallas",
     "compatibilitySources": [],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.com/dallas",
     "officialAlternate": ""
   },
   {
     "canonicalPath": "/nashville",
     "compatibilitySources": [],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.com/nashville",
     "officialAlternate": ""
   },
   {
     "canonicalPath": "/boston",
     "compatibilitySources": [],
-    "externalUrl": "",
+    "externalUrl": "https://www.timemission.com/boston",
     "officialAlternate": ""
   },
   {
     "canonicalPath": "/edison",
     "compatibilitySources": [],
-    "externalUrl": "https://www.superchargednj.com/",
+    "externalUrl": "https://www.timemission.com/edison",
     "officialAlternate": ""
   }
 ];

@@ -1,10 +1,5 @@
 import type { LocationRecord } from '../data/locations';
 
-const REGION_ORDER: Record<string, number> = {
-    us: 0,
-    europe: 1,
-};
-
 export type LocationRegion = 'us' | 'europe';
 
 export function orderedLocationRegions(primaryRegion: string): LocationRegion[] {
@@ -23,9 +18,15 @@ function regionLabel(loc: LocationRecord): string {
     return loc.address.state || loc.countryCode || loc.region.toUpperCase();
 }
 
-function sortKey(loc: LocationRecord): string {
+function regionOrder(region: string, primaryRegion: string): number {
+    if (region === primaryRegion) return 0;
+    if (region === 'us' || region === 'europe') return 1;
+    return 99;
+}
+
+function sortKey(loc: LocationRecord, primaryRegion: string): string {
     return [
-        REGION_ORDER[loc.region] ?? 99,
+        regionOrder(loc.region, primaryRegion),
         regionLabel(loc).toLocaleUpperCase('en-US'),
         cityName(loc).toLocaleUpperCase('en-US'),
     ].join('|');
@@ -35,8 +36,10 @@ export function locationListLabel(loc: LocationRecord): string {
     return `${regionLabel(loc)} – ${cityName(loc)}`;
 }
 
-export function sortLocationsForList(locations: LocationRecord[]): LocationRecord[] {
-    return locations.slice().sort((a, b) => sortKey(a).localeCompare(sortKey(b), 'en-US'));
+export function sortLocationsForList(locations: LocationRecord[], primaryRegion = 'us'): LocationRecord[] {
+    return locations
+        .slice()
+        .sort((a, b) => sortKey(a, primaryRegion).localeCompare(sortKey(b, primaryRegion), 'en-US'));
 }
 
 export function locationsForRegion(locations: LocationRecord[], region: string): LocationRecord[] {

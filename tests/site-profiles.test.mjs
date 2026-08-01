@@ -11,6 +11,8 @@ import {
 } from '../config/site-profiles.mjs';
 import { renderEuWranglerConfig } from '../scripts/lib/eu-wrangler-config.mjs';
 import { orderedLocationRegions } from '../src/lib/location-list';
+import { ticketPanelSelectOptions } from '../src/lib/ticket-options';
+import geoAnswerBlocks from '../src/data/site/geo-answer-blocks.json';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 
@@ -52,6 +54,19 @@ describe('site deployment profiles', () => {
   it('orders the active region first in location navigation', () => {
     expect(orderedLocationRegions('us')).toEqual(['us', 'europe']);
     expect(orderedLocationRegions('europe')).toEqual(['europe', 'us']);
+
+    const options = ticketPanelSelectOptions(
+      [location('houston'), location('eindhoven'), location('antwerp')],
+      'europe',
+    );
+    expect(options.map((option) => option.value)).toEqual(['antwerp', 'eindhoven', 'houston']);
+  });
+
+  it('keeps EU answer blocks focused on European venue facts', () => {
+    expect(geoAnswerBlocks.profiles.eu.locations.text).toContain('Eindhoven is coming soon');
+    expect(geoAnswerBlocks.profiles.eu.locations.text).toContain('Hermanus Boexstraat 4');
+    expect(geoAnswerBlocks.profiles.eu.pricing.text).toContain('current euro prices');
+    expect(geoAnswerBlocks.profiles.eu.pricing.text).not.toContain('Military');
   });
 
   it('keeps only regional locations operational on each site', () => {
@@ -82,13 +97,52 @@ describe('site deployment profiles', () => {
     });
   });
 
-  it('does not create a self-referential booking loop for Brussels', () => {
+  it('keeps Brussels on its local page with the verified Roller checkout', () => {
     const eu = resolveSiteProfile({ TM_SITE_PROFILE: 'eu' });
     const brussels = publicLocationForProfile(location('brussels'), eu);
 
     expect(brussels.pagePath).toBe('/brussels');
-    expect(brussels.bookingUrl).toBe('');
+    expect(brussels.bookingUrl).toBe('https://ecom.roller.app/terminal1/timemission/nl/products');
+    expect(brussels.rollerCheckoutUrl).toBe('https://ecom.roller.app/terminal1/timemission/nl/products');
+    expect(brussels.bookingProvider).toBe('roller');
     expect(brussels.externalUrl).toBeUndefined();
+  });
+
+  it('publishes verified European venue facts without making Eindhoven bookable', () => {
+    const antwerp = location('antwerp');
+    const brussels = location('brussels');
+    const eindhoven = location('eindhoven');
+
+    expect(antwerp).toMatchObject({
+      currency: 'EUR',
+      locale: 'nl-BE',
+      timeZone: 'Europe/Brussels',
+    });
+    expect(antwerp.hours).toMatchObject({
+      mon: { open: '16:00', close: '22:00', label: '16:00 - 22:00' },
+      fri: { open: '16:00', close: '00:00', label: '16:00 - 00:00' },
+      sat: { open: '11:00', close: '00:00', label: '11:00 - 00:00' },
+    });
+    expect(brussels).toMatchObject({
+      alternateName: 'Time Mission Brussels at Terminal 1',
+      venueName: 'Terminal 1',
+      contact: { phone: '', email: 'brussels@timemission.com' },
+      geo: { latitude: 50.898211, longitude: 4.3342982 },
+      localBusinessSchemaEligible: true,
+    });
+    expect(eindhoven).toMatchObject({
+      status: 'coming-soon',
+      address: {
+        line1: 'Hermanus Boexstraat 4',
+        city: 'Eindhoven',
+        zip: '5611 PJ',
+        country: 'Netherlands',
+      },
+      bookingUrl: '',
+      currency: 'EUR',
+      locale: 'nl-NL',
+      timeZone: 'Europe/Amsterdam',
+    });
   });
 
   it('preserves a third-party venue link for an internal location', () => {

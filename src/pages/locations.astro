@@ -2,7 +2,11 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
-import { locationsForRegion, locationListLabel } from '../lib/location-list';
+import {
+    locationsForRegion,
+    locationListLabel,
+    orderedLocationRegions,
+} from '../lib/location-list';
 import {
     locationAddressText,
     locationContactItems,
@@ -14,10 +18,20 @@ import {
 } from '../lib/location-view';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 import geoAnswerBlocks from '../data/site/geo-answer-blocks.json';
+import { activeSiteProfile } from '../lib/site-profile';
 
-const usLocs = locationsForRegion(allLocations, 'us');
-const euLocs = locationsForRegion(allLocations, 'europe');
-const locationsAnswer = geoAnswerBlocks.blocks.locations;
+const regionMetadata = {
+    us: { i18n: 'location.unitedStates', label: 'United States' },
+    europe: { i18n: 'location.europe', label: 'Europe' },
+} as const;
+const locationGroups = orderedLocationRegions(activeSiteProfile.internalRegion).map((region) => ({
+    ...regionMetadata[region],
+    locations: locationsForRegion(allLocations, region),
+    region,
+}));
+const locationsAnswer = activeSiteProfile.id === 'eu'
+    ? geoAnswerBlocks.profiles.eu.locations
+    : geoAnswerBlocks.blocks.locations;
 
 const ld = serializeGraph(
     buildSimpleGraph([
@@ -64,113 +78,60 @@ const page = definePage({ canonicalPath: '/locations' });
 
         <section class="locations-grid">
             <div class="locations-list">
-                <div class="loc-group">
-                    <div class="loc-group-title">United States</div>
-                    {
-                        usLocs.map((loc) => (
-                            <a
-                                href={locationHref(loc)}
-                                target={locationHrefIsExternal(loc) ? '_blank' : undefined}
-                                rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
-                                class:list={[
-                                    'loc-row',
-                                    'reveal',
-                                    { 'is-coming-soon': loc.status === 'coming-soon' },
-                                    { 'is-temporarily-closed': loc.status === 'temporarily-closed' },
-                                ]}
-                            >
-                                <span class="loc-state">{locationStateBadge(loc)}</span>
-                                <div class="loc-body">
-                                    <div class="loc-name">
-                                        {locationListLabel(loc)}
-                                        {locationStatusBadge(loc) ? (
-                                            <span class="loc-coming-soon-tag">{locationStatusBadge(loc)}</span>
-                                        ) : null}
-                                    </div>
-                                    <div class="loc-status">{locationHeadlineStatus(loc)}</div>
-                                    <div class="loc-address">{locationAddressText(loc)}</div>
-                                    <div class="loc-contact">
-                                        {
-                                            locationContactItems(loc).length ? (
-                                                locationContactItems(loc).map((item) => (
-                                                    <span class:list={['loc-contact-item', `is-${item.kind}`]}>
-                                                        {item.label}
-                                                    </span>
-                                                ))
-                                            ) : (
-                                                <span class="loc-contact-muted">Contact details coming soon</span>
-                                            )
-                                        }
-                                    </div>
-                                </div>
-                                <svg
-                                    class="loc-arrow"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    aria-hidden="true"
+                {locationGroups.map((group) => (
+                    <div class="loc-group" data-location-region={group.region}>
+                        <div class="loc-group-title" data-i18n={group.i18n}>{group.label}</div>
+                        {group.locations.map((loc) => {
+                            const contactItems = locationContactItems(loc);
+                            return (
+                                <a
+                                    href={locationHref(loc)}
+                                    target={locationHrefIsExternal(loc) ? '_blank' : undefined}
+                                    rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
+                                    class:list={[
+                                        'loc-row',
+                                        'reveal',
+                                        { 'is-coming-soon': loc.status === 'coming-soon' },
+                                        { 'is-temporarily-closed': loc.status === 'temporarily-closed' },
+                                    ]}
                                 >
-                                    <path d="M5 12h14M12 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                        ))
-                    }
-                </div>
-
-                <div class="loc-group">
-                    <div class="loc-group-title">Europe</div>
-                    {
-                        euLocs.map((loc) => (
-                            <a
-                                href={locationHref(loc)}
-                                target={locationHrefIsExternal(loc) ? '_blank' : undefined}
-                                rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
-                                class:list={[
-                                    'loc-row',
-                                    'reveal',
-                                    { 'is-coming-soon': loc.status === 'coming-soon' },
-                                    { 'is-temporarily-closed': loc.status === 'temporarily-closed' },
-                                ]}
-                            >
-                                <span class="loc-state">{locationStateBadge(loc)}</span>
-                                <div class="loc-body">
-                                    <div class="loc-name">
-                                        {locationListLabel(loc)}
-                                        {locationStatusBadge(loc) ? (
-                                            <span class="loc-coming-soon-tag">{locationStatusBadge(loc)}</span>
-                                        ) : null}
+                                    <span class="loc-state">{locationStateBadge(loc)}</span>
+                                    <div class="loc-body">
+                                        <div class="loc-name">
+                                            {locationListLabel(loc)}
+                                            {locationStatusBadge(loc) ? (
+                                                <span class="loc-coming-soon-tag">{locationStatusBadge(loc)}</span>
+                                            ) : null}
+                                        </div>
+                                        <div class="loc-status">{locationHeadlineStatus(loc)}</div>
+                                        <div class="loc-address">{locationAddressText(loc)}</div>
+                                        <div class="loc-contact">
+                                            {contactItems.length ? (
+                                                    contactItems.map((item) => (
+                                                        <span class:list={['loc-contact-item', `is-${item.kind}`]}>
+                                                            {item.label}
+                                                        </span>
+                                                    ))
+                                                ) : (
+                                                    <span class="loc-contact-muted">Contact details coming soon</span>
+                                                )}
+                                        </div>
                                     </div>
-                                    <div class="loc-status">{locationHeadlineStatus(loc)}</div>
-                                    <div class="loc-address">{locationAddressText(loc)}</div>
-                                    <div class="loc-contact">
-                                        {
-                                            locationContactItems(loc).length ? (
-                                                locationContactItems(loc).map((item) => (
-                                                    <span class:list={['loc-contact-item', `is-${item.kind}`]}>
-                                                        {item.label}
-                                                    </span>
-                                                ))
-                                            ) : (
-                                                <span class="loc-contact-muted">Contact details coming soon</span>
-                                            )
-                                        }
-                                    </div>
-                                </div>
-                                <svg
-                                    class="loc-arrow"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    aria-hidden="true"
-                                >
-                                    <path d="M5 12h14M12 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                        ))
-                    }
-                </div>
+                                    <svg
+                                        class="loc-arrow"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            );
+                        })}
+                    </div>
+                ))}
             </div>
         </section>
 

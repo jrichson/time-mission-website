@@ -52,7 +52,11 @@ function requireFile(rel) {
 const geo = loadJson('src/data/site/geo-answer-blocks.json');
 const registry = loadJson('src/data/routes.json');
 const requiredKeys = ['whatIsTimeMission', 'missions', 'groups', 'locations', 'faq'];
-const allBlocks = Object.entries(geo.blocks || {});
+const activeBlocks = {
+  ...(geo.blocks || {}),
+  ...(geo.profiles?.[profile.id] || {}),
+};
+const allBlocks = Object.entries(activeBlocks);
 
 for (const key of requiredKeys) {
   if (!geo.blocks || !geo.blocks[key]) {
@@ -78,7 +82,7 @@ for (const [key, block] of allBlocks) {
 }
 
 const routeByCanonical = new Map((registry.routes || []).map((route) => [route.canonicalPath, route]));
-const publicBlocks = requiredKeys.map((key) => [key, geo.blocks[key]]).filter(([, block]) => block);
+const publicBlocks = requiredKeys.map((key) => [key, activeBlocks[key]]).filter(([, block]) => block);
 
 for (const [key, block] of publicBlocks) {
   const route = routeByCanonical.get(block.publicPath);

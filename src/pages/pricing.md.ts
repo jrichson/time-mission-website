@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { allLocations, type LocationRecord } from '../data/locations';
 import faqsData from '../data/site/faqs.json';
 import geoAnswerBlocksData from '../data/site/geo-answer-blocks.json';
+import { sortLocationsForList } from '../lib/location-list';
 import { activeSiteProfile } from '../lib/site-profile';
 
 export const prerender = true;
@@ -10,7 +11,9 @@ type FaqItem = { q: string; a: string };
 type FaqSection = { id: string; heading: string; items: FaqItem[] };
 
 const baseUrl = activeSiteProfile.origin;
-const pricingAnswer = geoAnswerBlocksData.blocks.pricing;
+const pricingAnswer = activeSiteProfile.id === 'eu'
+    ? geoAnswerBlocksData.profiles.eu.pricing
+    : geoAnswerBlocksData.blocks.pricing;
 
 function canonicalUrl(path: string): string {
     return path === '/' ? `${baseUrl}/` : `${baseUrl}${path}`;
@@ -35,7 +38,7 @@ function faqAnswer(sectionId: string, question: string): string {
 }
 
 function bookingRows(locations: LocationRecord[]): string {
-    const rows = locations
+    const rows = sortLocationsForList(locations, activeSiteProfile.internalRegion)
         .filter((location) => location.status === 'open')
         .map((location) =>
             `| ${[
@@ -53,6 +56,22 @@ function bookingRows(locations: LocationRecord[]): string {
 }
 
 export const GET: APIRoute = () => {
+    const regionalAdmissionFacts = activeSiteProfile.id === 'eu'
+        ? []
+        : [`- Military discount: ${faqAnswer('general', 'Do you offer a military discount?')}`];
+    const giftCardFacts = activeSiteProfile.id === 'eu'
+        ? [
+            '## Gift Card Availability',
+            '',
+            'No public gift-card checkout is currently listed for Brussels or Antwerp. Use only an official gift-card link supplied by the selected venue.',
+        ]
+        : [
+            '## Gift Card Facts',
+            '',
+            `- Expiration: ${faqAnswer('gift-cards', 'Do gift cards expire?')}`,
+            `- Use cases: ${faqAnswer('gift-cards', 'What can gift cards be used for?')}`,
+            `- Refund policy: ${faqAnswer('gift-cards', 'Can I get a refund on a gift card?')}`,
+        ];
     const sections = [
         '# Time Mission Pricing And Booking Facts',
         '',
@@ -66,7 +85,7 @@ export const GET: APIRoute = () => {
         `- Team size: ${faqAnswer('general', 'How many people can play together?')}`,
         `- Advance booking: ${faqAnswer('general', 'Do I need to book in advance?')}`,
         `- Arrival timing: ${faqAnswer('general', "What if we're late?")}`,
-        `- Military discount: ${faqAnswer('general', 'Do you offer a military discount?')}`,
+        ...regionalAdmissionFacts,
         '',
         '## Group And Event Pricing',
         '',
@@ -76,11 +95,7 @@ export const GET: APIRoute = () => {
         `- Buyout pricing: ${faqAnswer('private-events', 'How is buyout pricing structured?')}`,
         `- Buyout minimum: ${faqAnswer('private-events', "What's the minimum headcount for a buyout?")}`,
         '',
-        '## Gift Card Facts',
-        '',
-        `- Expiration: ${faqAnswer('gift-cards', 'Do gift cards expire?')}`,
-        `- Use cases: ${faqAnswer('gift-cards', 'What can gift cards be used for?')}`,
-        `- Refund policy: ${faqAnswer('gift-cards', 'Can I get a refund on a gift card?')}`,
+        ...giftCardFacts,
         '',
         '## Booking Links By Open Location',
         '',

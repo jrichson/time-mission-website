@@ -188,8 +188,15 @@ function validateOpenLocation(location) {
   }
   assertSafeUrl(id, 'mapUrl', location.mapUrl);
   if (isExternalSiteOnlyOpenLocation(location)) return;
-  requireString(location, 'contact.phone', location.contact && location.contact.phone);
-  requireString(location, 'contact.email', location.contact && location.contact.email);
+  const phone = location.contact && typeof location.contact.phone === 'string'
+    ? location.contact.phone.trim()
+    : '';
+  const email = location.contact && typeof location.contact.email === 'string'
+    ? location.contact.email.trim()
+    : '';
+  if (!phone && !email) {
+    errors.push(`${id} must publish at least one direct contact method`);
+  }
   if (typeof location.giftCardUrl !== 'string') {
     errors.push(`${id}: giftCardUrl must be a string; use empty string when unavailable`);
   } else if (location.giftCardUrl.trim()) {

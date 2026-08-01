@@ -1,9 +1,39 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
-import contactMain from '../partials/contact-main.frag.txt?raw';
+import contactMainRaw from '../partials/contact-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 import { TM_OPS_CONTACT_FORM_LOCATION_SLUGS } from '../lib/contact-routing-policy.mjs';
+import { allLocations } from '../data/locations';
+import { locationsForRegion, locationListLabel, orderedLocationRegions } from '../lib/location-list';
+import { activeSiteProfile } from '../lib/site-profile';
+import { regionalCorporateContactEmail } from '../lib/regional-content';
+
+function escapeHtml(value: string): string {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+const contactRegionLabels = { us: 'United States', europe: 'Europe' } as const;
+const contactLocationOptions = orderedLocationRegions(activeSiteProfile.internalRegion)
+    .map((region) => {
+        const options = locationsForRegion(allLocations, region)
+            .map((location) => (
+                `<option value="${escapeHtml(location.slug)}">${escapeHtml(locationListLabel(location))}</option>`
+            ))
+            .join('');
+        return `<optgroup label="${contactRegionLabels[region]}">${options}</optgroup>`;
+    })
+    .join('');
+const generalContactEmail = regionalCorporateContactEmail(activeSiteProfile);
+const contactPhonePlaceholder = activeSiteProfile.id === 'eu' ? '+32 470 12 34 56' : '+1 555 123 4567';
+const contactMain = contactMainRaw
+    .replaceAll('{{CONTACT_LOCATION_OPTIONS}}', contactLocationOptions)
+    .replaceAll('{{GENERAL_CONTACT_EMAIL}}', generalContactEmail)
+    .replaceAll('{{CONTACT_PHONE_PLACEHOLDER}}', contactPhonePlaceholder);
 
 const ld = serializeGraph(
     buildSimpleGraph([

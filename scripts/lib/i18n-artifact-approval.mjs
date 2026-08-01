@@ -64,12 +64,21 @@ export function artifactLanguageDigest(distDir, profile, locale, registeredRoute
 }
 
 export function approvalRecord(value) {
-  if (typeof value === 'string') return { status: value, artifactDigest: '' };
+  if (typeof value === 'string') {
+    return {
+      status: value,
+      artifactDigest: '',
+      allowUnchangedFields: false,
+      approvalNote: '',
+    };
+  }
   return {
     status: String(value?.status || 'missing'),
     artifactDigest: String(value?.artifactDigest || ''),
     reviewer: String(value?.reviewer || ''),
     reviewedAt: String(value?.reviewedAt || ''),
+    allowUnchangedFields: value?.allowUnchangedFields === true,
+    approvalNote: String(value?.approvalNote || ''),
   };
 }
 

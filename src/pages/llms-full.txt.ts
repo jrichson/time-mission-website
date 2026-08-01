@@ -5,6 +5,7 @@ import faqsData from '../data/site/faqs.json';
 import groupsData from '../data/site/groups.json';
 import seoRoutes from '../data/site/seo-routes.json';
 import geoAnswerBlocksData from '../data/site/geo-answer-blocks.json';
+import { sortLocationsForList } from '../lib/location-list';
 import { activeSiteProfile, isInternalLocation } from '../lib/site-profile';
 
 export const prerender = true;
@@ -17,7 +18,12 @@ type SeoEntry = { title: string; description: string };
 type RouteEntry = { canonicalPath: string; sitemap: boolean };
 
 const baseUrl = activeSiteProfile.origin;
-const citationBlocks = Object.values(geoAnswerBlocksData.blocks) as GeoAnswerBlock[];
+const profileAnswerBlocks = activeSiteProfile.id === 'eu' ? geoAnswerBlocksData.profiles.eu : {};
+const citationBlocks = Object.values({
+    ...geoAnswerBlocksData.blocks,
+    ...profileAnswerBlocks,
+}) as GeoAnswerBlock[];
+const orderedLocations = sortLocationsForList(allLocations, activeSiteProfile.internalRegion);
 
 function canonicalUrl(path: string): string {
     return path === '/' ? `${baseUrl}/` : `${baseUrl}${path}`;
@@ -143,7 +149,7 @@ export const GET: APIRoute = () => {
         ...citationBlocks.flatMap((block) => [`### ${block.heading}`, '', block.text, '']),
         '## Complete Location Facts',
         '',
-        locationRows(allLocations),
+        locationRows(orderedLocations),
         '',
         '## Groups And Events',
         '',

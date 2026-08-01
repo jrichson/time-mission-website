@@ -31,7 +31,7 @@
 
                     <div class="form-group">
                         <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" placeholder="+1 555 123 4567" autocomplete="tel" inputmode="tel" aria-describedby="phone-help" maxlength="40" required>
+                            <input type="tel" id="phone" name="phone" placeholder="{{CONTACT_PHONE_PLACEHOLDER}}" autocomplete="tel" inputmode="tel" aria-describedby="phone-help" maxlength="40" required>
                         <span class="form-help" id="phone-help">We'll use this only to follow up about your inquiry.</span>
                     </div>
 
@@ -40,20 +40,7 @@
                             <label for="location">Location</label>
                             <select id="location" name="location" required>
                                 <option value="">Select a Location</option>
-                                <option value="mount-prospect">IL – Mount Prospect</option>
-                                <option value="orland-park">IL – Orland Park</option>
-                                <option value="boston">MA – Boston</option>
-                                <option value="edison">NJ – Edison</option>
-                                <option value="west-nyack">NY – West Nyack</option>
-                                <option value="philadelphia">PA – Philadelphia</option>
-                                <option value="lincoln">RI – Lincoln</option>
-                                <option value="nashville">TN – Nashville</option>
-                                <option value="dallas">TX – Dallas</option>
-                                <option value="houston">TX – Houston</option>
-                                <option value="manassas">VA – Manassas</option>
-                                <option value="antwerp">Belgium – Antwerp</option>
-                                <option value="brussels">Belgium – Brussels</option>
-                                <option value="eindhoven">Netherlands – Eindhoven</option>
+                                {{CONTACT_LOCATION_OPTIONS}}
                                 <option value="general">General Inquiry</option>
                             </select>
                         </div>
@@ -127,7 +114,7 @@
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                             <polyline points="22,6 12,13 2,6"/>
                         </svg>
-                        <a href="mailto:info@timemission.com">info@timemission.com</a>
+                        <a href="mailto:{{GENERAL_CONTACT_EMAIL}}">{{GENERAL_CONTACT_EMAIL}}</a>
                     </div>
                     <div class="contact-info-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -10,8 +10,11 @@ export type TicketPanelOption = {
 };
 
 /** Single source for ticket panel `<select>` options (SSR, checks, and browser via locations.js mirror). */
-export function ticketPanelSelectOptions(locations: LocationRecord[]): TicketPanelOption[] {
-    return sortLocationsForList(locations)
+export function ticketPanelSelectOptions(
+    locations: LocationRecord[],
+    primaryRegion = 'us',
+): TicketPanelOption[] {
+    return sortLocationsForList(locations, primaryRegion)
         .map((loc) => ({
             value: loc.id,
             label:

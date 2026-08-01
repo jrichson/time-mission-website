@@ -1,0 +1,25 @@
+---
+import { allLocations } from '../data/locations';
+import { locationsForRegion, orderedLocationRegions } from '../lib/location-list';
+import { activeSiteProfile } from '../lib/site-profile';
+
+const operatorLocations = orderedLocationRegions(activeSiteProfile.internalRegion)
+    .flatMap((region) => locationsForRegion(allLocations, region))
+    .filter((location) => location.status === 'open' && String(location.contact.email || '').trim());
+
+function operatorLabel(location: (typeof allLocations)[number]): string {
+    const venue = String(location.venueName || '').trim();
+    return venue && !location.name.toLocaleLowerCase().includes(venue.toLocaleLowerCase())
+        ? `${location.name} (at ${venue})`
+        : location.name;
+}
+---
+
+<ul class="legal-contacts">
+    {operatorLocations.map((location) => (
+        <li>
+            <strong>{operatorLabel(location)}:</strong>{' '}
+            <a href={`mailto:${location.contact.email}`}>{location.contact.email}</a>
+        </li>
+    ))}
+</ul>

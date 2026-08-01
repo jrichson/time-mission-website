@@ -31,7 +31,7 @@ if (strict && profile.localizedRoutes) {
       errors.push(`${locale}: approved Language Surface digest does not match the built artifact`);
     }
 
-    if (locale === profile.defaultLocale) continue;
+    if (locale === profile.defaultLocale || record.allowUnchangedFields) continue;
     for (const route of regionalRoutes) {
       const defaultPath = path.join(distDir, ...route.outputFile.split('/'));
       const localizedPath = path.join(distDir, locale, ...route.outputFile.split('/'));

@@ -7,7 +7,7 @@
 
     <!-- Content -->
     <section class="legal-page">
-        <p>This Cookie Policy explains how Time Mission Corp. ("Time Mission," "we," "us," or "our") uses cookies and similar technologies when you visit <a href="https://www.timemission.com">timemission.com</a>. It works alongside our <a href="/privacy">Privacy Policy</a>.</p>
+        <p>This Cookie Policy explains how Time Mission Corp. ("Time Mission," "we," "us," or "our") uses cookies and similar technologies when you visit <a href="{{SITE_ORIGIN}}">{{SITE_DOMAIN}}</a>. It works alongside our <a href="/privacy">Privacy Policy</a>.</p>
 
         <h2>What Are Cookies?</h2>
         <p>Cookies are small text files placed on your device when you visit a website. They let the site remember your preferences, keep you signed in, measure traffic, and support marketing.</p>
@@ -33,7 +33,7 @@
         <p>We may update this policy as our practices or the tools we use change. The "Last Updated" date below reflects the most recent revision.</p>
 
         <h2>Contact</h2>
-        <p>Questions about our cookie practices? Email <a href="mailto:info@timemission.com">info@timemission.com</a>.</p>
+        <p>Questions about our cookie practices? Email <a href="mailto:{{CORPORATE_CONTACT_EMAIL}}">{{CORPORATE_CONTACT_EMAIL}}</a>.</p>
 
         <p class="legal-updated">Last Updated: April 2026</p>
 

@@ -8,6 +8,7 @@ import {
     LIVE_SITE_PAGE_SNAPSHOT,
     LIVE_SITE_SYNC_SOURCE,
 } from '../cms/migration-data/20260730_live_site_snapshot';
+import { EU_LOCATION_OPERATIONAL_SNAPSHOT } from '../cms/migration-data/20260731_eu_location_operational_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -44,8 +45,24 @@ describe('live-site-to-CMS sync snapshot', () => {
             hiddenMissionIds: location.hiddenMissionIds ?? [],
         }));
 
+        const operationalPatches = new Map(
+            EU_LOCATION_OPERATIONAL_SNAPSHOT.map((location) => [location.slug, location]),
+        );
+        const effectiveSnapshot = LIVE_SITE_LOCATION_SNAPSHOT.map((location) => {
+            const patch = operationalPatches.get(location.slug);
+            if (!patch) return location;
+            return {
+                ...location,
+                hours: patch.hours,
+                externalLinks: {
+                    ...location.externalLinks,
+                    ...('externalLinks' in patch ? patch.externalLinks : {}),
+                },
+            };
+        });
+
         expect(LIVE_SITE_SYNC_SOURCE.commit).toBe('6cbae6adde40555535a271155b6c59d4f80db56c');
-        expect(LIVE_SITE_LOCATION_SNAPSHOT).toEqual(expected);
+        expect(effectiveSnapshot).toEqual(expected);
     });
 
     it('captures every code-owned SEO route for the CMS site-page collection', () => {
@@ -82,6 +99,7 @@ describe('live-site-to-CMS sync snapshot', () => {
         );
 
         expect(migrationIndex).toContain('20260730_151000_sync_live_site_to_cms');
+        expect(migrationIndex).toContain('20260731_180000_eu_location_operational_data');
         expect(migration).toContain('LIVE_SITE_LOCATION_SNAPSHOT');
         expect(migration).toContain('LIVE_SITE_PAGE_SNAPSHOT');
         expect(migration).toContain('"announcement_banners"');

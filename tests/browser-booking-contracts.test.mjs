@@ -9,6 +9,31 @@ import {
 } from './browser-contract-helpers.mjs';
 
 describe('browser booking contracts', () => {
+  it('orders browser ticket options by the active deployment region', () => {
+    const { context, window } = createBrowserContext({
+      __TM_SITE_PROFILE__: { internalRegion: 'europe' },
+    });
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+
+    const options = window.TMLocationViews.listTicketOptions([
+      {
+        id: 'houston', slug: 'houston', shortName: 'Houston', region: 'us', status: 'open',
+        address: { city: 'Houston', state: 'TX', country: 'United States' },
+      },
+      {
+        id: 'eindhoven', slug: 'eindhoven', shortName: 'Eindhoven', region: 'europe', status: 'coming-soon',
+        address: { city: 'Eindhoven', state: '', country: 'Netherlands' },
+      },
+      {
+        id: 'antwerp', slug: 'antwerp', shortName: 'Antwerp', region: 'europe', status: 'open',
+        address: { city: 'Antwerp', state: '', country: 'Belgium' },
+      },
+    ]);
+
+    expect(options.map((option) => option.value)).toEqual(['antwerp', 'eindhoven', 'houston']);
+  });
+
   it('LocationContext delegates booking URL decisions to TMBooking after both scripts load', async () => {
     const { context, window } = createBrowserContext({
       TM_DATA: {

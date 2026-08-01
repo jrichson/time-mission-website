@@ -1,8 +1,19 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
-import termsMain from '../partials/terms-main.frag.txt?raw';
+import termsMainRaw from '../partials/terms-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+import OperatorContactList from '../components/OperatorContactList.astro';
+import { activeSiteProfile } from '../lib/site-profile';
+import { applyRegionalContentTokens, splitHtmlSlot } from '../lib/regional-content';
+
+const operatorContactsSlot = '<!-- OPERATOR_CONTACTS_SLOT -->';
+const termsMain = applyRegionalContentTokens(termsMainRaw, activeSiteProfile);
+const [termsMainBeforeContacts, termsMainAfterContacts] = splitHtmlSlot(
+    termsMain,
+    operatorContactsSlot,
+    'Terms operator contacts slot',
+);
 
 const ld = serializeGraph(
     buildSimpleGraph([
@@ -23,5 +34,9 @@ const page = definePage({ canonicalPath: '/terms' });
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
-    <div set:html={termsMain} />
+    <div>
+        <Fragment set:html={termsMainBeforeContacts} />
+        <OperatorContactList />
+        <Fragment set:html={termsMainAfterContacts} />
+    </div>
 </SiteLayout>

@@ -1,8 +1,19 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
-import privacyMain from '../partials/privacy-main.frag.txt?raw';
+import privacyMainRaw from '../partials/privacy-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+import OperatorContactList from '../components/OperatorContactList.astro';
+import { activeSiteProfile } from '../lib/site-profile';
+import { applyRegionalContentTokens, splitHtmlSlot } from '../lib/regional-content';
+
+const operatorContactsSlot = '<!-- OPERATOR_CONTACTS_SLOT -->';
+const privacyMain = applyRegionalContentTokens(privacyMainRaw, activeSiteProfile);
+const [privacyMainBeforeContacts, privacyMainAfterContacts] = splitHtmlSlot(
+    privacyMain,
+    operatorContactsSlot,
+    'Privacy operator contacts slot',
+);
 
 const ld = serializeGraph(
     buildSimpleGraph([
@@ -23,5 +34,9 @@ const page = definePage({ canonicalPath: '/privacy' });
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
-    <div set:html={privacyMain} />
+    <div>
+        <Fragment set:html={privacyMainBeforeContacts} />
+        <OperatorContactList />
+        <Fragment set:html={privacyMainAfterContacts} />
+    </div>
 </SiteLayout>

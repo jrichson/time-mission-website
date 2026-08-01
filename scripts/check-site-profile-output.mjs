@@ -7,8 +7,10 @@ import { fileURLToPath } from 'node:url';
 import {
   isInternalLocation,
   localizedPath,
+  publicLocationsForProfile,
   resolveSiteProfile,
 } from '../config/site-profiles.mjs';
+import { LOCATION_ROUTE_ENTRIES } from '../functions/_shared/location-route-manifest.mjs';
 import {
   compileRegionalHtmlRoutes,
   localeHtmlLang,
@@ -117,6 +119,27 @@ function checkLocationIsolation() {
       || location.briqWidget
     ) {
       errors.push(`${location.slug}: external location exposes local booking or route capabilities`);
+    }
+  }
+}
+
+function checkLocationRouteManifest() {
+  const publicLocations = publicLocationsForProfile(locations, profile);
+  const entryByPath = new Map(LOCATION_ROUTE_ENTRIES.map((entry) => [entry.canonicalPath, entry]));
+
+  for (const location of publicLocations) {
+    const canonicalPath = `/${location.slug}`;
+    const entry = entryByPath.get(canonicalPath);
+    if (!entry) {
+      errors.push(`${canonicalPath}: missing from the Cloudflare location route manifest`);
+      continue;
+    }
+
+    const expectedExternalUrl = location.externalUrl || '';
+    if (entry.externalUrl !== expectedExternalUrl) {
+      errors.push(
+        `${canonicalPath}: route manifest externalUrl must be ${JSON.stringify(expectedExternalUrl)}`,
+      );
     }
   }
 }
@@ -262,6 +285,7 @@ if (!fs.existsSync(distDir)) {
 
 checkArtifactIdentity();
 checkLocationIsolation();
+checkLocationRouteManifest();
 checkRegisteredHtml();
 checkSitemapAndRedirects();
 checkTurnstileBuildConfig();

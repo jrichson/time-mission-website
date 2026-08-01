@@ -31,7 +31,7 @@
         <a href="mailto:info@timemission.eu">info@timemission.eu</a></p>
 
         <h2>Start a Conversation</h2>
-        <p>Email <a href="mailto:info@timemission.com?subject=Licensing%20Inquiry">info@timemission.com</a> with a short note about your market, venue, and timeline. We'll send the full brochure and set up a call.</p>
+        <p>Email <a href="mailto:{{CORPORATE_CONTACT_EMAIL}}?subject=Licensing%20Inquiry">{{CORPORATE_CONTACT_EMAIL}}</a> with a short note about your market, venue, and timeline. We'll send the full brochure and set up a call.</p>
 
         <p class="legal-updated">Last Updated: April 2026</p>
 

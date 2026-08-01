@@ -1,8 +1,12 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
-import cookiesMain from '../partials/cookies-main.frag.txt?raw';
+import cookiesMainRaw from '../partials/cookies-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+import { activeSiteProfile } from '../lib/site-profile';
+import { applyRegionalContentTokens } from '../lib/regional-content';
+
+const cookiesMain = applyRegionalContentTokens(cookiesMainRaw, activeSiteProfile);
 
 const ld = serializeGraph(
     buildSimpleGraph([

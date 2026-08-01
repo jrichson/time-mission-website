@@ -676,39 +676,39 @@
       },
       "hours": {
         "mon": {
-          "open": "14:00",
-          "close": "23:00",
-          "label": "2pm - 11pm"
+          "open": "16:00",
+          "close": "22:00",
+          "label": "16:00 - 22:00"
         },
         "tue": {
-          "open": "14:00",
-          "close": "23:00",
-          "label": "2pm - 11pm"
+          "open": "16:00",
+          "close": "22:00",
+          "label": "16:00 - 22:00"
         },
         "wed": {
           "open": "14:00",
           "close": "23:00",
-          "label": "2pm - 11pm"
+          "label": "14:00 - 23:00"
         },
         "thu": {
-          "open": "14:00",
-          "close": "23:00",
-          "label": "2pm - 11pm"
+          "open": "16:00",
+          "close": "22:00",
+          "label": "16:00 - 22:00"
         },
         "fri": {
-          "open": "14:00",
-          "close": "23:00",
-          "label": "2pm - 11pm"
+          "open": "16:00",
+          "close": "00:00",
+          "label": "16:00 - 00:00"
         },
         "sat": {
           "open": "11:00",
-          "close": "23:00",
-          "label": "11am - 11pm"
+          "close": "00:00",
+          "label": "11:00 - 00:00"
         },
         "sun": {
           "open": "11:00",
           "close": "23:00",
-          "label": "11am - 11pm"
+          "label": "11:00 - 23:00"
         }
       },
       "bookingUrl": "https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission",
@@ -750,9 +750,9 @@
       "ticker": "SUMMER ADVENTURES AT TIME MISSION ANTWERP",
       "giftCardUrl": "",
       "countryCode": "BE",
-      "locale": null,
-      "timeZone": null,
-      "currency": null,
+      "locale": "nl-BE",
+      "timeZone": "Europe/Brussels",
+      "currency": "EUR",
       "phoneE164": "+3233010303",
       "hreflang": "nl-BE",
       "localBusinessSchemaEligible": true
@@ -862,8 +862,9 @@
       "id": "brussels",
       "slug": "brussels",
       "name": "Time Mission Brussels",
+      "alternateName": "Time Mission Brussels at Terminal 1",
       "shortName": "Brussels",
-      "venueName": null,
+      "venueName": "Terminal 1",
       "region": "europe",
       "status": "open",
       "address": {
@@ -873,49 +874,55 @@
         "zip": "1020",
         "country": "Belgium"
       },
+      "geo": {
+        "latitude": 50.898211,
+        "longitude": 4.3342982
+      },
       "contact": {
         "phone": "",
-        "email": ""
+        "email": "brussels@timemission.com"
       },
       "hours": {
         "mon": {
           "open": "12:00",
           "close": "18:00",
-          "label": "12pm - 6pm"
+          "label": "12:00 - 18:00"
         },
         "tue": {
           "open": "12:00",
           "close": "18:00",
-          "label": "12pm - 6pm"
+          "label": "12:00 - 18:00"
         },
         "wed": {
           "open": "12:00",
           "close": "20:00",
-          "label": "12pm - 8pm"
+          "label": "12:00 - 20:00"
         },
         "thu": {
           "open": "12:00",
           "close": "20:00",
-          "label": "12pm - 8pm"
+          "label": "12:00 - 20:00"
         },
         "fri": {
           "open": "12:00",
           "close": "22:00",
-          "label": "12pm - 10pm"
+          "label": "12:00 - 22:00"
         },
         "sat": {
           "open": "10:00",
           "close": "22:00",
-          "label": "10am - 10pm"
+          "label": "10:00 - 22:00"
         },
         "sun": {
           "open": "10:00",
           "close": "20:00",
-          "label": "10am - 8pm"
+          "label": "10:00 - 20:00"
         }
       },
-      "bookingUrl": "https://timemission.eu/brussels",
+      "bookingUrl": "https://ecom.roller.app/terminal1/timemission/nl/products",
+      "rollerCheckoutUrl": "https://ecom.roller.app/terminal1/timemission/nl/products",
       "externalUrl": "https://timemission.eu/brussels",
+      "bookingProvider": "roller",
       "hiddenMissionIds": [
         "1001",
         "1005",
@@ -931,12 +938,12 @@
       "ticker": "BRUSSELS NOW OPEN",
       "giftCardUrl": "",
       "countryCode": "BE",
-      "locale": null,
-      "timeZone": null,
-      "currency": null,
+      "locale": "fr-BE",
+      "timeZone": "Europe/Brussels",
+      "currency": "EUR",
       "phoneE164": null,
       "hreflang": "fr-BE",
-      "localBusinessSchemaEligible": false
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "eindhoven",
@@ -965,9 +972,9 @@
       "ticker": "FIRST NETHERLANDS LOCATION COMING SOON",
       "giftCardUrl": "",
       "countryCode": "NL",
-      "locale": null,
-      "timeZone": null,
-      "currency": null,
+      "locale": "nl-NL",
+      "timeZone": "Europe/Amsterdam",
+      "currency": "EUR",
       "phoneE164": null,
       "hreflang": "nl-NL",
       "localBusinessSchemaEligible": false,

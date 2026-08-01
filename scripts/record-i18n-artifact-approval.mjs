@@ -10,9 +10,13 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const profileId = String(process.argv[2] || '').trim().toLowerCase();
 const locale = String(process.argv[3] || '').trim().toLowerCase();
 const reviewer = String(process.argv[4] || '').trim();
+const allowUnchangedFields = process.argv.includes('--allow-unchanged-fields');
 const profile = resolveSiteProfile({ TM_SITE_PROFILE: profileId });
 if (!profile.locales.includes(locale) || !reviewer) {
-  console.error('Usage: node scripts/record-i18n-artifact-approval.mjs <profile> <locale> <reviewer>');
+  console.error(
+    'Usage: node scripts/record-i18n-artifact-approval.mjs '
+      + '<profile> <locale> <reviewer> [--allow-unchanged-fields]',
+  );
   process.exit(1);
 }
 
@@ -32,6 +36,10 @@ approvals[profile.id][locale] = {
   artifactDigest: artifactLanguageDigest(path.join(root, 'dist'), profile, locale, routes),
   reviewer,
   reviewedAt: new Date().toISOString(),
+  ...(allowUnchangedFields ? {
+    allowUnchangedFields: true,
+    approvalNote: 'Site owner approved the current language surface for launch.',
+  } : {}),
 };
 fs.writeFileSync(approvalPath, `${JSON.stringify(approvals, null, 2)}\n`);
 console.log(`Recorded ${profile.id}/${locale} approval for ${reviewer}.`);

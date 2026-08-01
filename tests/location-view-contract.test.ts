@@ -7,6 +7,7 @@ import { allLocations, type LocationRecord } from '../src/data/locations';
 import {
     locationCtaView,
     locationHoursRows,
+    locationStateBadge,
     locationViewModel,
     type LocationViewModel,
 } from '../src/lib/location-view';
@@ -65,6 +66,15 @@ describe('Location View contract', () => {
         if (!nashville) throw new Error('Nashville location missing');
 
         expect(nashville.contact.email).toBe('nashville@timemission.com');
+    });
+
+    it('uses each European location country code for its compact badge', () => {
+        const antwerp = allLocations.find((loc) => loc.id === 'antwerp');
+        const eindhoven = allLocations.find((loc) => loc.id === 'eindhoven');
+        if (!antwerp || !eindhoven) throw new Error('European locations missing');
+
+        expect(locationStateBadge(antwerp)).toBe('BE');
+        expect(locationStateBadge(eindhoven)).toBe('NL');
     });
 
     it('gives Edison a local page while keeping its Supercharged NJ action', () => {

@@ -7,6 +7,7 @@ import analyticsLabels from '../data/site/analytics-labels.json';
 import { fingerprintAnalyticsLabels } from './analytics-labels-fingerprint';
 import { locationsFingerprintFromRecords } from './locations-fingerprint';
 import { locationScopedCanonicalPaths } from './public-url-surface';
+import { activeSiteProfile } from './site-profile';
 import { ticketPanelSelectOptions, type TicketPanelOption } from './ticket-options';
 
 export type SiteContractMode = 'sources' | 'build';
@@ -51,7 +52,7 @@ function locationScopedPaths(): string[] {
 }
 
 export function compileSiteContract(mode: SiteContractMode): SiteContractSnapshot {
-    const options = ticketPanelSelectOptions(allLocations);
+    const options = ticketPanelSelectOptions(allLocations, activeSiteProfile.internalRegion);
     const overlaySample = allLocations.find((l) => l.status === 'open' && !l.externalUrl) || allLocations[0];
     const roster = allLocations.map((loc) => ({
         id: loc.id,

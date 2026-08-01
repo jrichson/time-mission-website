@@ -255,11 +255,6 @@
         BookingJourney.applyCtaView(el, cta);
     }
 
-    var REGION_ORDER = {
-        us: 0,
-        europe: 1,
-    };
-
     function normalizeListDash(value) {
         return String(value || '').replace(/\s+[-–—]\s+/g, ' – ').trim();
     }
@@ -285,9 +280,8 @@
 
     function locationListSortKey(loc) {
         var region = (loc && loc.region) || '';
-        var regionOrder = Object.prototype.hasOwnProperty.call(REGION_ORDER, region)
-            ? REGION_ORDER[region]
-            : 99;
+        var primaryRegion = (window.__TM_SITE_PROFILE__ && window.__TM_SITE_PROFILE__.internalRegion) || 'us';
+        var regionOrder = region === primaryRegion ? 0 : (region === 'us' || region === 'europe' ? 1 : 99);
         return [
             regionOrder,
             locationListRegion(loc).toLocaleUpperCase('en-US'),

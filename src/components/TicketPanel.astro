@@ -2,13 +2,14 @@
 import { allLocations } from '../data/locations';
 import { locationTeamSizeLabel } from '../lib/location-team-size';
 import { ticketPanelSelectOptions } from '../lib/site-contract';
+import { activeSiteProfile } from '../lib/site-profile';
 
 interface Props {
     pageLocationSlug?: string;
 }
 
 const { pageLocationSlug = '' } = Astro.props;
-const ticketOptions = ticketPanelSelectOptions(allLocations);
+const ticketOptions = ticketPanelSelectOptions(allLocations, activeSiteProfile.internalRegion);
 const pageLocation = pageLocationSlug
     ? allLocations.find((loc) => loc.id === pageLocationSlug || loc.slug === pageLocationSlug)
     : null;

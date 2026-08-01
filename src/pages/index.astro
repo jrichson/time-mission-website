@@ -6,10 +6,19 @@ import { applyTmMediaBase } from '../lib/tm-media';
 import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 import { homePageTaglines } from '../lib/page-taglines';
 import PageWidgetsScripts from '../components/PageWidgetsScripts.astro';
+import HomeTestimonials from '../components/HomeTestimonials.astro';
+import { activeSiteProfile } from '../lib/site-profile';
+import { splitHtmlSlot } from '../lib/regional-content';
 
 const ld = serializeGraph(buildHomeGraph());
 const page = definePage({ canonicalPath: '/' });
+const profileProofSlot = '<!-- HOME_PROFILE_PROOF_SLOT -->';
 const indexMain = applyTmMediaBase(indexMainRaw);
+const [indexMainBeforeProof, indexMainAfterProof] = splitHtmlSlot(
+    indexMain,
+    profileProofSlot,
+    'Homepage profile proof slot',
+);
 const pageInit = {
     mode: 'index',
     config: {
@@ -34,7 +43,11 @@ const pageInit = {
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
-    <div class="home-main" set:html={indexMain} />
+    <div class="home-main">
+        <Fragment set:html={indexMainBeforeProof} />
+        {activeSiteProfile.id === 'us' && <HomeTestimonials />}
+        <Fragment set:html={indexMainAfterProof} />
+    </div>
     <Fragment slot="after-site-scripts">
         <PageWidgetsScripts pageInit={pageInit} />
     </Fragment>

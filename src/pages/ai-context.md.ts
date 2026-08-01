@@ -3,6 +3,7 @@ import { allLocations, type LocationRecord } from '../data/locations';
 import faqsData from '../data/site/faqs.json';
 import groupsData from '../data/site/groups.json';
 import geoAnswerBlocksData from '../data/site/geo-answer-blocks.json';
+import { sortLocationsForList } from '../lib/location-list';
 import { activeSiteProfile } from '../lib/site-profile';
 
 export const prerender = true;
@@ -13,7 +14,12 @@ type GroupItem = { id: string; title: string; blurb: string; canonicalPath: stri
 type GeoAnswerBlock = { heading: string; text: string; publicPath: string };
 
 const baseUrl = activeSiteProfile.origin;
-const citationBlocks = Object.values(geoAnswerBlocksData.blocks) as GeoAnswerBlock[];
+const profileAnswerBlocks = activeSiteProfile.id === 'eu' ? geoAnswerBlocksData.profiles.eu : {};
+const citationBlocks = Object.values({
+    ...geoAnswerBlocksData.blocks,
+    ...profileAnswerBlocks,
+}) as GeoAnswerBlock[];
+const orderedLocations = sortLocationsForList(allLocations, activeSiteProfile.internalRegion);
 
 function canonicalUrl(path: string): string {
     return path === '/' ? `${baseUrl}/` : `${baseUrl}${path}`;
@@ -127,7 +133,7 @@ export const GET: APIRoute = () => {
         '',
         '## Locations',
         '',
-        locationRows(allLocations),
+        locationRows(orderedLocations),
         '',
         '## Groups And Events',
         '',

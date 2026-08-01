@@ -74,9 +74,9 @@ export function locationAddressLines(loc: Pick<LocationRecord, 'address'> | null
     return [address.line1, address.line2, postalLine].filter((line): line is string => Boolean(line));
 }
 
-export function locationStateBadge(loc: Pick<LocationRecord, 'address' | 'region'>): string {
+export function locationStateBadge(loc: Pick<LocationRecord, 'address' | 'countryCode' | 'region'>): string {
     if (loc.address.state && loc.address.state.trim()) return loc.address.state;
-    if (loc.region === 'europe') return 'BE';
+    if (loc.region === 'europe') return loc.countryCode || '--';
     return '--';
 }
 

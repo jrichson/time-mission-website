@@ -1,8 +1,12 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
-import licensingMain from '../partials/licensing-main.frag.txt?raw';
+import licensingMainRaw from '../partials/licensing-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+import { activeSiteProfile } from '../lib/site-profile';
+import { applyRegionalContentTokens } from '../lib/regional-content';
+
+const licensingMain = applyRegionalContentTokens(licensingMainRaw, activeSiteProfile);
 
 const ld = serializeGraph(
     buildSimpleGraph([

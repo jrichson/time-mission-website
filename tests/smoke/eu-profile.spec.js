@@ -108,6 +108,21 @@ test('EU navigation lists Europe before the United States', async ({ page }) => 
     .evaluateAll((groups) => groups.map((group) => group.getAttribute('data-location-region')));
   expect(overlayOrder).toEqual(['europe', 'us']);
   expect(footerOrder).toEqual(['europe', 'us']);
+
+  await page.goto('/locations');
+  await expect(page.locator('.locations-list .loc-group').first())
+    .toHaveAttribute('data-location-region', 'europe');
+  await expect(page.locator('.loc-row[href="/eindhoven"] .loc-state')).toHaveText('NL');
+
+  await page.goto('/contact');
+  await expect(page.locator('#location optgroup').first()).toHaveAttribute('label', 'Europe');
+  await expect(page.locator('.general-contact a[href^="mailto:"]')).toHaveText('info@timemission.eu');
+
+  await page.goto('/');
+  const ticketValues = await page.locator('#ticketLocation option:not([value=""])')
+    .evaluateAll((options) => options.slice(0, 3).map((option) => option.value));
+  expect(ticketValues).toEqual(['antwerp', 'brussels', 'eindhoven']);
+  await expect(page.locator('.testimonial-card')).toHaveCount(0);
 });
 
 test('EU consent starts denied and GTM is not requested before opt-in', async ({ page }) => {
