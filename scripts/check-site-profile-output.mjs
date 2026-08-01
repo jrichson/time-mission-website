@@ -228,6 +228,14 @@ function checkSitemapAndRedirects() {
     errors.push(`robots.txt must point to ${profile.origin}/sitemap.xml`);
   }
 
+  redirects.split('\n').forEach((line, index) => {
+    const [source, target] = line.trim().split(/\s+/);
+    if (!source || source.startsWith('#') || !target) return;
+    if (target === source || target === `${profile.origin}${source}`) {
+      errors.push(`_redirects line ${index + 1} redirects ${source} to itself`);
+    }
+  });
+
   for (const route of routesDocument.routes || []) {
     const location = locationForCanonicalPath(route.canonicalPath, locations);
     if (!location || isInternalLocation(location, profile)) continue;

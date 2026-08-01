@@ -234,12 +234,22 @@ function writeProfileRedirects() {
   let redirects = fs.readFileSync(redirectsPath, 'utf8')
     .replaceAll('https://timemission.eu', 'https://www.timemission.eu');
 
-  if (profile.id === 'eu') {
-    redirects = redirects.replace(
-      /https:\/\/www\.timemission\.eu\/(antwerp|brussels|eindhoven)/g,
-      '/$1',
-    );
-  }
+  const internalRedirectTargets = new Map(
+    locations
+      .filter((location) => isInternalLocation(location, profile))
+      .map((location) => [`${profile.origin}/${location.slug}`, `/${location.slug}`]),
+  );
+  redirects = redirects
+    .split('\n')
+    .map((line) => {
+      const [source, target, ...rest] = line.trim().split(/\s+/);
+      const localTarget = internalRedirectTargets.get(target);
+      if (!localTarget) return line;
+      if (source === localTarget) return null;
+      return [source, localTarget, ...rest].join(' ');
+    })
+    .filter((line) => line !== null)
+    .join('\n');
 
   const externalLocations = locations.filter((location) => !isInternalLocation(location, profile));
   const externalRoutes = new Set(externalLocations.map((location) => `/${location.slug}`));
