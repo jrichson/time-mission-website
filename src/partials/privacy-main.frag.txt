@@ -50,6 +50,7 @@
 
         <h2>Third-Party Service Providers</h2>
         <p>We may engage providers for website hosting &amp; analytics, email/newsletter distribution, and advertising platforms (e.g., Google Ads). These parties only receive the data necessary to perform services and cannot use it for other purposes.</p>
+        <p>We do not sell, rent, or share your personal information - including your mobile opt-in and SMS consent data - with third parties for advertising purposes.</p>
 
         <h2>Updates to This Policy</h2>
         <p>We may update this policy periodically to reflect changes in our practices or for regulatory reasons. The "Last Updated" date below shows the most recent update. Please review this policy occasionally.</p>
@@ -59,4 +60,3 @@
 
         <p class="legal-updated">Last Updated: June 2026</p>
     </section>
-
