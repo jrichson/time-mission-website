@@ -2,7 +2,6 @@
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import { allLocations } from '../data/locations';
 import { locationsForRegion, locationListLabel } from '../lib/location-list';
-import { locationOpeningLabel } from '../lib/location-status';
 import { locationHref, locationHrefIsExternal, locationStatusBadge } from '../lib/location-view';
 
 interface Props {
@@ -18,23 +17,27 @@ function statusLabel(loc: (typeof allLocations)[number]) {
 }
 
 function showsOpenNowBadge(loc: (typeof allLocations)[number]) {
-    return ['houston', 'orland-park', 'brussels'].includes(loc.slug) && loc.status === 'open';
+    return loc.slug === 'brussels' && loc.status === 'open';
+}
+
+function showsPhiladelphiaOpeningBadge(loc: (typeof allLocations)[number]) {
+    return loc.slug === 'philadelphia' && loc.status === 'coming-soon';
 }
 
 function selectorBadge(loc: (typeof allLocations)[number]) {
     if (showsOpenNowBadge(loc)) return 'OPEN NOW!';
-    if (loc.status !== 'open') return statusLabel(loc);
+    if (showsPhiladelphiaOpeningBadge(loc) || loc.status === 'temporarily-closed') return statusLabel(loc);
     return '';
 }
 
 function selectorBadgeI18n(loc: (typeof allLocations)[number]) {
     if (showsOpenNowBadge(loc)) return 'location.openNow';
-    if (loc.status === 'coming-soon' && !locationOpeningLabel(loc)) return 'location.comingSoon';
     return undefined;
 }
 
 function statusClass(loc: (typeof allLocations)[number]) {
     if (showsOpenNowBadge(loc)) return 'location-open-now';
+    if (showsPhiladelphiaOpeningBadge(loc)) return 'location-opening-soon';
     if (loc.status === 'coming-soon') return 'location-coming-soon';
     if (loc.status === 'temporarily-closed') return 'location-temporarily-closed';
     return undefined;

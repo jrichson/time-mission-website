@@ -82,11 +82,12 @@ describe('css architecture contract', () => {
     expect(navCss).not.toMatch(/Announcement Ticker/);
     expect(navCss).not.toMatch(/Full-screen Mobile Menu/);
     expect(navCss).not.toMatch(/Full-screen Location Overlay/);
-    expect(locationOverlayCss).toContain('.location-dropdown a.location-coming-soon .coming-soon-tag,\n.location-dropdown a.location-temporarily-closed .coming-soon-tag,\n.location-dropdown a.location-open-now .coming-soon-tag');
+    expect(locationOverlayCss).toContain('.location-dropdown a.location-coming-soon .coming-soon-tag,\n.location-dropdown a.location-temporarily-closed .coming-soon-tag,\n.location-dropdown a.location-opening-soon .coming-soon-tag,\n.location-dropdown a.location-open-now .coming-soon-tag');
     expect(locationOverlayCss).toContain('display: inline-flex');
     expect(locationOverlayCss).toContain('.location-dropdown a.location-temporarily-closed .coming-soon-tag');
     expect(locationOverlayCss).toContain('background: rgba(239, 68, 68, 0.14)');
     expect(locationOverlayCss).toContain('.location-dropdown a.location-open-now .coming-soon-tag');
+    expect(locationOverlayCss).toContain('.location-dropdown a.location-opening-soon .coming-soon-tag');
     expect(locationOverlayCss).toContain('background: rgba(16, 185, 129, 0.16)');
 
     const linkedAssets = siteCoreCss()

@@ -230,6 +230,7 @@
 /* Coming Soon locations — visually de-emphasized, link to sign-up landing page */
 .location-dropdown a.location-coming-soon,
 .location-dropdown a.location-temporarily-closed,
+.location-dropdown a.location-opening-soon,
 .location-dropdown a.location-open-now {
     color: var(--gray, #999);
     cursor: pointer;
@@ -241,6 +242,7 @@
 
 .location-dropdown a.location-coming-soon .coming-soon-tag,
 .location-dropdown a.location-temporarily-closed .coming-soon-tag,
+.location-dropdown a.location-opening-soon .coming-soon-tag,
 .location-dropdown a.location-open-now .coming-soon-tag {
     display: inline-flex;
     align-items: center;
@@ -258,10 +260,13 @@
     color: var(--orange, #ff6b2c);
 }
 
+.location-dropdown a.location-opening-soon,
+.location-dropdown a.location-opening-soon.active,
 .location-dropdown a.location-open-now {
     color: var(--white);
 }
 
+.location-dropdown a.location-opening-soon .coming-soon-tag,
 .location-dropdown a.location-open-now .coming-soon-tag {
     background: rgba(16, 185, 129, 0.16);
     color: #6ee7b7;
