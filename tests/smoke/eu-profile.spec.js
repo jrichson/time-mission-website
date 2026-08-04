@@ -55,6 +55,85 @@ test('Dutch venue route is server localized with reciprocal SEO metadata', async
   await expect(page.locator('[data-i18n="nav.bookNow"]').first()).toContainText('Boek nu');
 });
 
+test('localized EU routes translate their announcement and footer chrome', async ({ page }) => {
+  const routes = [
+    {
+      path: '/nl/antwerp',
+      tickerKey: 'ticker.location.antwerp',
+      ticker: 'ZOMERAVONTUREN BIJ TIME MISSION ANTWERPEN',
+      city: 'ANTWERPEN',
+      tagline: 'Een sociaal game-avontuur waarin teams het tegen elkaar opnemen in meeslepende uitdagingen door tijd en ruimte.',
+      experience: 'BELEVING',
+      address: 'Adres',
+      hours: 'Openingstijden',
+      directions: 'Routebeschrijving ↗',
+      changeLocation: 'Locatie wijzigen',
+      rights: 'Alle rechten voorbehouden.',
+      cookiePreferences: 'Cookievoorkeuren',
+      firstDay: 'Maandag',
+    },
+    {
+      path: '/fr/brussels',
+      tickerKey: 'ticker.location.brussels',
+      ticker: 'BRUXELLES EST OUVERT',
+      city: 'BRUXELLES',
+      tagline: "Une aventure de jeu social où les équipes s'affrontent dans des défis immersifs à travers le temps et l'espace.",
+      experience: 'EXPÉRIENCE',
+      address: 'Adresse',
+      hours: 'Horaires',
+      directions: 'Itinéraire ↗',
+      changeLocation: 'Changer de site',
+      rights: 'Tous droits réservés.',
+      cookiePreferences: 'Préférences relatives aux cookies',
+      firstDay: 'Lundi',
+    },
+    {
+      path: '/es/eindhoven',
+      tickerKey: 'ticker.location.eindhoven',
+      ticker: 'PRIMERA UBICACIÓN EN LOS PAÍSES BAJOS, PRÓXIMAMENTE',
+      city: 'EINDHOVEN',
+      tagline: 'Una aventura de juego social en la que los equipos compiten en desafíos inmersivos a través del tiempo y el espacio.',
+      experience: 'EXPERIENCIA',
+      address: 'Dirección',
+      hours: 'Horarios',
+      directions: 'Cómo llegar ↗',
+      changeLocation: 'Cambiar ubicación',
+      rights: 'Todos los derechos reservados.',
+      cookiePreferences: 'Preferencias de cookies',
+      status: 'Muy pronto',
+    },
+  ];
+
+  for (const route of routes) {
+    await page.goto(route.path);
+
+    await expect(page.locator(`[data-i18n="${route.tickerKey}"]`).first()).toHaveText(route.ticker);
+    await expect(page.locator('.footer-locations-title')).toHaveText(route.city);
+    await expect(page.locator('.footer-brand p')).toHaveText(route.tagline);
+    await expect(page.locator('.footer-title').first()).toHaveText(route.experience);
+    await expect(page.locator('.footer-loc-label').first()).toHaveText(route.address);
+    await expect(page.locator('.footer-loc-hours-summary')).toContainText(route.hours);
+    await expect(page.locator('.footer-loc-map')).toHaveText(route.directions);
+    await expect(page.locator('.footer-loc-change')).toHaveText(route.changeLocation);
+    await expect(page.locator('.footer-copyright [data-i18n="footer.rights"]')).toHaveText(route.rights);
+    await expect(page.locator('[data-cc="show-preferencesModal"]')).toHaveText(route.cookiePreferences);
+    if (route.firstDay) {
+      await expect(page.locator('.footer-hours-row').first().locator('span').first()).toHaveText(route.firstDay);
+    }
+    if (route.status) {
+      await expect(page.locator('.footer-hours-row--note span').last()).toHaveText(route.status);
+    }
+
+    const layout = await page.locator('.footer').evaluate((footer) => ({
+      clientWidth: footer.clientWidth,
+      scrollWidth: footer.scrollWidth,
+      viewportWidth: window.innerWidth,
+    }));
+    expect(layout.clientWidth).toBeLessThanOrEqual(layout.viewportWidth);
+    expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth + 1);
+  }
+});
+
 test('browser language produces a suggestion instead of a forced redirect', async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(navigator, 'language', { configurable: true, get: () => 'nl-NL' });

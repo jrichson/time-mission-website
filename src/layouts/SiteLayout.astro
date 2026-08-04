@@ -63,6 +63,9 @@ const sitePageHead = landingHead ? null : sitePageHeadForDoc(await getPublishedS
 const pageLocation = bodyDataLocation
     ? allLocations.find((loc) => loc.id === bodyDataLocation || loc.slug === bodyDataLocation)
     : null;
+const locationTickerI18n = activeSiteProfile.id === 'eu' && pageLocation?.region === 'europe'
+    ? `ticker.location.${pageLocation.slug}`
+    : '';
 const announcementBanner = announcementBannerViewForDoc(
     selectAnnouncementBanner(await getPublishedAnnouncementBanners(), {
         locationSlug: pageLocation?.slug,
@@ -152,6 +155,7 @@ const rendersGtmNoscript = activeSiteProfile.consentProfile === 'us_open' && Boo
                     bookingCtaIsBookingTrigger={bookingCtaIsBookingTrigger}
                     bookingCtaI18n={bookingCtaI18n}
                     locationTicker={pageLocation?.ticker}
+                    locationTickerI18n={locationTickerI18n}
                 />
                 <LocationOverlay currentLang={lang} />
             </slot>

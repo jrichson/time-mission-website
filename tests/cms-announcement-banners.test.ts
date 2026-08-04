@@ -117,6 +117,22 @@ describe('CMS announcement banners', () => {
     expect(announcementBannerViewForDoc({ ...baseBanner, tickerBehavior: 'unexpected' })?.tickerBehavior).toBe('auto');
   });
 
+  it('connects the active EU CMS messages to their localized ticker copy', () => {
+    expect(announcementBannerViewForDoc({
+      ...baseBanner,
+      message: 'SUMMER ADVENTURES AT TIME MISSION ANTWERP',
+    })?.messageI18n).toBe('ticker.location.antwerp');
+    expect(announcementBannerViewForDoc({
+      ...baseBanner,
+      message: 'BRUSSELS NOW OPEN',
+    })?.messageI18n).toBe('ticker.location.brussels');
+    expect(announcementBannerViewForDoc({
+      ...baseBanner,
+      message: 'FIRST NETHERLANDS LOCATION COMING SOON',
+    })?.messageI18n).toBe('ticker.location.eindhoven');
+    expect(announcementBannerViewForDoc(baseBanner)?.messageI18n).toBeNull();
+  });
+
   it('selects the highest-priority eligible banner and uses start date as tie-breaker', () => {
     const selected = selectAnnouncementBanner(
       [

@@ -5,6 +5,7 @@ import { activeSiteProfile } from '../lib/site-profile';
 interface Props {
     announcementBanner?: {
         message: string;
+        messageI18n?: string | null;
         tickerBehavior?: 'auto' | 'static' | 'animated' | null;
         linkLabel?: string | null;
         linkUrl?: string | null;
@@ -15,6 +16,7 @@ interface Props {
     bookingCtaIsBookingTrigger?: boolean;
     bookingCtaI18n?: string;
     locationTicker?: string;
+    locationTickerI18n?: string;
 }
 
 const {
@@ -25,6 +27,7 @@ const {
     bookingCtaIsBookingTrigger = true,
     bookingCtaI18n = 'nav.bookNow',
     locationTicker = '',
+    locationTickerI18n = '',
 } = Astro.props;
 const bookingCtaAttrs = {
     ...(bookingCtaIsBookingTrigger ? { 'data-tm-booking-trigger': '', 'data-tm-booking-kind': 'tickets' } : {}),
@@ -47,7 +50,7 @@ const tickerBaseMessages: TickerMessage[] = activeSiteProfile.id === 'eu'
     }];
 const tickerCycles = 4;
 
-function tickerMessageFromText(text: string): TickerMessage | null {
+function tickerMessageFromText(text: string, textI18n = ''): TickerMessage | null {
     const value = text.trim();
     if (value.includes('|')) {
         const [label, ...rest] = value.split('|').map((part) => part.trim()).filter(Boolean);
@@ -55,7 +58,7 @@ function tickerMessageFromText(text: string): TickerMessage | null {
     }
     const match = value.match(/^(.*?\bGRAND OPENING)\s*(?:[-–—]\s*)?(.+)$/i);
     if (match) return { label: match[1].trim(), date: match[2].trim() };
-    return value ? { text: value } : null;
+    return value ? { text: value, textI18n } : null;
 }
 
 function tickerMessageCanBeStatic(message: TickerMessage | null): boolean {
@@ -67,10 +70,11 @@ function tickerBehavior(value: string | null | undefined): TickerBehavior {
     return 'auto';
 }
 
-const locationTickerMessage = tickerMessageFromText(locationTicker);
+const locationTickerMessage = tickerMessageFromText(locationTicker, locationTickerI18n);
 const cmsAnnouncementMessage: TickerMessage | null = announcementBanner?.message
     ? {
         text: announcementBanner.message,
+        textI18n: announcementBanner.messageI18n || undefined,
         href: announcementBanner.linkUrl,
         linkLabel: announcementBanner.linkLabel,
     }

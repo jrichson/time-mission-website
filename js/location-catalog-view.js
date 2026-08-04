@@ -31,7 +31,16 @@
     }
 
     function comingSoonLabelForLocation(loc) {
-        return openingLabelForLocation(loc) || translate('location.comingSoon', 'Coming Soon');
+        var openingLabel = openingLabelForLocation(loc);
+        if (openingLabel && openingLabel.toLowerCase() !== 'coming soon') return openingLabel;
+        return translate('location.comingSoon', openingLabel || 'Coming Soon');
+    }
+
+    function localizedFooterLocationName(loc) {
+        var fallback = (loc && (loc.shortName || loc.name)) || 'LOCATIONS';
+        if (!loc) return translate('nav.locations', fallback);
+        var slug = normalizeLocation(loc.slug || loc.id);
+        return slug ? translate('footer.city.' + slug, fallback) : fallback;
     }
 
     function temporaryClosureLabelForLocation(loc) {
@@ -75,7 +84,7 @@
             var row = document.createElement('div');
             row.className = 'footer-hours-row';
             var dayEl = document.createElement('span');
-            dayEl.textContent = dayLabels[day];
+            dayEl.textContent = translate('footer.day.' + day, dayLabels[day]);
             var timeEl = document.createElement('span');
             timeEl.textContent = hours[day].label;
             row.appendChild(dayEl);
@@ -351,7 +360,7 @@
         var titleEl = locationsColumn.querySelector('.footer-locations-title');
 
         if (!loc) {
-            if (titleEl) titleEl.textContent = 'LOCATIONS';
+            if (titleEl) titleEl.textContent = localizedFooterLocationName(null);
             setHidden(dropdown, false);
             setHidden(infoPanel, true);
             return;
@@ -367,7 +376,7 @@
         var hoursDetails = infoPanel.querySelector('.footer-loc-hours-details');
         var hoursEl = infoPanel.querySelector('.footer-loc-hours');
         var mapEl = infoPanel.querySelector('.footer-loc-map');
-        var displayName = loc.shortName || loc.name || '';
+        var displayName = localizedFooterLocationName(loc);
 
         if (titleEl) titleEl.textContent = displayName || 'LOCATIONS';
         if (hoursDetails) hoursDetails.removeAttribute('open');

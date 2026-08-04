@@ -56,6 +56,10 @@ describe('Language Surface', () => {
     expect(runtimeConfig.languages.map((language) => language.code)).toEqual(['en', 'es', 'nl', 'fr']);
     expect(runtimeConfig.translations.es['booking.chooseLocation.title']).toBeTruthy();
     expect(runtimeConfig.translations.fr['consent.preferencesTitle']).toBe('Préférences de cookies');
+    expect(runtimeConfig.translations.nl['ticker.location.antwerp'])
+      .toBe('ZOMERAVONTUREN BIJ TIME MISSION ANTWERPEN');
+    expect(runtimeConfig.translations.fr['footer.cookiePreferences'])
+      .toBe('Préférences relatives aux cookies');
   });
 
   it('keeps translated rich text on the approved HTML allowlist', () => {

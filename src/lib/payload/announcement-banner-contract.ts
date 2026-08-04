@@ -33,6 +33,7 @@ export interface AnnouncementBannerSelectionContext {
 
 export interface AnnouncementBannerView {
     message: string;
+    messageI18n?: string | null;
     tickerBehavior: AnnouncementBannerTickerBehavior;
     linkLabel?: string | null;
     linkUrl?: string | null;
@@ -40,6 +41,11 @@ export interface AnnouncementBannerView {
 
 const INTERNAL_PATH_REGEX = /^\/$|^\/[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
 const ANNOUNCEMENT_LINK_MAX_LENGTH = 2048;
+const ANNOUNCEMENT_MESSAGE_I18N_KEYS = new Map([
+    ['SUMMER ADVENTURES AT TIME MISSION ANTWERP', 'ticker.location.antwerp'],
+    ['BRUSSELS NOW OPEN', 'ticker.location.brussels'],
+    ['FIRST NETHERLANDS LOCATION COMING SOON', 'ticker.location.eindhoven'],
+]);
 
 function cleanString(value: unknown): string {
     return typeof value === 'string' ? value.trim() : '';
@@ -144,6 +150,7 @@ export function announcementBannerViewForDoc(doc: PayloadAnnouncementBannerDoc |
     const linkUrl = safeAnnouncementLink(doc.linkUrl);
     return {
         message: cleanString(doc.message),
+        messageI18n: ANNOUNCEMENT_MESSAGE_I18N_KEYS.get(cleanString(doc.message)) || null,
         tickerBehavior: safeTickerBehavior(doc.tickerBehavior),
         linkLabel: linkUrl ? cleanString(doc.linkLabel) || 'Learn more' : null,
         linkUrl,

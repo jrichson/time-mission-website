@@ -10,31 +10,31 @@
   "eu": {
     "en": {
       "status": "approved",
-      "artifactDigest": "97e508070a3aa94b54d7980540e30fec9e72e7bc0553a3956d98df0099e30708",
+      "artifactDigest": "712d77702c413439bbc12d096770a9706403d48ce54a4ac16df546cf5cad9ad8",
       "reviewer": "Aris Simon",
-      "reviewedAt": "2026-08-03T23:56:19.376Z"
+      "reviewedAt": "2026-08-04T01:55:37.651Z"
     },
     "nl": {
       "status": "approved",
-      "artifactDigest": "5ba81ee0b9590194a24427c27ed996129732529e4eb0912ba80a8dab5b9e19d4",
+      "artifactDigest": "1b141c265a97a4c67d44a8a4e54bdd6af62c610bed9973f399cc32ce35e09c63",
       "reviewer": "Aris Simon",
-      "reviewedAt": "2026-08-03T23:56:20.500Z",
+      "reviewedAt": "2026-08-04T01:55:37.821Z",
       "allowUnchangedFields": true,
       "approvalNote": "Site owner approved the current language surface for launch."
     },
     "fr": {
       "status": "approved",
-      "artifactDigest": "3e0da483f0639be99a5e8370d4f31de82bcf0795732337ce58e27fd2fb39b670",
+      "artifactDigest": "3095a4d3748919fae6292928ccb0197ddf33ab15233c1c42a01a9a3e07327f19",
       "reviewer": "Aris Simon",
-      "reviewedAt": "2026-08-03T23:56:21.643Z",
+      "reviewedAt": "2026-08-04T01:55:37.978Z",
       "allowUnchangedFields": true,
       "approvalNote": "Site owner approved the current language surface for launch."
     },
     "es": {
       "status": "approved",
-      "artifactDigest": "f030a43cee2710a6ec1e04810dd8295bbdd2dbb8bade9976f8870125b6054352",
+      "artifactDigest": "aaa458032df158ccffa14edcdf81f2bba3c6d560f370d5064f60f16da5f613af",
       "reviewer": "Aris Simon",
-      "reviewedAt": "2026-08-03T23:56:22.730Z",
+      "reviewedAt": "2026-08-04T01:55:38.142Z",
       "allowUnchangedFields": true,
       "approvalNote": "Site owner approved the current language surface for launch."
     }
