@@ -153,6 +153,8 @@
 
     function leadUrlForLocation(loc, slug, externalUrl) {
         if (externalUrl) return externalUrl;
+        var firstAccessUrl = BookingJourney.getFirstAccessUrl(loc);
+        if (firstAccessUrl) return firstAccessUrl;
         if (BookingJourney.isTemporarilyClosedLocation(loc)) {
             return contactLeadUrl(slug, 'closure');
         }
@@ -172,6 +174,7 @@
         var slug = loc.slug || loc.id || normalizeLocation(id);
         var mapQuery = getMapQuery(loc);
         var externalUrl = BookingJourney.getExternalLocationUrl(loc);
+        var firstAccessUrl = BookingJourney.getFirstAccessUrl(loc);
         var externalSiteLabel = loc.region === 'europe' ? 'Visit EU Site' : 'Visit Location Site';
         var pageUrl = loc.pagePath || externalUrl || (slug ? '/' + slug : '/');
         var comingSoon = loc.status === 'coming-soon';
@@ -196,6 +199,8 @@
             openingLabel: openingLabelForLocation(loc),
             bookLabel: temporarilyClosed
                 ? BookingJourney.temporaryClosureCtaLabel(loc)
+                : firstAccessUrl
+                ? 'First Access'
                 : externalUrl
                 ? externalSiteLabel
                 : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
@@ -240,6 +245,8 @@
         });
         var labelKey = view.externalUrl
             ? (loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite')
+            : BookingJourney.getFirstAccessUrl(loc)
+            ? 'location.firstAccess'
             : view.comingSoon
             ? 'location.contactUs'
             : 'nav.bookNow';

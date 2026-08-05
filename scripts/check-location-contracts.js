@@ -174,6 +174,15 @@ function validateDonationUrl(location) {
   assertSafeUrl(id, 'donationUrl', location.donationUrl);
 }
 
+function validateFirstAccessUrl(location) {
+  const id = location.id || '(unknown)';
+  if (location.firstAccessUrl == null) return;
+  if (location.status !== 'coming-soon') {
+    errors.push(`${id}: firstAccessUrl is only supported for coming-soon locations`);
+  }
+  assertSafeUrl(id, 'firstAccessUrl', location.firstAccessUrl);
+}
+
 function isExternalSiteOnlyOpenLocation(location) {
   const externalUrl = typeof location.externalUrl === 'string' ? location.externalUrl.trim() : '';
   const bookingUrl = typeof location.bookingUrl === 'string' ? location.bookingUrl.trim() : '';
@@ -317,6 +326,7 @@ for (const location of locations) {
   validateHiddenMissionIds(location);
   validateTeamSize(location);
   validateDonationUrl(location);
+  validateFirstAccessUrl(location);
   const hasValidGeo = validateGeo(location);
 
   if (Object.prototype.hasOwnProperty.call(location, 'localBusinessSchemaEligible')) {

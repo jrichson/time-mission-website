@@ -72,6 +72,27 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveText('Belgium – Brussels');
 });
 
+test('homepage Book routes the requested launch locations to First Access', async ({ page }) => {
+  const firstAccessUrls = {
+    dallas: 'https://time-mission.myklpages.com/l/XDp7DH',
+    boston: 'https://time-mission.myklpages.com/l/WcMfDv',
+    nashville: 'https://time-mission.myklpages.com/l/TJHPn3',
+  };
+
+  await page.goto('/');
+  await page.locator('.hero-cta .btn-tickets').click();
+
+  for (const [slug, href] of Object.entries(firstAccessUrls)) {
+    await page.locator('#ticketLocation').selectOption(slug);
+    await expect(page.locator('#ticketPanelTitle')).toHaveText('First Access');
+    await expect(page.locator('#ticketBookBtnText')).toHaveText('First Access');
+    await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', href);
+    await expect(page.locator('#ticketBookBtn')).toHaveAttribute('target', '_blank');
+    await expect(page.locator('#ticketBookBtn')).toHaveAttribute('rel', 'noopener');
+    await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
+  }
+});
+
 test('ticket panel routes Europe selections to the right external destination with UTMs', async ({ page }) => {
   await page.route('https://www.experience-factory.com/**', async (route) => {
     await route.fulfill({

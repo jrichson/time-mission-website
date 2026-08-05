@@ -109,6 +109,10 @@ export function locationContactHref(loc: Pick<LocationRecord, 'slug'>, type = 'u
     return `/contact#${params.toString()}`;
 }
 
+export function locationFirstAccessUrl(loc: Pick<LocationRecord, 'firstAccessUrl'>): string {
+    return String(loc.firstAccessUrl || '').trim();
+}
+
 export function locationMarket(loc: Pick<LocationRecord, 'address'>): string {
     return [loc.address.city, loc.address.state || loc.address.country].filter(Boolean).join(', ');
 }
@@ -135,6 +139,15 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
             isBookingTrigger: false,
             label: loc.temporaryClosure?.ctaLabel || 'Get Closure Updates',
             i18n: '',
+        };
+    }
+    const firstAccessUrl = locationFirstAccessUrl(loc);
+    if (firstAccessUrl) {
+        return {
+            href: firstAccessUrl,
+            isBookingTrigger: false,
+            label: 'First Access',
+            i18n: 'location.firstAccess',
         };
     }
     const externalUrl = String(loc.externalUrl || '').trim();
@@ -165,6 +178,7 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
 
 export function locationViewModel(loc: LocationRecord): LocationViewModel {
     const bookable = hasTicketBooking(loc);
+    const firstAccessUrl = locationFirstAccessUrl(loc);
     const externalUrl = String(loc.externalUrl || '').trim();
     const externalSiteLabel = loc.region === 'europe' ? 'Visit EU Site' : 'Visit Location Site';
     const comingSoon = loc.status === 'coming-soon';
@@ -174,6 +188,8 @@ export function locationViewModel(loc: LocationRecord): LocationViewModel {
         addressText: locationOverlayAddressText(loc),
         bookLabel: temporarilyClosed
             ? loc.temporaryClosure?.ctaLabel || 'Get Closure Updates'
+            : firstAccessUrl
+            ? 'First Access'
             : externalUrl
             ? externalSiteLabel
             : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),

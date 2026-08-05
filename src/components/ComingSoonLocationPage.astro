@@ -1,7 +1,7 @@
 ---
 import { allLocations } from '../data/locations';
 import { hasTicketBooking, locationDisplayStatus, locationOpeningDateText, locationOpeningLabel } from '../lib/location-status';
-import { locationContactHref, locationCtaView } from '../lib/location-view';
+import { locationContactHref, locationCtaView, locationFirstAccessUrl } from '../lib/location-view';
 import { locationPurchaseTermsFaqItemHtml } from '../lib/location-policy-faq';
 import { applyTmMediaBase } from '../lib/tm-media';
 import comingSoonMainRaw from '../partials/houston-main.frag.txt?raw';
@@ -41,11 +41,12 @@ function replaceRawToken(source: string, token: string, value: string) {
 const checkoutUrl = String(location.rollerCheckoutUrl || location.bookingUrl || '').trim();
 const isBookable = hasTicketBooking(location);
 const primaryCta = locationCtaView(location);
+const hasFirstAccess = Boolean(locationFirstAccessUrl(location));
 const hasExternalLocationSite = Boolean(String(location.externalUrl || '').trim());
 const openingLabel = locationOpeningLabel(location);
 const openingDateText = locationOpeningDateText(location);
-const primaryCtaLabel = isBookable || hasExternalLocationSite ? primaryCta.label : 'Contact This Location';
-const primaryCtaHref = isBookable || hasExternalLocationSite ? primaryCta.href : locationContactHref(location);
+const primaryCtaLabel = isBookable || hasFirstAccess || hasExternalLocationSite ? primaryCta.label : 'Contact This Location';
+const primaryCtaHref = isBookable || hasFirstAccess || hasExternalLocationSite ? primaryCta.href : locationContactHref(location);
 const primaryCtaClass = isBookable ? 'btn-location-book' : 'btn-location-lead';
 const primaryCtaAttrs = isBookable
     ? `data-tm-booking-trigger="" data-tm-booking-kind="tickets" data-tm-location="${escapeHtml(location.slug)}" data-tm-booking-url="${escapeHtml(checkoutUrl)}"`
@@ -53,6 +54,8 @@ const primaryCtaAttrs = isBookable
 const pageStatusLabel = locationDisplayStatus(location);
 const bookingFaqQuestion = isBookable
     ? 'Can I book now?'
+    : hasFirstAccess
+    ? 'How can I get first access?'
     : hasExternalLocationSite
     ? 'Where can I get location updates?'
     : 'When can I book?';
@@ -60,14 +63,22 @@ const bookingFaqAnswer = isBookable
     ? openingLabel
         ? `${location.shortName} opens ${openingDateText}. Online booking is available now, so use Book Now to choose your date and time through our secure checkout.`
         : `Yes. Online booking is available for ${location.shortName}. Use Book Now to choose your date and time through our secure checkout.`
+    : hasFirstAccess
+    ? `Use First Access to sign up for ${location.shortName} launch updates and early access.`
     : hasExternalLocationSite
     ? `Visit the ${location.venueName || location.shortName} website for opening updates and location details.`
     : `Booking opens closer to launch. Contact the ${location.shortName} team for opening updates and launch timing.`;
-const finalCtaTitle = isBookable ? (openingLabel ? 'BOOK AHEAD' : 'BOOK YOUR MISSION') : 'STAY CLOSE TO LAUNCH';
+const finalCtaTitle = isBookable
+    ? (openingLabel ? 'BOOK AHEAD' : 'BOOK YOUR MISSION')
+    : hasFirstAccess
+    ? 'GET FIRST ACCESS'
+    : 'STAY CLOSE TO LAUNCH';
 const finalCtaText = isBookable
     ? openingLabel
         ? `${location.shortName} opens ${openingDateText}. Choose your date, rally your team, and get ready to play.`
         : `Tickets for ${location.shortName} are available now. Choose your date, rally your team, and get ready to play.`
+    : hasFirstAccess
+    ? `Sign up for ${location.shortName} launch updates and be first in line when access opens.`
     : hasExternalLocationSite
     ? `Visit the ${location.venueName || location.shortName} website for opening updates and location details.`
     : `Reach out about ${location.shortName} and we will route your message to the right team.`;

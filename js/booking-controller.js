@@ -209,6 +209,13 @@
                 cta: translate('booking.eu.cta', 'Visit EU Site'),
             };
         }
+        if (kind === 'tickets' && BookingJourney.getFirstAccessUrl(loc)) {
+            return {
+                title: translate('booking.firstAccess.title', 'First Access'),
+                intro: translate('booking.firstAccess.intro', 'Sign up for launch updates and be first in line when access opens.'),
+                cta: translate('booking.firstAccess.cta', 'First Access'),
+            };
+        }
         if ((kind === 'tickets' || kind === 'groups') && BookingJourney.isLeadOnlyComingSoon(loc)) {
             return {
                 title: translate('booking.updates.title', 'Contact This Location'),

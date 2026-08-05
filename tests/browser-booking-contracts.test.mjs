@@ -101,6 +101,7 @@ describe('browser booking contracts', () => {
             slug: 'dallas',
             status: 'coming-soon',
             bookingUrl: '',
+            firstAccessUrl: 'https://time-mission.myklpages.com/l/XDp7DH',
             giftCardUrl: '',
             groupFormUrls: {},
           },
@@ -318,7 +319,7 @@ describe('browser booking contracts', () => {
         trigger: true,
       });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'dallas' }))
-      .toBe('/contact#location=dallas&type=updates');
+      .toBe('https://time-mission.myklpages.com/l/XDp7DH');
     expect(window.TMBooking.getDestination({ kind: 'group-tickets', locationId: 'dallas' }))
       .toBe('/contact#location=dallas&type=updates');
     expect(window.TMBooking.getDestination({ kind: 'groups', groupType: 'corporate', locationId: 'dallas' }))
@@ -329,14 +330,21 @@ describe('browser booking contracts', () => {
       .toBe('');
     expect(window.LocationContext.getOverlayView('dallas').cta)
       .toMatchObject({
-        href: '/contact#location=dallas&type=updates',
+        href: 'https://time-mission.myklpages.com/l/XDp7DH',
         bookingUrl: '',
         trigger: false,
+        target: '_blank',
+        rel: 'noopener',
+      });
+    expect(window.LocationContext.getOverlayView('dallas'))
+      .toMatchObject({
+        bookLabelKey: 'location.firstAccess',
+        bookLabelFallback: 'First Access',
       });
     expect(window.LocationContext.getLocationView('dallas'))
       .toMatchObject({
-        bookUrl: '/contact#location=dallas&type=updates',
-        bookLabel: 'Contact Us',
+        bookUrl: 'https://time-mission.myklpages.com/l/XDp7DH',
+        bookLabel: 'First Access',
         comingSoon: true,
       });
     expect(window.TMBooking.getDestination({

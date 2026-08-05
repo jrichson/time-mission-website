@@ -134,6 +134,10 @@
         return (loc && loc.externalUrl && String(loc.externalUrl).trim()) || '';
     }
 
+    function getFirstAccessUrl(loc) {
+        return (loc && loc.firstAccessUrl && String(loc.firstAccessUrl).trim()) || '';
+    }
+
     function isBookableLocation(loc) {
         if (isTemporarilyClosedLocation(loc)) return false;
         return !!resolveOpenCheckoutUrl(loc);
@@ -181,6 +185,7 @@
         var kind = normalizeKind(opts.kind || 'tickets');
         var slug = loc.slug || loc.id || normalizeLocation(opts.locationId || opts.pageLocationSlug || '');
         var checkoutUrl = resolveOpenCheckoutUrl(loc);
+        var firstAccessUrl = getFirstAccessUrl(loc);
         var bookable = !!checkoutUrl;
 
         if (isTemporarilyClosedLocation(loc)) {
@@ -219,6 +224,7 @@
         if (opts.preferLocationPageFlow && slug) {
             return appendTrackingParams('/' + slug + '?book=1', { includeInternal: true });
         }
+        if (isTicketKind(kind) && firstAccessUrl) return firstAccessUrl;
         if (isTicketKind(kind) && bookable) return checkoutUrl;
         var externalUrl = getExternalLocationUrl(loc);
         if (externalUrl) return externalUrl;
@@ -491,6 +497,7 @@
         appendTrackingParams: appendTrackingParams,
         resolveOpenCheckoutUrl: resolveOpenCheckoutUrl,
         getExternalLocationUrl: getExternalLocationUrl,
+        getFirstAccessUrl: getFirstAccessUrl,
         isTemporarilyClosedLocation: isTemporarilyClosedLocation,
         temporaryClosureCtaLabel: temporaryClosureCtaLabel,
         isBookableLocation: isBookableLocation,

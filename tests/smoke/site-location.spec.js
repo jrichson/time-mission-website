@@ -72,6 +72,42 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
 });
 
+test('homepage location preview and launch pages use First Access only for the requested locations', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'desktop-only overlay path');
+
+  const firstAccessUrls = {
+    dallas: 'https://time-mission.myklpages.com/l/XDp7DH',
+    boston: 'https://time-mission.myklpages.com/l/WcMfDv',
+    nashville: 'https://time-mission.myklpages.com/l/TJHPn3',
+  };
+
+  await page.goto('/');
+  await page.locator('#locationBtn').click();
+
+  for (const [slug, href] of Object.entries(firstAccessUrls)) {
+    await page.locator(`#locationDropdown a[data-tm-location-slug="${slug}"]`).first().hover();
+    await expect(page.locator('#locationInfo .location-info-book')).toHaveText('First Access');
+    await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', href);
+  }
+
+  await page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]').first().hover();
+  await expect(page.locator('#locationInfo .location-info-book')).toHaveText('Contact Us');
+  await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute(
+    'href',
+    '/contact#location=eindhoven&type=updates',
+  );
+
+  for (const [slug, href] of Object.entries(firstAccessUrls)) {
+    await page.goto(`/${slug}`);
+    await expect(page.locator('.nav-right .btn-tickets')).toHaveText('First Access');
+    await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('href', href);
+    await expect(page.locator('.hero .btn-location-lead')).toContainText('First Access');
+    await expect(page.locator('.hero .btn-location-lead')).toHaveAttribute('href', href);
+    await expect(page.locator('.final-cta .btn-location-lead')).toContainText('First Access');
+    await expect(page.locator('.final-cta .btn-location-lead')).toHaveAttribute('href', href);
+  }
+});
+
 test('Edison has a local location page whose action links lead to Supercharged NJ', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop-only overlay path');
 
@@ -287,7 +323,7 @@ test('Philadelphia page shows the August 7 opening and restores ticket booking C
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('data-tm-booking-trigger', '');
 });
 
-test('Boston coming-soon page publishes the address and lead-only CTAs', async ({ page }) => {
+test('Boston coming-soon page publishes the address and First Access CTAs', async ({ page }) => {
   await page.goto('/boston');
 
   const bostonMenuLink = page.locator('#locationDropdown a[data-tm-location-slug="boston"]').first();
@@ -298,7 +334,7 @@ test('Boston coming-soon page publishes the address and lead-only CTAs', async (
   await expect(bostonMenuLink.locator('.coming-soon-tag')).toHaveCount(0);
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
     'href',
-    '/contact#location=boston&type=updates'
+    'https://time-mission.myklpages.com/l/WcMfDv'
   );
   await expect(page.locator('.nav-right .btn-tickets')).not.toHaveAttribute('data-tm-booking-trigger', '');
   await expect(footer.locator('.footer-locations-title')).toHaveText('Boston');

@@ -85,6 +85,36 @@ describe('Location View contract', () => {
         });
     });
 
+    it('routes only the requested launch locations to First Access', () => {
+        const firstAccessUrls: Record<string, string> = {
+            dallas: 'https://time-mission.myklpages.com/l/XDp7DH',
+            boston: 'https://time-mission.myklpages.com/l/WcMfDv',
+            nashville: 'https://time-mission.myklpages.com/l/TJHPn3',
+        };
+
+        for (const [slug, href] of Object.entries(firstAccessUrls)) {
+            const location = allLocations.find((loc) => loc.slug === slug);
+            if (!location) throw new Error(`${slug} location missing`);
+
+            expect(location.firstAccessUrl).toBe(href);
+            expect(locationViewModel(location).bookLabel).toBe('First Access');
+            expect(locationCtaView(location)).toEqual({
+                href,
+                isBookingTrigger: false,
+                label: 'First Access',
+                i18n: 'location.firstAccess',
+            });
+        }
+
+        const eindhoven = allLocations.find((loc) => loc.slug === 'eindhoven');
+        if (!eindhoven) throw new Error('Eindhoven location missing');
+        expect(eindhoven.firstAccessUrl).toBeUndefined();
+        expect(locationCtaView(eindhoven)).toMatchObject({
+            href: '/contact#location=eindhoven&type=updates',
+            label: 'Contact Us',
+        });
+    });
+
     it('keeps runtime location views aligned with the typed build-time view model', () => {
         const runtime = loadRuntimeLocationViews();
 
