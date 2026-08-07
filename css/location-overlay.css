@@ -262,7 +262,8 @@
 
 .location-dropdown a.location-opening-soon,
 .location-dropdown a.location-opening-soon.active,
-.location-dropdown a.location-open-now {
+.location-dropdown a.location-open-now,
+.location-dropdown a.location-open-now.active {
     color: var(--white);
 }
 

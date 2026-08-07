@@ -298,7 +298,7 @@ test('Lincoln publishes its 2-4 player limit across the location experience', as
   await expect(page.locator('#ticketPlayersInfo')).toHaveText('Equipos de 2 a 4 jugadores por misión');
 });
 
-test('Philadelphia page shows the August 7 opening and restores ticket booking CTAs', async ({ page }) => {
+test('Philadelphia is now open across its banner, selector, and booking experience', async ({ page }) => {
   await page.goto('/philadelphia');
 
   const checkoutUrl = 'https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home';
@@ -307,13 +307,11 @@ test('Philadelphia page shows the August 7 opening and restores ticket booking C
   await expect(page).toHaveTitle('Time Mission Philadelphia – 25+ Interactive Mission Rooms');
   await expect(page.locator('.tm-closure-strip')).toHaveCount(0);
   await expect(page.locator('#temporaryClosureModal')).toHaveCount(0);
-  await expect(page.locator('.ticker-track')).not.toHaveClass(/ticker-track--static/);
-  await expect(page.locator('.ticker-item')).toHaveCount(4);
-  await expect(page.locator('.ticker-item').first()).toHaveText(
-    'OPENING AUGUST 7TH — USE CODE PHILLY50 for 50% OFF',
-  );
-  await expect(philadelphiaMenuLink.locator('.coming-soon-tag')).toHaveText('Opening 8/7');
-  await expect(philadelphiaMenuLink).toHaveClass(/location-opening-soon/);
+  await expect(page.locator('.ticker-track')).toHaveClass(/ticker-track--static/);
+  await expect(page.locator('.ticker-item')).toHaveCount(1);
+  await expect(page.locator('.ticker-item').first()).toHaveText('PHILADELPHIA NOW OPEN');
+  await expect(philadelphiaMenuLink.locator('.coming-soon-tag')).toHaveText('NOW OPEN');
+  await expect(philadelphiaMenuLink).toHaveClass(/location-open-now/);
   await expect(philadelphiaMenuLink).toHaveCSS('color', 'rgb(255, 255, 255)');
   await expect(philadelphiaMenuLink.locator('.coming-soon-tag')).toHaveCSS('color', 'rgb(110, 231, 183)');
   await expect(page.locator('.hero-cta .btn-tickets')).toHaveAttribute('href', '#');

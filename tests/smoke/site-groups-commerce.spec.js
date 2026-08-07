@@ -280,8 +280,8 @@ test('gift card page reflects enabled, paused, and unavailable locations', async
 
   await page.evaluate(() => window.TM.select('philadelphia'));
   await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('aria-disabled', 'true');
-  await expect(page.locator('#giftCardLocationHint')).toContainText('temporarily paused');
-  await expect(redemptionAnswer).toContainText('Gift cards are temporarily paused for Philadelphia');
+  await expect(page.locator('#giftCardLocationHint')).toContainText('not available');
+  await expect(redemptionAnswer).toContainText('Gift cards are not available for Philadelphia yet');
 
   await page.evaluate(() => window.TM.select('antwerp'));
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('antwerp');

@@ -25,6 +25,12 @@ describe('CMS current content sync migration', () => {
     const edisonAndPhiladelphiaMigration = read(
       'cms/migrations/20260730_091000_seed_edison_and_philadelphia_group_form.ts',
     );
+    const philadelphiaNowOpenMigration = read(
+      'cms/migrations/20260807_090000_philadelphia_now_open.ts',
+    );
+    const philadelphiaNowOpenSnapshot = read(
+      'cms/migration-data/20260807_philadelphia_now_open_snapshot.ts',
+    );
     const migrationIndex = read('cms/migrations/index.ts');
 
     expect(migrationIndex).toContain('20260605_143000_sync_current_cms_content');
@@ -37,6 +43,7 @@ describe('CMS current content sync migration', () => {
     expect(migrationIndex).toContain('20260727_090000_philadelphia_opening_promotion');
     expect(migrationIndex).toContain('20260730_090000_add_edison_location_enums');
     expect(migrationIndex).toContain('20260730_091000_seed_edison_and_philadelphia_group_form');
+    expect(migrationIndex).toContain('20260807_090000_philadelphia_now_open');
     expect(migration).toContain('"location_slug" = \'houston\'');
     expect(migration).toContain("'10am - 10pm'");
     expect(migration).toContain('Time Mission Houston – 25+ Interactive Mission Rooms');
@@ -78,6 +85,13 @@ describe('CMS current content sync migration', () => {
     expect(edisonAndPhiladelphiaMigration).toContain('EDISON COMING SOON');
     expect(edisonAndPhiladelphiaMigration).toContain(
       'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form',
+    );
+    expect(philadelphiaNowOpenMigration).toContain('PHILADELPHIA_NOW_OPEN_SNAPSHOT');
+    expect(philadelphiaNowOpenSnapshot).toContain('PHILADELPHIA NOW OPEN');
+    expect(philadelphiaNowOpenSnapshot).toContain('Time Mission Philadelphia is now open');
+    expect(philadelphiaNowOpenMigration).toContain('"location_slug" = \'philadelphia\'');
+    expect(philadelphiaNowOpenMigration).toContain(
+      "'static'::\"public\".\"enum_announcement_banners_ticker_behavior\"",
     );
   });
 });

@@ -8,6 +8,7 @@ import {
     LIVE_SITE_PAGE_SNAPSHOT,
     LIVE_SITE_SYNC_SOURCE,
 } from '../cms/migration-data/20260730_live_site_snapshot';
+import { PHILADELPHIA_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260807_philadelphia_now_open_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -45,7 +46,13 @@ describe('live-site-to-CMS sync snapshot', () => {
         }));
 
         expect(LIVE_SITE_SYNC_SOURCE.commit).toBe('6cbae6adde40555535a271155b6c59d4f80db56c');
-        expect(LIVE_SITE_LOCATION_SNAPSHOT).toEqual(expected);
+        const effectiveSnapshot = LIVE_SITE_LOCATION_SNAPSHOT.map((location) =>
+            location.slug === PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.slug
+                ? { ...location, ticker: PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.ticker }
+                : location,
+        );
+
+        expect(effectiveSnapshot).toEqual(expected);
     });
 
     it('captures every code-owned SEO route for the CMS site-page collection', () => {
@@ -71,7 +78,13 @@ describe('live-site-to-CMS sync snapshot', () => {
             twitterImage: seo.twitterImage ?? seo.ogImage,
         }));
 
-        expect(LIVE_SITE_PAGE_SNAPSHOT).toEqual(expected);
+        const effectiveSnapshot = LIVE_SITE_PAGE_SNAPSHOT.map((page) =>
+            page.path === PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.path
+                ? { ...page, metaDescription: PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.metaDescription }
+                : page,
+        );
+
+        expect(effectiveSnapshot).toEqual(expected);
     });
 
     it('registers the one-way content sync migration', () => {

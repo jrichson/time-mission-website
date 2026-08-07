@@ -76,7 +76,7 @@ describe('public location data generator', () => {
       'https://maps.google.com/?q=1600%20Market%20Street%20Philadelphia%20PA%2019103%20United%20States',
     );
     expect(philadelphia.hours.mon).toEqual({ label: '1pm - 5pm', open: '13:00', close: '17:00' });
-    expect(philadelphia.status).toBe('coming-soon');
+    expect(philadelphia.status).toBe('open');
     expect(philadelphia.bookingUrl).toBe('https://checkout.example/philadelphia');
     expect(philadelphia.rollerCheckoutUrl).toBe('https://checkout.example/philadelphia/roller');
     expect(philadelphia.giftCardUrl).toBe('');

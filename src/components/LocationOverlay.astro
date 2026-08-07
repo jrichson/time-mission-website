@@ -17,27 +17,23 @@ function statusLabel(loc: (typeof allLocations)[number]) {
 }
 
 function showsOpenNowBadge(loc: (typeof allLocations)[number]) {
-    return loc.slug === 'brussels' && loc.status === 'open';
-}
-
-function showsPhiladelphiaOpeningBadge(loc: (typeof allLocations)[number]) {
-    return loc.slug === 'philadelphia' && loc.status === 'coming-soon';
+    return ['brussels', 'philadelphia'].includes(loc.slug) && loc.status === 'open';
 }
 
 function selectorBadge(loc: (typeof allLocations)[number]) {
+    if (loc.slug === 'philadelphia' && loc.status === 'open') return 'NOW OPEN';
     if (showsOpenNowBadge(loc)) return 'OPEN NOW!';
-    if (showsPhiladelphiaOpeningBadge(loc) || loc.status === 'temporarily-closed') return statusLabel(loc);
+    if (loc.status === 'temporarily-closed') return statusLabel(loc);
     return '';
 }
 
 function selectorBadgeI18n(loc: (typeof allLocations)[number]) {
-    if (showsOpenNowBadge(loc)) return 'location.openNow';
+    if (loc.slug === 'brussels' && showsOpenNowBadge(loc)) return 'location.openNow';
     return undefined;
 }
 
 function statusClass(loc: (typeof allLocations)[number]) {
     if (showsOpenNowBadge(loc)) return 'location-open-now';
-    if (showsPhiladelphiaOpeningBadge(loc)) return 'location-opening-soon';
     if (loc.status === 'coming-soon') return 'location-coming-soon';
     if (loc.status === 'temporarily-closed') return 'location-temporarily-closed';
     return undefined;
