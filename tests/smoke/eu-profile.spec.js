@@ -188,6 +188,14 @@ test('EU navigation lists Europe before the United States', async ({ page }) => 
   expect(overlayOrder).toEqual(['europe', 'us']);
   expect(footerOrder).toEqual(['europe', 'us']);
 
+  const europeGroup = page.locator('.location-overlay-left .location-group[data-location-region="europe"]');
+  const usGroup = page.locator('.location-overlay-left .location-group[data-location-region="us"]');
+  await expect(europeGroup.locator('a[data-tm-location-slug="brussels"] .coming-soon-tag'))
+    .toHaveText('OPEN NOW!');
+  await expect(europeGroup.locator('a[data-tm-location-slug="eindhoven"] .coming-soon-tag'))
+    .toHaveCount(0);
+  await expect(usGroup.locator('.coming-soon-tag')).toHaveCount(0);
+
   await page.goto('/locations');
   await expect(page.locator('.locations-list .loc-group').first())
     .toHaveAttribute('data-location-region', 'europe');
@@ -202,6 +210,17 @@ test('EU navigation lists Europe before the United States', async ({ page }) => 
     .evaluateAll((options) => options.slice(0, 3).map((option) => option.value));
   expect(ticketValues).toEqual(['antwerp', 'brussels', 'eindhoven']);
   await expect(page.locator('.testimonial-card')).toHaveCount(0);
+});
+
+test('EU contact form lists only EU locations', async ({ page }) => {
+  await page.goto('/contact');
+
+  const contactLocationGroups = page.locator('#location optgroup');
+  await expect(contactLocationGroups).toHaveCount(1);
+  await expect(contactLocationGroups.first()).toHaveAttribute('label', 'Europe');
+  const contactLocationValues = await page.locator('#location option:not([value=""])')
+    .evaluateAll((options) => options.map((option) => option.value));
+  expect(contactLocationValues).toEqual(['antwerp', 'brussels', 'eindhoven', 'general']);
 });
 
 test('EU consent starts denied and GTM is not requested before opt-in', async ({ page }) => {

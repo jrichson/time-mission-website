@@ -18,7 +18,10 @@ function escapeHtml(value: string): string {
 }
 
 const contactRegionLabels = { us: 'United States', europe: 'Europe' } as const;
-const contactLocationOptions = orderedLocationRegions(activeSiteProfile.internalRegion)
+const contactLocationRegions = activeSiteProfile.id === 'eu'
+    ? [activeSiteProfile.internalRegion]
+    : orderedLocationRegions(activeSiteProfile.internalRegion);
+const contactLocationOptions = contactLocationRegions
     .map((region) => {
         const options = locationsForRegion(allLocations, region)
             .map((location) => (

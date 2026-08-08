@@ -30,18 +30,31 @@ function statusLabel(loc: (typeof allLocations)[number]) {
 }
 
 function showsOpenNowBadge(loc: (typeof allLocations)[number]) {
-    return ['houston', 'orland-park', 'brussels'].includes(loc.slug) && loc.status === 'open';
+    const openNowLocations = activeSiteProfile.id === 'eu'
+        ? ['brussels']
+        : ['houston', 'orland-park', 'brussels', 'philadelphia'];
+    return openNowLocations.includes(loc.slug) && loc.status === 'open';
 }
 
 function selectorBadge(loc: (typeof allLocations)[number]) {
+    if (activeSiteProfile.id === 'eu') {
+        if (showsOpenNowBadge(loc)) return 'OPEN NOW!';
+        if (loc.region === 'europe' && loc.status === 'temporarily-closed') return statusLabel(loc);
+        return '';
+    }
+
+    if (loc.slug === 'philadelphia' && loc.status === 'open') return 'NOW OPEN';
     if (showsOpenNowBadge(loc)) return 'OPEN NOW!';
     if (loc.status !== 'open') return statusLabel(loc);
     return '';
 }
 
 function selectorBadgeI18n(loc: (typeof allLocations)[number]) {
+    if (loc.slug === 'philadelphia' && showsOpenNowBadge(loc)) return 'location.nowOpen';
     if (showsOpenNowBadge(loc)) return 'location.openNow';
-    if (loc.status === 'coming-soon' && !locationOpeningLabel(loc)) return 'location.comingSoon';
+    if (activeSiteProfile.id === 'us' && loc.status === 'coming-soon' && !locationOpeningLabel(loc)) {
+        return 'location.comingSoon';
+    }
     return undefined;
 }
 
