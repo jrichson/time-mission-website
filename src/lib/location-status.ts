@@ -48,8 +48,9 @@ export function locationOpeningDateText(loc: Pick<LocationRecord, 'openingDate' 
 export function locationDisplayStatus(loc: LocationStatusFields): string {
     const closureLabel = locationTemporaryClosureLabel(loc);
     if (closureLabel) return closureLabel;
+    if (loc.status === 'open') return 'Now Open';
     const openingLabel = locationOpeningLabel(loc);
     if (openingLabel) return openingLabel;
     if (loc.status === 'coming-soon') return hasTicketBooking(loc) ? 'Booking Now' : 'Coming Soon';
-    return 'Now booking';
+    return 'Now Open';
 }

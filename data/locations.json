@@ -119,9 +119,7 @@
       "shortName": "Philadelphia",
       "venueName": null,
       "region": "us",
-      "status": "coming-soon",
-      "openingDate": "2026-08-07",
-      "openingLabel": "Opening 8/7",
+      "status": "open",
       "address": {
         "line1": "1530 Chestnut Street",
         "city": "Philadelphia",
@@ -198,8 +196,8 @@
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
       "faqs": [
         {
-          "q": "When does Time Mission Philadelphia reopen?",
-          "a": "Time Mission Philadelphia reopens August 7, 2026. Advance online booking is available now through the Philadelphia checkout."
+          "q": "Is Time Mission Philadelphia open?",
+          "a": "Yes. Time Mission Philadelphia is now open at 1530 Chestnut Street. Online booking is available through the Philadelphia checkout."
         },
         {
           "q": "What ages can play at Time Mission Philadelphia?",
@@ -210,7 +208,7 @@
           "a": "Teams are 2 to 5 players. Larger groups can split into multiple teams, rotate through missions, and compare scores during the same visit or event."
         }
       ],
-      "ticker": "OPENING AUGUST 7TH — USE CODE PHILLY50 for 50% OFF",
+      "ticker": "PHILADELPHIA NOW OPEN",
       "giftCardUrl": "",
       "waiverUrl": "",
       "countryCode": "US",
@@ -219,7 +217,7 @@
       "currency": null,
       "phoneE164": "+12677101240",
       "hreflang": null,
-      "localBusinessSchemaEligible": false
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "west-nyack",
@@ -672,7 +670,7 @@
       },
       "contact": {
         "phone": "+32 3 301 03 03",
-        "email": "info@experience-factory.com"
+        "email": "antwerp@experience-factory.com"
       },
       "hours": {
         "mon": {
@@ -962,7 +960,7 @@
       },
       "contact": {
         "phone": "",
-        "email": ""
+        "email": "eindhoven@timemission.nl"
       },
       "hours": {},
       "bookingUrl": "",

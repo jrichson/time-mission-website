@@ -28,6 +28,7 @@ import * as migration_20260730_091000_seed_edison_and_philadelphia_group_form fr
 import * as migration_20260730_151000_sync_live_site_to_cms from './20260730_151000_sync_live_site_to_cms';
 import * as migration_20260730_170000_blog_authoring_and_media from './20260730_170000_blog_authoring_and_media';
 import * as migration_20260731_180000_eu_location_operational_data from './20260731_180000_eu_location_operational_data';
+import * as migration_20260807_090000_philadelphia_now_open from './20260807_090000_philadelphia_now_open';
 
 export const migrations = [
   {
@@ -179,5 +180,10 @@ export const migrations = [
     up: migration_20260731_180000_eu_location_operational_data.up,
     down: migration_20260731_180000_eu_location_operational_data.down,
     name: '20260731_180000_eu_location_operational_data'
+  },
+  {
+    up: migration_20260807_090000_philadelphia_now_open.up,
+    down: migration_20260807_090000_philadelphia_now_open.down,
+    name: '20260807_090000_philadelphia_now_open'
   },
 ];

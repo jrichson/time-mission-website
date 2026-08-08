@@ -315,6 +315,57 @@ describe('Cloudflare form handler', () => {
     expect(emailCall.body.html).toContain('NY - West Nyack');
   });
 
+  it('routes EU contact submissions to each configured location inbox', async () => {
+    const calls = [];
+    const fetchImpl = (url, init) => {
+      calls.push({
+        body: typeof init.body === 'string' ? JSON.parse(init.body) : null,
+        url: String(url),
+      });
+      return fetchOk(url);
+    };
+    const recipients = {
+      antwerp: 'antwerp@experience-factory.com',
+      brussels: 'brussels@timemission.com',
+      eindhoven: 'eindhoven@timemission.nl',
+    };
+    const labels = {
+      antwerp: 'Belgium - Antwerp',
+      brussels: 'Belgium - Brussels',
+      eindhoven: 'Netherlands - Eindhoven',
+    };
+
+    for (const [location, recipient] of Object.entries(recipients)) {
+      const response = await handleFormRequest({
+        env: {
+          ...env,
+          CONTACT_TO_EMAIL_ANTWERP: recipients.antwerp,
+          CONTACT_TO_EMAIL_BRUSSELS: recipients.brussels,
+          CONTACT_TO_EMAIL_EINDHOVEN: recipients.eindhoven,
+          FORM_RATE_LIMIT_EMAIL_HOUR: '100',
+          TM_SITE_PROFILE: 'eu',
+        },
+        fetchImpl,
+        formType: 'contact',
+        request: formRequest('/api/contact', {
+          'cf-turnstile-response': 'token',
+          email: 'guest@example.com',
+          location,
+          message: 'Question about this location',
+          name: 'Guest',
+          phone: '+32 470 12 34 56',
+          subject: 'general',
+        }, { origin: 'https://www.timemission.eu' }),
+      });
+
+      expect(response.status).toBe(200);
+      expect(calls.at(-1).body).toMatchObject({
+        subject: `Time Mission contact: ${labels[location]} - General Inquiry`,
+        to: [recipient],
+      });
+    }
+  });
+
   it('routes TM Ops group subjects to the shared groups inbox', async () => {
     const calls = [];
     const fetchImpl = (url, init) => {

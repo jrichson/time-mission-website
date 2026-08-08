@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { allLocations, type LocationRecord } from '../src/data/locations';
 import {
     locationCtaView,
+    locationHeadlineStatus,
     locationHoursRows,
     locationStateBadge,
     locationViewModel,
@@ -116,14 +117,15 @@ describe('Location View contract', () => {
         }
     });
 
-    it('shows Philadelphia reopening hours and opening label while advance booking is live', () => {
+    it('treats Philadelphia as open everywhere while preserving its published hours', () => {
         const philadelphia = allLocations.find((loc) => loc.id === 'philadelphia');
         if (!philadelphia) throw new Error('Philadelphia location missing');
 
         const runtime = loadRuntimeLocationViews();
 
-        expect(philadelphia.status).toBe('coming-soon');
-        expect(philadelphia.openingLabel).toBe('Opening 8/7');
+        expect(philadelphia.status).toBe('open');
+        expect(philadelphia.openingLabel).toBeUndefined();
+        expect(locationHeadlineStatus(philadelphia)).toBe('Now Open');
         expect(philadelphia.hours.mon).toMatchObject({
             open: '10:00',
             close: '22:00',

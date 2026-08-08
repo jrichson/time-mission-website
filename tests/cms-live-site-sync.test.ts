@@ -9,6 +9,7 @@ import {
     LIVE_SITE_SYNC_SOURCE,
 } from '../cms/migration-data/20260730_live_site_snapshot';
 import { EU_LOCATION_OPERATIONAL_SNAPSHOT } from '../cms/migration-data/20260731_eu_location_operational_snapshot';
+import { PHILADELPHIA_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260807_philadelphia_now_open_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -50,15 +51,17 @@ describe('live-site-to-CMS sync snapshot', () => {
         );
         const effectiveSnapshot = LIVE_SITE_LOCATION_SNAPSHOT.map((location) => {
             const patch = operationalPatches.get(location.slug);
-            if (!patch) return location;
-            return {
+            const operationalLocation = patch ? {
                 ...location,
                 hours: patch.hours,
                 externalLinks: {
                     ...location.externalLinks,
                     ...('externalLinks' in patch ? patch.externalLinks : {}),
                 },
-            };
+            } : location;
+            return location.slug === PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.slug
+                ? { ...operationalLocation, ticker: PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.ticker }
+                : operationalLocation;
         });
 
         expect(LIVE_SITE_SYNC_SOURCE.commit).toBe('6cbae6adde40555535a271155b6c59d4f80db56c');
@@ -88,7 +91,13 @@ describe('live-site-to-CMS sync snapshot', () => {
             twitterImage: seo.twitterImage ?? seo.ogImage,
         }));
 
-        expect(LIVE_SITE_PAGE_SNAPSHOT).toEqual(expected);
+        const effectiveSnapshot = LIVE_SITE_PAGE_SNAPSHOT.map((page) =>
+            page.path === PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.path
+                ? { ...page, metaDescription: PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.metaDescription }
+                : page,
+        );
+
+        expect(effectiveSnapshot).toEqual(expected);
     });
 
     it('registers the one-way content sync migration', () => {

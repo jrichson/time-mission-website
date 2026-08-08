@@ -87,8 +87,10 @@ describe('browser data, consent, and i18n contracts', () => {
       requireUrl(locationId, 'waiverUrl', byId.get(locationId)?.waiverUrl);
     }
 
-    expect(byId.get('philadelphia')?.status).toBe('coming-soon');
-    expect(byId.get('philadelphia')?.openingLabel).toBe('Opening 8/7');
+    expect(byId.get('philadelphia')?.status).toBe('open');
+    expect(byId.get('philadelphia')?.openingLabel).toBeUndefined();
+    expect(byId.get('philadelphia')?.ticker).toBe('PHILADELPHIA NOW OPEN');
+    expect(byId.get('philadelphia')?.localBusinessSchemaEligible).toBe(true);
     expect(byId.get('philadelphia')?.bookingUrl)
       .toBe('https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home');
     expect(byId.get('philadelphia')?.rollerCheckoutUrl)

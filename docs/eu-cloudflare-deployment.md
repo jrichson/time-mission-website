@@ -98,9 +98,9 @@ and legal review is complete. The production workflow intentionally blocks befor
 | `TURNSTILE_SECRET_KEY` | EU Turnstile verification |
 | `KLAVIYO_API_KEY` | Optional EU newsletter integration |
 | `KLAVIYO_LIST_ID_*` | Optional EU list routing |
-| `CONTACT_TO_EMAIL_ANTWERP` | Optional Antwerp routing |
-| `CONTACT_TO_EMAIL_BRUSSELS` | Optional Brussels routing |
-| `CONTACT_TO_EMAIL_EINDHOVEN` | Optional Eindhoven routing |
+| `CONTACT_TO_EMAIL_ANTWERP` | Antwerp routing; pinned in `wrangler.eu.toml.tmpl` to `antwerp@experience-factory.com` |
+| `CONTACT_TO_EMAIL_BRUSSELS` | Brussels routing; pinned in `wrangler.eu.toml.tmpl` to `brussels@timemission.com` |
+| `CONTACT_TO_EMAIL_EINDHOVEN` | Eindhoven routing; pinned in `wrangler.eu.toml.tmpl` to `eindhoven@timemission.nl` |
 
 The rendered EU Wrangler configuration binds `FORM_SUBMISSIONS_DB`, restricts accepted
 form origins to the EU domains, and requires the D1 archive. Configure R2/media CORS to

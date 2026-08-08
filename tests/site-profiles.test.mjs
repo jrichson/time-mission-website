@@ -139,10 +139,12 @@ describe('site deployment profiles', () => {
         country: 'Netherlands',
       },
       bookingUrl: '',
+      contact: { phone: '', email: 'eindhoven@timemission.nl' },
       currency: 'EUR',
       locale: 'nl-NL',
       timeZone: 'Europe/Amsterdam',
     });
+    expect(antwerp.contact.email).toBe('antwerp@experience-factory.com');
   });
 
   it('preserves a third-party venue link for an internal location', () => {
@@ -166,6 +168,9 @@ describe('site deployment profiles', () => {
     expect(config).toContain('migrations_dir = "migrations"');
     expect(config).toContain('FORM_ALLOWED_ORIGINS = "https://www.timemission.eu,https://timemission.eu"');
     expect(config).toContain('PUBLIC_TURNSTILE_SITE_KEY = "eu-test-site-key"');
+    expect(config).toContain('CONTACT_TO_EMAIL_ANTWERP = "antwerp@experience-factory.com"');
+    expect(config).toContain('CONTACT_TO_EMAIL_BRUSSELS = "brussels@timemission.com"');
+    expect(config).toContain('CONTACT_TO_EMAIL_EINDHOVEN = "eindhoven@timemission.nl"');
   });
 
   it('refuses to render an EU Pages config without an EU D1 UUID', () => {

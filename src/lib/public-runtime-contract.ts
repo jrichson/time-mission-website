@@ -46,7 +46,7 @@ export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'bookingBriqProvider', src: '/js/booking-provider-briq.js', version: 1 },
     { id: 'bookingNavigationAdapters', src: '/js/booking-navigation-adapters.js', version: 1 },
     { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 10 },
-    { id: 'locations', src: '/js/locations.js', version: 25 },
+    { id: 'locations', src: '/js/locations.js', version: 26 },
     { id: 'nav', src: '/js/nav.js', version: 15 },
     { id: 'bookingController', src: '/js/booking-controller.js', version: 21 },
     { id: 'ticketPanel', src: '/js/ticket-panel.js', version: 12 },
