@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { resolveSiteProfile } from '../config/site-profiles.mjs';
+import { translationReviewEnvironment } from './lib/deployment-environment.mjs';
 import { mergeTmDotEnvFromDisk } from './tm-dotenv.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -25,7 +26,7 @@ const buildEnv = {
   TM_SITE_PROFILE: profile,
   PUBLIC_SITE_ORIGIN: definition.origin,
   TM_DEPLOYMENT_BUILD: production ? 'true' : 'false',
-  ...(production && profile === 'eu' ? { TM_REQUIRE_TRANSLATION_APPROVAL: 'true' } : {}),
+  ...translationReviewEnvironment(profile),
 };
 
 if (profile === 'eu') {

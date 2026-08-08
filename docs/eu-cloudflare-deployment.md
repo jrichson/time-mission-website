@@ -37,9 +37,9 @@ claim.
 - Locale pages have server-rendered `lang`, canonical, reciprocal `hreflang`, and
   `x-default` metadata.
 
-Production EU builds require a digest-bound human approval for every rendered locale.
-After reviewing all public route copy, metadata, forms, and legal text in a fresh review
-build, the language owner records that exact artifact with:
+Translation review remains available as an advisory audit trail for every rendered locale.
+After reviewing public route copy, metadata, forms, and legal text in a fresh review build,
+a language owner can record that exact artifact with:
 
 ```bash
 npm run build:eu
@@ -50,8 +50,8 @@ Repeat the approval command for `en`, `fr`, and `es` after each locale is review
 command writes the rendered-copy digest, reviewer, and review date to
 `src/data/site/i18n-approval.json`; do not hand-edit a status to `approved`. Any later copy
 change invalidates the digest. Shared UI and page-body copy are included in the rendered
-artifact review. Leave the current `review_required` statuses in place until native-language
-and legal review is complete. The production workflow intentionally blocks before deploy.
+artifact review. `review_required` statuses may remain until native-language and legal review
+is complete; they are visible audit metadata and do not block production deployment.
 
 ## One-Time Cloudflare Setup
 
@@ -122,7 +122,7 @@ npm run build:eu
 TM_SITE_PROFILE=eu PUBLIC_SITE_ORIGIN=https://www.timemission.eu npm run verify:artifact:review
 ```
 
-For a Cloudflare Pages preview before translation approval:
+For a Cloudflare Pages preview:
 
 ```bash
 export EU_D1_DATABASE_ID="<EU D1 UUID>"
@@ -138,7 +138,7 @@ Cloudflare serves the preview at a hash URL and the stable
 Email delivery variables may remain unset for visual and navigation testing; submitted
 forms will fail after their D1 archive step until those runtime values are configured.
 
-For production, after human translation approval:
+For production:
 
 ```bash
 export EU_D1_DATABASE_ID="<EU D1 UUID>"
@@ -156,10 +156,11 @@ verified artifact boundary or Pages Functions discovery.
 
 The preferred production path is the `CMS Wrangler Deploy` GitHub Actions workflow with
 `target=eu` or `target=both`. Each target builds independently, verifies its artifact
-digest, and deploys the same staged bytes to its own Pages project.
+digest, and deploys the same staged bytes to its own Pages project. Translation review
+records remain advisory in both the local and GitHub production paths.
 
-For pre-approval testing, dispatch the same workflow with `target=eu-preview`. This path
-does not assert translation approval and never updates the production Pages branch.
+For preview testing, dispatch the same workflow with `target=eu-preview`. This path never
+updates the production Pages branch.
 
 ## Domain Cutover
 

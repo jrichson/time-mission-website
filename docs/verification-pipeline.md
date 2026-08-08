@@ -49,8 +49,8 @@ also installs Playwright Chromium and its system dependencies for the source and
 browser checks.
 
 1. Run `npm run check` against source and deployment contracts.
-2. Build the selected profile with `TM_DEPLOYMENT_BUILD=true`; EU builds also enforce
-   digest-bound human translation approvals and an EU-specific Turnstile site key.
+2. Build the selected profile with `TM_DEPLOYMENT_BUILD=true`; EU builds require an
+   EU-specific Turnstile site key while translation review records remain advisory.
 3. Run `npm run verify:artifact`, including the profile-aware browser smoke matrix, and
    write `dist/data/deployment-verification.json` over the exact deployment inputs.
 4. Recompute the deployment digest and reject any post-verification modification.
@@ -63,9 +63,9 @@ stamp. Under the EU profile, Playwright selects the EU identity, localization, c
 CSP, and shared runtime-contract suites; the US profile retains the full US venue and
 commerce regression suite.
 
-`npm run deploy:pages:eu:preview` builds without the production translation assertion,
-runs the artifact checks, writes a preview-only digest stamp, and deploys to the fixed
-`eu-preview` Cloudflare Pages branch. Production deployment rejects that stamp.
+`npm run deploy:pages:eu:preview` runs the artifact checks, writes a preview-only digest
+stamp, and deploys to the fixed `eu-preview` Cloudflare Pages branch. Production deployment
+rejects that stamp.
 
 ## Available Scripts
 

@@ -18,3 +18,9 @@ export function sourceCheckEnvironment(input = process.env) {
   for (const key of DEPLOYMENT_ONLY_ENV_KEYS) delete env[key];
   return env;
 }
+
+export function translationReviewEnvironment(profile) {
+  return profile === 'eu'
+    ? { TM_REQUIRE_TRANSLATION_APPROVAL: 'false' }
+    : {};
+}

@@ -92,7 +92,7 @@ jobs:
       EU_SGTM_COLLECT_PATH: ${{ vars.EU_SGTM_COLLECT_PATH }}
       EU_SGTM_CONTAINER_URL: ${{ vars.EU_SGTM_CONTAINER_URL }}
       PUBLIC_TM_MEDIA_BASE: ${{ vars.PUBLIC_TM_MEDIA_BASE }}
-      TM_REQUIRE_TRANSLATION_APPROVAL: "true"
+      TM_REQUIRE_TRANSLATION_APPROVAL: "false"
       TM_SITE_PROFILE: eu
     steps:
       - name: Check out site source

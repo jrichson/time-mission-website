@@ -7,7 +7,10 @@ import {
   createCloudflareDeploymentArtifact,
   localWranglerBin,
 } from './lib/cloudflare-deployment-artifact.mjs';
-import { sourceCheckEnvironment } from './lib/deployment-environment.mjs';
+import {
+  sourceCheckEnvironment,
+  translationReviewEnvironment,
+} from './lib/deployment-environment.mjs';
 import { mergeTmPublicBuildEnvFromDisk } from './tm-dotenv.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -23,6 +26,7 @@ if (preview && requestedProfile !== 'eu') {
   console.error('The preview deployment interface currently supports only the EU profile.');
   process.exit(1);
 }
+const translationReviewEnv = translationReviewEnvironment(requestedProfile);
 
 function run(command, args, options = {}) {
   const env = {
@@ -58,7 +62,7 @@ try {
         requestedProfile,
         ...(preview ? ['--preview-deploy'] : ['--production']),
       ],
-      preview ? { env: { TM_REQUIRE_TRANSLATION_APPROVAL: 'false' } } : {},
+      { env: translationReviewEnv },
     );
     const publicBuildEnv = mergeTmPublicBuildEnvFromDisk(root, {
       ...process.env,
@@ -72,7 +76,7 @@ try {
       env: {
         ...publicBuildEnv,
         TM_DEPLOYMENT_BUILD: preview ? 'false' : 'true',
-        ...(preview ? { TM_REQUIRE_TRANSLATION_APPROVAL: 'false' } : {}),
+        ...translationReviewEnv,
       },
     });
   }

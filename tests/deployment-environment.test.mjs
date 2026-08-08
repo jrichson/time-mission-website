@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { sourceCheckEnvironment } from '../scripts/lib/deployment-environment.mjs';
+import {
+  sourceCheckEnvironment,
+  translationReviewEnvironment,
+} from '../scripts/lib/deployment-environment.mjs';
 
 describe('deployment source-check environment', () => {
   it('removes deployment-only values without dropping shared build inputs', () => {
@@ -19,5 +22,12 @@ describe('deployment source-check environment', () => {
     expect(env).toEqual({
       PUBLIC_TM_MEDIA_BASE: 'https://media.example',
     });
+  });
+
+  it('keeps EU translation review advisory during production deployment', () => {
+    expect(translationReviewEnvironment('eu')).toEqual({
+      TM_REQUIRE_TRANSLATION_APPROVAL: 'false',
+    });
+    expect(translationReviewEnvironment('us')).toEqual({});
   });
 });
