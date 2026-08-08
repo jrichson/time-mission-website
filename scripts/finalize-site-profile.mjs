@@ -14,6 +14,8 @@ import {
   localeHtmlLang,
   locationForCanonicalPath,
 } from './lib/regional-html-routes.mjs';
+import pageI18n from '../src/data/site/page-i18n.json' with { type: 'json' };
+import { localizePageCopy } from './lib/page-i18n.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const distDir = path.join(root, 'dist');
@@ -75,6 +77,15 @@ function replaceTranslatedElements(html, translations) {
     );
     rendered = rendered.replace(textPattern, `$1${htmlEscape(value)}$5`);
   }
+
+  const statusPattern = /(<([a-z][\w:-]*)\b[^>]*\sdata-i18n-status=(["'])([^"']+)\3[^>]*>)([\s\S]*?)(<\/\2>)/gi;
+  rendered = rendered.replace(statusPattern, (full, open, _tag, _quote, key, body, close) => {
+    const translated = translations[key];
+    if (typeof translated !== 'string') return full;
+    const base = body.replace(/\s*\([^()]*\)\s*$/, '');
+    return `${open}${base} (${htmlEscape(translated)})${close}`;
+  });
+
   return replaceTranslatedAttributes(rendered, translations);
 }
 
@@ -152,14 +163,12 @@ function hreflangMarkup(canonicalPath) {
 
 function localizeHtml(source, route, locale) {
   const canonicalUrl = localizedUrl(route.canonicalPath, locale);
-  const englishCanonical = localizedUrl(route.canonicalPath, profile.defaultLocale);
   const translations = {
     ...(i18n.translations?.[i18n.defaultLanguage] || {}),
     ...(i18n.translations?.[locale] || {}),
   };
 
   let html = source
-    .replaceAll(englishCanonical, canonicalUrl)
     .replace(
       /(<html\b[^>]*\blang=)(["'])[^"']*\2/i,
       `$1"${localeHtmlLang(locale, route.canonicalPath, locations)}"`,
@@ -171,6 +180,7 @@ function localizeHtml(source, route, locale) {
     .replace(/(<meta property="og:url" content=")[^"]*(">)/i, `$1${canonicalUrl}$2`);
 
   html = replaceTranslatedElements(html, translations);
+  html = localizePageCopy(html, locale, pageI18n, route.canonicalPath);
   html = localizeStructuredData(html, locale);
   html = prefixInternalLinks(html, locale);
   return html;

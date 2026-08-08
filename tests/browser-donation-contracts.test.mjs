@@ -35,6 +35,59 @@ function element(attrs = {}) {
 }
 
 describe('browser donation contracts', () => {
+  it('does not reload an in-progress embedded form when translations refresh', async () => {
+    const button = element({ href: '#' });
+    const hint = element();
+    const formSection = element();
+    const frame = element();
+    const intro = element();
+    let srcWrites = 0;
+    const setFrameAttribute = frame.setAttribute.bind(frame);
+    frame.setAttribute = (name, value) => {
+      if (name === 'src') srcWrites += 1;
+      setFrameAttribute(name, value);
+    };
+    const url = 'https://forms.roller.app/#/timemissionmountprospect/953cef02271145c/form';
+    const { context, window, document } = createBrowserContext({
+      TM: {
+        current: {
+          id: 'mount-prospect',
+          slug: 'mount-prospect',
+          shortName: 'Mount Prospect',
+          donationUrl: url,
+        },
+      },
+      TMI18n: {
+        ready: Promise.resolve(),
+        text(_key, fallback, replacements) {
+          return Object.entries(replacements || {}).reduce(
+            (value, [token, replacement]) => value.replace(`{${token}}`, replacement),
+            fallback,
+          );
+        },
+      },
+    });
+
+    document.querySelectorAll = (selector) => (
+      selector === '.btn-donation, [data-donation="1"]' ? [button] : []
+    );
+    document.querySelector = (selector) => (
+      selector === '[data-donation-form-section]' ? formSection : null
+    );
+    document.getElementById = (id) => ({
+      donationLocationHint: hint,
+      donationRequestFrame: frame,
+      donationFormIntro: intro,
+    }[id] || null);
+
+    runScript('js/page-donation-after.js', context);
+    await window.TMI18n.ready;
+    document.dispatchEvent({ type: 'tm:language-changed' });
+
+    expect(frame.getAttribute('src')).toBe(url);
+    expect(srcWrites).toBe(1);
+  });
+
   it('embeds the selected location donation form when available', () => {
     const button = element({ href: '#', 'aria-disabled': 'true' });
     button.classList.add('is-disabled');

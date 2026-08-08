@@ -16,6 +16,13 @@
     var BRIQ_WIDGET_STYLE_HREF = '/css/briq-widget.css?v=2';
     var BRIQ_WIDGET_SCRIPT_TIMEOUT_MS = 8000;
 
+    function translate(key, fallback) {
+        if (window.TMI18n && typeof window.TMI18n.text === 'function') {
+            return window.TMI18n.text(key, fallback);
+        }
+        return fallback;
+    }
+
     function getPanel() {
         if (panelAdapter && typeof panelAdapter.getPanelEl === 'function') return panelAdapter.getPanelEl();
         return document.getElementById('ticketPanel');
@@ -51,14 +58,19 @@
     function ensureBriqLoadingIndicator(container) {
         if (!container) return null;
         var loader = container.querySelector && container.querySelector('[data-briq-widget-loader]');
-        if (loader) return loader;
-        loader = document.createElement('div');
-        loader.className = 'briq-widget-loader';
-        loader.setAttribute('data-briq-widget-loader', '');
-        loader.setAttribute('role', 'status');
-        loader.setAttribute('aria-live', 'polite');
-        loader.innerHTML = '<span class="briq-widget-spinner" aria-hidden="true"></span><span class="briq-widget-loader-title">Loading booking options</span>';
-        container.insertBefore(loader, container.firstChild || null);
+        if (!loader) {
+            loader = document.createElement('div');
+            loader.className = 'briq-widget-loader';
+            loader.setAttribute('data-briq-widget-loader', '');
+            loader.setAttribute('role', 'status');
+            loader.setAttribute('aria-live', 'polite');
+            loader.innerHTML = '<span class="briq-widget-spinner" aria-hidden="true"></span><span class="briq-widget-loader-title"></span>';
+            container.insertBefore(loader, container.firstChild || null);
+        }
+        var title = loader.querySelector && loader.querySelector('.briq-widget-loader-title');
+        if (title && !container.classList.contains('is-error')) {
+            title.textContent = translate('booking.briq.loading', 'Loading booking options');
+        }
         return loader;
     }
 
@@ -84,7 +96,10 @@
         container.removeAttribute('aria-busy');
         if (loader) {
             var title = loader.querySelector && loader.querySelector('.briq-widget-loader-title');
-            if (title) title.textContent = 'Booking options are taking longer than expected.';
+            if (title) title.textContent = translate(
+                'booking.briq.delayed',
+                'Booking options are taking longer than expected.'
+            );
         }
     }
 
@@ -126,7 +141,9 @@
         widget.setAttribute('data-color-2-base', config.color2Base || '#FFBA00');
         widget.setAttribute('data-color-2-contrast', config.color2Contrast || '#010437');
         widget.setAttribute('data-price-display', config.priceDisplay || 'PerPerson');
-        widget.setAttribute('data-button-text', config.buttonText || 'BOOK NOW');
+        var buttonFallback = config.buttonText || 'BOOK NOW';
+        widget.setAttribute('data-tm-briq-button-fallback', buttonFallback);
+        widget.setAttribute('data-button-text', translate('booking.briq.button', buttonFallback));
         widget.setAttribute('data-features', 'hideMainButton');
         widget.setAttribute('data-positioning', "[{'x-align':'right','x-offset':'0px','y-offset':'0px','z-index':'10000'}]");
     }
@@ -162,7 +179,7 @@
             toggle.setAttribute('data-briq-open-toggle', '');
             toggle.setAttribute('aria-hidden', 'true');
             toggle.setAttribute('tabindex', '-1');
-            toggle.textContent = 'Open booking';
+            toggle.textContent = translate('booking.briq.open', 'Open booking');
             container.appendChild(toggle);
         }
         toggle.setAttribute('data-widget-state', 'bwr=bu|is|' + config.domain + '|and|o|is|true');
@@ -504,6 +521,23 @@
         return true;
     }
 
+    function localizeBriqUi() {
+        var container = getBriqWidgetContainer();
+        if (!container) return;
+        var loader = ensureBriqLoadingIndicator(container);
+        var title = loader && loader.querySelector && loader.querySelector('.briq-widget-loader-title');
+        if (title && container.classList.contains('is-error')) {
+            title.textContent = translate('booking.briq.delayed', 'Booking options are taking longer than expected.');
+        }
+        var toggle = getBriqOpenToggle();
+        if (toggle) toggle.textContent = translate('booking.briq.open', 'Open booking');
+        var widget = getBriqWidget();
+        if (widget) {
+            var buttonFallback = widget.getAttribute('data-tm-briq-button-fallback') || 'BOOK NOW';
+            widget.setAttribute('data-button-text', translate('booking.briq.button', buttonFallback));
+        }
+    }
+
     window.TMBookingBriq = {
         open: showBriqWidget,
         close: closeBriqWidget,
@@ -511,4 +545,8 @@
             panelAdapter = adapter || null;
         },
     };
+    document.addEventListener('tm:language-changed', localizeBriqUi);
+    if (window.TMI18n && window.TMI18n.ready && typeof window.TMI18n.ready.then === 'function') {
+        window.TMI18n.ready.then(localizeBriqUi);
+    }
 })();

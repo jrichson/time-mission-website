@@ -49,10 +49,9 @@ node scripts/record-i18n-artifact-approval.mjs eu nl "Reviewer name"
 Repeat the approval command for `en`, `fr`, and `es` after each locale is reviewed. The
 command writes the rendered-copy digest, reviewer, and review date to
 `src/data/site/i18n-approval.json`; do not hand-edit a status to `approved`. Any later copy
-change invalidates the digest. Catalog-marked shared UI is translated now; legacy
-page-body fragments still require human translation and annotation. Leave the current
-`review_required` statuses in place until that work is complete. The production workflow
-intentionally blocks before deploy.
+change invalidates the digest. Shared UI and page-body copy are included in the rendered
+artifact review. Leave the current `review_required` statuses in place until native-language
+and legal review is complete. The production workflow intentionally blocks before deploy.
 
 ## One-Time Cloudflare Setup
 

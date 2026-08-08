@@ -76,25 +76,20 @@ describe('Language Surface artifact approval', () => {
     expect(unchangedLocalizedFields(copy, copy)).toEqual(['title', 'description', 'heading']);
   });
 
-  it('keeps unchanged-field launch approval explicit and artifact-scoped', () => {
+  it('keeps launch approval artifact-scoped without an unchanged-copy waiver', () => {
     expect(approvalRecord({
       status: 'approved',
       artifactDigest: 'abc123',
       reviewer: 'Site Owner',
       reviewedAt: '2026-07-31T00:00:00.000Z',
-      allowUnchangedFields: true,
-      approvalNote: 'Approved for launch.',
     })).toMatchObject({
       status: 'approved',
       artifactDigest: 'abc123',
-      allowUnchangedFields: true,
-      approvalNote: 'Approved for launch.',
     });
 
     expect(approvalRecord('approved')).toMatchObject({
       status: 'approved',
       artifactDigest: '',
-      allowUnchangedFields: false,
     });
   });
 });

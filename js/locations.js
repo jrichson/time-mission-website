@@ -151,6 +151,12 @@
         }, fallback);
     }
 
+    function localizedLocationName(loc) {
+        const fallback = loc ? (loc.shortName || loc.name || '') : '';
+        const slug = loc ? normalizeLocationId(loc.slug || loc.id) : '';
+        return slug ? translateText('location.name.' + slug, fallback) : fallback;
+    }
+
     function getOverlayView(id, opts) {
         const loc = resolveLocationRef(id);
         return LocationViews.getOverlayView(loc, id, opts || {});
@@ -356,14 +362,14 @@
 
         updateDOM() {
             const loc = TM.current;
-            const selectedLocationName = loc ? (loc.shortName || loc.name || '') : '';
+            const selectedLocationName = localizedLocationName(loc);
 
             const locationText = document.getElementById('locationText');
             if (locationText) {
                 if (selectedLocationName) {
                     locationText.textContent = selectedLocationName;
                 } else if (TM.locations.length > 0) {
-                    locationText.textContent = 'Select Location';
+                    locationText.textContent = translateText('nav.selectLocation', 'Select Location');
                 }
             }
 
@@ -394,7 +400,9 @@
 
             if (loc && loc.ticker && pageLocationSlug === normalizeLocationId(loc.slug || loc.id)) {
                 document.querySelectorAll('.ticker-track').forEach(track => {
-                    if (track.dataset.tmTickerSource === 'cms') return;
+                    // CMS and location tickers are already rendered with the active locale.
+                    // Replacing them from the raw catalog would restore English after load.
+                    if (track.dataset.tmTickerSource === 'cms' || track.dataset.tmTickerSource === 'location') return;
                     const items = track.querySelectorAll('.ticker-item');
                     items.forEach(item => { renderTickerItem(item, loc.ticker); });
                 });
@@ -573,7 +581,7 @@
     window.TM = TM;
 
     document.addEventListener('tm:language-changed', function () {
-        if (TM.current) TM.updateDOM();
+        TM.updateDOM();
     });
 
     if (document.readyState === 'loading') {

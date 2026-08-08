@@ -22,12 +22,21 @@
     var initRevealOnScroll = requireWidget('initRevealOnScroll');
     var initSmoothScroll = requireWidget('initSmoothScroll');
 
+    function localizedLocationName(value, slug) {
+        var fallback = String(value || '');
+        var key = String(slug || fallback).toLowerCase().trim().replace(/\s+/g, '-');
+        if (key && window.TMI18n && typeof window.TMI18n.text === 'function') {
+            return window.TMI18n.text('location.name.' + key, fallback);
+        }
+        return fallback;
+    }
+
     function initCommonPage(config, options) {
         var opts = options || {};
         var taglines = Array.isArray(config.taglines) ? config.taglines : [];
         if (config.heroVideo !== false) initHeroVideo();
         var tagline = initTagline(taglines, {
-            initialCity: opts.initialCity || null,
+            initialCity: opts.initialCity ? localizedLocationName(opts.initialCity) : null,
             initialHoldMs: opts.initialHoldMs || 3000,
             mobileLocationHoldMs: 5000,
             translationKey: 'home.taglines'
@@ -38,7 +47,9 @@
         if (opts.updateEyebrow !== false && window.TM && window.TM.ready && typeof window.TM.ready.then === 'function') {
             window.TM.ready.then(function () {
                 var loc = window.TM.current || null;
-                if (loc && (loc.shortName || loc.name)) window.updateEyebrowLocation(loc.shortName || loc.name);
+                if (loc && (loc.shortName || loc.name)) {
+                    window.updateEyebrowLocation(localizedLocationName(loc.shortName || loc.name, loc.slug || loc.id));
+                }
             });
         }
 

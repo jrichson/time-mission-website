@@ -52,6 +52,7 @@ const steps = [
     env: { TM_RESOLVED_LOCATIONS_PATH: path.join(root, 'public', 'data', 'locations.json') },
   },
   { label: 'Finalize regional and localized output', ...nodeStep('scripts/finalize-site-profile.mjs') },
+  { label: 'Verify localized page-copy coverage', ...nodeStep('scripts/check-page-i18n-output.mjs') },
   { label: 'Verify built translation approval', ...nodeStep('scripts/check-i18n-artifact-approval.mjs') },
   { label: 'Verify regional artifact identity and isolation', ...nodeStep('scripts/check-site-profile-output.mjs') },
   { label: 'Prune excluded artifacts', ...nodeStep('scripts/prune-excluded-artifacts.mjs', ['dist', 'public']) },

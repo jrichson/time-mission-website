@@ -6,11 +6,13 @@
 
     var bookingFrame = null;
 
-    function translate(key, fallback) {
+    function translate(key, fallback, replacements) {
         if (window.TMI18n && typeof window.TMI18n.text === 'function') {
-            return window.TMI18n.text(key, fallback);
+            return window.TMI18n.text(key, fallback, replacements);
         }
-        return fallback;
+        return Object.keys(replacements || {}).reduce(function (value, token) {
+            return value.replace(new RegExp('\\{' + token + '\\}', 'g'), replacements[token]);
+        }, fallback);
     }
 
     function isExternalHttpUrl(href) {
@@ -18,6 +20,12 @@
             return window.TMBookingJourney.isExternalHttpUrl(href);
         }
         return /^https?:\/\//i.test(String(href || '').trim());
+    }
+
+    function localizedLocationName(loc) {
+        var fallback = (loc && (loc.shortName || loc.name)) || 'Time Mission';
+        var slug = String((loc && (loc.slug || loc.id)) || '').toLowerCase();
+        return slug ? translate('location.name.' + slug, fallback) : fallback;
     }
 
     function closeBookingFrame() {
@@ -99,9 +107,12 @@
             title: title,
             close: close,
             iframe: iframe,
+            locationName: '',
         };
         document.addEventListener('tm:language-changed', function () {
-            title.textContent = translate('booking.frame.title', 'Complete Your Booking');
+            title.textContent = bookingFrame.locationName
+                ? translate('booking.frame.bookLocation', 'Book {location}', { location: bookingFrame.locationName })
+                : translate('booking.frame.title', 'Complete Your Booking');
             close.setAttribute('aria-label', translate('booking.frame.close', 'Close booking'));
             iframe.title = translate('booking.frame.iframeTitle', 'Time Mission booking');
         });
@@ -111,8 +122,13 @@
     function showBookingFrame(loc, href) {
         if (!isExternalHttpUrl(href)) return false;
         var frame = ensureBookingFrame();
-        var name = (loc && (loc.shortName || loc.name)) || 'Time Mission';
-        frame.title.textContent = 'Book ' + name;
+        var name = localizedLocationName(loc);
+        frame.locationName = name;
+        frame.title.textContent = translate(
+            'booking.frame.bookLocation',
+            'Book {location}',
+            { location: name }
+        );
         frame.iframe.src = href;
         frame.overlay.hidden = false;
         frame.overlay.classList.add('active');

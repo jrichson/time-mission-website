@@ -10,6 +10,17 @@
         }
     }
 
+    function translate(key, fallback, replacements) {
+        if (window.TMI18n && typeof window.TMI18n.text === 'function') {
+            return window.TMI18n.text(key, fallback, replacements);
+        }
+        var value = fallback;
+        Object.keys(replacements || {}).forEach(function (token) {
+            value = String(value || '').replace(new RegExp('\\{' + token + '\\}', 'g'), replacements[token]);
+        });
+        return value;
+    }
+
     function normalizeToken(value) {
         return String(value || '')
             .toLowerCase()
@@ -81,26 +92,32 @@
     function updateJotformThankYouCopy(context) {
         if (!context || context.provider !== 'jotform') return;
         var labels = {
-            default: 'group event',
-            birthdays: 'birthday party',
-            corporate: 'corporate event',
-            'field-trips': 'field trip',
-            'bachelor-ette': 'bachelor or bachelorette event',
-            'private-events': 'private event',
-            holidays: 'holiday party',
+            default: { key: 'groupThankYou.event.default', fallback: 'group event' },
+            birthdays: { key: 'groupThankYou.event.birthdays', fallback: 'birthday party' },
+            corporate: { key: 'groupThankYou.event.corporate', fallback: 'corporate event' },
+            'field-trips': { key: 'groupThankYou.event.fieldTrips', fallback: 'field trip' },
+            'bachelor-ette': { key: 'groupThankYou.event.bachelorEtte', fallback: 'bachelor or bachelorette event' },
+            'private-events': { key: 'groupThankYou.event.privateEvents', fallback: 'private event' },
+            holidays: { key: 'groupThankYou.event.holidays', fallback: 'holiday party' },
         };
-        var label = labels[context.formSubject] || 'group event';
+        var labelConfig = labels[context.formSubject] || labels.default;
+        var label = translate(labelConfig.key, labelConfig.fallback);
         var eyebrow = document.querySelector('[data-group-thank-you-eyebrow]');
         var copy = document.querySelector('[data-group-thank-you-copy]');
         var locationLink = document.querySelector('[data-group-thank-you-location-link]');
         if (eyebrow) eyebrow.textContent = context.locationName + ' / ' + label;
-        if (copy) {
-            copy.textContent = 'Thanks. The Time Mission team received your ' + label
-                + ' request for ' + context.locationName + ' and will follow up with next steps.';
-        }
+        if (copy) copy.textContent = translate(
+            'groupThankYou.copy',
+            'Thanks. The Time Mission team received your {event} request for {location} and will follow up with next steps.',
+            { event: label, location: context.locationName }
+        );
         if (locationLink) {
             locationLink.href = '/' + context.locationSlug;
-            locationLink.textContent = 'View ' + context.locationName;
+            locationLink.textContent = translate(
+                'groupThankYou.viewLocation',
+                'View {location}',
+                { location: context.locationName }
+            );
         }
     }
 
@@ -136,4 +153,8 @@
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', trackOnce);
     else trackOnce();
+    document.addEventListener('tm:language-changed', trackOnce);
+    if (window.TMI18n && window.TMI18n.ready && typeof window.TMI18n.ready.then === 'function') {
+        window.TMI18n.ready.then(trackOnce);
+    }
 })();

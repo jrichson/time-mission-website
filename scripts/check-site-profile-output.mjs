@@ -192,6 +192,16 @@ function checkRegisteredHtml() {
         }
       }
 
+      const localizedLocalePattern = profile.locales
+        .filter((candidate) => candidate !== profile.defaultLocale)
+        .map((candidate) => candidate.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        .join('|');
+      const repeatedLocale = localizedLocalePattern
+        ? new RegExp(`^/(${localizedLocalePattern})/\\1(?:/|$)`)
+        : null;
+      const localeJoinedToAsset = localizedLocalePattern
+        ? new RegExp(`^/(?:${localizedLocalePattern})(?:assets|css|data|fonts|js)(?:/|$)`)
+        : null;
       const schemaBlocks = [...html.matchAll(
         /<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi,
       )];
@@ -208,6 +218,10 @@ function checkRegisteredHtml() {
           new RegExp(`${profile.origin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^"\\\\]*)`, 'g'),
         )];
         for (const [, suffix] of profileUrls) {
+          if (repeatedLocale?.test(suffix) || localeJoinedToAsset?.test(suffix)) {
+            errors.push(`${relPath}: malformed localized JSON-LD URL ${profile.origin}${suffix}`);
+            continue;
+          }
           if (/^\/(?:assets|css|data|fonts|js)(?:\/|$)/.test(suffix)) continue;
           const isLocalized = locale === profile.defaultLocale
             ? (!suffix || suffix.startsWith('/'))

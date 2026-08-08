@@ -64,6 +64,10 @@ function statusClass(loc: (typeof allLocations)[number]) {
     if (loc.status === 'temporarily-closed') return 'location-temporarily-closed';
     return undefined;
 }
+
+function locationLabelI18n(loc: (typeof allLocations)[number]) {
+    return loc.region === 'europe' ? `footer.location.${loc.slug}` : undefined;
+}
 ---
 
 <!-- Full-screen Location Overlay -->
@@ -96,7 +100,7 @@ function statusClass(loc: (typeof allLocations)[number]) {
                         target={externalLocationHref ? '_blank' : undefined}
                         rel={externalLocationHref ? 'noopener' : undefined}
                     >
-                        {locationListLabel(loc)}
+                        <span data-i18n={locationLabelI18n(loc)}>{locationListLabel(loc)}</span>
                         {badge && (
                             <span class="coming-soon-tag" data-i18n={selectorBadgeI18n(loc)}>
                                 {' '}{badge}
@@ -145,6 +149,8 @@ function statusClass(loc: (typeof allLocations)[number]) {
                 <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.668 4.533-4.668 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.927-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"></path></svg>
             </a>
         </div>
-        <p class="location-overlay-copyright">&copy; 2026 Time Mission. All rights reserved.</p>
+        <p class="location-overlay-copyright">
+            &copy; 2026 Time Mission. <span data-i18n="footer.rights">All rights reserved.</span>
+        </p>
     </div>
 </div>

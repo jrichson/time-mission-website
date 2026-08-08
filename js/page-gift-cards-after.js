@@ -40,6 +40,17 @@
     };
     if (!buttons.length) return;
 
+    function translate(key, fallback, replacements) {
+        if (window.TMI18n && typeof window.TMI18n.text === 'function') {
+            return window.TMI18n.text(key, fallback, replacements);
+        }
+        var value = fallback;
+        Object.keys(replacements || {}).forEach(function (token) {
+            value = String(value || '').replace(new RegExp('\\{' + token + '\\}', 'g'), replacements[token]);
+        });
+        return value;
+    }
+
     function setButtons(href, disabled) {
         buttons.forEach(function (button) {
             button.setAttribute('href', href || '#');
@@ -69,32 +80,56 @@
         return String((loc && (loc.slug || loc.id)) || '').toLowerCase();
     }
 
+    function localizedLocationName(loc) {
+        var fallback = (loc && (loc.shortName || loc.name)) || '';
+        var slug = locationSlug(loc);
+        return slug ? translate('location.name.' + slug, fallback) : fallback;
+    }
+
     function updateRedemptionAnswer(loc) {
         if (!redemptionAnswer) return;
 
         if (!loc) {
-            redemptionAnswer.textContent = 'Gift cards are location-specific. Select your location before purchasing so we can show the correct gift-card checkout and redemption details.';
+            redemptionAnswer.textContent = translate(
+                'gift.locationSpecific',
+                'Gift cards are location-specific. Select your location before purchasing so we can show the correct gift-card checkout and redemption details.'
+            );
             return;
         }
 
         var slug = locationSlug(loc);
-        var locationName = loc.shortName || loc.name || 'this location';
+        var locationName = localizedLocationName(loc) || translate('location.selectedLocation', 'this location');
         if (loc.status === 'temporarily-closed') {
-            redemptionAnswer.textContent = 'Gift cards are temporarily paused for ' + locationName + ' while ticket sales are paused.';
+            redemptionAnswer.textContent = translate(
+                'gift.pausedRedemption',
+                'Gift cards are temporarily paused for {location} while ticket sales are paused.',
+                { location: locationName }
+            );
             return;
         }
 
         if (opsGiftCardLocationIds[slug]) {
-            redemptionAnswer.textContent = 'Gift cards purchased from this location are valid for Time Missions located in these states: AL, GA, FL, IL, IN, KS, MD, MN, MO, NC, TN, VA & WI.';
+            redemptionAnswer.textContent = translate(
+                'gift.opsStates',
+                'Gift cards purchased from this location are valid for Time Missions located in these states: AL, GA, FL, IL, IN, KS, MD, MN, MO, NC, TN, VA & WI.'
+            );
             return;
         }
 
         if (loc.giftCardUrl) {
-            redemptionAnswer.textContent = 'Gift cards purchased through ' + locationName + '\'s checkout are intended for that location. Contact ' + locationName + ' before purchasing if you need to use a gift card at another Time Mission location.';
+            redemptionAnswer.textContent = translate(
+                'gift.locationRedemption',
+                'Gift cards purchased through {location}\'s checkout are intended for that location. Contact {location} before purchasing if you need to use a gift card at another Time Mission location.',
+                { location: locationName }
+            );
             return;
         }
 
-        redemptionAnswer.textContent = 'Gift cards are not available for ' + locationName + ' yet, so they cannot currently be purchased or redeemed from this page for that location.';
+        redemptionAnswer.textContent = translate(
+            'gift.unavailableRedemption',
+            'Gift cards are not available for {location} yet, so they cannot currently be purchased or redeemed from this page for that location.',
+            { location: locationName }
+        );
     }
 
     function applySelectedLocation() {
@@ -105,13 +140,13 @@
         }
 
         var url = loc.giftCardUrl || '';
-        var locationName = loc.shortName || loc.name;
+        var locationName = localizedLocationName(loc);
         updateRedemptionAnswer(loc);
         if (!url) {
             if (hint) {
                 hint.textContent = loc.status === 'temporarily-closed'
-                    ? 'Gift cards are temporarily paused for ' + locationName + '.'
-                    : 'Gift cards are not available for ' + locationName + ' yet.';
+                    ? translate('gift.pausedHint', 'Gift cards are temporarily paused for {location}.', { location: locationName })
+                    : translate('gift.unavailableHint', 'Gift cards are not available for {location} yet.', { location: locationName });
             }
             setButtons('#', true);
             return true;
@@ -119,9 +154,17 @@
 
         setButtons(url, false);
         if (/^mailto:/i.test(url)) {
-            if (hint) hint.textContent = 'Email ' + locationName + ' directly for a gift card.';
+            if (hint) hint.textContent = translate(
+                'gift.emailHint',
+                'Email {location} directly for a gift card.',
+                { location: locationName }
+            );
         } else if (hint) {
-            hint.textContent = 'Purchasing for ' + locationName + '. Change location in the top nav if needed.';
+            hint.textContent = translate(
+                'gift.purchasingHint',
+                'Purchasing for {location}. Change location in the top nav if needed.',
+                { location: locationName }
+            );
         }
         return true;
     }
@@ -174,10 +217,22 @@
 
     function syncLocationText() {
         var text = (navEl.textContent || '').trim();
-        cardEl.textContent = !text || /^select location$/i.test(text) ? 'YOUR LOCATION' : text;
+        cardEl.textContent = !text || /^select location$/i.test(text)
+            ? translate('gift.yourLocation', 'YOUR LOCATION')
+            : text;
     }
 
     syncLocationText();
     new MutationObserver(syncLocationText).observe(navEl, { characterData: true, childList: true, subtree: true });
     document.addEventListener('tm:location-changed', syncLocationText);
+    document.addEventListener('tm:language-changed', function () {
+        applySelectedLocation();
+        syncLocationText();
+    });
+    if (window.TMI18n && window.TMI18n.ready && typeof window.TMI18n.ready.then === 'function') {
+        window.TMI18n.ready.then(function () {
+            applySelectedLocation();
+            syncLocationText();
+        });
+    }
 })();

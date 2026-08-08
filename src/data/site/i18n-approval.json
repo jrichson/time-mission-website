@@ -9,34 +9,20 @@
   },
   "eu": {
     "en": {
-      "status": "approved",
-      "artifactDigest": "712d77702c413439bbc12d096770a9706403d48ce54a4ac16df546cf5cad9ad8",
-      "reviewer": "Aris Simon",
-      "reviewedAt": "2026-08-04T01:55:37.651Z"
+      "status": "review_required",
+      "reason": "The built language surface changed after the previous artifact approval."
     },
     "nl": {
-      "status": "approved",
-      "artifactDigest": "1b141c265a97a4c67d44a8a4e54bdd6af62c610bed9973f399cc32ce35e09c63",
-      "reviewer": "Aris Simon",
-      "reviewedAt": "2026-08-04T01:55:37.821Z",
-      "allowUnchangedFields": true,
-      "approvalNote": "Site owner approved the current language surface for launch."
+      "status": "review_required",
+      "reason": "Generated page translations require native-language and legal review."
     },
     "fr": {
-      "status": "approved",
-      "artifactDigest": "3095a4d3748919fae6292928ccb0197ddf33ab15233c1c42a01a9a3e07327f19",
-      "reviewer": "Aris Simon",
-      "reviewedAt": "2026-08-04T01:55:37.978Z",
-      "allowUnchangedFields": true,
-      "approvalNote": "Site owner approved the current language surface for launch."
+      "status": "review_required",
+      "reason": "Generated page translations require native-language and legal review."
     },
     "es": {
-      "status": "approved",
-      "artifactDigest": "aaa458032df158ccffa14edcdf81f2bba3c6d560f370d5064f60f16da5f613af",
-      "reviewer": "Aris Simon",
-      "reviewedAt": "2026-08-04T01:55:38.142Z",
-      "allowUnchangedFields": true,
-      "approvalNote": "Site owner approved the current language surface for launch."
+      "status": "review_required",
+      "reason": "Generated page translations require native-language and legal review."
     }
   }
 }

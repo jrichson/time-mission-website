@@ -3,6 +3,22 @@ const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { prepareSiteSmoke, REPO_ROOT } = require('./site-helpers');
 
+function localizedHtmlRoutes(locale) {
+  const base = path.join(REPO_ROOT, 'dist', locale);
+  const files = [];
+  const visit = (directory) => {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const absolute = path.join(directory, entry.name);
+      if (entry.isDirectory()) visit(absolute);
+      else if (entry.name.endsWith('.html')) files.push(path.relative(base, absolute));
+    }
+  };
+  visit(base);
+  return files
+    .map((file) => `/${file.replace(/(?:^|\/)index\.html$/, '').replace(/\.html$/, '')}`.replace(/\/$/, '') || '/')
+    .sort();
+}
+
 test.skip(process.env.TM_SITE_PROFILE !== 'eu', 'EU artifact smoke coverage');
 
 test.beforeEach(async ({ page }) => {
@@ -53,6 +69,105 @@ test('Dutch venue route is server localized with reciprocal SEO metadata', async
   );
   await expect(page.locator('[data-i18n="nav.about"]').first()).toHaveText('Over ons');
   await expect(page.locator('[data-i18n="nav.bookNow"]').first()).toContainText('Boek nu');
+
+  const structuredData = await page.locator('script[type="application/ld+json"]')
+    .allTextContents();
+  const serializedStructuredData = structuredData.join('\n');
+  expect(serializedStructuredData).toContain('https://www.timemission.eu/nl/antwerp');
+  expect(serializedStructuredData).not.toContain('https://www.timemission.eu/nl/nl');
+  expect(serializedStructuredData).not.toContain('https://www.timemission.eu/nlassets');
+});
+
+test('localized EU routes translate page-owned body copy and metadata', async ({ page }) => {
+  const routes = [
+    {
+      path: '/nl/about',
+      title: 'Over | Time Mission',
+      heading: 'HET SPEL IS ECHT',
+      copySelector: '.about-hero p',
+      copy: 'Deels escape room, deels videogame en helemaal echt.',
+      english: 'Part escape room, part video game, all real.',
+    },
+    {
+      path: '/fr/faq',
+      title: 'FAQ | Time Mission',
+      heading: 'QUESTIONS FRÉQUEMMENT POSÉES',
+      copySelector: '.page-header .page-subtitle',
+      copy: 'Tout ce que vous devez savoir avant votre aventure Time Mission.',
+      english: 'Everything you need to know before your Time Mission adventure.',
+    },
+    {
+      path: '/es/terms',
+      title: 'Términos y condiciones | Time Mission',
+      heading: 'TÉRMINOS Y CONDICIONES',
+      copySelector: '.legal-page > p',
+      copy: 'Bienvenido al sitio web de Time Mission.',
+      english: "Welcome to Time Mission's website.",
+    },
+  ];
+
+  for (const route of routes) {
+    await page.goto(route.path);
+    await expect(page).toHaveTitle(route.title);
+    await expect(page.locator('main h1').first()).toHaveText(route.heading);
+    await expect(page.locator(route.copySelector).first()).toContainText(route.copy);
+    await expect(page.locator(route.copySelector).first()).not.toContainText(route.english);
+  }
+});
+
+test('every localized EU route renders in each enabled language', async ({ page }) => {
+  test.setTimeout(180_000);
+  const expectedRoutes = localizedHtmlRoutes('nl');
+  expect(expectedRoutes).toHaveLength(34);
+
+  for (const locale of ['nl', 'fr', 'es']) {
+    expect(localizedHtmlRoutes(locale)).toEqual(expectedRoutes);
+    for (const route of expectedRoutes) {
+      const localizedPath = `/${locale}${route === '/' ? '' : route}`;
+      const response = await page.goto(localizedPath, { waitUntil: 'domcontentloaded' });
+      expect(response?.ok(), localizedPath).toBe(true);
+      const rendered = await page.evaluate(() => ({
+        lang: document.documentElement.lang,
+        mainText: document.querySelector('main')?.innerText.trim() || '',
+      }));
+      expect(rendered.lang, localizedPath).toMatch(new RegExp(`^${locale}(?:-|$)`, 'i'));
+      expect(rendered.mainText.length, localizedPath).toBeGreaterThan(0);
+    }
+  }
+});
+
+test('localized runtime writers preserve language after interaction', async ({ page }) => {
+  await page.goto('/nl/gift-cards');
+  await page.evaluate(() => window.TMI18n.ready);
+
+  await expect(page.locator('.skip-link')).toHaveText('Ga naar de hoofdinhoud');
+  await expect(page.locator('#locationDropdown')).toHaveAttribute('aria-label', 'Selecteer uw locatie');
+  await expect(page.locator('.location-dropdown-close')).toHaveAttribute('aria-label', 'Locatiekiezer sluiten');
+  await expect(page.locator('.location-group[data-location-region="europe"] a[data-tm-location-slug="antwerp"] > span').first())
+    .toHaveText('België – Antwerpen');
+  await expect(page.locator('.location-overlay-copyright [data-i18n="footer.rights"]'))
+    .toHaveText('Alle rechten voorbehouden.');
+  await expect(page.locator('#ticketLocation option[value="antwerp"]'))
+    .toHaveText('België – Antwerpen');
+  await expect(page.locator('#ticketLocation option[value="eindhoven"]'))
+    .toHaveText('Nederland – Eindhoven (Binnenkort)');
+  await expect(page.locator('[data-gift-card-location-answer]'))
+    .toContainText('Cadeaubonnen zijn locatiespecifiek.');
+
+  await page.evaluate(() => window.TM.select('antwerp'));
+  await expect(page.locator('[data-gift-card-location-answer]'))
+    .toContainText('Cadeaubonnen zijn nog niet beschikbaar voor Antwerpen');
+  await expect(page.locator('#giftCardLocationHint'))
+    .toContainText('Cadeaubonnen zijn nog niet beschikbaar voor Antwerpen');
+  await expect(page.locator('#giftCardLocationText')).toHaveText('Antwerpen');
+
+  await page.goto('/fr/donation');
+  await page.evaluate(() => window.TMI18n.ready);
+  await page.evaluate(() => window.TM.select('antwerp'));
+  await expect(page.locator('.btn-donation').first())
+    .toHaveText('Formulaire de demande de don bientôt disponible');
+  await expect(page.locator('#donationLocationHint'))
+    .toContainText("Le formulaire de demande de don en ligne n'est pas encore disponible pour Anvers");
 });
 
 test('localized EU routes translate their announcement and footer chrome', async ({ page }) => {
@@ -204,6 +319,15 @@ test('EU navigation lists Europe before the United States', async ({ page }) => 
   await page.goto('/contact');
   await expect(page.locator('#location optgroup').first()).toHaveAttribute('label', 'Europe');
   await expect(page.locator('.general-contact a[href^="mailto:"]')).toHaveText('info@timemission.eu');
+  for (const [location, email] of Object.entries({
+    antwerp: 'antwerp@experience-factory.com',
+    brussels: 'brussels@timemission.com',
+    eindhoven: 'eindhoven@timemission.nl',
+  })) {
+    await page.locator('#location').selectOption(location);
+    await expect(page.locator('[data-location-contact-email]')).toHaveText(email);
+    await expect(page.locator('[data-location-contact-email]')).toHaveAttribute('href', `mailto:${email}`);
+  }
 
   await page.goto('/');
   const ticketValues = await page.locator('#ticketLocation option:not([value=""])')
@@ -221,6 +345,21 @@ test('EU contact form lists only EU locations', async ({ page }) => {
   const contactLocationValues = await page.locator('#location option:not([value=""])')
     .evaluateAll((options) => options.map((option) => option.value));
   expect(contactLocationValues).toEqual(['antwerp', 'brussels', 'eindhoven', 'general']);
+
+  await page.goto('/nl/contact');
+  await expect(page.locator('#location optgroup')).toHaveAttribute('label', 'Europa');
+  await expect(page.locator('[data-location-contact-empty]'))
+    .toHaveText('Kies een locatie in het formulier om de rechtstreekse contactgegevens te bekijken.');
+  await page.locator('#location').selectOption('general');
+  const generalContact = page.locator('[data-location-contact-general]');
+  await expect(generalContact).toBeVisible();
+  await expect(generalContact.locator('h3')).toHaveText('Algemene vragen');
+  await expect(generalContact.locator('a[href="/nl/locations"]')).toHaveText('Alle locaties bekijken');
+
+  await page.goto('/nl/about');
+  await page.goto('/nl/contact#location=antwerp');
+  await expect(page.locator('#location')).toHaveValue('antwerp');
+  await expect(page).toHaveURL(/\/nl\/contact$/);
 });
 
 test('EU consent starts denied and GTM is not requested before opt-in', async ({ page }) => {

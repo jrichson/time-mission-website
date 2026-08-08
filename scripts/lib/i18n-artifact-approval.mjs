@@ -68,8 +68,6 @@ export function approvalRecord(value) {
     return {
       status: value,
       artifactDigest: '',
-      allowUnchangedFields: false,
-      approvalNote: '',
     };
   }
   return {
@@ -77,8 +75,6 @@ export function approvalRecord(value) {
     artifactDigest: String(value?.artifactDigest || ''),
     reviewer: String(value?.reviewer || ''),
     reviewedAt: String(value?.reviewedAt || ''),
-    allowUnchangedFields: value?.allowUnchangedFields === true,
-    approvalNote: String(value?.approvalNote || ''),
   };
 }
 

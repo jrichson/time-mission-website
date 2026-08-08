@@ -46,6 +46,22 @@
         ticketPlayersInfo.textContent = translate(key, fallback);
     }
 
+    function localizedOptionLabel(entry) {
+        var label = String(entry && entry.label || '');
+        var suffixMatch = label.match(/\s*\(([^()]*)\)\s*$/);
+        var base = suffixMatch ? label.slice(0, suffixMatch.index).trim() : label;
+        base = translate('footer.location.' + String(entry && entry.value || ''), base);
+        if (!suffixMatch) return base;
+
+        var status = suffixMatch[1];
+        if (/^coming soon$/i.test(status)) {
+            status = translate('location.comingSoon', status);
+        } else if (/^booking now$/i.test(status)) {
+            status = translate('booking.status.bookingNow', status);
+        }
+        return base + ' (' + status + ')';
+    }
+
     function syncLocationOptions() {
         var context = getLocationContext();
         var options = [];
@@ -73,7 +89,7 @@
         options.forEach(function (entry) {
             var opt = document.createElement('option');
             opt.value = entry.value;
-            opt.textContent = entry.label;
+            opt.textContent = localizedOptionLabel(entry);
             ticketLocSel.appendChild(opt);
         });
         if (prev) ticketLocSel.value = prev;

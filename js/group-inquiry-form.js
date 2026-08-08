@@ -9,6 +9,13 @@
         return document.querySelector('[data-tm-group-inquiry-form]');
     }
 
+    function translate(key, fallback) {
+        if (window.TMI18n && typeof window.TMI18n.text === 'function') {
+            return window.TMI18n.text(key, fallback);
+        }
+        return fallback;
+    }
+
     function setValue(form, selector, value) {
         var field = form && form.querySelector(selector);
         if (field) field.value = value;
@@ -91,7 +98,7 @@
     window.hcaptchaExpiredCallbackinput_19 = function () {
         var form = formElement();
         setValue(form, '#input_19', '');
-        captchaStatus(form, 'Please verify that you are human.');
+        captchaStatus(form, translate('form.verifyHuman', 'Please verify that you are human.'));
     };
 
     function init() {
@@ -103,7 +110,7 @@
             var captcha = form.querySelector('#input_19');
             if (!captcha || !captcha.value) {
                 event.preventDefault();
-                captchaStatus(form, 'Please verify that you are human.');
+                captchaStatus(form, translate('form.verifyHuman', 'Please verify that you are human.'));
                 var captchaFrame = form.querySelector('.h-captcha');
                 if (captchaFrame && typeof captchaFrame.scrollIntoView === 'function') {
                     captchaFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -113,7 +120,7 @@
             var submit = form.querySelector('#input_6');
             if (submit) {
                 submit.disabled = true;
-                submit.textContent = 'Sending…';
+                submit.textContent = translate('form.sending', 'Sending…');
             }
         });
     }

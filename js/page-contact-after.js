@@ -5,6 +5,17 @@
         return String(value || '').toLowerCase().trim().replace(/\s+/g, '-');
     }
 
+    function translate(key, fallback, replacements) {
+        if (window.TMI18n && typeof window.TMI18n.text === 'function') {
+            return window.TMI18n.text(key, fallback, replacements);
+        }
+        var value = fallback;
+        Object.keys(replacements || {}).forEach(function (token) {
+            value = String(value || '').replace(new RegExp('\\{' + token + '\\}', 'g'), replacements[token]);
+        });
+        return value;
+    }
+
     function contactFormOnlyLocations() {
         var meta = document.querySelector('meta[name="tm-contact-form-only-locations"]');
         var values = meta ? String(meta.getAttribute('content') || '').split(',') : [];
@@ -40,6 +51,11 @@
 
     function setLocationContactMessage(emptyEl, text) {
         if (emptyEl) emptyEl.textContent = text;
+    }
+
+    function localizedLocationName(loc, fallback) {
+        var slug = normalizeLocation(loc && (loc.slug || loc.id));
+        return slug ? translate('location.name.' + slug, fallback) : fallback;
     }
 
     function initLocationContactPanel(locations) {
@@ -88,7 +104,10 @@
             setHidden(empty, true);
 
             if (!value) {
-                setLocationContactMessage(empty, 'Choose a location in the form to see its direct contact info.');
+                setLocationContactMessage(empty, translate(
+                    'contact.chooseLocationDirect',
+                    'Choose a location in the form to see its direct contact info.'
+                ));
                 setHidden(empty, false);
                 return;
             }
@@ -102,10 +121,17 @@
             var contact = (loc && loc.contact) || {};
             var phone = String(contact.phone || '').trim();
             var email = formOnlyLocations.has(value) ? '' : String(contact.email || '').trim();
-            var locationName = (loc && (loc.shortName || loc.name)) || select.options[select.selectedIndex].text || 'this location';
+            var rawLocationName = (loc && (loc.shortName || loc.name))
+                || select.options[select.selectedIndex].text
+                || translate('location.selectedLocation', 'this location');
+            var locationName = localizedLocationName(loc, rawLocationName);
 
             if (!phone && !email) {
-                setLocationContactMessage(empty, 'Direct contact info is not listed for ' + locationName + ' yet. Use the message form and we will route it to the right team.');
+                setLocationContactMessage(empty, translate(
+                    'contact.unavailableDirect',
+                    'Direct contact info is not listed for {location} yet. Use the message form and we will route it to the right team.',
+                    { location: locationName }
+                ));
                 setHidden(empty, false);
                 return;
             }
@@ -125,12 +151,16 @@
         }
 
         select.addEventListener('change', render);
+        document.addEventListener('tm:language-changed', render);
         document.addEventListener('tm:location-changed', function (event) {
             var loc = event.detail || null;
             if (loc && setSelectLocation(loc.id || loc.slug)) render();
         });
         if (!select.value) syncFromCurrentLocation();
         render();
+        if (window.TMI18n && window.TMI18n.ready && typeof window.TMI18n.ready.then === 'function') {
+            window.TMI18n.ready.then(render);
+        }
     }
 
     directContactLocations().then(initLocationContactPanel);
@@ -181,7 +211,7 @@
             }
         }
         if ((type || location) && window.history && typeof window.history.replaceState === 'function') {
-            window.history.replaceState({}, '', '/contact');
+            window.history.replaceState({}, '', window.location.pathname || '/contact');
         }
     })();
 })();

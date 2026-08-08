@@ -307,14 +307,19 @@
     function listTicketOptions(locations) {
         return sortLocationsForList(locations).map(function (loc) {
             var view = getLocationView(loc, loc.id || loc.slug);
+            var openingLabel = openingLabelForLocation(loc);
             var statusSuffix = loc.status !== 'open'
-                ? ' (' + (temporaryClosureLabelForLocation(loc) || openingLabelForLocation(loc) || (view && view.bookable
+                ? ' (' + (temporaryClosureLabelForLocation(loc) || (openingLabel
+                    ? comingSoonLabelForLocation(loc)
+                    : (view && view.bookable
                     ? translate('booking.status.bookingNow', 'Booking Now')
-                    : translate('location.comingSoon', 'Coming Soon'))) + ')'
+                    : translate('location.comingSoon', 'Coming Soon')))) + ')'
                 : '';
+            var slug = normalizeLocation(loc.slug || loc.id);
+            var listLabel = translate('footer.location.' + slug, locationListLabel(loc));
             return {
                 value: loc.id,
-                label: locationListLabel(loc) + statusSuffix,
+                label: listLabel + statusSuffix,
                 status: loc.status || 'open',
             };
         });

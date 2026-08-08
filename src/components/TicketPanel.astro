@@ -1,5 +1,6 @@
 ---
 import { allLocations } from '../data/locations';
+import { locationListLabel } from '../lib/location-list';
 import { locationTeamSizeLabel } from '../lib/location-team-size';
 import { ticketPanelSelectOptions } from '../lib/site-contract';
 import { activeSiteProfile } from '../lib/site-profile';
@@ -21,6 +22,21 @@ const briqWidget = pageLocation?.bookingProvider === 'briq' ? pageLocation.briqW
 const briqToggleState = briqWidget
     ? `bwr=bu|is|${briqWidget.domain}|and|o|is|true`
     : '';
+const ticketLocations = new Map(allLocations.map((location) => [location.id, location]));
+
+function ticketLocationI18n(value: string) {
+    const location = ticketLocations.get(value);
+    return location?.region === 'europe' ? `footer.location.${location.slug}` : undefined;
+}
+
+function ticketStatusI18n(label: string) {
+    return /\(Coming Soon\)\s*$/.test(label) ? 'location.comingSoon' : undefined;
+}
+
+function ticketOptionBaseLabel(value: string, label: string) {
+    const location = ticketLocations.get(value);
+    return ticketStatusI18n(label) && location ? locationListLabel(location) : label;
+}
 ---
 
 <!-- Ticket Popup Panel -->
@@ -52,7 +68,18 @@ const briqToggleState = briqWidget
                 <label for="ticketLocation" data-i18n="booking.locationLabel">Choose Location</label>
                 <select id="ticketLocation">
                     <option value="" data-i18n="booking.locationPlaceholder">Select a location</option>
-                    {ticketOptions.map((opt) => <option value={opt.value}>{opt.label}</option>)}
+                    {ticketOptions.map((opt) => {
+                        const statusI18n = ticketStatusI18n(opt.label);
+                        return (
+                            <option
+                                value={opt.value}
+                                data-i18n={ticketLocationI18n(opt.value)}
+                                data-i18n-status={statusI18n}
+                            >
+                                {ticketOptionBaseLabel(opt.value, opt.label)}{statusI18n ? ' (Coming Soon)' : ''}
+                            </option>
+                        );
+                    })}
                 </select>
             </div>
 

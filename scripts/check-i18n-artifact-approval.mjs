@@ -11,6 +11,8 @@ import {
   unchangedLocalizedFields,
 } from './lib/i18n-artifact-approval.mjs';
 import { compileRegionalHtmlRoutes } from './lib/regional-html-routes.mjs';
+import pageI18n from '../src/data/site/page-i18n.json' with { type: 'json' };
+import { preservedSourceTermsFor } from './lib/page-i18n.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const distDir = path.join(root, 'dist');
@@ -31,17 +33,18 @@ if (strict && profile.localizedRoutes) {
       errors.push(`${locale}: approved Language Surface digest does not match the built artifact`);
     }
 
-    if (locale === profile.defaultLocale || record.allowUnchangedFields) continue;
+    if (locale === profile.defaultLocale) continue;
+    const preservedSourceTerms = preservedSourceTermsFor(pageI18n, locale);
     for (const route of regionalRoutes) {
       const defaultPath = path.join(distDir, ...route.outputFile.split('/'));
       const localizedPath = path.join(distDir, locale, ...route.outputFile.split('/'));
       if (!fs.existsSync(defaultPath) || !fs.existsSync(localizedPath)) continue;
-      const unchanged = unchangedLocalizedFields(
-        extractLanguageSurfaceCopy(fs.readFileSync(defaultPath, 'utf8')),
-        extractLanguageSurfaceCopy(fs.readFileSync(localizedPath, 'utf8')),
-      );
-      if (unchanged.length) {
-        errors.push(`${locale}${route.canonicalPath}: untranslated ${unchanged.join(', ')}`);
+      const defaultCopy = extractLanguageSurfaceCopy(fs.readFileSync(defaultPath, 'utf8'));
+      const localizedCopy = extractLanguageSurfaceCopy(fs.readFileSync(localizedPath, 'utf8'));
+      const untranslated = unchangedLocalizedFields(defaultCopy, localizedCopy)
+        .filter((field) => !preservedSourceTerms.has(defaultCopy[field]));
+      if (untranslated.length) {
+        errors.push(`${locale}${route.canonicalPath}: untranslated ${untranslated.join(', ')}`);
       }
     }
   }

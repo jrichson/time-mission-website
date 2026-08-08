@@ -60,6 +60,11 @@
         });
     }
 
+    function localizedLocationName(loc, fallback) {
+        const slug = normalizeLocation(loc && (loc.slug || loc.id));
+        return slug ? translate('location.name.' + slug, fallback) : fallback;
+    }
+
     function setAddressText(el, value, locationName) {
         if (!el) return;
         el.textContent = '';
@@ -480,7 +485,7 @@
         iframe.src = embedUrl;
         iframe.loading = 'lazy';
         iframe.referrerPolicy = 'no-referrer-when-downgrade';
-        iframe.title = 'Map';
+        iframe.title = translate('a11y.map', 'Map');
         target.appendChild(iframe);
         target.style.display = 'block';
     }
@@ -500,9 +505,10 @@
         const data = overlayView.location;
         activeLocationInfoRef = locationRef;
 
-        infoPanel.querySelector('.location-info-name').textContent = data.name;
+        const locationName = localizedLocationName(overlayView.location, data.name);
+        infoPanel.querySelector('.location-info-name').textContent = locationName;
         const addrEl = infoPanel.querySelector('.location-info-address');
-        setAddressText(addrEl, data.addressText, data.name);
+        setAddressText(addrEl, data.addressText, locationName);
         addrEl.href = data.mapDirectionsUrl || '#';
         infoPanel.querySelector('.location-info-phone').textContent = data.phone;
         setMultilineText(infoPanel.querySelector('.location-info-hours'), translateHoursText(data.hoursText));
@@ -525,7 +531,7 @@
     function syncNavLocationState(loc) {
         const mainLocText = document.getElementById('locationText');
         if (mainLocText && loc && (loc.shortName || loc.name)) {
-            mainLocText.textContent = loc.shortName || loc.name;
+            mainLocText.textContent = localizedLocationName(loc, loc.shortName || loc.name);
         }
         if (loc && (loc.id || loc.slug)) {
             showLocationInfo(loc.id || loc.slug);

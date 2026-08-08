@@ -3,10 +3,34 @@ import {
   createBrowserContext,
   groupTypes,
   locationRecords,
+  readScript,
   runScript,
 } from './browser-contract-helpers.mjs';
 
 describe('browser data, consent, and i18n contracts', () => {
+  it('routes runtime-generated language surfaces through TMI18n', () => {
+    const expectedKeys = {
+      'js/a11y.js': ['a11y.skipToMain', 'a11y.selectLocationDialog', 'a11y.closeLocationSelector'],
+      'js/page-gift-cards-after.js': ['gift.locationSpecific', 'gift.unavailableHint', 'gift.yourLocation'],
+      'js/page-donation-after.js': ['donation.frameTitle', 'donation.comingSoon', 'donation.routedTo'],
+      'js/group-inquiry-form.js': ['form.verifyHuman', 'form.sending'],
+      'js/group-form-thank-you.js': ['groupThankYou.copy', 'groupThankYou.viewLocation'],
+      'js/page-contact-after.js': ['contact.chooseLocationDirect', 'contact.unavailableDirect'],
+      'js/booking-frame.js': ['booking.frame.bookLocation'],
+      'js/booking-provider-briq.js': ['booking.briq.loading', 'booking.briq.delayed', 'booking.briq.open'],
+      'js/locations.js': ['nav.selectLocation', 'location.name.'],
+      'js/nav.js': ['a11y.map', 'location.name.'],
+      'js/page-widgets.js': ['location.name.'],
+      'js/page-widgets-tagline.js': ['location.name.'],
+    };
+
+    for (const [file, keys] of Object.entries(expectedKeys)) {
+      const source = readScript(file);
+      expect(source, file).toContain('window.TMI18n.text');
+      for (const key of keys) expect(source, `${file}: ${key}`).toContain(`'${key}'`);
+    }
+  });
+
   it('real location data exposes required external routing facts', () => {
     const byId = new Map(locationRecords.map((loc) => [loc.id, loc]));
     const requireUrl = (locationId, field, value) => {

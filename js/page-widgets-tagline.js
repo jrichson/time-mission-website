@@ -29,13 +29,23 @@
         return Array.isArray(fallback) ? fallback : [];
     }
 
+    function localizedLocationName(value) {
+        var fallback = String(value || '');
+        var key = fallback.toLowerCase().trim().replace(/\s+/g, '-');
+        if (key && window.TMI18n && typeof window.TMI18n.text === 'function') {
+            return window.TMI18n.text('location.name.' + key, fallback);
+        }
+        return fallback;
+    }
+
     function initTagline(taglines, opts) {
         var taglineElement = document.getElementById('taglineText');
         var noop = { setEyebrowToLocation: function () {} };
         if (!taglineElement) return noop;
         if (!Array.isArray(taglines) || taglines.length === 0) return noop;
 
-        var initialCity = opts && opts.initialCity ? opts.initialCity : null;
+        var initialCityFallback = opts && opts.initialCity ? opts.initialCity : null;
+        var initialCity = initialCityFallback ? localizedLocationName(initialCityFallback) : null;
         var initialHoldMs = opts && typeof opts.initialHoldMs === 'number' ? opts.initialHoldMs : 3000;
         var mobileLocationHoldMs = opts && typeof opts.mobileLocationHoldMs === 'number' ? opts.mobileLocationHoldMs : 5000;
         var translationKey = opts && opts.translationKey ? opts.translationKey : '';
@@ -102,6 +112,7 @@
         // On mobile with location: show "Time Mission {City}" for 5s, then rotate.
         function setEyebrowToLocation(city) {
             if (!isMobile() || !city) return;
+            city = localizedLocationName(city);
             if (taglineStartTimerId) {
                 clearTimeout(taglineStartTimerId);
                 taglineStartTimerId = null;
@@ -132,7 +143,9 @@
         document.addEventListener('tm:language-changed', function () {
             taglines = getTranslatedArray(translationKey, fallbackTaglines);
             currentTaglineIndex = 0;
-            if (!initialCity && taglines[0]) taglineElement.textContent = taglines[0];
+            initialCity = initialCityFallback ? localizedLocationName(initialCityFallback) : null;
+            if (initialCity) taglineElement.textContent = 'Time Mission ' + initialCity;
+            else if (taglines[0]) taglineElement.textContent = taglines[0];
         });
 
         return { setEyebrowToLocation: setEyebrowToLocation };
