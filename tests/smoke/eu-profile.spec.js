@@ -51,6 +51,31 @@ test('EU artifact exposes its identity and isolated location data', async ({ pag
   expect(antwerp.externalUrl).toBeUndefined();
 });
 
+test('wide animated announcement ticker remains populated across the viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 2048, height: 900 });
+  await page.goto('/');
+
+  const tickerTrack = page.locator('.ticker-track');
+  await expect(tickerTrack).not.toHaveClass(/ticker-track--static/);
+
+  const measureLargestGap = () => page.locator('.ticker-item').evaluateAll((items) => {
+    const viewportWidth = window.innerWidth;
+    const centers = items
+      .map((item) => {
+        const bounds = item.getBoundingClientRect();
+        return (bounds.left + bounds.right) / 2;
+      })
+      .filter((center) => center >= 0 && center <= viewportWidth)
+      .sort((left, right) => left - right);
+    const points = [0, ...centers, viewportWidth];
+    return Math.max(...points.slice(1).map((point, index) => point - points[index]));
+  });
+
+  expect(await measureLargestGap()).toBeLessThanOrEqual(600);
+  await page.waitForTimeout(2_000);
+  expect(await measureLargestGap()).toBeLessThanOrEqual(600);
+});
+
 test('Dutch venue route is server localized with reciprocal SEO metadata', async ({ page }) => {
   await page.goto('/nl/antwerp');
 
