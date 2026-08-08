@@ -383,5 +383,5 @@ test('selected location updates shared footer contact panel', async ({ page }) =
   await page.evaluate(() => window.TM.clear());
   await expect(footer.locator('.footer-location-info')).toBeHidden();
   await expect(footer.locator('.footer-locations-dropdown')).toBeVisible();
-  await expect(footer.locator('.footer-locations-title')).toHaveText('LOCATIONS');
+  await expect(footer.locator('.footer-locations-title')).toHaveText('Locations');
 });
