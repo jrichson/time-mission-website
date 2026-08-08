@@ -310,7 +310,7 @@ test('Philadelphia is now open across its banner, selector, and booking experien
   await expect(page.locator('.ticker-track')).toHaveClass(/ticker-track--static/);
   await expect(page.locator('.ticker-item')).toHaveCount(1);
   await expect(page.locator('.ticker-item').first()).toHaveText('PHILADELPHIA NOW OPEN');
-  await expect(philadelphiaMenuLink.locator('.coming-soon-tag')).toHaveText('NOW OPEN');
+  await expect(philadelphiaMenuLink.locator('.coming-soon-tag')).toHaveText('OPEN NOW!');
   await expect(philadelphiaMenuLink).toHaveClass(/location-open-now/);
   await expect(philadelphiaMenuLink).toHaveCSS('color', 'rgb(255, 255, 255)');
   await expect(philadelphiaMenuLink.locator('.coming-soon-tag')).toHaveCSS('color', 'rgb(110, 231, 183)');

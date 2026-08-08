@@ -21,14 +21,13 @@ function showsOpenNowBadge(loc: (typeof allLocations)[number]) {
 }
 
 function selectorBadge(loc: (typeof allLocations)[number]) {
-    if (loc.slug === 'philadelphia' && loc.status === 'open') return 'NOW OPEN';
     if (showsOpenNowBadge(loc)) return 'OPEN NOW!';
     if (loc.status === 'temporarily-closed') return statusLabel(loc);
     return '';
 }
 
 function selectorBadgeI18n(loc: (typeof allLocations)[number]) {
-    if (loc.slug === 'brussels' && showsOpenNowBadge(loc)) return 'location.openNow';
+    if (showsOpenNowBadge(loc)) return 'location.openNow';
     return undefined;
 }
 
