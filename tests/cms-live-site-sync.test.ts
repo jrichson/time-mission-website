@@ -10,6 +10,7 @@ import {
 } from '../cms/migration-data/20260730_live_site_snapshot';
 import { EU_LOCATION_OPERATIONAL_SNAPSHOT } from '../cms/migration-data/20260731_eu_location_operational_snapshot';
 import { PHILADELPHIA_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260807_philadelphia_now_open_snapshot';
+import { HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT } from '../cms/migration-data/20260810_houston_philadelphia_jotform_routes_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -49,6 +50,9 @@ describe('live-site-to-CMS sync snapshot', () => {
         const operationalPatches = new Map(
             EU_LOCATION_OPERATIONAL_SNAPSHOT.map((location) => [location.slug, location]),
         );
+        const groupFormPatches = new Map(
+            HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT.map((location) => [location.slug, location]),
+        );
         const effectiveSnapshot = LIVE_SITE_LOCATION_SNAPSHOT.map((location) => {
             const patch = operationalPatches.get(location.slug);
             const operationalLocation = patch ? {
@@ -59,9 +63,13 @@ describe('live-site-to-CMS sync snapshot', () => {
                     ...('externalLinks' in patch ? patch.externalLinks : {}),
                 },
             } : location;
-            return location.slug === PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.slug
+            const currentLocation = location.slug === PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.slug
                 ? { ...operationalLocation, ticker: PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.ticker }
                 : operationalLocation;
+            const groupFormPatch = groupFormPatches.get(location.slug);
+            return groupFormPatch
+                ? { ...currentLocation, groupFormUrls: groupFormPatch.groupFormUrls }
+                : currentLocation;
         });
 
         expect(LIVE_SITE_SYNC_SOURCE.commit).toBe('6cbae6adde40555535a271155b6c59d4f80db56c');
@@ -109,6 +117,7 @@ describe('live-site-to-CMS sync snapshot', () => {
 
         expect(migrationIndex).toContain('20260730_151000_sync_live_site_to_cms');
         expect(migrationIndex).toContain('20260731_180000_eu_location_operational_data');
+        expect(migrationIndex).toContain('20260810_090000_houston_philadelphia_jotform_routes');
         expect(migration).toContain('LIVE_SITE_LOCATION_SNAPSHOT');
         expect(migration).toContain('LIVE_SITE_PAGE_SNAPSHOT');
         expect(migration).toContain('"announcement_banners"');

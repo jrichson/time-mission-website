@@ -1,7 +1,6 @@
 ---
 import {
-    JOTFORM_GROUP_FORM_ID,
-    pipedriveLocationValueFor,
+    jotformGroupFormConfigFor,
     type GroupFormKey,
 } from '../lib/group-form-context';
 
@@ -19,8 +18,8 @@ const {
     locationSlug,
 } = Astro.props;
 
-const formAction = `https://submit.jotform.com/submit/${JOTFORM_GROUP_FORM_ID}`;
-const pipedriveLocationName = pipedriveLocationValueFor(locationSlug, locationName);
+const formConfig = jotformGroupFormConfigFor(locationSlug);
+const formAction = `https://submit.jotform.com/submit/${formConfig.formId}`;
 ---
 
 <section class="group-inquiry" aria-labelledby="group-inquiry-title">
@@ -65,26 +64,27 @@ const pipedriveLocationName = pipedriveLocationValueFor(locationSlug, locationNa
                 class="group-inquiry-form"
                 action={formAction}
                 method="post"
-                name={`form_${JOTFORM_GROUP_FORM_ID}`}
-                id={JOTFORM_GROUP_FORM_ID}
+                name={`form_${formConfig.formId}`}
+                id={formConfig.formId}
                 accept-charset="utf-8"
                 autocomplete="on"
                 data-tm-group-inquiry-form
                 data-form-subject={formKey}
                 data-location-name={locationName}
                 data-location-slug={locationSlug}
-                data-pipedrive-location-name={pipedriveLocationName}
+                data-pipedrive-location-name={formConfig.pipedriveLocationValue}
+                data-deal-title-prefix={formConfig.dealTitlePrefix}
             >
-                <input type="hidden" name="formID" value={JOTFORM_GROUP_FORM_ID} />
+                <input type="hidden" name="formID" value={formConfig.formId} />
                 <input type="hidden" id="JWTContainer" value="" />
                 <input type="hidden" id="cardinalOrderNumber" value="" />
-                <input type="hidden" id="jsExecutionTracker" name="jsExecutionTracker" value="build-date-1784236513760" />
+                <input type="hidden" id="jsExecutionTracker" name="jsExecutionTracker" value={`build-date-${formConfig.executionTrackerBuildDate}`} />
                 <input type="hidden" id="submitSource" name="submitSource" value="direct" />
                 <input type="hidden" id="submitDate" name="submitDate" value="" />
-                <input type="hidden" id="buildDate" name="buildDate" value="1784236513760" />
+                <input type="hidden" id="buildDate" name="buildDate" value={formConfig.buildDate} />
                 <input type="hidden" name="uploadServerUrl" value="https://upload.jotform.com/upload" />
                 <input type="hidden" name="eventObserver" value="1" />
-                <input type="hidden" id="input_21" name="q21_location" value={pipedriveLocationName} />
+                <input type="hidden" id="input_21" name="q21_location" value={formConfig.pipedriveLocationValue} />
                 <input type="hidden" id="input_23" name="q23_typeA" value="" />
                 <input type="hidden" id="input_20" name="q20_dealTitle" value="" />
                 <input type="hidden" id="month_27" name="q27_date[month]" value="" />
@@ -172,7 +172,7 @@ const pipedriveLocationName = pipedriveLocationValueFor(locationSlug, locationNa
                     <label for="group-inquiry-website">Leave this field empty</label>
                     <input id="group-inquiry-website" type="text" name="website" value="" tabindex="-1" autocomplete="off" />
                 </div>
-                <input type="hidden" class="simple_spc" name="simple_spc" value={`${JOTFORM_GROUP_FORM_ID}-${JOTFORM_GROUP_FORM_ID}`} />
+                <input type="hidden" class="simple_spc" name="simple_spc" value={`${formConfig.formId}-${formConfig.formId}`} />
             </form>
         </div>
     </div>

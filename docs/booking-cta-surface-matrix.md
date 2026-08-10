@@ -1,6 +1,6 @@
 # Booking CTA and Link Surface Matrix
 
-Last audited: 2026-05-20
+Last audited: 2026-08-10
 
 ## Scope
 
@@ -43,9 +43,9 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | --- | --- | --- |
 | No active location | Ticket panel in group mode | User must choose a location before continuing to the right form. |
 | Mount Prospect | Pipedrive form URLs by group type | Birthday, corporate, field trip, bachelor/ette, private events, holiday. |
-| Philadelphia | `https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form` | Same form for all group types. |
+| Philadelphia | `/groups/inquire/philadelphia/{group_type}` | On-site inquiry UI submits to Philadelphia Jotform `262217710699160`. |
 | Manassas | Pipedrive form URLs by group type | Birthday, corporate, field trip, bachelor/ette, private events, holiday. |
-| Houston | `https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form` | Same form for all group types. |
+| Houston | `/groups/inquire/houston/{group_type}` | On-site inquiry UI submits to Houston Jotform `262186150244149`. |
 | Orland Park | Pipedrive form URLs by group type | Birthday, corporate, field trip, bachelor/ette, private events, holiday. |
 | Lincoln | `https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959` | External provider navigation. |
 | Antwerp | `https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission` | Intentional EU/external group handoff. |
@@ -82,7 +82,7 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | --- | --- | --- |
 | Contact page form | `POST /api/contact` | Cloudflare Pages function exists at `functions/api/contact.js`. |
 | Newsletter forms | `POST /api/newsletter` | Cloudflare Pages function exists at `functions/api/newsletter.js`; acquisition sections may be hidden while paused. |
-| Groups embedded inquiry form | Removed | Group inquiries route through the booking controller instead of rendering the old FormSubmit form. |
+| Groups on-site inquiry form | `/groups/inquire/{location_slug}/{group_type}` | Supported locations submit compatible fields to their configured Jotform account and Pipedrive pipeline. |
 
 ## Internal Link Families
 

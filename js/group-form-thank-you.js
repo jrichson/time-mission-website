@@ -56,7 +56,7 @@
         } catch (e) {
             pathname = '';
         }
-        var match = pathname.match(/^\/groups\/inquire\/(manassas|mount-prospect|orland-park)\/(default|birthdays|corporate|field-trips|bachelor-ette|private-events|holidays)\/?$/);
+        var match = pathname.match(/^\/groups\/inquire\/(manassas|mount-prospect|orland-park|houston|philadelphia)\/(default|birthdays|corporate|field-trips|bachelor-ette|private-events|holidays)\/?$/);
         if (!match) return null;
         var locationSlug = normalizeToken(match[1]);
         if (requestedLocation && requestedLocation !== locationSlug) return null;
@@ -65,6 +65,8 @@
             manassas: 'Manassas',
             'mount-prospect': 'Mount Prospect',
             'orland-park': 'Orland Park',
+            houston: 'Houston',
+            philadelphia: 'Philadelphia',
         };
         return {
             locationSlug: locationSlug,

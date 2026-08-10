@@ -222,7 +222,6 @@ describe('analytics routing context', () => {
       if (selector === '[data-tm-group-form-thank-you]') return carrier;
       return null;
     };
-
     runScript('js/analytics.js', context);
     runScript('js/group-form-thank-you.js', context);
     runScript('js/group-form-thank-you.js', context);
@@ -271,6 +270,33 @@ describe('analytics routing context', () => {
     expect(successes[0].parameters).not.toHaveProperty('EMAIL');
     expect(successes[0].parameters).not.toHaveProperty('PHONE');
     expect(successes[0].parameters).not.toHaveProperty('MESSAGE');
+  });
+
+  it.each([
+    ['Houston', 'houston'],
+    ['Philadelphia', 'philadelphia'],
+  ])('accepts the new franchise Jotform redirect context for %s', (locationName, locationSlug) => {
+    const sessionStorage = createStorage();
+    const carrier = createGroupThankYouCarrier({ contextSource: 'query' });
+    const { context, window, document } = createBrowserContext(grantedConsentWindow({ sessionStorage }));
+    window.location.origin = 'https://www.timemission.com';
+    window.location.pathname = '/group-form-thank-you/jotform';
+    window.location.search = `?location=${encodeURIComponent(locationName)}&source=${encodeURIComponent(`https://www.timemission.com/groups/inquire/${locationSlug}/corporate`)}`;
+    document.querySelector = (selector) => {
+      if (selector === '[data-tm-group-form-thank-you]') return carrier;
+      return null;
+    };
+    runScript('js/analytics.js', context);
+    runScript('js/group-form-thank-you.js', context);
+    runScript('js/group-form-thank-you.js', context);
+
+    const success = window.dataLayer.find((entry) => entry && entry.event_name === 'GROUP_FORM_SUBMIT_SUCCESS');
+    expect(success.parameters).toMatchObject({
+      PROVIDER: 'jotform',
+      FORM_SUBJECT: 'corporate',
+      LOCATION_SLUG: locationSlug,
+      LOCATION_NAME: locationName,
+    });
   });
 
   it('distinguishes the group-form telephone link from other phone clicks', () => {

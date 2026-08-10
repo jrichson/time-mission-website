@@ -1,8 +1,7 @@
 import { allLocations, type LocationRecord } from '../data/locations';
 import {
-    GROUP_FORM_KEYS,
     formLabelFor,
-    isGroupInquiryLocationSlug,
+    hasOnSiteGroupInquiryRoute,
 } from './group-form-context';
 
 export type GroupFormThankYouPath = {
@@ -18,18 +17,14 @@ export function isPipedriveUrl(value: unknown): boolean {
     return typeof value === 'string' && value.includes('webforms.pipedrive.com');
 }
 
-export function groupFormThankYouPaths(): GroupFormThankYouPath[] {
+export function groupFormThankYouPathsFor(locations: LocationRecord[]): GroupFormThankYouPath[] {
     const paths: GroupFormThankYouPath[] = [];
-    for (const location of allLocations) {
+    for (const location of locations) {
         const formUrls = location.groupFormUrls || {};
         const locationSlug = location.slug || location.id;
-        const formKeys = new Set(Object.keys(formUrls));
-        if (isGroupInquiryLocationSlug(locationSlug)) {
-            for (const formKey of GROUP_FORM_KEYS) formKeys.add(formKey);
-        }
-        for (const formKey of formKeys) {
+        for (const formKey of Object.keys(formUrls)) {
             const url = formUrls[formKey];
-            if (!isPipedriveUrl(url) && !isGroupInquiryLocationSlug(locationSlug)) continue;
+            if (!isPipedriveUrl(url) && !hasOnSiteGroupInquiryRoute(location, formKey)) continue;
             paths.push({
                 location,
                 formKey,
@@ -39,4 +34,8 @@ export function groupFormThankYouPaths(): GroupFormThankYouPath[] {
         }
     }
     return paths;
+}
+
+export function groupFormThankYouPaths(): GroupFormThankYouPath[] {
+    return groupFormThankYouPathsFor(allLocations);
 }

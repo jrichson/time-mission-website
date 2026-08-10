@@ -40,8 +40,6 @@ describe('browser data, consent, and i18n contracts', () => {
     for (const locationId of [
       'west-nyack',
       'lincoln',
-      'philadelphia',
-      'houston',
       'antwerp',
     ]) {
       const groupFormUrls = byId.get(locationId)?.groupFormUrls || {};
@@ -50,7 +48,7 @@ describe('browser data, consent, and i18n contracts', () => {
       }
     }
 
-    for (const locationId of ['manassas', 'mount-prospect', 'orland-park']) {
+    for (const locationId of ['manassas', 'mount-prospect', 'orland-park', 'houston', 'philadelphia']) {
       const forms = byId.get(locationId)?.groupFormUrls || {};
       expect(forms.default).toBe(`/groups/inquire/${locationId}/default`);
       expect(forms['private-events']).toBe(`/groups/inquire/${locationId}/private-events`);
@@ -95,16 +93,14 @@ describe('browser data, consent, and i18n contracts', () => {
       .toBe('https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home');
     expect(byId.get('philadelphia')?.rollerCheckoutUrl)
       .toBe('https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home');
-    const philadelphiaGroupFormUrl =
-      'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form';
     expect(byId.get('philadelphia')?.groupFormUrls).toEqual({
-      default: philadelphiaGroupFormUrl,
-      birthdays: philadelphiaGroupFormUrl,
-      corporate: philadelphiaGroupFormUrl,
-      'field-trips': philadelphiaGroupFormUrl,
-      'bachelor-ette': philadelphiaGroupFormUrl,
-      'private-events': philadelphiaGroupFormUrl,
-      holidays: philadelphiaGroupFormUrl,
+      default: '/groups/inquire/philadelphia/default',
+      birthdays: '/groups/inquire/philadelphia/birthdays',
+      corporate: '/groups/inquire/philadelphia/corporate',
+      'field-trips': '/groups/inquire/philadelphia/field-trips',
+      'bachelor-ette': '/groups/inquire/philadelphia/bachelor-ette',
+      'private-events': '/groups/inquire/philadelphia/private-events',
+      holidays: '/groups/inquire/philadelphia/holidays',
     });
     expect(byId.get('boston')).toMatchObject({
       status: 'coming-soon',

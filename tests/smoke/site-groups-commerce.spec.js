@@ -47,9 +47,8 @@ test('group CTAs resolve to location-data form URLs for the selected location', 
   await expect(page.getByRole('heading', { level: 1 })).toContainText('corporate event');
 });
 
-test('Philadelphia group inquiries use the shared Roller form link', async ({ page }) => {
-  const expectedHref =
-    'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form';
+test('Philadelphia group inquiries use the on-site franchise Jotform route', async ({ page }) => {
+  const expectedHref = groupFormUrl('philadelphia', 'corporate');
 
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
@@ -59,8 +58,15 @@ test('Philadelphia group inquiries use the shared Roller form link', async ({ pa
   await page.locator('#ticketLocation').selectOption('philadelphia');
 
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', expectedHref);
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('target', '_blank');
+  await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('target', '_blank');
   await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
+
+  await page.locator('#ticketBookBtn').click();
+  await expect(page).toHaveURL(new RegExp(`${expectedHref}$`));
+  await expect(page.locator('[data-tm-group-inquiry-form]')).toHaveAttribute(
+    'action',
+    'https://submit.jotform.com/submit/262217710699160',
+  );
 });
 
 test('group cards open the selected location event form as a direct link', async ({ page }) => {
@@ -174,6 +180,13 @@ test('Houston and Orland Park group CTAs resolve to location-data forms', async 
   }));
   expect(houstonCorporate).toBe(groupFormUrl('houston', 'corporate'));
 
+  const philadelphiaCorporate = await page.evaluate(() => window.TMBooking.getDestination({
+    kind: 'groups',
+    groupType: 'corporate',
+    locationId: 'philadelphia',
+  }));
+  expect(philadelphiaCorporate).toBe(groupFormUrl('philadelphia', 'corporate'));
+
   const orlandPrivateEvents = await page.evaluate(() => window.TMBooking.getDestination({
     kind: 'groups',
     groupType: 'private-events',
@@ -224,11 +237,42 @@ test('Mount Prospect submits the exact Pipedrive location option', async ({ page
   await expect(page.locator('[name="q21_location"]')).toHaveValue('Mt Prospect');
 });
 
+test('Houston and Philadelphia use the franchisee Jotform with exact CRM context', async ({ page }) => {
+  const expectedConfigs = {
+    houston: {
+      formId: '262186150244149',
+      executionTrackerBuildDate: '1786402794617',
+      buildDate: '1786402794618',
+      locationValue: 'Houston',
+    },
+    philadelphia: {
+      formId: '262217710699160',
+      executionTrackerBuildDate: '1786402040663',
+      buildDate: '1786402040663',
+      locationValue: 'Philadelphia',
+    },
+  };
+
+  for (const [locationId, config] of Object.entries(expectedConfigs)) {
+    await page.goto(groupFormUrl(locationId, 'corporate'));
+    const form = page.locator('[data-tm-group-inquiry-form]');
+    await expect(form).toHaveAttribute('action', `https://submit.jotform.com/submit/${config.formId}`);
+    await expect(form).toHaveAttribute('data-pipedrive-location-name', config.locationValue);
+    await expect(form.locator('[name="formID"]')).toHaveValue(config.formId);
+    await expect(form.locator('[name="jsExecutionTracker"]')).toHaveValue(`build-date-${config.executionTrackerBuildDate}`);
+    await expect(form.locator('[name="buildDate"]')).toHaveValue(config.buildDate);
+    await expect(form.locator('[name="q21_location"]')).toHaveValue(config.locationValue);
+    await expect(form.locator('[name="q23_typeA"]')).toHaveValue(new RegExp(`/groups/inquire/${locationId}/corporate$`));
+  }
+});
+
 test('group inquiry deal titles use each CRM code and prefer organization over submitter', async ({ page }) => {
   const locationCodes = {
     manassas: 'MAN',
     'mount-prospect': 'MTP',
     'orland-park': 'OPK',
+    houston: 'HOU',
+    philadelphia: 'PHL',
   };
 
   for (const [locationId, code] of Object.entries(locationCodes)) {

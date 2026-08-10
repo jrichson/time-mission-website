@@ -44,13 +44,11 @@
         return origin + pathname;
     }
 
-    function locationCode(locationSlug) {
-        var codes = {
-            manassas: 'MAN',
-            'mount-prospect': 'MTP',
-            'orland-park': 'OPK',
-        };
-        return codes[locationSlug] || String(locationSlug || '').toUpperCase().slice(0, 3);
+    function dealTitlePrefix(form, locationSlug) {
+        var configured = cleanText((form && form.dataset.dealTitlePrefix) || '', 12)
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, '');
+        return configured || String(locationSlug || '').toUpperCase().slice(0, 3);
     }
 
     function prepareContext(form) {
@@ -71,7 +69,7 @@
         setValue(
             form,
             '#input_20',
-            locationCode(locationSlug) + ': ' + leadLabel + ' / ' + dealSubject + ' / FormDate: '
+            dealTitlePrefix(form, locationSlug) + ': ' + leadLabel + ' / ' + dealSubject + ' / FormDate: '
                 + dates.month + '-' + dates.day + '-' + dates.year
         );
         setValue(form, '#month_27', dates.month);

@@ -85,7 +85,7 @@ describe('public location data generator', () => {
       '/groups/inquire/philadelphia/private-events',
     );
     expect(philadelphia.groupFormUrls.birthdays).toBe(
-      'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form',
+      '/groups/inquire/philadelphia/birthdays',
     );
     expect(philadelphia.hiddenMissionIds).toEqual(['1005', '1011']);
 
