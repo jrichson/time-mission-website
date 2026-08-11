@@ -31,4 +31,13 @@ describe('group form thank-you route generation', () => {
             groupFormUrls: undefined,
         }])).toEqual([]);
     });
+
+    it('does not emit on-site thank-you routes for temporary Roller handoffs', () => {
+        const houston = allLocations.find((location) => location.slug === 'houston');
+        const philadelphia = allLocations.find((location) => location.slug === 'philadelphia');
+        expect(houston).toBeDefined();
+        expect(philadelphia).toBeDefined();
+
+        expect(groupFormThankYouPathsFor([houston!, philadelphia!])).toEqual([]);
+    });
 });

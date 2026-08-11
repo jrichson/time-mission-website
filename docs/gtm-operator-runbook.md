@@ -53,13 +53,15 @@ The generated pages emit `GROUP_FORM_SUBMIT_SUCCESS` with `parameters.LOCATION_S
 
 ## Jotform group forms
 
-The site uses account-specific Jotform configurations while keeping one on-site inquiry experience:
+The site retains account-specific Jotform configurations for one compatible on-site inquiry experience:
 
 - Form `261936424348059`: Manassas, Mount Prospect, and Orland Park
 - Form `262186150244149`: Houston
 - Form `262217710699160`: Philadelphia
 
-All forms are rendered from their compatible HTML source fields on the Time Mission site at:
+Houston and Philadelphia are temporarily routed to their previous Roller forms while their franchisee Pipedrive actions are completed. Their form IDs, build metadata, CRM location values, deal-title prefixes, and route implementation remain in source for reactivation. Manassas, Mount Prospect, and Orland Park continue using the on-site Jotform flow. Follow `docs/houston-philadelphia-jotform-reactivation.md` when the franchisee CRM setup is ready.
+
+Active on-site forms are rendered from their compatible HTML source fields on the Time Mission site at:
 
 ```text
 https://www.timemission.com/groups/inquire/{location_slug}/{form_subject}
@@ -71,7 +73,7 @@ The site fills Jotform's existing hidden `location`, `dealTitle`, and `typeA` fi
 https://www.timemission.com/group-form-thank-you/jotform?location={location}&source={typeA}
 ```
 
-Jotform replaces `{location}` and `{typeA}` from the fields' unique names. The success page validates both values against the five allowed locations and seven controlled group-form subjects before it emits:
+Jotform replaces `{location}` and `{typeA}` from the fields' unique names. The success page retains validation support for all five configured locations and seven controlled group-form subjects so Houston and Philadelphia can be reactivated without rebuilding the analytics contract. For active on-site forms it emits:
 
 - `event: "GROUP_FORM_SUBMIT_SUCCESS"`
 - `parameters.PROVIDER: "jotform"`

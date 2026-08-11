@@ -37,11 +37,19 @@ describe('group inquiry Jotform account routing', () => {
         expect(() => jotformGroupFormConfigFor('dallas')).toThrow(/Unsupported Jotform group inquiry location/);
     });
 
-    it('only emits inquiry routes when the active profile retains the on-site form URLs', () => {
+    it('keeps staged franchise configs dormant while Roller URLs are active', () => {
         const houston = allLocations.find((location) => location.slug === 'houston');
+        const philadelphia = allLocations.find((location) => location.slug === 'philadelphia');
+        const manassas = allLocations.find((location) => location.slug === 'manassas');
         expect(houston).toBeDefined();
-        expect(hasOnSiteGroupInquiryRoute(houston!, 'corporate')).toBe(true);
+        expect(philadelphia).toBeDefined();
+        expect(manassas).toBeDefined();
+        expect(hasOnSiteGroupInquiryRoute(houston!, 'corporate')).toBe(false);
+        expect(hasOnSiteGroupInquiryRoute(philadelphia!, 'corporate')).toBe(false);
+        expect(hasOnSiteGroupInquiryRoute(manassas!, 'corporate')).toBe(true);
         expect(hasOnSiteGroupInquiryRoute({ ...houston!, groupFormUrls: undefined }, 'corporate')).toBe(false);
-        expect(groupInquiryPaths().filter((entry) => entry.location.slug === 'houston')).toHaveLength(7);
+        expect(groupInquiryPaths().filter((entry) => entry.location.slug === 'houston')).toHaveLength(0);
+        expect(groupInquiryPaths().filter((entry) => entry.location.slug === 'philadelphia')).toHaveLength(0);
+        expect(groupInquiryPaths().filter((entry) => entry.location.slug === 'manassas')).toHaveLength(7);
     });
 });

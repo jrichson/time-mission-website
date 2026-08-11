@@ -51,7 +51,14 @@ describe('live-site-to-CMS sync snapshot', () => {
             EU_LOCATION_OPERATIONAL_SNAPSHOT.map((location) => [location.slug, location]),
         );
         const groupFormPatches = new Map(
-            HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT.map((location) => [location.slug, location]),
+            HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT.map((location) => [location.slug, {
+                groupFormUrls: Object.fromEntries(
+                    Object.keys(location.groupFormUrls).map((formKey) => [
+                        formKey,
+                        location.previousGroupFormUrl,
+                    ]),
+                ),
+            }]),
         );
         const effectiveSnapshot = LIVE_SITE_LOCATION_SNAPSHOT.map((location) => {
             const patch = operationalPatches.get(location.slug);
@@ -114,10 +121,17 @@ describe('live-site-to-CMS sync snapshot', () => {
             path.join(root, 'cms/migrations/20260730_151000_sync_live_site_to_cms.ts'),
             'utf8',
         );
+        const temporaryRollerMigration = fs.readFileSync(
+            path.join(root, 'cms/migrations/20260810_170000_houston_philadelphia_roller_routes.ts'),
+            'utf8',
+        );
 
         expect(migrationIndex).toContain('20260730_151000_sync_live_site_to_cms');
         expect(migrationIndex).toContain('20260731_180000_eu_location_operational_data');
         expect(migrationIndex).toContain('20260810_090000_houston_philadelphia_jotform_routes');
+        expect(migrationIndex).toContain('20260810_170000_houston_philadelphia_roller_routes');
+        expect(temporaryRollerMigration).toContain('location.previousGroupFormUrl');
+        expect(temporaryRollerMigration).toContain('await writeGroupFormUrls(db, false)');
         expect(migration).toContain('LIVE_SITE_LOCATION_SNAPSHOT');
         expect(migration).toContain('LIVE_SITE_PAGE_SNAPSHOT');
         expect(migration).toContain('"announcement_banners"');

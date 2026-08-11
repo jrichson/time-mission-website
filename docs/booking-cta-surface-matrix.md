@@ -43,9 +43,9 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | --- | --- | --- |
 | No active location | Ticket panel in group mode | User must choose a location before continuing to the right form. |
 | Mount Prospect | Pipedrive form URLs by group type | Birthday, corporate, field trip, bachelor/ette, private events, holiday. |
-| Philadelphia | `/groups/inquire/philadelphia/{group_type}` | On-site inquiry UI submits to Philadelphia Jotform `262217710699160`. |
+| Philadelphia | `https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form` | Temporary Roller handoff until franchisee Pipedrive actions are ready. |
 | Manassas | Pipedrive form URLs by group type | Birthday, corporate, field trip, bachelor/ette, private events, holiday. |
-| Houston | `/groups/inquire/houston/{group_type}` | On-site inquiry UI submits to Houston Jotform `262186150244149`. |
+| Houston | `https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form` | Temporary Roller handoff until franchisee Pipedrive actions are ready. |
 | Orland Park | Pipedrive form URLs by group type | Birthday, corporate, field trip, bachelor/ette, private events, holiday. |
 | Lincoln | `https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959` | External provider navigation. |
 | Antwerp | `https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission` | Intentional EU/external group handoff. |
