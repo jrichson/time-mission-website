@@ -35,8 +35,9 @@ if (profile.localizedRoutes) {
         errors.push(`${locale}${route.canonicalPath}: localized output is missing`);
         continue;
       }
-      const translations = pageTranslationsFor(pageI18n, locale, route.canonicalPath);
-      const preservedSourceTerms = preservedSourceTermsFor(pageI18n, locale);
+      const context = { canonicalPath: route.canonicalPath, profileId: profile.id };
+      const translations = pageTranslationsFor(pageI18n, locale, context);
+      const preservedSourceTerms = preservedSourceTermsFor(pageI18n, locale, context);
       const localizedEntries = collectPageCopyEntries(fs.readFileSync(localizedPath, 'utf8'));
       if (localizedEntries.length !== sourceEntries.length) {
         errors.push(

@@ -34,7 +34,7 @@ if (strict && profile.localizedRoutes) {
     }
 
     if (locale === profile.defaultLocale) continue;
-    const preservedSourceTerms = preservedSourceTermsFor(pageI18n, locale);
+    const preservedSourceTerms = preservedSourceTermsFor(pageI18n, locale, { profileId: profile.id });
     for (const route of regionalRoutes) {
       const defaultPath = path.join(distDir, ...route.outputFile.split('/'));
       const localizedPath = path.join(distDir, locale, ...route.outputFile.split('/'));

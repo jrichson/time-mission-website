@@ -21,7 +21,7 @@ function location(slug) {
 }
 
 describe('site deployment profiles', () => {
-  it('defaults to the existing US deployment', () => {
+  it('uses locale-prefixed Spanish routes for the US deployment', () => {
     const profile = resolveSiteProfile({});
 
     expect(profile).toMatchObject({
@@ -29,10 +29,12 @@ describe('site deployment profiles', () => {
       origin: 'https://www.timemission.com',
       internalRegion: 'us',
       locales: ['en', 'es'],
-      localizedRoutes: false,
+      localizedRoutes: true,
       pagesProject: 'time-mission-website',
     });
-    expect(localizedPath('/antwerp', 'es', profile)).toBe('/antwerp');
+    expect(localizedPath('/', 'es', profile)).toBe('/es');
+    expect(localizedPath('/philadelphia', 'es', profile)).toBe('/es/philadelphia');
+    expect(localizedPath('/philadelphia', 'en', profile)).toBe('/philadelphia');
   });
 
   it('uses locale-prefixed routes for the EU deployment', () => {

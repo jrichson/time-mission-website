@@ -180,7 +180,10 @@ function localizeHtml(source, route, locale) {
     .replace(/(<meta property="og:url" content=")[^"]*(">)/i, `$1${canonicalUrl}$2`);
 
   html = replaceTranslatedElements(html, translations);
-  html = localizePageCopy(html, locale, pageI18n, route.canonicalPath);
+  html = localizePageCopy(html, locale, pageI18n, {
+    canonicalPath: route.canonicalPath,
+    profileId: profile.id,
+  });
   html = localizeStructuredData(html, locale);
   html = prefixInternalLinks(html, locale);
   return html;

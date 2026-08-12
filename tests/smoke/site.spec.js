@@ -115,15 +115,15 @@ test('homepage testimonial ratings stay visible after carousel hydration', async
 test('language switcher changes visible navigation text', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop language switcher path; mobile menu uses same runtime');
 
-  await gotoHome(page);
+  await page.goto('/about');
   await expect.poll(() => page.evaluate(() => Boolean(window.__TM_I18N__?.translations?.es))).toBe(true);
 
   await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
-  await expect(page.locator('.nav-links a[href="/about"]')).toHaveText('Acerca de');
+  await expect(page.locator('.nav-links a[href="/es/about"]')).toHaveText('Acerca de');
   await expect.poll(() => page.evaluate(() => document.documentElement.lang)).toBe('es');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
 
-  await page.locator('.hero-cta .btn-tickets').click();
+  await page.locator('.nav-right .btn-tickets').click();
   const es = i18nCatalog.translations.es;
   await expect(page.locator('#ticketPanelTitle')).toHaveText('Elige tu ubicación');
   await expect(page.locator('label[for="ticketLocation"]')).toHaveText(es['booking.locationLabel']);
@@ -138,35 +138,60 @@ test('language switcher keeps the current route', async ({ page, isMobile }) => 
   await expect.poll(() => page.evaluate(() => Boolean(window.__TM_I18N__?.translations?.es))).toBe(true);
 
   await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
-  await expect(page).toHaveURL(/\/groups\/corporate$/);
+  await expect(page).toHaveURL(/\/es\/groups\/corporate$/);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    'href',
+    'https://www.timemission.com/es/groups/corporate',
+  );
   await expect.poll(() => page.evaluate(() => document.documentElement.lang)).toBe('es');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
 });
 
+test('explicit US language URLs override the saved preference', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('tm_language', 'en'));
+  await page.goto('/es/faq');
+  await waitForLanguageRuntime(page);
+
+  await expect(page).toHaveURL(/\/es\/faq\/?$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+  await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe('es');
+  await expect(page.locator('[data-language-select]').first()).toHaveValue('es');
+
+  await page.evaluate(() => localStorage.setItem('tm_language', 'es'));
+  await page.goto('/faq');
+  await waitForLanguageRuntime(page);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe('en');
+  await expect(page.locator('[data-language-select]').first()).toHaveValue('en');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('en');
+});
+
 test('selected US language persists across location and FAQ navigation', async ({ page, isMobile }) => {
-  await gotoHome(page);
+  await page.goto('/philadelphia');
   await waitForLanguageRuntime(page, true);
 
   if (isMobile) {
     await page.locator('.nav-menu-btn').click();
     await page.locator('.language-switcher--mobile [data-language-select]').selectOption('es');
-    await page.locator('.nav-menu-btn').click();
   } else {
     await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
   }
 
+  await expect(page).toHaveURL(/\/es\/philadelphia\/?$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe('es');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
 
   await page.locator('#locationBtn').click();
-  await page.locator('#locationDropdown a[data-tm-location-slug="philadelphia"]').click();
-  await expect(page).toHaveURL(/\/philadelphia\/?$/);
+  const manassas = page.locator('#locationDropdown a[data-tm-location-slug="manassas"]');
+  await expect(manassas).toHaveAttribute('href', '/es/manassas');
+  await manassas.click();
+  await expect(page).toHaveURL(/\/es\/manassas\/?$/);
   await waitForLanguageRuntime(page);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe('es');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
 
-  await page.goto('/');
-  await waitForLanguageRuntime(page);
   if (isMobile) {
     await page.locator('.nav-menu-btn').click();
     await page.locator('#mobileMenu a[data-i18n="nav.faq"]').click();
@@ -174,8 +199,9 @@ test('selected US language persists across location and FAQ navigation', async (
     await page.locator('.nav-links a[data-i18n="nav.faq"]').click();
   }
 
-  await expect(page).toHaveURL(/\/faq\/?$/);
+  await expect(page).toHaveURL(/\/es\/faq\/?$/);
   await waitForLanguageRuntime(page);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   await expect(page.locator('main h1').first()).toBeVisible();
   await expect(page.locator('.faq-question').first()).toBeAttached();
   await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe('es');

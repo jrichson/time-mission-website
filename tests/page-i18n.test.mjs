@@ -7,6 +7,7 @@ import {
   collectPageCopyEntries,
   collectPageCopyKeys,
   localizePageCopy,
+  pageTranslationsFor,
   preservedSourceTermsFor,
 } from '../scripts/lib/page-i18n.mjs';
 
@@ -20,6 +21,18 @@ const missionNamePairs = [...missionsMarkup.matchAll(/<article class="portal-car
     imageAlt: card.match(/<img\b[^>]*\balt="([^"]+)"/)?.[1]?.trim() || '',
   }));
 const homeSloganSource = 'Step into the mission. Teams of 2–5 compete through 25+ immersive missions at Time Mission, test your speed, strength, skill, and smarts.';
+const catalogTranslationLayers = [
+  ...Object.entries(pageI18n.translations).map(([locale, translations]) => ({
+    scope: locale,
+    translations,
+  })),
+  ...Object.entries(pageI18n._profiles || {}).flatMap(([profileId, profile]) => (
+    Object.entries(profile.translations || {}).map(([locale, translations]) => ({
+      scope: `${profileId}.${locale}`,
+      translations,
+    }))
+  )),
+];
 
 describe('page translation catalog', () => {
   it('localizes page copy and metadata without changing shared or deferred surfaces', () => {
@@ -72,8 +85,31 @@ describe('page translation catalog', () => {
       },
     };
 
-    const localized = localizePageCopy(source, 'fr', catalog, '/groups/field-trips');
+    const localized = localizePageCopy(source, 'fr', catalog, {
+      canonicalPath: '/groups/field-trips',
+    });
     expect(localized).toContain('<span>SORTIES</span> <span>SCOLAIRES</span>');
+  });
+
+  it('merges profile-specific language copy without leaking it to other sites', () => {
+    const catalog = {
+      translations: { es: { Shared: 'Compartido' } },
+      _profiles: {
+        us: {
+          translations: { es: { 'US only': 'Solo EE. UU.' } },
+          preservedSourceTerms: { es: ['Philadelphia'] },
+        },
+      },
+    };
+
+    expect(pageTranslationsFor(catalog, 'es', { canonicalPath: '/', profileId: 'us' })).toMatchObject({
+      Shared: 'Compartido',
+      'US only': 'Solo EE. UU.',
+    });
+    expect(pageTranslationsFor(catalog, 'es', { canonicalPath: '/', profileId: 'eu' }))
+      .not.toHaveProperty('US only');
+    expect(preservedSourceTermsFor(catalog, 'es', { profileId: 'us' })).toContain('Philadelphia');
+    expect(preservedSourceTermsFor(catalog, 'es', { profileId: 'eu' })).not.toContain('Philadelphia');
   });
 
   it('collects only page-owned visible copy', () => {
@@ -106,19 +142,19 @@ describe('page translation catalog', () => {
   });
 
   it('preserves the Time Mission brand and machine-safe plain text in every locale', () => {
-    for (const translations of Object.values(pageI18n.translations)) {
+    for (const { scope, translations } of catalogTranslationLayers) {
       for (const [source, translated] of Object.entries(translations)) {
         const brandReferences = source.match(/Time Mission/gi) || [];
         const translatedBrandReferences = String(translated).match(/Time Mission/g) || [];
-        expect(translatedBrandReferences).toHaveLength(brandReferences.length);
-        expect(translated).not.toMatch(/TMQBRAND|data-tm=|<[^>]+>/i);
+        expect(translatedBrandReferences, `${scope}: ${source}`).toHaveLength(brandReferences.length);
+        expect(translated, `${scope}: ${source}`).not.toMatch(/TMQBRAND|data-tm=|<[^>]+>/i);
 
         for (const email of source.match(/[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}/g) || []) {
-          expect(translated).toContain(email);
+          expect(translated, `${scope}: ${source}`).toContain(email);
         }
         if (source.startsWith('"') && source.endsWith('"')) {
-          expect(translated.startsWith('"')).toBe(true);
-          expect(translated.endsWith('"')).toBe(true);
+          expect(translated.startsWith('"'), `${scope}: ${source}`).toBe(true);
+          expect(translated.endsWith('"'), `${scope}: ${source}`).toBe(true);
         }
       }
     }
@@ -132,6 +168,25 @@ describe('page translation catalog', () => {
         if (translated === source) expect(preserved).toContain(source);
       }
     }
+  });
+
+  it('requires review of the newly routed US language artifacts', () => {
+    expect(approvals.us.en).toMatchObject({ status: 'review_required' });
+    expect(approvals.us.es).toMatchObject({ status: 'review_required' });
+  });
+
+  it('covers US-only Spanish page copy and preserves only declared source terms', () => {
+    const translations = pageI18n._profiles.us.translations.es;
+    const preserved = preservedSourceTermsFor(pageI18n, 'es', { profileId: 'us' });
+
+    expect(Object.keys(translations).length).toBeGreaterThan(300);
+    for (const [source, translated] of Object.entries(translations)) {
+      expect(translated.trim(), source).not.toBe('');
+      if (translated === source) expect(preserved, source).toContain(source);
+    }
+
+    expect(pageTranslationsFor(pageI18n, 'es', { canonicalPath: '/', profileId: 'eu' }))
+      .not.toHaveProperty('Where is Time Mission located?');
   });
 
   it('keeps the home slogan and every proper mission name in English', () => {

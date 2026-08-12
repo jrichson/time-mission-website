@@ -4,8 +4,14 @@
     "approvedMeaning": "A human language owner reviewed the complete built locale, not only the shared i18n catalog"
   },
   "us": {
-    "en": "approved",
-    "es": "approved"
+    "en": {
+      "status": "review_required",
+      "reason": "The US build now publishes locale-specific language routes and requires artifact review."
+    },
+    "es": {
+      "status": "review_required",
+      "reason": "The new server-rendered Spanish route surface requires human language and legal review."
+    }
   },
   "eu": {
     "en": {

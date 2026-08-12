@@ -9,7 +9,7 @@ const PROFILE_DEFINITIONS = {
     locales: ['en', 'es'],
     defaultLocale: 'en',
     consentProfile: 'us_open',
-    localizedRoutes: false,
+    localizedRoutes: true,
     pagesProject: 'time-mission-website',
     d1DatabaseName: 'time-mission-forms',
     turnstileSiteKeyEnv: 'PUBLIC_TURNSTILE_SITE_KEY',
