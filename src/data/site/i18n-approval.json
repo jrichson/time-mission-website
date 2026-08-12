@@ -1,7 +1,7 @@
 {
   "_policy": {
-    "scope": "All public route copy, metadata, shared UI, forms, and legal text",
-    "approvedMeaning": "A human language owner reviewed the complete built locale, not only the shared i18n catalog"
+    "scope": "All public route copy, metadata, shared UI, forms, and legal-page text",
+    "approvedMeaning": "A human language owner reviewed the complete built locale for language quality; this record is not legal sign-off"
   },
   "us": {
     "en": {
@@ -10,7 +10,7 @@
     },
     "es": {
       "status": "review_required",
-      "reason": "The new server-rendered Spanish route surface requires human language and legal review."
+      "reason": "The new server-rendered Spanish route surface requires human language review."
     }
   },
   "eu": {
@@ -20,15 +20,15 @@
     },
     "nl": {
       "status": "review_required",
-      "reason": "Generated page translations require native-language and legal review."
+      "reason": "Generated page translations require native-language review."
     },
     "fr": {
       "status": "review_required",
-      "reason": "Generated page translations require native-language and legal review."
+      "reason": "Generated page translations require native-language review."
     },
     "es": {
       "status": "review_required",
-      "reason": "Generated page translations require native-language and legal review."
+      "reason": "Generated page translations require native-language review."
     }
   }
 }

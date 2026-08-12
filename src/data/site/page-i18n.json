@@ -2,7 +2,7 @@
   "_policy": {
     "scope": "Visible route body copy and route metadata not already owned by the shared i18n catalog",
     "newsletter": "Deferred by the site owner and excluded by the page-copy collector",
-    "review": "Generated translations require human language and legal review before production approval",
+    "review": "Generated translations require human language review before production approval",
     "missionNames": [
       "Glitch Matrix",
       "Big Bang",

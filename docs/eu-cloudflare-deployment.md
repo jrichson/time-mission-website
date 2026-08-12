@@ -38,7 +38,8 @@ claim.
   `x-default` metadata.
 
 Translation review remains available as an advisory audit trail for every rendered locale.
-After reviewing public route copy, metadata, forms, and legal text in a fresh review build,
+After reviewing public route copy, metadata, forms, and legal-page text for language quality
+in a fresh review build,
 a language owner can record that exact artifact with:
 
 ```bash
@@ -50,8 +51,9 @@ Repeat the approval command for `en`, `fr`, and `es` after each locale is review
 command writes the rendered-copy digest, reviewer, and review date to
 `src/data/site/i18n-approval.json`; do not hand-edit a status to `approved`. Any later copy
 change invalidates the digest. Shared UI and page-body copy are included in the rendered
-artifact review. `review_required` statuses may remain until native-language and legal review
-is complete; they are visible audit metadata and do not block production deployment.
+artifact review. `review_required` statuses may remain until native-language review is
+complete; they are visible audit metadata and do not block production deployment. This is
+a language-quality review, not a legal approval.
 
 ## One-Time Cloudflare Setup
 

@@ -175,6 +175,21 @@ describe('page translation catalog', () => {
     expect(approvals.us.es).toMatchObject({ status: 'review_required' });
   });
 
+  it('requires language review without a separate legal approval', () => {
+    const policyCopy = [
+      approvals._policy.scope,
+      approvals._policy.approvedMeaning,
+      pageI18n._policy.review,
+      ...Object.values(approvals.us).map((record) => record.reason),
+      ...Object.values(approvals.eu).map((record) => record.reason),
+    ].join(' ');
+
+    expect(policyCopy).toContain('language');
+    expect(approvals._policy.scope).toContain('legal-page text');
+    expect(policyCopy).not.toMatch(/\blegal review\b|\brequires? legal\b/i);
+    expect(approvals._policy.approvedMeaning).toContain('not legal sign-off');
+  });
+
   it('covers US-only Spanish page copy and preserves only declared source terms', () => {
     const translations = pageI18n._profiles.us.translations.es;
     const preserved = preservedSourceTermsFor(pageI18n, 'es', { profileId: 'us' });
