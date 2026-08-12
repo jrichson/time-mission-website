@@ -6,7 +6,6 @@ import {
     locationListLabel,
     orderedLocationRegions,
 } from '../lib/location-list';
-import { locationOpeningLabel } from '../lib/location-status';
 import { locationHref, locationHrefIsExternal, locationStatusBadge } from '../lib/location-view';
 import { activeSiteProfile } from '../lib/site-profile';
 
@@ -30,31 +29,29 @@ function statusLabel(loc: (typeof allLocations)[number]) {
 }
 
 function showsOpenNowBadge(loc: (typeof allLocations)[number]) {
+    // Keep selector callouts intentionally scarce. Generic location status belongs
+    // on the location page; the overlay only promotes these approved exceptions.
     const openNowLocations = activeSiteProfile.id === 'eu'
         ? ['brussels']
-        : ['houston', 'orland-park', 'brussels', 'philadelphia'];
+        : ['philadelphia', 'brussels'];
     return openNowLocations.includes(loc.slug) && loc.status === 'open';
 }
 
 function selectorBadge(loc: (typeof allLocations)[number]) {
-    if (activeSiteProfile.id === 'eu') {
-        if (showsOpenNowBadge(loc)) return 'OPEN NOW!';
-        if (loc.region === 'europe' && loc.status === 'temporarily-closed') return statusLabel(loc);
-        return '';
+    if (activeSiteProfile.id === 'us' && loc.slug === 'philadelphia' && loc.status === 'open') {
+        return 'NOW OPEN';
     }
-
-    if (loc.slug === 'philadelphia' && loc.status === 'open') return 'NOW OPEN';
     if (showsOpenNowBadge(loc)) return 'OPEN NOW!';
-    if (loc.status !== 'open') return statusLabel(loc);
+    if (loc.status === 'temporarily-closed'
+        && (activeSiteProfile.id === 'us' || loc.region === 'europe')) {
+        return statusLabel(loc);
+    }
     return '';
 }
 
 function selectorBadgeI18n(loc: (typeof allLocations)[number]) {
     if (loc.slug === 'philadelphia' && showsOpenNowBadge(loc)) return 'location.nowOpen';
     if (showsOpenNowBadge(loc)) return 'location.openNow';
-    if (activeSiteProfile.id === 'us' && loc.status === 'coming-soon' && !locationOpeningLabel(loc)) {
-        return 'location.comingSoon';
-    }
     return undefined;
 }
 

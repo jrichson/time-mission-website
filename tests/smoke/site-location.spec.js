@@ -47,6 +47,7 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   const antwerp = page.locator('#locationDropdown a[data-tm-location-slug="antwerp"]').first();
   const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
   const houston = page.locator('#locationDropdown a[data-tm-location-slug="houston"]').first();
+  const orlandPark = page.locator('#locationDropdown a[data-tm-location-slug="orland-park"]').first();
 
   await expect(antwerp).toHaveAttribute('data-tm-external-location', 'true');
   await expect(antwerp).toHaveAttribute('data-city', 'Antwerp');
@@ -62,11 +63,22 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await expect(brussels).toContainText('Belgium – Brussels');
   await expect(brussels.locator('.coming-soon-tag')).toHaveText('OPEN NOW!');
   await expect(houston).toContainText('TX – Houston');
-  await expect(houston.locator('.coming-soon-tag')).toHaveText('OPEN NOW!');
+  await expect(houston.locator('.coming-soon-tag')).toHaveCount(0);
+  await expect(orlandPark).toContainText('IL – Orland Park');
+  await expect(orlandPark.locator('.coming-soon-tag')).toHaveCount(0);
   await brussels.hover();
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Brussels');
   await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit EU Site');
   await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
+});
+
+test('US location selector limits status pills to the two intentional launch callouts', async ({ page }) => {
+  await page.goto('/');
+
+  const badgeSlugs = await page.locator('#locationDropdown a:has(.coming-soon-tag)')
+    .evaluateAll((links) => links.map((link) => link.getAttribute('data-tm-location-slug')));
+
+  expect(badgeSlugs).toEqual(['philadelphia', 'brussels']);
 });
 
 test('Edison has a local location page whose action links lead to Supercharged NJ', async ({ page, isMobile }) => {
@@ -77,7 +89,7 @@ test('Edison has a local location page whose action links lead to Supercharged N
 
   const edison = page.locator('#locationDropdown a[data-tm-location-slug="edison"]').first();
   await expect(edison).toContainText('NJ – Edison');
-  await expect(edison.locator('.coming-soon-tag')).toHaveText('Coming Soon');
+  await expect(edison.locator('.coming-soon-tag')).toHaveCount(0);
   await expect(edison).not.toHaveAttribute('data-tm-external-location', 'true');
   await expect(edison).toHaveAttribute('href', '/edison?utm_source=paid&utm_campaign=edison');
 
@@ -297,7 +309,7 @@ test('Boston coming-soon page publishes the address and lead-only CTAs', async (
 
   await expect(page).toHaveTitle('Time Mission Boston | Coming Soon');
   await expect(page.locator('.ticker-item').first()).toContainText('BOSTON COMING SOON');
-  await expect(bostonMenuLink.locator('.coming-soon-tag')).toHaveText('Coming Soon');
+  await expect(bostonMenuLink.locator('.coming-soon-tag')).toHaveCount(0);
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
     'href',
     '/contact#location=boston&type=updates'
