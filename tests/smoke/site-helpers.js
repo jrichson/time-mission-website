@@ -35,6 +35,17 @@ async function gotoHome(page) {
   });
 }
 
+async function waitForLanguageRuntime(page, includeLocation = false) {
+  await page.waitForFunction(
+    (locationRequired) => Boolean(window.TMI18n?.ready && (!locationRequired || window.TM?.ready)),
+    includeLocation,
+  );
+  await page.evaluate(async (locationRequired) => {
+    await window.TMI18n.ready;
+    if (locationRequired) await window.TM.ready;
+  }, includeLocation);
+}
+
 function expectUrlToMatch(actualUrl, expectedUrl) {
   if (expectedUrl instanceof RegExp) {
     expect(actualUrl).toMatch(expectedUrl);
@@ -101,5 +112,6 @@ module.exports = {
   path,
   prepareSiteSmoke,
   readTaggingConsentProfile,
+  waitForLanguageRuntime,
   waiverUrl,
 };

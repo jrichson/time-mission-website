@@ -7,6 +7,7 @@ import { resolveSiteProfile } from '../config/site-profiles.mjs';
 import pageI18n from '../src/data/site/page-i18n.json' with { type: 'json' };
 import {
   collectPageCopyEntries,
+  effectivePageTranslation,
   pageTranslationsFor,
   preservedSourceTermsFor,
 } from './lib/page-i18n.mjs';
@@ -47,11 +48,16 @@ if (profile.localizedRoutes) {
 
       sourceEntries.forEach((entry, index) => {
         checkedEntries += 1;
-        const translated = translations[entry.value];
-        if (typeof translated !== 'string' || !translated.trim()) {
+        const catalogTranslation = translations[entry.value];
+        if (typeof catalogTranslation !== 'string' || !catalogTranslation.trim()) {
           errors.push(`${locale}${route.canonicalPath}: missing page translation for ${JSON.stringify(entry.value)}`);
           return;
         }
+        const translated = effectivePageTranslation(
+          translations,
+          preservedSourceTerms,
+          entry.value,
+        );
         if (translated === entry.value && !preservedSourceTerms.has(entry.value)) {
           errors.push(
             `${locale}${route.canonicalPath}: unchanged page copy is not explicitly preserved: `

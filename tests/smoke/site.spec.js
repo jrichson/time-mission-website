@@ -11,6 +11,7 @@ const {
   path,
   prepareSiteSmoke,
   readTaggingConsentProfile,
+  waitForLanguageRuntime,
   waiverUrl,
 } = require('./site-helpers');
 
@@ -139,6 +140,45 @@ test('language switcher keeps the current route', async ({ page, isMobile }) => 
   await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
   await expect(page).toHaveURL(/\/groups\/corporate$/);
   await expect.poll(() => page.evaluate(() => document.documentElement.lang)).toBe('es');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
+});
+
+test('selected US language persists across location and FAQ navigation', async ({ page, isMobile }) => {
+  await gotoHome(page);
+  await waitForLanguageRuntime(page, true);
+
+  if (isMobile) {
+    await page.locator('.nav-menu-btn').click();
+    await page.locator('.language-switcher--mobile [data-language-select]').selectOption('es');
+    await page.locator('.nav-menu-btn').click();
+  } else {
+    await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
+  }
+
+  await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe('es');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
+
+  await page.locator('#locationBtn').click();
+  await page.locator('#locationDropdown a[data-tm-location-slug="philadelphia"]').click();
+  await expect(page).toHaveURL(/\/philadelphia\/?$/);
+  await waitForLanguageRuntime(page);
+  await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe('es');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
+
+  await page.goto('/');
+  await waitForLanguageRuntime(page);
+  if (isMobile) {
+    await page.locator('.nav-menu-btn').click();
+    await page.locator('#mobileMenu a[data-i18n="nav.faq"]').click();
+  } else {
+    await page.locator('.nav-links a[data-i18n="nav.faq"]').click();
+  }
+
+  await expect(page).toHaveURL(/\/faq\/?$/);
+  await waitForLanguageRuntime(page);
+  await expect(page.locator('main h1').first()).toBeVisible();
+  await expect(page.locator('.faq-question').first()).toBeAttached();
+  await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe('es');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
 });
 

@@ -45,10 +45,17 @@ export function pageTranslationsFor(catalog, locale, canonicalPath = '') {
 }
 
 export function preservedSourceTermsFor(catalog, locale) {
+  const missionNames = catalog?._policy?.missionNames || [];
   return new Set([
+    ...missionNames,
+    ...missionNames.map((name) => String(name).toUpperCase()),
     ...(catalog?._policy?.preservedSourceTerms?.common || []),
     ...(catalog?._policy?.preservedSourceTerms?.[locale] || []),
   ]);
+}
+
+export function effectivePageTranslation(translations, preservedSourceTerms, source) {
+  return preservedSourceTerms.has(source) ? source : translations[source];
 }
 
 function isTranslatableCopy(value) {
@@ -140,10 +147,11 @@ export function localizePageCopy(html, locale, catalog, canonicalPath = '') {
   if (!Object.keys(translations).length) return html;
 
   const source = String(html || '');
+  const preservedSourceTerms = preservedSourceTermsFor(catalog, locale);
   const replacements = [];
   walkPageCopy(parseDocument(source, true), {
     text(node, value) {
-      const translated = translations[value];
+      const translated = effectivePageTranslation(translations, preservedSourceTerms, value);
       if (typeof translated !== 'string' || translated === value || !node.sourceCodeLocation) return;
       replacements.push({
         startOffset: node.sourceCodeLocation.startOffset,
@@ -152,7 +160,7 @@ export function localizePageCopy(html, locale, catalog, canonicalPath = '') {
       });
     },
     attribute(node, name, value) {
-      const translated = translations[value];
+      const translated = effectivePageTranslation(translations, preservedSourceTerms, value);
       if (typeof translated !== 'string' || translated === value) return;
       const replacement = attributeReplacement(source, node, name, translated);
       if (replacement) replacements.push(replacement);

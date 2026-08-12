@@ -4,6 +4,8 @@
 // ==========================================
 
 (function() {
+    const siteProfile = window.__TM_SITE_PROFILE__ || {};
+
     function normalizeLocation(value) {
         const context = getLocationContext();
         if (context && typeof context.normalizeSlug === 'function') {
@@ -126,6 +128,30 @@
         return safeDecode(value).toLowerCase().trim().replace(/\.html$/i, '').replace(/-/g, '');
     }
 
+    function localizedPathContext(pathname) {
+        const normalized = normalizeHrefPath(pathname);
+        if (!siteProfile.localizedRoutes) {
+            return { localePrefix: '', pathname: normalized };
+        }
+
+        const supportedLocales = Array.isArray(siteProfile.locales) ? siteProfile.locales : [];
+        const defaultLocale = String(siteProfile.defaultLocale || supportedLocales[0] || 'en').toLowerCase();
+        const parts = normalized.split('/').filter(Boolean);
+        const firstSegment = String(parts[0] || '').toLowerCase();
+        const matchedLocale = supportedLocales.find(function (locale) {
+            return String(locale || '').toLowerCase() === firstSegment;
+        });
+        if (!matchedLocale || firstSegment === defaultLocale) {
+            return { localePrefix: '', pathname: normalized };
+        }
+
+        const unprefixedPath = parts.length > 1 ? '/' + parts.slice(1).join('/') : '/';
+        return {
+            localePrefix: '/' + String(matchedLocale).toLowerCase(),
+            pathname: unprefixedPath,
+        };
+    }
+
     function getCurrentLocationSlug() {
         const context = getLocationContext();
         const loc = context && typeof context.getCurrent === 'function' ? context.getCurrent() : null;
@@ -168,7 +194,13 @@
     }
 
     function currentScopedCanonicalPath() {
-        const withoutLocation = getPathWithoutLocationPrefix(window.location.pathname || '/');
+        const localizedPath = localizedPathContext(window.location.pathname || '/');
+        if (siteProfile.localizedRoutes
+            && localizedPath.localePrefix
+            && !isKnownLocationPath(localizedPath.pathname)) {
+            return '';
+        }
+        const withoutLocation = getPathWithoutLocationPrefix(localizedPath.pathname);
         return getScopedCanonicalPath(withoutLocation);
     }
 
@@ -192,11 +224,15 @@
     function locationSelectionHref(slug) {
         const normalized = normalizeLocation(slug);
         if (!normalized) return '';
+        const localizedPath = localizedPathContext(window.location.pathname || '/');
         const canonicalPath = currentScopedCanonicalPath();
         const destinationPath = canonicalPath
             ? (canonicalPath === '/' ? '/' + normalized : '/' + normalized + canonicalPath)
             : '/' + normalized;
-        return destinationPath + currentSearchForLocationSelection(normalized) + ((window.location && window.location.hash) || '');
+        return localizedPath.localePrefix
+            + destinationPath
+            + currentSearchForLocationSelection(normalized)
+            + ((window.location && window.location.hash) || '');
     }
 
     function syncLocationSelectionLinks() {

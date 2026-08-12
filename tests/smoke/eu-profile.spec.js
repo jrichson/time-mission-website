@@ -1,7 +1,11 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
-const { prepareSiteSmoke, REPO_ROOT } = require('./site-helpers');
+const { prepareSiteSmoke, REPO_ROOT, waitForLanguageRuntime } = require('./site-helpers');
+const pageI18n = require('../../src/data/site/page-i18n.json');
+
+const missionAltNames = pageI18n._policy.missionNames;
+const missionDisplayNames = missionAltNames.map((name) => name.toUpperCase());
 
 function localizedHtmlRoutes(locale) {
   const base = path.join(REPO_ROOT, 'dist', locale);
@@ -140,6 +144,20 @@ test('localized EU routes translate page-owned body copy and metadata', async ({
   }
 });
 
+test('localized EU mission names and image labels remain in English', async ({ page }) => {
+  expect(missionDisplayNames).toHaveLength(30);
+  expect(missionAltNames).toHaveLength(30);
+
+  for (const locale of ['nl', 'fr', 'es']) {
+    await page.goto(`/${locale}/missions`);
+    await expect(page.locator('.portal-title')).toHaveCount(30);
+    expect(await page.locator('.portal-title').allTextContents()).toEqual(missionDisplayNames);
+    expect(await page.locator('.portal-card img').evaluateAll(
+      (images) => images.map((image) => image.getAttribute('alt')),
+    )).toEqual(missionAltNames);
+  }
+});
+
 test('every localized EU route renders in each enabled language', async ({ page }) => {
   test.setTimeout(180_000);
   const expectedRoutes = localizedHtmlRoutes('nl');
@@ -193,6 +211,53 @@ test('localized runtime writers preserve language after interaction', async ({ p
     .toHaveText('Formulaire de demande de don bientôt disponible');
   await expect(page.locator('#donationLocationHint'))
     .toContainText("Le formulaire de demande de don en ligne n'est pas encore disponible pour Anvers");
+});
+
+test('selected EU language persists across location and FAQ navigation', async ({ page, isMobile }) => {
+  for (const locale of ['nl', 'fr', 'es']) {
+    await page.goto('/eindhoven');
+    await waitForLanguageRuntime(page, true);
+
+    if (isMobile) {
+      await page.locator('#locationBtn').click();
+      await page.locator('.language-switcher--overlay [data-language-select]').selectOption(locale);
+    } else {
+      await page.locator('.language-switcher--desktop [data-language-select]').selectOption(locale);
+    }
+
+    await expect(page).toHaveURL(new RegExp(`/${locale}/eindhoven/?$`));
+    await waitForLanguageRuntime(page, true);
+    await expect(page.locator('html')).toHaveAttribute('lang', new RegExp(`^${locale}(?:-|$)`, 'i'));
+    await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe(locale);
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe(locale);
+
+    await page.locator('#locationBtn').click();
+    const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]');
+    await expect(brussels).toHaveAttribute('href', `/${locale}/brussels`);
+    await brussels.click();
+
+    await expect(page).toHaveURL(new RegExp(`/${locale}/brussels/?$`));
+    await waitForLanguageRuntime(page);
+    await expect(page.locator('html')).toHaveAttribute('lang', new RegExp(`^${locale}(?:-|$)`, 'i'));
+    await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe(locale);
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe(locale);
+    await expect.poll(() => page.locator('[data-language-select]').evaluateAll(
+      (selects) => selects.every((select) => select.value === document.documentElement.dataset.tmLanguage),
+    )).toBe(true);
+
+    if (isMobile) {
+      await page.locator('.nav-menu-btn').click();
+      await page.locator('#mobileMenu a[data-i18n="nav.faq"]').click();
+    } else {
+      await page.locator('.nav-links a[data-i18n="nav.faq"]').click();
+    }
+
+    await expect(page).toHaveURL(new RegExp(`/${locale}/faq/?$`));
+    await waitForLanguageRuntime(page);
+    await expect(page.locator('html')).toHaveAttribute('lang', new RegExp(`^${locale}(?:-|$)`, 'i'));
+    await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe(locale);
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe(locale);
+  }
 });
 
 test('localized EU routes translate their announcement and footer chrome', async ({ page }) => {

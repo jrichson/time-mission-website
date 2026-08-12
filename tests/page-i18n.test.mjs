@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import approvals from '../src/data/site/i18n-approval.json';
@@ -8,6 +9,17 @@ import {
   localizePageCopy,
   preservedSourceTermsFor,
 } from '../scripts/lib/page-i18n.mjs';
+
+const missionsMarkup = fs.readFileSync(
+  new URL('../src/partials/missions-main.frag.txt', import.meta.url),
+  'utf8',
+);
+const missionNamePairs = [...missionsMarkup.matchAll(/<article class="portal-card[\s\S]*?<\/article>/g)]
+  .map(([card]) => ({
+    display: card.match(/class="portal-title"[^>]*>([^<]+)</)?.[1]?.trim() || '',
+    imageAlt: card.match(/<img\b[^>]*\balt="([^"]+)"/)?.[1]?.trim() || '',
+  }));
+const homeSloganSource = 'Step into the mission. Teams of 2–5 compete through 25+ immersive missions at Time Mission, test your speed, strength, skill, and smarts.';
 
 describe('page translation catalog', () => {
   it('localizes page copy and metadata without changing shared or deferred surfaces', () => {
@@ -118,6 +130,36 @@ describe('page translation catalog', () => {
       const preserved = preservedSourceTermsFor(pageI18n, locale);
       for (const [source, translated] of Object.entries(pageI18n.translations[locale])) {
         if (translated === source) expect(preserved).toContain(source);
+      }
+    }
+  });
+
+  it('keeps the home slogan and every proper mission name in English', () => {
+    expect(missionNamePairs).toHaveLength(30);
+    expect(missionNamePairs.every(({ display, imageAlt }) => display && imageAlt)).toBe(true);
+
+    for (const locale of ['nl', 'fr', 'es']) {
+      const translations = pageI18n.translations[locale];
+      const preserved = preservedSourceTermsFor(pageI18n, locale);
+
+      expect(translations[homeSloganSource]).toMatch(/^Step into the mission\./);
+      for (const { display, imageAlt } of missionNamePairs) {
+        expect(translations[display], `${locale}: catalog ${display}`).toBe(display);
+        expect(translations[imageAlt], `${locale}: catalog ${imageAlt}`).toBe(imageAlt);
+        const localized = localizePageCopy(
+          `<main><h2>${display}</h2><img alt="${imageAlt}"></main>`,
+          locale,
+          pageI18n,
+        );
+        expect(localized, `${locale}: ${display}`).toContain(`<h2>${display}</h2>`);
+        expect(localized, `${locale}: ${imageAlt}`).toContain(`alt="${imageAlt}"`);
+        expect(preserved.has(display), `${locale}: preserve ${display}`).toBe(true);
+        expect(preserved.has(imageAlt), `${locale}: preserve ${imageAlt}`).toBe(true);
+      }
+
+      for (const genericCopy of ['BOOK YOUR MISSION', 'MISSION BRIEFING', 'THE MISSIONS']) {
+        expect(translations[genericCopy], `${locale}: translate ${genericCopy}`)
+          .not.toBe(genericCopy);
       }
     }
   });
