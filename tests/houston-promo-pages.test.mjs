@@ -23,7 +23,7 @@ describe('Houston back-to-school campaign pages', () => {
     expect(page).not.toContain('data-tm-booking-presentation="roller"');
     expect(page).not.toContain('data-tm-booking-url={bookingUrl}');
     expect(page).toContain('data-tm-promo-cta="school_night_book_now"');
-    expect(page).toContain('/js/page-houston-promo-after.js?v=1');
+    expect(page).toContain('/js/page-houston-promo-after.js?v=2');
     expect(page).not.toContain('imagePending');
     expect(page).not.toContain('up to $15 off');
     expect(page).not.toContain('60 minutes is $29.95');
