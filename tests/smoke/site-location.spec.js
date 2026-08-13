@@ -11,6 +11,7 @@ const {
   path,
   prepareSiteSmoke,
   readTaggingConsentProfile,
+  waitForLanguageRuntime,
   waiverUrl,
 } = require('./site-helpers');
 
@@ -206,6 +207,8 @@ test('desktop location hover renders address map preview before selection', asyn
 
   await page.goto('/');
   await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
+  await expect(page).toHaveURL(/\/es\/?$/);
+  await waitForLanguageRuntime(page, true);
   await page.locator('#locationBtn').click();
   await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
   await expect(page.locator('#locationDropdown .location-dropdown-title')).toHaveText(i18nCatalog.translations.es['location.title']);
@@ -214,7 +217,7 @@ test('desktop location hover renders address map preview before selection', asyn
   const className = await page.locator('#locationDropdown').evaluate((el) => el.className || '');
   expect(className).toContain('open');
   expect(className).not.toContain('navigating');
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/es$/);
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Mount Prospect');
   await expect(page.locator('#locationInfo .location-info-address')).toContainText('132 Randhurst Village Drive');
   await expect(page.locator('#locationInfo .location-info-directions')).toContainText(i18nCatalog.translations.es['location.getDirections']);

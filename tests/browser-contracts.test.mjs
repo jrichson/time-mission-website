@@ -276,4 +276,48 @@ describe('browser data, consent, and i18n contracts', () => {
     expect(window.localStorage.getItem('tm_language')).toBe('es');
     expect(seen).toContain('es');
   });
+
+  it('routes the localized homepage without a trailing slash', async () => {
+    let changeHandler = null;
+    const select = {
+      value: 'en',
+      addEventListener(type, handler) {
+        if (type === 'change') changeHandler = handler;
+      },
+    };
+    const form = { addEventListener() {} };
+    const { context, window, document } = createBrowserContext({
+      __TM_I18N__: {
+        defaultLanguage: 'en',
+        storageKey: 'tm_language',
+        languages: [
+          { code: 'en', htmlLang: 'en', label: 'English' },
+          { code: 'es', htmlLang: 'es', label: 'Spanish' },
+        ],
+        translations: { en: {}, es: {} },
+      },
+      __TM_SITE_PROFILE__: {
+        defaultLocale: 'en',
+        locales: ['en', 'es'],
+        localizedRoutes: true,
+      },
+    });
+    window.location.href = 'https://www.timemission.com/?utm_source=test#mission';
+    window.location.pathname = '/';
+    window.location.search = '?utm_source=test';
+    document.documentElement = { lang: 'en', dataset: {} };
+    document.querySelectorAll = (selector) => {
+      if (selector === '[data-language-switcher]') return [form];
+      if (selector === '[data-language-select]') return [select];
+      return [];
+    };
+
+    runScript('js/language-switcher.js', context);
+    await window.TMI18n.ready;
+    select.value = 'es';
+    changeHandler();
+
+    expect(window.location.href)
+      .toBe('https://www.timemission.com/es?utm_source=test#mission');
+  });
 });

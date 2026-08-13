@@ -178,6 +178,7 @@ test('selected US language persists across location and FAQ navigation', async (
   }
 
   await expect(page).toHaveURL(/\/es\/philadelphia\/?$/);
+  await waitForLanguageRuntime(page, true);
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe('es');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');

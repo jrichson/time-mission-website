@@ -96,7 +96,11 @@
         if (first && first.code !== defaultLanguage) parts.shift();
         if (targetCode !== defaultLanguage) parts.unshift(targetCode);
         url.pathname = '/' + parts.join('/');
-        if (url.pathname !== '/' && /\/$/.test(window.location.pathname)) url.pathname += '/';
+        if (
+            url.pathname !== '/'
+            && window.location.pathname !== '/'
+            && /\/$/.test(window.location.pathname)
+        ) url.pathname += '/';
         return url.toString();
     }
 
