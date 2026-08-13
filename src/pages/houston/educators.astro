@@ -1,0 +1,55 @@
+---
+import HoustonPromoSplit from '../../components/HoustonPromoSplit.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { definePage } from '../../lib/define-page';
+import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+
+const page = definePage({ canonicalPath: '/houston/educators' });
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Houston', href: '/houston' },
+    { label: 'Educators Free Through September 30', href: page.canonicalPath },
+]));
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyClass="has-noise tm-promo-page"
+    bodyDataLocation="houston"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-houston-promo.css?v=3" />
+        <script
+            is:inline
+            async
+            src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU"
+        ></script>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+
+    <HoustonPromoSplit
+        eyebrow="Houston · Educator Appreciation"
+        imageAlt="Three educators taking on the Control Room challenge at Time Mission"
+        imagePosition="center"
+        imageSrc="/assets/photos/promos/houston-educators-control-room-1200.webp"
+        imageSrcSet="/assets/photos/promos/houston-educators-control-room-480.webp 480w, /assets/photos/promos/houston-educators-control-room-800.webp 800w, /assets/photos/promos/houston-educators-control-room-1200.webp 1200w, /assets/photos/promos/houston-educators-control-room-1600.webp 1600w"
+    >
+        <h1 id="promo-title" class="tm-promo-landing__title tm-promo-landing__title--educators">
+            <span>Educators Free</span>{' '}
+            <span>Through Sept 30</span>
+        </h1>
+
+        <div class="tm-promo-landing__copy">
+            <p>School is back, and you've earned a night that has nothing to do with lesson plans.</p>
+            <p>Every educator gets a free mission at Time Mission Houston through September 30. Any session length, any night we're open. Fill out the form below, we'll send you a link with your promo code, and you show your school ID when you check in.</p>
+        </div>
+
+        <section class="tm-promo-form tm-promo-form--live" aria-label="Educator signup form">
+            <div class="klaviyo-form-YsG3eB" data-klaviyo-form-embed></div>
+        </section>
+
+        <p class="tm-promo-landing__terms">One free ticket per educator, valid through September 30, 2026. Valid at Time Mission Houston only. Available to K-12 teachers, administrators, and school staff with a valid school ID. Promo code link is sent by email after signup and must be redeemed by the person named on the signup. Valid school ID required at check-in. Valid any day and any session length, subject to availability. Two ticket minimum applies to all bookings. Cannot be combined with other offers, promotions, or discounts, including the School Night Sale. Not transferable, not redeemable for cash, and no cash value. Time Mission reserves the right to modify or end this promotion at any time.</p>
+    </HoustonPromoSplit>
+</SiteLayout>

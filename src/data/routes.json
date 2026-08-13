@@ -275,6 +275,30 @@
       "status": 301
     },
     {
+      "id": "houston-school-night",
+      "canonicalPath": "/houston/school-night",
+      "redirectSources": [
+        "/houston/school-night.html",
+        "/houston/promos/school-night",
+        "/houston/promos/school-night.html"
+      ],
+      "outputFile": "houston/school-night.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "houston-educators",
+      "canonicalPath": "/houston/educators",
+      "redirectSources": [
+        "/houston/educators.html",
+        "/houston/teachers",
+        "/houston/teachers.html"
+      ],
+      "outputFile": "houston/educators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "houston-spinandscore-rules",
       "canonicalPath": "/houston/spinandscore/rules",
       "redirectSources": [

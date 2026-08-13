@@ -9,13 +9,17 @@ const root = path.resolve(__dirname, '..');
 describe('CMS existing-page seed migration', () => {
   it('covers every route registry canonical path', () => {
     const routes = JSON.parse(fs.readFileSync(path.join(root, 'src/data/routes.json'), 'utf8')).routes;
-    const migration = fs.readFileSync(
-      path.join(root, 'cms/migrations/20260508_201500_seed_site_pages.ts'),
-      'utf8',
-    );
+    const migrationFiles = [
+      'cms/migrations/20260508_201500_seed_site_pages.ts',
+      'cms/migrations/20260811_210000_houston_back_to_school_pages.ts',
+      'cms/migration-data/20260811_houston_back_to_school_pages_snapshot.ts',
+    ];
+    const migrations = migrationFiles
+      .map((relativePath) => fs.readFileSync(path.join(root, relativePath), 'utf8'))
+      .join('\n');
 
     for (const route of routes) {
-      expect(migration).toContain(`'${route.canonicalPath}'`);
+      expect(migrations).toContain(`'${route.canonicalPath}'`);
     }
   });
 

@@ -1,0 +1,67 @@
+---
+import HoustonPromoSplit from '../../components/HoustonPromoSplit.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { definePage } from '../../lib/define-page';
+import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+
+const page = definePage({ canonicalPath: '/houston/school-night' });
+const bookingUrl = 'https://ecom.roller.app/TimeMissionHouston/onlinecheckout/en-US/products?code=SCHOOLNIGHT';
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Houston', href: '/houston' },
+    { label: 'School Night Sale', href: page.canonicalPath },
+]));
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyClass="has-noise tm-promo-page"
+    bodyDataLocation="houston"
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-houston-promo.css?v=3" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+
+    <HoustonPromoSplit
+        eyebrow="Houston · Through September 30"
+        imageAlt="A group taking on an interactive challenge at Time Mission"
+        imagePosition="center"
+        imageSrc="/assets/photos/TM-Groups-1200.webp"
+        imageSrcSet="/assets/photos/TM-Groups-480.webp 480w, /assets/photos/TM-Groups-800.webp 800w, /assets/photos/TM-Groups-1200.webp 1200w, /assets/photos/TM-Groups.webp 1920w"
+    >
+        <h1 id="promo-title" class="tm-promo-landing__title">
+            <span>School Nights</span>{' '}
+            <span>Are on Sale</span>
+        </h1>
+
+        <div class="tm-promo-landing__copy">
+            <p>School is back, but not every school night has to be boring.</p>
+            <p>Get $10 off 90 and 120 minute missions at Time Mission Houston on school nights. Sundays after 6PM and all day Monday through Thursday.</p>
+            <p>Book with the button below or use code <strong>SCHOOLNIGHT</strong>. Runs through September 30.</p>
+        </div>
+
+        <div class="tm-promo-landing__rule" aria-hidden="true"></div>
+
+        <a
+            class="tm-promo-landing__cta"
+            href="#"
+            data-tm-booking-trigger
+            data-tm-booking-kind="tickets"
+            data-tm-booking-presentation="roller"
+            data-tm-booking-url={bookingUrl}
+            data-tm-location="houston"
+            data-tm-promo-cta="school_night_book_now"
+        >
+            Book Now
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+            </svg>
+        </a>
+
+        <p class="tm-promo-landing__terms">Discount valid Sundays from 6PM to close and all day Monday through Thursday, now through September 30, 2026. Valid on 90 and 120 minute sessions only. 60 minute sessions excluded. Not valid Friday or Saturday. Not valid Labor Day weekend, September 5 through September 7. Valid at Time Mission Houston only. Discount applies when you book through this page or enter code SCHOOLNIGHT at checkout. Two ticket minimum. Cannot be combined with other offers, promotions, or discounts. Not valid on gift cards, group bookings, or private events. Subject to availability. Time Mission reserves the right to modify or end this promotion at any time.</p>
+    </HoustonPromoSplit>
+
+</SiteLayout>

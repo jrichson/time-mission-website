@@ -62,6 +62,12 @@
 /locations/index.html /locations 301
 /philadelphia.html /philadelphia 301
 /houston.html /houston 301
+/houston/school-night.html /houston/school-night 301
+/houston/promos/school-night /houston/school-night 301
+/houston/promos/school-night.html /houston/school-night 301
+/houston/educators.html /houston/educators 301
+/houston/teachers /houston/educators 301
+/houston/teachers.html /houston/educators 301
 /houston/spinandscore/rules.html /houston/spinandscore/rules 301
 /mount-prospect.html /mount-prospect 301
 /west-nyack.html /west-nyack 301

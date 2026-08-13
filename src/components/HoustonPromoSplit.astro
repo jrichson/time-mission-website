@@ -1,0 +1,46 @@
+---
+interface Props {
+    eyebrow: string;
+    imageAlt: string;
+    imagePosition?: 'center' | 'left' | 'right';
+    imageSrc: string;
+    imageSrcSet: string;
+}
+
+const {
+    eyebrow,
+    imageAlt,
+    imagePosition = 'center',
+    imageSrc,
+    imageSrcSet,
+} = Astro.props;
+---
+
+<section class="tm-promo-landing" aria-labelledby="promo-title">
+    <div class="tm-promo-landing__split">
+        <div class={`tm-promo-landing__media tm-promo-landing__media--${imagePosition}`}>
+            <picture>
+                <source srcset={imageSrcSet} sizes="(max-width: 767px) 100vw, 50vw" type="image/webp" />
+                <img
+                    src={imageSrc}
+                    alt={imageAlt}
+                    width="1200"
+                    height="800"
+                    fetchpriority="high"
+                    decoding="async"
+                />
+            </picture>
+        </div>
+
+        <div class="tm-promo-landing__content">
+            <a class="tm-promo-landing__back" href="/houston">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                </svg>
+                Houston
+            </a>
+            <p class="tm-promo-landing__eyebrow">{eyebrow}</p>
+            <slot />
+        </div>
+    </div>
+</section>

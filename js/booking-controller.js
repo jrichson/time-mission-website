@@ -369,7 +369,11 @@
         href = resolvedIntent.href;
         var source = String(opts.source || 'generic_cta');
         var locationSlug = resolvedIntent.locationSlug;
+        var promoCtaId = opts.currentTarget && typeof opts.currentTarget.getAttribute === 'function'
+            ? String(opts.currentTarget.getAttribute('data-tm-promo-cta') || '')
+            : '';
         var ctaId = opts.ctaId
+            || promoCtaId
             || (opts.currentTarget && opts.currentTarget.className && String(opts.currentTarget.className).split(' ')[0])
             || source;
 
@@ -387,7 +391,7 @@
             tmTrack('checkout_start', {
                 destination_url: safeDestination(href),
                 location_slug: locationSlug,
-                cta_id: source,
+                cta_id: promoCtaId || source,
             });
         }
 
@@ -432,6 +436,7 @@
                     groupType: groupType,
                     locationId: locationId,
                     pageLocationSlug: pageLocationSlug,
+                    currentTarget: btn,
                     preferLocationPageFlow: false,
                     resolveHref: true,
                 });

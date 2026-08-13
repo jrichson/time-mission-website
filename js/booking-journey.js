@@ -269,6 +269,21 @@
         return 'link';
     }
 
+    function explicitBookingPresentation(currentTarget, loc, kind, href) {
+        if (!currentTarget || typeof currentTarget.getAttribute !== 'function') return '';
+        var requested = normalizeKind(currentTarget.getAttribute('data-tm-booking-presentation') || '');
+        if (
+            requested === 'roller'
+            && loc
+            && (loc.bookingProvider === 'roller' || loc.rollerCheckoutUrl)
+            && (isTicketKind(kind) || isGroupTicketKind(kind))
+            && isNavigableHref(href)
+        ) {
+            return 'roller';
+        }
+        return '';
+    }
+
     function resolveIntent(options) {
         var opts = options || {};
         var currentTarget = opts.currentTarget || null;
@@ -292,8 +307,14 @@
         var loc = opts.location || null;
         var href = String(opts.href || '').trim();
         if (!href && currentTarget) href = getBookingHref(currentTarget);
+        var explicitPresentation = explicitBookingPresentation(currentTarget, loc, kind, href);
 
-        if (loc && opts.resolveHref !== false && (isTicketKind(kind) || !isNavigableHref(href))) {
+        if (
+            loc
+            && opts.resolveHref !== false
+            && !explicitPresentation
+            && (isTicketKind(kind) || !isNavigableHref(href))
+        ) {
             var resolvedHref = resolveLocationDestination(loc, {
                 kind: kind,
                 groupType: groupType,
@@ -310,7 +331,9 @@
             || (loc && (loc.id || loc.slug))
             || ''
         );
-        var presentation = bookingPresentationFor(loc, kind, href);
+        var presentation = explicitPresentation
+            || explicitBookingPresentation(currentTarget, loc, kind, href)
+            || bookingPresentationFor(loc, kind, href);
         if (shouldAppendTrackingForPresentation(presentation)) {
             href = appendTrackingParams(href);
         }

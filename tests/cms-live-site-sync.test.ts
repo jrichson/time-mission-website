@@ -11,6 +11,7 @@ import {
 import { EU_LOCATION_OPERATIONAL_SNAPSHOT } from '../cms/migration-data/20260731_eu_location_operational_snapshot';
 import { PHILADELPHIA_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260807_philadelphia_now_open_snapshot';
 import { HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT } from '../cms/migration-data/20260810_houston_philadelphia_jotform_routes_snapshot';
+import { HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT } from '../cms/migration-data/20260811_houston_back_to_school_pages_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -106,11 +107,16 @@ describe('live-site-to-CMS sync snapshot', () => {
             twitterImage: seo.twitterImage ?? seo.ogImage,
         }));
 
-        const effectiveSnapshot = LIVE_SITE_PAGE_SNAPSHOT.map((page) =>
-            page.path === PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.path
-                ? { ...page, metaDescription: PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.metaDescription }
-                : page,
+        const pageSnapshotByPath = new Map(
+            [...LIVE_SITE_PAGE_SNAPSHOT, ...HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT]
+                .map((page) => [page.path, page]),
         );
+        const effectiveSnapshot = expected.map(({ path: routePath }) => {
+            const page = pageSnapshotByPath.get(routePath);
+            return page?.path === PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.path
+                ? { ...page, metaDescription: PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.metaDescription }
+                : page;
+        });
 
         expect(effectiveSnapshot).toEqual(expected);
     });
@@ -125,13 +131,20 @@ describe('live-site-to-CMS sync snapshot', () => {
             path.join(root, 'cms/migrations/20260810_170000_houston_philadelphia_roller_routes.ts'),
             'utf8',
         );
+        const backToSchoolMigration = fs.readFileSync(
+            path.join(root, 'cms/migrations/20260811_210000_houston_back_to_school_pages.ts'),
+            'utf8',
+        );
 
         expect(migrationIndex).toContain('20260730_151000_sync_live_site_to_cms');
         expect(migrationIndex).toContain('20260731_180000_eu_location_operational_data');
         expect(migrationIndex).toContain('20260810_090000_houston_philadelphia_jotform_routes');
         expect(migrationIndex).toContain('20260810_170000_houston_philadelphia_roller_routes');
+        expect(migrationIndex).toContain('20260811_210000_houston_back_to_school_pages');
         expect(temporaryRollerMigration).toContain('location.previousGroupFormUrl');
         expect(temporaryRollerMigration).toContain('await writeGroupFormUrls(db, false)');
+        expect(backToSchoolMigration).toContain('HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT');
+        expect(backToSchoolMigration).toContain('ON CONFLICT ("path") DO NOTHING');
         expect(migration).toContain('LIVE_SITE_LOCATION_SNAPSHOT');
         expect(migration).toContain('LIVE_SITE_PAGE_SNAPSHOT');
         expect(migration).toContain('"announcement_banners"');

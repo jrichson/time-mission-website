@@ -9,6 +9,41 @@ import {
 } from './browser-contract-helpers.mjs';
 
 describe('browser booking contracts', () => {
+  it('keeps a coded Roller campaign URL in the on-page checkout provider', () => {
+    const { context, window } = createBrowserContext();
+    runScript('js/booking-journey.js', context);
+
+    const campaignUrl = 'https://ecom.roller.app/TimeMissionHouston/onlinecheckout/en-US/products?code=SCHOOLNIGHT';
+    const campaignCta = createAnchor('#');
+    campaignCta.setAttribute('data-tm-booking-url', campaignUrl);
+    campaignCta.setAttribute('data-tm-booking-kind', 'tickets');
+    campaignCta.setAttribute('data-tm-booking-presentation', 'roller');
+    campaignCta.setAttribute('data-tm-location', 'houston');
+
+    const intent = window.TMBookingJourney.resolveIntent({
+      currentTarget: campaignCta,
+      kind: 'tickets',
+      locationId: 'houston',
+      location: {
+        id: 'houston',
+        slug: 'houston',
+        bookingProvider: 'roller',
+        rollerCheckoutUrl: 'https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home',
+      },
+      resolveHref: true,
+    });
+
+    expect(intent).toMatchObject({
+      href: campaignUrl,
+      presentation: 'roller',
+      usesRollerCheckout: true,
+    });
+    expect(window.TMBookingJourney.resolveNavigationAction(intent)).toMatchObject({
+      provider: 'roller',
+      href: campaignUrl,
+    });
+  });
+
   it('orders browser ticket options by the active deployment region', () => {
     const { context, window } = createBrowserContext({
       __TM_SITE_PROFILE__: { internalRegion: 'europe' },

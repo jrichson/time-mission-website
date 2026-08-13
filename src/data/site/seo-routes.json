@@ -143,6 +143,18 @@
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
+  "/houston/school-night": {
+    "title": "School Night Sale | Time Mission Houston",
+    "description": "Get $10 off 90- and 120-minute missions at Time Mission Houston on Sunday evenings and Monday through Thursday through September 30, 2026.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
+  "/houston/educators": {
+    "title": "Educators Free Through September 30 | Time Mission Houston",
+    "description": "Houston K-12 educators, administrators, and school staff can claim one free mission at Time Mission Houston through September 30, 2026.",
+    "ogImage": "/assets/photos/promos/houston-educators-control-room-1200.webp",
+    "twitterImage": "/assets/photos/promos/houston-educators-control-room-1200.webp"
+  },
   "/houston/spinandscore/rules": {
     "title": "Spin & Score Official Rules | Time Mission Houston",
     "description": "Official rules for the Time Mission Houston Spin & Score promotion, including eligibility, entry method, prize details, and redemption terms.",

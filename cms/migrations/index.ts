@@ -31,6 +31,7 @@ import * as migration_20260731_180000_eu_location_operational_data from './20260
 import * as migration_20260807_090000_philadelphia_now_open from './20260807_090000_philadelphia_now_open';
 import * as migration_20260810_090000_houston_philadelphia_jotform_routes from './20260810_090000_houston_philadelphia_jotform_routes';
 import * as migration_20260810_170000_houston_philadelphia_roller_routes from './20260810_170000_houston_philadelphia_roller_routes';
+import * as migration_20260811_210000_houston_back_to_school_pages from './20260811_210000_houston_back_to_school_pages';
 
 export const migrations = [
   {
@@ -197,5 +198,10 @@ export const migrations = [
     up: migration_20260810_170000_houston_philadelphia_roller_routes.up,
     down: migration_20260810_170000_houston_philadelphia_roller_routes.down,
     name: '20260810_170000_houston_philadelphia_roller_routes'
+  },
+  {
+    up: migration_20260811_210000_houston_back_to_school_pages.up,
+    down: migration_20260811_210000_houston_back_to_school_pages.down,
+    name: '20260811_210000_houston_back_to_school_pages'
   },
 ];
