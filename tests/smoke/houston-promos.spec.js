@@ -27,6 +27,27 @@ async function expectResponsivePromoSplit(page, isMobile) {
 }
 
 test('School Night page publishes the corrected offer and coded checkout', async ({ page, isMobile }) => {
+  const decoratedCheckout = `${SCHOOL_NIGHT_CHECKOUT}&_gl=test-linker`;
+  let trackedEvents = [];
+
+  await page.addInitScript(({ checkoutUrl }) => {
+    document.addEventListener('click', (event) => {
+      const promoCta = event.target?.closest?.('[data-tm-promo-cta="school_night_book_now"]');
+      if (!promoCta) return;
+      promoCta.setAttribute('href', checkoutUrl);
+      event.preventDefault();
+    }, true);
+  }, { checkoutUrl: decoratedCheckout });
+  await page.exposeFunction('__captureSchoolNightEvents', (events) => {
+    trackedEvents = events;
+  });
+  await page.route('https://ecom.roller.app/**', async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>Roller progressive checkout</title>',
+    });
+  });
+
   await page.goto('/houston/school-night');
 
   await expect(page).toHaveTitle('School Night Sale | Time Mission Houston');
@@ -43,16 +64,18 @@ test('School Night page publishes the corrected offer and coded checkout', async
   await expectResponsivePromoSplit(page, isMobile);
 
   await page.evaluate(() => {
-    document.addEventListener('click', (event) => event.preventDefault(), { once: true });
+    document.addEventListener('click', () => {
+      window.__captureSchoolNightEvents(window.dataLayer
+        .filter((entry) => entry?.parameters?.CTA_ID === 'school_night_book_now')
+        .map((entry) => entry.event));
+    }, { capture: true, once: true });
   });
-  await promoCta.click();
-  await expect(page.locator('#roller-checkout')).toHaveCount(0);
-  await expect(page.locator('#roller-checkout-iframe')).toHaveCount(0);
-  await expect(page).toHaveURL(/\/houston\/school-night$/);
-  await expect.poll(() => page.evaluate(() => window.dataLayer
-    .filter((entry) => entry?.parameters?.CTA_ID === 'school_night_book_now')
-    .map((entry) => entry.event)))
-    .toEqual(['BOOKING_CLICK', 'CHECKOUT_START']);
+  await Promise.all([
+    page.waitForURL(decoratedCheckout),
+    promoCta.click(),
+  ]);
+  await expect(page).toHaveTitle('Roller progressive checkout');
+  expect(trackedEvents).toEqual(['BOOKING_CLICK', 'CHECKOUT_START']);
 });
 
 test('Educators page exposes the supplied image, copy, and Klaviyo embed', async ({ page, isMobile }) => {
