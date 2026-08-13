@@ -27,13 +27,6 @@ async function expectResponsivePromoSplit(page, isMobile) {
 }
 
 test('School Night page publishes the corrected offer and coded checkout', async ({ page, isMobile }) => {
-  await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
-    await route.fulfill({
-      contentType: 'application/javascript',
-      body: 'window.RollerCheckout = { show: function () { window.__rollerCheckoutShown = true; } };',
-    });
-  });
-
   await page.goto('/houston/school-night');
 
   await expect(page).toHaveTitle('School Night Sale | Time Mission Houston');
@@ -43,15 +36,18 @@ test('School Night page publishes the corrected offer and coded checkout', async
   await expect(page.locator('.tm-promo-landing__terms')).toContainText('September 5 through September 7');
   await expect(page.locator('.tm-promo-landing__image-status')).toHaveCount(0);
   const promoCta = page.locator('.tm-promo-landing__cta');
-  await expect(promoCta).toHaveAttribute('href', '#');
-  await expect(promoCta).toHaveAttribute('data-tm-booking-trigger', '');
-  await expect(promoCta).toHaveAttribute('data-tm-booking-presentation', 'roller');
-  await expect(promoCta).toHaveAttribute('data-tm-booking-url', SCHOOL_NIGHT_CHECKOUT);
+  await expect(promoCta).toHaveAttribute('href', SCHOOL_NIGHT_CHECKOUT);
+  await expect(promoCta).not.toHaveAttribute('data-tm-booking-trigger', '');
+  await expect(promoCta).not.toHaveAttribute('data-tm-booking-presentation', 'roller');
+  await expect(promoCta).not.toHaveAttribute('data-tm-booking-url', SCHOOL_NIGHT_CHECKOUT);
   await expectResponsivePromoSplit(page, isMobile);
 
+  await page.evaluate(() => {
+    document.addEventListener('click', (event) => event.preventDefault(), { once: true });
+  });
   await promoCta.click();
-  await page.waitForFunction(() => window.__rollerCheckoutShown === true);
-  await expect(page.locator('#roller-checkout')).toHaveAttribute('data-checkout', SCHOOL_NIGHT_CHECKOUT);
+  await expect(page.locator('#roller-checkout')).toHaveCount(0);
+  await expect(page.locator('#roller-checkout-iframe')).toHaveCount(0);
   await expect(page).toHaveURL(/\/houston\/school-night$/);
   await expect.poll(() => page.evaluate(() => window.dataLayer
     .filter((entry) => entry?.parameters?.CTA_ID === 'school_night_book_now')

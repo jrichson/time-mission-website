@@ -18,11 +18,12 @@ describe('Houston back-to-school campaign pages', () => {
     expect(page).toContain('Valid on 90 and 120 minute sessions only. 60 minute sessions excluded.');
     expect(page).toContain('Not valid Labor Day weekend, September 5 through September 7.');
     expect(page).toContain('https://ecom.roller.app/TimeMissionHouston/onlinecheckout/en-US/products?code=SCHOOLNIGHT');
-    expect(page).toContain('href="#"');
-    expect(page).toContain('data-tm-booking-trigger');
-    expect(page).toContain('data-tm-booking-presentation="roller"');
-    expect(page).toContain('data-tm-booking-url={bookingUrl}');
+    expect(page).toContain('href={bookingUrl}');
+    expect(page).not.toContain('data-tm-booking-trigger');
+    expect(page).not.toContain('data-tm-booking-presentation="roller"');
+    expect(page).not.toContain('data-tm-booking-url={bookingUrl}');
     expect(page).toContain('data-tm-promo-cta="school_night_book_now"');
+    expect(page).toContain('/js/page-houston-promo-after.js?v=1');
     expect(page).not.toContain('imagePending');
     expect(page).not.toContain('up to $15 off');
     expect(page).not.toContain('60 minutes is $29.95');
