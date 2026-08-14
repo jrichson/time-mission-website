@@ -109,10 +109,16 @@ for (const rel of astroRenderedHtml) {
 for (const htmlFile of htmlFiles()) {
   const rel = path.relative(distDir, htmlFile).split(path.sep).join('/');
   const segments = rel.split('/');
-  const localized = profile.localizedRoutes
+  const localizedRoot = profile.localizedRoutes
+    && profile.locales.some((locale) => (
+      locale !== profile.defaultLocale && rel === `${locale}.html`
+    ));
+  const localizedNested = profile.localizedRoutes
     && profile.locales.includes(segments[0])
     && segments[0] !== profile.defaultLocale;
-  const baseRel = localized ? segments.slice(1).join('/') : rel;
+  let baseRel = rel;
+  if (localizedRoot) baseRel = 'index.html';
+  else if (localizedNested) baseRel = segments.slice(1).join('/');
   const expected = astroRenderedHtml.has(baseRel)
     || baseRel.startsWith('c/')
     || baseRel.startsWith('blog/');
