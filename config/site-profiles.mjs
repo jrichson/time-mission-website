@@ -82,6 +82,12 @@ export function localizedPath(pathname, locale, profile = resolveSiteProfile()) 
   return normalizedPath === '/' ? `/${locale}` : `/${locale}${normalizedPath}`;
 }
 
+export function localizedOutputFile(route, locale, profile = resolveSiteProfile()) {
+  const outputFile = String(route?.outputFile || '').replace(/^\/+/, '');
+  if (!profile.localizedRoutes || locale === profile.defaultLocale) return outputFile;
+  return route?.canonicalPath === '/' ? `${locale}.html` : `${locale}/${outputFile}`;
+}
+
 export function publicLocationForProfile(location, profile = resolveSiteProfile()) {
   const slug = String(location?.slug || location?.id || '').trim();
   if (!slug) return location;

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { resolveSiteProfile } from '../config/site-profiles.mjs';
+import { localizedOutputFile, resolveSiteProfile } from '../config/site-profiles.mjs';
 import {
   approvalRecord,
   artifactLanguageDigest,
@@ -37,7 +37,10 @@ if (strict && profile.localizedRoutes) {
     const preservedSourceTerms = preservedSourceTermsFor(pageI18n, locale, { profileId: profile.id });
     for (const route of regionalRoutes) {
       const defaultPath = path.join(distDir, ...route.outputFile.split('/'));
-      const localizedPath = path.join(distDir, locale, ...route.outputFile.split('/'));
+      const localizedPath = path.join(
+        distDir,
+        ...localizedOutputFile(route, locale, profile).split('/'),
+      );
       if (!fs.existsSync(defaultPath) || !fs.existsSync(localizedPath)) continue;
       const defaultCopy = extractLanguageSurfaceCopy(fs.readFileSync(defaultPath, 'utf8'));
       const localizedCopy = extractLanguageSurfaceCopy(fs.readFileSync(localizedPath, 'utf8'));

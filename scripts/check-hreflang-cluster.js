@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {
   isInternalLocation,
+  localizedOutputFile,
   localizedPath,
   resolveSiteProfile,
 } = require('../config/site-profiles.mjs');
@@ -61,9 +62,7 @@ const validationEntries = profile.localizedRoutes
     .flatMap((route) => profile.locales.map((locale) => ({
       canonicalPath: route.canonicalPath,
       locale,
-      relPath: locale === profile.defaultLocale
-        ? route.outputFile
-        : path.join(locale, route.outputFile),
+      relPath: localizedOutputFile(route, locale, profile),
     })))
   : outputFiles
     .filter((relPath) => {

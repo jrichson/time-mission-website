@@ -10,6 +10,7 @@ const missionDisplayNames = missionAltNames.map((name) => name.toUpperCase());
 function localizedHtmlRoutes(locale) {
   const base = path.join(REPO_ROOT, 'dist', locale);
   const files = [];
+  const routes = fs.existsSync(path.join(REPO_ROOT, 'dist', `${locale}.html`)) ? ['/'] : [];
   const visit = (directory) => {
     for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
       const absolute = path.join(directory, entry.name);
@@ -18,9 +19,10 @@ function localizedHtmlRoutes(locale) {
     }
   };
   visit(base);
-  return files
-    .map((file) => `/${file.replace(/(?:^|\/)index\.html$/, '').replace(/\.html$/, '')}`.replace(/\/$/, '') || '/')
-    .sort();
+  routes.push(...files.map(
+    (file) => `/${file.replace(/(?:^|\/)index\.html$/, '').replace(/\.html$/, '')}`.replace(/\/$/, '') || '/',
+  ));
+  return routes.sort();
 }
 
 test.skip(process.env.TM_SITE_PROFILE !== 'eu', 'EU artifact smoke coverage');

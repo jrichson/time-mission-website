@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { localizedOutputFile } from '../../config/site-profiles.mjs';
 import { compileRegionalHtmlRoutes } from './regional-html-routes.mjs';
 
 function decodeHtml(value) {
@@ -49,9 +50,7 @@ export function artifactLanguageDigest(distDir, profile, locale, registeredRoute
   const hash = crypto.createHash('sha256');
   const routes = compileRegionalHtmlRoutes(distDir, profile, registeredRoutes);
   for (const route of routes) {
-    const outputFile = locale === profile.defaultLocale
-      ? route.outputFile
-      : path.posix.join(locale, route.outputFile);
+    const outputFile = localizedOutputFile(route, locale, profile);
     const absolute = path.join(distDir, ...outputFile.split('/'));
     if (!fs.existsSync(absolute)) continue;
     const copy = extractLanguageSurfaceCopy(fs.readFileSync(absolute, 'utf8'));

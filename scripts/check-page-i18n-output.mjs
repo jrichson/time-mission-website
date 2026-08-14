@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { resolveSiteProfile } from '../config/site-profiles.mjs';
+import { localizedOutputFile, resolveSiteProfile } from '../config/site-profiles.mjs';
 import pageI18n from '../src/data/site/page-i18n.json' with { type: 'json' };
 import {
   collectPageCopyEntries,
@@ -30,7 +30,10 @@ if (profile.localizedRoutes) {
 
     for (const locale of profile.locales) {
       if (locale === profile.defaultLocale) continue;
-      const localizedPath = path.join(distDir, locale, ...route.outputFile.split('/'));
+      const localizedPath = path.join(
+        distDir,
+        ...localizedOutputFile(route, locale, profile).split('/'),
+      );
       if (!fs.existsSync(localizedPath)) {
         errors.push(`${locale}${route.canonicalPath}: localized output is missing`);
         continue;

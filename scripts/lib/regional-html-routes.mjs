@@ -61,7 +61,11 @@ export function compileRegionalHtmlRoutes(distDir, profile, registeredRoutes = [
   for (const absolute of walkHtmlFiles(distDir)) {
     const outputFile = path.relative(distDir, absolute).split(path.sep).join('/');
     const firstSegment = outputFile.split('/')[0];
-    if (profile.locales.includes(firstSegment) && firstSegment !== profile.defaultLocale) continue;
+    const isLocalizedRoute = profile.locales.some((locale) => (
+      locale !== profile.defaultLocale
+      && (firstSegment === locale || outputFile === `${locale}.html`)
+    ));
+    if (isLocalizedRoute) continue;
     const html = fs.readFileSync(absolute, 'utf8');
     const canonicalPath = canonicalPathFromHtml(html, profile);
     if (!canonicalPath) continue;

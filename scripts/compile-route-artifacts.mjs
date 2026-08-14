@@ -158,7 +158,7 @@ function compileLocationRouteManifest(registry, locationsDocument) {
         return {
           canonicalPath,
           compatibilitySources: route.locationCompatibilitySources || [],
-          externalUrl: loc.externalUrl || '',
+          externalUrl: loc.pagePath ? '' : (loc.externalUrl || ''),
           officialAlternate: route.locationAlternate || '',
         };
     })

@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import locationsDocument from '../data/locations.json';
 import {
   isInternalLocation,
+  localizedOutputFile,
   localizedPath,
   publicLocationForProfile,
   resolveSiteProfile,
@@ -35,6 +36,13 @@ describe('site deployment profiles', () => {
     expect(localizedPath('/', 'es', profile)).toBe('/es');
     expect(localizedPath('/philadelphia', 'es', profile)).toBe('/es/philadelphia');
     expect(localizedPath('/philadelphia', 'en', profile)).toBe('/philadelphia');
+    expect(localizedOutputFile({ canonicalPath: '/', outputFile: 'index.html' }, 'es', profile))
+      .toBe('es.html');
+    expect(localizedOutputFile(
+      { canonicalPath: '/philadelphia', outputFile: 'philadelphia.html' },
+      'es',
+      profile,
+    )).toBe('es/philadelphia.html');
   });
 
   it('uses locale-prefixed routes for the EU deployment', () => {
@@ -51,6 +59,8 @@ describe('site deployment profiles', () => {
     expect(localizedPath('/', 'nl', profile)).toBe('/nl');
     expect(localizedPath('/antwerp/', 'fr', profile)).toBe('/fr/antwerp');
     expect(localizedPath('/antwerp', 'en', profile)).toBe('/antwerp');
+    expect(localizedOutputFile({ canonicalPath: '/', outputFile: 'index.html' }, 'nl', profile))
+      .toBe('nl.html');
   });
 
   it('orders the active region first in location navigation', () => {

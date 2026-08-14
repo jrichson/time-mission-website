@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   isInternalLocation,
+  localizedOutputFile,
   localizedPath,
   resolveSiteProfile,
 } from '../config/site-profiles.mjs';
@@ -211,7 +212,7 @@ function writeLocalizedRoutes() {
 
     for (const locale of profile.locales) {
       if (locale === profile.defaultLocale) continue;
-      const destination = path.join(distDir, locale, route.outputFile);
+      const destination = path.join(distDir, localizedOutputFile(route, locale, profile));
       fs.mkdirSync(path.dirname(destination), { recursive: true });
       fs.writeFileSync(destination, localizeHtml(source, route, locale), 'utf8');
     }

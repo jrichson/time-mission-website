@@ -39,14 +39,13 @@ afterEach(() => {
 describe('Language Surface artifact approval', () => {
   it('changes the digest when rendered locale copy changes', () => {
     const dist = tempDist();
-    fs.mkdirSync(path.join(dist, 'nl'), { recursive: true });
     fs.writeFileSync(path.join(dist, 'index.html'), page({
       title: 'Time Mission Experiences',
       description: 'English description for the public home page.',
       heading: 'Immersive adventures',
       canonical: 'https://www.timemission.eu/',
     }));
-    fs.writeFileSync(path.join(dist, 'nl/index.html'), page({
+    fs.writeFileSync(path.join(dist, 'nl.html'), page({
       title: 'Time Mission Ervaringen',
       description: 'Nederlandse beschrijving voor de openbare homepage.',
       heading: 'Meeslepende avonturen',
@@ -54,7 +53,7 @@ describe('Language Surface artifact approval', () => {
     }));
 
     const before = artifactLanguageDigest(dist, profile, 'nl', routes);
-    fs.writeFileSync(path.join(dist, 'nl/index.html'), page({
+    fs.writeFileSync(path.join(dist, 'nl.html'), page({
       title: 'Time Mission Activiteiten',
       description: 'Nederlandse beschrijving voor de openbare homepage.',
       heading: 'Meeslepende avonturen',

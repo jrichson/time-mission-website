@@ -95,8 +95,20 @@ describe('location route normalizer', () => {
 
   it('passes through already canonical or unrelated paths', () => {
     expect(resolveLocationCanonicalPath('/mount-prospect')).toBe('');
+    expect(resolveLocationCanonicalPath('/edison')).toBe('');
     expect(resolveLocationCanonicalPath('/api/contact')).toBe('');
     expect(resolveLocationCanonicalPath('/assets/logo/TM_Logo_White.svg')).toBe('');
+  });
+
+  it('keeps an internal location page local when its CTA uses a third-party venue', () => {
+    const edison = locationRouteEntries().find((entry) => entry.canonicalPath === '/edison');
+
+    expect(edison).toMatchObject({
+      canonicalPath: '/edison',
+      externalUrl: '',
+    });
+    expect(resolveLocationRouteRequest('https://timemission.com/edison'))
+      .toEqual({ redirectUrl: '', assetPath: '' });
   });
 
   it('serves shared pages behind a canonical location prefix without redirecting', () => {

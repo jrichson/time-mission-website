@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   isInternalLocation,
+  localizedOutputFile,
   localizedPath,
   publicLocationsForProfile,
   resolveSiteProfile,
@@ -135,7 +136,7 @@ function checkLocationRouteManifest() {
       continue;
     }
 
-    const expectedExternalUrl = location.externalUrl || '';
+    const expectedExternalUrl = location.pagePath ? '' : (location.externalUrl || '');
     if (entry.externalUrl !== expectedExternalUrl) {
       errors.push(
         `${canonicalPath}: route manifest externalUrl must be ${JSON.stringify(expectedExternalUrl)}`,
@@ -155,9 +156,7 @@ function checkRegisteredHtml() {
 
     for (const locale of profile.locales) {
       if (!profile.localizedRoutes && locale !== profile.defaultLocale) continue;
-      const relPath = locale === profile.defaultLocale
-        ? route.outputFile
-        : path.join(locale, route.outputFile);
+      const relPath = localizedOutputFile(route, locale, profile);
       const outputPath = path.join(distDir, relPath);
       if (!fs.existsSync(outputPath)) {
         errors.push(`${relPath}: registered regional route is missing`);
