@@ -4117,6 +4117,33 @@
     }
   },
   "routes": {
+    "/blog": {
+      "es": {
+        "1 post": "1 publicación",
+        "Boston · Aug 18, 2026": "Boston · 18 ago 2026",
+        "Browse by Location": "Explorar por ubicación",
+        "Browse by location": "Explorar por ubicación",
+        "Choose your location for local news, opening updates, and event ideas.": "Elige tu ubicación para ver noticias locales, novedades sobre aperturas e ideas para eventos.",
+        "Locations": "Ubicaciones"
+      }
+    },
+    "/blog/boston": {
+      "es": {
+        "All Blog Posts": "Todas las publicaciones del blog",
+        "Aug 18, 2026": "18 ago 2026",
+        "Boston Blog | Time Mission": "Blog de Boston | Time Mission",
+        "Local news, event ideas, and opening updates from Time Mission Boston.": "Noticias locales, ideas para eventos y novedades sobre la apertura de Time Mission Boston.",
+        "Location Blog": "Blog de la ubicación",
+        "Updates and local news from Time Mission Boston.": "Novedades y noticias locales de Time Mission Boston.",
+        "Visit Location": "Visitar ubicación"
+      }
+    },
+    "/blog/boston-announcement": {
+      "es": {
+        "Aug 18, 2026": "18 ago 2026",
+        "Time Mission is preparing to bring its social gaming adventure to 200 State St in Boston. Visit the Boston location page for confirmed opening and ticket updates.": "Time Mission se prepara para llevar su aventura de juego social a 200 State St en Boston. Visita la página de la ubicación de Boston para consultar las novedades confirmadas sobre la apertura y las entradas."
+      }
+    },
     "/contact": {
       "nl": {
         "CONTACT US": "NEEM CONTACT OP",
