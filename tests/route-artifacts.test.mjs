@@ -37,10 +37,11 @@ describe('route artifact resolution', () => {
     const redirectsPath = write(
       root,
       '_redirects',
-      '/boston https://www.timemission.com/boston 301\n',
+      '/boston https://www.timemission.com/boston 301\n/es/boston https://www.timemission.com/boston 301\n',
     );
 
     expect(resolveInternalDeployTarget(root, registry, '/boston')).toBe(redirectsPath);
+    expect(resolveInternalDeployTarget(root, registry, '/es/boston')).toBe(redirectsPath);
   });
 
   it('does not accept comments, wildcard sources, or unrelated redirects', () => {
@@ -50,6 +51,18 @@ describe('route artifact resolution', () => {
       '_redirects',
       '# /boston https://www.timemission.com/boston 301\n/boston/* https://www.timemission.com/boston 301\n/philadelphia https://www.timemission.com/philadelphia 301\n',
     );
+
+    expect(resolveInternalDeployTarget(root, registry, '/boston')).toBeNull();
+  });
+
+  it('does not let a source-tree redirect hide a missing registered Astro source', () => {
+    const root = tempRoot();
+    write(
+      root,
+      'src/data/site/astro-rendered-output-files.json',
+      `${JSON.stringify({ outputFiles: ['boston.html'] })}\n`,
+    );
+    write(root, '_redirects', '/boston https://www.timemission.com/boston 301\n');
 
     expect(resolveInternalDeployTarget(root, registry, '/boston')).toBeNull();
   });

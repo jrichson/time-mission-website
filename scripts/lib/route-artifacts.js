@@ -214,25 +214,29 @@ function redirectFileForSource(deployRoot, canonicalPath) {
 function resolveInternalDeployTarget(deployRoot, registry, href) {
   const clean = normalizeCanonicalPath(href);
   if (!clean || clean === '/') return null;
+  const renderedManifest = astroRenderedManifestPath(deployRoot);
+  const hasRenderedManifest = fs.existsSync(renderedManifest);
   const map = registry && registry.routes ? canonicalToOutputMap(registry) : new Map();
   const rel = map.get(clean);
   if (rel) {
     const routed = path.join(deployRoot, rel);
     if (fs.existsSync(routed)) return routed;
 
-    const renderedManifest = astroRenderedManifestPath(deployRoot);
-    if (fs.existsSync(renderedManifest)) {
+    if (hasRenderedManifest) {
       const astroRendered = loadAstroRenderedOutputFilesSet(deployRoot);
       if (astroRendered.has(rel)) {
         const astroSource = astroSourceForOutput(deployRoot, rel);
         if (astroSource) return astroSource;
       }
     }
-
-    const redirectFile = redirectFileForSource(deployRoot, clean);
-    if (redirectFile) return redirectFile;
     // Mapped output not present in this tree (e.g. source repo vs dist); try static path.
   }
+
+  if (!hasRenderedManifest) {
+    const redirectFile = redirectFileForSource(deployRoot, clean);
+    if (redirectFile) return redirectFile;
+  }
+
   const tail = clean.replace(/^\//, '');
   if (!tail || tail.includes('..')) return null;
   const staticPath = path.normalize(path.join(deployRoot, tail));
