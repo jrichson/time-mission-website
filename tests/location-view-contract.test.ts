@@ -88,6 +88,16 @@ describe('Location View contract', () => {
         expect(locationPhoneHref(eindhoven)).toBe('tel:+31408083636');
     });
 
+    it('keeps Brussels phone display formatting while dialing its E.164 number', () => {
+        const brussels = allLocations.find((loc) => loc.id === 'brussels');
+        if (!brussels) throw new Error('Brussels location missing');
+
+        expect(brussels.contact.phone).toBe('+32 (0) 479 66 09 32');
+        expect(brussels.contact.email).toBe('brussels@timemission.com');
+        expect(brussels.phoneE164).toBe('+32479660932');
+        expect(locationPhoneHref(brussels)).toBe('tel:+32479660932');
+    });
+
     it('gives Edison a local page while keeping its Supercharged NJ action', () => {
         const edison = allLocations.find((loc) => loc.id === 'edison');
         if (!edison) throw new Error('Edison location missing');

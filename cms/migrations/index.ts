@@ -35,6 +35,7 @@ import * as migration_20260811_210000_houston_back_to_school_pages from './20260
 import * as migration_20260817_090000_eindhoven_address_correction from './20260817_090000_eindhoven_address_correction';
 import * as migration_20260818_090000_blog_press_room_placement from './20260818_090000_blog_press_room_placement';
 import * as migration_20260818_130000_press_release_content from './20260818_130000_press_release_content';
+import * as migration_20260818_160000_nashville_press_release from './20260818_160000_nashville_press_release';
 
 export const migrations = [
   {
@@ -221,5 +222,10 @@ export const migrations = [
     up: migration_20260818_130000_press_release_content.up,
     down: migration_20260818_130000_press_release_content.down,
     name: '20260818_130000_press_release_content'
+  },
+  {
+    up: migration_20260818_160000_nashville_press_release.up,
+    down: migration_20260818_160000_nashville_press_release.down,
+    name: '20260818_160000_nashville_press_release'
   },
 ];

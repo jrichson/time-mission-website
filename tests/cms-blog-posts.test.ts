@@ -233,6 +233,7 @@ describe('CMS blog posts', () => {
     expect(migrationIndex).toContain('20260625_090000_blog_posts_rich_text');
     expect(migrationIndex).toContain('20260730_170000_blog_authoring_and_media');
     expect(migrationIndex).toContain('20260818_090000_blog_press_room_placement');
+    expect(migrationIndex).toContain('20260818_160000_nashville_press_release');
 
     expect(bodyField?.validate?.(null, { data: { postType: 'article', published: false } })).toBe(true);
     expect(bodyField?.validate?.(null, { data: { postType: 'article', published: true } })).toContain(

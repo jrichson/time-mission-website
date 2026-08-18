@@ -1,6 +1,17 @@
 {
   "items": [
     {
+      "id": "nashville-announcement",
+      "kicker": "Aug 18, 2026",
+      "title": "START THE COUNTDOWN: TIME MISSION TO OPEN IN MUSIC CITY THIS YEAR",
+      "summary": "Time Mission will open its largest location yet—a 12,000-square-foot, 28-mission venue at Cummins Station in Nashville—by the end of 2026.",
+      "image": "/assets/photos/venue/_Time-Mission_0042-1200.webp",
+      "imageWidth": 1200,
+      "imageHeight": 800,
+      "href": "/blog/nashville-announcement",
+      "ctaLabel": "Read Press Release"
+    },
+    {
       "id": "boston-announcement",
       "kicker": "Aug 6, 2026",
       "title": "Time Mission Announces New Immersive Adventure Steps from Boston's Faneuil Hall",

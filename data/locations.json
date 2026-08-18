@@ -893,7 +893,7 @@
         "longitude": 4.3342982
       },
       "contact": {
-        "phone": "",
+        "phone": "+32 (0) 479 66 09 32",
         "email": "brussels@timemission.com"
       },
       "hours": {
@@ -955,7 +955,7 @@
       "locale": "fr-BE",
       "timeZone": "Europe/Brussels",
       "currency": "EUR",
-      "phoneE164": null,
+      "phoneE164": "+32479660932",
       "hreflang": "fr-BE",
       "localBusinessSchemaEligible": true
     },

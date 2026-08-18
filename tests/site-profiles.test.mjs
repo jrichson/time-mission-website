@@ -177,7 +177,8 @@ describe('site deployment profiles', () => {
     expect(brussels).toMatchObject({
       alternateName: 'Time Mission Brussels at Terminal 1',
       venueName: 'Terminal 1',
-      contact: { phone: '', email: 'brussels@timemission.com' },
+      contact: { phone: '+32 (0) 479 66 09 32', email: 'brussels@timemission.com' },
+      phoneE164: '+32479660932',
       geo: { latitude: 50.898211, longitude: 4.3342982 },
       localBusinessSchemaEligible: true,
     });

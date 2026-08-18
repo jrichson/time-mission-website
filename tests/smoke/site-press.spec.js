@@ -5,7 +5,7 @@ test.beforeEach(async ({ page }) => {
   await prepareSiteSmoke(page);
 });
 
-test('press releases render both supplied announcements in an editorial layout', async ({ page, isMobile }) => {
+test('press releases render all supplied announcements in an editorial layout', async ({ page, isMobile }) => {
   await page.goto('/press/releases');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('PRESS RELEASES');
@@ -19,12 +19,19 @@ test('press releases render both supplied announcements in an editorial layout',
       name: 'Time Mission announces major global expansion with 15 to 20 new locations planned for 2027',
     }),
   });
+  const nashvilleRelease = page.locator('.tm-resource-release', {
+    has: page.getByRole('heading', {
+      name: 'START THE COUNTDOWN: TIME MISSION TO OPEN IN MUSIC CITY THIS YEAR',
+    }),
+  });
   await expect(bostonRelease).toContainText('8,600-square-foot venue at Marketplace Center');
   await expect(globalRelease).toContainText(
     '15 to 20 new locations planned for 2027 and venues currently under construction',
   );
+  await expect(nashvilleRelease).toContainText('12,000-square-foot, 28-mission venue');
 
   for (const [release, slug] of [
+    [nashvilleRelease, 'nashville-announcement'],
     [bostonRelease, 'boston-announcement'],
     [globalRelease, 'time-mission-global-expansion-2027'],
   ]) {
@@ -53,6 +60,20 @@ test('press releases render both supplied announcements in an editorial layout',
 });
 
 test('press release detail pages retain the full supplied articles', async ({ page }) => {
+  await page.goto('/blog/nashville-announcement');
+  await expect(page).toHaveTitle(/Time Mission Nashville Opening in 2026/);
+  await expect(page.locator('body')).toHaveClass(/tm-press-article-page/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    'START THE COUNTDOWN: TIME MISSION TO OPEN IN MUSIC CITY THIS YEAR',
+  );
+  await expect(page.locator('.tm-blog-body')).toContainText(
+    '12,000 sf and the largest Time Mission location',
+  );
+  await expect(page.locator('.tm-blog-body')).toContainText(
+    'David Larson, Managing Partner at TM Operations',
+  );
+  await expect(page.locator('.tm-blog-body')).not.toContainText('AUGUST XX');
+
   await page.goto('/blog/boston-announcement');
   await expect(page).toHaveTitle(/Time Mission Announces Boston Location/);
   await expect(page.locator('body')).toHaveClass(/tm-press-article-page/);

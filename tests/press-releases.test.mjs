@@ -35,6 +35,10 @@ describe('press releases page', () => {
       path.join(root, 'cms/migrations/20260818_130000_press_release_content.ts'),
       'utf8',
     );
+    const nashvilleMigration = fs.readFileSync(
+      path.join(root, 'cms/migrations/20260818_160000_nashville_press_release.ts'),
+      'utf8',
+    );
     const blogPage = fs.readFileSync(path.join(root, 'src/pages/blog/[slug].astro'), 'utf8');
 
     expect(markup).not.toContain('Time Mission Is Coming to Boston');
@@ -50,6 +54,14 @@ describe('press releases page', () => {
     expect(page).toContain('fallbackById');
     expect(styles).toContain('.tm-resource-release-list');
     expect(styles).toContain('grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.22fr)');
+    expect(releases.items).toContainEqual(expect.objectContaining({
+      id: 'nashville-announcement',
+      title: 'START THE COUNTDOWN: TIME MISSION TO OPEN IN MUSIC CITY THIS YEAR',
+      href: '/blog/nashville-announcement',
+      image: '/assets/photos/venue/_Time-Mission_0042-1200.webp',
+      imageWidth: 1200,
+      imageHeight: 800,
+    }));
     expect(releases.items).toContainEqual(expect.objectContaining({
       id: 'boston-announcement',
       title: "Time Mission Announces New Immersive Adventure Steps from Boston's Faneuil Hall",
@@ -73,35 +85,42 @@ describe('press releases page', () => {
     expect(contentMigration).toContain('PRESS_RELEASES_SNAPSHOT');
     expect(contentMigration).toContain('"show_in_press_room"');
     expect(contentMigration).toContain('ON CONFLICT ("slug") DO UPDATE');
+    expect(nashvilleMigration).toContain("release.slug === 'nashville-announcement'");
+    expect(nashvilleMigration).toContain('ON CONFLICT ("slug") DO UPDATE');
     expect(blogPage).toContain('tm-blog-article-hero--press');
     expect(blogPage).toContain('/css/page-blog.css?v=3');
     expect(blogPage).toContain("data-page-i18n={isPressRelease ? 'ignore' : undefined}");
   });
 
-  it('keeps both release detail pages available when the CMS is unavailable', () => {
+  it('keeps all release detail pages available when the CMS is unavailable', () => {
     expect(PRESS_RELEASE_FALLBACK_POSTS.map((post) => post.slug)).toEqual([
       'boston-announcement',
       'time-mission-global-expansion-2027',
+      'nashville-announcement',
     ]);
     expect(PRESS_RELEASE_FALLBACK_POSTS.every((post) => post.showInPressRoom)).toBe(true);
     expect(PRESS_RELEASE_FALLBACK_POSTS.every((post) => post.includeInSitemap)).toBe(true);
 
     const cmsBoston = { ...PRESS_RELEASE_FALLBACK_POSTS[0], id: 'cms-boston' };
     const merged = mergePressReleaseFallbackPosts([cmsBoston]);
-    expect(merged).toHaveLength(2);
+    expect(merged).toHaveLength(3);
     expect(merged.find((post) => post.slug === 'boston-announcement')?.id).toBe('cms-boston');
   });
 
-  it('preserves both attached press releases as renderable rich text', () => {
-    expect(PRESS_RELEASES_SNAPSHOT).toHaveLength(2);
+  it('preserves all attached press releases as renderable rich text', () => {
+    expect(PRESS_RELEASES_SNAPSHOT).toHaveLength(3);
 
     const boston = PRESS_RELEASES_SNAPSHOT.find((release) => release.slug === 'boston-announcement');
     const global = PRESS_RELEASES_SNAPSHOT.find(
       (release) => release.slug === 'time-mission-global-expansion-2027',
     );
+    const nashville = PRESS_RELEASES_SNAPSHOT.find(
+      (release) => release.slug === 'nashville-announcement',
+    );
     expect(boston).toBeDefined();
     expect(global).toBeDefined();
-    if (!boston || !global) throw new Error('Press release snapshots missing');
+    expect(nashville).toBeDefined();
+    if (!boston || !global || !nashville) throw new Error('Press release snapshots missing');
 
     const bostonHtml = blogPostBodyHtml({
       id: boston.slug,
@@ -115,6 +134,12 @@ describe('press releases page', () => {
       slug: global.slug,
       body: global.body,
     });
+    const nashvilleHtml = blogPostBodyHtml({
+      id: nashville.slug,
+      title: nashville.title,
+      slug: nashville.slug,
+      body: nashville.body,
+    });
 
     expect(bostonHtml).toContain('8,600-square-foot venue at Marketplace Center');
     expect(bostonHtml).toContain('Rob Cooper, CEO of LOL Entertainment');
@@ -122,5 +147,9 @@ describe('press releases page', () => {
     expect(globalHtml).toContain('15 to 20 new locations planned for 2027');
     expect(globalHtml).toContain('<li>Eindhoven, Netherlands</li>');
     expect(globalHtml).toContain('Pieter Martens, CEO and Founder of Time Mission');
+    expect(nashvilleHtml).toContain('12,000 sf and the largest Time Mission location');
+    expect(nashvilleHtml).toContain('David Larson, Managing Partner at TM Operations');
+    expect(nashvilleHtml).toContain('href="https://cumminsstation.com/"');
+    expect(nashvilleHtml).not.toContain('AUGUST XX');
   });
 });

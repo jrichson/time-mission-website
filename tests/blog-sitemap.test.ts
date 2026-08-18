@@ -67,6 +67,9 @@ describe('blog sitemap publication', () => {
     expect(body).toContain(
       '<loc>https://www.timemission.com/blog/time-mission-global-expansion-2027</loc>',
     );
+    expect(body).toContain(
+      '<loc>https://www.timemission.com/blog/nashville-announcement</loc>',
+    );
     expect(body).not.toContain('<loc>https://www.timemission.com/blog/boston</loc>');
   });
 });
