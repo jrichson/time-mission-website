@@ -306,6 +306,11 @@ body.tm-resource-page {
     padding-left: 1.3rem;
 }
 
+.tm-resource-release-list {
+    display: grid;
+    gap: 2.5rem;
+}
+
 .tm-resource-empty .tm-resource-kicker,
 .tm-resource-release .tm-resource-kicker {
     margin: 0;

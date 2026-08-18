@@ -67,6 +67,7 @@ export async function saveBlogPost(formData: FormData) {
   const excerptText = formString(formData, 'excerpt', 600);
   const body = parseLexicalState(formString(formData, 'bodyJson', 2_000_000));
   const published = formData.get('published') === 'on';
+  const showInPressRoom = formData.get('showInPressRoom') === 'on';
   const includeInSitemap = formData.get('includeInSitemap') === 'on';
   const externalUrlRaw = formString(formData, 'externalUrl', 2048);
   const externalUrl = safeHttpsUrl(externalUrlRaw);
@@ -77,7 +78,8 @@ export async function saveBlogPost(formData: FormData) {
   if (
     !title ||
     !blogSlugIsValid(slug) ||
-    !locationSlugs.has(locationSlug) ||
+    (!locationSlug && !showInPressRoom) ||
+    (locationSlug && !locationSlugs.has(locationSlug)) ||
     !publishDate ||
     !validDateInput(publishDate) ||
     !Number.isFinite(publishDateValue) ||
@@ -144,6 +146,7 @@ export async function saveBlogPost(formData: FormData) {
     postType,
     publishDate: new Date(publishDateValue).toISOString(),
     published,
+    showInPressRoom,
     seo: {
       metaDescription: formString(formData, 'metaDescription', 220),
       metaTitle: formString(formData, 'metaTitle', 90),

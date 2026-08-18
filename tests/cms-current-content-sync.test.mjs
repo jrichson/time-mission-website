@@ -101,6 +101,18 @@ describe('CMS current content sync migration', () => {
       "'static'::\"public\".\"enum_announcement_banners_ticker_behavior\"",
     );
     expect(eindhovenAddressMigration).toContain('EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT');
+    expect(eindhovenAddressMigration).toContain(
+      'replace("seo_meta_description", ${location.previousZip}, ${location.zip})',
+    );
+    expect(eindhovenAddressMigration).toContain(
+      'position(${location.previousZip} in "seo_meta_description") > 0',
+    );
+    expect(eindhovenAddressMigration).toContain(
+      'replace("seo_meta_description", ${location.zip}, ${location.previousZip})',
+    );
+    expect(eindhovenAddressMigration).not.toContain(
+      '"seo_meta_description" = ${page.metaDescription}',
+    );
     expect(eindhovenAddressSnapshot).toContain("zip: '5611 AJ'");
     expect(eindhovenAddressSnapshot).toContain('Hermanus Boexstraat 4, 5611 AJ Eindhoven');
   });

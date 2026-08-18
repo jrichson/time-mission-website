@@ -8,14 +8,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const locationDoc = JSON.parse(fs.readFileSync(path.join(root, 'data', 'locations.json'), 'utf8'));
 const locationRecords = locationDoc.locations || [];
-const groupTypes = [
-  'birthdays',
-  'corporate',
-  'field-trips',
-  'bachelor-ette',
-  'private-events',
-  'holidays',
-];
+const groupTypes = JSON.parse(
+  fs.readFileSync(path.join(root, 'src', 'data', 'site', 'groups.json'), 'utf8'),
+).items.map((item) => item.id);
 
 function readScript(rel) {
   return fs.readFileSync(path.join(root, rel), 'utf8');

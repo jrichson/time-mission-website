@@ -31,6 +31,7 @@ export {
     blogPostLocationSlug,
     blogPostPublishDate,
     blogPostShouldAppearInSitemap,
+    blogPostShowsInPressRoom,
     slugIsValidForBlogPost,
     sortBlogPosts,
 } from './blog-post-contract';

@@ -1,0 +1,12 @@
+{
+  "items": [
+    {
+      "id": "boston-announcement",
+      "kicker": "Boston Announcement",
+      "title": "Time Mission Is Coming to Boston",
+      "summary": "Time Mission Boston is coming soon at 200 State St, Boston, MA 02109. Follow the official Boston location page for confirmed opening and ticket updates.",
+      "href": "/boston",
+      "ctaLabel": "View Boston Location"
+    }
+  ]
+}

@@ -49,12 +49,16 @@ const props = Astro.props as BlogRouteProps;
 const location =
     props.kind === 'location'
         ? allLocations.find((loc) => loc.slug === props.locationSlug)!
-        : allLocations.find((loc) => loc.slug === blogPostLocationSlug(props.post))!;
+        : allLocations.find((loc) => loc.slug === blogPostLocationSlug(props.post));
+const locationName = location?.shortName || 'Time Mission';
+const locationPath = location ? `/${location.slug}` : '/locations';
+const postBackHref = location ? blogLocationCanonicalPath(location.slug) : '/press/releases';
+const postBackLabel = location?.shortName || 'Press Room';
 const locationPosts = props.kind === 'location' ? props.posts : [];
 const page = definePage({
     canonicalPath: props.kind === 'post'
         ? blogPostCanonicalPath(String(props.post.slug))
-        : blogLocationCanonicalPath(location.slug),
+        : blogLocationCanonicalPath(String(props.locationSlug)),
 });
 const post = props.kind === 'post' ? props.post : null;
 const externalUrl = post ? blogPostExternalUrl(post) : '';
@@ -62,8 +66,8 @@ const externalPublisher = post ? blogPostExternalPublisher(post) : '';
 const landingHead = post
     ? blogPostHeadForDoc(post)
     : {
-        metaTitle: `${location.shortName} Blog | Time Mission`,
-        metaDescription: `Updates and local news from Time Mission ${location.shortName}.`,
+        metaTitle: `${locationName} Blog | Time Mission`,
+        metaDescription: `Updates and local news from Time Mission ${locationName}.`,
         robots: 'index,follow',
         ogImage: '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg',
         twitterImage: '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg',
@@ -84,7 +88,7 @@ const landingHead = post
                         <img src={blogPostHeroImage(post)} alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
                     </picture>
                     <div class="tm-blog-shell tm-blog-article-copy">
-                        <a class="tm-blog-back" href={blogLocationCanonicalPath(location.slug)}>{location.shortName}</a>
+                        <a class="tm-blog-back" href={postBackHref}>{postBackLabel}</a>
                         <p class="tm-blog-kicker">{blogPostDateLabel(post)}</p>
                         <h1>{post.title}</h1>
                         <div class="tm-blog-article-excerpt" set:html={blogPostExcerptHtmlForDoc(post)} />
@@ -113,11 +117,11 @@ const landingHead = post
                 </picture>
                 <div class="tm-blog-shell tm-blog-hero-copy">
                     <p class="tm-blog-kicker">Location Blog</p>
-                    <h1>{location.shortName}</h1>
-                    <p>Local news, event ideas, and opening updates from Time Mission {location.shortName}.</p>
+                    <h1>{locationName}</h1>
+                    <p>Local news, event ideas, and opening updates from Time Mission {locationName}.</p>
                     <div class="tm-blog-actions">
                         <a href="/blog" class="tm-blog-secondary">All Blog Posts</a>
-                        <a href={`/${location.slug}`} class="tm-blog-button">Visit Location</a>
+                        <a href={locationPath} class="tm-blog-button">Visit Location</a>
                     </div>
                 </div>
             </section>
@@ -143,11 +147,11 @@ const landingHead = post
                         </div>
                     ) : (
                         <div class="tm-blog-empty">
-                            <h2>{location.shortName} stories are on the way.</h2>
+                            <h2>{locationName} stories are on the way.</h2>
                             <p>Check back for local news, event ideas, and mission-room updates. You can still visit the location page for hours, booking, and contact details.</p>
                             <div class="tm-blog-actions">
                                 <a href="/blog" class="tm-blog-secondary">Back to Blog</a>
-                                <a href={`/${location.slug}`} class="tm-blog-button">Visit Location</a>
+                                <a href={locationPath} class="tm-blog-button">Visit Location</a>
                             </div>
                         </div>
                     )}

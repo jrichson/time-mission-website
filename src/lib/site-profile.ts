@@ -1,6 +1,8 @@
 import {
     isInternalLocation,
     localizedPath,
+    locationsDocumentProfileState,
+    profileLocationsDocument,
     publicLocationForProfile,
     publicLocationsForProfile,
     resolveSiteProfile,
@@ -26,6 +28,8 @@ export const activeSiteProfile = resolveSiteProfile() as SiteProfile;
 export {
     isInternalLocation,
     localizedPath,
+    locationsDocumentProfileState,
+    profileLocationsDocument,
     publicLocationForProfile,
     publicLocationsForProfile,
     resolveSiteProfile,

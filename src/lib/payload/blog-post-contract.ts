@@ -59,6 +59,7 @@ export interface PayloadBlogPostDoc {
     externalUrl?: string | null;
     published?: boolean | null;
     includeInSitemap?: boolean | null;
+    showInPressRoom?: boolean | null;
     seo?: {
         metaTitle?: string | null;
         metaDescription?: string | null;
@@ -351,7 +352,7 @@ export function blogPostExternalPublisher(doc: PayloadBlogPostDoc): string {
 export function blogPostDocLooksRenderable(doc: PayloadBlogPostDoc): boolean {
     if (!doc || doc.published !== true) return false;
     if (!cleanString(doc.title) || !slugIsValidForBlogPost(cleanString(doc.slug))) return false;
-    if (!blogPostLocationSlug(doc)) return false;
+    if (!blogPostLocationSlug(doc) && doc.showInPressRoom !== true) return false;
     if (!blogPostPublishDate(doc)) return false;
     if (!blogPostExcerptForDoc(doc)) return false;
     if (blogPostIsExternal(doc)) return Boolean(blogPostExternalUrl(doc));
@@ -361,6 +362,10 @@ export function blogPostDocLooksRenderable(doc: PayloadBlogPostDoc): boolean {
 
 export function blogPostShouldAppearInSitemap(doc: PayloadBlogPostDoc): boolean {
     return blogPostDocLooksRenderable(doc) && doc.includeInSitemap !== false;
+}
+
+export function blogPostShowsInPressRoom(doc: PayloadBlogPostDoc): boolean {
+    return blogPostDocLooksRenderable(doc) && doc.showInPressRoom === true;
 }
 
 export function blogPostHeadForDoc(doc: PayloadBlogPostDoc): LandingHeadInput | null {

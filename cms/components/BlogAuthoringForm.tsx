@@ -20,6 +20,7 @@ export type BlogEditorDocument = {
   postType?: string | null;
   publishDate?: string | null;
   published?: boolean | null;
+  showInPressRoom?: boolean | null;
   seo?: {
     metaDescription?: string | null;
     metaTitle?: string | null;
@@ -179,10 +180,10 @@ export default function BlogAuthoringForm({
           <label>
             <span>Location feed</span>
             <select
-              defaultValue={document?.locationSlug || locations[0]?.value}
+              defaultValue={document ? document.locationSlug || '' : locations[0]?.value}
               name="locationSlug"
-              required
             >
+              <option value="">Company-wide / Press Room only</option>
               {locations.map((location) => (
                 <option key={location.value} value={location.value}>
                   {location.label}
@@ -300,6 +301,17 @@ export default function BlogAuthoringForm({
             <span>
               <strong>Include in sitemap</strong>
               <small>Allow search engines to discover this post.</small>
+            </span>
+          </label>
+          <label className={styles.checkField}>
+            <input
+              defaultChecked={document?.showInPressRoom === true}
+              name="showInPressRoom"
+              type="checkbox"
+            />
+            <span>
+              <strong>Show in Press Room</strong>
+              <small>Also list this post on the Press Releases page.</small>
             </span>
           </label>
         </div>

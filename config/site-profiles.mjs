@@ -134,6 +134,25 @@ export function publicLocationsForProfile(locations, profile = resolveSiteProfil
   );
 }
 
+export function profileLocationsDocument(document, options = {}) {
+  const {
+    alreadyProfiled = false,
+    profile = resolveSiteProfile(),
+  } = options;
+  if (alreadyProfiled) return document;
+
+  return {
+    ...document,
+    locations: publicLocationsForProfile(document?.locations, profile),
+  };
+}
+
+export function locationsDocumentProfileState(document, profile = resolveSiteProfile()) {
+  const documentProfile = String(document?.siteProfile || '').trim().toLowerCase();
+  if (!documentProfile) return 'raw';
+  return documentProfile === profile.id ? 'profiled' : 'mismatched';
+}
+
 export function isInternalLocation(location, profile = resolveSiteProfile()) {
   return location?.region === profile.internalRegion;
 }

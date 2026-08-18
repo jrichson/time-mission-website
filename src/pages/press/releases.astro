@@ -3,6 +3,15 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import { definePage } from '../../lib/define-page';
 import pressReleasesMain from '../../partials/press-releases-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+import pressReleaseFallbacks from '../../data/site/press-releases.json';
+import {
+    blogPostCanonicalPath,
+    blogPostExcerptForDoc,
+    blogPostExternalPublisher,
+    blogPostShowsInPressRoom,
+    getPublishedBlogPosts,
+    sortBlogPosts,
+} from '../../lib/payload/load';
 
 const page = definePage({ canonicalPath: '/press/releases' });
 const ld = serializeGraph(buildSimpleGraph([
@@ -10,14 +19,41 @@ const ld = serializeGraph(buildSimpleGraph([
     { label: 'Press', href: '/press' },
     { label: 'Press Releases', href: '/press/releases' },
 ]));
+const cmsReleases = sortBlogPosts(
+    (await getPublishedBlogPosts()).filter(blogPostShowsInPressRoom),
+).map((post) => ({
+    ctaLabel: 'Read Press Release',
+    href: blogPostCanonicalPath(String(post.slug)),
+    id: String(post.slug),
+    kicker: blogPostExternalPublisher(post) || 'Press Release',
+    summary: blogPostExcerptForDoc(post),
+    title: String(post.title || ''),
+}));
+const cmsReleaseIds = new Set(cmsReleases.map((release) => release.id));
+const pressReleases = [
+    ...cmsReleases,
+    ...pressReleaseFallbacks.items.filter((release) => !cmsReleaseIds.has(release.id)),
+];
 ---
 
 <SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-resource-page">
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-press.css?v=1" />
+        <link rel="stylesheet" href="/css/page-press.css?v=2" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={pressReleasesMain} />
+    <section class="tm-resource-section">
+        <div class="tm-resource-shell tm-resource-release-list">
+            {pressReleases.map((release) => (
+                <article class="tm-resource-release" aria-labelledby={`${release.id}-title`}>
+                    <p class="tm-resource-kicker">{release.kicker}</p>
+                    <h2 id={`${release.id}-title`}>{release.title}</h2>
+                    <p>{release.summary}</p>
+                    <a href={release.href} class="tm-resource-button">{release.ctaLabel}</a>
+                </article>
+            ))}
+        </div>
+    </section>
 </SiteLayout>

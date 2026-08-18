@@ -32,6 +32,7 @@ import {
   blogPostHeadForDoc,
   blogPostHeroImage,
   blogPostShouldAppearInSitemap,
+  blogPostShowsInPressRoom,
   slugIsValidForBlogPost,
   type PayloadBlogPostDoc,
 } from '../src/lib/payload/blog-post-contract';
@@ -131,6 +132,7 @@ describe('CMS blog posts', () => {
     const heroPicker = read('cms/components/BlogHeroPicker.tsx');
     const uploadRoute = read('cms/app/blog/media/route.ts');
     const preview = read('cms/app/preview/blog/[id]/page.tsx');
+    const publicPostRoute = read('src/pages/blog/[slug].astro');
 
     expect(home).toContain("href: '/blog'");
     expect(home).not.toContain('/admin/collections/blog-posts');
@@ -145,6 +147,7 @@ describe('CMS blog posts', () => {
     expect(uploadRoute).toContain("collection: 'media'");
     expect(uploadRoute).toContain('MAX_UPLOAD_BYTES');
     expect(preview).toContain('href={`/blog/${post.id}`}');
+    expect(publicPostRoute).toContain("postBackHref = location ? blogLocationCanonicalPath(location.slug) : '/press/releases'");
 
     expect(blogSlug('A New Story!')).toBe('a-new-story');
     const summary = plainTextLexicalState('First sentence.\n\nSecond sentence.');
@@ -163,6 +166,7 @@ describe('CMS blog posts', () => {
     const locationField = findField(BlogPosts.fields, 'locationSlug');
     const publishedField = findField(BlogPosts.fields, 'published');
     const includeInSitemapField = findField(BlogPosts.fields, 'includeInSitemap');
+    const showInPressRoomField = findField(BlogPosts.fields, 'showInPressRoom');
     const excerptField = findField(BlogPosts.fields, 'excerpt');
     const bodyField = findField(BlogPosts.fields, 'body');
     const postTypeField = findField(BlogPosts.fields, 'postType');
@@ -180,11 +184,22 @@ describe('CMS blog posts', () => {
       'updatedAt',
     ]);
     expect(slugField).toMatchObject({ name: 'slug', type: 'text', required: true, unique: true });
-    expect(locationField).toMatchObject({ name: 'locationSlug', type: 'select', required: true });
+    expect(locationField).toMatchObject({ name: 'locationSlug', type: 'select' });
+    expect(locationField?.required).not.toBe(true);
+    expect(locationField?.validate).toBeTypeOf('function');
+    expect(locationField?.validate?.(null, { data: { showInPressRoom: true } })).toBe(true);
+    expect(locationField?.validate?.(null, { data: { showInPressRoom: false } })).toContain(
+      'Choose a location',
+    );
     expect(locationField?.options).toContainEqual({ label: 'Time Mission Eindhoven', value: 'eindhoven' });
     expect(publishedField?.label).toBe('Published in CMS');
     expect(publishedField?.admin?.description).toContain('Live after deploy');
     expect(includeInSitemapField?.defaultValue).toBe(true);
+    expect(showInPressRoomField).toMatchObject({
+      name: 'showInPressRoom',
+      type: 'checkbox',
+      defaultValue: false,
+    });
     expect(excerptField).toMatchObject({ name: 'excerpt', type: 'richText', required: true });
     expect(bodyField).toMatchObject({ name: 'body', type: 'richText' });
     expect(bodyField?.validate).toBeTypeOf('function');
@@ -213,6 +228,7 @@ describe('CMS blog posts', () => {
     expect(migrationIndex).toContain('20260624_090000_blog_press_donation_eindhoven');
     expect(migrationIndex).toContain('20260625_090000_blog_posts_rich_text');
     expect(migrationIndex).toContain('20260730_170000_blog_authoring_and_media');
+    expect(migrationIndex).toContain('20260818_090000_blog_press_room_placement');
 
     expect(bodyField?.validate?.(null, { data: { postType: 'article', published: false } })).toBe(true);
     expect(bodyField?.validate?.(null, { data: { postType: 'article', published: true } })).toContain(
@@ -232,6 +248,13 @@ describe('CMS blog posts', () => {
     expect(blogPostDocLooksRenderable(basePost)).toBe(true);
     expect(blogPostDocLooksRenderable({ ...basePost, published: false })).toBe(false);
     expect(blogPostDocLooksRenderable({ ...basePost, locationSlug: 'unknown' })).toBe(false);
+    expect(blogPostShowsInPressRoom(basePost)).toBe(false);
+    expect(blogPostShowsInPressRoom({ ...basePost, showInPressRoom: true })).toBe(true);
+    expect(blogPostShowsInPressRoom({
+      ...basePost,
+      locationSlug: null,
+      showInPressRoom: true,
+    })).toBe(true);
   });
 
   it('builds public paths, SEO fallback, sitemap state, and safe body HTML', () => {

@@ -7,6 +7,8 @@ import {
   isInternalLocation,
   localizedOutputFile,
   localizedPath,
+  locationsDocumentProfileState,
+  profileLocationsDocument,
   publicLocationForProfile,
   resolveSiteProfile,
 } from '../config/site-profiles.mjs';
@@ -112,6 +114,38 @@ describe('site deployment profiles', () => {
       externalUrl: 'https://time-mission-website-eu.pages.dev/eindhoven',
       counterpartUrl: undefined,
     });
+  });
+
+  it('profiles fallback location data after a resolved source fails to load', () => {
+    const eu = resolveSiteProfile({ TM_SITE_PROFILE: 'eu' });
+    const fallbackDocument = {
+      locations: [location('houston'), location('antwerp')],
+    };
+
+    const profiled = profileLocationsDocument(fallbackDocument, {
+      alreadyProfiled: false,
+      profile: eu,
+    });
+    const houston = profiled.locations.find((item) => item.slug === 'houston');
+
+    expect(houston).toMatchObject({
+      externalUrl: 'https://www.timemission.com/houston',
+      pagePath: undefined,
+      bookingUrl: '',
+      groupFormUrls: undefined,
+    });
+    expect(profileLocationsDocument(fallbackDocument, {
+      alreadyProfiled: true,
+      profile: eu,
+    })).toBe(fallbackDocument);
+  });
+
+  it('trusts resolved location artifacts only for the active site profile', () => {
+    const us = resolveSiteProfile({ TM_SITE_PROFILE: 'us' });
+
+    expect(locationsDocumentProfileState({ locations: [] }, us)).toBe('raw');
+    expect(locationsDocumentProfileState({ locations: [], siteProfile: 'us' }, us)).toBe('profiled');
+    expect(locationsDocumentProfileState({ locations: [], siteProfile: 'eu' }, us)).toBe('mismatched');
   });
 
   it('keeps Brussels on its local page with the verified Roller checkout', () => {

@@ -3,7 +3,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import fallbackLocationsJson from '../../data/locations.json';
-import { publicLocationsForProfile } from '../lib/site-profile';
+import groupTypesConfig from '../../config/group-types.cjs';
+import {
+    activeSiteProfile,
+    locationsDocumentProfileState,
+    profileLocationsDocument,
+} from '../lib/site-profile';
+
+export type GroupTypeId = keyof typeof groupTypesConfig.GROUP_TYPES;
 
 export interface LocationDayHours {
     open?: string;
@@ -55,8 +62,8 @@ export interface LocationRecord {
     pagePath?: string;
     rollerCheckoutUrl?: string;
     groupCheckoutUrl?: string;
-    groupCheckoutUrls?: Record<string, string>;
-    groupInquiryLabels?: Record<string, string>;
+    groupCheckoutUrls?: Partial<Record<GroupTypeId, string>>;
+    groupInquiryLabels?: Partial<Record<GroupTypeId, string>>;
     bookingProvider?: 'roller' | 'briq' | 'clubspeed' | 'experience-factory';
     briqWidgetDomain?: string;
     briqWidget?: {
@@ -90,6 +97,7 @@ export interface LocationRecord {
 
 export interface LocationsDocument {
     locations: LocationRecord[];
+    siteProfile?: 'us' | 'eu';
 }
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -104,12 +112,33 @@ function resolvedLocationsPath(): string {
 
 const locationDataPath = resolvedLocationsPath();
 
-function readLocationsDocument(): LocationsDocument {
-    if (!locationDataPath) return fallbackLocationsJson as LocationsDocument;
+interface LoadedLocationsDocument {
+    alreadyProfiled: boolean;
+    document: LocationsDocument;
+}
+
+function readLocationsDocument(): LoadedLocationsDocument {
+    if (!locationDataPath) {
+        return {
+            alreadyProfiled: false,
+            document: fallbackLocationsJson as LocationsDocument,
+        };
+    }
 
     try {
         const parsed = JSON.parse(fs.readFileSync(locationDataPath, 'utf8')) as LocationsDocument;
-        if (Array.isArray(parsed?.locations)) return parsed;
+        if (Array.isArray(parsed?.locations)) {
+            const profileState = locationsDocumentProfileState(parsed, activeSiteProfile);
+            if (profileState !== 'mismatched') {
+                return {
+                    alreadyProfiled: profileState === 'profiled',
+                    document: parsed,
+                };
+            }
+            console.warn(
+                `[locations] resolved location data is for ${parsed.siteProfile}; using ${activeSiteProfile.id} code-owned fallback`,
+            );
+        }
     } catch (err) {
         console.warn(
             '[locations] failed to read resolved location data; using code-owned fallback:',
@@ -117,15 +146,15 @@ function readLocationsDocument(): LocationsDocument {
         );
     }
 
-    return fallbackLocationsJson as LocationsDocument;
+    return {
+        alreadyProfiled: false,
+        document: fallbackLocationsJson as LocationsDocument,
+    };
 }
 
-const sourceLocationsDocument = readLocationsDocument();
-export const locationsDocument = {
-    ...sourceLocationsDocument,
-    // Build-time resolved data has already been filtered for the active site profile.
-    locations: locationDataPath
-        ? sourceLocationsDocument.locations
-        : publicLocationsForProfile(sourceLocationsDocument.locations) as LocationRecord[],
-};
+const sourceLocations = readLocationsDocument();
+export const locationsDocument = profileLocationsDocument(sourceLocations.document, {
+    alreadyProfiled: sourceLocations.alreadyProfiled,
+    profile: activeSiteProfile,
+}) as LocationsDocument;
 export const allLocations = locationsDocument.locations;

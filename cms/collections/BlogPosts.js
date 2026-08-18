@@ -61,6 +61,15 @@ function validateExternalPostUrl(value, { data, siblingData } = {}) {
   return validateOptionalHttpsUrl(value);
 }
 
+function validateBlogLocation(value, { data, siblingData } = {}) {
+  const locationSlug = String(value || '').trim();
+  if (reservedBlogSlugs.has(locationSlug)) return true;
+
+  const showInPressRoom = data?.showInPressRoom ?? siblingData?.showInPressRoom;
+  if (!locationSlug && showInPressRoom === true) return true;
+  return 'Choose a location, or mark this as a company-wide Press Room post.';
+}
+
 function richTextHasText(value) {
   const children = value?.root?.children;
   if (!Array.isArray(children)) return false;
@@ -153,6 +162,16 @@ export const BlogPosts = {
       },
     },
     {
+      name: 'showInPressRoom',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Show in Press Room',
+      admin: {
+        position: 'sidebar',
+        description: 'If on, this published post also appears on the Press Releases page after deploy.',
+      },
+    },
+    {
       type: 'tabs',
       tabs: [
         {
@@ -209,12 +228,12 @@ export const BlogPosts = {
                 {
                   name: 'locationSlug',
                   type: 'select',
-                  required: true,
                   label: 'Location',
                   options: LOCATION_DETAIL_OPTIONS,
                   admin: {
-                    description: 'The post will also appear on this location’s blog.',
+                    description: 'The post will also appear on this location’s blog. Leave blank only for a company-wide Press Room post.',
                   },
+                  validate: validateBlogLocation,
                 },
                 {
                   name: 'publishDate',

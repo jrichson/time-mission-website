@@ -1,5 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { GROUP_TYPE_IDS } = require('../config/group-types.cjs');
+const { validateLocationExtensions } = require('./lib/location-extension-contracts.cjs');
 
 const root = path.resolve(__dirname, '..');
 const dataPath = path.join(root, 'data', 'locations.json');
@@ -324,6 +326,7 @@ for (const location of locations) {
   validateHiddenMissionIds(location);
   validateTeamSize(location);
   validateDonationUrl(location);
+  errors.push(...validateLocationExtensions(location, GROUP_TYPE_IDS));
   const hasValidGeo = validateGeo(location);
 
   if (Object.prototype.hasOwnProperty.call(location, 'localBusinessSchemaEligible')) {

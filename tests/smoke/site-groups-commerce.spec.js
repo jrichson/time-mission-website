@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const expectedGroupTypes = require('../../src/data/site/groups.json').items.map((item) => item.id);
 const {
   REPO_ROOT,
   fingerprintAnalyticsLabels,
@@ -83,14 +84,6 @@ test('group cards open the selected location event form as a direct link', async
 test('group event cards expose ticket booking and group inquiry triggers', async ({ page }) => {
   await page.goto('/groups.html');
 
-  const expectedGroupTypes = [
-    'birthdays',
-    'corporate',
-    'holidays',
-    'field-trips',
-    'private-events',
-    'bachelor-ette',
-  ];
   const cards = await page.locator('.event-type-card').evaluateAll((nodes) => nodes.map((card) => {
     const ticket = card.querySelector('.event-type-actions .btn-tickets');
     const inquiry = card.querySelector('.event-type-actions .ghost');
