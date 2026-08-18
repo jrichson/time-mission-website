@@ -194,7 +194,7 @@ test('localized EU mission names and image labels remain in English', async ({ p
 test('every localized EU route renders in each enabled language', async ({ page }) => {
   test.setTimeout(180_000);
   const expectedRoutes = localizedHtmlRoutes('nl');
-  expect(expectedRoutes).toHaveLength(36);
+  expect(expectedRoutes).toHaveLength(37);
 
   for (const locale of ['nl', 'fr', 'es']) {
     expect(localizedHtmlRoutes(locale)).toEqual(expectedRoutes);
