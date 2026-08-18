@@ -34,6 +34,7 @@ import * as migration_20260810_170000_houston_philadelphia_roller_routes from '.
 import * as migration_20260811_210000_houston_back_to_school_pages from './20260811_210000_houston_back_to_school_pages';
 import * as migration_20260817_090000_eindhoven_address_correction from './20260817_090000_eindhoven_address_correction';
 import * as migration_20260818_090000_blog_press_room_placement from './20260818_090000_blog_press_room_placement';
+import * as migration_20260818_130000_press_release_content from './20260818_130000_press_release_content';
 
 export const migrations = [
   {
@@ -215,5 +216,10 @@ export const migrations = [
     up: migration_20260818_090000_blog_press_room_placement.up,
     down: migration_20260818_090000_blog_press_room_placement.down,
     name: '20260818_090000_blog_press_room_placement'
+  },
+  {
+    up: migration_20260818_130000_press_release_content.up,
+    down: migration_20260818_130000_press_release_content.down,
+    name: '20260818_130000_press_release_content'
   },
 ];

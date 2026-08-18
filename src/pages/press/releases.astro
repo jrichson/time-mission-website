@@ -6,8 +6,10 @@ import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
 import pressReleaseFallbacks from '../../data/site/press-releases.json';
 import {
     blogPostCanonicalPath,
+    blogPostDateLabel,
     blogPostExcerptForDoc,
     blogPostExternalPublisher,
+    blogPostHeroImage,
     blogPostShowsInPressRoom,
     getPublishedBlogPosts,
     sortBlogPosts,
@@ -19,16 +21,25 @@ const ld = serializeGraph(buildSimpleGraph([
     { label: 'Press', href: '/press' },
     { label: 'Press Releases', href: '/press/releases' },
 ]));
+const fallbackById = new Map(pressReleaseFallbacks.items.map((release) => [release.id, release]));
 const cmsReleases = sortBlogPosts(
     (await getPublishedBlogPosts()).filter(blogPostShowsInPressRoom),
-).map((post) => ({
-    ctaLabel: 'Read Press Release',
-    href: blogPostCanonicalPath(String(post.slug)),
-    id: String(post.slug),
-    kicker: blogPostExternalPublisher(post) || 'Press Release',
-    summary: blogPostExcerptForDoc(post),
-    title: String(post.title || ''),
-}));
+).map((post) => {
+    const id = String(post.slug);
+    const fallback = fallbackById.get(id);
+
+    return {
+        ctaLabel: fallback?.ctaLabel || 'Read Press Release',
+        href: blogPostCanonicalPath(id),
+        id,
+        image: fallback?.image || blogPostHeroImage(post),
+        imageHeight: fallback?.imageHeight || 1067,
+        imageWidth: fallback?.imageWidth || 1600,
+        kicker: fallback?.kicker || blogPostDateLabel(post) || blogPostExternalPublisher(post) || 'Press Release',
+        summary: fallback?.summary || blogPostExcerptForDoc(post),
+        title: fallback?.title || String(post.title || ''),
+    };
+});
 const cmsReleaseIds = new Set(cmsReleases.map((release) => release.id));
 const pressReleases = [
     ...cmsReleases,
@@ -38,7 +49,7 @@ const pressReleases = [
 
 <SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-resource-page">
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-press.css?v=2" />
+        <link rel="stylesheet" href="/css/page-press.css?v=3" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
@@ -46,12 +57,31 @@ const pressReleases = [
     <div set:html={pressReleasesMain} />
     <section class="tm-resource-section">
         <div class="tm-resource-shell tm-resource-release-list">
-            {pressReleases.map((release) => (
+            {pressReleases.map((release, index) => (
                 <article class="tm-resource-release" aria-labelledby={`${release.id}-title`}>
-                    <p class="tm-resource-kicker">{release.kicker}</p>
-                    <h2 id={`${release.id}-title`}>{release.title}</h2>
-                    <p>{release.summary}</p>
-                    <a href={release.href} class="tm-resource-button">{release.ctaLabel}</a>
+                    <a
+                        class="tm-resource-release-media"
+                        href={release.href}
+                        aria-label={`${release.ctaLabel}: ${release.title}`}
+                        data-page-i18n="ignore"
+                    >
+                        <img
+                            src={release.image}
+                            alt=""
+                            width={release.imageWidth}
+                            height={release.imageHeight}
+                            loading={index < 2 ? 'eager' : 'lazy'}
+                            decoding="async"
+                        />
+                    </a>
+                    <div class="tm-resource-release-copy">
+                        <div class="tm-resource-release-source-copy" data-page-i18n="ignore">
+                            <p class="tm-resource-kicker">{release.kicker}</p>
+                            <h2 id={`${release.id}-title`}>{release.title}</h2>
+                            <p>{release.summary}</p>
+                        </div>
+                        <a href={release.href} class="tm-resource-button">{release.ctaLabel}</a>
+                    </div>
                 </article>
             ))}
         </div>

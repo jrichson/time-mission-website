@@ -8,6 +8,7 @@ import {
     locationCtaView,
     locationHeadlineStatus,
     locationHoursRows,
+    locationPhoneHref,
     locationStateBadge,
     locationViewModel,
     type LocationViewModel,
@@ -76,6 +77,15 @@ describe('Location View contract', () => {
 
         expect(locationStateBadge(antwerp)).toBe('BE');
         expect(locationStateBadge(eindhoven)).toBe('NL');
+    });
+
+    it('keeps Eindhoven phone display formatting while dialing its E.164 number', () => {
+        const eindhoven = allLocations.find((loc) => loc.id === 'eindhoven');
+        if (!eindhoven) throw new Error('Eindhoven location missing');
+
+        expect(eindhoven.contact.phone).toBe('+31 (0)40 808 3636');
+        expect(eindhoven.phoneE164).toBe('+31408083636');
+        expect(locationPhoneHref(eindhoven)).toBe('tel:+31408083636');
     });
 
     it('gives Edison a local page while keeping its Supercharged NJ action', () => {

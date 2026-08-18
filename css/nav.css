@@ -368,7 +368,7 @@
     .location-btn.has-location svg:first-of-type {
         width: 16px;
         height: 16px;
-        color: var(--cyan);
+        color: var(--orange);
     }
 
 
@@ -414,7 +414,7 @@
     }
 
     .nav-left {
-        gap: 0.5rem;
+        gap: 0.25rem;
     }
 
     .nav.has-location .nav-left {
@@ -423,8 +423,14 @@
     }
 
     .nav-logo img {
-        height: 32px;
-        min-width: 88px;
+        height: 28px;
+        min-width: 82px;
+    }
+
+    .nav-logo {
+        display: inline-flex;
+        min-height: var(--target-min);
+        align-items: center;
     }
 
     .nav-right {
@@ -459,12 +465,9 @@
     }
 
     .location-btn.has-location #locationText {
-        font-size: 0.68rem;
+        font-size: 0.67rem;
     }
 
-    .location-btn.has-location svg:first-of-type {
-        display: none;
-    }
 }
 
 @media (max-width: 360px) {
@@ -505,7 +508,4 @@
         font-size: 0.62rem;
     }
 
-    .location-btn.has-location svg:first-of-type {
-        display: none;
-    }
 }

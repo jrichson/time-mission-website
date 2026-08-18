@@ -388,7 +388,7 @@
         renderAddressLines(addrEl, loc.address);
         if (phoneEl && loc.contact && loc.contact.phone) {
             phoneEl.textContent = loc.contact.phone;
-            phoneEl.href = 'tel:' + loc.contact.phone.replace(/[^\d+]/g, '');
+            phoneEl.href = 'tel:' + String(loc.phoneE164 || loc.contact.phone).replace(/[^\d+]/g, '');
             setHidden(phoneEl, false);
             setHidden(phoneNoteEl, true);
         } else {

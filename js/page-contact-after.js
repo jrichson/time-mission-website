@@ -39,8 +39,8 @@
             .catch(function () { return []; });
     }
 
-    function telHref(phone) {
-        var value = String(phone || '').replace(/[^\d+]/g, '');
+    function telHref(phone, phoneE164) {
+        var value = String(phoneE164 || phone || '').replace(/[^\d+]/g, '');
         return value ? 'tel:' + value : '';
     }
 
@@ -139,7 +139,7 @@
             if (nameEl) nameEl.textContent = locationName;
             if (phoneEl) {
                 phoneEl.textContent = phone;
-                phoneEl.href = telHref(phone);
+                phoneEl.href = telHref(phone, loc && loc.phoneE164);
             }
             if (emailEl) {
                 emailEl.textContent = email;

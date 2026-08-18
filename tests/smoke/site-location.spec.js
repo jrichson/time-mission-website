@@ -345,7 +345,7 @@ test('location pages render footer contact details with accordion hours', async 
   await expect(footer.locator('.footer-loc-address')).toContainText('132 Randhurst Village Drive');
   await expect(footer.locator('.footer-loc-address')).toContainText('Mount Prospect, IL 60056');
   await expect(footer.locator('.footer-loc-phone')).toHaveText('(847) 250-9560');
-  await expect(footer.locator('.footer-loc-phone')).toHaveAttribute('href', 'tel:8472509560');
+  await expect(footer.locator('.footer-loc-phone')).toHaveAttribute('href', 'tel:+18472509560');
   await expect(footer.getByRole('button', { name: 'Change Location' })).toBeVisible();
 
   const hours = footer.locator('.footer-loc-hours-details');

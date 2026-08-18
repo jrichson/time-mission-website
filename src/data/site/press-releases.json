@@ -2,11 +2,25 @@
   "items": [
     {
       "id": "boston-announcement",
-      "kicker": "Boston Announcement",
-      "title": "Time Mission Is Coming to Boston",
-      "summary": "Time Mission Boston is coming soon at 200 State St, Boston, MA 02109. Follow the official Boston location page for confirmed opening and ticket updates.",
-      "href": "/boston",
-      "ctaLabel": "View Boston Location"
+      "kicker": "Aug 6, 2026",
+      "title": "Time Mission Announces New Immersive Adventure Steps from Boston's Faneuil Hall",
+      "summary": "Time Mission plans to open an 8,600-square-foot venue at Marketplace Center, 200 State Street, in early 2027. The new venue, adjacent to Faneuil Hall Marketplace, will bring mission rooms to downtown Boston for the first time.",
+      "image": "/assets/photos/experiences/Time-Mission_Control-Room-1200.webp",
+      "imageWidth": 1200,
+      "imageHeight": 1800,
+      "href": "https://www.timemission.com/blog/boston-announcement",
+      "ctaLabel": "Read Press Release"
+    },
+    {
+      "id": "time-mission-global-expansion-2027",
+      "kicker": "Jul 28, 2026",
+      "title": "Time Mission announces major global expansion with 15 to 20 new locations planned for 2027",
+      "summary": "Time Mission announced plans for its most ambitious expansion to date, with 15 to 20 new locations planned for 2027 and venues currently under construction across the United States and Europe.",
+      "image": "/assets/photos/TM-Groups-1200.webp",
+      "imageWidth": 1200,
+      "imageHeight": 800,
+      "href": "https://www.timemission.com/blog/time-mission-global-expansion-2027",
+      "ctaLabel": "Read Press Release"
     }
   ]
 }

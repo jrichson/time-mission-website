@@ -299,8 +299,7 @@ body.tm-resource-page {
     margin-top: 0.9rem;
 }
 
-.tm-resource-empty,
-.tm-resource-release {
+.tm-resource-empty {
     width: min(100%, 44rem);
     border-left: 3px solid var(--tm-resource-accent);
     padding-left: 1.3rem;
@@ -308,12 +307,68 @@ body.tm-resource-page {
 
 .tm-resource-release-list {
     display: grid;
-    gap: 2.5rem;
+    border-top: 1px solid var(--tm-resource-line);
 }
 
 .tm-resource-empty .tm-resource-kicker,
 .tm-resource-release .tm-resource-kicker {
     margin: 0;
+}
+
+.tm-resource-release {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.22fr);
+    align-items: center;
+    gap: clamp(1.5rem, 5vw, 4.5rem);
+    border-bottom: 1px solid var(--tm-resource-line);
+    padding: clamp(1.5rem, 4vw, 3rem) 0;
+}
+
+.tm-resource-release-media {
+    position: relative;
+    display: block;
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 1px solid var(--tm-resource-line);
+    border-radius: 6px;
+    background: var(--tm-resource-panel);
+}
+
+.tm-resource-release-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid transparent;
+    background: linear-gradient(180deg, transparent 58%, rgba(5, 5, 8, 0.34));
+    pointer-events: none;
+}
+
+.tm-resource-release-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: cover;
+    transition: transform 260ms ease;
+}
+
+.tm-resource-release-media:hover img {
+    transform: scale(1.025);
+}
+
+.tm-resource-release-media:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+}
+
+.tm-resource-release-copy {
+    width: min(100%, 41rem);
+}
+
+.tm-resource-release-copy h2 {
+    margin-top: 0.45rem;
 }
 
 .tm-resource-empty h2 + p,
@@ -372,6 +427,15 @@ body.tm-resource-page {
     .tm-resource-tile {
         min-height: 12rem;
     }
+
+    .tm-resource-release {
+        grid-template-columns: minmax(13rem, 0.85fr) minmax(0, 1.15fr);
+        gap: 1.5rem;
+    }
+
+    .tm-resource-release h2 {
+        font-size: 3.15rem;
+    }
 }
 
 @media (max-width: 620px) {
@@ -393,6 +457,16 @@ body.tm-resource-page {
     .tm-resource-secondary {
         width: 100%;
     }
+
+    .tm-resource-release {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+        padding-block: 1.5rem 2rem;
+    }
+
+    .tm-resource-release-media {
+        aspect-ratio: 4 / 3;
+    }
 }
 
 @media (max-width: 420px) {
@@ -404,5 +478,11 @@ body.tm-resource-page {
     .tm-resource-empty h2,
     .tm-resource-release h2 {
         font-size: 3rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tm-resource-release-media img {
+        transition: none;
     }
 }

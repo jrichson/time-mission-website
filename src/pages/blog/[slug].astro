@@ -14,6 +14,7 @@ import {
     blogPostHeadForDoc,
     blogPostHeroImage,
     blogPostLocationSlug,
+    blogPostShowsInPressRoom,
     getPublishedBlogPosts,
     sortBlogPosts,
     type PayloadBlogPostDoc,
@@ -52,15 +53,20 @@ const location =
         : allLocations.find((loc) => loc.slug === blogPostLocationSlug(props.post));
 const locationName = location?.shortName || 'Time Mission';
 const locationPath = location ? `/${location.slug}` : '/locations';
-const postBackHref = location ? blogLocationCanonicalPath(location.slug) : '/press/releases';
-const postBackLabel = location?.shortName || 'Press Room';
+const post = props.kind === 'post' ? props.post : null;
+const isPressRelease = post ? blogPostShowsInPressRoom(post) : false;
+const postBackHref = isPressRelease
+    ? '/press/releases'
+    : location
+        ? blogLocationCanonicalPath(location.slug)
+        : '/press/releases';
+const postBackLabel = isPressRelease ? 'Press Releases' : location?.shortName || 'Press Room';
 const locationPosts = props.kind === 'location' ? props.posts : [];
 const page = definePage({
     canonicalPath: props.kind === 'post'
         ? blogPostCanonicalPath(String(props.post.slug))
         : blogLocationCanonicalPath(String(props.locationSlug)),
 });
-const post = props.kind === 'post' ? props.post : null;
 const externalUrl = post ? blogPostExternalUrl(post) : '';
 const externalPublisher = post ? blogPostExternalPublisher(post) : '';
 const landingHead = post
@@ -74,24 +80,32 @@ const landingHead = post
     };
 ---
 
-<SiteLayout canonicalPath={page.canonicalPath} landingHead={landingHead} bodyClass="has-noise tm-blog-page">
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    landingHead={landingHead}
+    bodyClass={`has-noise tm-blog-page${isPressRelease ? ' tm-press-article-page' : ''}`}
+>
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-blog.css?v=2" />
+        <link rel="stylesheet" href="/css/page-blog.css?v=3" />
     </Fragment>
 
     {post ? (
         <>
             <article class="tm-blog-article">
-                <header class="tm-blog-article-hero">
+                <header class:list={["tm-blog-article-hero", { "tm-blog-article-hero--press": isPressRelease }]}>
                     <picture class="tm-blog-article-media" aria-hidden="true">
                         <source srcset={blogPostHeroImage(post)}>
                         <img src={blogPostHeroImage(post)} alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
                     </picture>
                     <div class="tm-blog-shell tm-blog-article-copy">
                         <a class="tm-blog-back" href={postBackHref}>{postBackLabel}</a>
-                        <p class="tm-blog-kicker">{blogPostDateLabel(post)}</p>
-                        <h1>{post.title}</h1>
-                        <div class="tm-blog-article-excerpt" set:html={blogPostExcerptHtmlForDoc(post)} />
+                        <div data-page-i18n={isPressRelease ? 'ignore' : undefined}>
+                            <p class="tm-blog-kicker">
+                                {isPressRelease ? 'Press Release · ' : ''}{blogPostDateLabel(post)}
+                            </p>
+                            <h1>{post.title}</h1>
+                            <div class="tm-blog-article-excerpt" set:html={blogPostExcerptHtmlForDoc(post)} />
+                        </div>
                     </div>
                 </header>
                 {externalUrl ? (
@@ -104,7 +118,11 @@ const landingHead = post
                         </aside>
                     </div>
                 ) : (
-                    <div class="tm-blog-shell tm-blog-body" set:html={blogPostBodyHtml(post)} />
+                    <div
+                        class="tm-blog-shell tm-blog-body"
+                        data-page-i18n={isPressRelease ? 'ignore' : undefined}
+                        set:html={blogPostBodyHtml(post)}
+                    />
                 )}
             </article>
         </>

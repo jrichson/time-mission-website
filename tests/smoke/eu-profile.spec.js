@@ -57,6 +57,19 @@ test('EU artifact exposes its identity and isolated location data', async ({ pag
   expect(antwerp.externalUrl).toBeUndefined();
 });
 
+test('Eindhoven publishes its local phone number with an international dial target', async ({ page }) => {
+  await page.goto('/eindhoven');
+
+  const phone = page.locator('.footer-loc-phone');
+  await expect(phone).toHaveText('+31 (0)40 808 3636');
+  await expect(phone).toHaveAttribute('href', 'tel:+31408083636');
+  await expect(page.locator('.footer-loc-phone-note')).toBeHidden();
+
+  await page.goto('/contact?location=eindhoven');
+  await expect(page.locator('[data-location-contact-phone]')).toHaveText('+31 (0)40 808 3636');
+  await expect(page.locator('[data-location-contact-phone]')).toHaveAttribute('href', 'tel:+31408083636');
+});
+
 test('wide animated announcement ticker remains populated across the viewport', async ({ page }) => {
   await page.setViewportSize({ width: 2048, height: 900 });
   await page.goto('/');

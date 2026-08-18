@@ -148,7 +148,10 @@ describe('CMS blog posts', () => {
     expect(uploadRoute).toContain("collection: 'media'");
     expect(uploadRoute).toContain('MAX_UPLOAD_BYTES');
     expect(preview).toContain('href={`/blog/${post.id}`}');
-    expect(publicPostRoute).toContain("postBackHref = location ? blogLocationCanonicalPath(location.slug) : '/press/releases'");
+    expect(publicPostRoute).toContain("const isPressRelease = post ? blogPostShowsInPressRoom(post) : false");
+    expect(publicPostRoute).toContain("const postBackHref = isPressRelease");
+    expect(publicPostRoute).toContain("? '/press/releases'");
+    expect(publicPostRoute).toContain('blogLocationCanonicalPath(location.slug)');
 
     expect(blogSlug('A New Story!')).toBe('a-new-story');
     const summary = plainTextLexicalState('First sentence.\n\nSecond sentence.');

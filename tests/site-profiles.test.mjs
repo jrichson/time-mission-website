@@ -190,10 +190,11 @@ describe('site deployment profiles', () => {
         country: 'Netherlands',
       },
       bookingUrl: '',
-      contact: { phone: '', email: 'eindhoven@timemission.nl' },
+      contact: { phone: '+31 (0)40 808 3636', email: 'eindhoven@timemission.nl' },
       currency: 'EUR',
       locale: 'nl-NL',
       timeZone: 'Europe/Amsterdam',
+      phoneE164: '+31408083636',
     });
     expect(antwerp.contact.email).toBe('antwerp@experience-factory.com');
   });

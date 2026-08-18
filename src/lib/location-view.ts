@@ -96,10 +96,13 @@ export function locationContactItems(loc: Pick<LocationRecord, 'contact'>): Loca
     return items;
 }
 
-export function locationPhoneHref(loc: Pick<LocationRecord, 'contact'> | null | undefined): string {
+export function locationPhoneHref(
+    loc: Pick<LocationRecord, 'contact' | 'phoneE164'> | null | undefined,
+): string {
     const phone = String(loc?.contact.phone || '').trim();
     if (!phone) return '';
-    return `tel:${phone.replace(/[^\d+]/g, '')}`;
+    const e164 = String(loc?.phoneE164 || '').trim();
+    return `tel:${e164 || phone.replace(/[^\d+]/g, '')}`;
 }
 
 export function locationContactHref(loc: Pick<LocationRecord, 'slug'>, type = 'updates'): string {

@@ -161,9 +161,11 @@ test.describe('small mobile (375x667)', () => {
     await page.goto('/mount-prospect');
     const locBtn = page.locator('.location-btn').first();
     const locationText = page.locator('#locationText');
+    const locationPin = locBtn.locator('svg').first();
 
     await expect(locBtn).toHaveClass(/has-location/);
     await expect(locationText).toBeVisible();
+    await expect(locationPin).toBeVisible();
     await expect(locationText).toContainText('Mount Prospect');
     await expect(locBtn).toHaveAttribute('aria-label', 'Change location: Mount Prospect');
 
@@ -191,6 +193,8 @@ test.describe('small mobile (375x667)', () => {
       borderTopWidth: '0px',
       borderRadius: '0px',
     });
+
+    await expect(locationPin).toHaveCSS('color', 'rgb(255, 107, 44)');
 
     const overflow = await page.evaluate(() => {
       return {

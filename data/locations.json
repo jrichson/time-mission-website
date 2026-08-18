@@ -975,7 +975,7 @@
         "country": "Netherlands"
       },
       "contact": {
-        "phone": "",
+        "phone": "+31 (0)40 808 3636",
         "email": "eindhoven@timemission.nl"
       },
       "hours": {},
@@ -990,7 +990,7 @@
       "locale": "nl-NL",
       "timeZone": "Europe/Amsterdam",
       "currency": "EUR",
-      "phoneE164": null,
+      "phoneE164": "+31408083636",
       "hreflang": "nl-NL",
       "localBusinessSchemaEligible": false,
       "openingLabel": "Coming Soon"
