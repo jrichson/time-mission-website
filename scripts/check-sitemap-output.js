@@ -20,6 +20,8 @@ const profile = resolveSiteProfile(process.env);
 contract.baseUrl = profile.origin;
 contract.rootHome = `${profile.origin}/`;
 contract.registry = { ...registry, baseUrl: profile.origin };
+contract.locales = profile.locales;
+contract.defaultLocale = profile.defaultLocale;
 contract.sitemapUrls = [];
 for (const route of registry.routes || []) {
     const location = locations.find(({ slug, id }) => {

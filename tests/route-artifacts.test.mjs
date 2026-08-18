@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import routeArtifacts from '../scripts/lib/route-artifacts.js';
 
-const { resolveInternalDeployTarget } = routeArtifacts;
+const { resolveInternalDeployTarget, verifySitemapLocs } = routeArtifacts;
 const roots = [];
 
 function tempRoot() {
@@ -65,5 +65,48 @@ describe('route artifact resolution', () => {
     write(root, '_redirects', '/boston https://www.timemission.com/boston 301\n');
 
     expect(resolveInternalDeployTarget(root, registry, '/boston')).toBeNull();
+  });
+});
+
+describe('dynamic sitemap URL validation', () => {
+  const contract = {
+    baseUrl: 'https://www.timemission.com',
+    defaultLocale: 'en',
+    locales: ['en', 'es'],
+    registry: {
+      baseUrl: 'https://www.timemission.com',
+      routes: [],
+      _meta: { dynamicLandingPrefix: '/c' },
+    },
+    rootHome: 'https://www.timemission.com/',
+    sitemapUrls: [],
+    sitemapUrlSet: new Set(),
+  };
+
+  it('accepts localized blog indexes, blog entries, and landing pages', () => {
+    const locs = [
+      'https://www.timemission.com/blog',
+      'https://www.timemission.com/blog/boston-announcement',
+      'https://www.timemission.com/es/blog',
+      'https://www.timemission.com/es/blog/boston-announcement',
+      'https://www.timemission.com/c/summer-adventures',
+      'https://www.timemission.com/es/c/summer-adventures',
+    ];
+
+    expect(verifySitemapLocs(locs, contract, { requireBaseUrl: true }).errors).toEqual([]);
+  });
+
+  it('rejects unsupported locales and nested dynamic slugs', () => {
+    const locs = [
+      'https://www.timemission.com/fr/blog/boston-announcement',
+      'https://www.timemission.com/es/blog/boston/announcement',
+      'https://www.timemission.com/es/c/summer/adventures',
+    ];
+
+    expect(verifySitemapLocs(locs, contract, { requireBaseUrl: true }).errors).toEqual([
+      'Unexpected sitemap URL: https://www.timemission.com/fr/blog/boston-announcement',
+      'Unexpected sitemap URL: https://www.timemission.com/es/blog/boston/announcement',
+      'Unexpected sitemap URL: https://www.timemission.com/es/c/summer/adventures',
+    ]);
   });
 });

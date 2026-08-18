@@ -88,25 +88,46 @@ function parseSitemapLocs(xml) {
 }
 
 function isDynamicLandingSitemapLoc(loc, contract) {
+  const pathname = localizedSitemapPathname(loc, contract);
+  if (!pathname) return false;
   const registry = contract.registry || {};
-  const base = String(registry.baseUrl || '').replace(/\/+$/, '');
   const prefix = normalizeDynamicLandingPrefix(registry);
-  const prefixSlug = prefix.startsWith('/') ? prefix.slice(1) : prefix;
-  const expectedPrefixNoSlash = `${base}/${prefixSlug}`;
-  if (!loc.startsWith(`${expectedPrefixNoSlash}/`)) return false;
-  const slug = loc.slice(expectedPrefixNoSlash.length + 1).replace(/\/+$/, '');
+  if (!pathname.startsWith(`${prefix}/`)) return false;
+  const slug = pathname.slice(prefix.length + 1).replace(/\/+$/, '');
   if (!slug || slug.includes('/') || slug.includes('.')) return false;
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
 }
 
 function isDynamicBlogSitemapLoc(loc, contract) {
-  const registry = contract.registry || {};
-  const base = String(registry.baseUrl || '').replace(/\/+$/, '');
-  const expectedPrefixNoSlash = `${base}/blog`;
-  if (!loc.startsWith(`${expectedPrefixNoSlash}/`)) return false;
-  const slug = loc.slice(expectedPrefixNoSlash.length + 1).replace(/\/+$/, '');
+  const pathname = localizedSitemapPathname(loc, contract);
+  if (!pathname) return false;
+  if (pathname === '/blog') return true;
+  if (!pathname.startsWith('/blog/')) return false;
+  const slug = pathname.slice('/blog/'.length).replace(/\/+$/, '');
   if (!slug || slug.includes('/') || slug.includes('.')) return false;
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+}
+
+function localizedSitemapPathname(loc, contract) {
+  let url;
+  let base;
+  try {
+    url = new URL(String(loc || ''));
+    base = new URL(String(contract.baseUrl || contract.registry?.baseUrl || ''));
+  } catch {
+    return '';
+  }
+  if (url.origin !== base.origin) return '';
+
+  const segments = url.pathname.split('/').filter(Boolean);
+  const defaultLocale = String(contract.defaultLocale || '');
+  const localizedLocales = new Set(
+    (contract.locales || [])
+      .map((locale) => String(locale || '').trim())
+      .filter((locale) => locale && locale !== defaultLocale),
+  );
+  if (localizedLocales.has(segments[0])) segments.shift();
+  return segments.length ? `/${segments.join('/')}` : '/';
 }
 
 function verifySitemapLocs(locs, contract, options = {}) {
