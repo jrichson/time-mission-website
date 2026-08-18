@@ -31,6 +31,7 @@ import {
   blogPostExternalUrl,
   blogPostHeadForDoc,
   blogPostHeroImage,
+  blogPostIsAvailableForProfile,
   blogPostShouldAppearInSitemap,
   blogPostShowsInPressRoom,
   slugIsValidForBlogPost,
@@ -255,6 +256,13 @@ describe('CMS blog posts', () => {
       locationSlug: null,
       showInPressRoom: true,
     })).toBe(true);
+    expect(blogPostIsAvailableForProfile(basePost, { internalRegion: 'us' })).toBe(true);
+    expect(blogPostIsAvailableForProfile(basePost, { internalRegion: 'europe' })).toBe(false);
+    expect(blogPostIsAvailableForProfile({
+      ...basePost,
+      locationSlug: null,
+      showInPressRoom: true,
+    }, { internalRegion: 'europe' })).toBe(true);
   });
 
   it('builds public paths, SEO fallback, sitemap state, and safe body HTML', () => {

@@ -1,5 +1,10 @@
 import { allLocations } from '../../data/locations';
 import type { LandingHeadInput } from '../seo/catalog';
+import {
+    activeSiteProfile,
+    isInternalLocation,
+    type SiteProfile,
+} from '../site-profile';
 
 const BLOG_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DEFAULT_BLOG_HERO_IMAGE = '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg';
@@ -287,6 +292,17 @@ export function blogPostCanonicalPath(slug: string): string {
 export function blogPostLocationSlug(doc: PayloadBlogPostDoc): string {
     const slug = cleanString(doc.locationSlug);
     return locationSlugs.has(slug) ? slug : '';
+}
+
+export function blogPostIsAvailableForProfile(
+    doc: PayloadBlogPostDoc,
+    profile: Pick<SiteProfile, 'internalRegion'> = activeSiteProfile,
+): boolean {
+    const locationSlug = blogPostLocationSlug(doc);
+    if (!locationSlug) return doc.showInPressRoom === true;
+
+    const location = allLocations.find(({ slug }) => slug === locationSlug);
+    return Boolean(location && isInternalLocation(location, profile));
 }
 
 export function blogPostHeroImage(doc: PayloadBlogPostDoc): string {

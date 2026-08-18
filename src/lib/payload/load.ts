@@ -1,7 +1,10 @@
 /** Build-time Payload REST client for CMS landings (`cms/` workspace). */
 
 import type { PayloadAnnouncementBannerDoc } from './announcement-banner-contract';
-import type { PayloadBlogPostDoc } from './blog-post-contract';
+import {
+    blogPostIsAvailableForProfile,
+    type PayloadBlogPostDoc,
+} from './blog-post-contract';
 import {
     cmsBuildStrict,
     validatedCmsOriginBase,
@@ -28,6 +31,7 @@ export {
     blogPostHeadForDoc,
     blogPostHeroImage,
     blogPostIsExternal,
+    blogPostIsAvailableForProfile,
     blogPostLocationSlug,
     blogPostPublishDate,
     blogPostShouldAppearInSitemap,
@@ -256,12 +260,13 @@ export async function getPublishedBlogPosts(origin?: string): Promise<PayloadBlo
     const readOrigin = publishedCmsOrigin({ label: 'blog posts', origin });
     if (!readOrigin) return [];
 
-    return fetchPayloadCollection<PayloadBlogPostDoc>({
+    const docs = await fetchPayloadCollection<PayloadBlogPostDoc>({
         collection: 'blog-posts',
         depth: 1,
         origin: readOrigin.base,
         strict: readOrigin.strict,
     });
+    return docs.filter((doc) => blogPostIsAvailableForProfile(doc));
 }
 
 export async function getPublishedSitePage(canonicalPath: string, origin?: string): Promise<PayloadSitePageDoc | null> {
