@@ -3,7 +3,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { loadJson, normalizeCanonicalPath } = require('./validation-core');
-const { loadAstroRenderedOutputFilesSet } = require('./load-astro-rendered-output-files.cjs');
+const {
+  astroRenderedManifestPath,
+  loadAstroRenderedOutputFilesSet,
+} = require('./load-astro-rendered-output-files.cjs');
 
 require('tsx/cjs/api').register();
 const {
@@ -188,6 +191,22 @@ function astroSourceForOutput(deployRoot, rel) {
   return fs.existsSync(candidate) ? candidate : null;
 }
 
+function redirectFileForSource(deployRoot, canonicalPath) {
+  const redirectsPath = path.join(deployRoot, '_redirects');
+  if (!fs.existsSync(redirectsPath)) return null;
+
+  const hasExactSource = fs.readFileSync(redirectsPath, 'utf8')
+    .split(/\r?\n/)
+    .some((line) => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) return false;
+      const [source, target, status] = trimmed.split(/\s+/);
+      return source === canonicalPath && Boolean(target) && /^\d{3}$/.test(status || '');
+    });
+
+  return hasExactSource ? redirectsPath : null;
+}
+
 /**
  * Resolve an internal site path against a deploy root: Astro routes.json first,
  * then static path under root (same rules as check-internal-links).
@@ -200,11 +219,18 @@ function resolveInternalDeployTarget(deployRoot, registry, href) {
   if (rel) {
     const routed = path.join(deployRoot, rel);
     if (fs.existsSync(routed)) return routed;
-    const astroRendered = loadAstroRenderedOutputFilesSet(deployRoot);
-    if (astroRendered.has(rel)) {
-      const astroSource = astroSourceForOutput(deployRoot, rel);
-      if (astroSource) return astroSource;
+
+    const renderedManifest = astroRenderedManifestPath(deployRoot);
+    if (fs.existsSync(renderedManifest)) {
+      const astroRendered = loadAstroRenderedOutputFilesSet(deployRoot);
+      if (astroRendered.has(rel)) {
+        const astroSource = astroSourceForOutput(deployRoot, rel);
+        if (astroSource) return astroSource;
+      }
     }
+
+    const redirectFile = redirectFileForSource(deployRoot, clean);
+    if (redirectFile) return redirectFile;
     // Mapped output not present in this tree (e.g. source repo vs dist); try static path.
   }
   const tail = clean.replace(/^\//, '');
