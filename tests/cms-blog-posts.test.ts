@@ -441,6 +441,7 @@ describe('CMS blog posts', () => {
     );
     expect(payloadDistCheck).toContain("fetchPublishedDocs('blog-posts')");
     expect(payloadDistCheck).toContain('blogPostDocLooksRenderable');
+    expect(payloadDistCheck).toContain('if (!blogPostIsAvailableForProfile(doc)) continue;');
     expect(payloadDistCheck).toContain('dist/blog/${slug}.html');
     expect(locationBlogPage).toContain(
       ".filter((location) => posts.some((post) => blogPostLocationSlug(post) === location.slug))",

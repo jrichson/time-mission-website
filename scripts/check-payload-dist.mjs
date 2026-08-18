@@ -23,6 +23,7 @@ const {
 const {
   blogPostCanonicalPath,
   blogPostDocLooksRenderable,
+  blogPostIsAvailableForProfile,
 } = require('../src/lib/payload/blog-post-contract.ts');
 
 const origin = process.env.PAYLOAD_CMS_ORIGIN || process.env.PAYLOAD_PUBLIC_CMS_ORIGIN || '';
@@ -98,6 +99,7 @@ for (const doc of landingDocs) {
 for (const doc of blogPostDocs) {
   const slug = typeof doc.slug === 'string' ? doc.slug : '';
   if (!blogPostDocLooksRenderable(doc)) continue;
+  if (!blogPostIsAvailableForProfile(doc)) continue;
   const canonicalPath = blogPostCanonicalPath(slug);
   if (!distCanonicalPathExists(canonicalPath)) {
     errors.push(`missing dist output for Payload blog post slug "${slug}" (expected dist/blog/${slug}.html or dist/blog/${slug}/index.html)`);
