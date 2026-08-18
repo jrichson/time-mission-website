@@ -12,6 +12,7 @@ import {
     blogPostExternalPublisher,
     blogPostHeroImage,
     blogPostLocationSlug,
+    blogPostShowsInPressRoom,
     getPublishedBlogPosts,
     sortBlogPosts,
     type PayloadBlogPostDoc,
@@ -70,9 +71,13 @@ const ld = serializeGraph(buildSimpleGraph([
                 <div class="tm-blog-grid">
                     {posts.map((post) => {
                         const location = allLocations.find((loc) => loc.slug === blogPostLocationSlug(post));
+                        const isPressRelease = blogPostShowsInPressRoom(post);
                         return (
                             <article class="tm-blog-card">
-                                <a href={blogPostCanonicalPath(String(post.slug))}>
+                                <a
+                                    href={blogPostCanonicalPath(String(post.slug))}
+                                    data-page-i18n={isPressRelease ? 'ignore' : undefined}
+                                >
                                     <img src={blogPostHeroImage(post)} alt="" width="720" height="480" loading="lazy" decoding="async" />
                                     <span>
                                         {blogPostExternalPublisher(post)

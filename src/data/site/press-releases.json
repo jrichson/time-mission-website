@@ -8,7 +8,7 @@
       "image": "/assets/photos/experiences/Time-Mission_Control-Room-1200.webp",
       "imageWidth": 1200,
       "imageHeight": 1800,
-      "href": "https://www.timemission.com/blog/boston-announcement",
+      "href": "/blog/boston-announcement",
       "ctaLabel": "Read Press Release"
     },
     {
@@ -19,7 +19,7 @@
       "image": "/assets/photos/TM-Groups-1200.webp",
       "imageWidth": 1200,
       "imageHeight": 800,
-      "href": "https://www.timemission.com/blog/time-mission-global-expansion-2027",
+      "href": "/blog/time-mission-global-expansion-2027",
       "ctaLabel": "Read Press Release"
     }
   ]

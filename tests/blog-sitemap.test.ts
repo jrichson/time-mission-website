@@ -52,7 +52,7 @@ describe('blog sitemap publication', () => {
     expect(body).not.toContain('<loc>https://www.timemission.com/blog/philadelphia</loc>');
   });
 
-  it('keeps empty blog routes out of the sitemap', async () => {
+  it('keeps code-backed press releases in the sitemap when the CMS is empty', async () => {
     process.env.PAYLOAD_CMS_BUILD_STRICT = 'true';
     process.env.PAYLOAD_CMS_ORIGIN = 'https://blog-sitemap-empty.example';
     mockCms([]);
@@ -60,6 +60,13 @@ describe('blog sitemap publication', () => {
     const response = await GET({} as never);
     const body = await response.text();
 
-    expect(body).not.toContain('<loc>https://www.timemission.com/blog');
+    expect(body).toContain('<loc>https://www.timemission.com/blog</loc>');
+    expect(body).toContain(
+      '<loc>https://www.timemission.com/blog/boston-announcement</loc>',
+    );
+    expect(body).toContain(
+      '<loc>https://www.timemission.com/blog/time-mission-global-expansion-2027</loc>',
+    );
+    expect(body).not.toContain('<loc>https://www.timemission.com/blog/boston</loc>');
   });
 });

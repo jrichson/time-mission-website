@@ -3,6 +3,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { PRESS_RELEASES_SNAPSHOT } from '../cms/migration-data/20260818_press_releases_snapshot';
+import {
+  PRESS_RELEASE_FALLBACK_POSTS,
+  mergePressReleaseFallbackPosts,
+} from '../src/data/site/press-release-posts';
 import { blogPostBodyHtml } from '../src/lib/payload/blog-post-contract';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -49,14 +53,14 @@ describe('press releases page', () => {
     expect(releases.items).toContainEqual(expect.objectContaining({
       id: 'boston-announcement',
       title: "Time Mission Announces New Immersive Adventure Steps from Boston's Faneuil Hall",
-      href: 'https://www.timemission.com/blog/boston-announcement',
+      href: '/blog/boston-announcement',
       image: '/assets/photos/experiences/Time-Mission_Control-Room-1200.webp',
       imageWidth: 1200,
       imageHeight: 1800,
     }));
     expect(releases.items).toContainEqual(expect.objectContaining({
       id: 'time-mission-global-expansion-2027',
-      href: 'https://www.timemission.com/blog/time-mission-global-expansion-2027',
+      href: '/blog/time-mission-global-expansion-2027',
       image: '/assets/photos/TM-Groups-1200.webp',
       imageWidth: 1200,
       imageHeight: 800,
@@ -72,6 +76,20 @@ describe('press releases page', () => {
     expect(blogPage).toContain('tm-blog-article-hero--press');
     expect(blogPage).toContain('/css/page-blog.css?v=3');
     expect(blogPage).toContain("data-page-i18n={isPressRelease ? 'ignore' : undefined}");
+  });
+
+  it('keeps both release detail pages available when the CMS is unavailable', () => {
+    expect(PRESS_RELEASE_FALLBACK_POSTS.map((post) => post.slug)).toEqual([
+      'boston-announcement',
+      'time-mission-global-expansion-2027',
+    ]);
+    expect(PRESS_RELEASE_FALLBACK_POSTS.every((post) => post.showInPressRoom)).toBe(true);
+    expect(PRESS_RELEASE_FALLBACK_POSTS.every((post) => post.includeInSitemap)).toBe(true);
+
+    const cmsBoston = { ...PRESS_RELEASE_FALLBACK_POSTS[0], id: 'cms-boston' };
+    const merged = mergePressReleaseFallbackPosts([cmsBoston]);
+    expect(merged).toHaveLength(2);
+    expect(merged.find((post) => post.slug === 'boston-announcement')?.id).toBe('cms-boston');
   });
 
   it('preserves both attached press releases as renderable rich text', () => {

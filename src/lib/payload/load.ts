@@ -13,6 +13,7 @@ import type { PayloadLandingSurface } from './landing-contract';
 import type { PayloadLandingSourceChannel } from './landing-contract';
 import type { PayloadLocationDetailsDoc } from './location-details-contract';
 import { fetchPayloadCollection } from './read-adapter';
+import { mergePressReleaseFallbackPosts } from '../../data/site/press-release-posts';
 export {
     announcementBannerDocLooksUsable,
     announcementBannerViewForDoc,
@@ -258,7 +259,7 @@ export async function getPublishedLocationDetails(origin?: string): Promise<Payl
  */
 export async function getPublishedBlogPosts(origin?: string): Promise<PayloadBlogPostDoc[]> {
     const readOrigin = publishedCmsOrigin({ label: 'blog posts', origin });
-    if (!readOrigin) return [];
+    if (!readOrigin) return mergePressReleaseFallbackPosts([]);
 
     const docs = await fetchPayloadCollection<PayloadBlogPostDoc>({
         collection: 'blog-posts',
@@ -266,7 +267,9 @@ export async function getPublishedBlogPosts(origin?: string): Promise<PayloadBlo
         origin: readOrigin.base,
         strict: readOrigin.strict,
     });
-    return docs.filter((doc) => blogPostIsAvailableForProfile(doc));
+    return mergePressReleaseFallbackPosts(
+        docs.filter((doc) => blogPostIsAvailableForProfile(doc)),
+    );
 }
 
 export async function getPublishedSitePage(canonicalPath: string, origin?: string): Promise<PayloadSitePageDoc | null> {
