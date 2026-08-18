@@ -107,6 +107,11 @@ describe('site deployment profiles', () => {
       pagePath: '/antwerp',
       bookingUrl: expect.stringContaining('experience-factory.com'),
     });
+    expect(publicLocationForProfile(location('eindhoven'), us)).toMatchObject({
+      pagePath: undefined,
+      externalUrl: 'https://time-mission-website-eu.pages.dev/eindhoven',
+      counterpartUrl: undefined,
+    });
   });
 
   it('keeps Brussels on its local page with the verified Roller checkout', () => {
@@ -147,7 +152,7 @@ describe('site deployment profiles', () => {
       address: {
         line1: 'Hermanus Boexstraat 4',
         city: 'Eindhoven',
-        zip: '5611 PJ',
+        zip: '5611 AJ',
         country: 'Netherlands',
       },
       bookingUrl: '',

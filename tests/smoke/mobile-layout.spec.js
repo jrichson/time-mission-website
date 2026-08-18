@@ -178,6 +178,20 @@ test.describe('small mobile (375x667)', () => {
     expect(box.width).toBeGreaterThanOrEqual(44);
     expect(box.height).toBeGreaterThanOrEqual(44);
 
+    const selectedLocationStyle = await locBtn.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return {
+        backgroundColor: style.backgroundColor,
+        borderTopWidth: style.borderTopWidth,
+        borderRadius: style.borderRadius,
+      };
+    });
+    expect(selectedLocationStyle).toEqual({
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      borderTopWidth: '0px',
+      borderRadius: '0px',
+    });
+
     const overflow = await page.evaluate(() => {
       return {
         scrollWidth: document.documentElement.scrollWidth,
@@ -223,6 +237,15 @@ test.describe('small mobile (375x667)', () => {
     const box = await ticketsBtn.boundingBox();
     expect(box).not.toBeNull();
     expect(box.height).toBeGreaterThanOrEqual(48);
+    const padding = await ticketsBtn.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return {
+        left: Number.parseFloat(style.paddingLeft),
+        right: Number.parseFloat(style.paddingRight),
+      };
+    });
+    expect(padding.left).toBeGreaterThanOrEqual(12);
+    expect(padding.right).toBeGreaterThanOrEqual(12);
   });
 
   test('open menu keeps the location label clear of the booking action', async ({ page }) => {

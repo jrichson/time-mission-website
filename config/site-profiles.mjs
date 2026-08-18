@@ -96,6 +96,7 @@ export function publicLocationForProfile(location, profile = resolveSiteProfile(
   const internalPath = `/${slug}`;
   const externalOrigin = profile.counterpartOrigin.replace(/\/+$/, '');
   const currentExternalUrl = String(location.externalUrl || '').trim();
+  const counterpartUrl = String(location.counterpartUrl || '').trim();
   const selfReferentialExternal = isInternal
     && currentExternalUrl
     && isSameSiteOrigin(new URL(currentExternalUrl, profile.origin).origin, profile.origin);
@@ -110,10 +111,13 @@ export function publicLocationForProfile(location, profile = resolveSiteProfile(
     pagePath: isInternal ? internalPath : undefined,
     externalUrl: isInternal
       ? (selfReferentialExternal ? undefined : location.externalUrl)
-      : `${externalOrigin}${internalPath}`,
+      : (counterpartUrl || `${externalOrigin}${internalPath}`),
+    counterpartUrl: undefined,
     bookingUrl: isInternal && !selfReferentialBooking ? location.bookingUrl : '',
     rollerCheckoutUrl: isInternal ? location.rollerCheckoutUrl : undefined,
     groupCheckoutUrl: isInternal ? location.groupCheckoutUrl : undefined,
+    groupCheckoutUrls: isInternal ? location.groupCheckoutUrls : undefined,
+    groupInquiryLabels: isInternal ? location.groupInquiryLabels : undefined,
     donationUrl: isInternal ? location.donationUrl : undefined,
     groupFormUrls: isInternal ? location.groupFormUrls : undefined,
     giftCardUrl: isInternal ? location.giftCardUrl : '',

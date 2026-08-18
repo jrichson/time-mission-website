@@ -407,6 +407,7 @@ test('EU navigation lists Europe before the United States', async ({ page }) => 
   await expect(page.locator('.locations-list .loc-group').first())
     .toHaveAttribute('data-location-region', 'europe');
   await expect(page.locator('.loc-row[href="/eindhoven"] .loc-state')).toHaveText('NL');
+  await expect(page.locator('.loc-row.is-coming-soon .loc-coming-soon-tag')).toHaveCount(0);
 
   await page.goto('/contact');
   await expect(page.locator('#location optgroup').first()).toHaveAttribute('label', 'Europe');

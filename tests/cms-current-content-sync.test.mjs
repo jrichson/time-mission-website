@@ -31,6 +31,12 @@ describe('CMS current content sync migration', () => {
     const philadelphiaNowOpenSnapshot = read(
       'cms/migration-data/20260807_philadelphia_now_open_snapshot.ts',
     );
+    const eindhovenAddressMigration = read(
+      'cms/migrations/20260817_090000_eindhoven_address_correction.ts',
+    );
+    const eindhovenAddressSnapshot = read(
+      'cms/migration-data/20260817_eindhoven_address_correction_snapshot.ts',
+    );
     const migrationIndex = read('cms/migrations/index.ts');
 
     expect(migrationIndex).toContain('20260605_143000_sync_current_cms_content');
@@ -44,6 +50,7 @@ describe('CMS current content sync migration', () => {
     expect(migrationIndex).toContain('20260730_090000_add_edison_location_enums');
     expect(migrationIndex).toContain('20260730_091000_seed_edison_and_philadelphia_group_form');
     expect(migrationIndex).toContain('20260807_090000_philadelphia_now_open');
+    expect(migrationIndex).toContain('20260817_090000_eindhoven_address_correction');
     expect(migration).toContain('"location_slug" = \'houston\'');
     expect(migration).toContain("'10am - 10pm'");
     expect(migration).toContain('Time Mission Houston – 25+ Interactive Mission Rooms');
@@ -93,5 +100,8 @@ describe('CMS current content sync migration', () => {
     expect(philadelphiaNowOpenMigration).toContain(
       "'static'::\"public\".\"enum_announcement_banners_ticker_behavior\"",
     );
+    expect(eindhovenAddressMigration).toContain('EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT');
+    expect(eindhovenAddressSnapshot).toContain("zip: '5611 AJ'");
+    expect(eindhovenAddressSnapshot).toContain('Hermanus Boexstraat 4, 5611 AJ Eindhoven');
   });
 });

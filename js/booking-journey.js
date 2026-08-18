@@ -116,10 +116,22 @@
         return (loc.bookingUrl && String(loc.bookingUrl).trim()) || '';
     }
 
-    function resolveGroupCheckoutUrl(loc) {
+    function resolveGroupCheckoutUrl(loc, groupType) {
         if (!loc) return '';
+        var normalizedGroupType = normalizeGroupType(groupType || '');
+        var groupCheckoutUrls = loc.groupCheckoutUrls || {};
+        var typedCheckout = normalizedGroupType
+            ? String(groupCheckoutUrls[normalizedGroupType] || '').trim()
+            : '';
         var groupCheckout = (loc.groupCheckoutUrl && String(loc.groupCheckoutUrl).trim()) || '';
-        return groupCheckout || resolveOpenCheckoutUrl(loc);
+        return typedCheckout || groupCheckout || resolveOpenCheckoutUrl(loc);
+    }
+
+    function resolveGroupInquiryLabel(loc, groupType, fallback) {
+        var normalizedGroupType = normalizeGroupType(groupType || '');
+        var labels = (loc && loc.groupInquiryLabels) || {};
+        return (normalizedGroupType && String(labels[normalizedGroupType] || '').trim())
+            || String(fallback || '').trim();
     }
 
     function isTemporarilyClosedLocation(loc) {
@@ -211,8 +223,11 @@
         }
 
         if (kind === 'group-tickets') {
-            var groupCheckoutUrl = (loc.groupCheckoutUrl && String(loc.groupCheckoutUrl).trim()) || '';
-            if (groupCheckoutUrl) return groupCheckoutUrl;
+            var resolvedGroupCheckoutUrl = resolveGroupCheckoutUrl(loc, opts.groupType || opts.pageGroupType || '');
+            if (isBriqProviderUrl(loc, resolvedGroupCheckoutUrl)) {
+                return briqWidgetDestination(loc, slug, resolvedGroupCheckoutUrl);
+            }
+            if (resolvedGroupCheckoutUrl) return resolvedGroupCheckoutUrl;
         }
 
         if (isBriqWidgetLocation(loc)) {
@@ -245,7 +260,10 @@
         if (!loc || !(isTicketKind(kind) || isGroupTicketKind(kind))) return false;
         var roller = (loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
         var groupCheckout = (loc.groupCheckoutUrl && String(loc.groupCheckoutUrl).trim()) || '';
-        return !!roller && (href === roller || href === groupCheckout);
+        var typedGroupCheckouts = Object.values(loc.groupCheckoutUrls || {}).map(function (value) {
+            return String(value || '').trim();
+        });
+        return !!roller && (href === roller || href === groupCheckout || typedGroupCheckouts.indexOf(href) !== -1);
     }
 
     function shouldUseBriqWidget(loc, href, kind) {
@@ -520,6 +538,7 @@
         isBookableLocation: isBookableLocation,
         isLeadOnlyComingSoon: isLeadOnlyComingSoon,
         resolveGroupCheckoutUrl: resolveGroupCheckoutUrl,
+        resolveGroupInquiryLabel: resolveGroupInquiryLabel,
         resolveLocationDestination: resolveLocationDestination,
         isTicketKind: isTicketKind,
         resolveIntent: resolveIntent,

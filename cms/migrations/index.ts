@@ -32,6 +32,7 @@ import * as migration_20260807_090000_philadelphia_now_open from './20260807_090
 import * as migration_20260810_090000_houston_philadelphia_jotform_routes from './20260810_090000_houston_philadelphia_jotform_routes';
 import * as migration_20260810_170000_houston_philadelphia_roller_routes from './20260810_170000_houston_philadelphia_roller_routes';
 import * as migration_20260811_210000_houston_back_to_school_pages from './20260811_210000_houston_back_to_school_pages';
+import * as migration_20260817_090000_eindhoven_address_correction from './20260817_090000_eindhoven_address_correction';
 
 export const migrations = [
   {
@@ -203,5 +204,10 @@ export const migrations = [
     up: migration_20260811_210000_houston_back_to_school_pages.up,
     down: migration_20260811_210000_houston_back_to_school_pages.down,
     name: '20260811_210000_houston_back_to_school_pages'
+  },
+  {
+    up: migration_20260817_090000_eindhoven_address_correction.up,
+    down: migration_20260817_090000_eindhoven_address_correction.down,
+    name: '20260817_090000_eindhoven_address_correction'
   },
 ];

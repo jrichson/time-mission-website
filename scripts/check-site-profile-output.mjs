@@ -107,7 +107,8 @@ function checkLocationIsolation() {
   const publicLocations = readJson(publicLocationsPath).locations || [];
   for (const location of publicLocations) {
     if (isInternalLocation(location, profile)) continue;
-    const expectedUrl = `${profile.counterpartOrigin}/${location.slug}`;
+    const sourceLocation = locations.find((candidate) => candidate.id === location.id);
+    const expectedUrl = sourceLocation?.counterpartUrl || `${profile.counterpartOrigin}/${location.slug}`;
     if (location.externalUrl !== expectedUrl) {
       errors.push(`${location.slug}: externalUrl must be ${expectedUrl}`);
     }
@@ -116,7 +117,10 @@ function checkLocationIsolation() {
       || location.bookingUrl
       || location.rollerCheckoutUrl
       || location.groupCheckoutUrl
+      || location.groupCheckoutUrls
+      || location.groupInquiryLabels
       || location.groupFormUrls
+      || location.counterpartUrl
       || location.briqWidget
     ) {
       errors.push(`${location.slug}: external location exposes local booking or route capabilities`);
@@ -283,7 +287,8 @@ function checkSitemapAndRedirects() {
       const sourcePath = locale === profile.defaultLocale
         ? route.canonicalPath
         : `/${locale}${route.canonicalPath}`;
-      const redirect = `${sourcePath} ${profile.counterpartOrigin}${route.canonicalPath} 301`;
+      const redirectTarget = location.counterpartUrl || `${profile.counterpartOrigin}${route.canonicalPath}`;
+      const redirect = `${sourcePath} ${redirectTarget} 301`;
       if (!redirects.includes(redirect)) {
         errors.push(`_redirects is missing ${redirect}`);
       }

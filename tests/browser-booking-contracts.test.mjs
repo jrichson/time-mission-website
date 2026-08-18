@@ -9,6 +9,44 @@ import {
 } from './browser-contract-helpers.mjs';
 
 describe('browser booking contracts', () => {
+  it('uses event-specific group package URLs and inquiry labels when configured', () => {
+    const { context, window } = createBrowserContext();
+    runScript('js/booking-journey.js', context);
+
+    const location = {
+      id: 'philadelphia',
+      slug: 'philadelphia',
+      bookingProvider: 'roller',
+      rollerCheckoutUrl: 'https://book.philadelphia.timemission.com/tickets',
+      groupCheckoutUrls: {
+        birthdays: 'https://book.philadelphia.timemission.com/birthdaypackage/en-us/products',
+        holidays: 'https://book.philadelphia.timemission.com/holidayparty/en-us/products',
+      },
+      groupInquiryLabels: {
+        birthdays: '25+ Group Inquire',
+        holidays: '25+ Group Inquire',
+      },
+    };
+
+    expect(window.TMBookingJourney.resolveIntent({
+      kind: 'group-tickets',
+      groupType: 'birthdays',
+      location,
+    })).toMatchObject({
+      href: location.groupCheckoutUrls.birthdays,
+      presentation: 'roller',
+      usesRollerCheckout: true,
+    });
+    expect(window.TMBookingJourney.resolveLocationDestination(location, {
+      kind: 'group-tickets',
+      groupType: 'holidays',
+    })).toBe(location.groupCheckoutUrls.holidays);
+    expect(window.TMBookingJourney.resolveGroupInquiryLabel(location, 'birthdays', 'Inquire Now'))
+      .toBe('25+ Group Inquire');
+    expect(window.TMBookingJourney.resolveGroupInquiryLabel(location, 'corporate', 'Plan An Event'))
+      .toBe('Plan An Event');
+  });
+
   it('keeps a coded Roller campaign URL in the on-page checkout provider', () => {
     const { context, window } = createBrowserContext();
     runScript('js/booking-journey.js', context);

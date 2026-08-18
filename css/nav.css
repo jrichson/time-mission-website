@@ -296,11 +296,11 @@
         align-items: center;
         gap: 0.35rem;
         max-width: min(12rem, 34vw);
-        padding: 0.45rem 0.65rem;
-        border: 1px solid rgba(0, 229, 255, 0.32);
-        border-radius: 999px;
-        background: rgba(0, 229, 255, 0.08);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        padding: 0.45rem 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
     }
 
     .location-btn.has-location #locationText {
@@ -446,23 +446,24 @@
     }
 
     .nav.has-location .btn-tickets {
-        --button-current-padding-x: 0.45rem;
-        font-size: 0.62rem;
+        --button-current-padding-x: 0.75rem;
+        padding-right: 0.75rem;
+        padding-left: 0.75rem;
+        font-size: 0.7rem;
     }
 
     .location-btn.has-location {
         gap: 0.2rem;
         max-width: min(8.75rem, 42vw);
-        padding: 0.35rem 0.38rem;
+        padding: 0.35rem 0;
     }
 
     .location-btn.has-location #locationText {
-        font-size: 0.58rem;
+        font-size: 0.68rem;
     }
 
     .location-btn.has-location svg:first-of-type {
-        width: 14px;
-        height: 14px;
+        display: none;
     }
 }
 
@@ -488,24 +489,23 @@
     }
 
     .nav.has-location .btn-tickets {
-        --button-current-padding-x: 0.42rem;
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-        font-size: 0.6rem;
+        --button-current-padding-x: 0.75rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        font-size: 0.68rem;
     }
 
     .location-btn.has-location {
         max-width: 7.25rem;
-        padding-left: 0.4rem;
-        padding-right: 0.4rem;
+        padding-left: 0;
+        padding-right: 0;
     }
 
     .location-btn.has-location #locationText {
-        font-size: 0.54rem;
+        font-size: 0.62rem;
     }
 
     .location-btn.has-location svg:first-of-type {
-        width: 14px;
-        height: 14px;
+        display: none;
     }
 }

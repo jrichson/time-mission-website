@@ -15,8 +15,9 @@ function groupFormUrl(locationId, groupType) {
   return locationById.get(locationId)?.groupFormUrls?.[groupType] || '';
 }
 
-function groupCheckoutUrl(locationId) {
-  return locationById.get(locationId)?.groupCheckoutUrl || '';
+function groupCheckoutUrl(locationId, groupType = '') {
+  const location = locationById.get(locationId);
+  return location?.groupCheckoutUrls?.[groupType] || location?.groupCheckoutUrl || '';
 }
 
 function waiverUrl(locationId) {

@@ -99,7 +99,7 @@ const page = definePage({ canonicalPath: '/locations' });
                                     <div class="loc-body">
                                         <div class="loc-name">
                                             {locationListLabel(loc)}
-                                            {locationStatusBadge(loc) ? (
+                                            {loc.status !== 'coming-soon' && locationStatusBadge(loc) ? (
                                                 <span class="loc-coming-soon-tag">{locationStatusBadge(loc)}</span>
                                             ) : null}
                                         </div>

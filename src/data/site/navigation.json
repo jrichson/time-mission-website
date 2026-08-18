@@ -13,9 +13,9 @@
   "groups": [
     { "label": "Birthdays", "href": "/groups/birthdays" },
     { "label": "Corporate", "href": "/groups/corporate" },
+    { "label": "Holidays", "href": "/groups/holidays" },
     { "label": "Field Trips", "href": "/groups/field-trips" },
-    { "label": "Bachelor / Bachelorette", "href": "/groups/bachelor-ette" },
     { "label": "Private Events", "href": "/groups/private-events" },
-    { "label": "Holidays", "href": "/groups/holidays" }
+    { "label": "Bachelor / Bachelorette", "href": "/groups/bachelor-ette" }
   ]
 }

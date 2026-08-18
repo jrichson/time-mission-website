@@ -185,6 +185,11 @@ test('Europe location fallback links preserve tracking params', async ({ page, i
     .toHaveAttribute('href', 'https://www.timemission.eu/antwerp?utm_source=paid&utm_campaign=spring');
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="brussels"]'))
     .toHaveAttribute('href', 'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=spring');
+  await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]'))
+    .toHaveAttribute(
+      'href',
+      'https://time-mission-website-eu.pages.dev/eindhoven?utm_source=paid&utm_campaign=spring',
+    );
 });
 
 test('hard refresh on shared pages clears stale saved location', async ({ page }) => {

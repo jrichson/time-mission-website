@@ -86,10 +86,10 @@ test('group event cards expose ticket booking and group inquiry triggers', async
   const expectedGroupTypes = [
     'birthdays',
     'corporate',
-    'bachelor-ette',
+    'holidays',
     'field-trips',
     'private-events',
-    'holidays',
+    'bachelor-ette',
   ];
   const cards = await page.locator('.event-type-card').evaluateAll((nodes) => nodes.map((card) => {
     const ticket = card.querySelector('.event-type-actions .btn-tickets');
@@ -103,6 +103,7 @@ test('group event cards expose ticket booking and group inquiry triggers', async
       inquiryIsTrigger: inquiry?.hasAttribute('data-tm-booking-trigger') || false,
       inquiryKind: inquiry?.getAttribute('data-tm-booking-kind') || '',
       groupType: inquiry?.getAttribute('data-tm-group-type') || '',
+      ticketGroupType: ticket?.getAttribute('data-tm-group-type') || '',
     };
   }));
 
@@ -111,6 +112,7 @@ test('group event cards expose ticket booking and group inquiry triggers', async
     expect(card.actionKinds).toEqual(['groups', 'group-tickets']);
     expect(card.ticketIsTrigger).toBe(true);
     expect(card.ticketKind).toBe('group-tickets');
+    expect(card.ticketGroupType).toBe(card.groupType);
     expect(card.inquiryIsTrigger).toBe(true);
     expect(card.inquiryKind).toBe('groups');
   }
@@ -118,6 +120,33 @@ test('group event cards expose ticket booking and group inquiry triggers', async
   const customEventCta = page.locator('.event-info-body .btn-link[data-tm-booking-kind="groups"]');
   await expect(customEventCta).toContainText('Plan Your Event');
   await expect(customEventCta).not.toHaveAttribute('data-tm-group-type', /./);
+});
+
+test('Philadelphia and Houston birthday and holiday cards use package CTAs', async ({ page }) => {
+  await page.goto('/groups.html');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  for (const locationId of ['philadelphia', 'houston']) {
+    await page.evaluate((id) => window.TM.select(id), locationId);
+
+    for (const groupType of ['birthdays', 'holidays']) {
+      const expectedHref = groupCheckoutUrl(locationId, groupType);
+      const href = await page.evaluate(({ id, type }) => window.TMBooking.getDestination({
+        kind: 'group-tickets',
+        groupType: type,
+        locationId: id,
+      }), { id: locationId, type: groupType });
+      expect(href).toBe(expectedHref);
+
+      const card = page.locator(`.event-type-card:has([data-tm-group-type="${groupType}"])`);
+      await expect(card.locator('[data-tm-booking-kind="groups"]')).toHaveText('25+ Group Inquire');
+      await expect(card.locator('[data-tm-booking-kind="group-tickets"]'))
+        .toHaveAttribute('data-tm-group-type', groupType);
+    }
+
+    await expect(page.locator('[data-tm-booking-kind="groups"][data-tm-group-type="corporate"]'))
+      .toHaveText('Plan An Event');
+  }
 });
 
 test('group event card Book Now uses group checkout when available', async ({ page }) => {

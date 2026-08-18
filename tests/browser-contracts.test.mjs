@@ -75,6 +75,24 @@ describe('browser data, consent, and i18n contracts', () => {
       expect(byId.get(locationId)?.groupCheckoutUrl).toBe(url);
     }
 
+    const groupPackageUrls = {
+      houston: {
+        birthdays: 'https://book.houston.timemission.com/birthdaypackage/en-us/products',
+        holidays: 'https://book.houston.timemission.com/holidayparty/en-us/products',
+      },
+      philadelphia: {
+        birthdays: 'https://book.philadelphia.timemission.com/birthdaypackage/en-us/products',
+        holidays: 'https://book.philadelphia.timemission.com/holidayparty/en-us/products',
+      },
+    };
+    for (const [locationId, urls] of Object.entries(groupPackageUrls)) {
+      expect(byId.get(locationId)?.groupCheckoutUrls).toEqual(urls);
+      expect(byId.get(locationId)?.groupInquiryLabels).toEqual({
+        birthdays: '25+ Group Inquire',
+        holidays: '25+ Group Inquire',
+      });
+    }
+
     const donationForms = {
       manassas: 'https://forms.roller.app/#/timemissionmanassasmall/648879c4625849e/form',
       'mount-prospect': 'https://forms.roller.app/#/timemissionmountprospect/953cef02271145c/form',
@@ -145,6 +163,10 @@ describe('browser data, consent, and i18n contracts', () => {
     expect(byId.get('brussels')?.navLabel).toBe('Belgium – Brussels');
     expect(byId.get('brussels')?.status).toBe('open');
     expect(byId.get('brussels')?.ticker).toBe('BRUSSELS NOW OPEN');
+    expect(byId.get('eindhoven')).toMatchObject({
+      counterpartUrl: 'https://time-mission-website-eu.pages.dev/eindhoven',
+      address: { zip: '5611 AJ' },
+    });
   });
 
   it('TMConsent.update notifies document and window listeners with the same state', () => {

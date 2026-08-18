@@ -192,6 +192,14 @@
         "private-events": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form",
         "holidays": "https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form"
       },
+      "groupCheckoutUrls": {
+        "birthdays": "https://book.philadelphia.timemission.com/birthdaypackage/en-us/products",
+        "holidays": "https://book.philadelphia.timemission.com/holidayparty/en-us/products"
+      },
+      "groupInquiryLabels": {
+        "birthdays": "25+ Group Inquire",
+        "holidays": "25+ Group Inquire"
+      },
       "navLabel": "PA – Philadelphia",
       "mapUrl": "https://maps.google.com/?q=1530+Chestnut+Street+Philadelphia+PA+19102",
       "faqs": [
@@ -634,6 +642,14 @@
         "private-events": "https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form",
         "holidays": "https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form"
       },
+      "groupCheckoutUrls": {
+        "birthdays": "https://book.houston.timemission.com/birthdaypackage/en-us/products",
+        "holidays": "https://book.houston.timemission.com/holidayparty/en-us/products"
+      },
+      "groupInquiryLabels": {
+        "birthdays": "25+ Group Inquire",
+        "holidays": "25+ Group Inquire"
+      },
       "navLabel": "TX – Houston",
       "mapUrl": "https://maps.google.com/?q=7620+Katy+Fwy+Suite+355+Houston+TX+77024",
       "faqs": [],
@@ -955,7 +971,7 @@
         "line1": "Hermanus Boexstraat 4",
         "city": "Eindhoven",
         "state": "",
-        "zip": "5611 PJ",
+        "zip": "5611 AJ",
         "country": "Netherlands"
       },
       "contact": {
@@ -964,8 +980,9 @@
       },
       "hours": {},
       "bookingUrl": "",
+      "counterpartUrl": "https://time-mission-website-eu.pages.dev/eindhoven",
       "navLabel": "Netherlands – Eindhoven",
-      "mapUrl": "https://maps.google.com/?q=Hermanus+Boexstraat+4+Eindhoven+5611+PJ+Netherlands",
+      "mapUrl": "https://maps.google.com/?q=Hermanus+Boexstraat+4+Eindhoven+5611+AJ+Netherlands",
       "faqs": [],
       "ticker": "FIRST NETHERLANDS LOCATION COMING SOON",
       "giftCardUrl": "",

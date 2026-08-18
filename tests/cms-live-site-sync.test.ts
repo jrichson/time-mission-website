@@ -12,6 +12,7 @@ import { EU_LOCATION_OPERATIONAL_SNAPSHOT } from '../cms/migration-data/20260731
 import { PHILADELPHIA_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260807_philadelphia_now_open_snapshot';
 import { HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT } from '../cms/migration-data/20260810_houston_philadelphia_jotform_routes_snapshot';
 import { HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT } from '../cms/migration-data/20260811_houston_back_to_school_pages_snapshot';
+import { EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT } from '../cms/migration-data/20260817_eindhoven_address_correction_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -74,10 +75,19 @@ describe('live-site-to-CMS sync snapshot', () => {
             const currentLocation = location.slug === PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.slug
                 ? { ...operationalLocation, ticker: PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.ticker }
                 : operationalLocation;
+            const addressCorrectedLocation = location.slug === EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.slug
+                ? {
+                    ...currentLocation,
+                    address: {
+                        ...currentLocation.address,
+                        zip: EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.zip,
+                    },
+                }
+                : currentLocation;
             const groupFormPatch = groupFormPatches.get(location.slug);
             return groupFormPatch
-                ? { ...currentLocation, groupFormUrls: groupFormPatch.groupFormUrls }
-                : currentLocation;
+                ? { ...addressCorrectedLocation, groupFormUrls: groupFormPatch.groupFormUrls }
+                : addressCorrectedLocation;
         });
 
         expect(LIVE_SITE_SYNC_SOURCE.commit).toBe('6cbae6adde40555535a271155b6c59d4f80db56c');
@@ -113,6 +123,12 @@ describe('live-site-to-CMS sync snapshot', () => {
         );
         const effectiveSnapshot = expected.map(({ path: routePath }) => {
             const page = pageSnapshotByPath.get(routePath);
+            if (page?.path === EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.page.path) {
+                return {
+                    ...page,
+                    metaDescription: EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.page.metaDescription,
+                };
+            }
             return page?.path === PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.path
                 ? { ...page, metaDescription: PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.metaDescription }
                 : page;

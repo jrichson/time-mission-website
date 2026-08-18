@@ -398,6 +398,16 @@
                 });
             }
 
+            document.querySelectorAll('[data-tm-booking-kind="groups"][data-tm-group-type]').forEach(el => {
+                const defaultLabel = el.dataset.tmDefaultLabel || el.textContent.trim();
+                const label = BookingJourney.resolveGroupInquiryLabel(
+                    loc,
+                    el.getAttribute('data-tm-group-type'),
+                    defaultLabel,
+                );
+                el.textContent = translateText(label, label);
+            });
+
             if (loc && loc.ticker && pageLocationSlug === normalizeLocationId(loc.slug || loc.id)) {
                 document.querySelectorAll('.ticker-track').forEach(track => {
                     // CMS and location tickers are already rendered with the active locale.

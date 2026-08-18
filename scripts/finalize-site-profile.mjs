@@ -266,23 +266,29 @@ function writeProfileRedirects() {
     .join('\n');
 
   const externalLocations = locations.filter((location) => !isInternalLocation(location, profile));
-  const externalRoutes = new Set(externalLocations.map((location) => `/${location.slug}`));
+  const externalRoutes = new Map(
+    externalLocations.map((location) => [
+      `/${location.slug}`,
+      String(location.counterpartUrl || '').trim(),
+    ]),
+  );
   for (const route of routesDocument.routes || []) {
     const location = locationForCanonicalPath(route.canonicalPath, locations);
     if (location && !isInternalLocation(location, profile)) {
-      externalRoutes.add(route.canonicalPath);
+      externalRoutes.set(route.canonicalPath, String(location.counterpartUrl || '').trim());
     }
   }
 
   const regionalRedirects = [];
-  for (const canonicalPath of externalRoutes) {
+  for (const [canonicalPath, counterpartUrl] of externalRoutes) {
+    const target = counterpartUrl || `${profile.counterpartOrigin}${canonicalPath}`;
     regionalRedirects.push(
-      `${canonicalPath} ${profile.counterpartOrigin}${canonicalPath} 301`,
+      `${canonicalPath} ${target} 301`,
     );
     for (const locale of profile.locales) {
       if (locale === profile.defaultLocale) continue;
       regionalRedirects.push(
-        `/${locale}${canonicalPath} ${profile.counterpartOrigin}${canonicalPath} 301`,
+        `/${locale}${canonicalPath} ${target} 301`,
       );
     }
   }

@@ -51,9 +51,12 @@ export interface LocationRecord {
     bookingUrl: string;
     donationUrl?: string;
     externalUrl?: string;
+    counterpartUrl?: string;
     pagePath?: string;
     rollerCheckoutUrl?: string;
     groupCheckoutUrl?: string;
+    groupCheckoutUrls?: Record<string, string>;
+    groupInquiryLabels?: Record<string, string>;
     bookingProvider?: 'roller' | 'briq' | 'clubspeed' | 'experience-factory';
     briqWidgetDomain?: string;
     briqWidget?: {
@@ -99,8 +102,9 @@ function resolvedLocationsPath(): string {
     return path.isAbsolute(cleanedPath) ? cleanedPath : path.resolve(repoRoot, cleanedPath);
 }
 
+const locationDataPath = resolvedLocationsPath();
+
 function readLocationsDocument(): LocationsDocument {
-    const locationDataPath = resolvedLocationsPath();
     if (!locationDataPath) return fallbackLocationsJson as LocationsDocument;
 
     try {
@@ -119,6 +123,9 @@ function readLocationsDocument(): LocationsDocument {
 const sourceLocationsDocument = readLocationsDocument();
 export const locationsDocument = {
     ...sourceLocationsDocument,
-    locations: publicLocationsForProfile(sourceLocationsDocument.locations) as LocationRecord[],
+    // Build-time resolved data has already been filtered for the active site profile.
+    locations: locationDataPath
+        ? sourceLocationsDocument.locations
+        : publicLocationsForProfile(sourceLocationsDocument.locations) as LocationRecord[],
 };
 export const allLocations = locationsDocument.locations;

@@ -22,11 +22,11 @@
 
     <section class="tm-resource-section">
         <div class="tm-resource-shell">
-            <div class="tm-resource-empty">
-                <p class="tm-resource-kicker">Coming Soon</p>
-                <h2>No public releases yet</h2>
-                <p>We are preparing the release archive. For a current deadline, contact us and include your outlet, topic, and publish date.</p>
-                <a href="/contact" class="tm-resource-button">Contact Media Team</a>
-            </div>
+            <article class="tm-resource-release" aria-labelledby="boston-announcement-title">
+                <p class="tm-resource-kicker">Boston Announcement</p>
+                <h2 id="boston-announcement-title">Time Mission Is Coming to Boston</h2>
+                <p>Time Mission Boston is coming soon at 200 State St, Boston, MA 02109. Follow the official Boston location page for confirmed opening and ticket updates.</p>
+                <a href="/boston" class="tm-resource-button">View Boston Location</a>
+            </article>
         </div>
     </section>

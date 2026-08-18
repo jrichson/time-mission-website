@@ -70,7 +70,8 @@ body.tm-resource-page {
 .tm-resource-hero h1,
 .tm-resource-section h2,
 .tm-resource-tile h3,
-.tm-resource-empty h2 {
+.tm-resource-empty h2,
+.tm-resource-release h2 {
     font-family: var(--display, "Bebas Neue", sans-serif);
     letter-spacing: 0;
     text-wrap: balance;
@@ -87,6 +88,7 @@ body.tm-resource-page {
 .tm-resource-copy p,
 .tm-resource-tile p,
 .tm-resource-empty p,
+.tm-resource-release p,
 .tm-resource-note {
     color: var(--tm-resource-muted);
     line-height: 1.65;
@@ -215,7 +217,8 @@ body.tm-resource-page {
 }
 
 .tm-resource-section h2,
-.tm-resource-empty h2 {
+.tm-resource-empty h2,
+.tm-resource-release h2 {
     margin: 0.2rem 0 0;
     font-size: 3.8rem;
     line-height: 0.98;
@@ -290,21 +293,26 @@ body.tm-resource-page {
 .tm-resource-copy .tm-resource-button,
 .tm-resource-copy .tm-resource-secondary,
 .tm-resource-empty .tm-resource-button,
-.tm-resource-empty .tm-resource-secondary {
+.tm-resource-empty .tm-resource-secondary,
+.tm-resource-release .tm-resource-button,
+.tm-resource-release .tm-resource-secondary {
     margin-top: 0.9rem;
 }
 
-.tm-resource-empty {
+.tm-resource-empty,
+.tm-resource-release {
     width: min(100%, 44rem);
     border-left: 3px solid var(--tm-resource-accent);
     padding-left: 1.3rem;
 }
 
-.tm-resource-empty .tm-resource-kicker {
+.tm-resource-empty .tm-resource-kicker,
+.tm-resource-release .tm-resource-kicker {
     margin: 0;
 }
 
-.tm-resource-empty h2 + p {
+.tm-resource-empty h2 + p,
+.tm-resource-release h2 + p {
     margin-top: 1rem;
 }
 
@@ -388,7 +396,8 @@ body.tm-resource-page {
     }
 
     .tm-resource-section h2,
-    .tm-resource-empty h2 {
+    .tm-resource-empty h2,
+    .tm-resource-release h2 {
         font-size: 3rem;
     }
 }
