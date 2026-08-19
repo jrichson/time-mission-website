@@ -324,6 +324,43 @@ describe('analytics routing context', () => {
     });
   });
 
+  it('tracks press coverage partner clicks without URL query data', () => {
+    const { context, window, document } = createBrowserContext(grantedConsentWindow());
+    window.location.pathname = '/press/in-the-news';
+    const anchor = createAnchor(
+      'https://www.masslive.com/boston/story.html?auth=secret#gallery',
+      {
+        attrs: {
+          'data-tm-analytics-content-id': 'masslive-boston-opening-2027',
+          'data-tm-analytics-event': 'press_coverage_click',
+          'data-tm-analytics-link-surface': 'thumbnail',
+          'data-tm-analytics-partner': 'MassLive',
+        },
+      },
+    );
+
+    runScript('js/analytics.js', context);
+    document.dispatchEvent({
+      type: 'click',
+      target: {
+        closest(selector) {
+          return selector === 'a[href]' ? anchor : null;
+        },
+      },
+    });
+
+    const pressClick = window.dataLayer.find(
+      (entry) => entry && entry.event_name === 'PRESS_COVERAGE_CLICK',
+    );
+    expect(pressClick.parameters).toMatchObject({
+      CONTENT_ID: 'masslive-boston-opening-2027',
+      LINK_PATH: 'https://www.masslive.com/boston/story.html',
+      LINK_SURFACE: 'thumbnail',
+      PARTNER_NAME: 'MassLive',
+    });
+    expect(JSON.stringify(pressClick)).not.toContain('auth=secret');
+  });
+
   it('pushes newsletter registrations to GTM with hashed user data after accepted submission', async () => {
     const form = createNewsletterForm();
     const redirects = [];

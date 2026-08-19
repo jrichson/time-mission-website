@@ -25,6 +25,7 @@
             contact_form_submit_success: 'CONTACT_FORM_SUBMIT_SUCCESS',
             group_form_submit_success: 'GROUP_FORM_SUBMIT_SUCCESS',
             nav_cta_click: 'NAV_CTA_CLICK',
+            press_coverage_click: 'PRESS_COVERAGE_CLICK',
             site_contract_stale: 'SITE_CONTRACT_STALE',
         },
         parameters: {
@@ -54,6 +55,9 @@
             form_name: 'FORM_NAME',
             form_subject: 'FORM_SUBJECT',
             provider: 'PROVIDER',
+            partner_name: 'PARTNER_NAME',
+            content_id: 'CONTENT_ID',
+            link_surface: 'LINK_SURFACE',
             consent_snapshot: 'CONSENT_SNAPSHOT',
             consent_profile: 'CONSENT_PROFILE',
             timestamp: 'TIMESTAMP',
@@ -521,6 +525,21 @@
                             cta_id: 'email_link',
                             link_path: 'mailto',
                         });
+                        return;
+                    }
+
+                    if (a.getAttribute('data-tm-analytics-event') === 'press_coverage_click') {
+                        var partnerName = a.getAttribute('data-tm-analytics-partner') || '';
+                        var contentId = a.getAttribute('data-tm-analytics-content-id') || '';
+                        var linkSurface = a.getAttribute('data-tm-analytics-link-surface') || '';
+                        if (partnerName && contentId && linkSurface && path) {
+                            track('press_coverage_click', {
+                                partner_name: partnerName.slice(0, 80),
+                                content_id: contentId.slice(0, 120),
+                                link_surface: linkSurface.slice(0, 40),
+                                link_path: path,
+                            });
+                        }
                         return;
                     }
 

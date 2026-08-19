@@ -21,6 +21,7 @@ Normalized events use a small shared schema so GTM `dataLayer` pushes and a futu
 | `location_slug` / `region` / `location_name` | string | Non-PII location routing context. `js/analytics.js` enriches events from explicit params, destination URLs, page location, selected site location, or form location where available. |
 | `form_name` / `form_subject` | string | Non-PII form context. `form_subject` must be a controlled option id, not free text. |
 | `provider` | string | Non-PII integration/source id such as `pipedrive` or `jotform` for group-form thank-you pages. |
+| `partner_name` / `content_id` / `link_surface` | string | Controlled press-coverage context. `partner_name` is the publisher, `content_id` is the article slug, and `link_surface` identifies the thumbnail or button. |
 | `utm_*` / click IDs | string | Campaign attribution context (for example `utm_source`, `utm_campaign`, `gclid`, `fbclid`, `msclkid`) captured from landing URL and persisted in local storage. |
 
 ## Forbidden (PII and free text)
@@ -43,6 +44,8 @@ Legacy offsite Pipedrive group forms redirect to `/group-form-thank-you/{locatio
 The active on-site Jotform group forms are hosted from compatible source fields at `/groups/inquire/{location_slug}/{form_subject}`. Form `261936424348059` serves Manassas, Mount Prospect, and Orland Park. Houston form `262186150244149` and Philadelphia form `262217710699160` remain configured in source, but their public inquiry destinations temporarily hand off to Roller until the franchisee Pipedrive actions pass acceptance testing. Active Jotform accounts should redirect successful submissions to `/group-form-thank-you/jotform?location={location}&source={typeA}` using their `location` and `typeA` replace tags. The thank-you runtime validates that the non-PII source URL matches an allowed inquiry route, then emits the same `GROUP_FORM_SUBMIT_SUCCESS` event with `provider: "jotform"` and `form_name: "jotform_group"`.
 
 The Group Specialist phone link on those inquiry pages uses the existing `PHONE_CLICK` event with `cta_id: "group_form_phone"`. GA4's normal page view plus `GROUP_FORM_SUBMIT_SUCCESS` and that phone CTA provide the visit-to-submit and visit-to-call comparison without sending a telephone number or visitor details to the data layer.
+
+External links on `/press/in-the-news` emit `PRESS_COVERAGE_CLICK` with `partner_name`, `content_id`, `link_surface`, and a query-free `link_path`. The thumbnail and button use distinct surface values so partner reports can distinguish the two placements without collecting visitor identity.
 
 Separately, the head bootstrap pushes a one-time `dataLayer` config event (`tm_tagging_config`) with non-PII routing metadata for web+server GTM orchestration (`tagging_mode`, server URL/path, web container ID, `consent_profile`). This is operator config context, not a conversion event.
 

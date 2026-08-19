@@ -145,6 +145,13 @@ test('in the news shows the MassLive article and its thumbnail', async ({ page }
   await expect(thumbnailLink).toHaveAttribute('href', MASSLIVE_ARTICLE_URL);
   await expect(thumbnailLink).toHaveAttribute('target', '_blank');
   await expect(thumbnailLink).toHaveAttribute('rel', 'noopener noreferrer');
+  await expect(thumbnailLink).toHaveAttribute('data-tm-analytics-event', 'press_coverage_click');
+  await expect(thumbnailLink).toHaveAttribute('data-tm-analytics-partner', 'MassLive');
+  await expect(thumbnailLink).toHaveAttribute(
+    'data-tm-analytics-content-id',
+    'masslive-boston-opening-2027',
+  );
+  await expect(thumbnailLink).toHaveAttribute('data-tm-analytics-link-surface', 'thumbnail');
 
   const thumbnail = thumbnailLink.locator('img');
   await expect(thumbnail).toBeVisible();
@@ -154,4 +161,16 @@ test('in the news shows the MassLive article and its thumbnail', async ({ page }
   const cta = article.getByRole('link', { name: 'Read on MassLive', exact: true });
   await expect(cta).toHaveAttribute('href', MASSLIVE_ARTICLE_URL);
   await expect(cta).toHaveAttribute('target', '_blank');
+  await expect(cta).toHaveAttribute('data-tm-analytics-link-surface', 'button');
+
+  await cta.click();
+  const pressClick = await page.evaluate(() => window.dataLayer.find(
+    (entry) => entry && entry.event_name === 'PRESS_COVERAGE_CLICK',
+  ));
+  expect(pressClick.parameters).toMatchObject({
+    CONTENT_ID: 'masslive-boston-opening-2027',
+    LINK_PATH: MASSLIVE_ARTICLE_URL,
+    LINK_SURFACE: 'button',
+    PARTNER_NAME: 'MassLive',
+  });
 });

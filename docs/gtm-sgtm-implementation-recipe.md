@@ -89,7 +89,7 @@ Create **Custom Event Trigger** (for normalized app events):
 - Event name regex:
 
 ```regex
-^(AD_LANDING|CTA_CLICK|BOOKING_CLICK|CHECKOUT_START|PHONE_CLICK|EMAIL_CLICK|GIFT_CARD_CLICK|LOCATION_SELECT|TICKET_PANEL_OPEN|TICKET_PANEL_CLOSE|MISSION_CARD_CLICK|CONTACT_FORM_FOCUS|CONTACT_FORM_SUBMIT_ATTEMPT|CONTACT_FORM_SUBMIT_SUCCESS|GROUP_FORM_SUBMIT_SUCCESS|NAV_CTA_CLICK)$
+^(AD_LANDING|CTA_CLICK|BOOKING_CLICK|CHECKOUT_START|PHONE_CLICK|EMAIL_CLICK|GIFT_CARD_CLICK|LOCATION_SELECT|TICKET_PANEL_OPEN|TICKET_PANEL_CLOSE|MISSION_CARD_CLICK|CONTACT_FORM_FOCUS|CONTACT_FORM_SUBMIT_ATTEMPT|CONTACT_FORM_SUBMIT_SUCCESS|GROUP_FORM_SUBMIT_SUCCESS|NAV_CTA_CLICK|PRESS_COVERAGE_CLICK)$
 ```
 
 ## 3) Web GTM: tags
@@ -118,6 +118,10 @@ Create **Custom Event Trigger** (for normalized app events):
   - `form_name` = `{{dlv.parameters.form_name}}`
   - `form_subject` = `{{dlv.parameters.form_subject}}`
   - `provider` = `{{dlv.parameters.provider}}`
+  - `partner_name` = `{{dlv.parameters.partner_name}}`
+  - `content_id` = `{{dlv.parameters.content_id}}`
+  - `link_surface` = `{{dlv.parameters.link_surface}}`
+  - `link_path` = `{{dlv.parameters.link_path}}`
   - Plus mapped keys from `{{dlv.parameters}}` as needed in your GA4 schema
 - Trigger: `CE - tracked events`
 - Consent checks: enabled

@@ -16,6 +16,7 @@
     "contact_form_submit_success": "CONTACT_FORM_SUBMIT_SUCCESS",
     "group_form_submit_success": "GROUP_FORM_SUBMIT_SUCCESS",
     "nav_cta_click": "NAV_CTA_CLICK",
+    "press_coverage_click": "PRESS_COVERAGE_CLICK",
     "site_contract_stale": "SITE_CONTRACT_STALE"
   },
   "parameters": {
@@ -45,6 +46,9 @@
     "form_name": "FORM_NAME",
     "form_subject": "FORM_SUBJECT",
     "provider": "PROVIDER",
+    "partner_name": "PARTNER_NAME",
+    "content_id": "CONTENT_ID",
+    "link_surface": "LINK_SURFACE",
     "consent_snapshot": "CONSENT_SNAPSHOT",
     "consent_profile": "CONSENT_PROFILE",
     "timestamp": "TIMESTAMP",
