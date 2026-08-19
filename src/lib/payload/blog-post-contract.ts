@@ -376,12 +376,20 @@ export function blogPostDocLooksRenderable(doc: PayloadBlogPostDoc): boolean {
     return true;
 }
 
-export function blogPostShouldAppearInSitemap(doc: PayloadBlogPostDoc): boolean {
-    return blogPostDocLooksRenderable(doc) && doc.includeInSitemap !== false;
-}
-
 export function blogPostShowsInPressRoom(doc: PayloadBlogPostDoc): boolean {
     return blogPostDocLooksRenderable(doc) && doc.showInPressRoom === true;
+}
+
+export function blogPostIsPressCoverage(doc: PayloadBlogPostDoc): boolean {
+    return blogPostShowsInPressRoom(doc) && blogPostIsExternal(doc);
+}
+
+export function blogPostShouldHaveDetailPage(doc: PayloadBlogPostDoc): boolean {
+    return blogPostDocLooksRenderable(doc) && !blogPostIsPressCoverage(doc);
+}
+
+export function blogPostShouldAppearInSitemap(doc: PayloadBlogPostDoc): boolean {
+    return blogPostShouldHaveDetailPage(doc) && doc.includeInSitemap !== false;
 }
 
 export function blogPostHeadForDoc(doc: PayloadBlogPostDoc): LandingHeadInput | null {

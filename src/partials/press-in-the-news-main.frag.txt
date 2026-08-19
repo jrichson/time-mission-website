@@ -6,7 +6,7 @@
         <div class="tm-resource-shell tm-resource-hero-copy">
             <p class="tm-resource-kicker">Coverage</p>
             <h1>IN THE NEWS</h1>
-            <p>Press mentions, local opening stories, broadcast coverage, and editorial features will be collected here.</p>
+            <p>Explore press mentions, local opening stories, broadcast coverage, and editorial features about Time Mission.</p>
             <a href="/press" class="tm-resource-secondary">Back to Press Room</a>
         </div>
     </section>
@@ -19,14 +19,3 @@
             <a href="/press/brand-guidelines">Brand Guidelines</a>
         </div>
     </nav>
-
-    <section class="tm-resource-section">
-        <div class="tm-resource-shell">
-            <div class="tm-resource-empty">
-                <p class="tm-resource-kicker">Coverage Archive</p>
-                <h2>Coverage archive coming soon</h2>
-                <p>Have a published story to share? Send the link so the team can review it for the archive.</p>
-                <a href="/contact" class="tm-resource-button">Send a Coverage Link</a>
-            </div>
-        </div>
-    </section>

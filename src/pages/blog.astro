@@ -7,11 +7,11 @@ import {
     blogLocationCanonicalPath,
     blogPostCanonicalPath,
     blogPostDateLabel,
-    blogPostDocLooksRenderable,
     blogPostExcerptHtmlForDoc,
     blogPostExternalPublisher,
     blogPostHeroImage,
     blogPostLocationSlug,
+    blogPostShouldHaveDetailPage,
     blogPostShowsInPressRoom,
     getPublishedBlogPosts,
     sortBlogPosts,
@@ -21,7 +21,7 @@ import {
 export const prerender = true;
 
 const page = definePage({ canonicalPath: '/blog' });
-const posts = sortBlogPosts((await getPublishedBlogPosts()).filter(blogPostDocLooksRenderable));
+const posts = sortBlogPosts((await getPublishedBlogPosts()).filter(blogPostShouldHaveDetailPage));
 const postsByLocation = new Map<string, PayloadBlogPostDoc[]>();
 for (const post of posts) {
     const locationSlug = blogPostLocationSlug(post);

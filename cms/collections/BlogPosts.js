@@ -129,7 +129,7 @@ export const BlogPosts = {
     },
     preview: (data) => (data?.id ? `/preview/blog/${data.id}` : null),
     description:
-      'Rich articles and shared links that use the public Time Mission design on the main blog and location blogs after deploy.',
+      'Original Time Mission articles and Press Room shared links that go live after deploy.',
   },
   access: {
     admin: canManageBlogPosts,
@@ -158,7 +158,7 @@ export const BlogPosts = {
       defaultValue: true,
       admin: {
         position: 'sidebar',
-        description: 'If off, the post can still exist but will be omitted from sitemap.xml.',
+        description: 'Applies to original articles and shared links outside Press Room. In the News links are always omitted.',
       },
     },
     {
@@ -168,7 +168,8 @@ export const BlogPosts = {
       label: 'Show in Press Room',
       admin: {
         position: 'sidebar',
-        description: 'If on, this published post also appears on the Press Releases page after deploy.',
+        description:
+          'If on, original articles appear under Press Releases and shared links appear under In the News after deploy.',
       },
     },
     {
@@ -196,7 +197,7 @@ export const BlogPosts = {
               ],
               admin: {
                 description:
-                  'Original articles are written here. Shared links wrap a press release or external story in the Time Mission blog design.',
+                  'Original articles are published on Time Mission. Shared links shown in Press Room appear under In the News and open the source directly.',
               },
             },
             {
@@ -231,7 +232,7 @@ export const BlogPosts = {
                   label: 'Location',
                   options: LOCATION_DETAIL_OPTIONS,
                   admin: {
-                    description: 'The post will also appear on this location’s blog. Leave blank only for a company-wide Press Room post.',
+                    description: 'Original articles also appear on this location’s blog. Leave blank for company-wide Press Room content.',
                   },
                   validate: validateBlogLocation,
                 },

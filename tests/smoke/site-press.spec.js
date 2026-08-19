@@ -1,5 +1,7 @@
 const { test, expect } = require('@playwright/test');
-const { prepareSiteSmoke } = require('./site-helpers');
+const { path, prepareSiteSmoke, REPO_ROOT } = require('./site-helpers');
+
+const MASSLIVE_ARTICLE_URL = 'https://www.masslive.com/boston/2026/08/new-escape-room-video-game-experience-expected-to-open-in-boston-in-2027.html';
 
 test.beforeEach(async ({ page }) => {
   await prepareSiteSmoke(page);
@@ -96,4 +98,35 @@ test('press release detail pages retain the full supplied articles', async ({ pa
   await expect(page.locator('.tm-blog-body')).toContainText(
     'Pieter Martens, CEO and Founder of Time Mission',
   );
+});
+
+test('in the news shows the MassLive article and its thumbnail', async ({ page }) => {
+  await page.route('https://www.masslive.com/resizer/**', (route) => route.fulfill({
+    contentType: 'image/jpeg',
+    path: path.join(REPO_ROOT, 'assets/photos/TM-Groups.jpg'),
+  }));
+  await page.goto('/press/in-the-news');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('IN THE NEWS');
+  const article = page.locator('.tm-resource-release', {
+    has: page.getByRole('heading', {
+      name: 'New escape room, video game experience expected to open in Boston in 2027',
+    }),
+  });
+  await expect(article).toContainText('MassLive · August 18, 2026');
+  await expect(article).toContainText('Grab your crew and race against the clock');
+
+  const thumbnailLink = article.locator('.tm-resource-release-media');
+  await expect(thumbnailLink).toHaveAttribute('href', MASSLIVE_ARTICLE_URL);
+  await expect(thumbnailLink).toHaveAttribute('target', '_blank');
+  await expect(thumbnailLink).toHaveAttribute('rel', 'noopener noreferrer');
+
+  const thumbnail = thumbnailLink.locator('img');
+  await expect(thumbnail).toBeVisible();
+  await expect(thumbnail).toHaveAttribute('src', /masslive\.com\/resizer/);
+  await expect.poll(() => thumbnail.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
+
+  const cta = article.getByRole('link', { name: 'Read on MassLive', exact: true });
+  await expect(cta).toHaveAttribute('href', MASSLIVE_ARTICLE_URL);
+  await expect(cta).toHaveAttribute('target', '_blank');
 });

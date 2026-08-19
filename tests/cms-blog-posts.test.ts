@@ -32,7 +32,9 @@ import {
   blogPostHeadForDoc,
   blogPostHeroImage,
   blogPostIsAvailableForProfile,
+  blogPostIsPressCoverage,
   blogPostShouldAppearInSitemap,
+  blogPostShouldHaveDetailPage,
   blogPostShowsInPressRoom,
   slugIsValidForBlogPost,
   type PayloadBlogPostDoc,
@@ -133,7 +135,9 @@ describe('CMS blog posts', () => {
     const heroPicker = read('cms/components/BlogHeroPicker.tsx');
     const uploadRoute = read('cms/app/blog/media/route.ts');
     const preview = read('cms/app/preview/blog/[id]/page.tsx');
+    const publicBlogRoute = read('src/pages/blog.astro');
     const publicPostRoute = read('src/pages/blog/[slug].astro');
+    const sitemapRoute = read('src/pages/sitemap.xml.ts');
 
     expect(home).toContain("href: '/blog'");
     expect(home).not.toContain('/admin/collections/blog-posts');
@@ -148,7 +152,9 @@ describe('CMS blog posts', () => {
     expect(uploadRoute).toContain("collection: 'media'");
     expect(uploadRoute).toContain('MAX_UPLOAD_BYTES');
     expect(preview).toContain('href={`/blog/${post.id}`}');
-    expect(publicPostRoute).toContain("const isPressRelease = post ? blogPostShowsInPressRoom(post) : false");
+    expect(publicBlogRoute).toContain('.filter(blogPostShouldHaveDetailPage)');
+    expect(publicPostRoute).toContain('.filter(blogPostShouldHaveDetailPage)');
+    expect(sitemapRoute).toContain('blogPosts.filter(blogPostShouldHaveDetailPage)');
     expect(publicPostRoute).toContain("const postBackHref = isPressRelease");
     expect(publicPostRoute).toContain("? '/press/releases'");
     expect(publicPostRoute).toContain('blogLocationCanonicalPath(location.slug)');
@@ -164,6 +170,7 @@ describe('CMS blog posts', () => {
     const migration = read('cms/migrations/20260624_090000_blog_press_donation_eindhoven.ts');
     const richTextMigration = read('cms/migrations/20260625_090000_blog_posts_rich_text.ts');
     const authoringMigration = read('cms/migrations/20260730_170000_blog_authoring_and_media.ts');
+    const coverageMigration = read('cms/migrations/20260819_090000_masslive_press_coverage.ts');
     const enumMigration = read('cms/migrations/20260624_085000_add_eindhoven_location_enum.ts');
     const migrationIndex = read('cms/migrations/index.ts');
     const slugField = findField(BlogPosts.fields, 'slug');
@@ -179,7 +186,7 @@ describe('CMS blog posts', () => {
 
     expect(config).toContain('BlogPosts as CollectionConfig');
     expect(BlogPosts.labels.singular).toBe('Blog Post');
-    expect(BlogPosts.admin.description).toContain('main blog');
+    expect(BlogPosts.admin.description).toContain('Press Room shared links');
     expect(BlogPosts.admin.defaultColumns).toEqual([
       'title',
       'locationSlug',
@@ -204,6 +211,7 @@ describe('CMS blog posts', () => {
       type: 'checkbox',
       defaultValue: false,
     });
+    expect(showInPressRoomField?.admin?.description).toContain('shared links appear under In the News');
     expect(excerptField).toMatchObject({ name: 'excerpt', type: 'richText', required: true });
     expect(bodyField).toMatchObject({ name: 'body', type: 'richText' });
     expect(bodyField?.validate).toBeTypeOf('function');
@@ -234,6 +242,11 @@ describe('CMS blog posts', () => {
     expect(migrationIndex).toContain('20260730_170000_blog_authoring_and_media');
     expect(migrationIndex).toContain('20260818_090000_blog_press_room_placement');
     expect(migrationIndex).toContain('20260818_160000_nashville_press_release');
+    expect(migrationIndex).toContain('20260819_090000_masslive_press_coverage');
+    expect(coverageMigration).toContain("'masslive-boston-opening-2027'");
+    expect(coverageMigration).toContain('"external_url"');
+    expect(coverageMigration).toContain("'noindex,follow'::\"enum_blog_posts_seo_robots\"");
+    expect(coverageMigration).toContain('ON CONFLICT ("slug") DO UPDATE');
 
     expect(bodyField?.validate?.(null, { data: { postType: 'article', published: false } })).toBe(true);
     expect(bodyField?.validate?.(null, { data: { postType: 'article', published: true } })).toContain(
@@ -411,6 +424,11 @@ describe('CMS blog posts', () => {
     };
 
     expect(blogPostDocLooksRenderable(sharedLink)).toBe(true);
+    expect(blogPostShouldHaveDetailPage(sharedLink)).toBe(true);
+    expect(blogPostIsPressCoverage(sharedLink)).toBe(false);
+    expect(blogPostIsPressCoverage({ ...sharedLink, showInPressRoom: true })).toBe(true);
+    expect(blogPostShouldHaveDetailPage({ ...sharedLink, showInPressRoom: true })).toBe(false);
+    expect(blogPostShouldAppearInSitemap({ ...sharedLink, showInPressRoom: true })).toBe(false);
     expect(blogPostExternalPublisher(sharedLink)).toBe('PR Newswire');
     expect(blogPostExternalUrl(sharedLink)).toContain('prnewswire.com');
     expect(blogPostDocLooksRenderable({ ...sharedLink, externalUrl: 'javascript:alert(1)' })).toBe(false);
@@ -444,7 +462,7 @@ describe('CMS blog posts', () => {
       deployScript.indexOf('createCloudflareDeploymentArtifact(root'),
     );
     expect(payloadDistCheck).toContain("fetchPublishedDocs('blog-posts')");
-    expect(payloadDistCheck).toContain('blogPostDocLooksRenderable');
+    expect(payloadDistCheck).toContain('blogPostShouldHaveDetailPage');
     expect(payloadDistCheck).toContain('if (!blogPostIsAvailableForProfile(doc)) continue;');
     expect(payloadDistCheck).toContain('dist/blog/${slug}.html');
     expect(locationBlogPage).toContain(

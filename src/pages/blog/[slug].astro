@@ -7,13 +7,13 @@ import {
     blogPostBodyHtml,
     blogPostCanonicalPath,
     blogPostDateLabel,
-    blogPostDocLooksRenderable,
     blogPostExcerptHtmlForDoc,
     blogPostExternalPublisher,
     blogPostExternalUrl,
     blogPostHeadForDoc,
     blogPostHeroImage,
     blogPostLocationSlug,
+    blogPostShouldHaveDetailPage,
     blogPostShowsInPressRoom,
     getPublishedBlogPosts,
     sortBlogPosts,
@@ -23,7 +23,7 @@ import {
 export const prerender = true;
 
 export async function getStaticPaths() {
-    const posts = sortBlogPosts((await getPublishedBlogPosts()).filter(blogPostDocLooksRenderable));
+    const posts = sortBlogPosts((await getPublishedBlogPosts()).filter(blogPostShouldHaveDetailPage));
     const locationPaths = allLocations
         .filter((location) => posts.some((post) => blogPostLocationSlug(post) === location.slug))
         .map((location) => ({

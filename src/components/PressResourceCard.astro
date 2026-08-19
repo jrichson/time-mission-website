@@ -1,0 +1,79 @@
+---
+interface Props {
+    ctaLabel: string;
+    external?: boolean;
+    href: string;
+    id: string;
+    ignoreKickerI18n?: boolean;
+    ignoreSummaryI18n?: boolean;
+    image: string;
+    imageAlt?: string;
+    imageHeight: number;
+    imageWidth: number;
+    kicker?: string;
+    loading?: 'eager' | 'lazy';
+    publishDate?: string;
+    publishDateIso?: string;
+    publisher?: string;
+    summary: string;
+    title: string;
+}
+
+const {
+    ctaLabel,
+    external = false,
+    href,
+    id,
+    ignoreKickerI18n = true,
+    ignoreSummaryI18n = true,
+    image,
+    imageAlt = '',
+    imageHeight,
+    imageWidth,
+    kicker = '',
+    loading = 'lazy',
+    publishDate = '',
+    publishDateIso = '',
+    publisher = '',
+    summary,
+    title,
+} = Astro.props;
+const externalLinkAttributes = external
+    ? { rel: 'noopener noreferrer', target: '_blank' }
+    : {};
+---
+
+<article class="tm-resource-release" aria-labelledby={`${id}-title`}>
+    <a
+        class="tm-resource-release-media"
+        href={href}
+        aria-labelledby={`${id}-title`}
+        {...externalLinkAttributes}
+    >
+        <img
+            src={image}
+            alt={imageAlt}
+            width={imageWidth}
+            height={imageHeight}
+            loading={loading}
+            decoding="async"
+            referrerpolicy={external ? 'no-referrer' : undefined}
+        />
+    </a>
+    <div class="tm-resource-release-copy">
+        <div class="tm-resource-release-source-copy">
+            <p class="tm-resource-kicker" data-page-i18n={ignoreKickerI18n ? 'ignore' : undefined}>
+                {publisher ? (
+                    <>
+                        <span data-page-i18n="ignore">{publisher}</span>
+                        {' · '}
+                        <time datetime={publishDateIso}>{publishDate}</time>
+                    </>
+                ) : kicker}
+            </p>
+            <h2 id={`${id}-title`} data-page-i18n="ignore">{title}</h2>
+            <p data-page-i18n={ignoreSummaryI18n ? 'ignore' : undefined}>{summary}</p>
+        </div>
+        <a href={href} class="tm-resource-button" {...externalLinkAttributes}>{ctaLabel}</a>
+    </div>
+</article>

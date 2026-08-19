@@ -5,8 +5,8 @@ import { cmsBuildStrict } from '../lib/payload/cms-origin';
 import {
     blogLocationCanonicalPath,
     blogPostCanonicalPath,
-    blogPostDocLooksRenderable,
     blogPostLocationSlug,
+    blogPostShouldHaveDetailPage,
     blogPostShouldAppearInSitemap,
     getPublishedBlogPosts,
     getPublishedLandings,
@@ -59,7 +59,7 @@ export const GET: APIRoute = async () => {
             addLocalizedUrls(cp);
         }
         const blogPosts = await getPublishedBlogPosts();
-        const renderableBlogPosts = blogPosts.filter(blogPostDocLooksRenderable);
+        const renderableBlogPosts = blogPosts.filter(blogPostShouldHaveDetailPage);
         if (renderableBlogPosts.length > 0) {
             addLocalizedUrls('/blog');
         }

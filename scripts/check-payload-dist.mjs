@@ -22,8 +22,8 @@ const {
 } = require('../src/lib/payload/landing-contract.ts');
 const {
   blogPostCanonicalPath,
-  blogPostDocLooksRenderable,
   blogPostIsAvailableForProfile,
+  blogPostShouldHaveDetailPage,
 } = require('../src/lib/payload/blog-post-contract.ts');
 
 const origin = process.env.PAYLOAD_CMS_ORIGIN || process.env.PAYLOAD_PUBLIC_CMS_ORIGIN || '';
@@ -98,7 +98,7 @@ for (const doc of landingDocs) {
 
 for (const doc of blogPostDocs) {
   const slug = typeof doc.slug === 'string' ? doc.slug : '';
-  if (!blogPostDocLooksRenderable(doc)) continue;
+  if (!blogPostShouldHaveDetailPage(doc)) continue;
   if (!blogPostIsAvailableForProfile(doc)) continue;
   const canonicalPath = blogPostCanonicalPath(slug);
   if (!distCanonicalPathExists(canonicalPath)) {

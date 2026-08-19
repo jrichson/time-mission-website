@@ -1,0 +1,17 @@
+{
+  "items": [
+    {
+      "id": "masslive-boston-opening-2027",
+      "publisher": "MassLive",
+      "publishDateIso": "2026-08-18",
+      "title": "New escape room, video game experience expected to open in Boston in 2027",
+      "summary": "Grab your crew and race against the clock in this new gaming experience coming to Boston next year.",
+      "image": "https://www.masslive.com/resizer/v2/CQHMUPZXIJFJNERXJHVUFO7RR4.jpg?auth=9550ee52106d9d00f7a529a5319361b23903812c2ec3b7ef9077b341d57551da&smart=true&width=1200",
+      "imageAlt": "Three people play a Time Mission challenge surrounded by exercise balls.",
+      "imageWidth": 1200,
+      "imageHeight": 800,
+      "href": "https://www.masslive.com/boston/2026/08/new-escape-room-video-game-experience-expected-to-open-in-boston-in-2027.html",
+      "ctaLabel": "Read on MassLive"
+    }
+  ]
+}

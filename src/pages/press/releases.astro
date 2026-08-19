@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import PressResourceCard from '../../components/PressResourceCard.astro';
 import { definePage } from '../../lib/define-page';
 import pressReleasesMain from '../../partials/press-releases-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
@@ -10,6 +11,7 @@ import {
     blogPostExcerptForDoc,
     blogPostExternalPublisher,
     blogPostHeroImage,
+    blogPostIsExternal,
     blogPostShowsInPressRoom,
     getPublishedBlogPosts,
     sortBlogPosts,
@@ -23,7 +25,9 @@ const ld = serializeGraph(buildSimpleGraph([
 ]));
 const fallbackById = new Map(pressReleaseFallbacks.items.map((release) => [release.id, release]));
 const cmsReleases = sortBlogPosts(
-    (await getPublishedBlogPosts()).filter(blogPostShowsInPressRoom),
+    (await getPublishedBlogPosts()).filter(
+        (post) => blogPostShowsInPressRoom(post) && !blogPostIsExternal(post),
+    ),
 ).map((post) => {
     const id = String(post.slug);
     const fallback = fallbackById.get(id);
@@ -58,31 +62,10 @@ const pressReleases = [
     <section class="tm-resource-section">
         <div class="tm-resource-shell tm-resource-release-list">
             {pressReleases.map((release, index) => (
-                <article class="tm-resource-release" aria-labelledby={`${release.id}-title`}>
-                    <a
-                        class="tm-resource-release-media"
-                        href={release.href}
-                        aria-label={`${release.ctaLabel}: ${release.title}`}
-                        data-page-i18n="ignore"
-                    >
-                        <img
-                            src={release.image}
-                            alt=""
-                            width={release.imageWidth}
-                            height={release.imageHeight}
-                            loading={index < 2 ? 'eager' : 'lazy'}
-                            decoding="async"
-                        />
-                    </a>
-                    <div class="tm-resource-release-copy">
-                        <div class="tm-resource-release-source-copy" data-page-i18n="ignore">
-                            <p class="tm-resource-kicker">{release.kicker}</p>
-                            <h2 id={`${release.id}-title`}>{release.title}</h2>
-                            <p>{release.summary}</p>
-                        </div>
-                        <a href={release.href} class="tm-resource-button">{release.ctaLabel}</a>
-                    </div>
-                </article>
+                <PressResourceCard
+                    {...release}
+                    loading={index < 2 ? 'eager' : 'lazy'}
+                />
             ))}
         </div>
     </section>

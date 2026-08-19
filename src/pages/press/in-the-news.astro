@@ -1,23 +1,91 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import PressResourceCard from '../../components/PressResourceCard.astro';
 import { definePage } from '../../lib/define-page';
 import pressNewsMain from '../../partials/press-in-the-news-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+import pressCoverage from '../../data/site/press-coverage.json';
+import { cmsBuildStrict } from '../../lib/payload/cms-origin';
+import {
+    blogPostExcerptForDoc,
+    blogPostExternalPublisher,
+    blogPostExternalUrl,
+    blogPostHeroImage,
+    blogPostIsPressCoverage,
+    blogPostPublishDate,
+    getPublishedBlogPosts,
+    sortBlogPosts,
+} from '../../lib/payload/load';
 
 const page = definePage({ canonicalPath: '/press/in-the-news' });
+function coverageDateLabel(publishDateIso: string): string {
+    return new Date(`${publishDateIso}T00:00:00.000Z`).toLocaleDateString('en-US', {
+        day: 'numeric',
+        month: 'long',
+        timeZone: 'UTC',
+        year: 'numeric',
+    });
+}
 const ld = serializeGraph(buildSimpleGraph([
     { label: 'Home', href: '/' },
     { label: 'Press', href: '/press' },
     { label: 'In the News', href: '/press/in-the-news' },
 ]));
+const fallbackById = new Map(pressCoverage.items.map((article) => [article.id, article]));
+const cmsCoverage = sortBlogPosts(
+    (await getPublishedBlogPosts()).filter(blogPostIsPressCoverage),
+).map((post) => {
+    const id = String(post.slug);
+    const fallback = fallbackById.get(id);
+    const publisher = blogPostExternalPublisher(post);
+
+    return {
+        ctaLabel: fallback?.ctaLabel || (publisher ? `Read on ${publisher}` : 'Read Original Story'),
+        href: blogPostExternalUrl(post),
+        id,
+        image: fallback?.image || blogPostHeroImage(post),
+        imageAlt: fallback?.imageAlt || '',
+        imageHeight: fallback?.imageHeight || 1067,
+        imageWidth: fallback?.imageWidth || 1600,
+        publishDate: coverageDateLabel(blogPostPublishDate(post)),
+        publishDateIso: blogPostPublishDate(post),
+        publisher,
+        summary: blogPostExcerptForDoc(post),
+        title: String(post.title || ''),
+    };
+});
+const cmsCoverageIds = new Set(cmsCoverage.map((article) => article.id));
+const fallbackCoverage = cmsBuildStrict()
+    ? []
+    : pressCoverage.items.filter((article) => !cmsCoverageIds.has(article.id));
+const coverageItems = [
+    ...cmsCoverage,
+    ...fallbackCoverage.map((article) => ({
+        ...article,
+        publishDate: coverageDateLabel(article.publishDateIso),
+    })),
+];
 ---
 
 <SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-resource-page">
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-press.css?v=1" />
+        <link rel="stylesheet" href="/css/page-press.css?v=3" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={pressNewsMain} />
+    <section class="tm-resource-section">
+        <div class="tm-resource-shell tm-resource-release-list">
+            {coverageItems.map((article, index) => (
+                <PressResourceCard
+                    {...article}
+                    external
+                    ignoreKickerI18n={false}
+                    ignoreSummaryI18n={false}
+                    loading={index < 2 ? 'eager' : 'lazy'}
+                />
+            ))}
+        </div>
+    </section>
 </SiteLayout>

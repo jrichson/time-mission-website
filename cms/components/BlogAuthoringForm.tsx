@@ -300,7 +300,7 @@ export default function BlogAuthoringForm({
             />
             <span>
               <strong>Include in sitemap</strong>
-              <small>Allow search engines to discover this post.</small>
+              <small>Applies outside In the News; press coverage links are always omitted.</small>
             </span>
           </label>
           <label className={styles.checkField}>
@@ -311,7 +311,7 @@ export default function BlogAuthoringForm({
             />
             <span>
               <strong>Show in Press Room</strong>
-              <small>Also list this post on the Press Releases page.</small>
+              <small>Original articles go to Press Releases; shared links go to In the News.</small>
             </span>
           </label>
         </div>

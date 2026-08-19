@@ -18,6 +18,10 @@ describe('press releases page', () => {
       'utf8',
     );
     const page = fs.readFileSync(path.join(root, 'src/pages/press/releases.astro'), 'utf8');
+    const card = fs.readFileSync(
+      path.join(root, 'src/components/PressResourceCard.astro'),
+      'utf8',
+    );
     const releases = JSON.parse(
       fs.readFileSync(path.join(root, 'src/data/site/press-releases.json'), 'utf8'),
     );
@@ -48,9 +52,11 @@ describe('press releases page', () => {
     expect(page).toContain('press-releases.json');
     expect(page).toContain('pressReleases.map');
     expect(page).toContain('/css/page-press.css?v=3');
-    expect(page).toContain('tm-resource-release-media');
-    expect(page).toContain('tm-resource-release-source-copy');
-    expect(page).toContain('data-page-i18n="ignore"');
+    expect(page).toContain('PressResourceCard');
+    expect(page).toContain('!blogPostIsExternal(post)');
+    expect(card).toContain('tm-resource-release-media');
+    expect(card).toContain('tm-resource-release-source-copy');
+    expect(card).toContain('data-page-i18n="ignore"');
     expect(page).toContain('fallbackById');
     expect(styles).toContain('.tm-resource-release-list');
     expect(styles).toContain('grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.22fr)');
@@ -151,5 +157,55 @@ describe('press releases page', () => {
     expect(nashvilleHtml).toContain('David Larson, Managing Partner at TM Operations');
     expect(nashvilleHtml).toContain('href="https://cumminsstation.com/"');
     expect(nashvilleHtml).not.toContain('AUGUST XX');
+  });
+});
+
+describe('in the news page', () => {
+  it('renders the MassLive coverage as an external article card with a thumbnail', () => {
+    const page = fs.readFileSync(path.join(root, 'src/pages/press/in-the-news.astro'), 'utf8');
+    const markup = fs.readFileSync(
+      path.join(root, 'src/partials/press-in-the-news-main.frag.txt'),
+      'utf8',
+    );
+    const coverage = JSON.parse(
+      fs.readFileSync(path.join(root, 'src/data/site/press-coverage.json'), 'utf8'),
+    );
+    const card = fs.readFileSync(
+      path.join(root, 'src/components/PressResourceCard.astro'),
+      'utf8',
+    );
+    const migration = fs.readFileSync(
+      path.join(root, 'cms/migrations/20260819_090000_masslive_press_coverage.ts'),
+      'utf8',
+    );
+
+    expect(markup).not.toContain('Coverage archive coming soon');
+    expect(page).toContain("import pressCoverage from '../../data/site/press-coverage.json'");
+    expect(page).toContain('getPublishedBlogPosts');
+    expect(page).toContain('blogPostIsPressCoverage');
+    expect(page).toContain('cmsCoverageIds');
+    expect(page).toContain('cmsBuildStrict()');
+    expect(page).toContain('coverageItems.map');
+    expect(page).toContain('PressResourceCard');
+    expect(card).toContain("referrerpolicy={external ? 'no-referrer' : undefined}");
+    expect(card).toContain("rel: 'noopener noreferrer'");
+    expect(card).toContain("target: '_blank'");
+    expect(coverage.items).toContainEqual(expect.objectContaining({
+      id: 'masslive-boston-opening-2027',
+      publisher: 'MassLive',
+      publishDateIso: '2026-08-18',
+      title: 'New escape room, video game experience expected to open in Boston in 2027',
+      image: expect.stringContaining('https://www.masslive.com/resizer/'),
+      imageWidth: 1200,
+      imageHeight: 800,
+      href: 'https://www.masslive.com/boston/2026/08/new-escape-room-video-game-experience-expected-to-open-in-boston-in-2027.html',
+      ctaLabel: 'Read on MassLive',
+    }));
+    expect(coverage.items[0]).not.toHaveProperty('publishDate');
+    expect(migration).toContain("'masslive-boston-opening-2027'");
+    expect(migration).toContain("'external'::\"enum_blog_posts_post_type\"");
+    expect(migration).toContain("'noindex,follow'::\"enum_blog_posts_seo_robots\"");
+    expect(migration).toContain('https://www.masslive.com/boston/2026/08/');
+    expect(migration).toContain('ON CONFLICT ("slug") DO UPDATE');
   });
 });
