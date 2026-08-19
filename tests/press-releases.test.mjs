@@ -118,6 +118,7 @@ describe('press releases page', () => {
 
   it('preserves all attached press releases as renderable rich text', () => {
     expect(PRESS_RELEASES_SNAPSHOT).toHaveLength(3);
+    expect(PRESS_RELEASES_SNAPSHOT.every((release) => release.locationSlug === null)).toBe(true);
 
     const boston = PRESS_RELEASES_SNAPSHOT.find((release) => release.slug === 'boston-announcement');
     const global = PRESS_RELEASES_SNAPSHOT.find(

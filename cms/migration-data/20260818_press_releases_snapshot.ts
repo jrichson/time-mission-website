@@ -90,7 +90,7 @@ export const PRESS_RELEASES_SNAPSHOT: PressReleaseSnapshot[] = [
   {
     slug: 'boston-announcement',
     title: "Time Mission Announces New Immersive Adventure Steps from Boston's Faneuil Hall",
-    locationSlug: 'boston',
+    locationSlug: null,
     publishDate: '2026-08-06T12:00:00.000Z',
     heroImage: '/assets/photos/experiences/Time-Mission_Control-Room-1200.webp',
     excerpt: root(paragraph(text('The Fully Themed Experience With 25+ Mission Rooms Is Set to Open in Early 2027'))),
@@ -170,7 +170,7 @@ export const PRESS_RELEASES_SNAPSHOT: PressReleaseSnapshot[] = [
   {
     slug: 'nashville-announcement',
     title: 'START THE COUNTDOWN: TIME MISSION TO OPEN IN MUSIC CITY THIS YEAR',
-    locationSlug: 'nashville',
+    locationSlug: null,
     publishDate: '2026-08-18T12:00:00.000Z',
     heroImage: '/assets/photos/venue/_Time-Mission_0042-1200.webp',
     excerpt: root(paragraph(text('Immersive and experiential social gaming adventure unlike anything else in Nashville arrives at Cummins Station in Q4; at 12,000 sf with 28 unique missions, it will be the largest location in the United States for fast-growing Time Mission.'))),

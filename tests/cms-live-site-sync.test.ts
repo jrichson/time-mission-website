@@ -166,10 +166,16 @@ describe('live-site-to-CMS sync snapshot', () => {
             path.join(root, 'cms/migrations/20260819_100000_press_seo.ts'),
             'utf8',
         );
+        const pressReleaseScopeMigration = fs.readFileSync(
+            path.join(root, 'cms/migrations/20260819_110000_press_release_scope.ts'),
+            'utf8',
+        );
 
         expect(migrationIndex).toContain('20260730_151000_sync_live_site_to_cms');
         expect(migrationIndex).toContain('20260819_100000_press_seo');
         expect(pressSeoMigration).toContain('PRESS_SEO_SNAPSHOT');
+        expect(migrationIndex).toContain('20260819_110000_press_release_scope');
+        expect(pressReleaseScopeMigration).toContain('"location_slug" = NULL');
         expect(migrationIndex).toContain('20260731_180000_eu_location_operational_data');
         expect(migrationIndex).toContain('20260810_090000_houston_philadelphia_jotform_routes');
         expect(migrationIndex).toContain('20260810_170000_houston_philadelphia_roller_routes');

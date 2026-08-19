@@ -38,6 +38,7 @@ import * as migration_20260818_130000_press_release_content from './20260818_130
 import * as migration_20260818_160000_nashville_press_release from './20260818_160000_nashville_press_release';
 import * as migration_20260819_090000_masslive_press_coverage from './20260819_090000_masslive_press_coverage';
 import * as migration_20260819_100000_press_seo from './20260819_100000_press_seo';
+import * as migration_20260819_110000_press_release_scope from './20260819_110000_press_release_scope';
 
 export const migrations = [
   {
@@ -239,5 +240,10 @@ export const migrations = [
     up: migration_20260819_100000_press_seo.up,
     down: migration_20260819_100000_press_seo.down,
     name: '20260819_100000_press_seo'
+  },
+  {
+    up: migration_20260819_110000_press_release_scope.up,
+    down: migration_20260819_110000_press_release_scope.down,
+    name: '20260819_110000_press_release_scope'
   },
 ];
