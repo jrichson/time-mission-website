@@ -208,6 +208,7 @@ describe('in the news page', () => {
     expect(migration).toContain("'masslive-boston-opening-2027'");
     expect(migration).toContain("'external'::\"enum_blog_posts_post_type\"");
     expect(migration).toContain("'noindex,follow'::\"enum_blog_posts_seo_robots\"");
+    expect(migration).toContain("'text', ${summary}::text");
     expect(migration).toContain('https://www.masslive.com/boston/2026/08/');
     expect(migration).toContain('ON CONFLICT ("slug") DO UPDATE');
   });

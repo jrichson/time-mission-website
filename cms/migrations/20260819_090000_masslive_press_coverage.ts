@@ -44,7 +44,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
               'children', jsonb_build_array(
                 jsonb_build_object(
                   'detail', 0, 'format', 0, 'mode', 'normal', 'style', '',
-                  'text', ${summary}, 'type', 'text', 'version', 1
+                  'text', ${summary}::text, 'type', 'text', 'version', 1
                 )
               )
             )
