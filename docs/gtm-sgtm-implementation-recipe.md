@@ -107,21 +107,21 @@ Create **Custom Event Trigger** (for normalized app events):
 - Event Name: `{{dlv.event_name}}`
 - Event Parameters:
   - `event_id` = `{{dlv.event_id}}`
-  - `consent_profile` = `{{dlv.parameters.consent_profile}}`
-  - `consent_ad_storage` = `{{dlv.parameters.consent.ad_storage}}`
-  - `consent_analytics_storage` = `{{dlv.parameters.consent.analytics_storage}}`
-  - `consent_ad_user_data` = `{{dlv.parameters.consent.ad_user_data}}`
-  - `consent_ad_personalization` = `{{dlv.parameters.consent.ad_personalization}}`
-  - `location_slug` = `{{dlv.parameters.location_slug}}`
-  - `location_name` = `{{dlv.parameters.location_name}}`
-  - `region` = `{{dlv.parameters.region}}`
-  - `form_name` = `{{dlv.parameters.form_name}}`
-  - `form_subject` = `{{dlv.parameters.form_subject}}`
-  - `provider` = `{{dlv.parameters.provider}}`
-  - `partner_name` = `{{dlv.parameters.partner_name}}`
-  - `content_id` = `{{dlv.parameters.content_id}}`
-  - `link_surface` = `{{dlv.parameters.link_surface}}`
-  - `link_path` = `{{dlv.parameters.link_path}}`
+  - `consent_profile` = `{{dlv.parameters.CONSENT_PROFILE}}`
+  - `consent_ad_storage` = `{{dlv.parameters.CONSENT_SNAPSHOT.ad_storage}}`
+  - `consent_analytics_storage` = `{{dlv.parameters.CONSENT_SNAPSHOT.analytics_storage}}`
+  - `consent_ad_user_data` = `{{dlv.parameters.CONSENT_SNAPSHOT.ad_user_data}}`
+  - `consent_ad_personalization` = `{{dlv.parameters.CONSENT_SNAPSHOT.ad_personalization}}`
+  - `location_slug` = `{{dlv.parameters.LOCATION_SLUG}}`
+  - `location_name` = `{{dlv.parameters.LOCATION_NAME}}`
+  - `region` = `{{dlv.parameters.REGION}}`
+  - `form_name` = `{{dlv.parameters.FORM_NAME}}`
+  - `form_subject` = `{{dlv.parameters.FORM_SUBJECT}}`
+  - `provider` = `{{dlv.parameters.PROVIDER}}`
+  - `partner_name` = `{{dlv.parameters.PARTNER_NAME}}`
+  - `content_id` = `{{dlv.parameters.CONTENT_ID}}`
+  - `link_surface` = `{{dlv.parameters.LINK_SURFACE}}`
+  - `link_path` = `{{dlv.parameters.LINK_PATH}}`
   - Plus mapped keys from `{{dlv.parameters}}` as needed in your GA4 schema
 - Trigger: `CE - tracked events`
 - Consent checks: enabled
