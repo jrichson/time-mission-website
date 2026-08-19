@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { loadAstroRenderedOutputFilesSet } = require('./lib/load-astro-rendered-output-files.cjs');
 const {
+  extractHeadMetadata,
   extractLdScripts,
   findNodesByType,
   typesInGraph,
@@ -289,10 +290,62 @@ for (const route of schemaRoutes) {
   }
 }
 
+const blogDistDir = path.join(distDir, 'blog');
+let checkedArticleRoutes = 0;
+if (fs.existsSync(blogDistDir)) {
+  for (const entry of fs.readdirSync(blogDistDir, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.html')) continue;
+
+    const outFile = `blog/${entry.name}`;
+    const html = fs.readFileSync(path.join(blogDistDir, entry.name), 'utf8');
+    if (!html.includes('class="tm-blog-article"')) continue;
+
+    checkedArticleRoutes += 1;
+    const blocks = extractLdScripts(html);
+    const graphBlock = blocks.find((block) => block.includes('"@graph"'));
+    if (!graphBlock) {
+      errors.push(`${outFile}: missing Article JSON-LD graph`);
+      continue;
+    }
+
+    let graph;
+    try {
+      graph = JSON.parse(graphBlock);
+    } catch (error) {
+      errors.push(`${outFile}: Article JSON-LD parse failed — ${error.message}`);
+      continue;
+    }
+
+    const expectedType = html.includes('tm-press-article-page') ? 'NewsArticle' : 'Article';
+    const articles = findNodesByType(graph, expectedType);
+    if (articles.length !== 1) {
+      errors.push(`${outFile}: expected exactly one ${expectedType}`);
+      continue;
+    }
+
+    const article = articles[0];
+    const head = extractHeadMetadata(html);
+    if (!article.headline || !article.description || !article.image || !article.datePublished) {
+      errors.push(`${outFile}: ${expectedType} missing headline, description, image, or datePublished`);
+    }
+    if (article.url !== head.canonical || article.mainEntityOfPage?.['@id'] !== head.canonical) {
+      errors.push(`${outFile}: ${expectedType} URL fields must match the canonical URL`);
+    }
+    if (article.author?.['@id'] !== orgSeed['@id'] || article.publisher?.['@id'] !== orgSeed['@id']) {
+      errors.push(`${outFile}: ${expectedType} author and publisher must reference Time Mission`);
+    }
+    if (!findNodesByType(graph, 'BreadcrumbList').length) {
+      errors.push(`${outFile}: ${expectedType} page missing BreadcrumbList`);
+    }
+  }
+}
+
 if (errors.length) {
   console.error('Schema output check failed:');
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
 
-console.log(`Schema output check passed for ${schemaRoutes.length} Astro-rendered routes.`);
+console.log(
+  `Schema output check passed for ${schemaRoutes.length} Astro-rendered routes and ${checkedArticleRoutes} article routes.`,
+);

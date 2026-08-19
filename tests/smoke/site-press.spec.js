@@ -10,6 +10,11 @@ test.beforeEach(async ({ page }) => {
 test('press releases render all supplied announcements in an editorial layout', async ({ page, isMobile }) => {
   await page.goto('/press/releases');
 
+  await expect(page).toHaveTitle('Time Mission Press Releases | Company News');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    'content',
+    /new locations, venue openings, company milestones/,
+  );
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('PRESS RELEASES');
   const bostonRelease = page.locator('.tm-resource-release', {
     has: page.getByRole('heading', {
@@ -65,6 +70,21 @@ test('press release detail pages retain the full supplied articles', async ({ pa
   await page.goto('/blog/nashville-announcement');
   await expect(page).toHaveTitle(/Time Mission Nashville Opening in 2026/);
   await expect(page.locator('body')).toHaveClass(/tm-press-article-page/);
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
+  await expect(page.locator('meta[property="article:published_time"]')).toHaveAttribute(
+    'content',
+    '2026-08-18T12:00:00.000Z',
+  );
+  const structuredData = await page.locator('script[type="application/ld+json"]')
+    .evaluateAll((scripts) => scripts.map((script) => JSON.parse(script.textContent || '{}')));
+  const graphNodes = structuredData.flatMap((block) => block['@graph'] || []);
+  const newsArticle = graphNodes.find((node) => node['@type'] === 'NewsArticle');
+  expect(newsArticle).toMatchObject({
+    headline: 'START THE COUNTDOWN: TIME MISSION TO OPEN IN MUSIC CITY THIS YEAR',
+    datePublished: '2026-08-18T12:00:00.000Z',
+    publisher: { '@id': 'https://www.timemission.com/#organization' },
+  });
+  expect(newsArticle.url).toBe('https://www.timemission.com/blog/nashville-announcement');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
     'START THE COUNTDOWN: TIME MISSION TO OPEN IN MUSIC CITY THIS YEAR',
   );
@@ -107,6 +127,11 @@ test('in the news shows the MassLive article and its thumbnail', async ({ page }
   }));
   await page.goto('/press/in-the-news');
 
+  await expect(page).toHaveTitle('Time Mission in the News | Media Coverage');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    'content',
+    /local opening stories, interviews, and editorial features/,
+  );
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('IN THE NEWS');
   const article = page.locator('.tm-resource-release', {
     has: page.getByRole('heading', {

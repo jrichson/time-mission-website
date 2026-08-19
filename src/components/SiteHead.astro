@@ -12,6 +12,8 @@ interface Props {
     ogImage?: string;
     twitterImage?: string;
     robots?: string;
+    ogType?: 'article' | 'website';
+    publishedTime?: string;
     /** When set (CMS landing pages), bypasses seo-routes.json for this canonicalPath */
     landingHead?: LandingHeadInput | null;
     /** ISO date string (YYYY-MM-DD) for <meta name="last-modified">. Resolved by SiteLayout. */
@@ -25,6 +27,8 @@ const {
     ogImage: ogOverride,
     twitterImage: twOverride,
     robots: robotsOverride,
+    ogType = 'website',
+    publishedTime,
     landingHead,
     lastUpdatedIso,
 } = Astro.props;
@@ -159,7 +163,10 @@ const gtmRequiresConsent = consentProfile !== 'us_open';
 <link rel="canonical" href={canonicalUrl} />
 <meta name="robots" content={robotsValue} />
 {lastUpdatedIso ? <meta name="last-modified" content={lastUpdatedIso} /> : null}
-<meta property="og:type" content="website" />
+<meta property="og:type" content={ogType} />
+{ogType === 'article' && publishedTime
+    ? <meta property="article:published_time" content={publishedTime} />
+    : null}
 <meta property="og:site_name" content={seo.siteName} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />

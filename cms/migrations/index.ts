@@ -37,6 +37,7 @@ import * as migration_20260818_090000_blog_press_room_placement from './20260818
 import * as migration_20260818_130000_press_release_content from './20260818_130000_press_release_content';
 import * as migration_20260818_160000_nashville_press_release from './20260818_160000_nashville_press_release';
 import * as migration_20260819_090000_masslive_press_coverage from './20260819_090000_masslive_press_coverage';
+import * as migration_20260819_100000_press_seo from './20260819_100000_press_seo';
 
 export const migrations = [
   {
@@ -233,5 +234,10 @@ export const migrations = [
     up: migration_20260819_090000_masslive_press_coverage.up,
     down: migration_20260819_090000_masslive_press_coverage.down,
     name: '20260819_090000_masslive_press_coverage'
+  },
+  {
+    up: migration_20260819_100000_press_seo.up,
+    down: migration_20260819_100000_press_seo.down,
+    name: '20260819_100000_press_seo'
   },
 ];

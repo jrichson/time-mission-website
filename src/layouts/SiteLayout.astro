@@ -25,6 +25,8 @@ interface Props {
     ogImage?: string;
     twitterImage?: string;
     robots?: string;
+    ogType?: 'article' | 'website';
+    publishedTime?: string;
     bodyDataLocation?: string;
     bodyClass?: string;
     bookingCtaHref?: string;
@@ -44,6 +46,8 @@ const {
     ogImage,
     twitterImage,
     robots,
+    ogType,
+    publishedTime,
     bodyDataLocation,
     bodyClass,
     bookingCtaHref = '#',
@@ -88,6 +92,8 @@ const rendersGtmNoscript = activeSiteProfile.consentProfile === 'us_open' && Boo
             ogImage={ogImage}
             twitterImage={twitterImage}
             robots={robots}
+            ogType={ogType}
+            publishedTime={publishedTime}
             landingHead={landingHead ?? sitePageHead}
             lastUpdatedIso={lastUpdatedInfo.iso}
         />

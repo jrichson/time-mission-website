@@ -1,4 +1,5 @@
 import { allLocations } from '../../data/locations';
+import { articleNode } from './article';
 import { organizationNode } from './organization';
 import { websiteNode } from './website';
 import { serviceNode } from './service';
@@ -29,6 +30,22 @@ export function buildSimpleGraph(crumbs?: Crumb[], extraNodes: unknown[] = []): 
     if (crumbs && crumbs.length > 1) nodes.push(breadcrumbNode(crumbs));
     nodes.push(...extraNodes);
     return withContext(nodes);
+}
+
+export function buildArticleGraph(opts: {
+    canonicalPath: string;
+    crumbs: Crumb[];
+    datePublished: string;
+    description: string;
+    headline: string;
+    image: string;
+    newsArticle?: boolean;
+}): Graph {
+    return withContext([
+        organizationNode(),
+        breadcrumbNode(opts.crumbs),
+        articleNode(opts),
+    ]);
 }
 
 /**

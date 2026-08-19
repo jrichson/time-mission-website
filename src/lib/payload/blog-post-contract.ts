@@ -321,11 +321,15 @@ export function blogPostExcerptHtmlForDoc(doc: PayloadBlogPostDoc): string {
     return richTextHtml(doc.excerpt);
 }
 
-export function blogPostPublishDate(doc: PayloadBlogPostDoc): string {
+export function blogPostPublishDateTime(doc: PayloadBlogPostDoc): string {
     const raw = cleanString(doc.publishDate);
     const date = raw ? new Date(raw) : null;
     if (!date || Number.isNaN(date.getTime())) return '';
-    return date.toISOString().slice(0, 10);
+    return date.toISOString();
+}
+
+export function blogPostPublishDate(doc: PayloadBlogPostDoc): string {
+    return blogPostPublishDateTime(doc).slice(0, 10);
 }
 
 export function blogPostDateLabel(doc: PayloadBlogPostDoc): string {

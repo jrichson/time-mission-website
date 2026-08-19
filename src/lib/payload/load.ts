@@ -36,6 +36,7 @@ export {
     blogPostIsAvailableForProfile,
     blogPostLocationSlug,
     blogPostPublishDate,
+    blogPostPublishDateTime,
     blogPostShouldAppearInSitemap,
     blogPostShouldHaveDetailPage,
     blogPostShowsInPressRoom,

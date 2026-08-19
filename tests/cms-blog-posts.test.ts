@@ -33,6 +33,7 @@ import {
   blogPostHeroImage,
   blogPostIsAvailableForProfile,
   blogPostIsPressCoverage,
+  blogPostPublishDateTime,
   blogPostShouldAppearInSitemap,
   blogPostShouldHaveDetailPage,
   blogPostShowsInPressRoom,
@@ -285,6 +286,7 @@ describe('CMS blog posts', () => {
   it('builds public paths, SEO fallback, sitemap state, and safe body HTML', () => {
     expect(blogPostCanonicalPath(basePost.slug!)).toBe('/blog/houston-opening-notes');
     expect(blogLocationCanonicalPath('houston')).toBe('/blog/houston');
+    expect(blogPostPublishDateTime(basePost)).toBe('2026-06-24T00:00:00.000Z');
     expect(blogPostShouldAppearInSitemap(basePost)).toBe(true);
     expect(blogPostShouldAppearInSitemap({ ...basePost, includeInSitemap: false })).toBe(false);
     expect(blogPostHeadForDoc(basePost)).toMatchObject({

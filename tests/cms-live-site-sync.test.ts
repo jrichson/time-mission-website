@@ -12,6 +12,7 @@ import { EU_LOCATION_OPERATIONAL_SNAPSHOT } from '../cms/migration-data/20260731
 import { PHILADELPHIA_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260807_philadelphia_now_open_snapshot';
 import { HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT } from '../cms/migration-data/20260810_houston_philadelphia_jotform_routes_snapshot';
 import { HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT } from '../cms/migration-data/20260811_houston_back_to_school_pages_snapshot';
+import { PRESS_SEO_SNAPSHOT } from '../cms/migration-data/20260819_press_seo_snapshot';
 import { EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT } from '../cms/migration-data/20260817_eindhoven_address_correction_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -121,8 +122,18 @@ describe('live-site-to-CMS sync snapshot', () => {
             [...LIVE_SITE_PAGE_SNAPSHOT, ...HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT]
                 .map((page) => [page.path, page]),
         );
+        const pressSeoByPath = new Map(PRESS_SEO_SNAPSHOT.map((page) => [page.path, page]));
         const effectiveSnapshot = expected.map(({ path: routePath }) => {
             const page = pageSnapshotByPath.get(routePath);
+            const pressSeo = pressSeoByPath.get(routePath);
+            if (page && pressSeo) {
+                return {
+                    ...page,
+                    title: pressSeo.title,
+                    metaTitle: pressSeo.metaTitle,
+                    metaDescription: pressSeo.metaDescription,
+                };
+            }
             if (page?.path === EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.page.path) {
                 return {
                     ...page,
@@ -151,8 +162,14 @@ describe('live-site-to-CMS sync snapshot', () => {
             path.join(root, 'cms/migrations/20260811_210000_houston_back_to_school_pages.ts'),
             'utf8',
         );
+        const pressSeoMigration = fs.readFileSync(
+            path.join(root, 'cms/migrations/20260819_100000_press_seo.ts'),
+            'utf8',
+        );
 
         expect(migrationIndex).toContain('20260730_151000_sync_live_site_to_cms');
+        expect(migrationIndex).toContain('20260819_100000_press_seo');
+        expect(pressSeoMigration).toContain('PRESS_SEO_SNAPSHOT');
         expect(migrationIndex).toContain('20260731_180000_eu_location_operational_data');
         expect(migrationIndex).toContain('20260810_090000_houston_philadelphia_jotform_routes');
         expect(migrationIndex).toContain('20260810_170000_houston_philadelphia_roller_routes');

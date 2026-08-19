@@ -7,18 +7,21 @@ import {
     blogPostBodyHtml,
     blogPostCanonicalPath,
     blogPostDateLabel,
+    blogPostExcerptForDoc,
     blogPostExcerptHtmlForDoc,
     blogPostExternalPublisher,
     blogPostExternalUrl,
     blogPostHeadForDoc,
     blogPostHeroImage,
     blogPostLocationSlug,
+    blogPostPublishDateTime,
     blogPostShouldHaveDetailPage,
     blogPostShowsInPressRoom,
     getPublishedBlogPosts,
     sortBlogPosts,
     type PayloadBlogPostDoc,
 } from '../../lib/payload/load';
+import { buildArticleGraph, buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
 
 export const prerender = true;
 
@@ -78,15 +81,47 @@ const landingHead = post
         ogImage: '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg',
         twitterImage: '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg',
     };
+const schemaCrumbs = post
+    ? [
+        { label: 'Home', href: '/' },
+        ...(isPressRelease
+            ? [
+                { label: 'Press', href: '/press' },
+                { label: 'Press Releases', href: '/press/releases' },
+            ]
+            : [{ label: 'Blog', href: '/blog' }]),
+        { label: String(post.title), href: page.canonicalPath },
+    ]
+    : [
+        { label: 'Home', href: '/' },
+        { label: 'Blog', href: '/blog' },
+        { label: locationName, href: page.canonicalPath },
+    ];
+const ld = serializeGraph(post
+    ? buildArticleGraph({
+        canonicalPath: page.canonicalPath,
+        crumbs: schemaCrumbs,
+        datePublished: blogPostPublishDateTime(post),
+        description: blogPostExcerptForDoc(post),
+        headline: String(post.title),
+        image: blogPostHeroImage(post),
+        newsArticle: isPressRelease,
+    })
+    : buildSimpleGraph(schemaCrumbs));
 ---
 
 <SiteLayout
     canonicalPath={page.canonicalPath}
     landingHead={landingHead}
+    ogType={post ? 'article' : 'website'}
+    publishedTime={post ? blogPostPublishDateTime(post) : undefined}
     bodyClass={`has-noise tm-blog-page${isPressRelease ? ' tm-press-article-page' : ''}`}
 >
     <Fragment slot="head-extra">
         <link rel="stylesheet" href="/css/page-blog.css?v=3" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
 
     {post ? (

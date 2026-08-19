@@ -96,6 +96,9 @@ describe('press releases page', () => {
     expect(blogPage).toContain('tm-blog-article-hero--press');
     expect(blogPage).toContain('/css/page-blog.css?v=3');
     expect(blogPage).toContain("data-page-i18n={isPressRelease ? 'ignore' : undefined}");
+    expect(blogPage).toContain('buildArticleGraph');
+    expect(blogPage).toContain("newsArticle: isPressRelease");
+    expect(blogPage).toContain("ogType={post ? 'article' : 'website'}");
   });
 
   it('keeps all release detail pages available when the CMS is unavailable', () => {
