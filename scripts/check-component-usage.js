@@ -37,6 +37,7 @@ const definePageCallRe = /\bdefinePage\s*\(\s*\{/;
 const locationPageShellImportRe = /import\s+\{[^}]*build(?:Open|ComingSoon)LocationPage[^}]*\}\s+from\s+['"][^'"]*\/lib\/location-page-shell['"]/;
 const locationPageShellCallRe = /\bbuild(?:Open|ComingSoon)LocationPage\s*\(/;
 const locationPageShellComponentRe = /<(?:Open|ComingSoon)LocationPageShell\b[^>]*\bcityPage=\{cityPage\}/;
+const educatorPageShellRe = /import\s+EducatorPage\s+from\s+['"][^'"]+EducatorPage\.astro['"][\s\S]*<EducatorPage\b/;
 
 function hasDefinePageSource(text) {
   return (definePageImportRe.test(text) && definePageCallRe.test(text))
@@ -48,8 +49,8 @@ function hasCanonicalSpread(text) {
     || text.includes('canonicalPath={cityPage.page.canonicalPath}');
 }
 
-function usesLocationPageShell(text) {
-  return locationPageShellComponentRe.test(text);
+function usesPageShell(text) {
+  return locationPageShellComponentRe.test(text) || educatorPageShellRe.test(text);
 }
 
 /** Pages that intentionally omit SiteLayout but still declare page metadata. */
@@ -58,9 +59,10 @@ const standalonePageRels = new Set(['src/pages/contact-thank-you.astro']);
 for (const file of pageFiles) {
   const rel = path.relative(root, file).split(path.sep).join('/');
   const text = fs.readFileSync(file, 'utf8');
+  const hasShellComponent = usesPageShell(text);
 
-  if (!hasDefinePageSource(text)) {
-    errors.push(`${rel}: must use definePage directly or through location-page-shell`);
+  if (!hasDefinePageSource(text) && !hasShellComponent) {
+    errors.push(`${rel}: must use definePage directly or through an approved page shell`);
   }
 
   if (standalonePageRels.has(rel)) {
@@ -73,12 +75,11 @@ for (const file of pageFiles) {
     continue;
   }
 
-  const hasShellComponent = usesLocationPageShell(text);
   if (!importLayoutRe.test(text) && !hasShellComponent) {
-    errors.push(`${rel}: missing \`import SiteLayout from "...SiteLayout.astro"\` or a location page shell component`);
+    errors.push(`${rel}: missing \`import SiteLayout from "...SiteLayout.astro"\` or an approved page shell component`);
   }
   if (!hasCanonicalSpread(text) && !hasShellComponent) {
-    errors.push(`${rel}: SiteLayout or location page shell must set canonicalPath={page.canonicalPath}`);
+    errors.push(`${rel}: SiteLayout or approved page shell must set canonicalPath={page.canonicalPath}`);
   }
 }
 
@@ -111,6 +112,23 @@ for (const shellRel of [
   }
   if (!shell.includes('canonicalPath={cityPage.page.canonicalPath}')) {
     errors.push(`${shellRel}: SiteLayout must use canonicalPath={cityPage.page.canonicalPath}`);
+  }
+}
+
+const educatorShellRel = path.join('src', 'components', 'EducatorPage.astro');
+const educatorShellFile = path.join(root, educatorShellRel);
+if (!fs.existsSync(educatorShellFile)) {
+  errors.push(`${educatorShellRel}: missing educator page shell component`);
+} else {
+  const shell = fs.readFileSync(educatorShellFile, 'utf8');
+  if (!importLayoutRe.test(shell)) {
+    errors.push(`${educatorShellRel}: missing \`import SiteLayout from "...SiteLayout.astro"\``);
+  }
+  if (!hasDefinePageSource(shell)) {
+    errors.push(`${educatorShellRel}: must define its canonical page path`);
+  }
+  if (!shell.includes('canonicalPath={page.canonicalPath}')) {
+    errors.push(`${educatorShellRel}: SiteLayout must use canonicalPath={page.canonicalPath}`);
   }
 }
 

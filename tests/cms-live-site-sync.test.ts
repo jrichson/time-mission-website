@@ -15,6 +15,7 @@ import { HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT } from '../cms/migration-data/2026
 import { PRESS_SEO_SNAPSHOT } from '../cms/migration-data/20260819_press_seo_snapshot';
 import { EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT } from '../cms/migration-data/20260817_eindhoven_address_correction_snapshot';
 import { PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260820_philadelphia_educators_page_snapshot';
+import { TM_OPS_EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260820_tm_ops_educators_pages_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -124,6 +125,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 ...LIVE_SITE_PAGE_SNAPSHOT,
                 ...HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT,
+                ...TM_OPS_EDUCATORS_PAGE_SNAPSHOT,
             ]
                 .map((page) => [page.path, page]),
         );
@@ -171,6 +173,10 @@ describe('live-site-to-CMS sync snapshot', () => {
             path.join(root, 'cms/migrations/20260820_090000_philadelphia_educators_page.ts'),
             'utf8',
         );
+        const tmOpsEducatorsMigration = fs.readFileSync(
+            path.join(root, 'cms/migrations/20260820_100000_tm_ops_educators_pages.ts'),
+            'utf8',
+        );
         const pressSeoMigration = fs.readFileSync(
             path.join(root, 'cms/migrations/20260819_100000_press_seo.ts'),
             'utf8',
@@ -196,6 +202,9 @@ describe('live-site-to-CMS sync snapshot', () => {
         expect(migrationIndex).toContain('20260820_090000_philadelphia_educators_page');
         expect(philadelphiaEducatorsMigration).toContain('PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT');
         expect(philadelphiaEducatorsMigration).toContain('ON CONFLICT ("path") DO NOTHING');
+        expect(migrationIndex).toContain('20260820_100000_tm_ops_educators_pages');
+        expect(tmOpsEducatorsMigration).toContain('TM_OPS_EDUCATORS_PAGE_SNAPSHOT');
+        expect(tmOpsEducatorsMigration).toContain('ON CONFLICT ("path") DO NOTHING');
         expect(migration).toContain('LIVE_SITE_LOCATION_SNAPSHOT');
         expect(migration).toContain('LIVE_SITE_PAGE_SNAPSHOT');
         expect(migration).toContain('"announcement_banners"');

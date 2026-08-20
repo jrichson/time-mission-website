@@ -335,6 +335,18 @@
       "status": 301
     },
     {
+      "id": "mount-prospect-educators",
+      "canonicalPath": "/mount-prospect/educators",
+      "redirectSources": [
+        "/mount-prospect/educators.html",
+        "/mount-prospect/teachers",
+        "/mount-prospect/teachers.html"
+      ],
+      "outputFile": "mount-prospect/educators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "west-nyack",
       "canonicalPath": "/west-nyack",
       "locationAlternate": "palisades-center",
@@ -375,6 +387,18 @@
       "status": 301
     },
     {
+      "id": "manassas-educators",
+      "canonicalPath": "/manassas/educators",
+      "redirectSources": [
+        "/manassas/educators.html",
+        "/manassas/teachers",
+        "/manassas/teachers.html"
+      ],
+      "outputFile": "manassas/educators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "antwerp",
       "canonicalPath": "/antwerp",
       "locationAlternate": "experience-factory-antwerp",
@@ -396,6 +420,18 @@
         "/orland-park.html"
       ],
       "outputFile": "orland-park.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "orland-park-educators",
+      "canonicalPath": "/orland-park/educators",
+      "redirectSources": [
+        "/orland-park/educators.html",
+        "/orland-park/teachers",
+        "/orland-park/teachers.html"
+      ],
+      "outputFile": "orland-park/educators.html",
       "sitemap": true,
       "status": 301
     },

@@ -15,6 +15,8 @@ describe('CMS existing-page seed migration', () => {
       'cms/migration-data/20260811_houston_back_to_school_pages_snapshot.ts',
       'cms/migrations/20260820_090000_philadelphia_educators_page.ts',
       'cms/migration-data/20260820_philadelphia_educators_page_snapshot.ts',
+      'cms/migrations/20260820_100000_tm_ops_educators_pages.ts',
+      'cms/migration-data/20260820_tm_ops_educators_pages_snapshot.ts',
     ];
     const migrations = migrationFiles
       .map((relativePath) => fs.readFileSync(path.join(root, relativePath), 'utf8'))

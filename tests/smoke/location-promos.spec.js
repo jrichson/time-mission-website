@@ -106,3 +106,40 @@ test('Philadelphia educators page matches the Houston offer with the Philadelphi
   await expect(page.locator('.tm-promo-landing__terms')).toContainText('Valid at Time Mission Philadelphia only');
   await expectResponsivePromoSplit(page, isMobile);
 });
+
+for (const educatorPage of [
+  {
+    formId: 'TwcrHA',
+    locationName: 'Manassas',
+    locationSlug: 'manassas',
+  },
+  {
+    formId: 'XmbdNb',
+    locationName: 'Mount Prospect',
+    locationSlug: 'mount-prospect',
+  },
+  {
+    formId: 'SmY6Us',
+    locationName: 'Orland Park',
+    locationSlug: 'orland-park',
+  },
+]) {
+  test(`${educatorPage.locationName} educators page uses its supplied Klaviyo form`, async ({ page, isMobile }) => {
+    await page.goto(`/${educatorPage.locationSlug}/educators`);
+
+    await expect(page).toHaveTitle(
+      `Educators Free Through September 30 | Time Mission ${educatorPage.locationName}`,
+    );
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Educators Free\s+Through Sept 30/i);
+    await expect(page.locator('.tm-promo-landing__back'))
+      .toHaveAttribute('href', `/${educatorPage.locationSlug}`);
+    await expect(page.locator('.tm-promo-landing__back')).toContainText(educatorPage.locationName);
+    await expect(page.locator('[data-klaviyo-form-embed]'))
+      .toHaveClass(new RegExp(`klaviyo-form-${educatorPage.formId}`));
+    await expect(page.locator('.tm-promo-landing__copy'))
+      .toContainText(`Time Mission ${educatorPage.locationName}`);
+    await expect(page.locator('.tm-promo-landing__terms'))
+      .toContainText(`Valid at Time Mission ${educatorPage.locationName} only`);
+    await expectResponsivePromoSplit(page, isMobile);
+  });
+}

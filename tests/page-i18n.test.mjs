@@ -247,6 +247,26 @@ describe('page translation catalog', () => {
     }
   });
 
+  it('covers every TM Ops educator page in US Spanish', () => {
+    const translations = pageI18n._profiles.us.translations.es;
+
+    for (const locationName of ['Manassas', 'Mount Prospect', 'Orland Park']) {
+      const sources = [
+        `Educators Free Through September 30 | Time Mission ${locationName}`,
+        `${locationName} K-12 educators, administrators, and school staff can claim one free mission at Time Mission ${locationName} through September 30, 2026.`,
+        `${locationName} · Educator Appreciation`,
+        `Every educator gets a free mission at Time Mission ${locationName} through September 30. Any session length, any night we're open. Fill out the form below, we'll send you a link with your promo code, and you show your school ID when you check in.`,
+        `One free ticket per educator, valid through September 30, 2026. Valid at Time Mission ${locationName} only. Available to K-12 teachers, administrators, and school staff with a valid school ID. Promo code link is sent by email after signup and must be redeemed by the person named on the signup. Valid school ID required at check-in. Valid any day and any session length, subject to availability. Two ticket minimum applies to all bookings. Cannot be combined with other offers, promotions, or discounts, including the School Night Sale. Not transferable, not redeemable for cash, and no cash value. Time Mission reserves the right to modify or end this promotion at any time.`,
+      ];
+
+      for (const source of sources) {
+        expect(translations[source], source).toBeTypeOf('string');
+        expect(translations[source].trim(), source).not.toBe('');
+        expect(translations[source], source).not.toBe(source);
+      }
+    }
+  });
+
   it('keeps the home slogan and every proper mission name in English', () => {
     expect(missionNamePairs).toHaveLength(30);
     expect(missionNamePairs.every(({ display, imageAlt }) => display && imageAlt)).toBe(true);

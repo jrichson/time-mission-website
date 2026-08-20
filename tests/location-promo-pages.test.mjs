@@ -31,12 +31,15 @@ describe('location campaign pages', () => {
 
   it('publishes the educator copy, supplied image, and Klaviyo embed', () => {
     const page = read('src/pages/houston/educators.astro');
+    const shell = read('src/components/EducatorPage.astro');
     const template = read('src/components/EducatorOffer.astro');
 
     expect(page).toContain('formId="YsG3eB"');
     expect(page).toContain('locationName="Houston"');
     expect(page).toContain('locationSlug="houston"');
-    expect(page).toContain('https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU');
+    expect(shell).toContain('https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU');
+    expect(shell).toContain('canonicalPath: `/${locationSlug}/educators`');
+    expect(shell).toContain('bodyDataLocation={locationSlug}');
     expect(template).toContain('<span>Educators Free</span>');
     expect(template).toContain('<span>Through Sept 30</span>');
     expect(template).toContain('Every educator gets a free mission');
@@ -53,15 +56,40 @@ describe('location campaign pages', () => {
     const page = read('src/pages/philadelphia/educators.astro');
     const template = read('src/components/EducatorOffer.astro');
 
-    expect(page).toContain("canonicalPath: '/philadelphia/educators'");
-    expect(page).toContain('bodyDataLocation="philadelphia"');
     expect(page).toContain('formId="YAhjX2"');
     expect(page).toContain('locationName="Philadelphia"');
     expect(page).toContain('locationSlug="philadelphia"');
-    expect(page).toContain('https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU');
     expect(template).toContain('backLink={{ href: `/${locationSlug}`, label: locationName }}');
     expect(template).toContain('Every educator gets a free mission at Time Mission {locationName}');
     expect(template).toContain('Valid at Time Mission {locationName} only.');
+  });
+
+  it.each([
+    {
+      formId: 'TwcrHA',
+      locationName: 'Manassas',
+      locationSlug: 'manassas',
+    },
+    {
+      formId: 'XmbdNb',
+      locationName: 'Mount Prospect',
+      locationSlug: 'mount-prospect',
+    },
+    {
+      formId: 'SmY6Us',
+      locationName: 'Orland Park',
+      locationSlug: 'orland-park',
+    },
+  ])('publishes the $locationName educator offer with its supplied Klaviyo form', ({
+    formId,
+    locationName,
+    locationSlug,
+  }) => {
+    const page = read(`src/pages/${locationSlug}/educators.astro`);
+
+    expect(page).toContain(`formId="${formId}"`);
+    expect(page).toContain(`locationName="${locationName}"`);
+    expect(page).toContain(`locationSlug="${locationSlug}"`);
   });
 
   it('keeps the reference layout responsive without exposing implementation placeholders', () => {

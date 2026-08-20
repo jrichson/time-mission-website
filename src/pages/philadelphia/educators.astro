@@ -1,37 +1,9 @@
 ---
-import EducatorOffer from '../../components/EducatorOffer.astro';
-import SiteLayout from '../../layouts/SiteLayout.astro';
-import { definePage } from '../../lib/define-page';
-import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
-
-const page = definePage({ canonicalPath: '/philadelphia/educators' });
-const ld = serializeGraph(buildSimpleGraph([
-    { label: 'Home', href: '/' },
-    { label: 'Philadelphia', href: '/philadelphia' },
-    { label: 'Educators Free Through September 30', href: page.canonicalPath },
-]));
+import EducatorPage from '../../components/EducatorPage.astro';
 ---
 
-<SiteLayout
-    canonicalPath={page.canonicalPath}
-    bodyClass="has-noise tm-promo-page"
-    bodyDataLocation="philadelphia"
->
-    <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-promo.css?v=1" />
-        <script
-            is:inline
-            async
-            src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU"
-        ></script>
-    </Fragment>
-    <Fragment slot="json-ld">
-        <script type="application/ld+json" is:inline set:html={ld}></script>
-    </Fragment>
-
-    <EducatorOffer
-        formId="YAhjX2"
-        locationName="Philadelphia"
-        locationSlug="philadelphia"
-    />
-</SiteLayout>
+<EducatorPage
+    formId="YAhjX2"
+    locationName="Philadelphia"
+    locationSlug="philadelphia"
+/>
