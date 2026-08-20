@@ -229,7 +229,13 @@ const hasPageLocation = Boolean(pageLocation);
     </div>
 
     <div class="footer-bottom">
-        <p class="footer-copyright">&copy; {year} Time Mission. <span data-i18n="footer.rights">All rights reserved.</span></p>
+        <p class="footer-copyright">
+            &copy; {year} Time Mission. <span data-i18n="footer.rights">All rights reserved.</span>
+            <span class="footer-developer-credit">
+                <span aria-hidden="true"> &middot; </span><span data-i18n="footer.developedBy">Developed by</span>{' '}
+                <a href="https://compatible.dev/">Compatible Dev</a>
+            </span>
+        </p>
         <div class="footer-legal">
             <a href="/terms" data-i18n="footer.terms">Terms</a>
             <a href="/privacy" data-i18n="footer.privacy">Privacy</a>

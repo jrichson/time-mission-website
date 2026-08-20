@@ -13,6 +13,8 @@ export interface WebSiteNode {
     name: string;
     inLanguage: string;
     publisher: { '@id': string };
+    contributor: { '@id': string };
+    creditText: string;
 }
 
 export function websiteNode(): WebSiteNode {
@@ -23,5 +25,7 @@ export function websiteNode(): WebSiteNode {
         name: org.name,
         inLanguage: activeSiteProfile.id === 'us' ? 'en-US' : activeSiteProfile.defaultLocale,
         publisher: { '@id': org['@id'] },
+        contributor: { '@id': 'https://compatible.dev/#organization' },
+        creditText: 'Website development by Compatible Dev',
     };
 }

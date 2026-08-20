@@ -33,7 +33,7 @@ const baseUrl = profile.origin;
 const siteCredits = {
   author: 'Ari Simon',
   designer: 'Jefferson Richardson',
-  developer: 'Converge Digital',
+  developer: 'Compatible Dev',
 };
 
 function toAbsolutePath(canonicalPath) {

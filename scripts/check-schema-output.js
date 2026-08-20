@@ -132,6 +132,12 @@ for (const route of schemaRoutes) {
   for (const website of findNodesByType(graph, 'WebSite')) {
     assertProfileUrl(outFile, 'WebSite @id', website['@id']);
     assertProfileUrl(outFile, 'WebSite url', website.url);
+    if (website.contributor?.['@id'] !== 'https://compatible.dev/#organization') {
+      errors.push(`${outFile}: WebSite contributor must reference Compatible Dev`);
+    }
+    if (website.creditText !== 'Website development by Compatible Dev') {
+      errors.push(`${outFile}: WebSite creditText mismatch`);
+    }
   }
   for (const image of findNodesByType(graph, 'ImageObject')) {
     assertProfileUrl(outFile, 'ImageObject @id', image['@id']);

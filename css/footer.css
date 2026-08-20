@@ -229,6 +229,26 @@ html {
     font-size: 0.75rem;
 }
 
+.footer-developer-credit {
+    white-space: nowrap;
+}
+
+.footer-copyright a {
+    color: rgba(255, 255, 255, 0.72);
+    border-radius: 4px;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.3);
+    text-underline-offset: 0.2em;
+    transition:
+        color var(--motion-standard) ease,
+        text-decoration-color var(--motion-standard) ease;
+}
+
+.footer-copyright a:focus-visible {
+    color: var(--white);
+    text-decoration-color: currentColor;
+}
+
 .footer-legal {
     display: flex;
     gap: 1.25rem;
@@ -258,9 +278,14 @@ html {
 }
 
 @media (hover: hover) {
+    .footer-copyright a:hover,
     .footer-legal a:hover,
     .footer-link-button:hover {
         color: var(--orange);
+    }
+
+    .footer-copyright a:hover {
+        text-decoration-color: currentColor;
     }
 }
 

@@ -307,6 +307,7 @@ test('localized EU routes translate their announcement and footer chrome', async
       directions: 'Routebeschrijving ↗',
       changeLocation: 'Locatie wijzigen',
       rights: 'Alle rechten voorbehouden.',
+      developedBy: 'Ontwikkeld door',
       cookiePreferences: 'Cookievoorkeuren',
       firstDay: 'Maandag',
     },
@@ -322,6 +323,7 @@ test('localized EU routes translate their announcement and footer chrome', async
       directions: 'Itinéraire ↗',
       changeLocation: 'Changer de site',
       rights: 'Tous droits réservés.',
+      developedBy: 'Développé par',
       cookiePreferences: 'Préférences relatives aux cookies',
       firstDay: 'Lundi',
     },
@@ -337,6 +339,7 @@ test('localized EU routes translate their announcement and footer chrome', async
       directions: 'Cómo llegar ↗',
       changeLocation: 'Cambiar ubicación',
       rights: 'Todos los derechos reservados.',
+      developedBy: 'Desarrollado por',
       cookiePreferences: 'Preferencias de cookies',
       status: 'Muy pronto',
     },
@@ -354,6 +357,10 @@ test('localized EU routes translate their announcement and footer chrome', async
     await expect(page.locator('.footer-loc-map')).toHaveText(route.directions);
     await expect(page.locator('.footer-loc-change')).toHaveText(route.changeLocation);
     await expect(page.locator('.footer-copyright [data-i18n="footer.rights"]')).toHaveText(route.rights);
+    await expect(page.locator('.footer-developer-credit [data-i18n="footer.developedBy"]')).toHaveText(route.developedBy);
+    await expect(page.locator('.footer-developer-credit a'))
+      .toHaveAttribute('href', 'https://compatible.dev/');
+    await expect(page.locator('.footer-developer-credit a')).toHaveText('Compatible Dev');
     await expect(page.locator('[data-cc="show-preferencesModal"]')).toHaveText(route.cookiePreferences);
     if (route.firstDay) {
       await expect(page.locator('.footer-hours-row').first().locator('span').first()).toHaveText(route.firstDay);
