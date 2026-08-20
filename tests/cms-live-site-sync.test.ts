@@ -14,6 +14,7 @@ import { HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT } from '../cms/migration-d
 import { HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT } from '../cms/migration-data/20260811_houston_back_to_school_pages_snapshot';
 import { PRESS_SEO_SNAPSHOT } from '../cms/migration-data/20260819_press_seo_snapshot';
 import { EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT } from '../cms/migration-data/20260817_eindhoven_address_correction_snapshot';
+import { PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260820_philadelphia_educators_page_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -119,7 +120,11 @@ describe('live-site-to-CMS sync snapshot', () => {
         }));
 
         const pageSnapshotByPath = new Map(
-            [...LIVE_SITE_PAGE_SNAPSHOT, ...HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT]
+            [
+                ...LIVE_SITE_PAGE_SNAPSHOT,
+                ...HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
+                PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT,
+            ]
                 .map((page) => [page.path, page]),
         );
         const pressSeoByPath = new Map(PRESS_SEO_SNAPSHOT.map((page) => [page.path, page]));
@@ -162,6 +167,10 @@ describe('live-site-to-CMS sync snapshot', () => {
             path.join(root, 'cms/migrations/20260811_210000_houston_back_to_school_pages.ts'),
             'utf8',
         );
+        const philadelphiaEducatorsMigration = fs.readFileSync(
+            path.join(root, 'cms/migrations/20260820_090000_philadelphia_educators_page.ts'),
+            'utf8',
+        );
         const pressSeoMigration = fs.readFileSync(
             path.join(root, 'cms/migrations/20260819_100000_press_seo.ts'),
             'utf8',
@@ -184,6 +193,9 @@ describe('live-site-to-CMS sync snapshot', () => {
         expect(temporaryRollerMigration).toContain('await writeGroupFormUrls(db, false)');
         expect(backToSchoolMigration).toContain('HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT');
         expect(backToSchoolMigration).toContain('ON CONFLICT ("path") DO NOTHING');
+        expect(migrationIndex).toContain('20260820_090000_philadelphia_educators_page');
+        expect(philadelphiaEducatorsMigration).toContain('PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT');
+        expect(philadelphiaEducatorsMigration).toContain('ON CONFLICT ("path") DO NOTHING');
         expect(migration).toContain('LIVE_SITE_LOCATION_SNAPSHOT');
         expect(migration).toContain('LIVE_SITE_PAGE_SNAPSHOT');
         expect(migration).toContain('"announcement_banners"');

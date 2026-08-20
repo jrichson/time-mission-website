@@ -22,6 +22,10 @@
         backdrop-filter var(--motion-standard) ease;
 }
 
+.nav--no-ticker {
+    top: env(safe-area-inset-top, 0px);
+}
+
 .nav.scrolled {
     background: rgba(13, 13, 13, 0.95);
     backdrop-filter: blur(20px);

@@ -4,10 +4,10 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import { definePage } from '../../lib/define-page';
 import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
 
-const page = definePage({ canonicalPath: '/houston/educators' });
+const page = definePage({ canonicalPath: '/philadelphia/educators' });
 const ld = serializeGraph(buildSimpleGraph([
     { label: 'Home', href: '/' },
-    { label: 'Houston', href: '/houston' },
+    { label: 'Philadelphia', href: '/philadelphia' },
     { label: 'Educators Free Through September 30', href: page.canonicalPath },
 ]));
 ---
@@ -15,7 +15,7 @@ const ld = serializeGraph(buildSimpleGraph([
 <SiteLayout
     canonicalPath={page.canonicalPath}
     bodyClass="has-noise tm-promo-page"
-    bodyDataLocation="houston"
+    bodyDataLocation="philadelphia"
 >
     <Fragment slot="head-extra">
         <link rel="stylesheet" href="/css/page-promo.css?v=1" />
@@ -30,8 +30,8 @@ const ld = serializeGraph(buildSimpleGraph([
     </Fragment>
 
     <EducatorOffer
-        formId="YsG3eB"
-        locationName="Houston"
-        locationSlug="houston"
+        formId="YAhjX2"
+        locationName="Philadelphia"
+        locationSlug="philadelphia"
     />
 </SiteLayout>

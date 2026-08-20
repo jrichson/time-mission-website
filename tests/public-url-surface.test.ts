@@ -21,6 +21,9 @@ describe('Public URL Surface', () => {
     expect(surface.publicUrlFor('/philadelphia')).toBe('https://www.timemission.com/philadelphia');
     expect(surface.outputFileFor('/philadelphia')).toBe('philadelphia.html');
     expect(surface.isKnownCanonical('/philadelphia')).toBe(true);
+    expect(surface.publicUrlFor('/philadelphia/educators')).toBe('https://www.timemission.com/philadelphia/educators');
+    expect(surface.outputFileFor('/philadelphia/educators')).toBe('philadelphia/educators.html');
+    expect(surface.isKnownCanonical('/philadelphia/educators')).toBe(true);
     expect(surface.isKnownCanonical('/c/summer-adventures-offer')).toBe(true);
     expect(surface.isKnownCanonical('/unknown-page')).toBe(false);
   });

@@ -19,6 +19,14 @@ test.beforeEach(async ({ page }) => {
   await prepareSiteSmoke(page);
 });
 
+test('homepage omits the retired Orland Park announcement ticker', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page.locator('.ticker-bar')).toHaveCount(0);
+  await expect(page.locator('#nav')).toHaveClass(/nav--no-ticker/);
+  await expect(page.locator('body')).not.toContainText('ORLAND PARK NOW OPEN');
+});
+
 test('desktop location selection keeps the current page context', async ({ page, isMobile }) => {
   // Desktop-only: this flow uses the desktop `#locationBtn` in the nav.
   // Mobile location selection lives inside the hamburger menu and is covered

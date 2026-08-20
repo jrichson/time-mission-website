@@ -1,4 +1,4 @@
-/* Houston campaign pages — image-first mobile, split-screen desktop. */
+/* Campaign pages — image-first mobile, split-screen desktop. */
 
 .tm-promo-page {
     --promo-page-offset: calc(var(--tm-ticker-height) + 7rem + env(safe-area-inset-top, 0px));

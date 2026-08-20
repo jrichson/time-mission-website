@@ -10,7 +10,7 @@ function read(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8');
 }
 
-describe('Houston back-to-school campaign pages', () => {
+describe('location campaign pages', () => {
   it('keeps the corrected School Night offer and coded checkout destination', () => {
     const page = read('src/pages/houston/school-night.astro');
 
@@ -31,25 +31,42 @@ describe('Houston back-to-school campaign pages', () => {
 
   it('publishes the educator copy, supplied image, and Klaviyo embed', () => {
     const page = read('src/pages/houston/educators.astro');
+    const template = read('src/components/EducatorOffer.astro');
 
-    expect(page).toContain('Houston · Educator Appreciation');
-    expect(page).toContain('<span>Educators Free</span>');
-    expect(page).toContain('<span>Through Sept 30</span>');
-    expect(page).toContain('Every educator gets a free mission');
+    expect(page).toContain('formId="YsG3eB"');
+    expect(page).toContain('locationName="Houston"');
+    expect(page).toContain('locationSlug="houston"');
     expect(page).toContain('https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU');
-    expect(page).toContain('<div class="klaviyo-form-YsG3eB" data-klaviyo-form-embed></div>');
-    expect(page).toContain('aria-label="Educator signup form"');
-    expect(page).not.toContain('Educator signup</p>');
-    expect(page).not.toContain('Get your promo code</h2>');
-    expect(page).toContain('/assets/photos/promos/houston-educators-control-room-1200.webp');
-    expect(page).not.toContain('imagePending');
-    expect(page).toContain('Available to K-12 teachers, administrators, and school staff with a valid school ID.');
-    expect(page).toContain('Two ticket minimum applies to all bookings');
+    expect(template).toContain('<span>Educators Free</span>');
+    expect(template).toContain('<span>Through Sept 30</span>');
+    expect(template).toContain('Every educator gets a free mission');
+    expect(template).toContain('class={`klaviyo-form-${formId}`}');
+    expect(template).toContain('aria-label="Educator signup form"');
+    expect(template).not.toContain('Get your promo code</h2>');
+    expect(template).toContain('/assets/photos/promos/houston-educators-control-room-1200.webp');
+    expect(template).not.toContain('imagePending');
+    expect(template).toContain('Available to K-12 teachers, administrators, and school staff with a valid school ID.');
+    expect(template).toContain('Two ticket minimum applies to all bookings');
+  });
+
+  it('publishes the matching Philadelphia educator offer with its supplied Klaviyo form', () => {
+    const page = read('src/pages/philadelphia/educators.astro');
+    const template = read('src/components/EducatorOffer.astro');
+
+    expect(page).toContain("canonicalPath: '/philadelphia/educators'");
+    expect(page).toContain('bodyDataLocation="philadelphia"');
+    expect(page).toContain('formId="YAhjX2"');
+    expect(page).toContain('locationName="Philadelphia"');
+    expect(page).toContain('locationSlug="philadelphia"');
+    expect(page).toContain('https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU');
+    expect(template).toContain('backLink={{ href: `/${locationSlug}`, label: locationName }}');
+    expect(template).toContain('Every educator gets a free mission at Time Mission {locationName}');
+    expect(template).toContain('Valid at Time Mission {locationName} only.');
   });
 
   it('keeps the reference layout responsive without exposing implementation placeholders', () => {
-    const component = read('src/components/HoustonPromoSplit.astro');
-    const css = read('css/page-houston-promo.css');
+    const component = read('src/components/PromoSplit.astro');
+    const css = read('css/page-promo.css');
 
     expect(component).not.toContain('Campaign image placeholder');
     expect(component).not.toContain('imagePending');

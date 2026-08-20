@@ -264,6 +264,18 @@
       "status": 301
     },
     {
+      "id": "philadelphia-educators",
+      "canonicalPath": "/philadelphia/educators",
+      "redirectSources": [
+        "/philadelphia/educators.html",
+        "/philadelphia/teachers",
+        "/philadelphia/teachers.html"
+      ],
+      "outputFile": "philadelphia/educators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "houston",
       "canonicalPath": "/houston",
       "locationAlternate": "marq-e",

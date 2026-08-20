@@ -1,5 +1,5 @@
 ---
-import HoustonPromoSplit from '../../components/HoustonPromoSplit.astro';
+import PromoSplit from '../../components/PromoSplit.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { definePage } from '../../lib/define-page';
 import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
@@ -19,13 +19,14 @@ const ld = serializeGraph(buildSimpleGraph([
     bodyDataLocation="houston"
 >
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-houston-promo.css?v=3" />
+        <link rel="stylesheet" href="/css/page-promo.css?v=1" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
 
-    <HoustonPromoSplit
+    <PromoSplit
+        backLink={{ href: '/houston', label: 'Houston' }}
         eyebrow="Houston · Through September 30"
         imageAlt="A group taking on an interactive challenge at Time Mission"
         imagePosition="center"
@@ -58,7 +59,7 @@ const ld = serializeGraph(buildSimpleGraph([
         </a>
 
         <p class="tm-promo-landing__terms">Discount valid Sundays from 6PM to close and all day Monday through Thursday, now through September 30, 2026. Valid on 90 and 120 minute sessions only. 60 minute sessions excluded. Not valid Friday or Saturday. Not valid Labor Day weekend, September 5 through September 7. Valid at Time Mission Houston only. Discount applies when you book through this page or enter code SCHOOLNIGHT at checkout. Two ticket minimum. Cannot be combined with other offers, promotions, or discounts. Not valid on gift cards, group bookings, or private events. Subject to availability. Time Mission reserves the right to modify or end this promotion at any time.</p>
-    </HoustonPromoSplit>
+    </PromoSplit>
 
     <Fragment slot="after-site-scripts">
         <script is:inline defer src="/js/page-houston-promo-after.js?v=2"></script>

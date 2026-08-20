@@ -92,3 +92,17 @@ test('Educators page exposes the supplied image, copy, and Klaviyo embed', async
   await expect(page.locator('.tm-promo-landing__terms')).toContainText('including the School Night Sale');
   await expectResponsivePromoSplit(page, isMobile);
 });
+
+test('Philadelphia educators page matches the Houston offer with the Philadelphia form', async ({ page, isMobile }) => {
+  await page.goto('/philadelphia/educators');
+
+  await expect(page).toHaveTitle('Educators Free Through September 30 | Time Mission Philadelphia');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Educators Free\s+Through Sept 30/i);
+  await expect(page.locator('.tm-promo-landing__back')).toHaveAttribute('href', '/philadelphia');
+  await expect(page.locator('.tm-promo-landing__back')).toContainText('Philadelphia');
+  await expect(page.locator('script[src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU"]')).toHaveCount(1);
+  await expect(page.locator('[data-klaviyo-form-embed]')).toHaveClass(/klaviyo-form-YAhjX2/);
+  await expect(page.locator('.tm-promo-landing__copy')).toContainText('Time Mission Philadelphia');
+  await expect(page.locator('.tm-promo-landing__terms')).toContainText('Valid at Time Mission Philadelphia only');
+  await expectResponsivePromoSplit(page, isMobile);
+});

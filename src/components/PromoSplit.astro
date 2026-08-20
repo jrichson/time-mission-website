@@ -1,5 +1,9 @@
 ---
 interface Props {
+    backLink: {
+        href: string;
+        label: string;
+    };
     eyebrow: string;
     imageAlt: string;
     imagePosition?: 'center' | 'left' | 'right';
@@ -8,6 +12,7 @@ interface Props {
 }
 
 const {
+    backLink,
     eyebrow,
     imageAlt,
     imagePosition = 'center',
@@ -33,11 +38,11 @@ const {
         </div>
 
         <div class="tm-promo-landing__content">
-            <a class="tm-promo-landing__back" href="/houston">
+            <a class="tm-promo-landing__back" href={backLink.href}>
                 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M19 12H5M12 19l-7-7 7-7"></path>
                 </svg>
-                Houston
+                {backLink.label}
             </a>
             <p class="tm-promo-landing__eyebrow">{eyebrow}</p>
             <slot />

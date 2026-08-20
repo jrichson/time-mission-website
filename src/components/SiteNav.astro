@@ -44,10 +44,7 @@ const tickerBaseMessages: TickerMessage[] = activeSiteProfile.id === 'eu'
         text: 'BRUSSELS NOW OPEN',
         textI18n: 'ticker.brusselsGrandOpening',
     }]
-    : [{
-        text: 'ORLAND PARK NOW OPEN',
-        textI18n: 'ticker.orlandParkGrandOpening',
-    }];
+    : [];
 const tickerCycles = 8;
 
 function tickerMessageFromText(text: string, textI18n = ''): TickerMessage | null {
@@ -103,38 +100,40 @@ function externalLinkAttrs(href: string | null | undefined) {
 ---
 
 <!-- Announcement Ticker -->
-<div class="ticker-bar">
-    <div
-        class={`ticker-track${tickerIsStatic ? ' ticker-track--static' : ''}`}
-        data-tm-ticker-source={tickerSource}
-        data-tm-ticker-behavior={activeTickerBehavior}
-    >
-        {tickerMessages.map((m) => (
-            <span class="ticker-item">
-                {'text' in m ? (
-                    <>
-                        <span data-i18n={m.textI18n}>{m.text}</span>
-                        {m.href && (
-                            <>
-                                <span class="ticker-separator" aria-hidden="true">-</span>
-                                <a class="ticker-link" href={m.href} {...externalLinkAttrs(m.href)}>{m.linkLabel || 'Learn more'}</a>
-                            </>
-                        )}
-                    </>
-                ) : (
-                    <>
-                        <span class="ticker-copy" data-i18n={m.labelI18n}>{m.label}</span>
-                        <span class="ticker-separator" aria-hidden="true">{m.separator || '-'}</span>
-                        <span class="ticker-date" data-i18n={m.dateI18n}>{m.date}</span>
-                    </>
-                )}
-            </span>
-        ))}
+{tickerMessages.length > 0 && (
+    <div class="ticker-bar">
+        <div
+            class={`ticker-track${tickerIsStatic ? ' ticker-track--static' : ''}`}
+            data-tm-ticker-source={tickerSource}
+            data-tm-ticker-behavior={activeTickerBehavior}
+        >
+            {tickerMessages.map((m) => (
+                <span class="ticker-item">
+                    {'text' in m ? (
+                        <>
+                            <span data-i18n={m.textI18n}>{m.text}</span>
+                            {m.href && (
+                                <>
+                                    <span class="ticker-separator" aria-hidden="true">-</span>
+                                    <a class="ticker-link" href={m.href} {...externalLinkAttrs(m.href)}>{m.linkLabel || 'Learn more'}</a>
+                                </>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            <span class="ticker-copy" data-i18n={m.labelI18n}>{m.label}</span>
+                            <span class="ticker-separator" aria-hidden="true">{m.separator || '-'}</span>
+                            <span class="ticker-date" data-i18n={m.dateI18n}>{m.date}</span>
+                        </>
+                    )}
+                </span>
+            ))}
+        </div>
     </div>
-</div>
+)}
 
 <!-- Navigation -->
-<nav class="nav" id="nav">
+<nav class={`nav${tickerMessages.length > 0 ? '' : ' nav--no-ticker'}`} id="nav">
     <div class="nav-left">
         <button class="nav-menu-btn" aria-label="Open menu" data-i18n-aria-label="nav.openMenu">
             <div class="hamburger">

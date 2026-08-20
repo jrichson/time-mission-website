@@ -61,6 +61,9 @@
 /locations.html /locations 301
 /locations/index.html /locations 301
 /philadelphia.html /philadelphia 301
+/philadelphia/educators.html /philadelphia/educators 301
+/philadelphia/teachers /philadelphia/educators 301
+/philadelphia/teachers.html /philadelphia/educators 301
 /houston.html /houston 301
 /houston/school-night.html /houston/school-night 301
 /houston/promos/school-night /houston/school-night 301

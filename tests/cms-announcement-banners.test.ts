@@ -101,6 +101,8 @@ describe('CMS announcement banners', () => {
     expect(migrationIndex).toContain('20260605_101500_announcement_banner_ticker_behavior');
     expect(payloadTypes).toContain("tickerBehavior: 'auto' | 'static' | 'animated';");
     expect(siteNav).toContain('data-tm-ticker-behavior={activeTickerBehavior}');
+    expect(siteNav).toContain('{tickerMessages.length > 0 && (');
+    expect(siteNav).not.toContain("text: 'ORLAND PARK NOW OPEN'");
     expect(locationsRuntime).toContain("track.dataset.tmTickerSource === 'cms'");
   });
 
