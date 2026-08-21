@@ -16,6 +16,7 @@ import { PRESS_SEO_SNAPSHOT } from '../cms/migration-data/20260819_press_seo_sna
 import { EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT } from '../cms/migration-data/20260817_eindhoven_address_correction_snapshot';
 import { PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260820_philadelphia_educators_page_snapshot';
 import { TM_OPS_EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260820_tm_ops_educators_pages_snapshot';
+import { HOUSTON_PHILADELPHIA_HOURS_SNAPSHOT } from '../cms/migration-data/20260821_houston_philadelphia_hours_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -41,6 +42,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 country: location.address?.country ?? '',
             },
             hours: location.hours ?? {},
+            ...(Array.isArray(location.specialHours) ? { specialHours: location.specialHours } : {}),
             externalLinks: {
                 externalUrl: location.externalUrl ?? null,
                 bookingUrl: location.bookingUrl ?? null,
@@ -65,6 +67,12 @@ describe('live-site-to-CMS sync snapshot', () => {
                 ),
             }]),
         );
+        const hoursPatches = new Map(
+            HOUSTON_PHILADELPHIA_HOURS_SNAPSHOT.locations.map((location) => [
+                location.slug,
+                HOUSTON_PHILADELPHIA_HOURS_SNAPSHOT.weekdayHours,
+            ]),
+        );
         const effectiveSnapshot = LIVE_SITE_LOCATION_SNAPSHOT.map((location) => {
             const patch = operationalPatches.get(location.slug);
             const operationalLocation = patch ? {
@@ -78,15 +86,23 @@ describe('live-site-to-CMS sync snapshot', () => {
             const currentLocation = location.slug === PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.slug
                 ? { ...operationalLocation, ticker: PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.ticker }
                 : operationalLocation;
-            const addressCorrectedLocation = location.slug === EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.slug
+            const hoursPatch = hoursPatches.get(location.slug);
+            const currentHoursLocation = hoursPatch
                 ? {
                     ...currentLocation,
+                    hours: { ...currentLocation.hours, ...hoursPatch },
+                    specialHours: [HOUSTON_PHILADELPHIA_HOURS_SNAPSHOT.specialHours],
+                }
+                : currentLocation;
+            const addressCorrectedLocation = location.slug === EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.slug
+                ? {
+                    ...currentHoursLocation,
                     address: {
-                        ...currentLocation.address,
+                        ...currentHoursLocation.address,
                         zip: EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.zip,
                     },
                 }
-                : currentLocation;
+                : currentHoursLocation;
             const groupFormPatch = groupFormPatches.get(location.slug);
             return groupFormPatch
                 ? { ...addressCorrectedLocation, groupFormUrls: groupFormPatch.groupFormUrls }

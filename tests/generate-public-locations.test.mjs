@@ -4,6 +4,7 @@ import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { generatePublicLocations } from '../scripts/generate-public-locations.mjs';
+import { applyLocationDetailsOverrides as applyRuntimeLocationDetailsOverrides } from '../src/lib/payload/location-details-contract';
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -35,6 +36,10 @@ describe('public location data generator', () => {
               hours: {
                 mon: { label: '1pm - 5pm', open: '13:00', close: '17:00' },
               },
+              specialHours: [
+                { date: '2026-09-07', name: 'Labor Day', label: '9am - 9pm', open: '09:00', close: '21:00' },
+                { date: '09/07/2026', name: 'Invalid date', label: 'Ignore me' },
+              ],
               externalLinks: {
                 bookingUrl: 'https://checkout.example/philadelphia',
                 rollerCheckoutUrl: 'https://checkout.example/philadelphia/roller',
@@ -76,6 +81,9 @@ describe('public location data generator', () => {
       'https://maps.google.com/?q=1600%20Market%20Street%20Philadelphia%20PA%2019103%20United%20States',
     );
     expect(philadelphia.hours.mon).toEqual({ label: '1pm - 5pm', open: '13:00', close: '17:00' });
+    expect(philadelphia.specialHours).toEqual([
+      { date: '2026-09-07', name: 'Labor Day', label: '9am - 9pm', open: '09:00', close: '21:00' },
+    ]);
     expect(philadelphia.status).toBe('open');
     expect(philadelphia.bookingUrl).toBe('https://checkout.example/philadelphia');
     expect(philadelphia.rollerCheckoutUrl).toBe('https://checkout.example/philadelphia/roller');
@@ -89,6 +97,63 @@ describe('public location data generator', () => {
     );
     expect(philadelphia.hiddenMissionIds).toEqual(['1005', '1011']);
 
+    fs.rmSync(tempDir, { force: true, recursive: true });
+  });
+
+  it('allows published CMS location data to clear code-owned special hours', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tm-locations-clear-special-'));
+    const outputPath = path.join(tempDir, 'locations.json');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          docs: [{ id: 2, locationSlug: 'philadelphia', published: true, specialHours: [] }],
+        }),
+      }),
+    );
+
+    const result = await generatePublicLocations({ origin: 'https://cms.example', outputPath });
+    const locationsDoc = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+    const philadelphia = locationsDoc.locations.find((loc) => loc.slug === 'philadelphia');
+
+    expect(result.appliedCount).toBe(1);
+    expect(philadelphia.specialHours).toEqual([]);
+    fs.rmSync(tempDir, { force: true, recursive: true });
+  });
+
+  it('keeps build-time and runtime special-hours sanitization in parity', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tm-locations-special-hours-parity-'));
+    const outputPath = path.join(tempDir, 'locations.json');
+    const baseDocument = JSON.parse(fs.readFileSync(new URL('../data/locations.json', import.meta.url), 'utf8'));
+    const docs = [
+      {
+        id: 3,
+        locationSlug: 'philadelphia',
+        published: true,
+        specialHours: [
+          { date: '2026-12-25', name: ' Christmas Day ', label: ' Closed ' },
+          { date: '2026-09-07', name: 'Labor Day', label: '10am - 10pm', open: '10:00', close: '22:00' },
+          { date: '2026-09-07', name: 'Labor Day', label: '10am - 9pm', open: '10:00', close: '25:00' },
+          { date: '2026-02-30', name: 'Invalid date', label: 'Ignore me' },
+        ],
+      },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ docs }),
+      }),
+    );
+
+    await generatePublicLocations({ origin: 'https://cms.example', outputPath });
+    const generatedLocations = JSON.parse(fs.readFileSync(outputPath, 'utf8')).locations;
+    const runtimeLocations = applyRuntimeLocationDetailsOverrides(baseDocument.locations, docs);
+
+    expect(generatedLocations.find((loc) => loc.slug === 'philadelphia')?.specialHours).toEqual(
+      runtimeLocations.find((loc) => loc.slug === 'philadelphia')?.specialHours,
+    );
     fs.rmSync(tempDir, { force: true, recursive: true });
   });
 

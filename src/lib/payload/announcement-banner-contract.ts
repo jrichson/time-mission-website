@@ -35,6 +35,8 @@ export interface AnnouncementBannerView {
     message: string;
     messageI18n?: string | null;
     tickerBehavior: AnnouncementBannerTickerBehavior;
+    startsAt?: string | null;
+    endsAt?: string | null;
     linkLabel?: string | null;
     linkUrl?: string | null;
 }
@@ -56,6 +58,11 @@ function timeValue(value: string | null | undefined): number | null {
     if (!raw) return null;
     const time = new Date(raw).getTime();
     return Number.isFinite(time) ? time : null;
+}
+
+function safeScheduleTimestamp(value: string | null | undefined): string | null {
+    const timestamp = timeValue(value);
+    return timestamp == null ? null : new Date(timestamp).toISOString();
 }
 
 function safeAnnouncementLink(value: string | null | undefined): string | null {
@@ -152,6 +159,8 @@ export function announcementBannerViewForDoc(doc: PayloadAnnouncementBannerDoc |
         message: cleanString(doc.message),
         messageI18n: ANNOUNCEMENT_MESSAGE_I18N_KEYS.get(cleanString(doc.message)) || null,
         tickerBehavior: safeTickerBehavior(doc.tickerBehavior),
+        startsAt: safeScheduleTimestamp(doc.startsAt),
+        endsAt: safeScheduleTimestamp(doc.endsAt),
         linkLabel: linkUrl ? cleanString(doc.linkLabel) || 'Learn more' : null,
         linkUrl,
     };

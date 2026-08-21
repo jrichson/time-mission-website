@@ -18,6 +18,11 @@ export interface LocationDayHours {
     label: string;
 }
 
+export interface LocationSpecialHours extends LocationDayHours {
+    date: string;
+    name: string;
+}
+
 export interface LocationRecord {
     id: string;
     slug: string;
@@ -51,6 +56,7 @@ export interface LocationRecord {
         email: string;
     };
     hours: Record<string, LocationDayHours>;
+    specialHours?: LocationSpecialHours[];
     teamSize?: {
         min: number;
         max: number;

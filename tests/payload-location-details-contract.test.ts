@@ -160,6 +160,30 @@ describe('Payload location details contract', () => {
         expect(clearedLocation.hiddenMissionIds).toEqual([]);
     });
 
+    it('applies validated special-hour overrides and allows editors to clear them', () => {
+        const [holidayLocation] = applyLocationDetailsOverrides(
+            [baseLocation],
+            [{
+                ...baseDoc,
+                address: null,
+                hours: null,
+                specialHours: [
+                    { date: '2026-09-07', name: 'Labor Day', label: '10am - 10pm', open: '10:00', close: '22:00' },
+                    { date: '09/07/2026', name: 'Invalid', label: '10am - 10pm', open: '10:00', close: '22:00' },
+                ],
+            }],
+        );
+        const [clearedLocation] = applyLocationDetailsOverrides(
+            [{ ...baseLocation, specialHours: [{ date: '2026-09-07', name: 'Labor Day', label: '10am - 10pm' }] }],
+            [{ ...baseDoc, address: null, hours: null, specialHours: [] }],
+        );
+
+        expect(holidayLocation.specialHours).toEqual([
+            { date: '2026-09-07', name: 'Labor Day', label: '10am - 10pm', open: '10:00', close: '22:00' },
+        ]);
+        expect(clearedLocation.specialHours).toEqual([]);
+    });
+
     it('ignores unpublished docs and docs for non-code-owned locations', () => {
         const changed = applyLocationDetailsOverrides(
             [baseLocation],

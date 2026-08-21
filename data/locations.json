@@ -137,29 +137,29 @@
       },
       "hours": {
         "mon": {
-          "open": "10:00",
+          "open": "12:00",
           "close": "22:00",
-          "label": "10am - 10pm"
+          "label": "12pm - 10pm"
         },
         "tue": {
-          "open": "10:00",
+          "open": "12:00",
           "close": "22:00",
-          "label": "10am - 10pm"
+          "label": "12pm - 10pm"
         },
         "wed": {
-          "open": "10:00",
+          "open": "12:00",
           "close": "22:00",
-          "label": "10am - 10pm"
+          "label": "12pm - 10pm"
         },
         "thu": {
-          "open": "10:00",
+          "open": "12:00",
           "close": "22:00",
-          "label": "10am - 10pm"
+          "label": "12pm - 10pm"
         },
         "fri": {
-          "open": "10:00",
+          "open": "12:00",
           "close": "23:00",
-          "label": "10am - 11pm"
+          "label": "12pm - 11pm"
         },
         "sat": {
           "open": "10:00",
@@ -172,6 +172,15 @@
           "label": "10am - 10pm"
         }
       },
+      "specialHours": [
+        {
+          "date": "2026-09-07",
+          "name": "Labor Day",
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
+        }
+      ],
       "bookingUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home",
       "bookingProvider": "roller",
@@ -221,7 +230,7 @@
       "waiverUrl": "",
       "countryCode": "US",
       "locale": null,
-      "timeZone": null,
+      "timeZone": "America/New_York",
       "currency": null,
       "phoneE164": "+12677101240",
       "hreflang": null,
@@ -587,29 +596,29 @@
       },
       "hours": {
         "mon": {
-          "open": "10:00",
+          "open": "12:00",
           "close": "22:00",
-          "label": "10am - 10pm"
+          "label": "12pm - 10pm"
         },
         "tue": {
-          "open": "10:00",
+          "open": "12:00",
           "close": "22:00",
-          "label": "10am - 10pm"
+          "label": "12pm - 10pm"
         },
         "wed": {
-          "open": "10:00",
+          "open": "12:00",
           "close": "22:00",
-          "label": "10am - 10pm"
+          "label": "12pm - 10pm"
         },
         "thu": {
-          "open": "10:00",
+          "open": "12:00",
           "close": "22:00",
-          "label": "10am - 10pm"
+          "label": "12pm - 10pm"
         },
         "fri": {
-          "open": "10:00",
+          "open": "12:00",
           "close": "23:00",
-          "label": "10am - 11pm"
+          "label": "12pm - 11pm"
         },
         "sat": {
           "open": "10:00",
@@ -622,6 +631,15 @@
           "label": "10am - 10pm"
         }
       },
+      "specialHours": [
+        {
+          "date": "2026-09-07",
+          "name": "Labor Day",
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
+        }
+      ],
       "bookingUrl": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
       "rollerCheckoutUrl": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
       "bookingProvider": "roller",
@@ -658,7 +676,7 @@
       "waiverUrl": "https://book.houston.timemission.com/timemissionhouston/onlinecheckout/en-us/home",
       "countryCode": "US",
       "locale": null,
-      "timeZone": null,
+      "timeZone": "America/Chicago",
       "currency": null,
       "phoneE164": "+17135881630",
       "hreflang": null,

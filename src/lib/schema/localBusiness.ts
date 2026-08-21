@@ -1,5 +1,6 @@
 import type { LocationRecord } from '../../data/locations';
 import org from '../../data/site/seo-organization.json';
+import { upcomingLocationSpecialHours } from '../location-hours';
 import { activeSiteProfile } from '../site-profile';
 
 const baseUrl = activeSiteProfile.origin;
@@ -45,6 +46,13 @@ export interface LocalBusinessNode {
         opens: string;
         closes: string;
     }>;
+    specialOpeningHoursSpecification?: Array<{
+        '@type': 'OpeningHoursSpecification';
+        opens: string;
+        closes: string;
+        validFrom: string;
+        validThrough: string;
+    }>;
     sameAs?: string[];
 }
 
@@ -69,7 +77,7 @@ function hasValidGeo(loc: LocationRecord): loc is LocationRecord & { geo: { lati
  * Returns null when the location is NOT eligible (coming-soon, temporarily closed, OR localBusinessSchemaEligible !== true).
  * Callers MUST treat null as "skip this node entirely" — Pitfall 6 / D-07 / D-10.
  */
-export function localBusinessNode(loc: LocationRecord, canonicalPath: string): LocalBusinessNode | null {
+export function localBusinessNode(loc: LocationRecord, canonicalPath: string, now = new Date()): LocalBusinessNode | null {
     if (loc.status !== 'open') return null;
     if (loc.localBusinessSchemaEligible !== true) return null;
 
@@ -121,6 +129,18 @@ export function localBusinessNode(loc: LocationRecord, canonicalPath: string): L
             dayOfWeek: dayOfWeekMap[day] ?? day,
             opens: schemaClockTime(h.open!),
             closes: schemaClockTime(h.close!),
+        }));
+    }
+    const specialHourEntries = upcomingLocationSpecialHours(loc, now).filter(
+        (hours) => typeof hours.open === 'string' && typeof hours.close === 'string',
+    );
+    if (specialHourEntries.length > 0) {
+        node.specialOpeningHoursSpecification = specialHourEntries.map((hours) => ({
+            '@type': 'OpeningHoursSpecification',
+            opens: schemaClockTime(hours.open!),
+            closes: schemaClockTime(hours.close!),
+            validFrom: hours.date,
+            validThrough: hours.date,
         }));
     }
     return node;

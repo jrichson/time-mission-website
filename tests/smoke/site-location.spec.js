@@ -161,6 +161,28 @@ test('short Houston ticker renders centered instead of scrolling from the edge',
   expect(metrics.centerDelta).toBeLessThanOrEqual(2);
 });
 
+test('expired CMS location announcement restores the canonical ticker without a rebuild', async ({ page }) => {
+  await page.goto('/houston');
+
+  await page.locator('.ticker-track').evaluate((track) => {
+    track.dataset.tmTickerSource = 'cms';
+    track.dataset.tmTickerEndsAt = '2026-09-08T05:00:00.000Z';
+    track.dataset.tmTickerFallback = 'HOUSTON NOW OPEN';
+    track.dataset.tmTickerFallbackBehavior = 'auto';
+    track.classList.remove('ticker-track--static');
+    track.innerHTML = '<span class="ticker-item">LABOR DAY HOURS: 10AM - 10PM</span>';
+  });
+  await page.evaluate(() => {
+    window.TMTickerSchedule.refresh(new Date('2026-09-08T05:00:00.000Z'));
+  });
+
+  const track = page.locator('.ticker-track');
+  await expect(track).toHaveAttribute('data-tm-ticker-source', 'location');
+  await expect(track).toHaveClass(/ticker-track--static/);
+  await expect(track.locator('.ticker-item')).toHaveCount(1);
+  await expect(track.locator('.ticker-item')).toHaveText('HOUSTON NOW OPEN');
+});
+
 test('desktop location selector hands Brussels off to the EU site', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop-only overlay path');
 
@@ -366,6 +388,7 @@ test('location pages render footer contact details with accordion hours', async 
 });
 
 test('Houston location page renders launch footer contact hours from location data', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-08-21T12:00:00.000Z'));
   await page.goto('/houston');
 
   const footer = page.locator('footer.footer');
@@ -378,11 +401,14 @@ test('Houston location page renders launch footer contact hours from location da
   await expect(hours).not.toHaveAttribute('open', '');
   await hours.locator('.footer-loc-hours-summary').click();
   await expect(hours).toHaveAttribute('open', '');
-  await expect(hours.locator('.footer-hours-row')).toHaveCount(7);
-  await expect(hours.locator('.footer-hours-row').first()).toContainText('Monday');
+  await expect(hours.locator('.footer-hours-row')).toHaveCount(8);
+  await expect(hours.locator('.footer-hours-row').first()).toContainText('Labor Day');
+  await expect(hours.locator('.footer-hours-row').first()).toContainText('10am - 10pm');
+  await expect(hours.locator('.footer-hours-row').nth(1)).toContainText('Monday');
 });
 
 test('selected location updates shared footer contact panel', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-08-21T12:00:00.000Z'));
   await page.goto('/');
 
   const footer = page.locator('footer.footer');
@@ -401,8 +427,10 @@ test('selected location updates shared footer contact panel', async ({ page }) =
   const hours = footer.locator('.footer-loc-hours-details');
   await expect(hours).not.toHaveAttribute('open', '');
   await hours.locator('.footer-loc-hours-summary').click();
-  await expect(hours.locator('.footer-hours-row')).toHaveCount(7);
-  await expect(hours.locator('.footer-hours-row').first()).toContainText('Monday');
+  await expect(hours.locator('.footer-hours-row')).toHaveCount(8);
+  await expect(hours.locator('.footer-hours-row').first()).toContainText('Labor Day');
+  await expect(hours.locator('.footer-hours-row').first()).toContainText('10am - 10pm');
+  await expect(hours.locator('.footer-hours-row').nth(1)).toContainText('Monday');
 
   await page.evaluate(() => window.TM.select('mount-prospect'));
   await expect(footer.locator('.footer-locations-title')).toHaveText('Mount Prospect');

@@ -7,6 +7,8 @@ interface Props {
         message: string;
         messageI18n?: string | null;
         tickerBehavior?: 'auto' | 'static' | 'animated' | null;
+        startsAt?: string | null;
+        endsAt?: string | null;
         linkLabel?: string | null;
         linkUrl?: string | null;
     } | null;
@@ -91,6 +93,15 @@ const tickerMessages: TickerMessage[] = activeTickerMessage
         ? [activeTickerMessage]
         : Array.from({ length: tickerCycles }, () => activeTickerMessage)
     : Array.from({ length: tickerCycles }, () => tickerBaseMessages).flat();
+const fallbackTickerMessage = locationTickerMessage || tickerBaseMessages[0] || null;
+const fallbackTickerText = locationTicker || (fallbackTickerMessage && 'text' in fallbackTickerMessage
+    ? fallbackTickerMessage.text
+    : '');
+const fallbackTickerI18n = locationTickerI18n || (fallbackTickerMessage && 'text' in fallbackTickerMessage
+    ? fallbackTickerMessage.textI18n || ''
+    : '');
+const fallbackTickerBehavior: TickerBehavior = locationTickerMessage ? 'auto' : 'animated';
+const fallbackTickerSource = locationTickerMessage ? 'location' : 'default';
 
 function externalLinkAttrs(href: string | null | undefined) {
     return /^https?:\/\//i.test(String(href || '').trim())
@@ -106,6 +117,12 @@ function externalLinkAttrs(href: string | null | undefined) {
             class={`ticker-track${tickerIsStatic ? ' ticker-track--static' : ''}`}
             data-tm-ticker-source={tickerSource}
             data-tm-ticker-behavior={activeTickerBehavior}
+            data-tm-ticker-starts-at={cmsAnnouncementMessage ? announcementBanner?.startsAt : undefined}
+            data-tm-ticker-ends-at={cmsAnnouncementMessage ? announcementBanner?.endsAt : undefined}
+            data-tm-ticker-fallback={cmsAnnouncementMessage ? fallbackTickerText : undefined}
+            data-tm-ticker-fallback-i18n={cmsAnnouncementMessage ? fallbackTickerI18n : undefined}
+            data-tm-ticker-fallback-behavior={cmsAnnouncementMessage ? fallbackTickerBehavior : undefined}
+            data-tm-ticker-fallback-source={cmsAnnouncementMessage ? fallbackTickerSource : undefined}
         >
             {tickerMessages.map((m) => (
                 <span class="ticker-item">

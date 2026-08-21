@@ -70,7 +70,58 @@
         });
     }
 
-    function renderHoursTable(container, hours, fallback) {
+    function localCalendarDate(date) {
+        var year = date.getFullYear();
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var day = String(date.getDate()).padStart(2, '0');
+        return year + '-' + month + '-' + day;
+    }
+
+    function calendarDateInTimeZone(date, timeZone) {
+        if (!timeZone) return localCalendarDate(date);
+        try {
+            var parts = new Intl.DateTimeFormat('en-US', {
+                day: '2-digit',
+                month: '2-digit',
+                timeZone: timeZone,
+                year: 'numeric'
+            }).formatToParts(date);
+            var values = {};
+            parts.forEach(function (part) { values[part.type] = part.value; });
+            var value = values.year + '-' + values.month + '-' + values.day;
+            if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+        } catch (error) {
+            // Invalid or unsupported IANA zones fall back to the runtime calendar.
+        }
+        return localCalendarDate(date);
+    }
+
+    function upcomingSpecialHours(specialHours, timeZone, now) {
+        var today = calendarDateInTimeZone(now || new Date(), timeZone);
+        return (Array.isArray(specialHours) ? specialHours : [])
+            .filter(function (hours) {
+                return /^\d{4}-\d{2}-\d{2}$/.test(hours.date)
+                    && hours.date >= today
+                    && String(hours.name || '').trim()
+                    && String(hours.label || '').trim();
+            })
+            .slice()
+            .sort(function (left, right) { return left.date.localeCompare(right.date); });
+    }
+
+    function appendHoursRow(container, label, hours, className) {
+        var row = document.createElement('div');
+        row.className = className || 'footer-hours-row';
+        var dayEl = document.createElement('span');
+        dayEl.textContent = label;
+        var timeEl = document.createElement('span');
+        timeEl.textContent = hours;
+        row.appendChild(dayEl);
+        row.appendChild(timeEl);
+        container.appendChild(row);
+    }
+
+    function renderHoursTable(container, hours, fallback, specialHours, timeZone, now) {
         if (!container) return;
         container.textContent = '';
         if (!hours) hours = {};
@@ -79,17 +130,13 @@
             mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday',
             thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday'
         };
+        upcomingSpecialHours(specialHours, timeZone, now).forEach(function (special) {
+            appendHoursRow(container, special.name, special.label, 'footer-hours-row footer-hours-row--special');
+            rendered = true;
+        });
         dayOrder.forEach(function (day) {
             if (!hours[day] || !hours[day].label) return;
-            var row = document.createElement('div');
-            row.className = 'footer-hours-row';
-            var dayEl = document.createElement('span');
-            dayEl.textContent = translate('footer.day.' + day, dayLabels[day]);
-            var timeEl = document.createElement('span');
-            timeEl.textContent = hours[day].label;
-            row.appendChild(dayEl);
-            row.appendChild(timeEl);
-            container.appendChild(row);
+            appendHoursRow(container, translate('footer.day.' + day, dayLabels[day]), hours[day].label);
             rendered = true;
         });
         if (!rendered && fallback) {
@@ -118,13 +165,16 @@
         return parts.join('\n');
     }
 
-    function hoursTextForLocation(loc) {
+    function hoursTextForLocation(loc, now) {
         if (!loc) return '';
         if (loc.status === 'temporarily-closed') return temporaryClosureLabelForLocation(loc);
         if (!loc.hours) {
             return loc && loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : '';
         }
         var lines = [];
+        upcomingSpecialHours(loc.specialHours, loc.timeZone, now).forEach(function (special) {
+            lines.push(special.name + ': ' + special.label);
+        });
         dayOrder.forEach(function (day) {
             if (loc.hours[day] && loc.hours[day].label) {
                 lines.push(shortDayLabels[day] + ': ' + loc.hours[day].label);
@@ -402,7 +452,7 @@
                 setHidden(phoneNoteEl, false);
             }
         }
-        renderHoursTable(hoursEl, loc.status === 'temporarily-closed' ? {} : loc.hours, loc.status === 'temporarily-closed' ? temporaryClosureLabelForLocation(loc) : loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : translate('location.hoursComingSoon', 'Hours coming soon'));
+        renderHoursTable(hoursEl, loc.status === 'temporarily-closed' ? {} : loc.hours, loc.status === 'temporarily-closed' ? temporaryClosureLabelForLocation(loc) : loc.status === 'coming-soon' ? comingSoonLabelForLocation(loc) : translate('location.hoursComingSoon', 'Hours coming soon'), loc.specialHours, loc.timeZone);
         if (mapEl) {
             mapEl.href = loc.mapUrl || '#';
             setHidden(mapEl, !loc.mapUrl);

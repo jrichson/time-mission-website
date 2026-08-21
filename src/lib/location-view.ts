@@ -5,6 +5,7 @@ import {
     locationOpeningLabel,
     locationTemporaryClosureLabel,
 } from './location-status';
+import { upcomingLocationSpecialHours } from './location-hours';
 
 export interface LocationContactItem {
     kind: 'phone' | 'email';
@@ -116,13 +117,21 @@ export function locationMarket(loc: Pick<LocationRecord, 'address'>): string {
     return [loc.address.city, loc.address.state || loc.address.country].filter(Boolean).join(', ');
 }
 
-export function locationHoursRows(loc: Pick<LocationRecord, 'hours' | 'status'> | null | undefined): LocationHoursRow[] {
+export function locationHoursRows(
+    loc: Pick<LocationRecord, 'hours' | 'specialHours' | 'status' | 'timeZone'> | null | undefined,
+    now = new Date(),
+): LocationHoursRow[] {
     if (!loc) return [];
     if (loc.status === 'temporarily-closed') return [];
-    return locationDayOrder.flatMap(([key, day]) => {
+    const specialRows = upcomingLocationSpecialHours(loc, now).map((hours) => ({
+        day: hours.name,
+        label: hours.label,
+    }));
+    const recurringRows = locationDayOrder.flatMap(([key, day]) => {
         const label = loc.hours?.[key]?.label;
         return label ? [{ day, label }] : [];
     });
+    return [...specialRows, ...recurringRows];
 }
 
 function locationOverlayAddressText(loc: Pick<LocationRecord, 'address'>): string {

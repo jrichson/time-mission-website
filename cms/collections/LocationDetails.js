@@ -5,6 +5,7 @@ import { LOCATION_DETAIL_OPTIONS, LOCATION_HOUR_DAYS, LOCATION_MISSION_OPTIONS }
 const TIME_24_HOUR_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 const GROUP_FORM_KEY_PATTERN = /^[a-z0-9-]+$/;
 const INTERNAL_PUBLIC_PATH_PATTERN = /^\/[a-z0-9-]+(?:\/[a-z0-9-]+)*$/;
+const CALENDAR_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 function isCmsAdmin(user) {
   return user?.collection === 'users' && user?.role === 'admin';
@@ -25,6 +26,16 @@ function validateOptionalTime(value) {
   if (typeof value !== 'string') return 'Use 24-hour HH:mm, for example 09:00 or 23:30.';
 
   return TIME_24_HOUR_PATTERN.test(value.trim()) || 'Use 24-hour HH:mm, for example 09:00 or 23:30.';
+}
+
+function validateCalendarDate(value) {
+  const cleaned = typeof value === 'string' ? value.trim() : '';
+  if (!CALENDAR_DATE_PATTERN.test(cleaned)) return 'Use YYYY-MM-DD, for example 2026-09-07.';
+
+  const parsed = new Date(`${cleaned}T00:00:00.000Z`);
+  return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === cleaned
+    ? true
+    : 'Use a real calendar date in YYYY-MM-DD format.';
 }
 
 function validateOptionalHttpsUrl(value) {
@@ -259,6 +270,73 @@ export const LocationDetails = {
                   'Leave a day blank only when this location does not have public hours yet.',
               },
               fields: LOCATION_HOUR_DAYS.map(dayHoursField),
+            },
+            {
+              name: 'specialHours',
+              type: 'array',
+              label: 'Holiday and special hours',
+              labels: {
+                singular: 'Special-hours date',
+                plural: 'Special-hours dates',
+              },
+              maxRows: 32,
+              admin: {
+                description:
+                  'Add a dated holiday or one-off exception. It appears before weekly hours and expires automatically after the venue-local date.',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'date',
+                      type: 'text',
+                      required: true,
+                      maxLength: 10,
+                      label: 'Date (YYYY-MM-DD)',
+                      validate: validateCalendarDate,
+                    },
+                    {
+                      name: 'name',
+                      type: 'text',
+                      required: true,
+                      maxLength: 80,
+                      label: 'Public name',
+                      admin: { description: 'Example: Labor Day.' },
+                    },
+                  ],
+                },
+                {
+                  name: 'label',
+                  type: 'text',
+                  required: true,
+                  maxLength: 80,
+                  label: 'Public hours text',
+                  admin: { description: 'Example: 10am - 10pm.' },
+                  validate: validateHoursLabel,
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'open',
+                      type: 'text',
+                      maxLength: 5,
+                      label: 'Opening time',
+                      admin: { description: 'Optional 24-hour time, such as 10:00.' },
+                      validate: validateOptionalTime,
+                    },
+                    {
+                      name: 'close',
+                      type: 'text',
+                      maxLength: 5,
+                      label: 'Closing time',
+                      admin: { description: 'Optional 24-hour time, such as 22:00.' },
+                      validate: validateOptionalTime,
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },

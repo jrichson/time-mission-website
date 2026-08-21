@@ -62,6 +62,7 @@ describe('CMS announcement banners', () => {
     const migrationIndex = read('cms/migrations/index.ts');
     const payloadTypes = read('cms/payload-types.ts');
     const siteNav = read('src/components/SiteNav.astro');
+    const tickerScheduleRuntime = read('js/ticker-schedule.js');
     const locationsRuntime = read('js/locations.js');
     const messageField = findField(AnnouncementBanners.fields, 'message');
     const tickerBehaviorField = findField(AnnouncementBanners.fields, 'tickerBehavior');
@@ -101,6 +102,9 @@ describe('CMS announcement banners', () => {
     expect(migrationIndex).toContain('20260605_101500_announcement_banner_ticker_behavior');
     expect(payloadTypes).toContain("tickerBehavior: 'auto' | 'static' | 'animated';");
     expect(siteNav).toContain('data-tm-ticker-behavior={activeTickerBehavior}');
+    expect(siteNav).toContain('data-tm-ticker-ends-at');
+    expect(siteNav).toContain('data-tm-ticker-fallback');
+    expect(tickerScheduleRuntime).toContain('window.TMTickerSchedule');
     expect(siteNav).toContain('{tickerMessages.length > 0 && (');
     expect(siteNav).not.toContain("text: 'ORLAND PARK NOW OPEN'");
     expect(locationsRuntime).toContain("track.dataset.tmTickerSource === 'cms'");
@@ -117,6 +121,17 @@ describe('CMS announcement banners', () => {
     expect(announcementBannerViewForDoc({ ...baseBanner, tickerBehavior: 'static' })?.tickerBehavior).toBe('static');
     expect(announcementBannerViewForDoc({ ...baseBanner, tickerBehavior: 'animated' })?.tickerBehavior).toBe('animated');
     expect(announcementBannerViewForDoc({ ...baseBanner, tickerBehavior: 'unexpected' })?.tickerBehavior).toBe('auto');
+  });
+
+  it('exposes valid schedule boundaries to the browser ticker view', () => {
+    expect(announcementBannerViewForDoc({
+      ...baseBanner,
+      startsAt: '2026-08-21T00:00:00.000Z',
+      endsAt: '2026-09-08T05:00:00.000Z',
+    })).toMatchObject({
+      startsAt: '2026-08-21T00:00:00.000Z',
+      endsAt: '2026-09-08T05:00:00.000Z',
+    });
   });
 
   it('connects the active EU CMS messages to their localized ticker copy', () => {

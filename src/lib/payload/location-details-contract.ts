@@ -1,4 +1,4 @@
-import type { LocationDayHours, LocationRecord } from '../../data/locations';
+import type { LocationDayHours, LocationRecord, LocationSpecialHours } from '../../data/locations';
 
 export const LOCATION_HOUR_DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
@@ -38,6 +38,14 @@ export interface PayloadLocationDetailsHiddenMissionId {
     missionId?: string | null;
 }
 
+export interface PayloadLocationDetailsSpecialHours {
+    date?: string | null;
+    name?: string | null;
+    label?: string | null;
+    open?: string | null;
+    close?: string | null;
+}
+
 export interface PayloadLocationDetailsDoc {
     id: string | number;
     title?: string | null;
@@ -48,6 +56,7 @@ export interface PayloadLocationDetailsDoc {
     externalLinks?: PayloadLocationDetailsExternalLinks | null;
     groupFormUrls?: PayloadLocationDetailsGroupFormUrl[] | null;
     hiddenMissionIds?: PayloadLocationDetailsHiddenMissionId[] | null;
+    specialHours?: PayloadLocationDetailsSpecialHours[] | null;
 }
 
 interface LocationDetailsPatch {
@@ -59,6 +68,7 @@ interface LocationDetailsPatch {
     >;
     hours?: Record<string, LocationDayHours>;
     hiddenMissionIds?: string[];
+    specialHours?: LocationSpecialHours[];
     mapUrl?: string;
 }
 
@@ -66,6 +76,7 @@ const TIME_24_HOUR_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 const GROUP_FORM_KEY_PATTERN = /^[a-z0-9-]+$/;
 const INTERNAL_PUBLIC_PATH_PATTERN = /^\/[a-z0-9-]+(?:\/[a-z0-9-]+)*$/;
 const MISSION_ID_PATTERN = /^\d{4}$/;
+const CALENDAR_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const EXTERNAL_LINK_FIELDS = ['externalUrl', 'bookingUrl', 'rollerCheckoutUrl', 'giftCardUrl', 'waiverUrl'] as const;
 
 function cleanString(value: unknown): string {
@@ -199,6 +210,33 @@ function hiddenMissionIdsPatchForDoc(doc: PayloadLocationDetailsDoc): string[] |
         .filter((missionId) => MISSION_ID_PATTERN.test(missionId))));
 }
 
+function specialHoursPatchForDoc(doc: PayloadLocationDetailsDoc): LocationSpecialHours[] | null {
+    if (!Array.isArray(doc.specialHours)) return null;
+
+    const byDate = new Map<string, LocationSpecialHours>();
+    for (const row of doc.specialHours) {
+        const date = cleanString(row?.date);
+        const name = cleanString(row?.name);
+        const label = cleanString(row?.label);
+        if (!CALENDAR_DATE_PATTERN.test(date) || !name || !label) continue;
+
+        const parsedDate = new Date(`${date}T00:00:00.000Z`);
+        if (!Number.isFinite(parsedDate.getTime()) || parsedDate.toISOString().slice(0, 10) !== date) continue;
+
+        const open = cleanTime(row?.open);
+        const close = cleanTime(row?.close);
+        byDate.set(date, {
+            date,
+            name,
+            label,
+            ...(open ? { open } : {}),
+            ...(close ? { close } : {}),
+        });
+    }
+
+    return [...byDate.values()].sort((left, right) => left.date.localeCompare(right.date));
+}
+
 function patchForDoc(doc: PayloadLocationDetailsDoc): LocationDetailsPatch | null {
     if (!doc || doc.published !== true || !cleanString(doc.locationSlug)) return null;
 
@@ -206,7 +244,8 @@ function patchForDoc(doc: PayloadLocationDetailsDoc): LocationDetailsPatch | nul
     const hours = hoursPatchForDoc(doc);
     const externalLinks = externalLinksPatchForDoc(doc);
     const hiddenMissionIds = hiddenMissionIdsPatchForDoc(doc);
-    if (!address && !hours && !externalLinks && hiddenMissionIds == null) return null;
+    const specialHours = specialHoursPatchForDoc(doc);
+    if (!address && !hours && !externalLinks && hiddenMissionIds == null && specialHours == null) return null;
 
     return {
         ...(address ? { address } : {}),
@@ -214,6 +253,7 @@ function patchForDoc(doc: PayloadLocationDetailsDoc): LocationDetailsPatch | nul
         ...(hours ? { hours } : {}),
         ...(externalLinks ? { externalLinks } : {}),
         ...(hiddenMissionIds != null ? { hiddenMissionIds } : {}),
+        ...(specialHours != null ? { specialHours } : {}),
     };
 }
 
@@ -280,6 +320,7 @@ export function applyLocationDetailsOverrides(
                 ? { groupFormUrls: { ...(loc.groupFormUrls || {}), ...externalLinks.groupFormUrls } }
                 : {}),
             ...(applyHiddenMissionIds ? { hiddenMissionIds: patch.hiddenMissionIds } : {}),
+            ...(patch.specialHours ? { specialHours: patch.specialHours } : {}),
         };
     });
 }

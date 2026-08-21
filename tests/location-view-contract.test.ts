@@ -19,7 +19,7 @@ const root = path.resolve(__dirname, '..');
 
 interface RuntimeLocationViews {
     getLocationView(loc: LocationRecord, id?: string): LocationViewModel;
-    hoursTextForLocation(loc: LocationRecord): string;
+    hoursTextForLocation(loc: LocationRecord, now?: Date): string;
 }
 
 interface RuntimeWindow {
@@ -147,11 +147,25 @@ describe('Location View contract', () => {
         expect(philadelphia.openingLabel).toBeUndefined();
         expect(locationHeadlineStatus(philadelphia)).toBe('Now Open');
         expect(philadelphia.hours.mon).toMatchObject({
-            open: '10:00',
+            open: '12:00',
             close: '22:00',
+            label: '12pm - 10pm',
+        });
+        const beforeLaborDay = new Date('2026-08-21T12:00:00Z');
+        const lateLaborDayInPhiladelphia = new Date('2026-09-08T03:30:00Z');
+        const startOfSeptember8InPhiladelphia = new Date('2026-09-08T04:00:00Z');
+        const afterLaborDay = new Date('2026-09-08T12:00:00Z');
+        expect(locationHoursRows(philadelphia, beforeLaborDay)).toContainEqual({
+            day: 'Labor Day',
             label: '10am - 10pm',
         });
-        expect(locationHoursRows(philadelphia)).toHaveLength(7);
-        expect(runtime.hoursTextForLocation(philadelphia)).toContain('Mon: 10am - 10pm');
+        expect(locationHoursRows(philadelphia, beforeLaborDay)).toHaveLength(8);
+        expect(locationHoursRows(philadelphia, lateLaborDayInPhiladelphia)).toHaveLength(8);
+        expect(locationHoursRows(philadelphia, startOfSeptember8InPhiladelphia)).toHaveLength(7);
+        expect(locationHoursRows(philadelphia, afterLaborDay)).toHaveLength(7);
+        expect(runtime.hoursTextForLocation(philadelphia, beforeLaborDay)).toContain('Labor Day: 10am - 10pm');
+        expect(runtime.hoursTextForLocation(philadelphia, lateLaborDayInPhiladelphia)).toContain('Labor Day: 10am - 10pm');
+        expect(runtime.hoursTextForLocation(philadelphia, afterLaborDay)).not.toContain('Labor Day');
+        expect(runtime.hoursTextForLocation(philadelphia, beforeLaborDay)).toContain('Mon: 12pm - 10pm');
     });
 });

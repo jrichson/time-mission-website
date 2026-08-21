@@ -50,6 +50,8 @@ describe('CMS location details', () => {
         const locationSlugField = findField(LocationDetails.fields, 'locationSlug');
         const addressField = findField(LocationDetails.fields, 'address');
         const hoursField = findField(LocationDetails.fields, 'hours');
+        const specialHoursField = findField(LocationDetails.fields, 'specialHours');
+        const specialHoursDateField = findField(LocationDetails.fields, 'date');
         const externalLinksField = findField(LocationDetails.fields, 'externalLinks');
         const bookingUrlField = findField(LocationDetails.fields, 'bookingUrl');
         const groupFormUrlsField = findField(LocationDetails.fields, 'groupFormUrls');
@@ -69,6 +71,10 @@ describe('CMS location details', () => {
         expect(locationSlugField?.options).toContainEqual({ label: 'Time Mission Philadelphia', value: 'philadelphia' });
         expect(addressField?.admin?.description).toContain('Booking and inquiry destinations');
         expect(hoursField?.type).toBe('group');
+        expect(specialHoursField).toMatchObject({ name: 'specialHours', type: 'array' });
+        expect(specialHoursField?.admin?.description).toContain('holiday');
+        expect(specialHoursDateField?.validate?.('2026-09-07')).toBe(true);
+        expect(specialHoursDateField?.validate?.('09/07/2026')).toContain('YYYY-MM-DD');
         expect(externalLinksField?.admin?.description).toContain('Only administrators');
         expect(externalLinksField?.access?.update).toBeTypeOf('function');
         expect(bookingUrlField?.label).toBe('Ticket booking URL');
@@ -97,6 +103,9 @@ describe('CMS location details', () => {
         );
         expect(read('cms/migrations/20260617_090000_location_details_hidden_missions.ts')).toContain(
             'CREATE TABLE IF NOT EXISTS "location_details_hidden_mission_ids"',
+        );
+        expect(read('cms/migrations/20260821_090000_houston_philadelphia_hours.ts')).toContain(
+            'CREATE TABLE IF NOT EXISTS "location_details_special_hours"',
         );
     });
 
