@@ -234,10 +234,10 @@ html {
 }
 
 .footer-copyright a {
-    color: rgba(255, 255, 255, 0.72);
+    color: var(--orange);
     border-radius: 4px;
     text-decoration: underline;
-    text-decoration-color: rgba(255, 255, 255, 0.3);
+    text-decoration-color: rgba(255, 107, 44, 0.55);
     text-underline-offset: 0.2em;
     transition:
         color var(--motion-standard) ease,
