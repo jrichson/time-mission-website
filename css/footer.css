@@ -234,10 +234,10 @@ html {
 }
 
 .footer-copyright a {
-    color: var(--orange);
+    color: inherit;
     border-radius: 4px;
     text-decoration: underline;
-    text-decoration-color: rgba(255, 107, 44, 0.55);
+    text-decoration-color: rgba(255, 255, 255, 0.3);
     text-underline-offset: 0.2em;
     transition:
         color var(--motion-standard) ease,
@@ -278,13 +278,13 @@ html {
 }
 
 @media (hover: hover) {
-    .footer-copyright a:hover,
     .footer-legal a:hover,
     .footer-link-button:hover {
         color: var(--orange);
     }
 
     .footer-copyright a:hover {
+        color: inherit;
         text-decoration-color: currentColor;
     }
 }
