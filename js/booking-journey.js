@@ -279,10 +279,22 @@
             || presentation === 'iframe';
     }
 
+    function shouldEmbedGroupForm(loc, kind, href) {
+        var configuredForms = Object.values((loc && loc.groupFormUrls) || {}).map(function (url) {
+            return String(url || '').trim();
+        });
+        return normalizeKind(kind) === 'groups'
+            && loc
+            && loc.groupFormPresentation === 'iframe'
+            && isExternalHttpUrl(href)
+            && configuredForms.indexOf(String(href || '').trim()) !== -1;
+    }
+
     function bookingPresentationFor(loc, kind, href) {
         if (!isNavigableHref(href)) return 'panel';
         if (shouldUseBriqWidget(loc, href, kind)) return 'briq-widget';
         if (isLocationExternalSiteUrl(loc, href)) return 'external-site';
+        if (shouldEmbedGroupForm(loc, kind, href)) return 'iframe';
         if ((isTicketKind(kind) || isGroupTicketKind(kind)) && shouldUseRollerCheckout(loc, href, kind)) return 'roller';
         return 'link';
     }

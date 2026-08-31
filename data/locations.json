@@ -916,39 +916,35 @@
       },
       "hours": {
         "mon": {
-          "open": "12:00",
-          "close": "18:00",
-          "label": "12:00 - 18:00"
+          "label": "Closed"
         },
         "tue": {
-          "open": "12:00",
-          "close": "18:00",
-          "label": "12:00 - 18:00"
+          "label": "Closed"
         },
         "wed": {
-          "open": "12:00",
+          "open": "14:00",
           "close": "20:00",
-          "label": "12:00 - 20:00"
+          "label": "14:00 – 20:00"
         },
         "thu": {
-          "open": "12:00",
-          "close": "20:00",
-          "label": "12:00 - 20:00"
+          "open": "16:00",
+          "close": "23:00",
+          "label": "16:00 – 23:00"
         },
         "fri": {
-          "open": "12:00",
-          "close": "22:00",
-          "label": "12:00 - 22:00"
+          "open": "16:00",
+          "close": "23:00",
+          "label": "16:00 – 23:00"
         },
         "sat": {
-          "open": "10:00",
-          "close": "22:00",
-          "label": "10:00 - 22:00"
+          "open": "12:00",
+          "close": "23:00",
+          "label": "12:00 – 23:00"
         },
         "sun": {
           "open": "10:00",
           "close": "20:00",
-          "label": "10:00 - 20:00"
+          "label": "10:00 – 20:00"
         }
       },
       "bookingUrl": "https://ecom.roller.app/terminal1/timemission/nl/products",
@@ -964,6 +960,16 @@
         "1018",
         "1027"
       ],
+      "groupFormUrls": {
+        "default": "https://forms.roller.app/#/terminal1/4fc51060f1c8424/form",
+        "birthdays": "https://forms.roller.app/#/terminal1/4fc51060f1c8424/form",
+        "corporate": "https://forms.roller.app/#/terminal1/4fc51060f1c8424/form",
+        "field-trips": "https://forms.roller.app/#/terminal1/4fc51060f1c8424/form",
+        "bachelor-ette": "https://forms.roller.app/#/terminal1/4fc51060f1c8424/form",
+        "private-events": "https://forms.roller.app/#/terminal1/4fc51060f1c8424/form",
+        "holidays": "https://forms.roller.app/#/terminal1/4fc51060f1c8424/form"
+      },
+      "groupFormPresentation": "iframe",
       "navLabel": "Belgium – Brussels",
       "mapUrl": "https://maps.google.com/?q=Av.+Imp%C3%A9ratrice+Charlotte+1020+Bruxelles+Belgium",
       "faqs": [],

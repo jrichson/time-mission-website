@@ -17,11 +17,19 @@ import { EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT } from '../cms/migration-data/202
 import { PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260820_philadelphia_educators_page_snapshot';
 import { TM_OPS_EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260820_tm_ops_educators_pages_snapshot';
 import { HOUSTON_PHILADELPHIA_HOURS_SNAPSHOT } from '../cms/migration-data/20260821_houston_philadelphia_hours_snapshot';
+import { BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT } from '../cms/migration-data/20260831_brussels_operational_details_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 function readJson(relativePath: string): unknown {
     return JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
+}
+
+function withoutNullHourFields(hours: Record<string, Record<string, unknown>>) {
+    return Object.fromEntries(Object.entries(hours).map(([day, row]) => [
+        day,
+        Object.fromEntries(Object.entries(row).filter(([, value]) => value != null)),
+    ]));
 }
 
 describe('live-site-to-CMS sync snapshot', () => {
@@ -104,9 +112,16 @@ describe('live-site-to-CMS sync snapshot', () => {
                 }
                 : currentHoursLocation;
             const groupFormPatch = groupFormPatches.get(location.slug);
-            return groupFormPatch
+            const groupFormLocation = groupFormPatch
                 ? { ...addressCorrectedLocation, groupFormUrls: groupFormPatch.groupFormUrls }
                 : addressCorrectedLocation;
+            return location.slug === BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT.slug
+                ? {
+                    ...groupFormLocation,
+                    hours: withoutNullHourFields(BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT.hours),
+                    groupFormUrls: BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT.groupFormUrls,
+                }
+                : groupFormLocation;
         });
 
         expect(LIVE_SITE_SYNC_SOURCE.commit).toBe('6cbae6adde40555535a271155b6c59d4f80db56c');
@@ -221,6 +236,7 @@ describe('live-site-to-CMS sync snapshot', () => {
         expect(migrationIndex).toContain('20260820_100000_tm_ops_educators_pages');
         expect(tmOpsEducatorsMigration).toContain('TM_OPS_EDUCATORS_PAGE_SNAPSHOT');
         expect(tmOpsEducatorsMigration).toContain('ON CONFLICT ("path") DO NOTHING');
+        expect(migrationIndex).toContain('20260831_090000_brussels_operational_details');
         expect(migration).toContain('LIVE_SITE_LOCATION_SNAPSHOT');
         expect(migration).toContain('LIVE_SITE_PAGE_SNAPSHOT');
         expect(migration).toContain('"announcement_banners"');

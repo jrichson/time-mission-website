@@ -82,6 +82,7 @@ export interface LocationRecord {
         buttonText: string;
     };
     groupFormUrls?: Record<string, string>;
+    groupFormPresentation?: 'iframe';
     navLabel: string;
     mapUrl: string;
     faqs: unknown[];

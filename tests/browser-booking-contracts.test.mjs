@@ -650,6 +650,44 @@ describe('browser booking contracts', () => {
     }
   });
 
+  it('embeds the Brussels group inquiry form without changing other Roller form handoffs', () => {
+    const brussels = locationRecords.find((location) => location.id === 'brussels');
+    const { context, window } = createBrowserContext();
+    runScript('js/booking-journey.js', context);
+
+    const intent = window.TMBookingJourney.resolveIntent({
+      kind: 'groups',
+      groupType: 'corporate',
+      locationId: 'brussels',
+      location: {
+        ...brussels,
+        externalUrl: '',
+        pagePath: '/brussels',
+      },
+      resolveHref: true,
+    });
+
+    expect(intent).toMatchObject({
+      href: 'https://forms.roller.app/#/terminal1/4fc51060f1c8424/form',
+      presentation: 'iframe',
+      usesBookingFrame: true,
+    });
+
+    expect(window.TMBookingJourney.resolveIntent({
+      href: 'https://forms.example/unconfigured',
+      kind: 'groups',
+      location: {
+        ...brussels,
+        externalUrl: '',
+        pagePath: '/brussels',
+      },
+      resolveHref: false,
+    })).toMatchObject({
+      presentation: 'link',
+      usesBookingFrame: false,
+    });
+  });
+
   it('booking click handler prompts for tickets without a selected location but still navigates non-ticket links', async () => {
     const { context, window } = createBrowserContext();
     runScript('js/booking-journey.js', context);

@@ -42,6 +42,7 @@ import * as migration_20260819_110000_press_release_scope from './20260819_11000
 import * as migration_20260820_090000_philadelphia_educators_page from './20260820_090000_philadelphia_educators_page';
 import * as migration_20260820_100000_tm_ops_educators_pages from './20260820_100000_tm_ops_educators_pages';
 import * as migration_20260821_090000_houston_philadelphia_hours from './20260821_090000_houston_philadelphia_hours';
+import * as migration_20260831_090000_brussels_operational_details from './20260831_090000_brussels_operational_details';
 
 export const migrations = [
   {
@@ -263,5 +264,10 @@ export const migrations = [
     up: migration_20260821_090000_houston_philadelphia_hours.up,
     down: migration_20260821_090000_houston_philadelphia_hours.down,
     name: '20260821_090000_houston_philadelphia_hours'
+  },
+  {
+    up: migration_20260831_090000_brussels_operational_details.up,
+    down: migration_20260831_090000_brussels_operational_details.down,
+    name: '20260831_090000_brussels_operational_details'
   },
 ];

@@ -120,6 +120,7 @@ export function publicLocationForProfile(location, profile = resolveSiteProfile(
     groupInquiryLabels: isInternal ? location.groupInquiryLabels : undefined,
     donationUrl: isInternal ? location.donationUrl : undefined,
     groupFormUrls: isInternal ? location.groupFormUrls : undefined,
+    groupFormPresentation: isInternal ? location.groupFormPresentation : undefined,
     giftCardUrl: isInternal ? location.giftCardUrl : '',
     waiverUrl: isInternal ? location.waiverUrl : '',
     bookingProvider: isInternal ? location.bookingProvider : undefined,
