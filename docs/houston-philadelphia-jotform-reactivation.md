@@ -17,10 +17,10 @@ Do not delete or edit the applied migration history. The forward migration write
 
 ## Preserved CRM values
 
-| Location | Jotform | Build metadata | Pipedrive location | Deal prefix | Group phone |
-| --- | --- | --- | --- | --- | --- |
-| Houston | `262186150244149` | `1788292905464` | `Houston` | `HOU` | `713-588-1630` |
-| Philadelphia | `262217710699160` | `1788292891937` | `Philadelphia` | `PHI` | `267-710-1240` |
+| Location | Jotform | Build metadata | Pipedrive location | Deal prefix |
+| --- | --- | --- | --- | --- |
+| Houston | `262186150244149` | `1788292905464` | `Houston` | `HOU` |
+| Philadelphia | `262217710699160` | `1788292891937` | `Philadelphia` | `PHI` |
 
 The website continues to retain mappings for `q20_dealTitle`, `q21_location`, `q23_typeA`, and the existing event-detail field.
 
@@ -42,7 +42,7 @@ Before deploying the reactivation, submit one controlled test through each franc
    - Houston: `/groups/inquire/houston/{form_key}`
    - Philadelphia: `/groups/inquire/philadelphia/{form_key}`
 2. `20260901_090000_houston_philadelphia_jotform_reactivation` reuses `HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT` and writes each entry's on-site route.
-3. The shared renderer preserves each source form's field names, form ID, build metadata, CRM location, deal prefix, and Group Specialist phone number.
+3. The shared renderer preserves each source form's field names, form ID, build metadata, CRM location, and deal prefix. Houston and Philadelphia do not render the optional Group Specialist phone callout.
 4. Release validation remains `npm run check`, `npm run build:astro`, and `npm run test:smoke`.
 5. After deployment, no-cache verify Houston, Philadelphia, Manassas, Mount Prospect, and Orland Park.
 

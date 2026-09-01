@@ -81,7 +81,7 @@ Jotform replaces `{location}` and `{typeA}` from the fields' unique names. The s
 - `parameters.LOCATION_SLUG`: `manassas`, `mount-prospect`, `orland-park`, `houston`, or `philadelphia`
 - `parameters.FORM_SUBJECT`: the controlled event-type slug
 
-The top Group Specialist telephone link remains in the Time Mission page rather than a cross-origin iframe. It emits `PHONE_CLICK` with `parameters.CTA_ID: "group_form_phone"`; use the event's top-level `page_path` and `parameters.LOCATION_SLUG` to compare calls by route/location. The phone number itself is intentionally not sent to GTM.
+For locations that configure it, the top Group Specialist telephone link remains in the Time Mission page rather than a cross-origin iframe. Manassas, Mount Prospect, and Orland Park currently provide the link; Houston and Philadelphia do not. When present, it emits `PHONE_CLICK` with `parameters.CTA_ID: "group_form_phone"`; use the event's top-level `page_path` and `parameters.LOCATION_SLUG` to compare calls by route/location. The phone number itself is intentionally not sent to GTM.
 
 ## Staging vs production
 

@@ -83,7 +83,7 @@ test('Houston and Philadelphia use their own Jotforms in the shared inquiry desi
   }
 });
 
-test('the shared inquiry design keeps the specialist phone for operator locations', async ({ page }) => {
+test('the shared inquiry design keeps the specialist phone for locations configured with it', async ({ page }) => {
   await page.goto('/groups/inquire/manassas/corporate');
 
   await expect(page.getByText('Rather talk it through?')).toBeVisible();
