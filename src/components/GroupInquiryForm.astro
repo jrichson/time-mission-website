@@ -40,11 +40,11 @@ const formAction = `https://submit.jotform.com/submit/${formConfig.formId}`;
                 <div>
                     <p>Rather talk it through?</p>
                     <a
-                        href="tel:+18137735250"
+                        href={formConfig.specialistPhone.href}
                         data-tm-analytics-cta="group_form_phone"
                         rel="nofollow"
                     >
-                        Call 813-773-5250
+                        Call {formConfig.specialistPhone.display}
                     </a>
                     <span>Group Specialist team</span>
                 </div>

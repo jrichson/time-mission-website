@@ -16,6 +16,10 @@ export type JotformGroupFormConfig = {
     buildDate: string;
     pipedriveLocationValue: string;
     dealTitlePrefix: string;
+    specialistPhone: {
+        display: string;
+        href: `tel:+${string}`;
+    };
 };
 
 const JOTFORM_GROUP_FORM_CONFIGS: Record<GroupInquiryLocationSlug, JotformGroupFormConfig> = {
@@ -25,6 +29,10 @@ const JOTFORM_GROUP_FORM_CONFIGS: Record<GroupInquiryLocationSlug, JotformGroupF
         buildDate: '1784236513760',
         pipedriveLocationValue: 'Manassas',
         dealTitlePrefix: 'MAN',
+        specialistPhone: {
+            display: '813-773-5250',
+            href: 'tel:+18137735250',
+        },
     },
     'mount-prospect': {
         formId: '261936424348059',
@@ -32,6 +40,10 @@ const JOTFORM_GROUP_FORM_CONFIGS: Record<GroupInquiryLocationSlug, JotformGroupF
         buildDate: '1784236513760',
         pipedriveLocationValue: 'Mt Prospect',
         dealTitlePrefix: 'MTP',
+        specialistPhone: {
+            display: '813-773-5250',
+            href: 'tel:+18137735250',
+        },
     },
     'orland-park': {
         formId: '261936424348059',
@@ -39,20 +51,32 @@ const JOTFORM_GROUP_FORM_CONFIGS: Record<GroupInquiryLocationSlug, JotformGroupF
         buildDate: '1784236513760',
         pipedriveLocationValue: 'Orland Park',
         dealTitlePrefix: 'OPK',
+        specialistPhone: {
+            display: '813-773-5250',
+            href: 'tel:+18137735250',
+        },
     },
     houston: {
         formId: '262186150244149',
-        executionTrackerBuildDate: '1786402794617',
-        buildDate: '1786402794618',
+        executionTrackerBuildDate: '1788292905464',
+        buildDate: '1788292905464',
         pipedriveLocationValue: 'Houston',
         dealTitlePrefix: 'HOU',
+        specialistPhone: {
+            display: '713-588-1630',
+            href: 'tel:+17135881630',
+        },
     },
     philadelphia: {
         formId: '262217710699160',
-        executionTrackerBuildDate: '1786402040663',
-        buildDate: '1786402040663',
+        executionTrackerBuildDate: '1788292891937',
+        buildDate: '1788292891937',
         pipedriveLocationValue: 'Philadelphia',
-        dealTitlePrefix: 'PHL',
+        dealTitlePrefix: 'PHI',
+        specialistPhone: {
+            display: '267-710-1240',
+            href: 'tel:+12677101240',
+        },
     },
 };
 

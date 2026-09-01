@@ -32,12 +32,23 @@ describe('group form thank-you route generation', () => {
         }])).toEqual([]);
     });
 
-    it('does not emit on-site thank-you routes for temporary Roller handoffs', () => {
+    it('emits on-site thank-you routes for the Houston and Philadelphia Jotforms', () => {
         const houston = allLocations.find((location) => location.slug === 'houston');
         const philadelphia = allLocations.find((location) => location.slug === 'philadelphia');
         expect(houston).toBeDefined();
         expect(philadelphia).toBeDefined();
 
-        expect(groupFormThankYouPathsFor([houston!, philadelphia!])).toEqual([]);
+        const paths = groupFormThankYouPathsFor([houston!, philadelphia!]);
+        expect(paths).toHaveLength(14);
+        expect(paths).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                formKey: 'corporate',
+                canonicalPath: '/group-form-thank-you/houston/corporate',
+            }),
+            expect.objectContaining({
+                formKey: 'corporate',
+                canonicalPath: '/group-form-thank-you/philadelphia/corporate',
+            }),
+        ]));
     });
 });

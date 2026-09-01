@@ -67,12 +67,7 @@ describe('live-site-to-CMS sync snapshot', () => {
         );
         const groupFormPatches = new Map(
             HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT.map((location) => [location.slug, {
-                groupFormUrls: Object.fromEntries(
-                    Object.keys(location.groupFormUrls).map((formKey) => [
-                        formKey,
-                        location.previousGroupFormUrl,
-                    ]),
-                ),
+                groupFormUrls: location.groupFormUrls,
             }]),
         );
         const hoursPatches = new Map(
@@ -196,6 +191,10 @@ describe('live-site-to-CMS sync snapshot', () => {
             path.join(root, 'cms/migrations/20260810_170000_houston_philadelphia_roller_routes.ts'),
             'utf8',
         );
+        const jotformReactivationMigration = fs.readFileSync(
+            path.join(root, 'cms/migrations/20260901_090000_houston_philadelphia_jotform_reactivation.ts'),
+            'utf8',
+        );
         const backToSchoolMigration = fs.readFileSync(
             path.join(root, 'cms/migrations/20260811_210000_houston_back_to_school_pages.ts'),
             'utf8',
@@ -225,9 +224,12 @@ describe('live-site-to-CMS sync snapshot', () => {
         expect(migrationIndex).toContain('20260731_180000_eu_location_operational_data');
         expect(migrationIndex).toContain('20260810_090000_houston_philadelphia_jotform_routes');
         expect(migrationIndex).toContain('20260810_170000_houston_philadelphia_roller_routes');
+        expect(migrationIndex).toContain('20260901_090000_houston_philadelphia_jotform_reactivation');
         expect(migrationIndex).toContain('20260811_210000_houston_back_to_school_pages');
         expect(temporaryRollerMigration).toContain('location.previousGroupFormUrl');
         expect(temporaryRollerMigration).toContain('await writeGroupFormUrls(db, false)');
+        expect(jotformReactivationMigration).toContain('location.previousGroupFormUrl');
+        expect(jotformReactivationMigration).toContain('await writeGroupFormUrls(db, false)');
         expect(backToSchoolMigration).toContain('HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT');
         expect(backToSchoolMigration).toContain('ON CONFLICT ("path") DO NOTHING');
         expect(migrationIndex).toContain('20260820_090000_philadelphia_educators_page');

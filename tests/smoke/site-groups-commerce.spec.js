@@ -48,22 +48,44 @@ test('group CTAs resolve to location-data form URLs for the selected location', 
   await expect(page.getByRole('heading', { level: 1 })).toContainText('corporate event');
 });
 
-test('Houston and Philadelphia group inquiries temporarily hand off to Roller', async ({ page }) => {
+test('Houston and Philadelphia use their own Jotforms in the shared inquiry design', async ({ page }) => {
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
-  const expectedUrls = {
-    houston: 'https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form',
-    philadelphia: 'https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form',
+  const expectedForms = {
+    houston: {
+      formId: '262186150244149',
+      location: 'Houston',
+      phoneHref: 'tel:+17135881630',
+      phoneText: '713-588-1630',
+    },
+    philadelphia: {
+      formId: '262217710699160',
+      location: 'Philadelphia',
+      phoneHref: 'tel:+12677101240',
+      phoneText: '267-710-1240',
+    },
   };
-  for (const [locationId, expectedHref] of Object.entries(expectedUrls)) {
+  for (const [locationId, expected] of Object.entries(expectedForms)) {
+    const expectedHref = groupFormUrl(locationId, 'corporate');
     await page.evaluate(() => window.TMBooking.open({ kind: 'groups', groupType: 'corporate' }));
     await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
     await page.locator('#ticketLocation').selectOption(locationId);
     await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', expectedHref);
-    await expect(page.locator('#ticketBookBtn')).toHaveAttribute('target', '_blank');
+    await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('target', '_blank');
     await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
-    await page.locator('#ticketClose').click();
+    await page.locator('#ticketBookBtn').click();
+
+    const form = page.locator('[data-tm-group-inquiry-form]');
+    await expect(form).toHaveAttribute('action', `https://submit.jotform.com/submit/${expected.formId}`);
+    await expect(form.locator('[name="q21_location"]')).toHaveValue(expected.location);
+    await expect(page.locator('[data-tm-analytics-cta="group_form_phone"]'))
+      .toHaveAttribute('href', expected.phoneHref);
+    await expect(page.locator('[data-tm-analytics-cta="group_form_phone"]'))
+      .toContainText(expected.phoneText);
+
+    await page.goto('/groups/corporate');
+    await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
   }
 });
 
@@ -261,6 +283,8 @@ test('group inquiry deal titles use each CRM code and prefer organization over s
     manassas: 'MAN',
     'mount-prospect': 'MTP',
     'orland-park': 'OPK',
+    houston: 'HOU',
+    philadelphia: 'PHI',
   };
 
   for (const [locationId, code] of Object.entries(locationCodes)) {

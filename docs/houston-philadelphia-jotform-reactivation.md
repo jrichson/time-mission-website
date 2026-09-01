@@ -1,6 +1,6 @@
 # Houston and Philadelphia Jotform Reactivation
 
-Houston and Philadelphia group inquiries are temporarily routed to their previous Roller forms while the separate franchisee Pipedrive setup is completed. The Jotform implementation is intentionally retained and should be reactivated with a new forward-only change.
+Houston and Philadelphia group inquiries now use the same on-site design as Manassas and Mount Prospect while submitting to their separate franchisee-owned Jotform accounts. The previous Roller rollback remains in migration history, and reactivation is implemented as a new forward-only change.
 
 ## Preserved implementation
 
@@ -10,39 +10,40 @@ Houston and Philadelphia group inquiries are temporarily routed to their previou
 - Submit behavior: `js/group-inquiry-form.js`
 - Original enabling migration: `cms/migrations/20260810_090000_houston_philadelphia_jotform_routes.ts`
 - Temporary Roller migration: `cms/migrations/20260810_170000_houston_philadelphia_roller_routes.ts`
+- Forward reactivation migration: `cms/migrations/20260901_090000_houston_philadelphia_jotform_reactivation.ts`
 - Reusable route and Roller URL snapshot: `cms/migration-data/20260810_houston_philadelphia_jotform_routes_snapshot.ts`
 
-Do not delete or edit the applied migration history. The temporary migration's `down` function documents the exact reversal, but production reactivation should normally use a new forward migration that writes the preserved on-site routes.
+Do not delete or edit the applied migration history. The forward migration writes the preserved on-site routes; its `down` function restores the prior Roller destinations.
 
 ## Preserved CRM values
 
-| Location | Jotform | Pipedrive location | Deal prefix |
-| --- | --- | --- | --- |
-| Houston | `262186150244149` | `Houston` | `HOU` |
-| Philadelphia | `262217710699160` | `Philadelphia` | `PHL` |
+| Location | Jotform | Build metadata | Pipedrive location | Deal prefix | Group phone |
+| --- | --- | --- | --- | --- | --- |
+| Houston | `262186150244149` | `1788292905464` | `Houston` | `HOU` | `713-588-1630` |
+| Philadelphia | `262217710699160` | `1788292891937` | `Philadelphia` | `PHI` | `267-710-1240` |
 
 The website continues to retain mappings for `q20_dealTitle`, `q21_location`, `q23_typeA`, and the existing event-detail field.
 
-## Readiness gate
+## Production release gate
 
-Before reactivation, submit one controlled test through each franchisee-owned Jotform and confirm:
+Before deploying the reactivation, submit one controlled test through each franchisee-owned Jotform and confirm:
 
 1. One Pipedrive person is created or matched without an unwanted duplicate.
 2. One deal is created in the correct location pipeline, stage, status, visibility, and owner.
-3. The deal title begins with `HOU:` or `PHL:` as appropriate.
+3. The deal title begins with `HOU:` or `PHI:` as appropriate.
 4. The Pipedrive location equals `Houston` or `Philadelphia` exactly.
 5. Event Details reaches the intended Deal Large text field without a 255-character rejection.
 6. Expected activities and notifications are created once.
 7. The Jotform success redirect reaches the Time Mission thank-you route and emits `GROUP_FORM_SUBMIT_SUCCESS` without PII.
 
-## Reactivation change
+## Implemented reactivation
 
-1. In `data/locations.json`, set all seven `groupFormUrls` values for each location to:
+1. `data/locations.json` sets all seven `groupFormUrls` values for each location to:
    - Houston: `/groups/inquire/houston/{form_key}`
    - Philadelphia: `/groups/inquire/philadelphia/{form_key}`
-2. Add a new CMS migration after `20260810_170000_houston_philadelphia_roller_routes`. Reuse `HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT` and write each entry's `groupFormUrls` value, matching the temporary migration's `down` behavior.
-3. Update routing tests and the active-state notes in the analytics contract, CTA matrix, and GTM runbook.
-4. Run `npm run check`, `npm run build:astro`, and `npm run test:smoke`.
-5. Deploy a clean US artifact, then no-cache verify Houston, Philadelphia, Manassas, Mount Prospect, and Orland Park.
+2. `20260901_090000_houston_philadelphia_jotform_reactivation` reuses `HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT` and writes each entry's on-site route.
+3. The shared renderer preserves each source form's field names, form ID, build metadata, CRM location, deal prefix, and Group Specialist phone number.
+4. Release validation remains `npm run check`, `npm run build:astro`, and `npm run test:smoke`.
+5. After deployment, no-cache verify Houston, Philadelphia, Manassas, Mount Prospect, and Orland Park.
 
 The seven form keys are `default`, `birthdays`, `corporate`, `field-trips`, `bachelor-ette`, `private-events`, and `holidays`.

@@ -42,11 +42,11 @@ This matrix covers the public site surfaces that behave like buttons or destinat
 | Selected location | Destination / behavior | Notes |
 | --- | --- | --- |
 | No active location | Ticket panel in group mode | User must choose a location before continuing to the right form. |
-| Mount Prospect | Pipedrive form URLs by group type | Birthday, corporate, field trip, bachelor/ette, private events, holiday. |
-| Philadelphia | `https://forms.roller.app/#/timemissionphiladelphiapa/1446ba8be6094ad/form` | Temporary Roller handoff until franchisee Pipedrive actions are ready. |
-| Manassas | Pipedrive form URLs by group type | Birthday, corporate, field trip, bachelor/ette, private events, holiday. |
-| Houston | `https://forms.roller.app/#/timemissionhouston/bc80621a90b3417/form` | Temporary Roller handoff until franchisee Pipedrive actions are ready. |
-| Orland Park | Pipedrive form URLs by group type | Birthday, corporate, field trip, bachelor/ette, private events, holiday. |
+| Mount Prospect | `/groups/inquire/mount-prospect/{form_subject}` | Shared on-site design submitting to Jotform `261936424348059`. |
+| Philadelphia | `/groups/inquire/philadelphia/{form_subject}` | Shared on-site design submitting to franchise Jotform `262217710699160`. |
+| Manassas | `/groups/inquire/manassas/{form_subject}` | Shared on-site design submitting to Jotform `261936424348059`. |
+| Houston | `/groups/inquire/houston/{form_subject}` | Shared on-site design submitting to franchise Jotform `262186150244149`. |
+| Orland Park | `/groups/inquire/orland-park/{form_subject}` | Shared on-site design submitting to Jotform `261936424348059`. |
 | Lincoln | `https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959` | External provider navigation. |
 | Antwerp | `https://www.experience-factory.com/antwerp/online-booking/#your-group=groups-of-friends&your-favorite-experience=time-mission` | Intentional EU/external group handoff. |
 | West Nyack from any page | Briq widget inside the current ticket panel | Briq group URLs are converted to the internal Briq widget handoff instead of raw external Briq navigation. |
