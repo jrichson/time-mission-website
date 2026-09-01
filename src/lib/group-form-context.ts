@@ -19,7 +19,7 @@ export type JotformGroupFormConfig = {
     specialistPhone: {
         display: string;
         href: `tel:+${string}`;
-    };
+    } | null;
 };
 
 const JOTFORM_GROUP_FORM_CONFIGS: Record<GroupInquiryLocationSlug, JotformGroupFormConfig> = {
@@ -62,10 +62,7 @@ const JOTFORM_GROUP_FORM_CONFIGS: Record<GroupInquiryLocationSlug, JotformGroupF
         buildDate: '1788292905464',
         pipedriveLocationValue: 'Houston',
         dealTitlePrefix: 'HOU',
-        specialistPhone: {
-            display: '713-588-1630',
-            href: 'tel:+17135881630',
-        },
+        specialistPhone: null,
     },
     philadelphia: {
         formId: '262217710699160',
@@ -73,10 +70,7 @@ const JOTFORM_GROUP_FORM_CONFIGS: Record<GroupInquiryLocationSlug, JotformGroupF
         buildDate: '1788292891937',
         pipedriveLocationValue: 'Philadelphia',
         dealTitlePrefix: 'PHI',
-        specialistPhone: {
-            display: '267-710-1240',
-            href: 'tel:+12677101240',
-        },
+        specialistPhone: null,
     },
 };
 

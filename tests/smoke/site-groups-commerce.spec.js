@@ -56,14 +56,10 @@ test('Houston and Philadelphia use their own Jotforms in the shared inquiry desi
     houston: {
       formId: '262186150244149',
       location: 'Houston',
-      phoneHref: 'tel:+17135881630',
-      phoneText: '713-588-1630',
     },
     philadelphia: {
       formId: '262217710699160',
       location: 'Philadelphia',
-      phoneHref: 'tel:+12677101240',
-      phoneText: '267-710-1240',
     },
   };
   for (const [locationId, expected] of Object.entries(expectedForms)) {
@@ -79,14 +75,22 @@ test('Houston and Philadelphia use their own Jotforms in the shared inquiry desi
     const form = page.locator('[data-tm-group-inquiry-form]');
     await expect(form).toHaveAttribute('action', `https://submit.jotform.com/submit/${expected.formId}`);
     await expect(form.locator('[name="q21_location"]')).toHaveValue(expected.location);
-    await expect(page.locator('[data-tm-analytics-cta="group_form_phone"]'))
-      .toHaveAttribute('href', expected.phoneHref);
-    await expect(page.locator('[data-tm-analytics-cta="group_form_phone"]'))
-      .toContainText(expected.phoneText);
+    await expect(page.getByText('Rather talk it through?')).toHaveCount(0);
+    await expect(page.locator('[data-tm-analytics-cta="group_form_phone"]')).toHaveCount(0);
 
     await page.goto('/groups/corporate');
     await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
   }
+});
+
+test('the shared inquiry design keeps the specialist phone for operator locations', async ({ page }) => {
+  await page.goto('/groups/inquire/manassas/corporate');
+
+  await expect(page.getByText('Rather talk it through?')).toBeVisible();
+  await expect(page.locator('[data-tm-analytics-cta="group_form_phone"]'))
+    .toHaveAttribute('href', 'tel:+18137735250');
+  await expect(page.locator('[data-tm-analytics-cta="group_form_phone"]'))
+    .toContainText('813-773-5250');
 });
 
 test('group cards open the selected location event form as a direct link', async ({ page }) => {

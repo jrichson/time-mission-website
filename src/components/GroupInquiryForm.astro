@@ -35,20 +35,22 @@ const formAction = `https://submit.jotform.com/submit/${formConfig.formId}`;
                 Tell us what you have in mind. A Time Mission group specialist will follow up with availability and next steps.
             </p>
 
-            <div class="group-inquiry__callout">
-                <span class="group-inquiry__callout-index" aria-hidden="true">01</span>
-                <div>
-                    <p>Rather talk it through?</p>
-                    <a
-                        href={formConfig.specialistPhone.href}
-                        data-tm-analytics-cta="group_form_phone"
-                        rel="nofollow"
-                    >
-                        Call {formConfig.specialistPhone.display}
-                    </a>
-                    <span>Group Specialist team</span>
+            {formConfig.specialistPhone && (
+                <div class="group-inquiry__callout">
+                    <span class="group-inquiry__callout-index" aria-hidden="true">01</span>
+                    <div>
+                        <p>Rather talk it through?</p>
+                        <a
+                            href={formConfig.specialistPhone.href}
+                            data-tm-analytics-cta="group_form_phone"
+                            rel="nofollow"
+                        >
+                            Call {formConfig.specialistPhone.display}
+                        </a>
+                        <span>Group Specialist team</span>
+                    </div>
                 </div>
-            </div>
+            )}
         </aside>
 
         <div class="group-inquiry__form-shell">

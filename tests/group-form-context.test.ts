@@ -16,20 +16,22 @@ describe('group inquiry Jotform account routing', () => {
             buildDate: '1784236513760',
             pipedriveLocationValue: 'Manassas',
             dealTitlePrefix: 'MAN',
+            specialistPhone: {
+                display: '813-773-5250',
+                href: 'tel:+18137735250',
+            },
         });
     });
 
     it.each([
-        ['houston', '262186150244149', '1788292905464', 'Houston', 'HOU', '713-588-1630', 'tel:+17135881630'],
-        ['philadelphia', '262217710699160', '1788292891937', 'Philadelphia', 'PHI', '267-710-1240', 'tel:+12677101240'],
+        ['houston', '262186150244149', '1788292905464', 'Houston', 'HOU'],
+        ['philadelphia', '262217710699160', '1788292891937', 'Philadelphia', 'PHI'],
     ])('routes %s through its franchise form with exact source and CRM values', (
         slug,
         formId,
         buildDate,
         locationValue,
         prefix,
-        groupPhoneDisplay,
-        groupPhoneHref,
     ) => {
         expect(jotformGroupFormConfigFor(slug)).toEqual({
             formId,
@@ -37,10 +39,7 @@ describe('group inquiry Jotform account routing', () => {
             buildDate,
             pipedriveLocationValue: locationValue,
             dealTitlePrefix: prefix,
-            specialistPhone: {
-                display: groupPhoneDisplay,
-                href: groupPhoneHref,
-            },
+            specialistPhone: null,
         });
         expect(groupInquiryPath(slug, 'corporate')).toBe(`/groups/inquire/${slug}/corporate`);
     });
