@@ -9,6 +9,7 @@ import {
     locationHeadlineStatus,
     locationHoursRows,
     locationPhoneHref,
+    locationSignupFormId,
     locationStateBadge,
     locationViewModel,
     type LocationViewModel,
@@ -88,6 +89,25 @@ describe('Location View contract', () => {
         expect(locationPhoneHref(eindhoven)).toBe('tel:+31408083636');
     });
 
+    it('routes Eindhoven conversion CTAs to its Klaviyo signup form', () => {
+        const eindhoven = allLocations.find((loc) => loc.id === 'eindhoven');
+        if (!eindhoven) throw new Error('Eindhoven location missing');
+        const internalEindhoven = { ...eindhoven, externalUrl: undefined };
+
+        expect(locationSignupFormId(eindhoven)).toBe('Y5LLf7');
+        expect(locationCtaView(internalEindhoven)).toEqual({
+            href: '#',
+            isBookingTrigger: false,
+            label: 'Sign Up',
+            i18n: 'location.signUp',
+            signupFormId: 'Y5LLf7',
+        });
+        expect(locationViewModel(internalEindhoven)).toMatchObject({
+            bookLabel: 'Sign Up',
+            signupFormId: 'Y5LLf7',
+        });
+    });
+
     it('keeps Brussels phone display formatting while dialing its E.164 number', () => {
         const brussels = allLocations.find((loc) => loc.id === 'brussels');
         if (!brussels) throw new Error('Brussels location missing');
@@ -132,6 +152,7 @@ describe('Location View contract', () => {
                 openingLabel: runtimeView.openingLabel,
                 pageUrl: runtimeView.pageUrl,
                 slug: runtimeView.slug,
+                signupFormId: runtimeView.signupFormId,
                 status: runtimeView.status,
             }).toEqual(typedView);
         }

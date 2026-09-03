@@ -17,6 +17,7 @@ interface Props {
     bookingCtaLabel?: string;
     bookingCtaIsBookingTrigger?: boolean;
     bookingCtaI18n?: string;
+    bookingCtaSignupFormId?: string;
     locationTicker?: string;
     locationTickerI18n?: string;
 }
@@ -28,12 +29,14 @@ const {
     bookingCtaLabel = 'Book Now',
     bookingCtaIsBookingTrigger = true,
     bookingCtaI18n = 'nav.bookNow',
+    bookingCtaSignupFormId = '',
     locationTicker = '',
     locationTickerI18n = '',
 } = Astro.props;
 const bookingCtaAttrs = {
     ...(bookingCtaIsBookingTrigger ? { 'data-tm-booking-trigger': '', 'data-tm-booking-kind': 'tickets' } : {}),
     ...(bookingCtaI18n ? { 'data-i18n': bookingCtaI18n } : {}),
+    ...(bookingCtaSignupFormId ? { 'data-tm-klaviyo-form-trigger': bookingCtaSignupFormId } : {}),
 };
 
 type TickerMessage =

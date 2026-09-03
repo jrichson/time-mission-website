@@ -22,6 +22,7 @@ export interface LocationCtaView {
     isBookingTrigger: boolean;
     label: string;
     i18n: string;
+    signupFormId?: string;
 }
 
 export interface LocationViewModel {
@@ -33,6 +34,7 @@ export interface LocationViewModel {
     openingLabel: string;
     pageUrl: string;
     slug: string;
+    signupFormId: string;
     status: LocationRecord['status'];
 }
 
@@ -113,6 +115,13 @@ export function locationContactHref(loc: Pick<LocationRecord, 'slug'>, type = 'u
     return `/contact#${params.toString()}`;
 }
 
+export function locationSignupFormId(
+    loc: Pick<LocationRecord, 'signupFormId'> | null | undefined,
+): string {
+    const formId = String(loc?.signupFormId || '').trim();
+    return /^[a-z0-9]+$/i.test(formId) ? formId : '';
+}
+
 export function locationMarket(loc: Pick<LocationRecord, 'address'>): string {
     return [loc.address.city, loc.address.state || loc.address.country].filter(Boolean).join(', ');
 }
@@ -158,6 +167,16 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
             i18n: loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite',
         };
     }
+    const signupFormId = locationSignupFormId(loc);
+    if (signupFormId) {
+        return {
+            href: '#',
+            isBookingTrigger: false,
+            label: 'Sign Up',
+            i18n: 'location.signUp',
+            signupFormId,
+        };
+    }
     const isBookable = hasTicketBooking(loc);
     if (isBookable) {
         return {
@@ -178,6 +197,7 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
 export function locationViewModel(loc: LocationRecord): LocationViewModel {
     const bookable = hasTicketBooking(loc);
     const externalUrl = String(loc.externalUrl || '').trim();
+    const signupFormId = externalUrl ? '' : locationSignupFormId(loc);
     const externalSiteLabel = loc.region === 'europe' ? 'Visit EU Site' : 'Visit Location Site';
     const comingSoon = loc.status === 'coming-soon';
     const temporarilyClosed = loc.status === 'temporarily-closed';
@@ -188,6 +208,8 @@ export function locationViewModel(loc: LocationRecord): LocationViewModel {
             ? loc.temporaryClosure?.ctaLabel || 'Get Closure Updates'
             : externalUrl
             ? externalSiteLabel
+            : signupFormId
+            ? 'Sign Up'
             : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
         bookable,
         externalUrl,
@@ -195,6 +217,7 @@ export function locationViewModel(loc: LocationRecord): LocationViewModel {
         openingLabel: locationOpeningLabel(loc),
         pageUrl: locationHref(loc),
         slug: locationSlug(loc),
+        signupFormId,
         status: loc.status,
     };
 }

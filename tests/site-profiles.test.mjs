@@ -191,6 +191,7 @@ describe('site deployment profiles', () => {
         country: 'Netherlands',
       },
       bookingUrl: '',
+      signupFormId: 'Y5LLf7',
       contact: { phone: '+31 (0)40 808 3636', email: 'eindhoven@timemission.nl' },
       currency: 'EUR',
       locale: 'nl-NL',

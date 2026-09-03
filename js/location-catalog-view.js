@@ -11,6 +11,7 @@
         sat: 'Sat',
         sun: 'Sun',
     };
+    var KLAVIYO_ONSITE_SRC = 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU';
     var BookingJourney = window.TMBookingJourney;
     if (!BookingJourney) throw new Error('TMBookingJourney must load before location-catalog-view.js');
 
@@ -23,6 +24,40 @@
             return window.TMI18n.text(key, fallback);
         }
         return fallback;
+    }
+
+    function signupFormIdForLocation(loc) {
+        if (!loc || BookingJourney.getExternalLocationUrl(loc)) return '';
+        var formId = String(loc.signupFormId || '').trim();
+        return /^[a-z0-9]+$/i.test(formId) ? formId : '';
+    }
+
+    function ensureKlaviyoOnsiteScript() {
+        if (document.querySelector('script[data-tm-klaviyo-onsite]')
+            || document.querySelector('script[src="' + KLAVIYO_ONSITE_SRC + '"]')) return;
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = KLAVIYO_ONSITE_SRC;
+        script.setAttribute('data-tm-klaviyo-onsite', '');
+        var parent = document.head || document.body || document.documentElement;
+        if (parent) parent.appendChild(script);
+    }
+
+    function bindKlaviyoPopupTriggers() {
+        if (typeof document === 'undefined' || window.__TM_KLAVIYO_POPUP_TRIGGERS__) return;
+        window.__TM_KLAVIYO_POPUP_TRIGGERS__ = true;
+        document.addEventListener('click', function (event) {
+            var trigger = event.target && typeof event.target.closest === 'function'
+                ? event.target.closest('[data-tm-klaviyo-form-trigger]')
+                : null;
+            if (!trigger) return;
+            var formId = String(trigger.getAttribute('data-tm-klaviyo-form-trigger') || '').trim();
+            if (!/^[a-z0-9]+$/i.test(formId)) return;
+            event.preventDefault();
+            window._klOnsite = window._klOnsite || [];
+            window._klOnsite.push(['openForm', formId]);
+            ensureKlaviyoOnsiteScript();
+        });
     }
 
     function openingLabelForLocation(loc) {
@@ -235,6 +270,7 @@
         var pageUrl = loc.pagePath || externalUrl || (slug ? '/' + slug : '/');
         var comingSoon = loc.status === 'coming-soon';
         var temporarilyClosed = loc.status === 'temporarily-closed';
+        var signupFormId = signupFormIdForLocation(loc);
         var bookable = BookingJourney.isBookableLocation(loc);
         var bookingUrl = BookingJourney.resolveOpenCheckoutUrl(loc);
         var leadUrl = leadUrlForLocation(loc, slug, externalUrl);
@@ -257,6 +293,8 @@
                 ? BookingJourney.temporaryClosureCtaLabel(loc)
                 : externalUrl
                 ? externalSiteLabel
+                : signupFormId
+                ? 'Sign Up'
                 : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
             mapQuery: mapQuery,
             mapDirectionsUrl: mapQuery ? 'https://www.google.com/maps/dir/?api=1&destination=' + mapQuery : '',
@@ -265,11 +303,34 @@
             temporarilyClosed: temporarilyClosed,
             status: loc.status || 'open',
             bookable: bookable,
+            signupFormId: signupFormId,
             locationId: loc.id || slug,
         };
     }
 
     function getBookingCtaView(loc, options) {
+        var opts = options || {};
+        var kind = BookingJourney.normalizeKind(opts.kind || 'tickets');
+        var signupFormId = kind === 'tickets' ? signupFormIdForLocation(loc) : '';
+        if (signupFormId) {
+            return {
+                kind: kind,
+                groupType: '',
+                locationId: normalizeLocation(loc.id || loc.slug),
+                href: '#',
+                bookingUrl: '',
+                label: translate('location.signUp', 'Sign Up'),
+                labelKey: 'location.signUp',
+                klaviyoFormId: signupFormId,
+                url: '#',
+                trigger: false,
+                externalLocation: false,
+                disabled: false,
+                presentation: 'signup-form',
+                target: '',
+                rel: '',
+            };
+        }
         return BookingJourney.resolveCtaView(loc, options || {});
     }
 
@@ -299,6 +360,8 @@
         });
         var labelKey = view.externalUrl
             ? (loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite')
+            : view.signupFormId
+            ? 'location.signUp'
             : view.comingSoon
             ? 'location.contactUs'
             : 'nav.bookNow';
@@ -312,6 +375,12 @@
 
     function applyBookingCtaView(el, cta) {
         BookingJourney.applyCtaView(el, cta);
+        if (cta && cta.klaviyoFormId) {
+            el.setAttribute('data-tm-klaviyo-form-trigger', cta.klaviyoFormId);
+            if (cta.labelKey) el.setAttribute('data-i18n', cta.labelKey);
+        } else {
+            el.removeAttribute('data-tm-klaviyo-form-trigger');
+        }
     }
 
     function normalizeListDash(value) {
@@ -458,6 +527,8 @@
             setHidden(mapEl, !loc.mapUrl);
         }
     }
+
+    bindKlaviyoPopupTriggers();
 
     window.TMLocationViews = {
         getLocationView: getLocationView,

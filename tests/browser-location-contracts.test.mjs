@@ -1,10 +1,86 @@
 import { describe, expect, it } from 'vitest';
 import {
+  createAnchor,
   createBrowserContext,
   runScript,
 } from './browser-contract-helpers.mjs';
 
 describe('browser location state contracts', () => {
+  it('turns Eindhoven ticket CTAs into Klaviyo signup triggers', async () => {
+    const signupCta = createAnchor('/contact#location=eindhoven&type=updates', {
+      className: 'btn-tickets',
+      textContent: 'Contact Us',
+    });
+    const { context, window, document } = createBrowserContext({
+      TM_DATA: {
+        locations: [
+          {
+            id: 'eindhoven',
+            slug: 'eindhoven',
+            name: 'Time Mission Eindhoven',
+            shortName: 'Eindhoven',
+            status: 'coming-soon',
+            bookingUrl: '',
+            signupFormId: 'Y5LLf7',
+            contact: { phone: '+31 (0)40 808 3636', email: 'eindhoven@timemission.nl' },
+            hours: {},
+          },
+        ],
+      },
+    });
+    window.location.pathname = '/eindhoven';
+    document.body.dataset.location = 'eindhoven';
+    document.querySelectorAll = (selector) => (
+      selector === '.btn-tickets, .btn-book-now' ? [signupCta] : []
+    );
+
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    runScript('js/locations.js', context);
+    await window.TM.ready;
+
+    expect(signupCta.textContent).toBe('Sign Up');
+    expect(signupCta.href).toBe('#');
+    expect(signupCta.getAttribute('data-i18n')).toBe('location.signUp');
+    expect(signupCta.getAttribute('data-tm-klaviyo-form-trigger')).toBe('Y5LLf7');
+    expect(signupCta.hasAttribute('data-tm-booking-trigger')).toBe(false);
+  });
+
+  it('opens the requested Klaviyo popup from a signup trigger', () => {
+    const appendedScripts = [];
+    const trigger = createAnchor('#', {
+      attrs: { 'data-tm-klaviyo-form-trigger': 'Y5LLf7' },
+      closestSelectors: ['[data-tm-klaviyo-form-trigger]'],
+    });
+    const { context, window, document } = createBrowserContext();
+    document.head = {
+      appendChild(script) {
+        appendedScripts.push(script);
+        return script;
+      },
+    };
+
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    const click = {
+      type: 'click',
+      target: trigger,
+      defaultPrevented: false,
+      preventDefault() {
+        this.defaultPrevented = true;
+      },
+    };
+    document.dispatchEvent(click);
+
+    expect(click.defaultPrevented).toBe(true);
+    expect(window._klOnsite).toEqual([['openForm', 'Y5LLf7']]);
+    expect(appendedScripts).toHaveLength(1);
+    expect(appendedScripts[0]).toMatchObject({
+      async: true,
+      src: 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU',
+    });
+  });
+
   it('homepage clears stale saved location instead of restoring it on hard refresh', async () => {
     const { context, window } = createBrowserContext({
       TM_DATA: {

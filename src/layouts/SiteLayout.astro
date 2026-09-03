@@ -33,6 +33,7 @@ interface Props {
     bookingCtaLabel?: string;
     bookingCtaIsBookingTrigger?: boolean;
     bookingCtaI18n?: string;
+    bookingCtaSignupFormId?: string;
     landingHead?: import('../lib/seo/catalog').LandingHeadInput | null;
     lang?: string;
     /** Optional YYYY-MM-DD override; otherwise resolved from git mtime of the page source file. */
@@ -54,6 +55,7 @@ const {
     bookingCtaLabel = 'Book Now',
     bookingCtaIsBookingTrigger = true,
     bookingCtaI18n = 'nav.bookNow',
+    bookingCtaSignupFormId = '',
     landingHead,
     lang = activeSiteProfile.defaultLocale,
     lastUpdated,
@@ -152,6 +154,7 @@ const rendersGtmNoscript = activeSiteProfile.consentProfile === 'us_open' && Boo
                     bookingCtaLabel={bookingCtaLabel}
                     bookingCtaIsBookingTrigger={bookingCtaIsBookingTrigger}
                     bookingCtaI18n={bookingCtaI18n}
+                    bookingCtaSignupFormId={bookingCtaSignupFormId}
                 />
                 <SiteNav
                     currentLang={lang}
@@ -160,6 +163,7 @@ const rendersGtmNoscript = activeSiteProfile.consentProfile === 'us_open' && Boo
                     bookingCtaLabel={bookingCtaLabel}
                     bookingCtaIsBookingTrigger={bookingCtaIsBookingTrigger}
                     bookingCtaI18n={bookingCtaI18n}
+                    bookingCtaSignupFormId={bookingCtaSignupFormId}
                     locationTicker={pageLocation?.ticker}
                     locationTickerI18n={locationTickerI18n}
                 />

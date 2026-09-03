@@ -13,6 +13,7 @@ interface Props {
             i18n: string;
             isBookingTrigger: boolean;
             label: string;
+            signupFormId?: string;
         };
         ld: string;
         location: { slug: string };
@@ -41,6 +42,7 @@ const pageCss = locationPageCssHref(slug);
     bookingCtaLabel={cityPage.cta.label}
     bookingCtaIsBookingTrigger={cityPage.cta.isBookingTrigger}
     bookingCtaI18n={cityPage.cta.i18n}
+    bookingCtaSignupFormId={cityPage.cta.signupFormId}
 >
     <Fragment slot="head-extra">
         <LocationPageHeadLinks pageCss={pageCss} />

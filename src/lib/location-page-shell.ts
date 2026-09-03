@@ -2,7 +2,7 @@ import { allLocations, type LocationRecord } from '../data/locations';
 import { definePage } from './define-page';
 import { comingSoonLocationPageTaglines, locationPageTaglines } from './location-page-registry';
 import { hasTicketBooking, locationDisplayStatus, locationOpeningDateText, locationOpeningLabel } from './location-status';
-import { locationCtaView } from './location-view';
+import { locationCtaView, locationSignupFormId } from './location-view';
 import { buildLocationGraph, serializeGraph } from './schema/graph';
 import { getSeoForRoute } from './seo/catalog';
 import { locationPurchaseTermsFaqItemHtml } from './location-policy-faq';
@@ -57,6 +57,10 @@ function locationPageStatusLabel(location: LocationRecord): string {
 }
 
 function locationPrimaryCtaAttrs(location: LocationRecord): string {
+    const signupFormId = locationSignupFormId(location);
+    if (signupFormId) {
+        return `data-tm-klaviyo-form-trigger="${escapeHtml(signupFormId)}" data-i18n="location.signUp"`;
+    }
     if (!hasTicketBooking(location)) return '';
     const checkoutUrl = String(location.rollerCheckoutUrl || location.bookingUrl || '').trim();
     return `data-tm-booking-trigger="" data-tm-booking-kind="tickets" data-tm-location="${escapeHtml(location.slug)}" data-tm-booking-url="${escapeHtml(checkoutUrl)}"`;
