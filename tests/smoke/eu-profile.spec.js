@@ -6,6 +6,7 @@ const pageI18n = require('../../src/data/site/page-i18n.json');
 
 const missionAltNames = pageI18n._policy.missionNames;
 const missionDisplayNames = missionAltNames.map((name) => name.toUpperCase());
+const BRUSSELS_SCHOOL_CHECKOUT = 'https://ecom.roller.app/TERMINAL1/timemission/nl-BE/products?code=SCHOOL20';
 
 function localizedHtmlRoutes(locale) {
   const base = path.join(REPO_ROOT, 'dist', locale);
@@ -86,6 +87,40 @@ test('Brussels publishes its local phone and email contact details', async ({ pa
     'href',
     'mailto:brussels@timemission.com',
   );
+});
+
+test('Brussels back-to-school page publishes the weekday offer and localized SCHOOL20 checkout', async ({ page }) => {
+  await page.route('https://ecom.roller.app/**', async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>Roller progressive checkout</title>',
+    });
+  });
+  await page.goto('/brussels/back-to-school-sale');
+
+  await expect(page).toHaveTitle('20% Off Back to School Sale | Time Mission Brussels');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/20% Off\s+Back to School Sale/i);
+  await expect(page.locator('.tm-promo-landing__copy')).toContainText(
+    'Get 20% OFF missions at Time Mission Brussels on weekdays, Wednesday through Friday.',
+  );
+  const promoCta = page.locator('.tm-promo-landing__cta');
+  await expect(promoCta).toHaveAttribute('href', BRUSSELS_SCHOOL_CHECKOUT);
+  await expect(promoCta).not.toHaveAttribute('data-tm-booking-trigger', '');
+  await expect(promoCta).not.toHaveAttribute('data-tm-booking-presentation', 'roller');
+  await expect(promoCta).not.toHaveAttribute('data-tm-booking-url', BRUSSELS_SCHOOL_CHECKOUT);
+  await Promise.all([
+    page.waitForURL(BRUSSELS_SCHOOL_CHECKOUT),
+    promoCta.click(),
+  ]);
+  await expect(page).toHaveTitle('Roller progressive checkout');
+
+  await page.goto('/nl/brussels/back-to-school-sale');
+  await expect(page).toHaveTitle('20% korting voor de back-to-schoolactie | Time Mission Brussel');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/20% korting\s+Back-to-schoolactie/i);
+  await expect(page.locator('.tm-promo-landing__copy')).toContainText(
+    'Krijg 20% korting op missies bij Time Mission Brussel op weekdagen, van woensdag tot en met vrijdag.',
+  );
+  await expect(page.locator('.tm-promo-landing__copy')).toContainText('SCHOOL20');
 });
 
 test('wide animated announcement ticker remains populated across the viewport', async ({ page }) => {
@@ -194,7 +229,7 @@ test('localized EU mission names and image labels remain in English', async ({ p
 test('every localized EU route renders in each enabled language', async ({ page }) => {
   test.setTimeout(180_000);
   const expectedRoutes = localizedHtmlRoutes('nl');
-  expect(expectedRoutes).toHaveLength(37);
+  expect(expectedRoutes).toHaveLength(38);
 
   for (const locale of ['nl', 'fr', 'es']) {
     expect(localizedHtmlRoutes(locale)).toEqual(expectedRoutes);
@@ -313,8 +348,10 @@ test('localized EU routes translate their announcement and footer chrome', async
     },
     {
       path: '/fr/brussels',
-      tickerKey: 'ticker.location.brussels',
-      ticker: 'BRUXELLES EST OUVERT',
+      tickerKey: 'ticker.backToSchool20',
+      ticker: '20 % DE RÉDUCTION POUR LA RENTRÉE',
+      tickerHref: '/fr/brussels/back-to-school-sale',
+      tickerLink: 'En savoir plus',
       city: 'BRUXELLES',
       tagline: "Une aventure de jeu social où les équipes s'affrontent dans des défis immersifs à travers le temps et l'espace.",
       experience: 'EXPÉRIENCE',
@@ -348,7 +385,16 @@ test('localized EU routes translate their announcement and footer chrome', async
   for (const route of routes) {
     await page.goto(route.path);
 
-    await expect(page.locator(`[data-i18n="${route.tickerKey}"]`).first()).toHaveText(route.ticker);
+    if (route.tickerKey) {
+      await expect(page.locator(`[data-i18n="${route.tickerKey}"]`).first()).toHaveText(route.ticker);
+      if (route.tickerHref) {
+        await expect(page.locator('.ticker-link').first()).toHaveAttribute('href', route.tickerHref);
+        await expect(page.locator('[data-i18n="ticker.learnMore"]').first()).toHaveText(route.tickerLink);
+      }
+    } else {
+      await expect(page.locator('.ticker-item').first()).toContainText(route.ticker);
+      await expect(page.locator('.ticker-link').first()).toHaveAttribute('href', route.tickerHref);
+    }
     await expect(page.locator('.footer-locations-title')).toHaveText(route.city);
     await expect(page.locator('.footer-brand p')).toHaveText(route.tagline);
     await expect(page.locator('.footer-title').first()).toHaveText(route.experience);
@@ -376,6 +422,24 @@ test('localized EU routes translate their announcement and footer chrome', async
     }));
     expect(layout.clientWidth).toBeLessThanOrEqual(layout.viewportWidth);
     expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth + 1);
+  }
+});
+
+test('Brussels campaign ticker follows runtime language changes', async ({ page }) => {
+  await page.goto('/brussels');
+  await page.evaluate(() => window.TMI18n.ready);
+
+  const tickerCopy = page.locator('[data-i18n="ticker.backToSchool20"]').first();
+  const tickerLink = page.locator('[data-i18n="ticker.learnMore"]').first();
+
+  for (const expected of [
+    { locale: 'fr', copy: '20 % DE RÉDUCTION POUR LA RENTRÉE', link: 'En savoir plus' },
+    { locale: 'nl', copy: '20% KORTING VOOR DE BACK-TO-SCHOOLACTIE', link: 'Meer informatie' },
+    { locale: 'es', copy: '20 % DE DESCUENTO POR LA VUELTA AL COLE', link: 'Más información' },
+  ]) {
+    await page.evaluate((locale) => window.TMI18n.setLanguage(locale), expected.locale);
+    await expect(tickerCopy).toHaveText(expected.copy);
+    await expect(tickerLink).toHaveText(expected.link);
   }
 });
 

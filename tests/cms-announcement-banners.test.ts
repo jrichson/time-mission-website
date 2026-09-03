@@ -147,6 +147,15 @@ describe('CMS announcement banners', () => {
       ...baseBanner,
       message: 'FIRST NETHERLANDS LOCATION COMING SOON',
     })?.messageI18n).toBe('ticker.location.eindhoven');
+    expect(announcementBannerViewForDoc({
+      ...baseBanner,
+      message: '20% OFF BACK TO SCHOOL',
+      linkUrl: '/brussels/back-to-school-sale',
+    })).toMatchObject({
+      messageI18n: 'ticker.backToSchool20',
+      linkLabel: 'Learn more',
+      linkLabelI18n: 'ticker.learnMore',
+    });
     expect(announcementBannerViewForDoc(baseBanner)?.messageI18n).toBeNull();
   });
 

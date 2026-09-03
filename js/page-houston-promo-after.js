@@ -6,6 +6,7 @@
             ? event.target.closest('[data-tm-promo-cta]')
             : null;
         if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (link.hasAttribute('data-tm-booking-trigger')) return;
 
         var destination = String(link.getAttribute('href') || '').trim();
         if (!/^https:\/\/ecom\.roller\.app\//i.test(destination)) return;

@@ -498,6 +498,17 @@
       "status": 301
     },
     {
+      "id": "brussels-back-to-school-sale",
+      "canonicalPath": "/brussels/back-to-school-sale",
+      "externalUrl": "https://timemission.eu/brussels/back-to-school-sale",
+      "redirectSources": [
+        "/brussels/back-to-school-sale.html"
+      ],
+      "outputFile": "brussels/back-to-school-sale.html",
+      "sitemap": false,
+      "status": 301
+    },
+    {
       "id": "privacy",
       "canonicalPath": "/privacy",
       "redirectSources": [

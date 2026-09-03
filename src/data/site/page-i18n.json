@@ -66,6 +66,7 @@
         "PA",
         "RI",
         "RI – Lincoln",
+        "SCHOOL20",
         "Sophie D.",
         "TN",
         "TN – Nashville",
@@ -4260,6 +4261,50 @@
     }
   },
   "routes": {
+    "/brussels/back-to-school-sale": {
+      "nl": {
+        ". Runs through September 20.": ". Geldig tot en met 20 september.",
+        "20% Off": "20% korting",
+        "20% Off Back to School Sale | Time Mission Brussels": "20% korting voor de back-to-schoolactie | Time Mission Brussel",
+        "A group taking on an interactive challenge at Time Mission": "Een groep die een interactieve uitdaging aangaat bij Time Mission",
+        "Back to School Sale": "Back-to-schoolactie",
+        "Book Now": "Boek nu",
+        "Book with the button below or use code": "Boek via de knop hieronder of gebruik code",
+        "Brussels": "Brussel",
+        "Brussels · Through September 20": "Brussel · Tot en met 20 september",
+        "Get 20% OFF missions at Time Mission Brussels on weekdays, Wednesday through Friday.": "Krijg 20% korting op missies bij Time Mission Brussel op weekdagen, van woensdag tot en met vrijdag.",
+        "Get 20% off missions at Time Mission Brussels on weekdays, Wednesday through Friday, through September 20, 2026.": "Krijg 20% korting op missies bij Time Mission Brussel op weekdagen, van woensdag tot en met vrijdag, tot en met 20 september 2026.",
+        "SCHOOL20": "SCHOOL20"
+      },
+      "fr": {
+        ". Runs through September 20.": ". Valable jusqu’au 20 septembre.",
+        "20% Off": "20 % de réduction",
+        "20% Off Back to School Sale | Time Mission Brussels": "20 % de réduction pour la rentrée | Time Mission Bruxelles",
+        "A group taking on an interactive challenge at Time Mission": "Un groupe relève un défi interactif à Time Mission",
+        "Back to School Sale": "Offre de rentrée",
+        "Book Now": "Réservez maintenant",
+        "Book with the button below or use code": "Réservez avec le bouton ci-dessous ou utilisez le code",
+        "Brussels": "Bruxelles",
+        "Brussels · Through September 20": "Bruxelles · Jusqu’au 20 septembre",
+        "Get 20% OFF missions at Time Mission Brussels on weekdays, Wednesday through Friday.": "Profitez de 20 % de réduction sur les missions à Time Mission Bruxelles en semaine, du mercredi au vendredi.",
+        "Get 20% off missions at Time Mission Brussels on weekdays, Wednesday through Friday, through September 20, 2026.": "Profitez de 20 % de réduction sur les missions à Time Mission Bruxelles en semaine, du mercredi au vendredi, jusqu’au 20 septembre 2026.",
+        "SCHOOL20": "SCHOOL20"
+      },
+      "es": {
+        ". Runs through September 20.": ". Válido hasta el 20 de septiembre.",
+        "20% Off": "20 % de descuento",
+        "20% Off Back to School Sale | Time Mission Brussels": "20 % de descuento por la vuelta al cole | Time Mission Bruselas",
+        "A group taking on an interactive challenge at Time Mission": "Un grupo participando en un desafío interactivo en Time Mission",
+        "Back to School Sale": "Oferta de vuelta al cole",
+        "Book Now": "Reserve ahora",
+        "Book with the button below or use code": "Reserva con el botón de abajo o usa el código",
+        "Brussels": "Bruselas",
+        "Brussels · Through September 20": "Bruselas · Hasta el 20 de septiembre",
+        "Get 20% OFF missions at Time Mission Brussels on weekdays, Wednesday through Friday.": "Consigue un 20 % de descuento en las misiones de Time Mission Bruselas entre semana, de miércoles a viernes.",
+        "Get 20% off missions at Time Mission Brussels on weekdays, Wednesday through Friday, through September 20, 2026.": "Consigue un 20 % de descuento en las misiones de Time Mission Bruselas entre semana, de miércoles a viernes, hasta el 20 de septiembre de 2026.",
+        "SCHOOL20": "SCHOOL20"
+      }
+    },
     "/blog": {
       "es": {
         "1 post": "1 publicación",

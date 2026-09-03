@@ -23,7 +23,7 @@ describe('location campaign pages', () => {
     expect(page).not.toContain('data-tm-booking-presentation="roller"');
     expect(page).not.toContain('data-tm-booking-url={bookingUrl}');
     expect(page).toContain('data-tm-promo-cta="school_night_book_now"');
-    expect(page).toContain('/js/page-houston-promo-after.js?v=2');
+    expect(page).toContain('/js/page-houston-promo-after.js?v=3');
     expect(page).not.toContain('imagePending');
     expect(page).not.toContain('up to $15 off');
     expect(page).not.toContain('60 minutes is $29.95');
@@ -90,6 +90,27 @@ describe('location campaign pages', () => {
     expect(page).toContain(`formId="${formId}"`);
     expect(page).toContain(`locationName="${locationName}"`);
     expect(page).toContain(`locationSlug="${locationSlug}"`);
+  });
+
+  it('publishes the Brussels weekday offer and exact SCHOOL20 checkout', () => {
+    const page = read('src/pages/brussels/back-to-school-sale.astro');
+    const shell = read('src/components/LocationPromotionPage.astro');
+
+    expect(page).toContain('Get 20% OFF missions at Time Mission Brussels on weekdays, Wednesday through Friday.');
+    expect(page).toContain('bookingPresentation="direct"');
+    expect(page).toContain('promoCode="SCHOOL20"');
+    expect(page).toContain('https://ecom.roller.app/TERMINAL1/timemission/nl-BE/products?code=SCHOOL20');
+    expect(page).toContain('runThrough="Runs through September 20."');
+    expect(shell).toContain("bookingPresentation?: 'direct' | 'roller'");
+    expect(shell).toContain("bookingPresentation === 'roller'");
+  });
+
+  it('schedules the Brussels campaign ticker for the promotion window', () => {
+    const snapshot = read('cms/migration-data/20260902_brussels_back_to_school_sale_snapshot.ts');
+
+    expect(snapshot).toContain("linkUrl: '/brussels/back-to-school-sale'");
+    expect(snapshot).toContain("startsAt: '2026-09-02T00:00:00+02:00'");
+    expect(snapshot).toContain("endsAt: '2026-09-21T00:00:00+02:00'");
   });
 
   it('keeps the reference layout responsive without exposing implementation placeholders', () => {

@@ -38,6 +38,7 @@ export interface AnnouncementBannerView {
     startsAt?: string | null;
     endsAt?: string | null;
     linkLabel?: string | null;
+    linkLabelI18n?: string | null;
     linkUrl?: string | null;
 }
 
@@ -47,6 +48,10 @@ const ANNOUNCEMENT_MESSAGE_I18N_KEYS = new Map([
     ['SUMMER ADVENTURES AT TIME MISSION ANTWERP', 'ticker.location.antwerp'],
     ['BRUSSELS NOW OPEN', 'ticker.location.brussels'],
     ['FIRST NETHERLANDS LOCATION COMING SOON', 'ticker.location.eindhoven'],
+    ['20% OFF BACK TO SCHOOL', 'ticker.backToSchool20'],
+]);
+const ANNOUNCEMENT_LINK_LABEL_I18N_KEYS = new Map([
+    ['LEARN MORE', 'ticker.learnMore'],
 ]);
 
 function cleanString(value: unknown): string {
@@ -154,14 +159,19 @@ export function selectAnnouncementBanner(
 export function announcementBannerViewForDoc(doc: PayloadAnnouncementBannerDoc | null | undefined): AnnouncementBannerView | null {
     if (!doc || !announcementBannerDocLooksUsable(doc)) return null;
 
+    const message = cleanString(doc.message);
     const linkUrl = safeAnnouncementLink(doc.linkUrl);
+    const linkLabel = linkUrl ? cleanString(doc.linkLabel) || 'Learn more' : null;
     return {
-        message: cleanString(doc.message),
-        messageI18n: ANNOUNCEMENT_MESSAGE_I18N_KEYS.get(cleanString(doc.message)) || null,
+        message,
+        messageI18n: ANNOUNCEMENT_MESSAGE_I18N_KEYS.get(message) || null,
         tickerBehavior: safeTickerBehavior(doc.tickerBehavior),
         startsAt: safeScheduleTimestamp(doc.startsAt),
         endsAt: safeScheduleTimestamp(doc.endsAt),
-        linkLabel: linkUrl ? cleanString(doc.linkLabel) || 'Learn more' : null,
+        linkLabel,
+        linkLabelI18n: linkLabel
+            ? ANNOUNCEMENT_LINK_LABEL_I18N_KEYS.get(linkLabel.toUpperCase()) || null
+            : null,
         linkUrl,
     };
 }

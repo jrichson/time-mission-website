@@ -44,6 +44,7 @@ import * as migration_20260820_100000_tm_ops_educators_pages from './20260820_10
 import * as migration_20260821_090000_houston_philadelphia_hours from './20260821_090000_houston_philadelphia_hours';
 import * as migration_20260831_090000_brussels_operational_details from './20260831_090000_brussels_operational_details';
 import * as migration_20260901_090000_houston_philadelphia_jotform_reactivation from './20260901_090000_houston_philadelphia_jotform_reactivation';
+import * as migration_20260902_090000_brussels_back_to_school_sale from './20260902_090000_brussels_back_to_school_sale';
 
 export const migrations = [
   {
@@ -275,5 +276,10 @@ export const migrations = [
     up: migration_20260901_090000_houston_philadelphia_jotform_reactivation.up,
     down: migration_20260901_090000_houston_philadelphia_jotform_reactivation.down,
     name: '20260901_090000_houston_philadelphia_jotform_reactivation'
+  },
+  {
+    up: migration_20260902_090000_brussels_back_to_school_sale.up,
+    down: migration_20260902_090000_brussels_back_to_school_sale.down,
+    name: '20260902_090000_brussels_back_to_school_sale'
   },
 ];

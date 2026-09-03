@@ -38,6 +38,7 @@ const locationPageShellImportRe = /import\s+\{[^}]*build(?:Open|ComingSoon)Locat
 const locationPageShellCallRe = /\bbuild(?:Open|ComingSoon)LocationPage\s*\(/;
 const locationPageShellComponentRe = /<(?:Open|ComingSoon)LocationPageShell\b[^>]*\bcityPage=\{cityPage\}/;
 const educatorPageShellRe = /import\s+EducatorPage\s+from\s+['"][^'"]+EducatorPage\.astro['"][\s\S]*<EducatorPage\b/;
+const locationPromotionPageShellRe = /import\s+LocationPromotionPage\s+from\s+['"][^'"]+LocationPromotionPage\.astro['"][\s\S]*<LocationPromotionPage\b/;
 
 function hasDefinePageSource(text) {
   return (definePageImportRe.test(text) && definePageCallRe.test(text))
@@ -50,7 +51,9 @@ function hasCanonicalSpread(text) {
 }
 
 function usesPageShell(text) {
-  return locationPageShellComponentRe.test(text) || educatorPageShellRe.test(text);
+  return locationPageShellComponentRe.test(text)
+    || educatorPageShellRe.test(text)
+    || locationPromotionPageShellRe.test(text);
 }
 
 /** Pages that intentionally omit SiteLayout but still declare page metadata. */
@@ -129,6 +132,23 @@ if (!fs.existsSync(educatorShellFile)) {
   }
   if (!shell.includes('canonicalPath={page.canonicalPath}')) {
     errors.push(`${educatorShellRel}: SiteLayout must use canonicalPath={page.canonicalPath}`);
+  }
+}
+
+const locationPromotionShellRel = path.join('src', 'components', 'LocationPromotionPage.astro');
+const locationPromotionShellFile = path.join(root, locationPromotionShellRel);
+if (!fs.existsSync(locationPromotionShellFile)) {
+  errors.push(`${locationPromotionShellRel}: missing location promotion page shell component`);
+} else {
+  const shell = fs.readFileSync(locationPromotionShellFile, 'utf8');
+  if (!importLayoutRe.test(shell)) {
+    errors.push(`${locationPromotionShellRel}: missing \`import SiteLayout from "...SiteLayout.astro"\``);
+  }
+  if (!hasDefinePageSource(shell)) {
+    errors.push(`${locationPromotionShellRel}: must define its canonical page path`);
+  }
+  if (!shell.includes('canonicalPath={page.canonicalPath}')) {
+    errors.push(`${locationPromotionShellRel}: SiteLayout must use canonicalPath={page.canonicalPath}`);
   }
 }
 

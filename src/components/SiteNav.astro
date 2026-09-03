@@ -10,6 +10,7 @@ interface Props {
         startsAt?: string | null;
         endsAt?: string | null;
         linkLabel?: string | null;
+        linkLabelI18n?: string | null;
         linkUrl?: string | null;
     } | null;
     currentLang?: string;
@@ -40,7 +41,7 @@ const bookingCtaAttrs = {
 };
 
 type TickerMessage =
-    | { text: string; href?: string | null; linkLabel?: string | null; textI18n?: string }
+    | { text: string; href?: string | null; linkLabel?: string | null; linkLabelI18n?: string; textI18n?: string }
     | { label: string; date: string; separator?: string; labelI18n?: string; dateI18n?: string };
 type TickerBehavior = 'auto' | 'static' | 'animated';
 
@@ -79,6 +80,7 @@ const cmsAnnouncementMessage: TickerMessage | null = announcementBanner?.message
         textI18n: announcementBanner.messageI18n || undefined,
         href: announcementBanner.linkUrl,
         linkLabel: announcementBanner.linkLabel,
+        linkLabelI18n: announcementBanner.linkLabelI18n || undefined,
     }
     : null;
 const activeTickerMessage = cmsAnnouncementMessage || locationTickerMessage;
@@ -135,7 +137,7 @@ function externalLinkAttrs(href: string | null | undefined) {
                             {m.href && (
                                 <>
                                     <span class="ticker-separator" aria-hidden="true">-</span>
-                                    <a class="ticker-link" href={m.href} {...externalLinkAttrs(m.href)}>{m.linkLabel || 'Learn more'}</a>
+                                    <a class="ticker-link" href={m.href} data-i18n={m.linkLabelI18n} {...externalLinkAttrs(m.href)}>{m.linkLabel || 'Learn more'}</a>
                                 </>
                             )}
                         </>

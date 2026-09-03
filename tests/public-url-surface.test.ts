@@ -30,6 +30,9 @@ describe('Public URL Surface', () => {
       expect(surface.outputFileFor(canonicalPath)).toBe(`${locationSlug}/educators.html`);
       expect(surface.isKnownCanonical(canonicalPath)).toBe(true);
     }
+    expect(surface.outputFileFor('/brussels/back-to-school-sale'))
+      .toBe('brussels/back-to-school-sale.html');
+    expect(surface.isKnownCanonical('/brussels/back-to-school-sale')).toBe(true);
     expect(surface.isKnownCanonical('/c/summer-adventures-offer')).toBe(true);
     expect(surface.isKnownCanonical('/unknown-page')).toBe(false);
   });

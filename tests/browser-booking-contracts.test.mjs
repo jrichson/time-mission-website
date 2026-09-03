@@ -82,6 +82,37 @@ describe('browser booking contracts', () => {
     });
   });
 
+  it('lets embedded Roller promo CTAs reach the booking controller', () => {
+    const { context, document, window } = createBrowserContext();
+    runScript('js/page-houston-promo-after.js', context);
+
+    const campaignCta = createAnchor(
+      'https://ecom.roller.app/TERMINAL1/timemission/nl-BE/products?code=SCHOOL20',
+      {
+        attrs: {
+          'data-tm-booking-trigger': '',
+          'data-tm-promo-cta': 'back_to_school_book_now',
+        },
+        closestSelectors: ['[data-tm-promo-cta]'],
+      },
+    );
+    let prevented = false;
+
+    document.dispatchEvent({
+      type: 'click',
+      target: campaignCta,
+      button: 0,
+      metaKey: false,
+      ctrlKey: false,
+      shiftKey: false,
+      altKey: false,
+      preventDefault() { prevented = true; },
+    });
+
+    expect(prevented).toBe(false);
+    expect(window.location.href).toBe('');
+  });
+
   it('orders browser ticket options by the active deployment region', () => {
     const { context, window } = createBrowserContext({
       __TM_SITE_PROFILE__: { internalRegion: 'europe' },

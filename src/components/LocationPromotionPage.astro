@@ -1,0 +1,104 @@
+---
+import PromoSplit from './PromoSplit.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+
+interface Props {
+    bookingPresentation?: 'direct' | 'roller';
+    bookingUrl: string;
+    campaignLabel: string;
+    ctaId: string;
+    eyebrow: string;
+    headlineLines: readonly [string, string];
+    intro?: string;
+    locationName: string;
+    locationSlug: string;
+    offerCopy: string;
+    pageSlug: string;
+    promoCode: string;
+    runThrough: string;
+}
+
+const {
+    bookingPresentation = 'roller',
+    bookingUrl,
+    campaignLabel,
+    ctaId,
+    eyebrow,
+    headlineLines,
+    intro,
+    locationName,
+    locationSlug,
+    offerCopy,
+    pageSlug,
+    promoCode,
+    runThrough,
+} = Astro.props;
+const bookingAttributes = bookingPresentation === 'roller'
+    ? {
+        'data-tm-booking-kind': 'tickets',
+        'data-tm-booking-presentation': 'roller',
+        'data-tm-booking-trigger': '',
+        'data-tm-booking-url': bookingUrl,
+    }
+    : {};
+const page = definePage({ canonicalPath: `/${locationSlug}/${pageSlug}` });
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: locationName, href: `/${locationSlug}` },
+    { label: campaignLabel, href: page.canonicalPath },
+]));
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyClass="has-noise tm-promo-page"
+    bodyDataLocation={locationSlug}
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-promo.css?v=1" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+
+    <PromoSplit
+        backLink={{ href: `/${locationSlug}`, label: locationName }}
+        eyebrow={eyebrow}
+        imageAlt="A group taking on an interactive challenge at Time Mission"
+        imagePosition="center"
+        imageSrc="/assets/photos/TM-Groups-1200.webp"
+        imageSrcSet="/assets/photos/TM-Groups-480.webp 480w, /assets/photos/TM-Groups-800.webp 800w, /assets/photos/TM-Groups-1200.webp 1200w, /assets/photos/TM-Groups.webp 1920w"
+    >
+        <h1 id="promo-title" class="tm-promo-landing__title">
+            <span>{headlineLines[0]}</span>{' '}
+            <span>{headlineLines[1]}</span>
+        </h1>
+
+        <div class="tm-promo-landing__copy">
+            {intro && <p>{intro}</p>}
+            <p>{offerCopy}</p>
+            <p>Book with the button below or use code <strong>{promoCode}</strong>. {runThrough}</p>
+        </div>
+
+        <div class="tm-promo-landing__rule" aria-hidden="true"></div>
+
+        <a
+            class="tm-promo-landing__cta"
+            href={bookingUrl}
+            {...bookingAttributes}
+            data-tm-location={locationSlug}
+            data-tm-promo-cta={ctaId}
+        >
+            Book Now
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+            </svg>
+        </a>
+    </PromoSplit>
+
+    <Fragment slot="after-site-scripts">
+        <script is:inline defer src="/js/page-houston-promo-after.js?v=3"></script>
+    </Fragment>
+</SiteLayout>

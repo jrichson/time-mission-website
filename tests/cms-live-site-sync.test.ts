@@ -18,6 +18,7 @@ import { PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/2026
 import { TM_OPS_EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260820_tm_ops_educators_pages_snapshot';
 import { HOUSTON_PHILADELPHIA_HOURS_SNAPSHOT } from '../cms/migration-data/20260821_houston_philadelphia_hours_snapshot';
 import { BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT } from '../cms/migration-data/20260831_brussels_operational_details_snapshot';
+import { BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT } from '../cms/migration-data/20260902_brussels_back_to_school_sale_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -152,6 +153,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 ...HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT,
                 ...TM_OPS_EDUCATORS_PAGE_SNAPSHOT,
+                ...BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
             ]
                 .map((page) => [page.path, page]),
         );
@@ -207,6 +209,10 @@ describe('live-site-to-CMS sync snapshot', () => {
             path.join(root, 'cms/migrations/20260820_100000_tm_ops_educators_pages.ts'),
             'utf8',
         );
+        const brusselsBackToSchoolMigration = fs.readFileSync(
+            path.join(root, 'cms/migrations/20260902_090000_brussels_back_to_school_sale.ts'),
+            'utf8',
+        );
         const pressSeoMigration = fs.readFileSync(
             path.join(root, 'cms/migrations/20260819_100000_press_seo.ts'),
             'utf8',
@@ -238,6 +244,10 @@ describe('live-site-to-CMS sync snapshot', () => {
         expect(migrationIndex).toContain('20260820_100000_tm_ops_educators_pages');
         expect(tmOpsEducatorsMigration).toContain('TM_OPS_EDUCATORS_PAGE_SNAPSHOT');
         expect(tmOpsEducatorsMigration).toContain('ON CONFLICT ("path") DO NOTHING');
+        expect(migrationIndex).toContain('20260902_090000_brussels_back_to_school_sale');
+        expect(brusselsBackToSchoolMigration).toContain('BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT');
+        expect(brusselsBackToSchoolMigration).toContain('BRUSSELS_BACK_TO_SCHOOL_ANNOUNCEMENT_SNAPSHOT');
+        expect(brusselsBackToSchoolMigration).toContain('ON CONFLICT ("path") DO NOTHING');
         expect(migrationIndex).toContain('20260831_090000_brussels_operational_details');
         expect(migration).toContain('LIVE_SITE_LOCATION_SNAPSHOT');
         expect(migration).toContain('LIVE_SITE_PAGE_SNAPSHOT');
