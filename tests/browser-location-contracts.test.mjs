@@ -21,7 +21,7 @@ describe('browser location state contracts', () => {
             shortName: 'Eindhoven',
             status: 'coming-soon',
             bookingUrl: '',
-            signupFormId: 'Y5LLf7',
+            signupFormId: 'W5S6At',
             contact: { phone: '+31 (0)40 808 3636', email: 'eindhoven@timemission.nl' },
             hours: {},
           },
@@ -42,14 +42,14 @@ describe('browser location state contracts', () => {
     expect(signupCta.textContent).toBe('Sign Up');
     expect(signupCta.href).toBe('#');
     expect(signupCta.getAttribute('data-i18n')).toBe('location.signUp');
-    expect(signupCta.getAttribute('data-tm-klaviyo-form-trigger')).toBe('Y5LLf7');
+    expect(signupCta.getAttribute('data-tm-klaviyo-form-trigger')).toBe('W5S6At');
     expect(signupCta.hasAttribute('data-tm-booking-trigger')).toBe(false);
   });
 
   it('opens the requested Klaviyo popup from a signup trigger', () => {
     const appendedScripts = [];
     const trigger = createAnchor('#', {
-      attrs: { 'data-tm-klaviyo-form-trigger': 'Y5LLf7' },
+      attrs: { 'data-tm-klaviyo-form-trigger': 'W5S6At' },
       closestSelectors: ['[data-tm-klaviyo-form-trigger]'],
     });
     const { context, window, document } = createBrowserContext();
@@ -73,11 +73,11 @@ describe('browser location state contracts', () => {
     document.dispatchEvent(click);
 
     expect(click.defaultPrevented).toBe(true);
-    expect(window._klOnsite).toEqual([['openForm', 'Y5LLf7']]);
+    expect(window._klOnsite).toEqual([['openForm', 'W5S6At']]);
     expect(appendedScripts).toHaveLength(1);
     expect(appendedScripts[0]).toMatchObject({
       async: true,
-      src: 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU',
+      src: 'https://static.klaviyo.com/onsite/js/YccPJs/klaviyo.js?company_id=YccPJs',
     });
   });
 

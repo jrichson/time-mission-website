@@ -94,17 +94,17 @@ describe('Location View contract', () => {
         if (!eindhoven) throw new Error('Eindhoven location missing');
         const internalEindhoven = { ...eindhoven, externalUrl: undefined };
 
-        expect(locationSignupFormId(eindhoven)).toBe('Y5LLf7');
+        expect(locationSignupFormId(eindhoven)).toBe('W5S6At');
         expect(locationCtaView(internalEindhoven)).toEqual({
             href: '#',
             isBookingTrigger: false,
             label: 'Sign Up',
             i18n: 'location.signUp',
-            signupFormId: 'Y5LLf7',
+            signupFormId: 'W5S6At',
         });
         expect(locationViewModel(internalEindhoven)).toMatchObject({
             bookLabel: 'Sign Up',
-            signupFormId: 'Y5LLf7',
+            signupFormId: 'W5S6At',
         });
     });
 

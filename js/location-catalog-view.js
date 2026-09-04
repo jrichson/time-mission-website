@@ -12,6 +12,8 @@
         sun: 'Sun',
     };
     var KLAVIYO_ONSITE_SRC = 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU';
+    var EINDHOVEN_KLAVIYO_FORM_ID = 'W5S6At';
+    var EINDHOVEN_KLAVIYO_ONSITE_SRC = 'https://static.klaviyo.com/onsite/js/YccPJs/klaviyo.js?company_id=YccPJs';
     var BookingJourney = window.TMBookingJourney;
     if (!BookingJourney) throw new Error('TMBookingJourney must load before location-catalog-view.js');
 
@@ -32,13 +34,15 @@
         return /^[a-z0-9]+$/i.test(formId) ? formId : '';
     }
 
-    function ensureKlaviyoOnsiteScript() {
-        if (document.querySelector('script[data-tm-klaviyo-onsite]')
-            || document.querySelector('script[src="' + KLAVIYO_ONSITE_SRC + '"]')) return;
+    function ensureKlaviyoOnsiteScript(formId) {
+        var scriptSrc = formId === EINDHOVEN_KLAVIYO_FORM_ID
+            ? EINDHOVEN_KLAVIYO_ONSITE_SRC
+            : KLAVIYO_ONSITE_SRC;
+        if (document.querySelector('script[src="' + scriptSrc + '"]')) return;
         var script = document.createElement('script');
         script.async = true;
-        script.src = KLAVIYO_ONSITE_SRC;
-        script.setAttribute('data-tm-klaviyo-onsite', '');
+        script.src = scriptSrc;
+        script.setAttribute('data-tm-klaviyo-onsite', formId);
         var parent = document.head || document.body || document.documentElement;
         if (parent) parent.appendChild(script);
     }
@@ -56,7 +60,7 @@
             event.preventDefault();
             window._klOnsite = window._klOnsite || [];
             window._klOnsite.push(['openForm', formId]);
-            ensureKlaviyoOnsiteScript();
+            ensureKlaviyoOnsiteScript(formId);
         });
     }
 
