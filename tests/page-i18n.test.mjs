@@ -267,6 +267,28 @@ describe('page translation catalog', () => {
     }
   });
 
+  it('covers the school-night and Brussels sale routes in every published language', () => {
+    for (const locationSlug of ['manassas', 'mount-prospect', 'orland-park']) {
+      const translations = pageTranslationsFor(pageI18n, 'es', {
+        canonicalPath: `/${locationSlug}/school-night`,
+        profileId: 'us',
+      });
+      expect(translations['20% Off']).toBe('20 % de descuento');
+      expect(translations['School Night Sale']).toBe('Oferta para noches escolares');
+    }
+
+    for (const locale of ['nl', 'fr', 'es']) {
+      const translations = pageTranslationsFor(pageI18n, locale, {
+        canonicalPath: '/brussels/back-to-school-sale',
+        profileId: 'eu',
+      });
+      expect(translations['20% Off']).toBeTypeOf('string');
+      expect(translations['Back to School Sale']).toBeTypeOf('string');
+      expect(translations.SCHOOL20).toBe('SCHOOL20');
+      expect(preservedSourceTermsFor(pageI18n, locale, { profileId: 'eu' })).toContain('SCHOOL20');
+    }
+  });
+
   it('keeps the home slogan and every proper mission name in English', () => {
     expect(missionNamePairs).toHaveLength(30);
     expect(missionNamePairs.every(({ display, imageAlt }) => display && imageAlt)).toBe(true);

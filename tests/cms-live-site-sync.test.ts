@@ -19,6 +19,8 @@ import { TM_OPS_EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260820_t
 import { HOUSTON_PHILADELPHIA_HOURS_SNAPSHOT } from '../cms/migration-data/20260821_houston_philadelphia_hours_snapshot';
 import { BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT } from '../cms/migration-data/20260831_brussels_operational_details_snapshot';
 import { BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT } from '../cms/migration-data/20260902_brussels_back_to_school_sale_snapshot';
+import { MOUNT_PROSPECT_ORLAND_PARK_NOON_HOURS_SNAPSHOT } from '../cms/migration-data/20260907_mount_prospect_orland_park_noon_hours_snapshot';
+import { US_SCHOOL_NIGHT_PAGE_SNAPSHOT } from '../cms/migration-data/20260908_school_night_promotions_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -77,6 +79,12 @@ describe('live-site-to-CMS sync snapshot', () => {
                 HOUSTON_PHILADELPHIA_HOURS_SNAPSHOT.weekdayHours,
             ]),
         );
+        const noonHoursPatches = new Map(
+            MOUNT_PROSPECT_ORLAND_PARK_NOON_HOURS_SNAPSHOT.locations.map((locationSlug) => [
+                locationSlug,
+                MOUNT_PROSPECT_ORLAND_PARK_NOON_HOURS_SNAPSHOT.weekdayHours,
+            ]),
+        );
         const effectiveSnapshot = LIVE_SITE_LOCATION_SNAPSHOT.map((location) => {
             const patch = operationalPatches.get(location.slug);
             const operationalLocation = patch ? {
@@ -98,15 +106,22 @@ describe('live-site-to-CMS sync snapshot', () => {
                     specialHours: [HOUSTON_PHILADELPHIA_HOURS_SNAPSHOT.specialHours],
                 }
                 : currentLocation;
-            const addressCorrectedLocation = location.slug === EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.slug
+            const noonHoursPatch = noonHoursPatches.get(location.slug);
+            const currentNoonHoursLocation = noonHoursPatch
                 ? {
                     ...currentHoursLocation,
+                    hours: { ...currentHoursLocation.hours, ...noonHoursPatch },
+                }
+                : currentHoursLocation;
+            const addressCorrectedLocation = location.slug === EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.slug
+                ? {
+                    ...currentNoonHoursLocation,
                     address: {
-                        ...currentHoursLocation.address,
+                        ...currentNoonHoursLocation.address,
                         zip: EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.zip,
                     },
                 }
-                : currentHoursLocation;
+                : currentNoonHoursLocation;
             const groupFormPatch = groupFormPatches.get(location.slug);
             const groupFormLocation = groupFormPatch
                 ? { ...addressCorrectedLocation, groupFormUrls: groupFormPatch.groupFormUrls }
@@ -154,6 +169,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT,
                 ...TM_OPS_EDUCATORS_PAGE_SNAPSHOT,
                 ...BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
+                ...US_SCHOOL_NIGHT_PAGE_SNAPSHOT,
             ]
                 .map((page) => [page.path, page]),
         );
@@ -213,6 +229,10 @@ describe('live-site-to-CMS sync snapshot', () => {
             path.join(root, 'cms/migrations/20260902_090000_brussels_back_to_school_sale.ts'),
             'utf8',
         );
+        const usSchoolNightPromotionMigration = fs.readFileSync(
+            path.join(root, 'cms/migrations/20260908_090000_school_night_promotions.ts'),
+            'utf8',
+        );
         const pressSeoMigration = fs.readFileSync(
             path.join(root, 'cms/migrations/20260819_100000_press_seo.ts'),
             'utf8',
@@ -248,6 +268,13 @@ describe('live-site-to-CMS sync snapshot', () => {
         expect(brusselsBackToSchoolMigration).toContain('BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT');
         expect(brusselsBackToSchoolMigration).toContain('BRUSSELS_BACK_TO_SCHOOL_ANNOUNCEMENT_SNAPSHOT');
         expect(brusselsBackToSchoolMigration).toContain('ON CONFLICT ("path") DO NOTHING');
+        expect(usSchoolNightPromotionMigration).toContain('US_SCHOOL_NIGHT_PAGE_SNAPSHOT');
+        expect(usSchoolNightPromotionMigration).toContain('US_SCHOOL_NIGHT_ANNOUNCEMENT_SNAPSHOT');
+        expect(usSchoolNightPromotionMigration).toContain('ON CONFLICT ("path") DO NOTHING');
+        expect(fs.existsSync(
+            path.join(root, 'cms/migrations/20260908_090000_school_night_promotions.ts'),
+        )).toBe(true);
+        expect(migrationIndex).toContain('migration_20260908_090000_school_night_promotions');
         expect(migrationIndex).toContain('20260831_090000_brussels_operational_details');
         expect(migration).toContain('LIVE_SITE_LOCATION_SNAPSHOT');
         expect(migration).toContain('LIVE_SITE_PAGE_SNAPSHOT');

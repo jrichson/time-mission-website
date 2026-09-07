@@ -30,6 +30,12 @@ describe('Public URL Surface', () => {
       expect(surface.outputFileFor(canonicalPath)).toBe(`${locationSlug}/educators.html`);
       expect(surface.isKnownCanonical(canonicalPath)).toBe(true);
     }
+    for (const locationSlug of ['manassas', 'mount-prospect', 'orland-park']) {
+      const canonicalPath = `/${locationSlug}/school-night`;
+      expect(surface.publicUrlFor(canonicalPath)).toBe(`https://www.timemission.com${canonicalPath}`);
+      expect(surface.outputFileFor(canonicalPath)).toBe(`${locationSlug}/school-night.html`);
+      expect(surface.isKnownCanonical(canonicalPath)).toBe(true);
+    }
     expect(surface.outputFileFor('/brussels/back-to-school-sale'))
       .toBe('brussels/back-to-school-sale.html');
     expect(surface.isKnownCanonical('/brussels/back-to-school-sale')).toBe(true);

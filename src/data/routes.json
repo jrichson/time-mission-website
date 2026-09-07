@@ -347,6 +347,18 @@
       "status": 301
     },
     {
+      "id": "mount-prospect-school-night",
+      "canonicalPath": "/mount-prospect/school-night",
+      "redirectSources": [
+        "/mount-prospect/school-night.html",
+        "/mount-prospect/promos/school-night",
+        "/mount-prospect/promos/school-night.html"
+      ],
+      "outputFile": "mount-prospect/school-night.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "west-nyack",
       "canonicalPath": "/west-nyack",
       "locationAlternate": "palisades-center",
@@ -399,6 +411,18 @@
       "status": 301
     },
     {
+      "id": "manassas-school-night",
+      "canonicalPath": "/manassas/school-night",
+      "redirectSources": [
+        "/manassas/school-night.html",
+        "/manassas/promos/school-night",
+        "/manassas/promos/school-night.html"
+      ],
+      "outputFile": "manassas/school-night.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "antwerp",
       "canonicalPath": "/antwerp",
       "locationAlternate": "experience-factory-antwerp",
@@ -432,6 +456,18 @@
         "/orland-park/teachers.html"
       ],
       "outputFile": "orland-park/educators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "orland-park-school-night",
+      "canonicalPath": "/orland-park/school-night",
+      "redirectSources": [
+        "/orland-park/school-night.html",
+        "/orland-park/promos/school-night",
+        "/orland-park/promos/school-night.html"
+      ],
+      "outputFile": "orland-park/school-night.html",
       "sitemap": true,
       "status": 301
     },

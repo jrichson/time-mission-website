@@ -25,29 +25,29 @@
       },
       "hours": {
         "mon": {
-          "open": "11:00",
+          "open": "12:00",
           "close": "21:00",
-          "label": "11am - 9pm"
+          "label": "12pm - 9pm"
         },
         "tue": {
-          "open": "11:00",
+          "open": "12:00",
           "close": "21:00",
-          "label": "11am - 9pm"
+          "label": "12pm - 9pm"
         },
         "wed": {
-          "open": "11:00",
+          "open": "12:00",
           "close": "21:00",
-          "label": "11am - 9pm"
+          "label": "12pm - 9pm"
         },
         "thu": {
-          "open": "11:00",
+          "open": "12:00",
           "close": "21:00",
-          "label": "11am - 9pm"
+          "label": "12pm - 9pm"
         },
         "fri": {
-          "open": "11:00",
+          "open": "12:00",
           "close": "00:00",
-          "label": "11am - Midnight"
+          "label": "12pm - Midnight"
         },
         "sat": {
           "open": "10:00",
@@ -815,29 +815,29 @@
       },
       "hours": {
         "mon": {
-          "open": "11:00",
+          "open": "12:00",
           "close": "21:00",
-          "label": "11am - 9pm"
+          "label": "12pm - 9pm"
         },
         "tue": {
-          "open": "11:00",
+          "open": "12:00",
           "close": "21:00",
-          "label": "11am - 9pm"
+          "label": "12pm - 9pm"
         },
         "wed": {
-          "open": "11:00",
+          "open": "12:00",
           "close": "21:00",
-          "label": "11am - 9pm"
+          "label": "12pm - 9pm"
         },
         "thu": {
-          "open": "11:00",
+          "open": "12:00",
           "close": "21:00",
-          "label": "11am - 9pm"
+          "label": "12pm - 9pm"
         },
         "fri": {
-          "open": "11:00",
+          "open": "12:00",
           "close": "00:00",
-          "label": "11am - Midnight"
+          "label": "12pm - Midnight"
         },
         "sat": {
           "open": "10:00",

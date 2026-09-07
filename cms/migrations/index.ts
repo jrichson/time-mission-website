@@ -45,6 +45,8 @@ import * as migration_20260821_090000_houston_philadelphia_hours from './2026082
 import * as migration_20260831_090000_brussels_operational_details from './20260831_090000_brussels_operational_details';
 import * as migration_20260901_090000_houston_philadelphia_jotform_reactivation from './20260901_090000_houston_philadelphia_jotform_reactivation';
 import * as migration_20260902_090000_brussels_back_to_school_sale from './20260902_090000_brussels_back_to_school_sale';
+import * as migration_20260907_173000_mount_prospect_orland_park_noon_hours from './20260907_173000_mount_prospect_orland_park_noon_hours';
+import * as migration_20260908_090000_school_night_promotions from './20260908_090000_school_night_promotions';
 
 export const migrations = [
   {
@@ -281,5 +283,15 @@ export const migrations = [
     up: migration_20260902_090000_brussels_back_to_school_sale.up,
     down: migration_20260902_090000_brussels_back_to_school_sale.down,
     name: '20260902_090000_brussels_back_to_school_sale'
+  },
+  {
+    up: migration_20260907_173000_mount_prospect_orland_park_noon_hours.up,
+    down: migration_20260907_173000_mount_prospect_orland_park_noon_hours.down,
+    name: '20260907_173000_mount_prospect_orland_park_noon_hours'
+  },
+  {
+    up: migration_20260908_090000_school_night_promotions.up,
+    down: migration_20260908_090000_school_night_promotions.down,
+    name: '20260908_090000_school_night_promotions'
   },
 ];

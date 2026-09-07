@@ -179,6 +179,12 @@
     "ogImage": "/assets/photos/promos/houston-educators-control-room-1200.webp",
     "twitterImage": "/assets/photos/promos/houston-educators-control-room-1200.webp"
   },
+  "/mount-prospect/school-night": {
+    "title": "20% Off School Night Sale | Time Mission Mount Prospect",
+    "description": "Get 20% off 90- and 120-minute missions at Time Mission Mount Prospect on Sunday evenings and Monday through Thursday through September 30, 2026.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
   "/west-nyack": {
     "title": "Time Mission West Nyack – 25+ Interactive Mission Rooms",
     "description": "Time Mission West Nyack at Palisades Center, 25+ immersive challenges for teams of 2–5. Book your mission today.",
@@ -203,6 +209,12 @@
     "ogImage": "/assets/photos/promos/houston-educators-control-room-1200.webp",
     "twitterImage": "/assets/photos/promos/houston-educators-control-room-1200.webp"
   },
+  "/manassas/school-night": {
+    "title": "20% Off School Night Sale | Time Mission Manassas",
+    "description": "Get 20% off 90- and 120-minute missions at Time Mission Manassas on Sunday evenings and Monday through Thursday through September 30, 2026.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
   "/antwerp": {
     "title": "Time Mission Antwerp – 25+ Interactive Mission Rooms",
     "description": "Time Mission Antwerp, 25+ immersive challenge rooms for groups of 2–5. Réserve ta mission.",
@@ -220,6 +232,12 @@
     "description": "Orland Park K-12 educators, administrators, and school staff can claim one free mission at Time Mission Orland Park through September 30, 2026.",
     "ogImage": "/assets/photos/promos/houston-educators-control-room-1200.webp",
     "twitterImage": "/assets/photos/promos/houston-educators-control-room-1200.webp"
+  },
+  "/orland-park/school-night": {
+    "title": "20% Off School Night Sale | Time Mission Orland Park",
+    "description": "Get 20% off 90- and 120-minute missions at Time Mission Orland Park on Sunday evenings and Monday through Thursday through September 30, 2026.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
   },
   "/dallas": {
     "title": "Time Mission Dallas | Coming Soon",

@@ -4305,6 +4305,36 @@
         "SCHOOL20": "SCHOOL20"
       }
     },
+    "/manassas/school-night": {
+      "es": {
+        "20% Off": "20 % de descuento",
+        "20% Off School Night Sale | Time Mission Manassas": "20 % de descuento en noches escolares | Time Mission Manassas",
+        "Get 20% OFF 90 and 120 minute missions at Time Mission Manassas on school nights. Sundays after 6PM and all day Monday through Thursday.": "Obtén un 20 % de descuento en misiones de 90 y 120 minutos en Time Mission Manassas durante las noches escolares. Los domingos después de las 6 p. m. y todo el día de lunes a jueves.",
+        "Get 20% off 90- and 120-minute missions at Time Mission Manassas on Sunday evenings and Monday through Thursday through September 30, 2026.": "Obtén un 20 % de descuento en misiones de 90 y 120 minutos en Time Mission Manassas los domingos después de las 6 p. m. y de lunes a jueves hasta el 30 de septiembre de 2026.",
+        "Manassas · Through September 30": "Manassas · Hasta el 30 de septiembre",
+        "School Night Sale": "Oferta para noches escolares"
+      }
+    },
+    "/mount-prospect/school-night": {
+      "es": {
+        "20% Off": "20 % de descuento",
+        "20% Off School Night Sale | Time Mission Mount Prospect": "20 % de descuento en noches escolares | Time Mission Mount Prospect",
+        "Get 20% OFF 90 and 120 minute missions at Time Mission Mount Prospect on school nights. Sundays after 6PM and all day Monday through Thursday.": "Obtén un 20 % de descuento en misiones de 90 y 120 minutos en Time Mission Mount Prospect durante las noches escolares. Los domingos después de las 6 p. m. y todo el día de lunes a jueves.",
+        "Get 20% off 90- and 120-minute missions at Time Mission Mount Prospect on Sunday evenings and Monday through Thursday through September 30, 2026.": "Obtén un 20 % de descuento en misiones de 90 y 120 minutos en Time Mission Mount Prospect los domingos después de las 6 p. m. y de lunes a jueves hasta el 30 de septiembre de 2026.",
+        "Mount Prospect · Through September 30": "Mount Prospect · Hasta el 30 de septiembre",
+        "School Night Sale": "Oferta para noches escolares"
+      }
+    },
+    "/orland-park/school-night": {
+      "es": {
+        "20% Off": "20 % de descuento",
+        "20% Off School Night Sale | Time Mission Orland Park": "20 % de descuento en noches escolares | Time Mission Orland Park",
+        "Get 20% OFF 90 and 120 minute missions at Time Mission Orland Park on school nights. Sundays after 6PM and all day Monday through Thursday.": "Obtén un 20 % de descuento en misiones de 90 y 120 minutos en Time Mission Orland Park durante las noches escolares. Los domingos después de las 6 p. m. y todo el día de lunes a jueves.",
+        "Get 20% off 90- and 120-minute missions at Time Mission Orland Park on Sunday evenings and Monday through Thursday through September 30, 2026.": "Obtén un 20 % de descuento en misiones de 90 y 120 minutos en Time Mission Orland Park los domingos después de las 6 p. m. y de lunes a jueves hasta el 30 de septiembre de 2026.",
+        "Orland Park · Through September 30": "Orland Park · Hasta el 30 de septiembre",
+        "School Night Sale": "Oferta para noches escolares"
+      }
+    },
     "/blog": {
       "es": {
         "1 post": "1 publicación",

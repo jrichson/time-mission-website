@@ -92,6 +92,43 @@ describe('location campaign pages', () => {
     expect(page).toContain(`locationSlug="${locationSlug}"`);
   });
 
+  it.each([
+    {
+      checkout: 'https://ecom.roller.app/TimeMissionManassasMall/onlinecheckout/en-US/products?code=SCHOOLNIGHT',
+      locationName: 'Manassas',
+      locationSlug: 'manassas',
+    },
+    {
+      checkout: 'https://ecom.roller.app/TimeMissionMountProspect/onlinecheckout/en-US/products?code=SCHOOLNIGHT',
+      locationName: 'Mount Prospect',
+      locationSlug: 'mount-prospect',
+    },
+    {
+      checkout: 'https://ecom.roller.app/TimeMissionOrlandPark/onlinecheckout/en-US/products?code=SCHOOLNIGHT',
+      locationName: 'Orland Park',
+      locationSlug: 'orland-park',
+    },
+  ])('publishes the $locationName 20% school-night offer and coded checkout', ({
+    checkout,
+    locationName,
+    locationSlug,
+  }) => {
+    const page = read(`src/pages/${locationSlug}/school-night.astro`);
+    const shell = read('src/components/LocationPromotionPage.astro');
+
+    expect(page).toContain(`bookingUrl="${checkout}"`);
+    expect(page).toContain(`locationName="${locationName}"`);
+    expect(page).toContain(`locationSlug="${locationSlug}"`);
+    expect(page).toContain(`Get 20% OFF 90 and 120 minute missions at Time Mission ${locationName}`);
+    expect(page).not.toContain('20% OFF off');
+    expect(shell).toContain('data-tm-promo-cta={ctaId}');
+    expect(shell).toContain('href={bookingUrl}');
+    expect(shell).toContain("bookingPresentation = 'roller'");
+    expect(shell).toContain("'data-tm-booking-trigger': ''");
+    expect(shell).toContain("'data-tm-booking-presentation': 'roller'");
+    expect(shell).toContain("'data-tm-booking-url': bookingUrl");
+  });
+
   it('publishes the Brussels weekday offer and exact SCHOOL20 checkout', () => {
     const page = read('src/pages/brussels/back-to-school-sale.astro');
     const shell = read('src/components/LocationPromotionPage.astro');
@@ -105,12 +142,19 @@ describe('location campaign pages', () => {
     expect(shell).toContain("bookingPresentation === 'roller'");
   });
 
-  it('schedules the Brussels campaign ticker for the promotion window', () => {
-    const snapshot = read('cms/migration-data/20260902_brussels_back_to_school_sale_snapshot.ts');
+  it('schedules the linked location tickers and restores the standing messages after each sale', () => {
+    const brusselsSnapshot = read('cms/migration-data/20260902_brussels_back_to_school_sale_snapshot.ts');
+    const usSnapshot = read('cms/migration-data/20260908_school_night_promotions_snapshot.ts');
 
-    expect(snapshot).toContain("linkUrl: '/brussels/back-to-school-sale'");
-    expect(snapshot).toContain("startsAt: '2026-09-02T00:00:00+02:00'");
-    expect(snapshot).toContain("endsAt: '2026-09-21T00:00:00+02:00'");
+    for (const locationSlug of ['manassas', 'mount-prospect', 'orland-park']) {
+      expect(usSnapshot).toContain(`linkUrl: '/${locationSlug}/school-night'`);
+    }
+    expect(usSnapshot).toContain("message: '$10 OFF TICKETS – BACK TO SCHOOL'");
+    expect(usSnapshot).toContain("locationSlug: 'houston'");
+    expect(usSnapshot).toContain("startsAt: '2026-09-07T00:00:00-04:00'");
+    expect(brusselsSnapshot).toContain("linkUrl: '/brussels/back-to-school-sale'");
+    expect(brusselsSnapshot).toContain("startsAt: '2026-09-02T00:00:00+02:00'");
+    expect(brusselsSnapshot).toContain("endsAt: '2026-09-21T00:00:00+02:00'");
   });
 
   it('keeps the reference layout responsive without exposing implementation placeholders', () => {

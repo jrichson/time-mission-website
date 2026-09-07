@@ -78,6 +78,45 @@ test('School Night page publishes the corrected offer and coded checkout', async
   expect(trackedEvents).toEqual(['BOOKING_CLICK', 'CHECKOUT_START']);
 });
 
+for (const schoolNightPage of [
+  {
+    checkout: 'https://ecom.roller.app/TimeMissionManassasMall/onlinecheckout/en-US/products?code=SCHOOLNIGHT',
+    locationName: 'Manassas',
+    locationSlug: 'manassas',
+  },
+  {
+    checkout: 'https://ecom.roller.app/TimeMissionMountProspect/onlinecheckout/en-US/products?code=SCHOOLNIGHT',
+    locationName: 'Mount Prospect',
+    locationSlug: 'mount-prospect',
+  },
+  {
+    checkout: 'https://ecom.roller.app/TimeMissionOrlandPark/onlinecheckout/en-US/products?code=SCHOOLNIGHT',
+    locationName: 'Orland Park',
+    locationSlug: 'orland-park',
+  },
+]) {
+  test(`${schoolNightPage.locationName} school-night page publishes the 20% offer`, async ({ page, isMobile }) => {
+    await page.goto(`/${schoolNightPage.locationSlug}/school-night`);
+
+    await expect(page).toHaveTitle(
+      `20% Off School Night Sale | Time Mission ${schoolNightPage.locationName}`,
+    );
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/20% Off\s+School Night Sale/i);
+    await expect(page.locator('.tm-promo-landing__copy')).toContainText(
+      `Get 20% OFF 90 and 120 minute missions at Time Mission ${schoolNightPage.locationName}`,
+    );
+    await expect(page.locator('.tm-promo-landing__cta'))
+      .toHaveAttribute('href', schoolNightPage.checkout);
+    await expect(page.locator('.tm-promo-landing__cta'))
+      .toHaveAttribute('data-tm-booking-trigger', '');
+    await expect(page.locator('.tm-promo-landing__cta'))
+      .toHaveAttribute('data-tm-booking-presentation', 'roller');
+    await expect(page.locator('.tm-promo-landing__cta'))
+      .toHaveAttribute('data-tm-booking-url', schoolNightPage.checkout);
+    await expectResponsivePromoSplit(page, isMobile);
+  });
+}
+
 test('Educators page exposes the supplied image, copy, and Klaviyo embed', async ({ page, isMobile }) => {
   await page.goto('/houston/educators');
 
