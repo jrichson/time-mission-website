@@ -2,15 +2,24 @@
 import PromoSplit from '../../components/PromoSplit.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { definePage } from '../../lib/define-page';
+import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
 
 const page = definePage({ canonicalPath: '/eindhoven/signup' });
 const formId = 'W5S6At';
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Eindhoven', href: '/eindhoven' },
+    { label: 'Sign Up', href: page.canonicalPath },
+]));
 ---
 
 <SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-promo-page" bodyDataLocation="eindhoven">
     <Fragment slot="head-extra">
         <link rel="stylesheet" href="/css/page-promo.css?v=1" />
         <script is:inline async src="https://static.klaviyo.com/onsite/js/YccPJs/klaviyo.js?company_id=YccPJs"></script>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <PromoSplit
         backLink={{ href: '/eindhoven', label: 'Eindhoven' }}
