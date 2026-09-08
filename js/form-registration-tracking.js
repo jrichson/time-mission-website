@@ -1,11 +1,13 @@
 /**
- * Newsletter registrations -> GTM CompleteRegistration.
- * Sends hashed user data only; raw form fields stay out of dataLayer.
+ * First-party and Klaviyo registrations -> GTM CompleteRegistration.
+ * Sends hashed user data only for consented first-party forms; Klaviyo form
+ * metadata stays out of dataLayer.
  */
 (function () {
     'use strict';
 
     var EVENT_NAME = 'COMPLETE_REGISTRATION';
+    var KLAVIYO_EVENT_NAME = 'klaviyoForms';
     var SUCCESS_PATH = '/contact-thank-you';
     var EMAIL_FIELD_NAMES = ['email'];
     var FIRST_FIELD_NAMES = ['given_name', 'first_name', 'firstname', 'name'];
@@ -76,6 +78,21 @@
         return lower(formData.get('location')).replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
     }
 
+    function pageLocationSlug() {
+        var body = document.body;
+        var value = body && body.dataset ? body.dataset.location : '';
+        return lower(value).replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
+    }
+
+    function consentSnapshot() {
+        return {
+            ad_storage: String(consentState().ad_storage || ''),
+            analytics_storage: String(consentState().analytics_storage || ''),
+            ad_user_data: String(consentState().ad_user_data || ''),
+            ad_personalization: String(consentState().ad_personalization || ''),
+        };
+    }
+
     function buildUserData(formData) {
         if (!canSendUserData(formData)) return Promise.resolve({});
         var userData = {};
@@ -100,12 +117,7 @@
                 FORM_NAME: formName,
                 PAGE_PATH: window.location.pathname || '/',
                 CONSENT_PROFILE: consentProfile(),
-                CONSENT_SNAPSHOT: {
-                    ad_storage: String(consentState().ad_storage || ''),
-                    analytics_storage: String(consentState().analytics_storage || ''),
-                    ad_user_data: String(consentState().ad_user_data || ''),
-                    ad_personalization: String(consentState().ad_personalization || ''),
-                },
+                CONSENT_SNAPSHOT: consentSnapshot(),
             };
             if (location && location !== 'general') parameters.LOCATION_SLUG = location;
 
@@ -123,6 +135,67 @@
             };
             if (Object.keys(userData).length) payload.user_data = userData;
             window.dataLayer.push(payload);
+        });
+    }
+
+    function klaviyoFormElement(formId) {
+        if (!/^[a-z0-9]+$/i.test(formId)) return null;
+        return document.querySelector('[data-tm-klaviyo-form-id="' + formId + '"]')
+            || document.querySelector('.klaviyo-form-' + formId);
+    }
+
+    function klaviyoFormName(formId) {
+        var formElement = klaviyoFormElement(formId);
+        var configuredName = formElement && typeof formElement.getAttribute === 'function'
+            ? formElement.getAttribute('data-tm-form-name')
+            : '';
+        return clean(configuredName || 'klaviyo_' + formId, 80);
+    }
+
+    function pushKlaviyoRegistration(detail) {
+        var formId = clean(detail && detail.formId, 80);
+        if (!formId) return;
+
+        var formVersionId = clean(detail.formVersionId, 80);
+        var formName = klaviyoFormName(formId);
+        var location = pageLocationSlug();
+        var parameters = {
+            FORM_ID: formId,
+            FORM_NAME: formName,
+            PAGE_PATH: window.location.pathname || '/',
+            PROVIDER: 'klaviyo',
+            CONSENT_PROFILE: consentProfile(),
+            CONSENT_SNAPSHOT: consentSnapshot(),
+        };
+        if (formVersionId) parameters.FORM_VERSION_ID = formVersionId;
+        if (location) parameters.LOCATION_SLUG = location;
+
+        var payload = {
+            event: EVENT_NAME,
+            event_name: EVENT_NAME,
+            event_id: eventId(),
+            timestamp: new Date().toISOString(),
+            page_path: window.location.pathname || '/',
+            form_id: formId,
+            form_name: formName,
+            conversion_source: 'klaviyo_form',
+            ga4_event_name: 'complete_registration',
+            standard_event_name: 'CompleteRegistration',
+            parameters: parameters,
+        };
+        if (formVersionId) payload.form_version_id = formVersionId;
+
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(payload);
+    }
+
+    function bindKlaviyoForms() {
+        if (window.__TM_KLAVIYO_REGISTRATION_TRACKING__) return;
+        window.__TM_KLAVIYO_REGISTRATION_TRACKING__ = true;
+        window.addEventListener(KLAVIYO_EVENT_NAME, function (event) {
+            var detail = event && event.detail;
+            if (!detail || detail.type !== 'submit') return;
+            pushKlaviyoRegistration(detail);
         });
     }
 
@@ -181,6 +254,7 @@
         document.querySelectorAll('form[data-tm-form="newsletter"]').forEach(bind);
     }
 
+    bindKlaviyoForms();
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
 })();

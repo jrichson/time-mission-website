@@ -46,13 +46,14 @@ describe('browser location state contracts', () => {
     expect(signupCta.hasAttribute('data-tm-booking-trigger')).toBe(false);
   });
 
-  it('opens the requested Klaviyo popup from a signup trigger', () => {
+  it('opens the existing Klaviyo form on its standalone signup page', () => {
     const appendedScripts = [];
     const trigger = createAnchor('#', {
       attrs: { 'data-tm-klaviyo-form-trigger': 'W5S6At' },
       closestSelectors: ['[data-tm-klaviyo-form-trigger]'],
     });
     const { context, window, document } = createBrowserContext();
+    window.location.pathname = '/nl/eindhoven/signup';
     document.head = {
       appendChild(script) {
         appendedScripts.push(script);
@@ -79,6 +80,25 @@ describe('browser location state contracts', () => {
       async: true,
       src: 'https://static.klaviyo.com/onsite/js/YccPJs/klaviyo.js?company_id=YccPJs',
     });
+  });
+
+  it.each([
+    ['/eindhoven', '/eindhoven/signup'],
+    ['/nl/eindhoven', '/nl/eindhoven/signup'],
+  ])('routes Eindhoven signup from %s to its language page', (pathname, expected) => {
+    const trigger = createAnchor('#', {
+      attrs: { 'data-tm-klaviyo-form-trigger': 'W5S6At' },
+      closestSelectors: ['[data-tm-klaviyo-form-trigger]'],
+    });
+    const { context, window, document } = createBrowserContext();
+    let destination;
+    window.location.pathname = pathname;
+    window.location.assign = (url) => { destination = url; };
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    document.dispatchEvent({ type: 'click', target: trigger, preventDefault() {} });
+    expect(destination).toBe(expected);
+    expect(window._klOnsite).toBeUndefined();
   });
 
   it('homepage clears stale saved location instead of restoring it on hard refresh', async () => {

@@ -129,6 +129,35 @@ test('Educators page exposes the supplied image, copy, and Klaviyo embed', async
   await expect(page.locator('.tm-promo-landing__media img')).toHaveAttribute('src', '/assets/photos/promos/houston-educators-control-room-1200.webp');
   await expect(page.locator('.tm-promo-landing__terms')).toContainText('Available to K-12 teachers, administrators, and school staff');
   await expect(page.locator('.tm-promo-landing__terms')).toContainText('including the School Night Sale');
+
+  const completion = await page.evaluate(() => {
+    window.dispatchEvent(new CustomEvent('klaviyoForms', {
+      detail: {
+        type: 'submit',
+        formId: 'YsG3eB',
+        formVersionId: 'smoke-version',
+        metaData: { email: 'private@example.com' },
+      },
+    }));
+    return window.dataLayer.find((entry) => (
+      entry?.event_name === 'COMPLETE_REGISTRATION'
+      && entry?.parameters?.FORM_ID === 'YsG3eB'
+    ));
+  });
+  expect(completion).toMatchObject({
+    conversion_source: 'klaviyo_form',
+    form_id: 'YsG3eB',
+    form_name: 'educator_appreciation',
+    form_version_id: 'smoke-version',
+    parameters: {
+      FORM_ID: 'YsG3eB',
+      FORM_NAME: 'educator_appreciation',
+      FORM_VERSION_ID: 'smoke-version',
+      LOCATION_SLUG: 'houston',
+      PROVIDER: 'klaviyo',
+    },
+  });
+  expect(JSON.stringify(completion)).not.toContain('private@example.com');
   await expectResponsivePromoSplit(page, isMobile);
 });
 

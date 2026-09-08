@@ -328,5 +328,11 @@
     "description": "This page has drifted out of the timeline. Head back to base and pick up another mission.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
+  "/eindhoven/signup": {
+    "title": "Sign Up | Time Mission Eindhoven",
+    "description": "Sign up for opening news and updates from Time Mission Eindhoven.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
   }
 }

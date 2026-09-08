@@ -1,0 +1,30 @@
+---
+import PromoSplit from '../../components/PromoSplit.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { definePage } from '../../lib/define-page';
+
+const page = definePage({ canonicalPath: '/eindhoven/signup' });
+const formId = 'W5S6At';
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-promo-page" bodyDataLocation="eindhoven">
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-promo.css?v=1" />
+        <script is:inline async src="https://static.klaviyo.com/onsite/js/YccPJs/klaviyo.js?company_id=YccPJs"></script>
+    </Fragment>
+    <PromoSplit
+        backLink={{ href: '/eindhoven', label: 'Eindhoven' }}
+        eyebrow="Time Mission Eindhoven"
+        imageAlt="A group taking on an interactive challenge at Time Mission"
+        imagePosition="center"
+        imageSrc="/assets/photos/TM-Groups-1200.webp"
+        imageSrcSet="/assets/photos/TM-Groups-480.webp 480w, /assets/photos/TM-Groups-800.webp 800w, /assets/photos/TM-Groups-1200.webp 1200w"
+    >
+        <h1 id="promo-title" class="tm-promo-landing__title">Be First to Know</h1>
+        <div class="tm-promo-landing__copy"><p>Sign up for opening news and updates from Time Mission Eindhoven.</p></div>
+        <section class="tm-promo-form tm-promo-form--live" aria-label="Eindhoven signup form">
+            <div class={`klaviyo-form-${formId}`} data-klaviyo-form-embed data-tm-form-name="eindhoven_signup" data-tm-klaviyo-form-id={formId}></div>
+            <button type="button" class="tm-promo-landing__cta" data-tm-klaviyo-form-trigger={formId}>Sign Up</button>
+        </section>
+    </PromoSplit>
+</SiteLayout>

@@ -1,3 +1,4 @@
+import { EINDHOVEN_SIGNUP_PAGE_SNAPSHOT, REMOVED_TICKER_LOCATIONS } from '../cms/migration-data/20260908_admin_promotion_updates_snapshot';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -97,6 +98,8 @@ describe('live-site-to-CMS sync snapshot', () => {
             } : location;
             const currentLocation = location.slug === PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.slug
                 ? { ...operationalLocation, ticker: PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.ticker }
+                : REMOVED_TICKER_LOCATIONS.some((slug) => slug === location.slug)
+                ? { ...operationalLocation, ticker: '' }
                 : operationalLocation;
             const hoursPatch = hoursPatches.get(location.slug);
             const currentHoursLocation = hoursPatch
@@ -170,6 +173,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 ...TM_OPS_EDUCATORS_PAGE_SNAPSHOT,
                 ...BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 ...US_SCHOOL_NIGHT_PAGE_SNAPSHOT,
+                EINDHOVEN_SIGNUP_PAGE_SNAPSHOT,
             ]
                 .map((page) => [page.path, page]),
         );

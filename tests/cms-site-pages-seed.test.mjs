@@ -10,6 +10,7 @@ describe('CMS existing-page seed migration', () => {
   it('covers every route registry canonical path', () => {
     const routes = JSON.parse(fs.readFileSync(path.join(root, 'src/data/routes.json'), 'utf8')).routes;
     const migrationFiles = [
+      'cms/migration-data/20260908_admin_promotion_updates_snapshot.ts',
       'cms/migrations/20260508_201500_seed_site_pages.ts',
       'cms/migrations/20260811_210000_houston_back_to_school_pages.ts',
       'cms/migration-data/20260811_houston_back_to_school_pages_snapshot.ts',

@@ -416,4 +416,87 @@ describe('analytics routing context', () => {
     expect(JSON.stringify(event)).not.toContain('ada@example.com');
     expect(JSON.stringify(event)).not.toContain('Lovelace');
   });
+
+  it('tracks every completed Klaviyo form with stable form identity and no submitted metadata', () => {
+    const formElement = {
+      getAttribute(name) {
+        return name === 'data-tm-form-name' ? 'educator_appreciation' : null;
+      },
+    };
+    const { context, window, document } = createBrowserContext(grantedConsentWindow({
+      crypto: webcrypto,
+    }));
+    window.location.pathname = '/houston/educators';
+    document.body.dataset.location = 'houston';
+    document.querySelector = (selector) => (
+      selector === '[data-tm-klaviyo-form-id="YsG3eB"]' ? formElement : null
+    );
+
+    runScript('js/form-registration-tracking.js', context);
+    window.dispatchEvent({
+      type: 'klaviyoForms',
+      detail: {
+        type: 'submit',
+        formId: 'YsG3eB',
+        formVersionId: 'variant-b',
+        metaData: {
+          email: 'private@example.com',
+          phone_number: '+15555550123',
+        },
+      },
+    });
+
+    const event = window.dataLayer.find((entry) => (
+      entry && entry.event_name === 'COMPLETE_REGISTRATION'
+    ));
+    expect(event).toMatchObject({
+      event: 'COMPLETE_REGISTRATION',
+      conversion_source: 'klaviyo_form',
+      form_id: 'YsG3eB',
+      form_name: 'educator_appreciation',
+      form_version_id: 'variant-b',
+      standard_event_name: 'CompleteRegistration',
+    });
+    expect(event.parameters).toMatchObject({
+      FORM_ID: 'YsG3eB',
+      FORM_NAME: 'educator_appreciation',
+      FORM_VERSION_ID: 'variant-b',
+      LOCATION_SLUG: 'houston',
+      PAGE_PATH: '/houston/educators',
+      PROVIDER: 'klaviyo',
+    });
+    expect(JSON.stringify(event)).not.toContain('private@example.com');
+    expect(JSON.stringify(event)).not.toContain('+15555550123');
+  });
+
+  it('distinguishes unannotated Klaviyo forms and ignores non-completion activity', () => {
+    const { context, window } = createBrowserContext(grantedConsentWindow());
+
+    runScript('js/form-registration-tracking.js', context);
+    window.dispatchEvent({
+      type: 'klaviyoForms',
+      detail: { type: 'stepSubmit', formId: 'First1' },
+    });
+    window.dispatchEvent({
+      type: 'klaviyoForms',
+      detail: { type: 'submit', formId: 'First1' },
+    });
+    window.dispatchEvent({
+      type: 'klaviyoForms',
+      detail: { type: 'submit', formId: 'Second2' },
+    });
+
+    const events = window.dataLayer.filter((entry) => (
+      entry && entry.event_name === 'COMPLETE_REGISTRATION'
+    ));
+    expect(events).toHaveLength(2);
+    expect(events.map((event) => ({
+      formId: event.parameters.FORM_ID,
+      formName: event.parameters.FORM_NAME,
+    }))).toEqual([
+      { formId: 'First1', formName: 'klaviyo_First1' },
+      { formId: 'Second2', formName: 'klaviyo_Second2' },
+    ]);
+  });
+
 });

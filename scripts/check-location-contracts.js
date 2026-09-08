@@ -95,8 +95,8 @@ function validateGeo(location) {
 
 function validateLocationTicker(location) {
   const id = location.id || '(unknown)';
-  if (typeof location.ticker !== 'string' || location.ticker.trim() === '') {
-    errors.push(`${id}: ticker must be a non-empty string`);
+  if (typeof location.ticker !== 'string') {
+    errors.push(`${id}: ticker must be a string (empty disables the location ticker)`);
     return;
   }
 

@@ -613,6 +613,16 @@
       "outputFile": "waiver.html",
       "sitemap": true,
       "status": 301
+    },
+    {
+      "id": "eindhoven-signup",
+      "canonicalPath": "/eindhoven/signup",
+      "redirectSources": [
+        "/eindhoven/signup.html"
+      ],
+      "outputFile": "eindhoven/signup.html",
+      "sitemap": true,
+      "status": 301
     }
   ],
   "aliases": [

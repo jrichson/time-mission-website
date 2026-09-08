@@ -58,6 +58,11 @@
             var formId = String(trigger.getAttribute('data-tm-klaviyo-form-trigger') || '').trim();
             if (!/^[a-z0-9]+$/i.test(formId)) return;
             event.preventDefault();
+            if (formId === EINDHOVEN_KLAVIYO_FORM_ID && !/\/eindhoven\/signup(?:\.html)?\/?$/.test(window.location.pathname)) {
+                var localePrefix = window.location.pathname.match(/^\/(nl|fr|es)(?:\/|$)/);
+                window.location.assign((localePrefix ? '/' + localePrefix[1] : '') + '/eindhoven/signup');
+                return;
+            }
             window._klOnsite = window._klOnsite || [];
             window._klOnsite.push(['openForm', formId]);
             ensureKlaviyoOnsiteScript(formId);

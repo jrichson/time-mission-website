@@ -44,6 +44,8 @@ describe('location campaign pages', () => {
     expect(template).toContain('<span>Through Sept 30</span>');
     expect(template).toContain('Every educator gets a free mission');
     expect(template).toContain('class={`klaviyo-form-${formId}`}');
+    expect(template).toContain('data-tm-form-name="educator_appreciation"');
+    expect(template).toContain('data-tm-klaviyo-form-id={formId}');
     expect(template).toContain('aria-label="Educator signup form"');
     expect(template).not.toContain('Get your promo code</h2>');
     expect(template).toContain('/assets/photos/promos/houston-educators-control-room-1200.webp');

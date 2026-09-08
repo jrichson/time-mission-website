@@ -180,7 +180,7 @@ test('group event card Book Now uses group checkout when available', async ({ pa
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
   await page.evaluate(() => window.TM.select('manassas'));
 
-  const expectedHref = groupCheckoutUrl('manassas');
+  const expectedHref = groupCheckoutUrl('manassas', 'birthdays');
   await page.locator('.event-type-actions .btn-tickets[data-tm-booking-kind="group-tickets"]').first().click();
   await page.waitForFunction(() => window.__rollerCheckoutShown === true);
   await expect(page.locator('#roller-checkout')).toHaveAttribute('data-checkout', expectedHref);
