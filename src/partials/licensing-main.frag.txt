@@ -25,7 +25,7 @@
         <a href="tel:+14013214546">+1 401 321 4546</a><br>
         <a href="mailto:info@timemission.com">info@timemission.com</a></p>
 
-        <p><strong>Europe Office, Time Mission Corp Inc.</strong><br>
+        <p><strong>Europe Office, Time Mission Europe BV</strong><br>
         Kruisakker 12<br>
         5674 TZ Nuenen, Netherlands<br>
         <a href="mailto:info@timemission.eu">info@timemission.eu</a></p>
