@@ -218,7 +218,7 @@ test('Europe location fallback links preserve tracking params', async ({ page, i
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]'))
     .toHaveAttribute(
       'href',
-      'https://time-mission-website-eu.pages.dev/eindhoven?utm_source=paid&utm_campaign=spring',
+      'https://www.timemission.eu/eindhoven?utm_source=paid&utm_campaign=spring',
     );
 });
 

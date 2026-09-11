@@ -154,8 +154,8 @@ describe('browser data, consent, and i18n contracts', () => {
     expect(byId.get('brussels')?.navLabel).toBe('Belgium – Brussels');
     expect(byId.get('brussels')?.status).toBe('open');
     expect(byId.get('brussels')?.ticker).toBe('BRUSSELS NOW OPEN');
+    expect(byId.get('eindhoven')).not.toHaveProperty('counterpartUrl');
     expect(byId.get('eindhoven')).toMatchObject({
-      counterpartUrl: 'https://time-mission-website-eu.pages.dev/eindhoven',
       address: { zip: '5611 AJ' },
     });
   });

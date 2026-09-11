@@ -111,7 +111,7 @@ describe('site deployment profiles', () => {
     });
     expect(publicLocationForProfile(location('eindhoven'), us)).toMatchObject({
       pagePath: undefined,
-      externalUrl: 'https://time-mission-website-eu.pages.dev/eindhoven',
+      externalUrl: 'https://www.timemission.eu/eindhoven',
       counterpartUrl: undefined,
     });
   });

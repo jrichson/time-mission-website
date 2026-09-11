@@ -66,7 +66,7 @@ export const LOCATION_ROUTE_ENTRIES = [
   {
     "canonicalPath": "/eindhoven",
     "compatibilitySources": [],
-    "externalUrl": "https://time-mission-website-eu.pages.dev/eindhoven",
+    "externalUrl": "https://www.timemission.eu/eindhoven",
     "officialAlternate": ""
   },
   {
