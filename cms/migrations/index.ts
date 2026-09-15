@@ -1,3 +1,4 @@
+import * as migration_20260915_090000_school_night_ticker_copy from './20260915_090000_school_night_ticker_copy';
 import * as migration_20260908_100000_admin_promotion_updates from './20260908_100000_admin_promotion_updates';
 import * as migration_20260508_181551_initial_schema from './20260508_181551_initial_schema';
 import * as migration_20260508_193500_site_pages from './20260508_193500_site_pages';
@@ -301,4 +302,9 @@ export const migrations = [
     name: '20260908_100000_admin_promotion_updates'
   },
 
+  {
+    up: migration_20260915_090000_school_night_ticker_copy.up,
+    down: migration_20260915_090000_school_night_ticker_copy.down,
+    name: '20260915_090000_school_night_ticker_copy'
+  },
 ];

@@ -31,8 +31,7 @@ const ld = serializeGraph(buildSimpleGraph([
     >
         <h1 id="promo-title" class="tm-promo-landing__title">Be First to Know</h1>
         <div class="tm-promo-landing__copy"><p>Sign up for opening news and updates from Time Mission Eindhoven.</p></div>
-        <section class="tm-promo-form tm-promo-form--live" aria-label="Eindhoven signup form">
-            <div class={`klaviyo-form-${formId}`} data-klaviyo-form-embed data-tm-form-name="eindhoven_signup" data-tm-klaviyo-form-id={formId}></div>
+        <section class="tm-promo-form" aria-label="Eindhoven signup form" data-tm-form-name="eindhoven_signup" data-tm-klaviyo-form-id={formId}>
             <button type="button" class="tm-promo-landing__cta" data-tm-klaviyo-form-trigger={formId}>Sign Up</button>
         </section>
     </PromoSplit>
