@@ -64,17 +64,27 @@ describe('CMS deploy gate', () => {
     vi.stubGlobal('fetch', fetchSpy);
     const req = reqFor({ role: 'editor' });
 
+    const doc = { id: 4, published: true };
     expect(markCmsDeployNeeded({
       action: 'change',
       collection: 'landings',
-      doc: { published: true },
+      doc,
       previousDoc: { published: false },
       req,
-    })).toBe(true);
+    })).toBe(doc);
     expect(fetchSpy).not.toHaveBeenCalled();
     expect(req.payload.logger.info).toHaveBeenCalledWith(
       '[cms-deploy] landings change is Published in CMS; manual deploy is required.',
     );
+  });
+
+  it('preserves saved draft and deleted document responses', () => {
+    const req = reqFor({ role: 'editor' });
+    const doc = { id: 4, published: false };
+    for (const action of ['change', 'delete']) {
+      expect(markCmsDeployNeeded({ action, collection: 'blog-posts', doc, previousDoc: doc, req })).toBe(doc);
+    }
+    expect(req.payload.logger.info).not.toHaveBeenCalled();
   });
 
   it('keeps deploy permission separate from editor and admin roles', async () => {

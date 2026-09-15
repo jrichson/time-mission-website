@@ -160,7 +160,8 @@ export function markCmsDeployNeeded({ action, collection, doc, previousDoc, req 
     logger(req).info?.(`[cms-deploy] ${collection} ${action} is Published in CMS; manual deploy is required.`);
   }
 
-  return needsDeploy;
+  // Payload collection hooks must return the document, not the deploy-needed flag.
+  return doc;
 }
 
 export async function triggerCmsDeploy({ reason = 'manual-cms-deploy', req }) {

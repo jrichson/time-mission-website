@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { markCmsDeployNeeded } from '../cms/lib/cms-deploy-gate.js';
 import { plainTextLexicalState } from '../cms/lib/blog-authoring';
 
 const { payload, user } = vi.hoisted(() => ({
@@ -16,7 +17,10 @@ beforeEach(() => {
   vi.clearAllMocks();
   payload.find.mockResolvedValue({ docs: [] });
   payload.findByID.mockResolvedValue({ seo: {} });
-  payload.update.mockResolvedValue({ id: 4 });
+  payload.update.mockImplementation(async ({ data }) => markCmsDeployNeeded({
+    action: 'change', collection: 'blog-posts', doc: { ...data, id: 4 },
+    previousDoc: {}, req: { payload: { logger: { info: vi.fn() } } },
+  }));
   payload.create.mockResolvedValue({ id: 5 });
 });
 
