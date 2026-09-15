@@ -106,7 +106,6 @@ async function triggerGithubActionsDeploy({ reason, req }) {
     ref: config.ref,
     inputs: {
       reason: cleanString(reason) || 'manual-cms-deploy',
-      source: 'payload-cms',
     },
   };
 

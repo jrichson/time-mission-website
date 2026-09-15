@@ -138,6 +138,13 @@ test('Edison has a local location page whose action links lead to Supercharged N
 test('short Houston ticker renders centered instead of scrolling from the edge', async ({ page }) => {
   await page.goto('/houston');
 
+  // Live CMS promotions take precedence; exercise the canonical short ticker
+  // after the current promotion expires without changing published content.
+  await page.evaluate(() => {
+    const endsAt = document.querySelector('.ticker-track')?.dataset.tmTickerEndsAt;
+    if (endsAt) window.TMTickerSchedule.refresh(new Date(endsAt));
+  });
+
   const tickerTrack = page.locator('.ticker-track');
   const tickerItem = page.locator('.ticker-item');
 

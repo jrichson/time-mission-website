@@ -142,7 +142,7 @@ export async function saveBlogPost(formData: FormData) {
     externalUrl: postType === 'external' ? externalUrl : null,
     heroMedia,
     includeInSitemap,
-    locationSlug,
+    locationSlug: locationSlug || null,
     postType,
     publishDate: new Date(publishDateValue).toISOString(),
     published,

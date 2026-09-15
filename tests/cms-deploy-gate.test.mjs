@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { parse } from 'yaml';
 
 import {
   markCmsDeployNeeded,
@@ -126,7 +128,6 @@ describe('CMS deploy gate', () => {
           ref: 'rebuild',
           inputs: {
             reason: 'cms-hours-update',
-            source: 'payload-cms',
           },
         }),
         headers: expect.objectContaining({
@@ -135,6 +136,11 @@ describe('CMS deploy gate', () => {
         method: 'POST',
       }),
     );
+    const workflow = parse(readFileSync(new URL('../.github/workflows/cms-wrangler-deploy.yml', import.meta.url), 'utf8'));
+    const declaredInputs = workflow.on.workflow_dispatch.inputs;
+    const dispatchedInputs = JSON.parse(fetchSpy.mock.calls[0][1].body).inputs;
+    expect(Object.keys(dispatchedInputs).filter((name) => !(name in declaredInputs))).toEqual([]);
+    expect(declaredInputs.target.default).toBe('us');
   });
 
   it('fails closed when the deploy hook is not configured', async () => {

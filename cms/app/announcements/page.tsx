@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 import type { AnnouncementBanner } from '../../payload-types';
 import { requireCmsUser } from '../../lib/cms-auth';
+import { announcementDataChanged, announcementDateForSave } from '../../lib/announcement-authoring';
 import { LOCATION_DETAIL_OPTIONS } from '../../lib/location-details-options.js';
 import workspaceStyles from '../blog/blog.module.css';
 import styles from './page.module.css';
@@ -93,8 +94,13 @@ async function saveAnnouncements(formData: FormData) {
     const tickerBehavior: AnnouncementBanner['tickerBehavior'] = behaviors.has(tickerRaw)
       ? tickerRaw as AnnouncementBanner['tickerBehavior']
       : 'auto';
-    const start = isoDate(text(formData, id, 'startsAt', 10));
-    const end = isoDate(text(formData, id, 'endsAt', 10), true);
+    const previous = id === 'new' ? null : await payload.findByID({
+      collection: 'announcement-banners', id, depth: 0, overrideAccess: false, user,
+    });
+    const startInput = text(formData, id, 'startsAt', 10);
+    const endInput = text(formData, id, 'endsAt', 10);
+    const start = announcementDateForSave(startInput, previous?.startsAt, isoDate(startInput));
+    const end = announcementDateForSave(endInput, previous?.endsAt, isoDate(endInput, true));
     const linkUrlRaw = text(formData, id, 'linkUrl', 2048);
     const linkUrl = safeLink(linkUrlRaw);
     if (linkUrlRaw && !linkUrl) redirect('/announcements?status=link-url');
@@ -128,6 +134,8 @@ async function saveAnnouncements(formData: FormData) {
       tickerBehavior,
       title,
     };
+
+    if (previous && !announcementDataChanged(previous, data)) continue;
 
     if (id === 'new') {
       await payload.create({
