@@ -32,12 +32,9 @@ import PromoSplit from '../../components/PromoSplit.astro';
                 <li><strong>Beat the Deadline:</strong> Register by September 30, 2026 to qualify for free January play.</li>
                 <li><strong>Show Up &amp; Have Fun:</strong> Redeem your free teacher pass January 5–29, 2027.</li>
             </ul>
-            <h2>Don't Miss Out—Register by September 30!</h2>
-            <p>This teacher perk is only available to those who register by September 30, 2026. Spread the word around the teachers' lounge and invite your teacher friends to kick off 2027 with a mission!</p>
-            <a class="tm-promo-landing__cta" href="#teacher-signup">Claim Your Free Teacher Pass Now</a>
         </div>
 
-        <section id="teacher-signup" class="tm-promo-form tm-promo-form--live" aria-label="Educator signup form" tabindex="-1">
+        <section id="teacher-signup" class="tm-promo-form tm-promo-form--live" aria-label="Educator signup form">
             <div
                 class="klaviyo-form-WC5BHF"
                 data-klaviyo-form-embed
@@ -45,6 +42,11 @@ import PromoSplit from '../../components/PromoSplit.astro';
                 data-tm-klaviyo-form-id="WC5BHF"
             ></div>
         </section>
+
+        <div class="tm-promo-landing__copy">
+            <h2>Don't Miss Out—Register by September 30!</h2>
+            <p>Spread the word around the teachers' lounge and invite your teacher friends to kick off 2027 with a mission!</p>
+        </div>
 
         <p class="tm-promo-landing__terms">Register by September 30, 2026. One free ticket per educator, redeemable January 5–29, 2027. Valid at Time Mission Nashville only, opening December 2026. Available to K-12 teachers, administrators, and school staff with a valid school ID. Promo code link is sent by email after signup and must be redeemed by the person named on the signup. Valid school ID required at check-in. Valid any day during the redemption period and any session length, subject to availability. Two ticket minimum applies to all bookings. Cannot be combined with other offers, promotions, or discounts. Not transferable, not redeemable for cash, and no cash value. Time Mission reserves the right to modify or end this promotion at any time.</p>
     </PromoSplit>
@@ -63,9 +65,5 @@ import PromoSplit from '../../components/PromoSplit.astro';
         gap: 0.75rem;
         margin: 0;
         padding-left: 1.25rem;
-    }
-
-    #teacher-signup {
-        scroll-margin-top: var(--promo-page-offset);
     }
 </style>

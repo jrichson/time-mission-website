@@ -220,13 +220,13 @@ test('Nashville educators register before opening for January 2027 play', async 
   await expect(page.locator('.tm-promo-landing__eyebrow')).toHaveText('Nashville · Opening December 2026');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Big Things.\s+This December!/);
   await expect(page.getByRole('heading', { name: 'Calling All Teachers: Play for FREE January 5–29, 2027!' })).toBeVisible();
-  await expect(page.locator('.tm-promo-landing__copy')).toContainText('Register by September 30, 2026');
+  await expect(page.locator('.tm-promo-landing__copy').first()).toContainText('Register by September 30, 2026');
   await expect(page.locator('.tm-promo-landing__terms')).toContainText('redeemable January 5–29, 2027');
   await expect(page.locator('[data-klaviyo-form-embed]')).toHaveClass('klaviyo-form-WC5BHF');
   await expect(page.locator('main')).not.toContainText('Through Sept 30');
   await expect(page.locator('main')).not.toContainText('valid through September 30');
-  await page.getByRole('link', { name: 'Claim Your Free Teacher Pass Now' }).click();
-  await expect(page).toHaveURL(/#teacher-signup$/);
-  await expect(page.locator('#teacher-signup')).toBeInViewport();
+  await expect(page.getByRole('link', { name: 'Claim Your Free Teacher Pass Now' })).toHaveCount(0);
+  await expect(page.locator('#teacher-signup + .tm-promo-landing__copy h2'))
+    .toHaveText("Don't Miss Out—Register by September 30!");
   await expectResponsivePromoSplit(page, isMobile);
 });
