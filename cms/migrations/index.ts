@@ -1,3 +1,4 @@
+import * as migration_20260916_120000_nashville_educators_deadline from './20260916_120000_nashville_educators_deadline';
 import * as migration_20260916_110000_dallas_educators_opening from './20260916_110000_dallas_educators_opening';
 import * as migration_20260916_100000_nashville_educators_opening from './20260916_100000_nashville_educators_opening';
 import * as migration_20260916_090000_educators_pages from './20260916_090000_educators_pages';
@@ -324,5 +325,10 @@ export const migrations = [
     up: migration_20260916_110000_dallas_educators_opening.up,
     down: migration_20260916_110000_dallas_educators_opening.down,
     name: '20260916_110000_dallas_educators_opening'
+  },
+  {
+    up: migration_20260916_120000_nashville_educators_deadline.up,
+    down: migration_20260916_120000_nashville_educators_deadline.down,
+    name: '20260916_120000_nashville_educators_deadline'
   },
 ];

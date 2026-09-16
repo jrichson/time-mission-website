@@ -1,3 +1,4 @@
+import { NASHVILLE_EDUCATORS_DEADLINE_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_nashville_educators_deadline_snapshot';
 import { DALLAS_EDUCATORS_OPENING_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_dallas_educators_opening_snapshot';
 import { NASHVILLE_EDUCATORS_OPENING_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_nashville_educators_opening_snapshot';
 import { EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_educators_pages_snapshot';
@@ -176,6 +177,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 ...TM_OPS_EDUCATORS_PAGE_SNAPSHOT,
                 ...EDUCATORS_PAGE_SNAPSHOT,
                 NASHVILLE_EDUCATORS_OPENING_PAGE_SNAPSHOT,
+                NASHVILLE_EDUCATORS_DEADLINE_PAGE_SNAPSHOT,
                 DALLAS_EDUCATORS_OPENING_PAGE_SNAPSHOT,
                 ...BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 ...US_SCHOOL_NIGHT_PAGE_SNAPSHOT,
