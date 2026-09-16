@@ -1,9 +1,38 @@
 ---
 import EducatorPage from '../../components/EducatorPage.astro';
+import PromoSplit from '../../components/PromoSplit.astro';
 ---
 
 <EducatorPage
     formId="TzbcnW"
     locationName="Dallas"
     locationSlug="dallas"
-/>
+    breadcrumbLabel="Educator Offers"
+>
+    <PromoSplit
+        backLink={{ href: '/dallas', label: 'Dallas' }}
+        eyebrow="Dallas · Opening November 2026"
+        imageAlt="Three educators taking on the Control Room challenge at Time Mission"
+        imagePosition="center"
+        imageSrc="/assets/photos/promos/houston-educators-control-room-1200.webp"
+        imageSrcSet="/assets/photos/promos/houston-educators-control-room-480.webp 480w, /assets/photos/promos/houston-educators-control-room-800.webp 800w, /assets/photos/promos/houston-educators-control-room-1200.webp 1200w, /assets/photos/promos/houston-educators-control-room-1600.webp 1600w"
+    >
+        <h1 id="promo-title" class="tm-promo-landing__title">
+            <span>Be the First to Know</span>
+        </h1>
+
+        <div class="tm-promo-landing__copy">
+            <p>Dallas, the countdown is on. Time Mission Dallas opens this November, and we're saving something special for the educators in our community.</p>
+            <p>Sign up now to get first access to an exclusive teacher and educator offer!</p>
+        </div>
+
+        <section class="tm-promo-form tm-promo-form--live" aria-label="Educator signup form">
+            <div
+                class="klaviyo-form-TzbcnW"
+                data-klaviyo-form-embed
+                data-tm-form-name="educator_appreciation"
+                data-tm-klaviyo-form-id="TzbcnW"
+            ></div>
+        </section>
+    </PromoSplit>
+</EducatorPage>

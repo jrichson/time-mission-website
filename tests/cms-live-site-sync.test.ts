@@ -1,3 +1,4 @@
+import { DALLAS_EDUCATORS_OPENING_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_dallas_educators_opening_snapshot';
 import { NASHVILLE_EDUCATORS_OPENING_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_nashville_educators_opening_snapshot';
 import { EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_educators_pages_snapshot';
 import { EINDHOVEN_SIGNUP_PAGE_SNAPSHOT, REMOVED_TICKER_LOCATIONS } from '../cms/migration-data/20260908_admin_promotion_updates_snapshot';
@@ -175,6 +176,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 ...TM_OPS_EDUCATORS_PAGE_SNAPSHOT,
                 ...EDUCATORS_PAGE_SNAPSHOT,
                 NASHVILLE_EDUCATORS_OPENING_PAGE_SNAPSHOT,
+                DALLAS_EDUCATORS_OPENING_PAGE_SNAPSHOT,
                 ...BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 ...US_SCHOOL_NIGHT_PAGE_SNAPSHOT,
                 EINDHOVEN_SIGNUP_PAGE_SNAPSHOT,

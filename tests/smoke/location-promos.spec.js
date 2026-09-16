@@ -181,7 +181,6 @@ test('Philadelphia educators page matches the Houston offer with the Philadelphi
 });
 
 for (const educatorPage of [
-  { formId: 'TzbcnW', locationName: 'Dallas', locationSlug: 'dallas' },
   {
     formId: 'TwcrHA',
     locationName: 'Manassas',
@@ -233,5 +232,18 @@ test('Nashville educators register before opening for January 2027 play', async 
   await expect(page.getByRole('link', { name: 'Claim Your Free Teacher Pass Now' })).toHaveCount(0);
   await expect(page.locator('#teacher-signup + .tm-promo-landing__copy h2'))
     .toHaveText("Don't Miss Out—Register by September 30!");
+  await expectResponsivePromoSplit(page, isMobile);
+});
+
+test('Dallas educators can register for opening offer updates', async ({ page, isMobile }) => {
+  await page.goto('/dallas/educators');
+  await expect(page).toHaveTitle('Dallas Educator Offers: Be the First to Know | Time Mission');
+  await expect(page.locator('.tm-promo-landing__eyebrow')).toHaveText('Dallas · Opening November 2026');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Be the First to Know');
+  await expect(page.locator('.tm-promo-landing__back')).toHaveAttribute('href', '/dallas');
+  await expect(page.locator('.tm-promo-landing__copy')).toContainText('Sign up now to get first access to an exclusive teacher and educator offer!');
+  await expect(page.locator('[data-klaviyo-form-embed]')).toHaveClass('klaviyo-form-TzbcnW');
+  await expect(page.locator('.tm-promo-landing__terms')).toHaveCount(0);
+  await expect(page.locator('main')).not.toContainText('September 30');
   await expectResponsivePromoSplit(page, isMobile);
 });
