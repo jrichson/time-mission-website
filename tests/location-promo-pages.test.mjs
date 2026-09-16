@@ -67,6 +67,8 @@ describe('location campaign pages', () => {
   });
 
   it.each([
+    { formId: 'WC5BHF', locationName: 'Nashville', locationSlug: 'nashville' },
+    { formId: 'TzbcnW', locationName: 'Dallas', locationSlug: 'dallas' },
     {
       formId: 'TwcrHA',
       locationName: 'Manassas',

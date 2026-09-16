@@ -334,5 +334,17 @@
     "description": "Sign up for opening news and updates from Time Mission Eindhoven.",
     "ogImage": "/assets/photos/TM-Groups-1200.webp",
     "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
+  "/nashville/educators": {
+    "title": "Educators Free Through September 30 | Time Mission Nashville",
+    "description": "Nashville K-12 educators, administrators, and school staff can claim one free mission at Time Mission Nashville through September 30, 2026.",
+    "ogImage": "/assets/photos/promos/houston-educators-control-room-1200.webp",
+    "twitterImage": "/assets/photos/promos/houston-educators-control-room-1200.webp"
+  },
+  "/dallas/educators": {
+    "title": "Educators Free Through September 30 | Time Mission Dallas",
+    "description": "Dallas K-12 educators, administrators, and school staff can claim one free mission at Time Mission Dallas through September 30, 2026.",
+    "ogImage": "/assets/photos/promos/houston-educators-control-room-1200.webp",
+    "twitterImage": "/assets/photos/promos/houston-educators-control-room-1200.webp"
   }
 }

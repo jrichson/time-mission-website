@@ -623,6 +623,30 @@
       "outputFile": "eindhoven/signup.html",
       "sitemap": true,
       "status": 301
+    },
+    {
+      "id": "nashville-educators",
+      "canonicalPath": "/nashville/educators",
+      "redirectSources": [
+        "/nashville/educators.html",
+        "/nashville/teachers",
+        "/nashville/teachers.html"
+      ],
+      "outputFile": "nashville/educators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "dallas-educators",
+      "canonicalPath": "/dallas/educators",
+      "redirectSources": [
+        "/dallas/educators.html",
+        "/dallas/teachers",
+        "/dallas/teachers.html"
+      ],
+      "outputFile": "dallas/educators.html",
+      "sitemap": true,
+      "status": 301
     }
   ],
   "aliases": [

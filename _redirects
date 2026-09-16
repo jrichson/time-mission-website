@@ -273,3 +273,11 @@
 /west-nyack/youth-group-camp /groups/private-events 301
 
 /eindhoven/signup.html /eindhoven/signup 301
+
+# Educator offers
+/nashville/educators.html /nashville/educators 301
+/nashville/teachers /nashville/educators 301
+/nashville/teachers.html /nashville/educators 301
+/dallas/educators.html /dallas/educators 301
+/dallas/teachers /dallas/educators 301
+/dallas/teachers.html /dallas/educators 301

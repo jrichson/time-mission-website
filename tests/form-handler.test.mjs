@@ -315,6 +315,27 @@ describe('Cloudflare form handler', () => {
     expect(emailCall.body.html).toContain('NY - West Nyack');
   });
 
+  it.each(['birthday', 'booking', 'corporate', 'feedback', 'general', 'groups', 'other'])(
+    'routes Edison %s contacts to Supercharged regardless of configured defaults', async (subject) => {
+      const calls = [];
+      const response = await handleFormRequest({
+        env: { ...env, FORM_RATE_LIMIT_KV: mockKv(), CONTACT_TO_EMAIL_EDISON: 'old@example.com' },
+        fetchImpl: (url, init) => {
+          calls.push({ url: String(url), body: typeof init.body === 'string' ? JSON.parse(init.body) : null });
+          return fetchOk(url);
+        },
+        formType: 'contact',
+        request: formRequest('/api/contact', {
+          'cf-turnstile-response': 'token', email: 'guest@example.com',
+          location: 'edison', message: 'Question about this location', name: 'Guest', phone: '7325550123', subject,
+        }),
+      });
+      expect(response.status).toBe(200);
+      expect(calls.at(-1).url).toBe('https://api.resend.com/emails');
+      expect(calls.at(-1).body.to).toEqual(['info@SuperchargedNJ.com']);
+    },
+  );
+
   it('routes EU contact submissions to each configured location inbox', async () => {
     const calls = [];
     const fetchImpl = (url, init) => {

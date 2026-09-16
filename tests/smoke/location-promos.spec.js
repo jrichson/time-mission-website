@@ -176,6 +176,8 @@ test('Philadelphia educators page matches the Houston offer with the Philadelphi
 });
 
 for (const educatorPage of [
+  { formId: 'WC5BHF', locationName: 'Nashville', locationSlug: 'nashville' },
+  { formId: 'TzbcnW', locationName: 'Dallas', locationSlug: 'dallas' },
   {
     formId: 'TwcrHA',
     locationName: 'Manassas',
