@@ -17,6 +17,11 @@ async function expectResponsivePromoSplit(page, isMobile) {
     expect(mediaBox.y + mediaBox.height).toBeLessThanOrEqual(contentBox.y + 1);
   } else {
     expect(contentBox.x + contentBox.width).toBeLessThanOrEqual(mediaBox.x + 1);
+    if (await page.locator('body.tm-educator-page').count()) {
+      const backBox = await page.locator('.tm-promo-landing__back').boundingBox();
+      expect(backBox.y - mediaBox.y).toBeGreaterThanOrEqual(24);
+      expect(backBox.y - mediaBox.y).toBeLessThanOrEqual(40);
+    }
   }
 
   const overflow = await page.evaluate(() => ({

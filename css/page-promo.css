@@ -238,6 +238,17 @@
     min-height: 10rem;
 }
 
+@media (min-width: 901px) {
+    .tm-educator-page .tm-promo-landing__content {
+        align-self: start;
+        padding-top: 2rem;
+    }
+
+    .tm-educator-page .tm-promo-landing__back {
+        margin-bottom: 1rem;
+    }
+}
+
 @media (max-width: 900px) {
     .tm-promo-page {
         --promo-page-offset: calc(var(--tm-ticker-height) + 6.5rem + env(safe-area-inset-top, 0px));
