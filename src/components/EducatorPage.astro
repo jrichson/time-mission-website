@@ -8,14 +8,20 @@ interface Props {
     formId: string;
     locationName: string;
     locationSlug: string;
+    breadcrumbLabel?: string;
 }
 
-const { formId, locationName, locationSlug } = Astro.props;
+const {
+    formId,
+    locationName,
+    locationSlug,
+    breadcrumbLabel = 'Educators Free Through September 30',
+} = Astro.props;
 const page = definePage({ canonicalPath: `/${locationSlug}/educators` });
 const ld = serializeGraph(buildSimpleGraph([
     { label: 'Home', href: '/' },
     { label: locationName, href: `/${locationSlug}` },
-    { label: 'Educators Free Through September 30', href: page.canonicalPath },
+    { label: breadcrumbLabel, href: page.canonicalPath },
 ]));
 ---
 
@@ -36,9 +42,11 @@ const ld = serializeGraph(buildSimpleGraph([
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
 
-    <EducatorOffer
-        formId={formId}
-        locationName={locationName}
-        locationSlug={locationSlug}
-    />
+    <slot>
+        <EducatorOffer
+            formId={formId}
+            locationName={locationName}
+            locationSlug={locationSlug}
+        />
+    </slot>
 </SiteLayout>

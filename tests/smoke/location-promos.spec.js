@@ -176,7 +176,6 @@ test('Philadelphia educators page matches the Houston offer with the Philadelphi
 });
 
 for (const educatorPage of [
-  { formId: 'WC5BHF', locationName: 'Nashville', locationSlug: 'nashville' },
   { formId: 'TzbcnW', locationName: 'Dallas', locationSlug: 'dallas' },
   {
     formId: 'TwcrHA',
@@ -213,3 +212,21 @@ for (const educatorPage of [
     await expectResponsivePromoSplit(page, isMobile);
   });
 }
+
+
+test('Nashville educators register before opening for January 2027 play', async ({ page, isMobile }) => {
+  await page.goto('/nashville/educators');
+  await expect(page).toHaveTitle('Nashville Teacher Pass: Free Play January 5–29, 2027 | Time Mission');
+  await expect(page.locator('.tm-promo-landing__eyebrow')).toHaveText('Nashville · Opening December 2026');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Big Things.\s+This December!/);
+  await expect(page.getByRole('heading', { name: 'Calling All Teachers: Play for FREE January 5–29, 2027!' })).toBeVisible();
+  await expect(page.locator('.tm-promo-landing__copy')).toContainText('Register by September 30, 2026');
+  await expect(page.locator('.tm-promo-landing__terms')).toContainText('redeemable January 5–29, 2027');
+  await expect(page.locator('[data-klaviyo-form-embed]')).toHaveClass('klaviyo-form-WC5BHF');
+  await expect(page.locator('main')).not.toContainText('Through Sept 30');
+  await expect(page.locator('main')).not.toContainText('valid through September 30');
+  await page.getByRole('link', { name: 'Claim Your Free Teacher Pass Now' }).click();
+  await expect(page).toHaveURL(/#teacher-signup$/);
+  await expect(page.locator('#teacher-signup')).toBeInViewport();
+  await expectResponsivePromoSplit(page, isMobile);
+});

@@ -1,3 +1,4 @@
+import * as migration_20260916_100000_nashville_educators_opening from './20260916_100000_nashville_educators_opening';
 import * as migration_20260916_090000_educators_pages from './20260916_090000_educators_pages';
 import * as migration_20260915_090000_school_night_ticker_copy from './20260915_090000_school_night_ticker_copy';
 import * as migration_20260908_100000_admin_promotion_updates from './20260908_100000_admin_promotion_updates';
@@ -312,5 +313,10 @@ export const migrations = [
     up: migration_20260916_090000_educators_pages.up,
     down: migration_20260916_090000_educators_pages.down,
     name: '20260916_090000_educators_pages'
+  },
+  {
+    up: migration_20260916_100000_nashville_educators_opening.up,
+    down: migration_20260916_100000_nashville_educators_opening.down,
+    name: '20260916_100000_nashville_educators_opening'
   },
 ];

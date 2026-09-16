@@ -1,9 +1,71 @@
 ---
 import EducatorPage from '../../components/EducatorPage.astro';
+import PromoSplit from '../../components/PromoSplit.astro';
 ---
 
 <EducatorPage
     formId="WC5BHF"
     locationName="Nashville"
     locationSlug="nashville"
-/>
+    breadcrumbLabel="Nashville Teacher Pass: January 5–29, 2027"
+>
+    <PromoSplit
+        backLink={{ href: '/nashville', label: 'Nashville' }}
+        eyebrow="Nashville · Opening December 2026"
+        imageAlt="Three educators taking on the Control Room challenge at Time Mission"
+        imagePosition="center"
+        imageSrc="/assets/photos/promos/houston-educators-control-room-1200.webp"
+        imageSrcSet="/assets/photos/promos/houston-educators-control-room-480.webp 480w, /assets/photos/promos/houston-educators-control-room-800.webp 800w, /assets/photos/promos/houston-educators-control-room-1200.webp 1200w, /assets/photos/promos/houston-educators-control-room-1600.webp 1600w"
+    >
+        <h1 id="promo-title" class="tm-promo-landing__title tm-promo-landing__title--educators">
+            <span>Big Things.</span>{' '}
+            <span>This December!</span>
+        </h1>
+
+        <div class="tm-promo-landing__copy">
+            <p>Nashville, the countdown is on! We're putting the final polish on our brand-new location and can't wait to welcome you through the doors this December.</p>
+            <h2>Calling All Teachers: Play for FREE January 5–29, 2027!</h2>
+            <p>To celebrate our grand opening and show some love to our local educators, we're handing the fun over to you. You work hard every day. Now it's your turn to kick back, let loose, and play on us at Time Mission Nashville!</p>
+            <h2>Here's how to lock in your free play:</h2>
+            <ul>
+                <li><strong>Sign Up Now:</strong> Registration is open. Secure your teacher pass early!</li>
+                <li><strong>Beat the Deadline:</strong> Register by September 30, 2026 to qualify for free January play.</li>
+                <li><strong>Show Up &amp; Have Fun:</strong> Redeem your free teacher pass January 5–29, 2027.</li>
+            </ul>
+            <h2>Don't Miss Out—Register by September 30!</h2>
+            <p>This teacher perk is only available to those who register by September 30, 2026. Spread the word around the teachers' lounge and invite your teacher friends to kick off 2027 with a mission!</p>
+            <a class="tm-promo-landing__cta" href="#teacher-signup">Claim Your Free Teacher Pass Now</a>
+        </div>
+
+        <section id="teacher-signup" class="tm-promo-form tm-promo-form--live" aria-label="Educator signup form" tabindex="-1">
+            <div
+                class="klaviyo-form-WC5BHF"
+                data-klaviyo-form-embed
+                data-tm-form-name="educator_appreciation"
+                data-tm-klaviyo-form-id="WC5BHF"
+            ></div>
+        </section>
+
+        <p class="tm-promo-landing__terms">Register by September 30, 2026. One free ticket per educator, redeemable January 5–29, 2027. Valid at Time Mission Nashville only, opening December 2026. Available to K-12 teachers, administrators, and school staff with a valid school ID. Promo code link is sent by email after signup and must be redeemed by the person named on the signup. Valid school ID required at check-in. Valid any day during the redemption period and any session length, subject to availability. Two ticket minimum applies to all bookings. Cannot be combined with other offers, promotions, or discounts. Not transferable, not redeemable for cash, and no cash value. Time Mission reserves the right to modify or end this promotion at any time.</p>
+    </PromoSplit>
+</EducatorPage>
+
+<style>
+    h2 {
+        margin: 0.5rem 0 0;
+        color: var(--white);
+        font-size: clamp(1.25rem, 2vw, 1.6rem);
+        line-height: 1.3;
+    }
+
+    ul {
+        display: grid;
+        gap: 0.75rem;
+        margin: 0;
+        padding-left: 1.25rem;
+    }
+
+    #teacher-signup {
+        scroll-margin-top: var(--promo-page-offset);
+    }
+</style>
