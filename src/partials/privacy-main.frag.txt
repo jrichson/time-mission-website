@@ -17,8 +17,13 @@
         <h2>Data We Collect</h2>
         <p>We may collect a limited amount of personal data when you engage with our corporate website or brand-wide services, including:</p>
         <p><strong>Cookies &amp; Similar Technologies</strong> for analytics, performance, and marketing optimization.</p>
-        <p><strong>Contact Information</strong> (e.g., email, phone number) if you sign up for newsletters or promotions, which may be hashed (e.g., using SHA-256) and shared with advertising platforms (like Google Ads) to measure effectiveness.</p>
+        <p><strong>Contact Information</strong> (e.g., email, phone number) if you sign up for newsletters or promotions, which may be hashed (e.g., using SHA-256) and shared with advertising platforms (like Google Ads) to measure effectiveness. Mobile numbers and SMS consent data are excluded from this sharing.</p>
         <p><strong>Inquiries &amp; Communications</strong> (e.g., emails) to address your questions or requests.</p>
+
+        <h2>Text Messages (SMS)</h2>
+        <p>If you give us your mobile number and agree to receive text messages (for example, through a sign-up form on our website), we collect your mobile number, your consent to receive messages, the date and time you opted in, and the page or form you used. We use this information to send you recurring automated marketing text messages about offers, events and news from Time Mission, and to keep a record of your consent.</p>
+        <p><strong>We do not sell, rent or share your mobile number or text message opt-in data with third parties or affiliates for their own marketing purposes.</strong> We share it only with the service providers that deliver our messages for us (such as our messaging platform and mobile carriers), and only so they can provide that service. Mobile numbers and SMS consent data are not included in any information shared with advertising platforms.</p>
+        <p>Message frequency varies. Message and data rates may apply. Consent to receive text messages is not a condition of purchase. You can opt out at any time by replying <strong>STOP</strong> to any message; you will receive one confirmation text and no further marketing messages. Reply <strong>HELP</strong> for help, or contact us at <a href="mailto:info@timemission.com">info@timemission.com</a>. For full messaging terms, see our <a href="http://time-mission.myklpages.com/p/mobile-terms-of-service">Mobile Terms of Service</a>.</p>
 
         <h2>Data from Time Mission Locations</h2>
         <p>Most participant data (e.g., bookings, gameplay, waivers) is collected by and owned by the individual Operator. Time Mission Corp. may store and process that data on behalf of the Operator, but does not independently own it.</p>
@@ -41,7 +46,7 @@
         <p>Children under 18 may only participate in Time Mission with legal guardian consent. Each location may have additional policies regarding minors. If you have concerns about a minor's data, contact the relevant Operator or Time Mission Corp. directly if stored on our servers.</p>
 
         <h2>Third-Party Service Providers</h2>
-        <p>We may engage providers for website hosting &amp; analytics, email/newsletter distribution, and advertising platforms (e.g., Google Ads). These parties only receive the data necessary to perform services and cannot use it for other purposes.</p>
+        <p>We may engage providers for website hosting &amp; analytics, email/newsletter distribution, and advertising platforms (e.g., Google Ads). These parties only receive the data necessary to perform services and cannot use it for other purposes. Mobile numbers and SMS consent data are not included in any information shared with advertising platforms.</p>
 
         <h2>Updates to This Policy</h2>
         <p>We may update this policy periodically to reflect changes in our practices or for regulatory reasons. The "Last Updated" date below shows the most recent update. Please review this policy occasionally.</p>
@@ -49,5 +54,5 @@
         <h2>Contact Us</h2>
         <p>If you have questions about Time Mission Corp.'s data practices at the corporate level, please email us at <a href="mailto:{{CORPORATE_CONTACT_EMAIL}}">{{CORPORATE_CONTACT_EMAIL}}</a>. For location-specific data concerns (including access, correction, or deletion requests), please reach out to the Operator directly.</p>
 
-        <p class="legal-updated">Last Updated: June 2026</p>
+        <p class="legal-updated">Last Updated: September 2026</p>
     </section>
