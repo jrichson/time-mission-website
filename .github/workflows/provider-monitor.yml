@@ -1,0 +1,44 @@
+name: Daily provider monitoring
+on:
+  schedule:
+    - cron: '17 15 * * *'
+  workflow_dispatch:
+    inputs:
+      activation:
+        description: Send one activation confirmation email
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: daily-provider-monitor
+  cancel-in-progress: false
+jobs:
+  providers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Check live forms and booking
+        env:
+          TM_PROVIDER_BASE_URL: https://www.timemission.com
+        run: npx playwright test --config playwright.providers.config.cjs
+      - name: Email new failures and recoveries
+        if: always()
+        env:
+          TM_MONITOR_TOKEN: ${{ secrets.TM_MONITOR_TOKEN }}
+          TM_MONITOR_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          TM_MONITOR_ACTIVATION: ${{ inputs.activation || 'false' }}
+        run: node scripts/report-provider-monitor.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: provider-monitor-results
+          path: test-results/providers
+          retention-days: 7

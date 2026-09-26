@@ -1,0 +1,12 @@
+{
+  "origin": "https://www.timemission.com",
+  "alertRecipient": "ari@compatible.la",
+  "educators": ["houston", "philadelphia", "manassas", "mount-prospect", "orland-park", "dallas", "nashville"],
+  "providers": {
+    "klaviyo": {"hosts": ["klaviyo.com"], "purpose": "Educator forms, form definitions, and subscriptions", "required": {"script-src": ["https://static.klaviyo.com"], "connect-src": ["https://static-forms.klaviyo.com", "https://fast.a.klaviyo.com", "https://a.klaviyo.com"]}},
+    "briq": {"hosts": ["briqbookings.com"], "purpose": "Palisades booking options and checkout", "required": {"script-src": ["https://widgetcdn.briqbookings.com"], "connect-src": ["https://*.briqbookings.com"]}},
+    "stripe": {"hosts": ["stripe.com"], "purpose": "Briq payment library and secure frames", "required": {"script-src": ["https://js.stripe.com"], "frame-src": ["https://js.stripe.com", "https://hooks.stripe.com"], "connect-src": ["https://api.stripe.com"]}},
+    "roller": {"hosts": ["roller.app", "rollerdigital.com", "book.houston.timemission.com"], "purpose": "Houston embedded checkout", "required": {"frame-src": ["https://ecom.roller.app", "https://book.houston.timemission.com"]}},
+    "fonts": {"hosts": ["googleapis.com", "gstatic.com", "typekit.net"], "purpose": "Provider form typography", "required": {"style-src-elem": ["https://fonts.googleapis.com", "https://use.typekit.net"], "font-src": ["https://fonts.gstatic.com", "https://use.typekit.net"]}}
+  }
+}
