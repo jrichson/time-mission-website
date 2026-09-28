@@ -115,7 +115,9 @@
         "tiktokw.us",
         "hightouch-events.com",
         "mm-uxrv.com",
-        "cgcag.timemission.com"
+        "cgcag.timemission.com",
+        "bzrcdn.openai.com",
+        "bzr.openai.com"
       ],
       "purpose": "Published GTM container scripts and existing analytics connections",
       "required": {
@@ -125,11 +127,13 @@
           "https://connect.facebook.net",
           "https://analytics.tiktok.com",
           "https://cdn.hightouch-events.com",
-          "https://cgcag.timemission.com"
+          "https://cgcag.timemission.com",
+          "https://bzrcdn.openai.com"
         ],
         "script-src": [
           "'unsafe-eval'",
-          "https://cgcag.timemission.com"
+          "https://cgcag.timemission.com",
+          "https://bzrcdn.openai.com"
         ],
         "connect-src": [
           "https://analytics.google.com",
@@ -141,7 +145,10 @@
           "https://mpc-prod-21-1053047382554.us-central1.run.app",
           "https://xd-f1cf3d4fdb19408ea770fc6f80817dcb.ecs.us-east-1.on.aws",
           "https://bded8a3c6ae-1-1053047382554.us-central1.run.app",
-          "https://cgcag.timemission.com"
+          "https://cgcag.timemission.com",
+          "https://bzr.openai.com",
+          "https://fh-118116076e9a4c2a96a99fbb70bea2a0.ecs.us-west-2.on.aws",
+          "https://bzrcdn.openai.com"
         ]
       }
     }
