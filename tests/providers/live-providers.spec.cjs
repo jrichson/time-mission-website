@@ -112,16 +112,25 @@ for (const origin of ['https://www.timemission.com', 'https://www.timemission.eu
 }
 for (const locale of ['', '/nl']) {
   test(`Eindhoven ${locale || 'English'} signup opens fields`, async ({ page }) => {
+    await page.addInitScript(() => {
+      window.__signupOpenedForms = [];
+      window.addEventListener('klaviyoForms', event => {
+        if (event.detail.type === 'open') window.__signupOpenedForms.push(event.detail.formId);
+      });
+    });
     await page.goto('https://www.timemission.eu' + locale + '/eindhoven/signup', { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.__TM_KLAVIYO_POPUP_TRIGGERS__);
-    const email = page.locator('input[type="email"]:visible').first();
-    // Klaviyo can auto-open the same popup before the CTA is clicked.
+    const popup = page.locator('[data-kl-scroll-locking-modal]:visible');
+    const expectedForm = locale === '/nl' ? 'VNjiQj' : 'W5S6At';
+    const email = popup.locator('input[type="email"]').first();
     if (!await email.isVisible()) {
       await page.locator('[data-tm-klaviyo-form-trigger]').click({ timeout: 5000 }).catch(async error => {
         if (!await email.isVisible()) throw error;
       });
     }
     await expect(email).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.__signupOpenedForms.at(-1))).toBe(expectedForm);
+    await expect(popup).toContainText(locale === '/nl' ? 'Schrijf je nu in' : 'Sign up');
     await checkProviderCsp(page);
   });
 }
