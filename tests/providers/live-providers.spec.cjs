@@ -34,7 +34,21 @@ async function checkProviderCsp(page) {
     try { const hostname = new URL(value).hostname; return hosts.some(host => hostname === host || hostname.endsWith('.' + host)); }
     catch { return false; }
   }));
-  expect(relevant, 'Provider CSP violations').toEqual([]);
+  // Briq's Sentry replay is optional telemetry. Keep it blocked by CSP and
+  // record it without treating it as a checkout outage. All other blocks fail.
+  const optionalTelemetry = relevant.filter(event => {
+    if (event.source !== 'https://widgetcdn.briqbookings.com/widget/widget.js') return false;
+    if (event.directive === 'worker-src' && event.blocked === 'blob') return true;
+    try {
+      const url = new URL(event.blocked);
+      return event.directive === 'connect-src' && url.origin === 'https://o223617.ingest.sentry.io'
+        && url.pathname === '/api/4506388506083328/envelope/';
+    } catch { return false; }
+  });
+  if (optionalTelemetry.length) await test.info().attach('blocked-optional-briq-telemetry', {
+    body: JSON.stringify(optionalTelemetry), contentType: 'application/json',
+  });
+  expect(relevant.filter(event => !optionalTelemetry.includes(event)), 'Required provider CSP violations').toEqual([]);
 }
 
 for (const venue of registry.educators) {
@@ -80,3 +94,32 @@ test('Houston Roller checkout renders', async ({ page }) => {
   }).toBe(true);
   await checkProviderCsp(page);
 });
+
+for (const origin of ['https://www.timemission.com', 'https://www.timemission.eu']) {
+  test(`native submission APIs respond on ${new URL(origin).hostname}`, async ({ request }) => {
+    // No customer data, subscriptions or emails: GET must reject with 405.
+    for (const endpoint of ['/api/contact', '/api/newsletter']) {
+      const response = await request.get(origin + endpoint);
+      expect(response.status(), endpoint + ' must reach the form handler').toBe(405);
+      expect(response.headers().allow).toBe('POST');
+    }
+  });
+}
+for (const locale of ['', '/nl']) {
+  test(`Eindhoven ${locale || 'English'} signup opens fields`, async ({ page }) => {
+    await page.goto('https://www.timemission.eu' + locale + '/eindhoven/signup', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => window.__TM_KLAVIYO_POPUP_TRIGGERS__);
+    await page.locator('[data-tm-klaviyo-form-trigger]').click();
+    await expect(page.locator('input[type="email"]:visible').first()).toBeVisible();
+    await checkProviderCsp(page);
+  });
+}
+for (const venue of ['mount-prospect', 'philadelphia', 'manassas', 'houston', 'orland-park']) {
+  test(`group inquiry ${venue} loads without Worker routing`, async ({ page }) => {
+    const response = await page.goto(`/groups/inquire/${venue}/default`, { waitUntil: 'domcontentloaded' });
+    expect(response.status()).toBe(200);
+    await expect(page.locator('form input[type="email"]').first()).toBeVisible();
+    await expect(page.locator('form[action*="jotform.com"]')).toHaveCount(1);
+    await checkProviderCsp(page);
+  });
+}
