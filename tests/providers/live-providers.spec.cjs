@@ -3,6 +3,21 @@ const registry = require('../../functions/_shared/provider-monitor.json');
 test.skip(process.env.TM_SITE_PROFILE === 'eu', 'This registry covers US integrations only.');
 const hosts = Object.values(registry.providers).flatMap(provider => provider.hosts);
 
+for (const [url, venue] of [
+  ['https://www.timemission.com/houston/faq', 'houston'],
+  ['https://www.timemission.com/west-nyack/gift-cards', 'west-nyack'],
+  ['https://www.timemission.eu/nl/eindhoven/contact', 'eindhoven'],
+  ['https://www.timemission.eu/fr/brussels/faq', 'brussels'],
+]) {
+  test(`nested route ${new URL(url).pathname} stays available`, async ({ page }) => {
+    const response = await page.goto(url, { waitUntil: 'domcontentloaded' });
+    expect(response.status()).toBe(200);
+    await expect(page.locator('h1')).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug)).toBe(venue);
+    await expect(page.locator('#tm-static-csp')).toHaveCount(1);
+  });
+}
+
 // These tests intentionally use real providers. Never use the mocked smoke helpers.
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
