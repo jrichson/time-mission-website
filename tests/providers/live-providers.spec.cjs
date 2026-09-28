@@ -93,6 +93,11 @@ test('Houston Roller checkout renders', async ({ page }) => {
     return false;
   }).toBe(true);
   await checkProviderCsp(page);
+  for (const venue of ['philadelphia', 'houston']) {
+    await page.goto('https://book.' + venue + '.timemission.com/giftcards/en-us/products', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByText('Time Mission Gift Cards', { exact: true }).first()).toBeVisible();
+    expect(new URL(page.url()).pathname).toBe('/giftcards/en-us/products');
+  }
 });
 
 for (const origin of ['https://www.timemission.com', 'https://www.timemission.eu']) {
@@ -109,8 +114,14 @@ for (const locale of ['', '/nl']) {
   test(`Eindhoven ${locale || 'English'} signup opens fields`, async ({ page }) => {
     await page.goto('https://www.timemission.eu' + locale + '/eindhoven/signup', { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.__TM_KLAVIYO_POPUP_TRIGGERS__);
-    await page.locator('[data-tm-klaviyo-form-trigger]').click();
-    await expect(page.locator('input[type="email"]:visible').first()).toBeVisible();
+    const email = page.locator('input[type="email"]:visible').first();
+    // Klaviyo can auto-open the same popup before the CTA is clicked.
+    if (!await email.isVisible()) {
+      await page.locator('[data-tm-klaviyo-form-trigger]').click({ timeout: 5000 }).catch(async error => {
+        if (!await email.isVisible()) throw error;
+      });
+    }
+    await expect(email).toBeVisible();
     await checkProviderCsp(page);
   });
 }
