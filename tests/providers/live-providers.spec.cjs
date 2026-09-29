@@ -112,25 +112,23 @@ for (const origin of ['https://www.timemission.com', 'https://www.timemission.eu
 }
 for (const locale of ['', '/nl']) {
   test(`Eindhoven ${locale || 'English'} signup opens fields`, async ({ page }) => {
-    await page.addInitScript(() => {
-      window.__signupOpenedForms = [];
-      window.addEventListener('klaviyoForms', event => {
-        if (event.detail.type === 'open') window.__signupOpenedForms.push(event.detail.formId);
-      });
-    });
-    await page.goto('https://www.timemission.eu' + locale + '/eindhoven/signup', { waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => window.__TM_KLAVIYO_POPUP_TRIGGERS__);
-    const popup = page.locator('[data-kl-scroll-locking-modal]:visible');
-    const expectedForm = locale === '/nl' ? 'VNjiQj' : 'W5S6At';
-    const email = popup.locator('input[type="email"]').first();
-    if (!await email.isVisible()) {
-      await page.locator('[data-tm-klaviyo-form-trigger]').click({ timeout: 5000 }).catch(async error => {
-        if (!await email.isVisible()) throw error;
-      });
-    }
+    const response = await page.goto('https://www.timemission.eu' + locale + '/eindhoven/signup', { waitUntil: 'domcontentloaded' });
+    expect(response.status()).toBe(200);
+    // The signup page now embeds the form directly. Keep the check title stable
+    // so the monitor can report recovery against the existing incident IDs.
+    const expectedForm = locale === '/nl' ? 'TsDm2K' : 'XDPbDT';
+    const section = page.locator('[data-tm-form-name="eindhoven_signup"]');
+    await expect(section).toHaveAttribute('data-tm-klaviyo-form-id', expectedForm);
+    const form = section.locator('.klaviyo-form-' + expectedForm);
+    const email = form.locator('input[type="email"]').first();
     await expect(email).toBeVisible();
-    await expect.poll(() => page.evaluate(() => window.__signupOpenedForms.at(-1))).toBe(expectedForm);
-    await expect(popup).toContainText(locale === '/nl' ? 'Schrijf je nu in' : 'Sign up');
+    await expect(form.locator('input[type="tel"]').first()).toBeVisible();
+    await expect(form.getByRole('checkbox').first()).toBeVisible();
+    await expect(form.getByRole('button', {
+      name: locale === '/nl' ? 'IK WIL ER ALS EERSTE BIJ ZIJN!' : 'SIGN UP FOR FIRST ACCESS!', exact: true,
+    })).toBeVisible();
+    await expect(form).toContainText(locale === '/nl' ? 'Schrijf je nu in' : 'Sign up');
+    expect(await email.evaluate(element => element.getBoundingClientRect().height)).toBeGreaterThan(28);
     await checkProviderCsp(page);
   });
 }
