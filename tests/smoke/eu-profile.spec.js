@@ -261,7 +261,7 @@ test('localized runtime writers preserve language after interaction', async ({ p
   await expect(page.locator('#ticketLocation option[value="antwerp"]'))
     .toHaveText('België – Antwerpen');
   await expect(page.locator('#ticketLocation option[value="eindhoven"]'))
-    .toHaveText('Nederland – Eindhoven (Binnenkort)');
+    .toHaveText('Nederland – Eindhoven (Opening October 16)');
   await expect(page.locator('[data-gift-card-location-answer]'))
     .toContainText('Cadeaubonnen zijn locatiespecifiek.');
 
@@ -299,13 +299,26 @@ test('selected EU language persists across location and FAQ navigation', async (
     await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe(locale);
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe(locale);
 
+    if (isMobile) {
+      await page.locator('.nav-menu-btn').click();
+      await page.locator('#mobileMenu a[data-i18n="nav.faq"]').click();
+    } else {
+      await page.locator('.nav-links a[data-i18n="nav.faq"]').click();
+    }
+    await expect(page).toHaveURL(new RegExp(`/${locale}/eindhoven/faq/?$`));
+    await page.reload();
+    await waitForLanguageRuntime(page, true);
+    await expect.poll(() => page.evaluate(() => window.TM.current?.slug)).toBe('eindhoven');
+    await expect(page.locator('html')).toHaveAttribute('lang', new RegExp(`^${locale}(?:-|$)`, 'i'));
+
     await page.locator('#locationBtn').click();
     const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]');
-    await expect(brussels).toHaveAttribute('href', `/${locale}/brussels`);
+    await expect(brussels).toHaveAttribute('href', `/${locale}/brussels/faq`);
     await brussels.click();
 
-    await expect(page).toHaveURL(new RegExp(`/${locale}/brussels/?$`));
-    await waitForLanguageRuntime(page);
+    await expect(page).toHaveURL(new RegExp(`/${locale}/brussels/faq/?$`));
+    await waitForLanguageRuntime(page, true);
+    await expect.poll(() => page.evaluate(() => window.TM.current?.slug)).toBe('brussels');
     await expect(page.locator('html')).toHaveAttribute('lang', new RegExp(`^${locale}(?:-|$)`, 'i'));
     await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe(locale);
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe(locale);
@@ -320,7 +333,7 @@ test('selected EU language persists across location and FAQ navigation', async (
       await page.locator('.nav-links a[data-i18n="nav.faq"]').click();
     }
 
-    await expect(page).toHaveURL(new RegExp(`/${locale}/faq/?$`));
+    await expect(page).toHaveURL(new RegExp(`/${locale}/brussels/faq/?$`));
     await waitForLanguageRuntime(page);
     await expect(page.locator('html')).toHaveAttribute('lang', new RegExp(`^${locale}(?:-|$)`, 'i'));
     await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe(locale);
@@ -348,10 +361,8 @@ test('localized EU routes translate their announcement and footer chrome', async
     },
     {
       path: '/fr/brussels',
-      tickerKey: 'ticker.backToSchool20',
-      ticker: '20 % DE RÉDUCTION POUR LA RENTRÉE',
-      tickerHref: '/fr/brussels/back-to-school-sale',
-      tickerLink: 'En savoir plus',
+      tickerKey: 'ticker.location.brussels',
+      ticker: 'BRUXELLES EST OUVERT',
       city: 'BRUXELLES',
       tagline: "Une aventure de jeu social où les équipes s'affrontent dans des défis immersifs à travers le temps et l'espace.",
       experience: 'EXPÉRIENCE',
@@ -378,7 +389,7 @@ test('localized EU routes translate their announcement and footer chrome', async
       rights: 'Todos los derechos reservados.',
       developedBy: 'Desarrollado por',
       cookiePreferences: 'Preferencias de cookies',
-      status: 'Muy pronto',
+      status: 'Opening October 16',
     },
   ];
 
@@ -425,21 +436,19 @@ test('localized EU routes translate their announcement and footer chrome', async
   }
 });
 
-test('Brussels campaign ticker follows runtime language changes', async ({ page }) => {
+test('Brussels location ticker follows runtime language changes', async ({ page }) => {
   await page.goto('/brussels');
   await page.evaluate(() => window.TMI18n.ready);
 
-  const tickerCopy = page.locator('[data-i18n="ticker.backToSchool20"]').first();
-  const tickerLink = page.locator('[data-i18n="ticker.learnMore"]').first();
+  const tickerCopy = page.locator('[data-i18n="ticker.location.brussels"]').first();
 
   for (const expected of [
-    { locale: 'fr', copy: '20 % DE RÉDUCTION POUR LA RENTRÉE', link: 'En savoir plus' },
-    { locale: 'nl', copy: '20% KORTING VOOR DE BACK-TO-SCHOOLACTIE', link: 'Meer informatie' },
-    { locale: 'es', copy: '20 % DE DESCUENTO POR LA VUELTA AL COLE', link: 'Más información' },
+    { locale: 'fr', copy: 'BRUXELLES EST OUVERT' },
+    { locale: 'nl', copy: 'BRUSSEL NU OPEN' },
+    { locale: 'es', copy: 'BRUSELAS YA ESTÁ ABIERTO' },
   ]) {
     await page.evaluate((locale) => window.TMI18n.setLanguage(locale), expected.locale);
     await expect(tickerCopy).toHaveText(expected.copy);
-    await expect(tickerLink).toHaveText(expected.link);
   }
 });
 
@@ -500,9 +509,9 @@ test('EU navigation lists Europe before the United States', async ({ page }) => 
   const europeGroup = page.locator('.location-overlay-left .location-group[data-location-region="europe"]');
   const usGroup = page.locator('.location-overlay-left .location-group[data-location-region="us"]');
   await expect(europeGroup.locator('a[data-tm-location-slug="brussels"] .coming-soon-tag'))
-    .toHaveText('OPEN NOW!');
-  await expect(europeGroup.locator('a[data-tm-location-slug="eindhoven"] .coming-soon-tag'))
     .toHaveCount(0);
+  await expect(europeGroup.locator('a[data-tm-location-slug="eindhoven"] .coming-soon-tag'))
+    .toHaveText('Opens Oct. 16');
   await expect(usGroup.locator('.coming-soon-tag')).toHaveCount(0);
 
   await page.goto('/locations');
@@ -608,4 +617,31 @@ test('US venue HTML and form artifacts are absent from the EU package', async ()
     '/houston/spinandscore/rules https://www.timemission.com/houston/spinandscore/rules 301',
   );
   expect(redirects).toContain('/nl/houston https://www.timemission.com/houston 301');
+});
+
+for (const prefix of ['', '/nl', '/fr', '/es']) {
+  test(`EU Edison is open in ${prefix || 'English'} location listings`, async ({ page }) => {
+    await page.goto(`${prefix}/locations`);
+    await waitForLanguageRuntime(page);
+    const destination = `https://www.timemission.com${prefix === '/es' ? '/es' : ''}/edison`;
+    const edison = page.locator(`.loc-row[href="${destination}"]`);
+    await expect(edison).toHaveCount(1);
+    await expect(edison).not.toHaveClass(/is-coming-soon/);
+    await expect(edison.locator('.loc-status')).toHaveText(/Now Open|Nu open|Ouvert|Abierto/i);
+    const navEdison = page.locator('.location-overlay-left a[data-tm-location-slug="edison"]');
+    await expect(navEdison).toHaveAttribute('href', destination);
+    await expect(navEdison.locator('.coming-soon-tag')).toHaveCount(0);
+  });
+}
+
+
+test('Eindhoven opens full-page checkout while the hero keeps signup', async ({ page }) => {
+  await page.goto('/eindhoven');
+  await page.evaluate(async () => { await window.TM.ready; });
+  const checkout = 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home';
+  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('href', checkout);
+  await expect(page.locator('.nav-right .btn-tickets')).not.toHaveAttribute('data-tm-booking-trigger', '');
+  await expect(page.locator('.hero-cta [data-tm-klaviyo-form-trigger]')).toHaveAttribute('data-tm-klaviyo-form-trigger', 'W5S6At');
+  await expect(page.locator('main a[href="' + checkout + '"]')).toHaveCount(1);
+  await expect(page.locator('script[src*="guest-agent"]')).toHaveCount(0);
 });

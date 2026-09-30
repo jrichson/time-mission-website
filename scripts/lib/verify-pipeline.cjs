@@ -4,6 +4,7 @@ const VERIFY_STEPS = [
   ['check', []],
   ['build:astro', []],
   ['check:site-profile-output', []],
+  ['check:navigation-output', []],
   ['check:csp-hashes', []],
   ['check:best-practices', ['--', '--dist']],
   ['check:routes', ['--', '--dist']],
@@ -25,6 +26,7 @@ const VERIFY_STEPS = [
   ['check:rsl', []],
   ['check:nap-parity', []],
   ['test:smoke', []],
+  ['test:providers', []],
 ];
 
 const VERIFY_ARTIFACT_STEPS = VERIFY_STEPS.slice(2);

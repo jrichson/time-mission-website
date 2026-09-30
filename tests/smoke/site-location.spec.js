@@ -70,7 +70,7 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await expect(brussels).toHaveAttribute('data-city', 'Brussels');
   await expect(brussels).toHaveAttribute('href', 'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
   await expect(brussels).toContainText('Belgium – Brussels');
-  await expect(brussels.locator('.coming-soon-tag')).toHaveText('OPEN NOW!');
+  await expect(brussels.locator('.coming-soon-tag')).toHaveCount(0);
   await expect(houston).toContainText('TX – Houston');
   await expect(houston.locator('.coming-soon-tag')).toHaveCount(0);
   await expect(orlandPark).toContainText('IL – Orland Park');
@@ -81,13 +81,13 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
 });
 
-test('US location selector limits status pills to the two intentional launch callouts', async ({ page }) => {
+test('US location selector shows only the Eindhoven opening callout', async ({ page }) => {
   await page.goto('/');
 
   const badgeSlugs = await page.locator('#locationDropdown a:has(.coming-soon-tag)')
     .evaluateAll((links) => links.map((link) => link.getAttribute('data-tm-location-slug')));
 
-  expect(badgeSlugs).toEqual(['philadelphia', 'brussels']);
+  expect(badgeSlugs).toEqual(['eindhoven']);
 });
 
 test('Edison has a local location page whose action links lead to Supercharged NJ', async ({ page, isMobile }) => {
@@ -107,87 +107,44 @@ test('Edison has a local location page whose action links lead to Supercharged N
   await expect(page.locator('#locationInfo .location-info-book')).toContainText('Visit Location Site');
   await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute(
     'href',
-    'https://www.superchargednj.com/?utm_source=paid&utm_campaign=edison',
+    'https://www.superchargednj.com/book-time-mission/?utm_source=paid&utm_campaign=edison',
   );
 
   await edison.click();
   await expect(page).toHaveURL(/\/edison\?utm_source=paid&utm_campaign=edison$/);
-  await expect(page).toHaveTitle('Time Mission Edison | Coming Soon');
-  await expect(page.locator('.ticker-item').first()).toContainText('EDISON COMING SOON');
-  await expect(page.locator('.hero .btn-location-lead')).toHaveAttribute(
+  await expect(page).toHaveTitle('Time Mission Edison | Now Open');
+  await expect(page.locator('.ticker-bar')).toHaveCount(0);
+  await expect(page.locator('.hero .btn-location-book')).toHaveAttribute(
     'href',
-    'https://www.superchargednj.com/',
+    'https://www.superchargednj.com/book-time-mission/',
   );
-  await expect(page.locator('.final-cta .btn-location-lead')).toHaveAttribute(
+  await expect(page.locator('.final-cta .btn-location-book')).toHaveAttribute(
     'href',
-    'https://www.superchargednj.com/',
+    'https://www.superchargednj.com/book-time-mission/',
   );
   await expect(page.locator('nav .btn-tickets')).toHaveAttribute(
     'href',
-    'https://www.superchargednj.com/?utm_source=paid&utm_campaign=edison',
+    'https://www.superchargednj.com/book-time-mission/?utm_source=paid&utm_campaign=edison',
   );
 
   await page.goto('/locations');
   const locationRow = page.locator('.loc-row[href="/edison"]');
   await expect(locationRow).toContainText('NJ – Edison');
-  await expect(locationRow).toContainText('Coming Soon');
+  await expect(locationRow).toContainText('Now Open');
   await expect(locationRow).toContainText('987 US-1, Edison, NJ 08817');
   await expect(locationRow).not.toHaveAttribute('target', '_blank');
 });
 
-test('short Houston ticker renders centered instead of scrolling from the edge', async ({ page }) => {
-  await page.goto('/houston');
-
-  // Live CMS promotions take precedence; exercise the canonical short ticker
-  // after the current promotion expires without changing published content.
-  await page.evaluate(() => {
-    const endsAt = document.querySelector('.ticker-track')?.dataset.tmTickerEndsAt;
-    if (endsAt) window.TMTickerSchedule.refresh(new Date(endsAt));
-  });
-
-  const tickerTrack = page.locator('.ticker-track');
-  const tickerItem = page.locator('.ticker-item');
-
-  await expect(tickerTrack).toHaveClass(/ticker-track--static/);
-  await expect(tickerItem).toHaveCount(1);
-  await expect(tickerItem).toHaveText('HOUSTON NOW OPEN');
-
-  const metrics = await page.evaluate(() => {
-    const bar = document.querySelector('.ticker-bar');
-    const track = document.querySelector('.ticker-track');
-    const item = document.querySelector('.ticker-item');
-    const barRect = bar.getBoundingClientRect();
-    const itemRect = item.getBoundingClientRect();
-    return {
-      centerDelta: Math.abs((itemRect.left + itemRect.width / 2) - (barRect.left + barRect.width / 2)),
-      trackAnimation: getComputedStyle(track).animationName,
-    };
-  });
-
-  expect(metrics.trackAnimation).toBe('none');
-  expect(metrics.centerDelta).toBeLessThanOrEqual(2);
-});
-
-test('expired CMS location announcement restores the canonical ticker without a rebuild', async ({ page }) => {
-  await page.goto('/houston');
-
-  await page.locator('.ticker-track').evaluate((track) => {
-    track.dataset.tmTickerSource = 'cms';
-    track.dataset.tmTickerEndsAt = '2026-09-08T05:00:00.000Z';
-    track.dataset.tmTickerFallback = 'HOUSTON NOW OPEN';
-    track.dataset.tmTickerFallbackBehavior = 'auto';
-    track.classList.remove('ticker-track--static');
-    track.innerHTML = '<span class="ticker-item">LABOR DAY HOURS: 10AM - 10PM</span>';
-  });
-  await page.evaluate(() => {
-    window.TMTickerSchedule.refresh(new Date('2026-09-08T05:00:00.000Z'));
-  });
-
-  const track = page.locator('.ticker-track');
-  await expect(track).toHaveAttribute('data-tm-ticker-source', 'location');
-  await expect(track).toHaveClass(/ticker-track--static/);
-  await expect(track.locator('.ticker-item')).toHaveCount(1);
-  await expect(track.locator('.ticker-item')).toHaveText('HOUSTON NOW OPEN');
+test('US locations omit tickers after runtime initialization and schedule refresh', async ({ page }) => {
+  for (const slug of ['houston', 'philadelphia', 'edison', 'boston', 'mount-prospect', 'orland-park', 'manassas']) {
+    await page.goto('/' + slug);
+    await page.evaluate(async () => {
+      await window.TM.ready;
+      window.TMTickerSchedule?.refresh(new Date('2027-01-01T00:00:00Z'));
+    });
+    await expect(page.locator('.ticker-bar')).toHaveCount(0);
+    await expect(page.locator('#nav')).toHaveClass(/nav--no-ticker/);
+  }
 });
 
 test('desktop location selector hands Brussels off to the EU site', async ({ page, isMobile }) => {
@@ -331,14 +288,8 @@ test('Philadelphia is now open across its banner, selector, and booking experien
   await expect(page).toHaveTitle('Time Mission Philadelphia – 25+ Interactive Mission Rooms');
   await expect(page.locator('.tm-closure-strip')).toHaveCount(0);
   await expect(page.locator('#temporaryClosureModal')).toHaveCount(0);
-  await expect(page.locator('.ticker-track')).toHaveClass(/ticker-track--static/);
-  await expect(page.locator('.ticker-item')).toHaveCount(1);
-  await expect(page.locator('.ticker-item').first()).toHaveText('PHILADELPHIA NOW OPEN');
-  await expect(philadelphiaMenuLink.locator('.coming-soon-tag')).toHaveText('NOW OPEN');
-  await expect(philadelphiaMenuLink.locator('.coming-soon-tag'))
-    .toHaveAttribute('data-i18n', 'location.nowOpen');
-  await page.evaluate(() => window.TMI18n.setLanguage('es'));
-  await expect(philadelphiaMenuLink.locator('.coming-soon-tag')).toHaveText('¡YA ABIERTO!');
+  await expect(page.locator('.ticker-bar')).toHaveCount(0);
+  await expect(philadelphiaMenuLink.locator('.coming-soon-tag')).toHaveCount(0);
   await expect(page.locator('.hero-cta .btn-tickets')).toHaveAttribute('href', '#');
   await expect(page.locator('.hero-cta .btn-tickets')).toHaveAttribute('data-tm-booking-trigger', '');
   await expect(page.locator('.hero-cta .btn-tickets')).toHaveAttribute('data-tm-booking-url', checkoutUrl);
@@ -353,11 +304,11 @@ test('Boston coming-soon page publishes the address and lead-only CTAs', async (
   const footer = page.locator('footer.footer');
 
   await expect(page).toHaveTitle('Time Mission Boston | Coming Soon');
-  await expect(page.locator('.ticker-item').first()).toContainText('BOSTON COMING SOON');
+  await expect(page.locator('.ticker-bar')).toHaveCount(0);
   await expect(bostonMenuLink.locator('.coming-soon-tag')).toHaveCount(0);
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
     'href',
-    '/contact#location=boston&type=updates'
+    '/boston/contact#location=boston&type=updates'
   );
   await expect(page.locator('.nav-right .btn-tickets')).not.toHaveAttribute('data-tm-booking-trigger', '');
   await expect(footer.locator('.footer-locations-title')).toHaveText('Boston');

@@ -230,7 +230,7 @@
         }
       ],
       "ticker": "PHILADELPHIA NOW OPEN",
-      "giftCardUrl": "",
+      "giftCardUrl": "https://book.philadelphia.timemission.com/giftcards/en-us/products",
       "waiverUrl": "",
       "countryCode": "US",
       "locale": null,
@@ -1015,8 +1015,18 @@
         "email": "eindhoven@timemission.nl"
       },
       "hours": {},
-      "bookingUrl": "",
+      "bookingUrl": "https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home",
       "signupFormId": "W5S6At",
+      "groupFormUrls": {
+        "default": "https://forms.roller.app/#/timemissioneindhoven/e6ec1f201a1e4d1/form",
+        "birthdays": "https://forms.roller.app/#/timemissioneindhoven/e6ec1f201a1e4d1/form",
+        "corporate": "https://forms.roller.app/#/timemissioneindhoven/e6ec1f201a1e4d1/form",
+        "field-trips": "https://forms.roller.app/#/timemissioneindhoven/e6ec1f201a1e4d1/form",
+        "bachelor-ette": "https://forms.roller.app/#/timemissioneindhoven/e6ec1f201a1e4d1/form",
+        "private-events": "https://forms.roller.app/#/timemissioneindhoven/e6ec1f201a1e4d1/form",
+        "holidays": "https://forms.roller.app/#/timemissioneindhoven/e6ec1f201a1e4d1/form"
+      },
+      "groupFormPresentation": "iframe",
       "navLabel": "Netherlands – Eindhoven",
       "mapUrl": "https://maps.google.com/?q=Hermanus+Boexstraat+4+Eindhoven+5611+AJ+Netherlands",
       "faqs": [],
@@ -1029,7 +1039,7 @@
       "phoneE164": "+31408083636",
       "hreflang": "nl-NL",
       "localBusinessSchemaEligible": false,
-      "openingLabel": "Coming Soon"
+      "openingLabel": "Opening October 16"
     },
     {
       "id": "dallas",
@@ -1151,7 +1161,7 @@
       "shortName": "Edison",
       "venueName": "Supercharged Entertainment New Jersey",
       "region": "us",
-      "status": "coming-soon",
+      "status": "open",
       "address": {
         "line1": "987 US-1",
         "city": "Edison",
@@ -1164,13 +1174,13 @@
         "email": ""
       },
       "hours": {},
-      "bookingUrl": "",
-      "externalUrl": "https://www.superchargednj.com/",
+      "bookingUrl": "https://www.superchargednj.com/book-time-mission/",
+      "externalUrl": "https://www.superchargednj.com/book-time-mission/",
       "pagePath": "/edison",
       "navLabel": "NJ – Edison",
       "mapUrl": "https://maps.google.com/?q=987+US-1+Edison+NJ+08817",
       "faqs": [],
-      "ticker": "EDISON COMING SOON",
+      "ticker": "EDISON NOW OPEN",
       "giftCardUrl": "",
       "countryCode": "US",
       "locale": null,
@@ -1178,8 +1188,7 @@
       "currency": null,
       "phoneE164": null,
       "hreflang": null,
-      "localBusinessSchemaEligible": false,
-      "openingLabel": "Coming Soon"
+      "localBusinessSchemaEligible": false
     }
   ]
 }

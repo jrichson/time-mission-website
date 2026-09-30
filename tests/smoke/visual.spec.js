@@ -1,6 +1,10 @@
 const { test, expect } = require('@playwright/test');
 const { prepareSmokePage } = require('./network');
 
+// This suite injects test-only motion-freezing CSS. CSP enforcement is covered
+// separately by csp.spec.js against the unmodified production response.
+test.use({ bypassCSP: true });
+
 const VISUAL_MAX_DIFF_PIXELS = 6000;
 const REDUCE_MOTION_CSS = `
   *, *::before, *::after {

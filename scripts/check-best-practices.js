@@ -74,7 +74,9 @@ function requireIncludes(errors, content, label, needles) {
 }
 
 function checkHeaders(errors, rel) {
-  const headers = read(rel);
+  const headers = read(rel) + (rel === 'dist/_headers'
+    ? '\nContent-Security-Policy: ' + JSON.parse(read('dist/data/content-security-policy.json')).policy
+    : '');
   requireIncludes(errors, headers, rel, [
     'Strict-Transport-Security: max-age=31536000; includeSubDomains; preload',
     'X-Content-Type-Options: nosniff',

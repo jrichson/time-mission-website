@@ -19,6 +19,7 @@
     }
 
     function navigateToHref(href) {
+        if (window.TMNavigation) href = window.TMNavigation.href(href);
         if (BookingJourney.isExternalHttpUrl(href) && typeof window.open === 'function') {
             var opened = window.open(href, '_blank', 'noopener');
             if (opened && typeof opened.opener !== 'undefined') opened.opener = null;

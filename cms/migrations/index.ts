@@ -1,8 +1,12 @@
+import * as migration_20260925_090000_eindhoven_checkout from './20260925_090000_eindhoven_checkout';
+import * as migration_20260918_100000_edison_now_open from './20260918_100000_edison_now_open';
+import * as migration_20260918_090000_edison_booking from './20260918_090000_edison_booking';
 import * as migration_20260916_120000_nashville_educators_deadline from './20260916_120000_nashville_educators_deadline';
 import * as migration_20260916_110000_dallas_educators_opening from './20260916_110000_dallas_educators_opening';
 import * as migration_20260916_100000_nashville_educators_opening from './20260916_100000_nashville_educators_opening';
 import * as migration_20260916_090000_educators_pages from './20260916_090000_educators_pages';
 import * as migration_20260915_090000_school_night_ticker_copy from './20260915_090000_school_night_ticker_copy';
+import * as migration_20260914_090000_eindhoven_group_form from './20260914_090000_eindhoven_group_form';
 import * as migration_20260908_100000_admin_promotion_updates from './20260908_100000_admin_promotion_updates';
 import * as migration_20260508_181551_initial_schema from './20260508_181551_initial_schema';
 import * as migration_20260508_193500_site_pages from './20260508_193500_site_pages';
@@ -307,6 +311,11 @@ export const migrations = [
   },
 
   {
+    up: migration_20260914_090000_eindhoven_group_form.up,
+    down: migration_20260914_090000_eindhoven_group_form.down,
+    name: '20260914_090000_eindhoven_group_form'
+  },
+  {
     up: migration_20260915_090000_school_night_ticker_copy.up,
     down: migration_20260915_090000_school_night_ticker_copy.down,
     name: '20260915_090000_school_night_ticker_copy'
@@ -331,4 +340,15 @@ export const migrations = [
     down: migration_20260916_120000_nashville_educators_deadline.down,
     name: '20260916_120000_nashville_educators_deadline'
   },
+  {
+    up: migration_20260918_090000_edison_booking.up,
+    down: migration_20260918_090000_edison_booking.down,
+    name: '20260918_090000_edison_booking'
+  },
+  {
+    up: migration_20260918_100000_edison_now_open.up,
+    down: migration_20260918_100000_edison_now_open.down,
+    name: '20260918_100000_edison_now_open'
+  },
+  { up: migration_20260925_090000_eindhoven_checkout.up, down: migration_20260925_090000_eindhoven_checkout.down, name: '20260925_090000_eindhoven_checkout' },
 ];

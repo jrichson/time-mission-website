@@ -8,6 +8,10 @@ import { fingerprintAnalyticsLabels } from './analytics-labels-fingerprint';
 import { locationsFingerprintFromRecords } from './locations-fingerprint';
 import { locationScopedCanonicalPaths } from './public-url-surface';
 import { activeSiteProfile } from './site-profile';
+import navigation from '../../config/navigation-routes.json';
+import routesRegistry from '../data/routes.json';
+
+type NavigationPolicy = typeof navigation & { aliases: Record<string, string>; locationAliases: Record<string, string>; externalLocationUrls: Record<string, string> };
 import { ticketPanelSelectOptions, type TicketPanelOption } from './ticket-options';
 
 export type SiteContractMode = 'sources' | 'build';
@@ -39,6 +43,7 @@ export interface SiteContractSnapshot {
         locationStorageKey: 'tm_location';
         locationChangeEvent: 'tm:location-changed';
         locationScopedPaths: string[];
+        navigation: NavigationPolicy;
     };
     smokeHints: {
         ticketOptionCount: number;
@@ -58,7 +63,7 @@ export function compileSiteContract(mode: SiteContractMode): SiteContractSnapsho
         id: loc.id,
         slug: loc.slug,
         status: loc.status || 'open',
-        external: Boolean(loc.externalUrl),
+        external: Boolean(loc.externalUrl && !loc.pagePath),
     }));
     const externalLocationIds = roster.filter((loc) => loc.external).map((loc) => loc.id);
     return {
@@ -79,6 +84,20 @@ export function compileSiteContract(mode: SiteContractMode): SiteContractSnapsho
             locationStorageKey: 'tm_location',
             locationChangeEvent: 'tm:location-changed',
             locationScopedPaths: locationScopedPaths(),
+            navigation: {
+                ...navigation,
+                externalLocationUrls: Object.fromEntries(allLocations.filter(loc => loc.externalUrl && !loc.pagePath).map(loc => [loc.slug || loc.id, loc.externalUrl || ''])),
+                aliases: Object.fromEntries([
+                    ...routesRegistry.routes.flatMap(route => (route.redirectSources || []).map(source => [source, route.canonicalPath])),
+                    ...routesRegistry.aliases.filter(alias => alias.target.startsWith('/')).map(alias => [alias.source, alias.target]),
+                ]),
+                locationAliases: Object.fromEntries(routesRegistry.routes.flatMap(route => (
+                    'locationAlternate' in route
+                        ? [route.locationAlternate, ...('locationCompatibilitySources' in route ? route.locationCompatibilitySources || [] : [])]
+                            .filter(Boolean).map(source => [source, route.canonicalPath.slice(1)])
+                        : []
+                ))),
+            },
         },
         smokeHints: {
             ticketOptionCount: options.length,
@@ -110,6 +129,7 @@ export interface PublicSiteContract {
         locationStorageKey: 'tm_location';
         locationChangeEvent: 'tm:location-changed';
         locationScopedPaths: string[];
+        navigation: NavigationPolicy;
     };
 }
 

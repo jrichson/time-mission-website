@@ -291,7 +291,8 @@
       "groupThankYou.copy": "Thanks. The Time Mission team received your {event} request for {location} and will follow up with next steps.",
       "groupThankYou.viewLocation": "View {location}",
       "city.hero.h1Seo": "Time Mission Antwerp — 25+ Interactive Mission Rooms.",
-      "city.about.short": "Step into a real-life video game where behind every door is a new surprise. One ticket unlocks every mission, so race the clock to play them all or run your favorites over and over. Built for every age 6 to 106 and every skill level. Game on!"
+      "city.about.short": "Step into a real-life video game where behind every door is a new surprise. One ticket unlocks every mission, so race the clock to play them all or run your favorites over and over. Built for every age 6 to 106 and every skill level. Game on!",
+      "location.eindhovenOpening": "Opens Oct. 16"
     },
     "es": {
       "language.label": "Idioma",
@@ -552,7 +553,8 @@
       "groupThankYou.copy": "Gracias. El equipo de Time Mission ha recibido tu solicitud de {event} para {location} y se pondrá en contacto contigo con los siguientes pasos.",
       "groupThankYou.viewLocation": "Ver {location}",
       "city.hero.h1Seo": "Time Mission Antwerp — Más de 25 salas de misión interactivas.",
-      "city.about.short": "Entra en un videojuego de la vida real donde detrás de cada puerta hay una nueva sorpresa. Un boleto desbloquea todas las misiones, así que corre contra el reloj para jugarlas todas o repetir tus favoritas una y otra vez. Diseñado para todas las edades desde 6 años y todos los niveles de habilidad. ¡A jugar!"
+      "city.about.short": "Entra en un videojuego de la vida real donde detrás de cada puerta hay una nueva sorpresa. Un boleto desbloquea todas las misiones, así que corre contra el reloj para jugarlas todas o repetir tus favoritas una y otra vez. Diseñado para todas las edades desde 6 años y todos los niveles de habilidad. ¡A jugar!",
+      "location.eindhovenOpening": "Abre el 16 de oct."
     },
     "nl": {
       "language.label": "Taal",
@@ -813,7 +815,8 @@
       "groupThankYou.copy": "Bedankt. Het Time Mission-team heeft uw aanvraag voor een {event} bij {location} ontvangen en neemt contact met u op over de volgende stappen.",
       "groupThankYou.viewLocation": "Bekijk {location}",
       "city.hero.h1Seo": "Time Mission Antwerpen — 25+ interactieve missiekamers.",
-      "city.about.short": "Stap in een levensechte videogame waarin achter elke deur een nieuwe verrassing wacht. Eén ticket geeft toegang tot alle missies. Speel ze allemaal of probeer je favorieten opnieuw."
+      "city.about.short": "Stap in een levensechte videogame waarin achter elke deur een nieuwe verrassing wacht. Eén ticket geeft toegang tot alle missies. Speel ze allemaal of probeer je favorieten opnieuw.",
+      "location.eindhovenOpening": "Opent op 16 okt."
     },
     "fr": {
       "language.label": "Langue",
@@ -1074,7 +1077,8 @@
       "groupThankYou.copy": "Merci. L'équipe Time Mission a reçu votre demande de {event} pour {location} et vous contactera pour les prochaines étapes.",
       "groupThankYou.viewLocation": "Voir {location}",
       "city.hero.h1Seo": "Time Mission Anvers — Plus de 25 salles de mission interactives.",
-      "city.about.short": "Entrez dans un jeu vidéo grandeur nature où une nouvelle surprise vous attend derrière chaque porte. Un billet donne accès à toutes les missions : jouez-les toutes ou recommencez vos préférées."
+      "city.about.short": "Entrez dans un jeu vidéo grandeur nature où une nouvelle surprise vous attend derrière chaque porte. Un billet donne accès à toutes les missions : jouez-les toutes ou recommencez vos préférées.",
+      "location.eindhovenOpening": "Ouvre le 16 oct."
     }
   }
 }

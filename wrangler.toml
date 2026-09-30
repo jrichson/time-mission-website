@@ -16,6 +16,7 @@ pages_build_output_dir = "dist"
 compatibility_date = "2026-05-09"
 
 [vars]
+CSP_REPORTING_ENABLED = "false"
 TM_SITE_PROFILE = "us"
 PUBLIC_SITE_ORIGIN = "https://www.timemission.com"
 PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAADdV7UFMRdD_WvXW"

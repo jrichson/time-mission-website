@@ -64,3 +64,23 @@ test('site-progressive.js: footer location toggle opens on click', async ({ page
 
     expect(pageErrors, `Page errors on / (footer toggle):\n${pageErrors.join('\n')}`).toHaveLength(0);
 });
+
+test('static HTML enforces the complete generated CSP without Workers', async ({ page }) => {
+    const fs = require('node:fs');
+    const { policy } = JSON.parse(fs.readFileSync('dist/data/content-security-policy.json', 'utf8'));
+    const venue = process.env.TM_SITE_PROFILE === 'eu' ? 'eindhoven' : 'philadelphia';
+    for (const route of ['/', '/' + venue, '/' + venue + '/faq']) {
+        const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+        const documentPolicy = policy.split(';').map(value => value.trim()).filter(value => value && !value.startsWith('frame-ancestors ')).join('; ');
+        await expect(page.locator('#tm-static-csp')).toHaveAttribute('content', documentPolicy);
+        expect(response.status()).toBe(200);
+    }
+    // Confirm browser enforcement, not just the presence of a header.
+    await page.evaluate(() => {
+        const button = document.createElement('button');
+        button.setAttribute('onclick', 'window.__unexpectedInlineExecution = true');
+        document.body.appendChild(button);
+        button.click();
+    });
+    expect(await page.evaluate(() => window.__unexpectedInlineExecution)).toBeUndefined();
+});

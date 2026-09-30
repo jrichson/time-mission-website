@@ -76,7 +76,7 @@ const profiledLocations = publicLocationsForProfile(
   locDoc.locations || [],
   resolveSiteProfile(process.env),
 );
-const externalLocationIds = profiledLocations.filter((loc) => loc.externalUrl).map((loc) => loc.id);
+const externalLocationIds = profiledLocations.filter((loc) => loc.externalUrl && !loc.pagePath).map((loc) => loc.id);
 if (JSON.stringify(publicContract.externalLocationIds) !== JSON.stringify(externalLocationIds)) {
   errors.push('public site contract externalLocationIds must match the active regional profile');
 }

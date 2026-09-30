@@ -37,14 +37,17 @@ async function gotoHome(page) {
 }
 
 async function waitForLanguageRuntime(page, includeLocation = false) {
-  await page.waitForFunction(
-    (locationRequired) => Boolean(window.TMI18n?.ready && (!locationRequired || window.TM?.ready)),
-    includeLocation,
-  );
-  await page.evaluate(async (locationRequired) => {
-    await window.TMI18n.ready;
-    if (locationRequired) await window.TM.ready;
-  }, includeLocation);
+  await expect(async () => {
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForFunction(
+      (locationRequired) => Boolean(window.TMI18n?.ready && (!locationRequired || window.TM?.ready)),
+      includeLocation,
+    );
+    await page.evaluate(async (locationRequired) => {
+      await window.TMI18n.ready;
+      if (locationRequired) await window.TM.ready;
+    }, includeLocation);
+  }).toPass({ timeout: 15000, intervals: [100, 250, 500] });
 }
 
 function expectUrlToMatch(actualUrl, expectedUrl) {

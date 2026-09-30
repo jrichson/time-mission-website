@@ -167,6 +167,15 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
             i18n: loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite',
         };
     }
+    // Eindhoven accepts advance bookings while its hero keeps the launch signup.
+    if (loc.slug === 'eindhoven' && hasTicketBooking(loc)) {
+        return {
+            href: loc.bookingUrl,
+            isBookingTrigger: false,
+            label: 'Book Now',
+            i18n: 'nav.bookNow',
+        };
+    }
     const signupFormId = locationSignupFormId(loc);
     if (signupFormId) {
         return {
@@ -208,7 +217,7 @@ export function locationViewModel(loc: LocationRecord): LocationViewModel {
             ? loc.temporaryClosure?.ctaLabel || 'Get Closure Updates'
             : externalUrl
             ? externalSiteLabel
-            : signupFormId
+            : signupFormId && !(loc.slug === 'eindhoven' && bookable)
             ? 'Sign Up'
             : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
         bookable,

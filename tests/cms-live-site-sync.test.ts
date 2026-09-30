@@ -1,7 +1,11 @@
+import { EINDHOVEN_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20260925_eindhoven_checkout_snapshot';
+import { EDISON_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260918_edison_now_open_snapshot';
+import { EDISON_BOOKING_SNAPSHOT } from '../cms/migration-data/20260918_edison_booking_snapshot';
 import { NASHVILLE_EDUCATORS_DEADLINE_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_nashville_educators_deadline_snapshot';
 import { DALLAS_EDUCATORS_OPENING_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_dallas_educators_opening_snapshot';
 import { NASHVILLE_EDUCATORS_OPENING_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_nashville_educators_opening_snapshot';
 import { EDUCATORS_PAGE_SNAPSHOT } from '../cms/migration-data/20260916_educators_pages_snapshot';
+import { EINDHOVEN_GROUP_FORM_SNAPSHOT } from '../cms/migration-data/20260914_eindhoven_group_form_snapshot';
 import { EINDHOVEN_SIGNUP_PAGE_SNAPSHOT, REMOVED_TICKER_LOCATIONS } from '../cms/migration-data/20260908_admin_promotion_updates_snapshot';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -129,10 +133,30 @@ describe('live-site-to-CMS sync snapshot', () => {
                     },
                 }
                 : currentNoonHoursLocation;
-            const groupFormPatch = groupFormPatches.get(location.slug);
+            const groupFormPatch = location.slug === EINDHOVEN_GROUP_FORM_SNAPSHOT.slug
+                ? EINDHOVEN_GROUP_FORM_SNAPSHOT
+                : groupFormPatches.get(location.slug);
             const groupFormLocation = groupFormPatch
                 ? { ...addressCorrectedLocation, groupFormUrls: groupFormPatch.groupFormUrls }
                 : addressCorrectedLocation;
+            // The blank published CMS gift-card field inherits the code-owned URL.
+            if (location.slug === 'philadelphia') {
+                return { ...groupFormLocation, externalLinks: { ...groupFormLocation.externalLinks, giftCardUrl: 'https://book.philadelphia.timemission.com/giftcards/en-us/products' } };
+            }
+            if (location.slug === EINDHOVEN_CHECKOUT_SNAPSHOT.slug) {
+                return { ...groupFormLocation, externalLinks: { ...groupFormLocation.externalLinks, bookingUrl: EINDHOVEN_CHECKOUT_SNAPSHOT.bookingUrl } };
+            }
+            if (location.slug === EDISON_BOOKING_SNAPSHOT.slug) {
+                return {
+                    ...groupFormLocation,
+                    ticker: EDISON_NOW_OPEN_SNAPSHOT.ticker,
+                    externalLinks: {
+                        ...groupFormLocation.externalLinks,
+                        externalUrl: EDISON_BOOKING_SNAPSHOT.externalUrl,
+                        bookingUrl: EDISON_NOW_OPEN_SNAPSHOT.bookingUrl,
+                    },
+                };
+            }
             return location.slug === BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT.slug
                 ? {
                     ...groupFormLocation,
@@ -172,6 +196,7 @@ describe('live-site-to-CMS sync snapshot', () => {
         const pageSnapshotByPath = new Map(
             [
                 ...LIVE_SITE_PAGE_SNAPSHOT,
+                EDISON_NOW_OPEN_SNAPSHOT.page,
                 ...HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT,
                 ...TM_OPS_EDUCATORS_PAGE_SNAPSHOT,

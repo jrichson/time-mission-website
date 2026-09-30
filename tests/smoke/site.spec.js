@@ -200,7 +200,7 @@ test('selected US language persists across location and FAQ navigation', async (
     await page.locator('.nav-links a[data-i18n="nav.faq"]').click();
   }
 
-  await expect(page).toHaveURL(/\/es\/faq\/?$/);
+  await expect(page).toHaveURL(/\/es\/manassas\/faq\/?$/);
   await waitForLanguageRuntime(page);
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   await expect(page.locator('main h1').first()).toBeVisible();

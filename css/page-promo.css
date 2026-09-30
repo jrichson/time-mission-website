@@ -92,6 +92,11 @@
     padding: clamp(3.5rem, 7vw, 7.5rem) clamp(1.5rem, 6vw, 6.5rem);
 }
 
+.tm-eindhoven-signup .tm-promo-landing__content {
+    align-self: start;
+    padding-top: 1.5rem;
+}
+
 .tm-promo-landing__back {
     display: inline-flex;
     align-items: center;

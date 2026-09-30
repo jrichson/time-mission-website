@@ -5,7 +5,7 @@ import { definePage } from '../../lib/define-page';
 import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
 
 const page = definePage({ canonicalPath: '/eindhoven/signup' });
-const formId = 'W5S6At';
+const formId = 'XDPbDT';
 const ld = serializeGraph(buildSimpleGraph([
     { label: 'Home', href: '/' },
     { label: 'Eindhoven', href: '/eindhoven' },
@@ -13,7 +13,7 @@ const ld = serializeGraph(buildSimpleGraph([
 ]));
 ---
 
-<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-promo-page" bodyDataLocation="eindhoven">
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-promo-page tm-eindhoven-signup" bodyDataLocation="eindhoven">
     <Fragment slot="head-extra">
         <link rel="stylesheet" href="/css/page-promo.css?v=1" />
         <script is:inline async src="https://static.klaviyo.com/onsite/js/YccPJs/klaviyo.js?company_id=YccPJs"></script>
@@ -32,7 +32,7 @@ const ld = serializeGraph(buildSimpleGraph([
         <h1 id="promo-title" class="tm-promo-landing__title">Be First to Know</h1>
         <div class="tm-promo-landing__copy"><p>Sign up for opening news and updates from Time Mission Eindhoven.</p></div>
         <section class="tm-promo-form" aria-label="Eindhoven signup form" data-tm-form-name="eindhoven_signup" data-tm-klaviyo-form-id={formId}>
-            <button type="button" class="tm-promo-landing__cta" data-tm-klaviyo-form-trigger={formId}>Sign Up</button>
+            <div class="klaviyo-form-XDPbDT"></div>
         </section>
     </PromoSplit>
 </SiteLayout>

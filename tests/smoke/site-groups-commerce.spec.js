@@ -184,7 +184,7 @@ test('group event card Book Now uses group checkout when available', async ({ pa
   await page.locator('.event-type-actions .btn-tickets[data-tm-booking-kind="group-tickets"]').first().click();
   await page.waitForFunction(() => window.__rollerCheckoutShown === true);
   await expect(page.locator('#roller-checkout')).toHaveAttribute('data-checkout', expectedHref);
-  await expect(page).toHaveURL(/\/groups\.html$/);
+  await expect(page).toHaveURL(/\/groups$/);
 });
 
 test('group page Book Now CTAs use group checkout when available', async ({ page }) => {

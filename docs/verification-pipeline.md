@@ -13,6 +13,7 @@ Order is fixed in `scripts/lib/cloudflare-artifact-contract.cjs` and exposed thr
 | 1 | `npm run check` | Source checks, unit tests, route artifacts, architecture policies, analytics/consent, SEO catalogs |
 | 2 | `npm run build:astro` | Sync static assets, run `astro build`, prune excluded artifacts, minify assets, bundle CSS, inject CSP hashes |
 | 3 | `npm run check:site-profile-output` | Regional artifact identity, canonical, locale, redirect, and location isolation |
+| 3a | `npm run check:navigation-output` | Every generated page's internal links, supported language, venue context, and serving target across the regional location roster |
 | 4 | `npm run check:csp-hashes` | CSP inline hash parity after build |
 | 5 | `npm run check:best-practices -- --dist` | Built security headers, CSP placeholder leakage, source maps, and mixed-content HTML attributes |
 | 6 | `npm run check:routes -- --dist` | Route registry vs built output |
@@ -92,3 +93,5 @@ npx playwright test tests/smoke/visual.spec.js --update-snapshots
 ```
 
 Snapshot file names include the platform. Linux CI needs matching Linux snapshot files generated on that runner or inside the pinned Playwright environment.
+
+`npm run test:providers` runs the separate real-provider browser gate against local Pages with the actual CSP; it never submits a form or purchase. See [provider monitoring](provider-monitoring.md).

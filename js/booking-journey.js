@@ -364,6 +364,9 @@
         var presentation = explicitPresentation
             || explicitBookingPresentation(currentTarget, loc, kind, href)
             || bookingPresentationFor(loc, kind, href);
+        if (window.TMNavigation && presentation !== 'iframe' && presentation !== 'roller') {
+            href = window.TMNavigation.href(href, { location: locationSlug });
+        }
         if (shouldAppendTrackingForPresentation(presentation)) {
             href = appendTrackingParams(href);
         }

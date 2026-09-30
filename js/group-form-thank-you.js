@@ -56,6 +56,7 @@
         } catch (e) {
             pathname = '';
         }
+        if (window.TMNavigation) pathname = window.TMNavigation.pathContext(pathname).path;
         var match = pathname.match(/^\/groups\/inquire\/(manassas|mount-prospect|orland-park|houston|philadelphia)\/(default|birthdays|corporate|field-trips|bachelor-ette|private-events|holidays)\/?$/);
         if (!match) return null;
         var locationSlug = normalizeToken(match[1]);
@@ -115,6 +116,7 @@
         );
         if (locationLink) {
             locationLink.href = '/' + context.locationSlug;
+            if (window.TMNavigation) locationLink.href = window.TMNavigation.href(locationLink.href);
             locationLink.textContent = translate(
                 'groupThankYou.viewLocation',
                 'View {location}',

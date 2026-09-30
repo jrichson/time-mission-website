@@ -6,7 +6,20 @@ import {
 } from './browser-contract-helpers.mjs';
 
 describe('browser location state contracts', () => {
-  it('turns Eindhoven ticket CTAs into Klaviyo signup triggers', async () => {
+  it.each(['nl', 'fr', 'es'])('restores the venue from a %s shared-page URL', async (locale) => {
+    const { context, window } = createBrowserContext({
+      __TM_SITE_PROFILE__: { localizedRoutes: true, locales: ['en', 'nl', 'fr', 'es'] },
+      TM_DATA: { locations: [{ id: 'eindhoven', slug: 'eindhoven', name: 'Eindhoven', hours: {} }] },
+    });
+    window.location.pathname = `/${locale}/eindhoven/faq`;
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    runScript('js/locations.js', context);
+    await window.TM.ready;
+    expect(window.TM.current?.slug).toBe('eindhoven');
+  });
+
+  it.each(['', 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home'])('resolves Eindhoven ticket CTAs with checkout %s', async (bookingUrl) => {
     const signupCta = createAnchor('/contact#location=eindhoven&type=updates', {
       className: 'btn-tickets',
       textContent: 'Contact Us',
@@ -20,7 +33,7 @@ describe('browser location state contracts', () => {
             name: 'Time Mission Eindhoven',
             shortName: 'Eindhoven',
             status: 'coming-soon',
-            bookingUrl: '',
+            bookingUrl,
             signupFormId: 'W5S6At',
             contact: { phone: '+31 (0)40 808 3636', email: 'eindhoven@timemission.nl' },
             hours: {},
@@ -39,6 +52,12 @@ describe('browser location state contracts', () => {
     runScript('js/locations.js', context);
     await window.TM.ready;
 
+    if (bookingUrl) {
+      expect(signupCta.href).toBe(bookingUrl);
+      expect(signupCta.hasAttribute('data-tm-klaviyo-form-trigger')).toBe(false);
+      expect(signupCta.hasAttribute('data-tm-booking-trigger')).toBe(false);
+      return;
+    }
     expect(signupCta.textContent).toBe('Sign Up');
     expect(signupCta.href).toBe('#');
     expect(signupCta.getAttribute('data-i18n')).toBe('location.signUp');
@@ -46,14 +65,20 @@ describe('browser location state contracts', () => {
     expect(signupCta.hasAttribute('data-tm-booking-trigger')).toBe(false);
   });
 
-  it('opens the existing Klaviyo form on its standalone signup page', () => {
+  it.each([
+    ['/eindhoven/signup', 'W5S6At'],
+    ['/nl/eindhoven/signup', 'VNjiQj'],
+    ['/nl/eindhoven/signup/', 'VNjiQj'],
+    ['/fr/eindhoven/signup', 'W5S6At'],
+    ['/es/eindhoven/signup', 'W5S6At'],
+  ])('opens the correct Klaviyo form on %s', (pathname, expectedFormId) => {
     const appendedScripts = [];
     const trigger = createAnchor('#', {
       attrs: { 'data-tm-klaviyo-form-trigger': 'W5S6At' },
       closestSelectors: ['[data-tm-klaviyo-form-trigger]'],
     });
     const { context, window, document } = createBrowserContext();
-    window.location.pathname = '/nl/eindhoven/signup';
+    window.location.pathname = pathname;
     document.head = {
       appendChild(script) {
         appendedScripts.push(script);
@@ -74,7 +99,7 @@ describe('browser location state contracts', () => {
     document.dispatchEvent(click);
 
     expect(click.defaultPrevented).toBe(true);
-    expect(window._klOnsite).toEqual([['openForm', 'W5S6At']]);
+    expect(window._klOnsite).toEqual([['openForm', expectedFormId]]);
     expect(appendedScripts).toHaveLength(1);
     expect(appendedScripts[0]).toMatchObject({
       async: true,

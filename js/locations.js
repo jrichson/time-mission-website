@@ -56,7 +56,7 @@
     }
 
     function isLocationScopedLocation(loc) {
-        return !!(loc && !loc.externalUrl);
+        return !!(loc && (loc.pagePath || !loc.externalUrl));
     }
 
     function clearStoredLocation() {
@@ -231,9 +231,14 @@
     }
 
     function getUrlLocationSlug() {
-        const firstSegment = ((window.location && window.location.pathname) || '')
+        if (window.TMNavigation) return window.TMNavigation.currentLocation();
+        const segments = ((window.location && window.location.pathname) || '')
             .split('/')
-            .filter(Boolean)[0] || '';
+            .filter(Boolean);
+        const profile = window.__TM_SITE_PROFILE__ || {};
+        if (profile.localizedRoutes && Array.isArray(profile.locales)
+            && profile.locales.includes(segments[0])) segments.shift();
+        const firstSegment = segments[0] || '';
         if (!firstSegment || !TM.locations.length) return '';
         const compactSegment = compactLocationSlug(firstSegment);
         const loc = TM.locations.find((entry) => {

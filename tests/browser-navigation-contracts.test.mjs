@@ -7,6 +7,30 @@ import {
 } from './browser-contract-helpers.mjs';
 
 describe('browser navigation contracts', () => {
+  it.each(['en', 'nl', 'fr', 'es'])('keeps location and %s on shared navigation links', async (locale) => {
+    const prefix = locale === 'en' ? '' : `/${locale}`;
+    const paths = ['/', '/about', '/faq', '/contact', '/groups/corporate'];
+    const anchors = paths.map((route) => createAnchor(`${prefix}${route}?ref=nav#details`));
+    const explicitLocation = createAnchor(`${prefix}/brussels/back-to-school-sale`);
+    const { context, window, document } = createBrowserContext({
+      __TM_SITE_PROFILE__: { defaultLocale: 'en', locales: ['en', 'nl', 'fr', 'es'], localizedRoutes: true },
+      TM: {
+        ready: Promise.resolve(),
+        current: { id: 'eindhoven', slug: 'eindhoven' },
+        locations: [{ id: 'eindhoven', slug: 'eindhoven' }, { id: 'brussels', slug: 'brussels' }],
+      },
+    });
+    window.location.origin = 'https://www.timemission.eu';
+    window.location.pathname = `${prefix}/eindhoven/faq`;
+    document.querySelectorAll = (selector) => selector === 'a[href]' ? [...anchors, explicitLocation] : [];
+    runScript('js/nav.js', context);
+    await Promise.resolve();
+    paths.forEach((route, index) => {
+      expect(anchors[index].getAttribute('href')).toBe(`${prefix}/eindhoven${route === '/' ? '' : route}?ref=nav#details`);
+    });
+    expect(explicitLocation.getAttribute('href')).toBe(`${prefix}/brussels/back-to-school-sale`);
+  });
+
   it('navigation links carry the selected location through shared pages', async () => {
     let subscriber = null;
     const anchors = [
@@ -179,7 +203,7 @@ describe('browser navigation contracts', () => {
     expect(brussels.getAttribute('href')).toBe('/nl/brussels?utm_source=test#faq');
     expect(eindhoven.getAttribute('href')).toBe('/nl/eindhoven?utm_source=test#faq');
     expect(external.getAttribute('href')).toBe('https://www.timemission.com/houston');
-    expect(faq.getAttribute('href')).toBe('/nl/faq?ref=nav#questions');
+    expect(faq.getAttribute('href')).toBe('/nl/eindhoven/faq?ref=nav#questions');
 
     window.location.pathname = '/nl/faq';
     locationButton.dispatchEvent({ type: 'click', stopPropagation() {} });

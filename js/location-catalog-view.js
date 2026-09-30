@@ -13,6 +13,7 @@
     };
     var KLAVIYO_ONSITE_SRC = 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU';
     var EINDHOVEN_KLAVIYO_FORM_ID = 'W5S6At';
+    var EINDHOVEN_KLAVIYO_DUTCH_FORM_ID = 'VNjiQj';
     var EINDHOVEN_KLAVIYO_ONSITE_SRC = 'https://static.klaviyo.com/onsite/js/YccPJs/klaviyo.js?company_id=YccPJs';
     var BookingJourney = window.TMBookingJourney;
     if (!BookingJourney) throw new Error('TMBookingJourney must load before location-catalog-view.js');
@@ -35,7 +36,7 @@
     }
 
     function ensureKlaviyoOnsiteScript(formId) {
-        var scriptSrc = formId === EINDHOVEN_KLAVIYO_FORM_ID
+        var scriptSrc = (formId === EINDHOVEN_KLAVIYO_FORM_ID || formId === EINDHOVEN_KLAVIYO_DUTCH_FORM_ID)
             ? EINDHOVEN_KLAVIYO_ONSITE_SRC
             : KLAVIYO_ONSITE_SRC;
         if (document.querySelector('script[src="' + scriptSrc + '"]')) return;
@@ -58,7 +59,13 @@
             var formId = String(trigger.getAttribute('data-tm-klaviyo-form-trigger') || '').trim();
             if (!/^[a-z0-9]+$/i.test(formId)) return;
             event.preventDefault();
-            if (formId === EINDHOVEN_KLAVIYO_FORM_ID && !/\/eindhoven\/signup(?:\.html)?\/?$/.test(window.location.pathname)) {
+            var isEindhovenForm = formId === EINDHOVEN_KLAVIYO_FORM_ID || formId === EINDHOVEN_KLAVIYO_DUTCH_FORM_ID;
+            if (isEindhovenForm) {
+                formId = /^\/nl(?:\/|$)/.test(window.location.pathname)
+                    ? EINDHOVEN_KLAVIYO_DUTCH_FORM_ID
+                    : EINDHOVEN_KLAVIYO_FORM_ID;
+            }
+            if (isEindhovenForm && !/\/eindhoven\/signup(?:\.html)?\/?$/.test(window.location.pathname)) {
                 var localePrefix = window.location.pathname.match(/^\/(nl|fr|es)(?:\/|$)/);
                 window.location.assign((localePrefix ? '/' + localePrefix[1] : '') + '/eindhoven/signup');
                 return;
@@ -302,7 +309,7 @@
                 ? BookingJourney.temporaryClosureCtaLabel(loc)
                 : externalUrl
                 ? externalSiteLabel
-                : signupFormId
+                : signupFormId && !(slug === 'eindhoven' && bookable)
                 ? 'Sign Up'
                 : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
             mapQuery: mapQuery,
@@ -321,7 +328,7 @@
         var opts = options || {};
         var kind = BookingJourney.normalizeKind(opts.kind || 'tickets');
         var signupFormId = kind === 'tickets' ? signupFormIdForLocation(loc) : '';
-        if (signupFormId) {
+        if (signupFormId && !(loc.slug === 'eindhoven' && BookingJourney.isBookableLocation(loc))) {
             return {
                 kind: kind,
                 groupType: '',
@@ -369,7 +376,7 @@
         });
         var labelKey = view.externalUrl
             ? (loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite')
-            : view.signupFormId
+            : view.signupFormId && !(view.slug === 'eindhoven' && view.bookable)
             ? 'location.signUp'
             : view.comingSoon
             ? 'location.contactUs'

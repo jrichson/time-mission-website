@@ -56,10 +56,9 @@ test('TM Ops location footers open the preselected contact form', async ({ page 
       'href',
       `/${location}/contact#location=${location}&type=updates`,
     );
-    await expect(contactLink).toHaveAttribute(
-      'data-tm-location-base-href',
-      `/contact#location=${location}&type=updates`,
-    );
+    await contactLink.click();
+    await expect(page).toHaveURL(new RegExp(`/${location}/contact`));
+    await expect(page.locator('#location')).toHaveValue(location);
   }
 });
 

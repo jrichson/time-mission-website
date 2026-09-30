@@ -93,7 +93,7 @@ const tickerIsStatic = Boolean(
         (activeTickerBehavior === 'auto' && tickerMessageCanBeStatic(activeTickerMessage))
     ),
 );
-const tickerMessages: TickerMessage[] = activeTickerMessage
+const tickerMessages: TickerMessage[] = activeSiteProfile.id === 'us' ? [] : activeTickerMessage
     ? tickerIsStatic
         ? [activeTickerMessage]
         : Array.from({ length: tickerCycles }, () => activeTickerMessage)

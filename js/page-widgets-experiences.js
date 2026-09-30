@@ -273,7 +273,7 @@
 
             card.addEventListener('click', function () {
                 if (isHovering && !wasDragged) {
-                    window.location.href = '/missions';
+                    window.location.href = window.TMNavigation ? window.TMNavigation.href('/missions') : '/missions';
                 }
             });
         });

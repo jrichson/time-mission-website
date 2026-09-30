@@ -195,6 +195,12 @@
 
     function currentScopedCanonicalPath() {
         const localizedPath = localizedPathContext(window.location.pathname || '/');
+        if (window.TMNavigation) {
+            const path = getPathWithoutLocationPrefix(localizedPath.pathname);
+            const policy = (window.__TM_SITE_CONTRACT__.runtime || {}).navigation || {};
+            if ((policy.dynamicSharedPrefixes || []).some(prefix => path.startsWith(prefix + '/'))) return path;
+            return getScopedCanonicalPath(path);
+        }
         if (siteProfile.localizedRoutes
             && localizedPath.localePrefix
             && !isKnownLocationPath(localizedPath.pathname)) {
@@ -278,13 +284,17 @@
             || link.classList.contains('location-info-book')
         )) return true;
         if (typeof link.closest === 'function' && link.closest('.footer-location-list')) return true;
-        const pathname = normalizeHrefPath(url.pathname);
+        const pathname = localizedPathContext(url.pathname).pathname;
         if (/^\/(assets|css|data|fonts|js|api|c)\b/i.test(pathname)) return true;
         if (/^\/(_headers|_redirects|favicon\.ico|license\.xml|robots\.txt|sitemap\.xml|llms\.txt|ai-context\.md|pricing\.md)$/i.test(pathname)) return true;
         return isKnownLocationPath(pathname);
     }
 
     function updateLocationScopedLinks() {
+        if (window.TMNavigation) {
+            window.TMNavigation.refresh();
+            return;
+        }
         const slug = getCurrentLocationSlug();
         document.querySelectorAll('a[href]').forEach(function (link) {
             let baseHref = link.getAttribute('data-tm-location-base-href') || link.getAttribute('href') || '';
@@ -304,14 +314,16 @@
                 link.setAttribute('data-tm-location-base-href', baseHref);
             }
 
-            const canonicalPath = getScopedCanonicalPath(url.pathname);
+            const localizedPath = localizedPathContext(url.pathname);
+            const canonicalPath = getScopedCanonicalPath(localizedPath.pathname);
             if (!slug || !canonicalPath) {
                 link.setAttribute('href', baseHref);
                 return;
             }
 
             const scopedPath = canonicalPath === '/' ? '/' + slug : '/' + slug + canonicalPath;
-            link.setAttribute('href', scopedPath + url.search + url.hash);
+            const localePrefix = localizedPathContext(window.location.pathname || '/').localePrefix;
+            link.setAttribute('href', localePrefix + scopedPath + url.search + url.hash);
         });
     }
 

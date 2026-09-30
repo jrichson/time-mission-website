@@ -205,6 +205,7 @@
 
     function redirectAfterTracking(form) {
         var target = form.getAttribute('data-tm-success-path') || SUCCESS_PATH;
+        if (window.TMNavigation) target = window.TMNavigation.href(target);
         // ponytail: small GTM flush delay; use server-side CAPI if delivery certainty matters.
         window.setTimeout(function () {
             window.location.assign(target);

@@ -7,8 +7,42 @@ import {
   resolveLocationRedirectUrl,
   resolveLocationRouteRequest,
 } from '../functions/_shared/location-route-normalizer.mjs';
+import { LOCATION_ROUTE_LOCALES, COUNTERPART_ORIGIN, COUNTERPART_LOCALES } from '../functions/_shared/location-route-manifest.mjs';
 
 describe('location route normalizer', () => {
+  it('preserves the page and supported locale in counterpart redirects', () => {
+    for (const entry of locationRouteEntries().filter(entry => entry.externalUrl && new URL(entry.externalUrl).origin === COUNTERPART_ORIGIN)) {
+      for (const locale of ['', ...LOCATION_ROUTE_LOCALES]) {
+        const prefix = locale ? `/${locale}` : '';
+        const targetPrefix = COUNTERPART_LOCALES.includes(locale) ? prefix : '';
+        expect(resolveLocationRouteRequest(`https://example.com${prefix}${entry.canonicalPath}/faq?ref=test`))
+          .toEqual({ redirectUrl: `${COUNTERPART_ORIGIN}${targetPrefix}${entry.canonicalPath}/faq?ref=test`, assetPath: '' });
+      }
+    }
+  });
+
+  it.each(LOCATION_ROUTE_LOCALES)('serves location-scoped %s pages without losing the locale', (locale) => {
+    const location = locationRouteEntries().find((entry) => !entry.externalUrl);
+    const base = `https://www.timemission.eu/${locale}${location.canonicalPath}`;
+    expect(resolveLocationRouteRequest(`${base}/faq?ref=nav`)).toEqual({
+      redirectUrl: '', assetPath: `/${locale}/faq`,
+    });
+    expect(resolveLocationRouteRequest(`${base}/groups/corporate`)).toEqual({
+      redirectUrl: '', assetPath: `/${locale}/groups/corporate`,
+    });
+    expect(resolveLocationRouteRequest(`${base}/FAQ.html?ref=nav`)).toEqual({
+      redirectUrl: `${base}/faq?ref=nav`, assetPath: '',
+    });
+    expect(resolveLocationRouteRequest(`${base}/js/nav.js`)).toEqual({
+      redirectUrl: '', assetPath: '/js/nav.js',
+    });
+    for (const family of ['blog', 'c']) {
+      expect(resolveLocationRouteRequest(`${base}/${family}/sample-article`)).toEqual({ redirectUrl: '', assetPath: `/${locale}/${family}/sample-article` });
+      expect(resolveLocationRouteRequest(`${base}/${family}/sample-article.html`)).toEqual({ redirectUrl: `${base}/${family}/sample-article`, assetPath: '' });
+      expect(resolveLocationRouteRequest(`${base}/${family}/sample-article/not-a-page`).assetPath).toBe('');
+    }
+  });
+
   const sharedPagePaths = [
     '/about',
     '/missions',
@@ -84,13 +118,13 @@ describe('location route normalizer', () => {
     expect(resolveLocationRedirectUrl('https://timemission.com/antwerp?utm_source=test#book'))
       .toBe('https://www.timemission.eu/antwerp?utm_source=test');
     expect(resolveLocationRedirectUrl('https://timemission.com/antwerp/groups/corporate?utm_source=test'))
-      .toBe('https://www.timemission.eu/antwerp?utm_source=test');
+      .toBe('https://www.timemission.eu/antwerp/groups/corporate?utm_source=test');
     expect(resolveLocationRedirectUrl('https://timemission.com/brussels?utm_source=test'))
       .toBe('https://www.timemission.eu/brussels?utm_source=test');
     expect(resolveLocationRedirectUrl('https://timemission.com/Terminal1/missions?utm_source=test'))
-      .toBe('https://www.timemission.eu/brussels?utm_source=test');
+      .toBe('https://www.timemission.eu/brussels/missions?utm_source=test');
     expect(resolveLocationRouteRequest('https://timemission.com/brussels/css/nav.css?v=17'))
-      .toEqual({ redirectUrl: 'https://www.timemission.eu/brussels?v=17', assetPath: '' });
+      .toEqual({ redirectUrl: 'https://www.timemission.eu/brussels/css/nav.css?v=17', assetPath: '' });
   });
 
   it('passes through already canonical or unrelated paths', () => {

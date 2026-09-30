@@ -633,6 +633,8 @@ describe('browser booking contracts', () => {
           ? 'external-site'
           : isWestNyackBriq
           ? 'briq-widget'
+          : loc.groupFormPresentation === 'iframe' && expectedRuntimeHref && loc.status !== 'temporarily-closed'
+          ? 'iframe'
           : (expectedRuntimeHref ? 'link' : 'panel');
         expect(window.TMBooking.getDestination({
           kind: 'groups',
@@ -646,7 +648,7 @@ describe('browser booking contracts', () => {
         })).toMatchObject({
           href: expectedRuntimeHref,
           presentation: expectedPresentation,
-          usesBookingFrame: false,
+          usesBookingFrame: expectedPresentation === 'iframe',
         });
         if (isWestNyackBriq) {
           expect(window.TMBooking.resolveIntent({

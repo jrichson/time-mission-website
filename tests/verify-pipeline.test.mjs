@@ -7,7 +7,8 @@ describe('Verification pipeline', () => {
   it('owns the Pages readiness order', () => {
     expect(VERIFY_STEPS[0][0]).toBe('check');
     expect(VERIFY_STEPS[1][0]).toBe('build:astro');
-    expect(VERIFY_STEPS.at(-1)[0]).toBe('test:smoke');
+    expect(VERIFY_STEPS.at(-2)[0]).toBe('test:smoke');
+    expect(VERIFY_STEPS.at(-1)[0]).toBe('test:providers');
     expect(formatNpmStep(VERIFY_STEPS[0])).toBe('npm run check');
     expect(resolveNpmStep(VERIFY_STEPS[0], 'win32')).toEqual({
       command: 'npm.cmd',

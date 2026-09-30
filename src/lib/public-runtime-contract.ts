@@ -1,5 +1,6 @@
 export type RuntimeScriptId =
     | 'progressive'
+    | 'navigationContext'
     | 'language'
     | 'consent'
     | 'analytics'
@@ -37,19 +38,20 @@ export interface LazyRuntimeScript {
 }
 
 export const publicRuntimeScripts: RuntimeScript[] = [
+    { id: 'navigationContext', src: '/js/navigation-context.js', version: 1 },
     { id: 'progressive', src: '/js/site-progressive.js', version: 1 },
-    { id: 'language', src: '/js/language-switcher.js', version: 5 },
+    { id: 'language', src: '/js/language-switcher.js', version: 6 },
     { id: 'consent', src: '/js/consent-bridge.js', version: 1 },
     { id: 'analytics', src: '/js/analytics.js', version: 1 },
-    { id: 'formRegistrationTracking', src: '/js/form-registration-tracking.js', version: 2 },
-    { id: 'bookingJourney', src: '/js/booking-journey.js', version: 13 },
+    { id: 'formRegistrationTracking', src: '/js/form-registration-tracking.js', version: 3 },
+    { id: 'bookingJourney', src: '/js/booking-journey.js', version: 14 },
     { id: 'bookingFrame', src: '/js/booking-frame.js', version: 1 },
-    { id: 'bookingBriqProvider', src: '/js/booking-provider-briq.js', version: 1 },
-    { id: 'bookingNavigationAdapters', src: '/js/booking-navigation-adapters.js', version: 1 },
-    { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 12 },
+    { id: 'bookingBriqProvider', src: '/js/booking-provider-briq.js', version: 2 },
+    { id: 'bookingNavigationAdapters', src: '/js/booking-navigation-adapters.js', version: 2 },
+    { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 14 },
     { id: 'tickerSchedule', src: '/js/ticker-schedule.js', version: 1 },
-    { id: 'locations', src: '/js/locations.js', version: 26 },
-    { id: 'nav', src: '/js/nav.js', version: 15 },
+    { id: 'locations', src: '/js/locations.js', version: 28 },
+    { id: 'nav', src: '/js/nav.js', version: 17 },
     { id: 'bookingController', src: '/js/booking-controller.js', version: 22 },
     { id: 'ticketPanel', src: '/js/ticket-panel.js', version: 12 },
     { id: 'a11y', src: '/js/a11y.js', version: null },

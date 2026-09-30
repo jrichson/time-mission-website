@@ -882,6 +882,16 @@
       "source": "/locations/",
       "target": "/locations",
       "status": 301
+    },
+    {
+      "source": "/houston/world-cup",
+      "target": "/houston/spinandscore/rules",
+      "status": 301
+    },
+    {
+      "source": "/houston/world-cup.html",
+      "target": "/houston/spinandscore/rules",
+      "status": 301
     }
   ]
 }

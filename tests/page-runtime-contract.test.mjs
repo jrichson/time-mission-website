@@ -99,7 +99,7 @@ describe('page-widgets runtime contract', () => {
 
   it('uses canonical clean URLs for runtime navigation', () => {
     expect(runtime).not.toContain('missions.html');
-    expect(runtime).toContain("window.location.href = '/missions'");
+    expect(runtime).toContain("window.TMNavigation.href('/missions')");
   });
 
   it('keeps the coordinator small and leaves widget behavior in focused files', () => {

@@ -159,7 +159,7 @@ describe('site deployment profiles', () => {
     expect(brussels.externalUrl).toBeUndefined();
   });
 
-  it('publishes verified European venue facts without making Eindhoven bookable', () => {
+  it('publishes verified European venue facts and Eindhoven advance booking', () => {
     const antwerp = location('antwerp');
     const brussels = location('brussels');
     const eindhoven = location('eindhoven');
@@ -190,7 +190,7 @@ describe('site deployment profiles', () => {
         zip: '5611 AJ',
         country: 'Netherlands',
       },
-      bookingUrl: '',
+      bookingUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
       signupFormId: 'W5S6At',
       contact: { phone: '+31 (0)40 808 3636', email: 'eindhoven@timemission.nl' },
       currency: 'EUR',
@@ -206,7 +206,7 @@ describe('site deployment profiles', () => {
     const edison = publicLocationForProfile(location('edison'), us);
 
     expect(edison.pagePath).toBe('/edison');
-    expect(edison.externalUrl).toBe('https://www.superchargednj.com/');
+    expect(edison.externalUrl).toBe('https://www.superchargednj.com/book-time-mission/');
   });
 
   it('renders the EU Pages config with its isolated D1 binding', () => {

@@ -2,6 +2,10 @@ import {
   LOCATION_ROUTE_ENTRIES,
   PREFIXABLE_CANONICAL_PATHS,
   PREFIXABLE_ROUTE_ALIASES,
+  LOCATION_ROUTE_LOCALES,
+  DYNAMIC_SHARED_PREFIXES,
+  COUNTERPART_LOCALES,
+  COUNTERPART_ORIGIN,
 } from './location-route-manifest.mjs';
 
 const LOCATION_PREFIXED_ASSET_PREFIXES = [
@@ -98,6 +102,23 @@ export function resolveLocationCanonicalPath(pathname) {
 
 function resolveLocationPath(pathname) {
   const cleanPathname = normalizePathname(pathname);
+  const locale = cleanPathname.split('/')[1];
+  if (LOCATION_ROUTE_LOCALES.includes(locale)) {
+    const route = resolveLocationPath(cleanPathname.slice(locale.length + 1) || '/');
+    if (route.redirectUrl && COUNTERPART_LOCALES.includes(locale)) {
+      const destination = new URL(route.redirectUrl);
+      if (destination.origin === COUNTERPART_ORIGIN) destination.pathname = `/${locale}${destination.pathname}`;
+      route.redirectUrl = destination.toString();
+    }
+    return {
+      ...route,
+      redirectPath: route.redirectPath ? `/${locale}${route.redirectPath}` : '',
+      assetPath: route.assetPath
+        ? (LOCATION_PREFIXED_ASSET_PREFIXES.some((prefix) => route.assetPath.startsWith(prefix))
+          ? route.assetPath : `/${locale}${route.assetPath}`)
+        : '',
+    };
+  }
   const parts = cleanPathname.split('/');
   const firstSegment = parts[1] || '';
   if (!firstSegment) return { redirectPath: '', assetPath: '' };
@@ -106,9 +127,14 @@ function resolveLocationPath(pathname) {
   if (!entry) return { redirectPath: '', redirectUrl: '', assetPath: '' };
 
   if (entry.externalUrl) {
+    const destination = new URL(entry.externalUrl);
+    const suffix = parts.slice(2).join('/');
+    if (destination.origin === COUNTERPART_ORIGIN && suffix) {
+      destination.pathname = `${destination.pathname.replace(/\/$/, '')}/${suffix}`;
+    }
     return {
       redirectPath: '',
-      redirectUrl: entry.externalUrl,
+      redirectUrl: destination.toString(),
       assetPath: '',
     };
   }
@@ -136,7 +162,11 @@ function resolveLocationPath(pathname) {
     };
   }
 
-  const sharedPath = sharedRouteByCompactPath.get(compactRoutePath(suffixPath));
+  const dynamicSuffix = suffixPath.replace(/\.html$/, '');
+  const dynamicSharedPath = DYNAMIC_SHARED_PREFIXES.some((prefix) =>
+    dynamicSuffix.startsWith(`${prefix}/`) && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(dynamicSuffix.slice(prefix.length + 1)),
+  ) ? dynamicSuffix : '';
+  const sharedPath = sharedRouteByCompactPath.get(compactRoutePath(suffixPath)) || dynamicSharedPath;
   const targetSuffix = sharedPath ? (sharedPath === '/' ? '' : sharedPath) : suffixPath;
   const targetPath = `${canonicalPath}${targetSuffix}`;
 

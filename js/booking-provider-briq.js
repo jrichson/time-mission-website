@@ -296,7 +296,8 @@
     function routeToBriqVenuePage(loc) {
         var slug = loc && (loc.slug || loc.id || '');
         if (!slug) return false;
-        window.location.assign(BookingJourney.appendTrackingParams('/' + slug + '?book=1', { includeInternal: true }));
+        var destination = BookingJourney.appendTrackingParams('/' + slug + '?book=1', { includeInternal: true });
+        window.location.assign(window.TMNavigation ? window.TMNavigation.href(destination) : destination);
         return true;
     }
 

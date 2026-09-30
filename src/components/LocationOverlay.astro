@@ -28,20 +28,8 @@ function statusLabel(loc: (typeof allLocations)[number]) {
     return locationStatusBadge(loc) || 'Coming Soon';
 }
 
-function showsOpenNowBadge(loc: (typeof allLocations)[number]) {
-    // Keep selector callouts intentionally scarce. Generic location status belongs
-    // on the location page; the overlay only promotes these approved exceptions.
-    const openNowLocations = activeSiteProfile.id === 'eu'
-        ? ['brussels']
-        : ['philadelphia', 'brussels'];
-    return openNowLocations.includes(loc.slug) && loc.status === 'open';
-}
-
 function selectorBadge(loc: (typeof allLocations)[number]) {
-    if (activeSiteProfile.id === 'us' && loc.slug === 'philadelphia' && loc.status === 'open') {
-        return 'NOW OPEN';
-    }
-    if (showsOpenNowBadge(loc)) return 'OPEN NOW!';
+    if (loc.slug === 'eindhoven') return 'Opens Oct. 16';
     if (loc.status === 'temporarily-closed'
         && (activeSiteProfile.id === 'us' || loc.region === 'europe')) {
         return statusLabel(loc);
@@ -49,14 +37,7 @@ function selectorBadge(loc: (typeof allLocations)[number]) {
     return '';
 }
 
-function selectorBadgeI18n(loc: (typeof allLocations)[number]) {
-    if (loc.slug === 'philadelphia' && showsOpenNowBadge(loc)) return 'location.nowOpen';
-    if (showsOpenNowBadge(loc)) return 'location.openNow';
-    return undefined;
-}
-
 function statusClass(loc: (typeof allLocations)[number]) {
-    if (showsOpenNowBadge(loc)) return 'location-open-now';
     if (loc.status === 'coming-soon') return 'location-coming-soon';
     if (loc.status === 'temporarily-closed') return 'location-temporarily-closed';
     return undefined;
@@ -99,7 +80,7 @@ function locationLabelI18n(loc: (typeof allLocations)[number]) {
                     >
                         <span data-i18n={locationLabelI18n(loc)}>{locationListLabel(loc)}</span>
                         {badge && (
-                            <span class="coming-soon-tag" data-i18n={selectorBadgeI18n(loc)}>
+                            <span class="coming-soon-tag" data-i18n={loc.slug === 'eindhoven' ? 'location.eindhovenOpening' : undefined}>
                                 {' '}{badge}
                             </span>
                         )}

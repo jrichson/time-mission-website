@@ -46,13 +46,17 @@ const hasSignupForm = Boolean(signupFormId);
 const hasExternalLocationSite = Boolean(String(location.externalUrl || '').trim());
 const openingLabel = locationOpeningLabel(location);
 const openingDateText = locationOpeningDateText(location);
-const primaryCtaLabel = isBookable || hasExternalLocationSite || hasSignupForm
+const primaryCtaLabel = hasSignupForm
+    ? 'Sign Up'
+    : isBookable || hasExternalLocationSite
     ? primaryCta.label
     : 'Contact This Location';
-const primaryCtaHref = isBookable || hasExternalLocationSite || hasSignupForm
+const primaryCtaHref = hasSignupForm
+    ? '#'
+    : isBookable || hasExternalLocationSite
     ? primaryCta.href
     : locationContactHref(location);
-const primaryCtaClass = isBookable ? 'btn-location-book' : 'btn-location-lead';
+const primaryCtaClass = isBookable && !hasSignupForm ? 'btn-location-book' : 'btn-location-lead';
 const primaryCtaAttrs = hasSignupForm
     ? `data-tm-klaviyo-form-trigger="${escapeHtml(signupFormId)}" data-i18n="location.signUp"`
     : isBookable
@@ -85,6 +89,18 @@ comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_NAME', location.name);
 comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_SHORT_NAME', location.shortName);
 comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_SLUG', location.slug);
 comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_PAGE_STATUS_LABEL', pageStatusLabel);
+// Keep the hero signup; the final page CTA uses the available checkout.
+if (slug === 'eindhoven' && isBookable) {
+    const finalCtaStart = comingSoonMain.lastIndexOf('<a href="{{PRIMARY_CTA_HREF}}"');
+    if (finalCtaStart !== -1) {
+        const finalCta = comingSoonMain.slice(finalCtaStart)
+            .replaceAll('{{PRIMARY_CTA_HREF}}', escapeHtml(checkoutUrl))
+            .replaceAll('{{PRIMARY_CTA_LABEL}}', 'Book Now')
+            .replaceAll('{{PRIMARY_CTA_CLASS}}', 'btn-location-book')
+            .replaceAll('{{PRIMARY_CTA_ATTRS}}', 'data-i18n="nav.bookNow"');
+        comingSoonMain = comingSoonMain.slice(0, finalCtaStart) + finalCta;
+    }
+}
 comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_LABEL', primaryCtaLabel);
 comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_HREF', primaryCtaHref);
 comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_CLASS', primaryCtaClass);

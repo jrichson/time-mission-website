@@ -90,6 +90,7 @@
     function localizedUrl(code) {
         var target = findLanguage(code);
         var targetCode = target ? target.code : defaultLanguage;
+        if (window.TMNavigation) return window.TMNavigation.href(window.location.href, { locale: targetCode });
         var url = new URL(window.location.href);
         var parts = url.pathname.split('/').filter(Boolean);
         var first = findLanguage(parts[0]);
@@ -332,6 +333,7 @@
             function handleLanguageSelection() {
                 if (select.value === currentLanguage) return;
                 if (siteProfile.localizedRoutes) {
+                    currentLanguage = select.value;
                     writeSavedLanguage(select.value);
                     window.location.assign(localizedUrl(select.value));
                     return;

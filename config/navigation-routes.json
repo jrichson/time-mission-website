@@ -1,0 +1,4 @@
+{
+  "dynamicSharedPrefixes": ["/blog", "/c"],
+  "locationFormPrefixes": ["/groups/inquire", "/group-form-thank-you"]
+}

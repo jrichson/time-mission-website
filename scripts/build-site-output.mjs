@@ -59,6 +59,8 @@ const steps = [
   { label: 'Minify copied CSS and JS', ...nodeStep('scripts/minify-dist-assets.mjs') },
   { label: 'Bundle route CSS', ...nodeStep('scripts/bundle-dist-css.mjs') },
   { label: 'Inject CSP hashes', ...nodeStep('scripts/inject-csp-hashes.mjs') },
+  { label: 'Verify pages exist without Workers', ...nodeStep('scripts/check-navigation-output.mjs') },
+  { label: 'Verify static CSP and sparse Worker routing', ...nodeStep('scripts/check-csp-hashes.js') },
 ];
 
 for (const step of steps) {

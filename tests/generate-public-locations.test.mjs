@@ -87,7 +87,7 @@ describe('public location data generator', () => {
     expect(philadelphia.status).toBe('open');
     expect(philadelphia.bookingUrl).toBe('https://checkout.example/philadelphia');
     expect(philadelphia.rollerCheckoutUrl).toBe('https://checkout.example/philadelphia/roller');
-    expect(philadelphia.giftCardUrl).toBe('');
+    expect(philadelphia.giftCardUrl).toBe('https://book.philadelphia.timemission.com/giftcards/en-us/products');
     expect(philadelphia.groupFormUrls.default).toBe('https://forms.example/philadelphia/default');
     expect(philadelphia.groupFormUrls['private-events']).toBe(
       '/groups/inquire/philadelphia/private-events',

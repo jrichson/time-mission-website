@@ -180,6 +180,16 @@ function localizeHtml(source, route, locale) {
     )
     .replace(/(<meta property="og:url" content=")[^"]*(">)/i, `$1${canonicalUrl}$2`);
 
+  // Eindhoven uses a separate Klaviyo embed for the Dutch signup page.
+  if (route.canonicalPath === '/eindhoven/signup' && locale === 'nl') {
+    html = html
+      .replace('data-tm-klaviyo-form-id="XDPbDT"', 'data-tm-klaviyo-form-id="TsDm2K"')
+      .replace(
+        '<div class="klaviyo-form-XDPbDT"></div>',
+        '<div class="klaviyo-form-TsDm2K"></div>',
+      );
+  }
+
   html = replaceTranslatedElements(html, translations);
   html = localizePageCopy(html, locale, pageI18n, {
     canonicalPath: route.canonicalPath,
@@ -280,6 +290,7 @@ function writeProfileRedirects() {
   }
 
   const regionalRedirects = [];
+  const counterpartProfile = resolveSiteProfile({ TM_SITE_PROFILE: profile.id === 'eu' ? 'us' : 'eu' });
   for (const [canonicalPath, counterpartUrl] of externalRoutes) {
     const target = counterpartUrl || `${profile.counterpartOrigin}${canonicalPath}`;
     regionalRedirects.push(
@@ -287,12 +298,35 @@ function writeProfileRedirects() {
     );
     for (const locale of profile.locales) {
       if (locale === profile.defaultLocale) continue;
+      const localizedTarget = new URL(target);
+      if (localizedTarget.origin === profile.counterpartOrigin && counterpartProfile.locales.includes(locale)) {
+        localizedTarget.pathname = localizedPath(localizedTarget.pathname, locale, counterpartProfile);
+      }
       regionalRedirects.push(
-        `/${locale}${canonicalPath} ${target} 301`,
+        `/${locale}${canonicalPath} ${localizedTarget.toString()} 301`,
       );
     }
   }
-  fs.writeFileSync(redirectsPath, `${regionalRedirects.join('\n')}\n${redirects}`, 'utf8');
+  const aliases = [
+    ...(routesDocument.aliases || []),
+    ...(routesDocument.routes || []).flatMap(route => (route.redirectSources || []).map(source => ({ source, target: route.canonicalPath, status: route.status || 301 }))),
+  ];
+  for (const alias of aliases) {
+    if (!alias.source.startsWith('/') || !alias.target.startsWith('/')) continue;
+    for (const locale of profile.locales.filter(locale => locale !== profile.defaultLocale)) {
+      const location = locationForCanonicalPath(alias.target, locations);
+      const destinationProfile = location && !isInternalLocation(location, profile) ? counterpartProfile : profile;
+      const destinationLocale = destinationProfile.locales.includes(locale) ? locale : destinationProfile.defaultLocale;
+      const targetPath = localizedPath(alias.target, destinationLocale, destinationProfile);
+      const target = destinationProfile === profile ? targetPath : `${destinationProfile.origin}${targetPath}`;
+      regionalRedirects.push(`/${locale}${alias.source} ${target} ${alias.status || 301}`);
+    }
+  }
+  const lines = [...new Set(regionalRedirects), ...redirects.split('\n')];
+  // Pages counts all rules following the first wildcard against its dynamic limit.
+  const dynamic = lines.filter(line => /[*:]/.test(line.trim().split(/\s+/)[0]) && !line.startsWith('#'));
+  const staticLines = lines.filter(line => !dynamic.includes(line));
+  fs.writeFileSync(redirectsPath, [...staticLines, ...dynamic, ''].join('\n'), 'utf8');
 }
 
 function writeProfileRobots() {

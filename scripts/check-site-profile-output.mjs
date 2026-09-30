@@ -287,7 +287,12 @@ function checkSitemapAndRedirects() {
       const sourcePath = locale === profile.defaultLocale
         ? route.canonicalPath
         : `/${locale}${route.canonicalPath}`;
-      const redirectTarget = location.counterpartUrl || `${profile.counterpartOrigin}${route.canonicalPath}`;
+      const destination = new URL(location.counterpartUrl || `${profile.counterpartOrigin}${route.canonicalPath}`);
+      const counterpart = resolveSiteProfile({ TM_SITE_PROFILE: profile.id === 'eu' ? 'us' : 'eu' });
+      if (destination.origin === profile.counterpartOrigin && counterpart.locales.includes(locale)) {
+        destination.pathname = localizedPath(destination.pathname, locale, counterpart);
+      }
+      const redirectTarget = destination.toString();
       const redirect = `${sourcePath} ${redirectTarget} 301`;
       if (!redirects.includes(redirect)) {
         errors.push(`_redirects is missing ${redirect}`);

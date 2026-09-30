@@ -134,12 +134,12 @@ describe('browser data, consent, and i18n contracts', () => {
       },
     });
     expect(byId.get('edison')).toMatchObject({
-      status: 'coming-soon',
+      status: 'open',
       navLabel: 'NJ – Edison',
-      bookingUrl: '',
-      externalUrl: 'https://www.superchargednj.com/',
+      bookingUrl: 'https://www.superchargednj.com/book-time-mission/',
+      externalUrl: 'https://www.superchargednj.com/book-time-mission/',
       pagePath: '/edison',
-      ticker: 'EDISON COMING SOON',
+      ticker: 'EDISON NOW OPEN',
       address: {
         line1: '987 US-1',
         city: 'Edison',

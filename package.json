@@ -46,6 +46,7 @@
     "check:i18n-readiness": "node scripts/check-i18n-readiness.mjs",
     "check:i18n-artifact-approval": "node scripts/check-i18n-artifact-approval.mjs",
     "check:site-profile-output": "node scripts/check-site-profile-output.mjs",
+    "check:navigation-output": "node scripts/check-navigation-output.mjs",
     "check:verify-pipeline": "node scripts/check-verification-pipeline.js",
     "prune:artifacts": "node scripts/prune-excluded-artifacts.mjs dist public",
     "compile:routes": "node scripts/compile-route-artifacts.mjs",
@@ -69,7 +70,8 @@
     "migrate:d1:eu": "node scripts/migrate-eu-d1.mjs",
     "preview:astro": "astro preview",
     "preview:test": "astro preview --host 127.0.0.1 --port 4173",
-    "check:payload-dist": "node scripts/check-payload-dist.mjs"
+    "check:payload-dist": "node scripts/check-payload-dist.mjs",
+    "test:providers": "playwright test --config playwright.providers.config.cjs"
   },
   "repository": {
     "type": "git",

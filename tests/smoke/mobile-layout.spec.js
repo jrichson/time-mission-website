@@ -60,13 +60,13 @@ test.describe('Mobile location selector', () => {
     await edison.tap();
 
     await expect(page).toHaveURL(/\/edison\?utm_source=paid&utm_campaign=edison$/);
-    await expect(page.locator('.hero .btn-location-lead')).toHaveAttribute(
+    await expect(page.locator('.hero .btn-location-book')).toHaveAttribute(
       'href',
-      'https://www.superchargednj.com/',
+      'https://www.superchargednj.com/book-time-mission/',
     );
     await expect(page.locator('nav .btn-tickets')).toHaveAttribute(
       'href',
-      'https://www.superchargednj.com/?utm_source=paid&utm_campaign=edison',
+      'https://www.superchargednj.com/book-time-mission/?utm_source=paid&utm_campaign=edison',
     );
   });
 });

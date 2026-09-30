@@ -2,6 +2,7 @@
 import { getPublicSiteContract } from '../lib/site-contract';
 import { lazyRuntimeScripts, publicRuntimeScripts, versionedRuntimeSrc } from '../lib/public-runtime-contract';
 import { activeSiteProfile } from '../lib/site-profile';
+import { resolveSiteProfile } from '../../config/site-profiles.mjs';
 
 const siteContract = getPublicSiteContract();
 const formConfig = {
@@ -18,6 +19,8 @@ const publicSiteProfile = {
     locales: activeSiteProfile.locales,
     defaultLocale: activeSiteProfile.defaultLocale,
     localizedRoutes: activeSiteProfile.localizedRoutes,
+    counterpartOrigin: activeSiteProfile.counterpartOrigin,
+    counterpartLocales: resolveSiteProfile({ TM_SITE_PROFILE: activeSiteProfile.id === 'eu' ? 'us' : 'eu' }).locales,
 };
 ---
 

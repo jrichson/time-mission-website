@@ -671,10 +671,26 @@
 
     function scheduleAutoRedirect() {
         var pageLocationSlug = BookingJourney.normalizeLocation((document.body && document.body.dataset.location) || '');
-        if (!pageLocationSlug) return;
-        if (window.location.search.indexOf('book=1') === -1) return;
+        // Briq's hosted links return to our homepage with their widget state.
+        var briqState = /^#bwr=(?:bu\|is\|([^|]+)\|and\|)?o\|is\|true$/.exec(window.location.hash || '');
+        if (!briqState && (!pageLocationSlug || new URLSearchParams(window.location.search).get('book') !== '1')) return;
 
         function doRedirect() {
+            if (briqState) {
+                var records = window.TM && Array.isArray(window.TM.locations) ? window.TM.locations : [];
+                var candidates = records.filter(function (record) {
+                    return record.bookingProvider === 'briq' && record.briqWidget && record.briqWidget.domain
+                        && (!briqState[1] || record.briqWidget.domain === briqState[1]);
+                });
+                // Never guess the venue if a generic provider link is ambiguous.
+                if (candidates.length !== 1) return;
+                var briqSlug = candidates[0].slug || candidates[0].id;
+                if (pageLocationSlug !== briqSlug) {
+                    var destination = BookingJourney.appendTrackingParams('/' + briqSlug + '?book=1', { includeInternal: true });
+                    window.location.assign(window.TMNavigation ? window.TMNavigation.href(destination) : destination);
+                    return;
+                }
+            }
             var loc = getLocation(pageLocationSlug);
             if (BookingJourney.isTemporarilyClosedLocation(loc)) {
                 cleanBookParamFromCurrentUrl();

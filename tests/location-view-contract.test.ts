@@ -89,21 +89,20 @@ describe('Location View contract', () => {
         expect(locationPhoneHref(eindhoven)).toBe('tel:+31408083636');
     });
 
-    it('routes Eindhoven conversion CTAs to its Klaviyo signup form', () => {
+    it('routes Eindhoven booking CTAs to checkout while retaining its signup form', () => {
         const eindhoven = allLocations.find((loc) => loc.id === 'eindhoven');
         if (!eindhoven) throw new Error('Eindhoven location missing');
-        const internalEindhoven = { ...eindhoven, externalUrl: undefined };
+        const internalEindhoven = { ...eindhoven, externalUrl: undefined, bookingUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home' };
 
         expect(locationSignupFormId(eindhoven)).toBe('W5S6At');
         expect(locationCtaView(internalEindhoven)).toEqual({
-            href: '#',
+            href: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
             isBookingTrigger: false,
-            label: 'Sign Up',
-            i18n: 'location.signUp',
-            signupFormId: 'W5S6At',
+            label: 'Book Now',
+            i18n: 'nav.bookNow',
         });
         expect(locationViewModel(internalEindhoven)).toMatchObject({
-            bookLabel: 'Sign Up',
+            bookLabel: 'Book Now',
             signupFormId: 'W5S6At',
         });
     });
@@ -124,12 +123,12 @@ describe('Location View contract', () => {
 
         const view = locationViewModel(edison);
 
-        expect(edison.status).toBe('coming-soon');
-        expect(view.externalUrl).toBe('https://www.superchargednj.com/');
+        expect(edison.status).toBe('open');
+        expect(view.externalUrl).toBe('https://www.superchargednj.com/book-time-mission/');
         expect(view.pageUrl).toBe('/edison');
         expect(view.bookLabel).toBe('Visit Location Site');
         expect(locationCtaView(edison)).toEqual({
-            href: 'https://www.superchargednj.com/',
+            href: 'https://www.superchargednj.com/book-time-mission/',
             isBookingTrigger: false,
             label: 'Visit Location Site',
             i18n: 'location.visitLocationSite',
