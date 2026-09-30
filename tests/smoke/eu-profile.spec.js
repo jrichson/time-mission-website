@@ -3,6 +3,7 @@ const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { prepareSiteSmoke, REPO_ROOT, waitForLanguageRuntime } = require('./site-helpers');
 const pageI18n = require('../../src/data/site/page-i18n.json');
+const { LOCATION_ROUTE_ENTRIES } = require('../../functions/_shared/location-route-manifest.mjs');
 
 const missionAltNames = pageI18n._policy.missionNames;
 const missionDisplayNames = missionAltNames.map((name) => name.toUpperCase());
@@ -227,9 +228,16 @@ test('localized EU mission names and image labels remain in English', async ({ p
 });
 
 test('every localized EU route renders in each enabled language', async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(360_000);
   const expectedRoutes = localizedHtmlRoutes('nl');
-  expect(expectedRoutes).toHaveLength(39);
+  // Venue-prefixed copies of shared pages (e.g. /nl/eindhoven/faq) are rendered too.
+  const venuePaths = LOCATION_ROUTE_ENTRIES.filter((entry) => !entry.externalUrl).map((entry) => entry.canonicalPath);
+  const isVenueCopy = (route) => venuePaths.some((venue) => (
+    route.startsWith(`${venue}/`) && expectedRoutes.includes(route.slice(venue.length))
+  ));
+  const sharedRoutes = expectedRoutes.filter((route) => !isVenueCopy(route));
+  expect(sharedRoutes).toHaveLength(39);
+  expect(expectedRoutes.length).toBeGreaterThan(sharedRoutes.length);
 
   for (const locale of ['nl', 'fr', 'es']) {
     expect(localizedHtmlRoutes(locale)).toEqual(expectedRoutes);

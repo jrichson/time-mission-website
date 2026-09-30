@@ -18,6 +18,10 @@ const routesDocument = JSON.parse(fs.readFileSync(path.join(root, 'src/data/rout
 const locationsDocument = JSON.parse(fs.readFileSync(path.join(root, 'data/locations.json'), 'utf8'));
 const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
 const profile = resolveSiteProfile(process.env);
+const routeManifest = require('../functions/_shared/location-route-manifest.mjs');
+const internalVenuePaths = routeManifest.LOCATION_ROUTE_ENTRIES
+  .filter((entry) => !entry.externalUrl)
+  .map((entry) => entry.canonicalPath.replace(/^\//, ''));
 const externalRouteOutputs = new Set(
   (routesDocument.routes || [])
     .filter((route) => {
@@ -106,6 +110,21 @@ for (const rel of astroRenderedHtml) {
   mustFile(rel);
 }
 
+function isRenderedPage(rel) {
+  return astroRenderedHtml.has(rel) || rel.startsWith('c/') || rel.startsWith('blog/');
+}
+
+// Mirrors materializeLocationPages: shared pages copied under each internal venue path.
+function isMaterializedLocationPage(rel) {
+  const venue = internalVenuePaths.find((venuePath) => rel.startsWith(`${venuePath}/`));
+  if (!venue) return false;
+  const sharedRel = rel.slice(venue.length + 1);
+  const sharedRoute = `/${sharedRel.replace(/\.html$/, '')}`;
+  const prefixable = routeManifest.PREFIXABLE_CANONICAL_PATHS.includes(sharedRoute)
+    || routeManifest.DYNAMIC_SHARED_PREFIXES.some((prefix) => sharedRoute.startsWith(`${prefix}/`));
+  return prefixable && isRenderedPage(sharedRel);
+}
+
 for (const htmlFile of htmlFiles()) {
   const rel = path.relative(distDir, htmlFile).split(path.sep).join('/');
   const segments = rel.split('/');
@@ -119,9 +138,7 @@ for (const htmlFile of htmlFiles()) {
   let baseRel = rel;
   if (localizedRoot) baseRel = 'index.html';
   else if (localizedNested) baseRel = segments.slice(1).join('/');
-  const expected = astroRenderedHtml.has(baseRel)
-    || baseRel.startsWith('c/')
-    || baseRel.startsWith('blog/');
+  const expected = isRenderedPage(baseRel) || isMaterializedLocationPage(baseRel);
   if (!expected) {
     errors.push(`${rel}: unexpected HTML artifact in dist`);
   }

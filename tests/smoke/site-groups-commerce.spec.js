@@ -339,9 +339,9 @@ test('gift card page reflects enabled, paused, and unavailable locations', async
   await expect(redemptionAnswer).toContainText('Gift cards purchased from this location are valid for Time Missions located in these states: AL, GA, FL, IL, IN, KS, MD, MN, MO, NC, TN, VA & WI.');
 
   await page.evaluate(() => window.TM.select('philadelphia'));
-  await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('aria-disabled', 'true');
-  await expect(page.locator('#giftCardLocationHint')).toContainText('not available');
-  await expect(redemptionAnswer).toContainText('Gift cards are not available for Philadelphia yet');
+  await expect(page.locator('#giftCardBuyBtn')).not.toHaveAttribute('aria-disabled', 'true');
+  await expect(page.locator('#giftCardBuyBtn')).toHaveAttribute('href', locationById.get('philadelphia').giftCardUrl);
+  await expect(page.locator('#giftCardLocationHint')).toContainText('Purchasing for Philadelphia');
 
   expect(await page.evaluate(() => window.TMBooking.getDestination({
     kind: 'gift-cards',

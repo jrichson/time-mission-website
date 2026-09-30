@@ -78,6 +78,26 @@ for (const directive of [scriptSrcDirective, scriptElements]) {
   }
 }
 
+// Meta and Google tags load through GTM after consent. Dropping these hosts, or
+// sending a stricter CSP header (browsers enforce header AND meta policies),
+// silently blocks every pixel and conversion event, as on 2026-09-25.
+const directiveTokens = name => (directives.find(d => d.startsWith(name + ' ')) || '').split(/\s+/).slice(1);
+const trackingHosts = {
+  'script-src-elem': ['https://www.googletagmanager.com', 'https://connect.facebook.net'],
+  'connect-src': ['https://www.googletagmanager.com', 'https://www.google-analytics.com', 'https://www.facebook.com', 'https://connect.facebook.net'],
+};
+for (const [directive, hosts] of Object.entries(trackingHosts)) {
+  for (const host of hosts) {
+    if (!directiveTokens(directive).includes(host)) errors.push(`Tracking blocked: ${directive} must allow ${host}`);
+  }
+}
+for (const line of headersContent.split('\n')) {
+  const header = line.match(/^\s*Content-Security-Policy:\s*(.*)$/i);
+  if (header && header[1].split(';').some(d => d.trim() && !d.trim().startsWith('frame-ancestors '))) {
+    errors.push('dist/_headers: only frame-ancestors may be sent as a CSP header; the full policy belongs in the HTML meta tag');
+  }
+}
+
 const scriptHashesInHeader = extractHashes(scriptSrcDirective);
 const styleHashesInHeader = extractHashes(styleSrcDirective);
 
