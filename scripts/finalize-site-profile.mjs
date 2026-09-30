@@ -350,6 +350,8 @@ function writeProfileMarker() {
     turnstileSiteKeyHash: turnstileSiteKey
       ? crypto.createHash('sha256').update(turnstileSiteKey).digest('hex')
       : null,
+    // Set by scripts/release.mjs so post-deploy checks can confirm what is live.
+    commit: String(process.env.TM_RELEASE_COMMIT || '').trim() || null,
   }, null, 2)}\n`);
 }
 

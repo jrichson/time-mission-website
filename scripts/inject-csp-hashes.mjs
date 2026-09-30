@@ -1,4 +1,4 @@
-/** Renders CSP hash placeholders in root and dist _headers files. */
+/** Renders CSP hash placeholders in dist/_headers and, for US builds, the committed root _headers. */
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -81,11 +81,12 @@ for (const line of staticHeaders.split('\n')) {
 }
 fs.mkdirSync(path.join(distDir, 'data'), { recursive: true });
 fs.writeFileSync(path.join(distDir, 'data/content-security-policy.json'), JSON.stringify({ policy }) + '\n');
-fs.writeFileSync(rootHeadersPath, staticHeaders, 'utf8');
 fs.writeFileSync(distHeadersPath, staticHeaders, 'utf8');
 applyStaticSecurity(distDir, policy);
 const staticLocationPages = materializeLocationPages(distDir, routeManifest);
-fs.copyFileSync(distHeadersPath, rootHeadersPath);
+// The committed root _headers mirrors the US artifact only. Other profiles
+// would otherwise leave their origin and hashes in the working tree.
+if (siteProfile.id === 'us') fs.copyFileSync(distHeadersPath, rootHeadersPath);
 console.log(`Materialized ${staticLocationPages} location-prefixed pages without Worker routing.`);
 
 console.log(

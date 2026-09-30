@@ -39,6 +39,7 @@ jobs:
       PAYLOAD_CMS_ORIGIN: https://time-mission-website-production.up.railway.app
       PUBLIC_TM_MEDIA_BASE: ${{ vars.PUBLIC_TM_MEDIA_BASE }}
       TM_SITE_PROFILE: us
+      TM_RELEASE_COMMIT: ${{ github.sha }}
     steps:
       - name: Check out site source
         uses: actions/checkout@v4
@@ -94,6 +95,7 @@ jobs:
       PUBLIC_TM_MEDIA_BASE: ${{ vars.PUBLIC_TM_MEDIA_BASE }}
       TM_REQUIRE_TRANSLATION_APPROVAL: "false"
       TM_SITE_PROFILE: eu
+      TM_RELEASE_COMMIT: ${{ github.sha }}
     steps:
       - name: Check out site source
         uses: actions/checkout@v4
@@ -149,6 +151,7 @@ jobs:
       PUBLIC_TM_MEDIA_BASE: ${{ vars.PUBLIC_TM_MEDIA_BASE }}
       TM_REQUIRE_TRANSLATION_APPROVAL: "false"
       TM_SITE_PROFILE: eu
+      TM_RELEASE_COMMIT: ${{ github.sha }}
     steps:
       - name: Check out site source
         uses: actions/checkout@v4

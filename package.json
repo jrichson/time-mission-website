@@ -63,6 +63,8 @@
     "build:eu:production": "node scripts/build-profile.mjs eu --production",
     "verify:artifact": "node scripts/verify-site-output.mjs --artifact-only",
     "verify:artifact:review": "node scripts/verify-site-output.mjs --artifact-only --no-stamp",
+    "release": "node scripts/release.mjs",
+    "verify:live": "node scripts/verify-live.mjs",
     "deploy:pages": "node scripts/deploy-pages-profile.mjs us --build",
     "deploy:pages:us": "node scripts/deploy-pages-profile.mjs us --build",
     "deploy:pages:eu": "node scripts/deploy-pages-profile.mjs eu --build",

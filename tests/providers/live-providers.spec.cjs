@@ -79,7 +79,9 @@ test('Briq return link opens the correct venue', async ({ page }) => {
   await checkProviderCsp(page);
 });
 
-test('Houston Roller checkout renders', async ({ page }) => {
+test('Houston Roller checkout renders', async ({ page, baseURL }) => {
+  // Roller sends frame-ancestors https:, so its checkout cannot render inside a local http:// server.
+  test.skip(!String(baseURL).startsWith('https://'), 'Roller checkout only frames into HTTPS pages');
   await page.goto('/houston?book=1', { waitUntil: 'domcontentloaded' });
   const frame = page.locator('iframe').filter({ visible: true }).first();
   await expect(frame).toBeVisible();
