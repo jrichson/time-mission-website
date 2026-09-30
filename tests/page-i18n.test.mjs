@@ -204,79 +204,49 @@ describe('page translation catalog', () => {
       .not.toHaveProperty('Where is Time Mission located?');
   });
 
-  it('covers the Houston campaign pages in US Spanish without translating the promo code', () => {
+  it('covers the Houston educator page in US Spanish', () => {
     const translations = pageI18n._profiles.us.translations.es;
-    const preserved = preservedSourceTermsFor(pageI18n, 'es', { profileId: 'us' });
-    const campaignSources = [
-      'School Night Sale | Time Mission Houston',
-      'Get $10 off 90- and 120-minute missions at Time Mission Houston on Sunday evenings and Monday through Thursday through September 30, 2026.',
-      'A group taking on an interactive challenge at Time Mission',
-      'Houston · Through September 30',
-      'School Nights',
-      'Are on Sale',
-      'School is back, but not every school night has to be boring.',
-      'Get $10 off 90 and 120 minute missions at Time Mission Houston on school nights. Sundays after 6PM and all day Monday through Thursday.',
-      'Book with the button below or use code',
-      'SCHOOLNIGHT',
-      '. Runs through September 30.',
-      'Discount valid Sundays from 6PM to close and all day Monday through Thursday, now through September 30, 2026. Valid on 90 and 120 minute sessions only. 60 minute sessions excluded. Not valid Friday or Saturday. Not valid Labor Day weekend, September 5 through September 7. Valid at Time Mission Houston only. Discount applies when you book through this page or enter code SCHOOLNIGHT at checkout. Two ticket minimum. Cannot be combined with other offers, promotions, or discounts. Not valid on gift cards, group bookings, or private events. Subject to availability. Time Mission reserves the right to modify or end this promotion at any time.',
-      'Educators Free Through September 30 | Time Mission Houston',
-      'Houston K-12 educators, administrators, and school staff can claim one free mission at Time Mission Houston through September 30, 2026.',
+    const sources = [
       'Three educators taking on the Control Room challenge at Time Mission',
-      'Houston · Educator Appreciation',
       'Educators Free',
-      'Through Sept 30',
-      "School is back, and you've earned a night that has nothing to do with lesson plans.",
-      "Every educator gets a free mission at Time Mission Houston through September 30. Any session length, any night we're open. Fill out the form below, we'll send you a link with your promo code, and you show your school ID when you check in.",
+      'Now Through Dec 31',
+      "You've earned a night that has nothing to do with lesson plans.",
       'Educator signup form',
-      'One free ticket per educator, valid through September 30, 2026. Valid at Time Mission Houston only. Available to K-12 teachers, administrators, and school staff with a valid school ID. Promo code link is sent by email after signup and must be redeemed by the person named on the signup. Valid school ID required at check-in. Valid any day and any session length, subject to availability. Two ticket minimum applies to all bookings. Cannot be combined with other offers, promotions, or discounts, including the School Night Sale. Not transferable, not redeemable for cash, and no cash value. Time Mission reserves the right to modify or end this promotion at any time.',
     ];
 
-    for (const source of campaignSources) {
+    for (const source of sources) {
       expect(translations[source], source).toBeTypeOf('string');
       expect(translations[source].trim(), source).not.toBe('');
-    }
-    expect(translations['School Night Sale | Time Mission Houston'])
-      .toBe('Oferta para noches escolares | Time Mission Houston');
-    expect(translations.SCHOOLNIGHT).toBe('SCHOOLNIGHT');
-    for (const source of campaignSources) {
-      expect(preserved.has(source), source).toBe(source === 'SCHOOLNIGHT');
-    }
-    for (const source of campaignSources.filter((entry) => entry !== 'SCHOOLNIGHT')) {
       expect(translations[source], source).not.toBe(source);
+    }
+    expect(translations['Now Through Dec 31']).toBe('Hasta el 31 de diciembre');
+    for (const retired of ['School Night Sale | Time Mission Houston', 'SCHOOLNIGHT', 'Through Sept 30']) {
+      expect(translations, retired).not.toHaveProperty(retired);
     }
   });
 
-  it('covers every TM Ops educator page in US Spanish', () => {
+  it('covers every shared educator page in US Spanish', () => {
     const translations = pageI18n._profiles.us.translations.es;
 
-    for (const locationName of ['Manassas', 'Mount Prospect', 'Orland Park']) {
+    for (const locationName of ['Houston', 'Philadelphia', 'Manassas', 'Mount Prospect', 'Orland Park']) {
       const sources = [
-        `Educators Free Through September 30 | Time Mission ${locationName}`,
-        `${locationName} K-12 educators, administrators, and school staff can claim one free mission at Time Mission ${locationName} through September 30, 2026.`,
+        `Educators Free Through December 31 | Time Mission ${locationName}`,
+        `${locationName} K-12 educators, administrators, and school staff can claim one free mission at Time Mission ${locationName} through December 31, 2026.`,
         `${locationName} · Educator Appreciation`,
-        `Every educator gets a free mission at Time Mission ${locationName} through September 30. Any session length, any night we're open. Fill out the form below, we'll send you a link with your promo code, and you show your school ID when you check in.`,
-        `One free ticket per educator, valid through September 30, 2026. Valid at Time Mission ${locationName} only. Available to K-12 teachers, administrators, and school staff with a valid school ID. Promo code link is sent by email after signup and must be redeemed by the person named on the signup. Valid school ID required at check-in. Valid any day and any session length, subject to availability. Two ticket minimum applies to all bookings. Cannot be combined with other offers, promotions, or discounts, including the School Night Sale. Not transferable, not redeemable for cash, and no cash value. Time Mission reserves the right to modify or end this promotion at any time.`,
+        `Every educator gets a free mission at Time Mission ${locationName}, now extended through December 31. Any session length, any night we're open. Limit one free educator ticket per purchase. Fill out the form below, we'll send you a link with your promo code, and you show your school ID when you check in.`,
+        `One free ticket per educator, valid through December 31, 2026. Limit one free educator ticket per purchase. Valid at Time Mission ${locationName} only. Available to K-12 teachers, administrators, and school staff with a valid school ID. Promo code link is sent by email after signup and must be redeemed by the person named on the signup. Valid school ID required at check-in. Valid any day and any session length, subject to availability. Two ticket minimum applies to all bookings. Cannot be combined with other offers, promotions, or discounts. Not transferable, not redeemable for cash, and no cash value. Time Mission reserves the right to modify or end this promotion at any time.`,
       ];
 
       for (const source of sources) {
         expect(translations[source], source).toBeTypeOf('string');
         expect(translations[source].trim(), source).not.toBe('');
         expect(translations[source], source).not.toBe(source);
+        expect(translations[source], source).not.toContain('30 de septiembre');
       }
     }
   });
 
-  it('covers the school-night and Brussels sale routes in every published language', () => {
-    for (const locationSlug of ['manassas', 'mount-prospect', 'orland-park']) {
-      const translations = pageTranslationsFor(pageI18n, 'es', {
-        canonicalPath: `/${locationSlug}/school-night`,
-        profileId: 'us',
-      });
-      expect(translations['20% Off']).toBe('20 % de descuento');
-      expect(translations['School Night Sale']).toBe('Oferta para noches escolares');
-    }
-
+  it('covers the Brussels sale route in every published language', () => {
     for (const locale of ['nl', 'fr', 'es']) {
       const translations = pageTranslationsFor(pageI18n, locale, {
         canonicalPath: '/brussels/back-to-school-sale',

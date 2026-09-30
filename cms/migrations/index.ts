@@ -1,3 +1,5 @@
+import * as migration_20260930_100000_school_night_retirement from './20260930_100000_school_night_retirement';
+import * as migration_20260930_090000_educators_december_extension from './20260930_090000_educators_december_extension';
 import * as migration_20260925_090000_eindhoven_checkout from './20260925_090000_eindhoven_checkout';
 import * as migration_20260918_100000_edison_now_open from './20260918_100000_edison_now_open';
 import * as migration_20260918_090000_edison_booking from './20260918_090000_edison_booking';
@@ -351,4 +353,14 @@ export const migrations = [
     name: '20260918_100000_edison_now_open'
   },
   { up: migration_20260925_090000_eindhoven_checkout.up, down: migration_20260925_090000_eindhoven_checkout.down, name: '20260925_090000_eindhoven_checkout' },
+  {
+    up: migration_20260930_090000_educators_december_extension.up,
+    down: migration_20260930_090000_educators_december_extension.down,
+    name: '20260930_090000_educators_december_extension'
+  },
+  {
+    up: migration_20260930_100000_school_night_retirement.up,
+    down: migration_20260930_100000_school_night_retirement.down,
+    name: '20260930_100000_school_night_retirement'
+  },
 ];

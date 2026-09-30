@@ -30,6 +30,7 @@ import { BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT } from '../cms/migration-data/202
 import { BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT } from '../cms/migration-data/20260902_brussels_back_to_school_sale_snapshot';
 import { MOUNT_PROSPECT_ORLAND_PARK_NOON_HOURS_SNAPSHOT } from '../cms/migration-data/20260907_mount_prospect_orland_park_noon_hours_snapshot';
 import { US_SCHOOL_NIGHT_PAGE_SNAPSHOT } from '../cms/migration-data/20260908_school_night_promotions_snapshot';
+import { EDUCATORS_DECEMBER_EXTENSION_PAGE_SNAPSHOT } from '../cms/migration-data/20260930_educators_december_extension_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -211,8 +212,11 @@ describe('live-site-to-CMS sync snapshot', () => {
                 .map((page) => [page.path, page]),
         );
         const pressSeoByPath = new Map(PRESS_SEO_SNAPSHOT.map((page) => [page.path, page]));
+        const educatorExtensionByPath = new Map(EDUCATORS_DECEMBER_EXTENSION_PAGE_SNAPSHOT.map((page) => [page.path, page]));
         const effectiveSnapshot = expected.map(({ path: routePath }) => {
-            const page = pageSnapshotByPath.get(routePath);
+            const snapshotPage = pageSnapshotByPath.get(routePath);
+            const educatorExtension = educatorExtensionByPath.get(routePath);
+            const page = snapshotPage && educatorExtension ? { ...snapshotPage, ...educatorExtension } : snapshotPage;
             const pressSeo = pressSeoByPath.get(routePath);
             if (page && pressSeo) {
                 return {

@@ -11,22 +11,28 @@ function read(relativePath) {
 }
 
 describe('location campaign pages', () => {
-  it('keeps the corrected School Night offer and coded checkout destination', () => {
-    const page = read('src/pages/houston/school-night.astro');
+  it('retires every School Night page to its location homepage', () => {
+    const routes = JSON.parse(read('src/data/routes.json'));
+    const redirects = read('_redirects');
+    const retirement = read('cms/migrations/20260930_100000_school_night_retirement.ts');
+    const snapshot = read('cms/migration-data/20260930_educators_december_extension_snapshot.ts');
 
-    expect(page).toContain('Get $10 off 90 and 120 minute missions');
-    expect(page).toContain('Valid on 90 and 120 minute sessions only. 60 minute sessions excluded.');
-    expect(page).toContain('Not valid Labor Day weekend, September 5 through September 7.');
-    expect(page).toContain('https://ecom.roller.app/TimeMissionHouston/onlinecheckout/en-US/products?code=SCHOOLNIGHT');
-    expect(page).toContain('href={bookingUrl}');
-    expect(page).not.toContain('data-tm-booking-trigger');
-    expect(page).not.toContain('data-tm-booking-presentation="roller"');
-    expect(page).not.toContain('data-tm-booking-url={bookingUrl}');
-    expect(page).toContain('data-tm-promo-cta="school_night_book_now"');
-    expect(page).toContain('/js/page-houston-promo-after.js?v=3');
-    expect(page).not.toContain('imagePending');
-    expect(page).not.toContain('up to $15 off');
-    expect(page).not.toContain('60 minutes is $29.95');
+    for (const locationSlug of ['houston', 'manassas', 'mount-prospect', 'orland-park']) {
+      expect(fs.existsSync(path.join(root, `src/pages/${locationSlug}/school-night.astro`))).toBe(false);
+      expect(routes.routes.some((route) => route.canonicalPath === `/${locationSlug}/school-night`)).toBe(false);
+      for (const source of [
+        `/${locationSlug}/school-night`,
+        `/${locationSlug}/school-night.html`,
+        `/${locationSlug}/promos/school-night`,
+        `/${locationSlug}/promos/school-night.html`,
+      ]) {
+        expect(routes.aliases).toContainEqual({ source, target: `/${locationSlug}`, status: 301 });
+        expect(redirects).toContain(`${source} /${locationSlug} 301\n`);
+      }
+      expect(snapshot).toContain(`'/${locationSlug}/school-night'`);
+    }
+    expect(retirement).toContain('SET "published" = false');
+    expect(retirement).toContain('WHERE "link_url" = ${path}');
   });
 
   it('publishes the educator copy, supplied image, and Klaviyo embed', () => {
@@ -41,7 +47,12 @@ describe('location campaign pages', () => {
     expect(shell).toContain('canonicalPath: `/${locationSlug}/educators`');
     expect(shell).toContain('bodyDataLocation={locationSlug}');
     expect(template).toContain('<span>Educators Free</span>');
-    expect(template).toContain('<span>Through Sept 30</span>');
+    expect(template).toContain('<span>Now Through Dec 31</span>');
+    expect(template).toContain('now extended through December 31');
+    expect(template).toContain('Limit one free educator ticket per purchase.');
+    expect(template).toContain('valid through December 31, 2026');
+    expect(template).not.toContain('September 30');
+    expect(template).not.toContain('School Night');
     expect(template).toContain('Every educator gets a free mission');
     expect(template).toContain('class={`klaviyo-form-${formId}`}');
     expect(template).toContain('data-tm-form-name="educator_appreciation"');
@@ -94,43 +105,6 @@ describe('location campaign pages', () => {
     expect(page).toContain(`formId="${formId}"`);
     expect(page).toContain(`locationName="${locationName}"`);
     expect(page).toContain(`locationSlug="${locationSlug}"`);
-  });
-
-  it.each([
-    {
-      checkout: 'https://ecom.roller.app/TimeMissionManassasMall/onlinecheckout/en-US/products?code=SCHOOLNIGHT',
-      locationName: 'Manassas',
-      locationSlug: 'manassas',
-    },
-    {
-      checkout: 'https://ecom.roller.app/TimeMissionMountProspect/onlinecheckout/en-US/products?code=SCHOOLNIGHT',
-      locationName: 'Mount Prospect',
-      locationSlug: 'mount-prospect',
-    },
-    {
-      checkout: 'https://ecom.roller.app/TimeMissionOrlandPark/onlinecheckout/en-US/products?code=SCHOOLNIGHT',
-      locationName: 'Orland Park',
-      locationSlug: 'orland-park',
-    },
-  ])('publishes the $locationName 20% school-night offer and coded checkout', ({
-    checkout,
-    locationName,
-    locationSlug,
-  }) => {
-    const page = read(`src/pages/${locationSlug}/school-night.astro`);
-    const shell = read('src/components/LocationPromotionPage.astro');
-
-    expect(page).toContain(`bookingUrl="${checkout}"`);
-    expect(page).toContain(`locationName="${locationName}"`);
-    expect(page).toContain(`locationSlug="${locationSlug}"`);
-    expect(page).toContain(`Get 20% OFF 90 and 120 minute missions at Time Mission ${locationName}`);
-    expect(page).not.toContain('20% OFF off');
-    expect(shell).toContain('data-tm-promo-cta={ctaId}');
-    expect(shell).toContain('href={bookingUrl}');
-    expect(shell).toContain("bookingPresentation = 'roller'");
-    expect(shell).toContain("'data-tm-booking-trigger': ''");
-    expect(shell).toContain("'data-tm-booking-presentation': 'roller'");
-    expect(shell).toContain("'data-tm-booking-url': bookingUrl");
   });
 
   it('publishes the Brussels weekday offer and exact SCHOOL20 checkout', () => {

@@ -287,18 +287,6 @@
       "status": 301
     },
     {
-      "id": "houston-school-night",
-      "canonicalPath": "/houston/school-night",
-      "redirectSources": [
-        "/houston/school-night.html",
-        "/houston/promos/school-night",
-        "/houston/promos/school-night.html"
-      ],
-      "outputFile": "houston/school-night.html",
-      "sitemap": true,
-      "status": 301
-    },
-    {
       "id": "houston-educators",
       "canonicalPath": "/houston/educators",
       "redirectSources": [
@@ -343,18 +331,6 @@
         "/mount-prospect/teachers.html"
       ],
       "outputFile": "mount-prospect/educators.html",
-      "sitemap": true,
-      "status": 301
-    },
-    {
-      "id": "mount-prospect-school-night",
-      "canonicalPath": "/mount-prospect/school-night",
-      "redirectSources": [
-        "/mount-prospect/school-night.html",
-        "/mount-prospect/promos/school-night",
-        "/mount-prospect/promos/school-night.html"
-      ],
-      "outputFile": "mount-prospect/school-night.html",
       "sitemap": true,
       "status": 301
     },
@@ -411,18 +387,6 @@
       "status": 301
     },
     {
-      "id": "manassas-school-night",
-      "canonicalPath": "/manassas/school-night",
-      "redirectSources": [
-        "/manassas/school-night.html",
-        "/manassas/promos/school-night",
-        "/manassas/promos/school-night.html"
-      ],
-      "outputFile": "manassas/school-night.html",
-      "sitemap": true,
-      "status": 301
-    },
-    {
       "id": "antwerp",
       "canonicalPath": "/antwerp",
       "locationAlternate": "experience-factory-antwerp",
@@ -456,18 +420,6 @@
         "/orland-park/teachers.html"
       ],
       "outputFile": "orland-park/educators.html",
-      "sitemap": true,
-      "status": 301
-    },
-    {
-      "id": "orland-park-school-night",
-      "canonicalPath": "/orland-park/school-night",
-      "redirectSources": [
-        "/orland-park/school-night.html",
-        "/orland-park/promos/school-night",
-        "/orland-park/promos/school-night.html"
-      ],
-      "outputFile": "orland-park/school-night.html",
       "sitemap": true,
       "status": 301
     },
@@ -891,6 +843,86 @@
     {
       "source": "/houston/world-cup.html",
       "target": "/houston/spinandscore/rules",
+      "status": 301
+    },
+    {
+      "source": "/houston/school-night",
+      "target": "/houston",
+      "status": 301
+    },
+    {
+      "source": "/houston/school-night.html",
+      "target": "/houston",
+      "status": 301
+    },
+    {
+      "source": "/houston/promos/school-night",
+      "target": "/houston",
+      "status": 301
+    },
+    {
+      "source": "/houston/promos/school-night.html",
+      "target": "/houston",
+      "status": 301
+    },
+    {
+      "source": "/mount-prospect/school-night",
+      "target": "/mount-prospect",
+      "status": 301
+    },
+    {
+      "source": "/mount-prospect/school-night.html",
+      "target": "/mount-prospect",
+      "status": 301
+    },
+    {
+      "source": "/mount-prospect/promos/school-night",
+      "target": "/mount-prospect",
+      "status": 301
+    },
+    {
+      "source": "/mount-prospect/promos/school-night.html",
+      "target": "/mount-prospect",
+      "status": 301
+    },
+    {
+      "source": "/manassas/school-night",
+      "target": "/manassas",
+      "status": 301
+    },
+    {
+      "source": "/manassas/school-night.html",
+      "target": "/manassas",
+      "status": 301
+    },
+    {
+      "source": "/manassas/promos/school-night",
+      "target": "/manassas",
+      "status": 301
+    },
+    {
+      "source": "/manassas/promos/school-night.html",
+      "target": "/manassas",
+      "status": 301
+    },
+    {
+      "source": "/orland-park/school-night",
+      "target": "/orland-park",
+      "status": 301
+    },
+    {
+      "source": "/orland-park/school-night.html",
+      "target": "/orland-park",
+      "status": 301
+    },
+    {
+      "source": "/orland-park/promos/school-night",
+      "target": "/orland-park",
+      "status": 301
+    },
+    {
+      "source": "/orland-park/promos/school-night.html",
+      "target": "/orland-park",
       "status": 301
     }
   ]
