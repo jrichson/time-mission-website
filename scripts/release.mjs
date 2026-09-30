@@ -55,7 +55,7 @@ function step(message) {
 }
 
 function capture(command, args, options = {}) {
-  const result = spawnSync(command, args, { cwd: options.cwd || root, encoding: 'utf8', env: options.env || process.env });
+  const result = spawnSync(command, args, { cwd: options.cwd || root, encoding: 'utf8' });
   return { status: result.status, stdout: String(result.stdout || '').trimEnd(), stderr: String(result.stderr || '').trim() };
 }
 
@@ -98,25 +98,26 @@ function railwayDeployments(cwd) {
   return JSON.parse(result.stdout.slice(result.stdout.indexOf('[')));
 }
 
-async function deployCms(worktree) {
-  const knownIds = new Set(railwayDeployments(worktree).map((deployment) => deployment.id));
-  // The service builds from its cms/ root directory, so upload the repository root.
-  run('railway', ['up', '--ci', ...railwayArgs()], { cwd: worktree });
-
+async function waitForCmsDeployment(worktree, knownIds) {
   const deadline = Date.now() + 15 * 60_000;
   while (Date.now() < deadline) {
     const deployment = newestRailwayDeployment(railwayDeployments(worktree), knownIds);
-    if (deployment?.status === 'SUCCESS') {
-      console.log(`CMS deployment ${deployment.id} is live.`);
-      break;
-    }
+    if (deployment?.status === 'SUCCESS') return deployment;
     if (deployment && RAILWAY_TERMINAL_FAILURES.has(deployment.status)) {
       throw new Error(`CMS deployment ${deployment.id} ended ${deployment.status}. The previous CMS is still serving; check Railway logs.`);
     }
     console.log(`Waiting for the CMS to start and run migrations (${deployment?.status || 'queued'})...`);
     await new Promise((resolve) => setTimeout(resolve, 15_000));
   }
-  if (Date.now() >= deadline) throw new Error('Timed out waiting for the CMS deployment to finish.');
+  throw new Error('Timed out waiting for the CMS deployment to finish.');
+}
+
+async function deployCms(worktree) {
+  const knownIds = new Set(railwayDeployments(worktree).map((deployment) => deployment.id));
+  // The service builds from its cms/ root directory, so upload the repository root.
+  run('railway', ['up', '--ci', ...railwayArgs()], { cwd: worktree });
+  const deployment = await waitForCmsDeployment(worktree, knownIds);
+  console.log(`CMS deployment ${deployment.id} is live.`);
 
   const response = await fetch(`${CMS_PRODUCTION.origin}/api/site-pages?limit=1&depth=0`, {
     signal: AbortSignal.timeout(30_000),

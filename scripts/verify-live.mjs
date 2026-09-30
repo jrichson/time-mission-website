@@ -59,18 +59,12 @@ async function fetchText(url, attempts = 3) {
 }
 
 async function servedCommit(origin) {
-  let response;
-  let text;
   try {
-    ({ response, text } = await fetchText(`${origin}/data/site-profile.json?ts=${Date.now()}`));
+    const { response, text } = await fetchText(`${origin}/data/site-profile.json?ts=${Date.now()}`);
+    if (!response.ok) return { error: `site-profile.json returned ${response.status}` };
+    return { marker: JSON.parse(text) };
   } catch (error) {
     return { error: error.message };
-  }
-  if (!response.ok) return { error: `site-profile.json returned ${response.status}` };
-  try {
-    return { marker: JSON.parse(text) };
-  } catch {
-    return { error: 'site-profile.json is not JSON' };
   }
 }
 
@@ -94,7 +88,7 @@ async function checkProfile(profileId) {
   const problems = [];
   if (expectedCommit) problems.push(...(await waitForCommit(profile.origin, expectedCommit)));
 
-  for (const pagePath of SAMPLE_PATHS[profileId] || ['/']) {
+  for (const pagePath of SAMPLE_PATHS[profileId]) {
     let response;
     let text;
     try {
