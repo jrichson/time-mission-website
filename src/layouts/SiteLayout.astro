@@ -181,8 +181,8 @@ const rendersGtmNoscript = activeSiteProfile.consentProfile === 'us_open' && Boo
         <SiteScripts />
         {activeSiteProfile.id === 'us' && pageLocation?.slug === 'houston' && (
             <>
-                <script is:inline src="/js/roller-guest-agent-config.js?v=2"></script>
-                <script is:inline async src="https://cdn.rollerdigital.com/scripts/guest-agent/v1/widget.js"></script>
+                <script is:inline src="/js/roller-guest-agent-config.js?v=3"></script>
+                <script is:inline async src="https://cdn.rollerdigital.com/scripts/guest-agent/v2/widget.js"></script>
             </>
         )}
         <slot name="after-site-scripts" />
