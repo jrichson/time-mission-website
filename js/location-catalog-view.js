@@ -68,6 +68,14 @@
             window._klOnsite = window._klOnsite || [];
             window._klOnsite.push(['openForm', formId]);
             ensureKlaviyoOnsiteScript(formId);
+            // Klaviyo will not reopen a popup the visitor already closed, so also
+            // bring the on-page embed into view when the page has one.
+            var signupEmbed = isEindhovenForm && typeof document.getElementById === 'function'
+                ? document.getElementById('signup')
+                : null;
+            if (signupEmbed && typeof signupEmbed.scrollIntoView === 'function') {
+                signupEmbed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         });
     }
 

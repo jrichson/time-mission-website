@@ -119,11 +119,14 @@ describe('browser location state contracts', () => {
     window.location.pathname = pathname;
     window.location.assign = (url) => { destination = url; };
     document.head = { appendChild(script) { return script; } };
+    const scrolls = [];
+    document.getElementById = (id) => (id === 'signup' ? { scrollIntoView: (opts) => scrolls.push(opts) } : null);
     runScript('js/booking-journey.js', context);
     runScript('js/location-catalog-view.js', context);
     document.dispatchEvent({ type: 'click', target: trigger, preventDefault() {} });
     expect(destination).toBeUndefined();
     expect(window._klOnsite).toHaveLength(1);
+    expect(scrolls).toEqual([{ behavior: 'smooth', block: 'start' }]);
   });
 
   it('homepage clears stale saved location instead of restoring it on hard refresh', async () => {
