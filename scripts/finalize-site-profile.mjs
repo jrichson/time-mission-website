@@ -180,8 +180,8 @@ function localizeHtml(source, route, locale) {
     )
     .replace(/(<meta property="og:url" content=")[^"]*(">)/i, `$1${canonicalUrl}$2`);
 
-  // Eindhoven uses a separate Klaviyo embed for the Dutch signup page.
-  if (route.canonicalPath === '/eindhoven/signup' && locale === 'nl') {
+  // Eindhoven uses a separate Klaviyo embed for the Dutch location and signup pages.
+  if ((route.canonicalPath === '/eindhoven/signup' || route.canonicalPath === '/eindhoven') && locale === 'nl') {
     html = html
       .replace('data-tm-klaviyo-form-id="XDPbDT"', 'data-tm-klaviyo-form-id="TsDm2K"')
       .replace(

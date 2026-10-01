@@ -101,6 +101,20 @@ if (slug === 'eindhoven' && isBookable) {
         comingSoonMain = comingSoonMain.slice(0, finalCtaStart) + finalCta;
     }
 }
+// Eindhoven shows the signup embed on the page as well as the CTA popup.
+// finalize-site-profile swaps in the Dutch embed for /nl.
+if (slug === 'eindhoven' && hasSignupForm) {
+    const signupEmbed = `
+    <section class="welcome" id="signup" data-tm-form-name="eindhoven_signup" data-tm-klaviyo-form-id="XDPbDT">
+        <div class="welcome-content">
+            <div class="section-badge" data-i18n="location.signUp">Sign Up</div>
+            <div class="klaviyo-form-XDPbDT"></div>
+        </div>
+        <script async src="https://static.klaviyo.com/onsite/js/YccPJs/klaviyo.js?company_id=YccPJs"></script>
+    </section>
+`;
+    comingSoonMain = comingSoonMain.replace('    <!-- Welcome Section -->', `${signupEmbed}\n    <!-- Welcome Section -->`);
+}
 comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_LABEL', primaryCtaLabel);
 comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_HREF', primaryCtaHref);
 comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_CLASS', primaryCtaClass);

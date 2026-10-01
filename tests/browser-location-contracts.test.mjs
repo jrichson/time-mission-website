@@ -66,6 +66,8 @@ describe('browser location state contracts', () => {
   });
 
   it.each([
+    ['/eindhoven', 'W5S6At'],
+    ['/nl/eindhoven', 'VNjiQj'],
     ['/eindhoven/signup', 'W5S6At'],
     ['/nl/eindhoven/signup', 'VNjiQj'],
     ['/nl/eindhoven/signup/', 'VNjiQj'],
@@ -107,10 +109,7 @@ describe('browser location state contracts', () => {
     });
   });
 
-  it.each([
-    ['/eindhoven', '/eindhoven/signup'],
-    ['/nl/eindhoven', '/nl/eindhoven/signup'],
-  ])('routes Eindhoven signup from %s to its language page', (pathname, expected) => {
+  it.each(['/eindhoven', '/nl/eindhoven'])('opens the Eindhoven popup in place on %s', (pathname) => {
     const trigger = createAnchor('#', {
       attrs: { 'data-tm-klaviyo-form-trigger': 'W5S6At' },
       closestSelectors: ['[data-tm-klaviyo-form-trigger]'],
@@ -119,11 +118,12 @@ describe('browser location state contracts', () => {
     let destination;
     window.location.pathname = pathname;
     window.location.assign = (url) => { destination = url; };
+    document.head = { appendChild(script) { return script; } };
     runScript('js/booking-journey.js', context);
     runScript('js/location-catalog-view.js', context);
     document.dispatchEvent({ type: 'click', target: trigger, preventDefault() {} });
-    expect(destination).toBe(expected);
-    expect(window._klOnsite).toBeUndefined();
+    expect(destination).toBeUndefined();
+    expect(window._klOnsite).toHaveLength(1);
   });
 
   it('homepage clears stale saved location instead of restoring it on hard refresh', async () => {

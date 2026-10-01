@@ -65,11 +65,6 @@
                     ? EINDHOVEN_KLAVIYO_DUTCH_FORM_ID
                     : EINDHOVEN_KLAVIYO_FORM_ID;
             }
-            if (isEindhovenForm && !/\/eindhoven\/signup(?:\.html)?\/?$/.test(window.location.pathname)) {
-                var localePrefix = window.location.pathname.match(/^\/(nl|fr|es)(?:\/|$)/);
-                window.location.assign((localePrefix ? '/' + localePrefix[1] : '') + '/eindhoven/signup');
-                return;
-            }
             window._klOnsite = window._klOnsite || [];
             window._klOnsite.push(['openForm', formId]);
             ensureKlaviyoOnsiteScript(formId);
