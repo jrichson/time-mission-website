@@ -30,7 +30,7 @@
 
         .contact-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 3.5rem;
             min-width: 0;
         }
@@ -42,7 +42,7 @@
             border-radius: 20px;
             padding: clamp(2rem, 4vw, 2.75rem);
             min-width: 0;
-            overflow-x: clip;
+            container-type: inline-size;
         }
 
         .contact-form-card h2 {
@@ -65,11 +65,13 @@
 
         .form-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 1rem;
+            min-width: 0;
         }
 
         .form-group {
+            min-width: 0;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
@@ -90,6 +92,9 @@
         .form-group input,
         .form-group select,
         .form-group textarea {
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
             padding: 1rem 1.25rem;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -169,6 +174,7 @@
 
         /* Location Cards */
         .locations-info {
+            min-width: 0;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
@@ -242,6 +248,8 @@
         }
 
         .contact-info-item a {
+            min-width: 0;
+            overflow-wrap: anywhere;
             color: var(--white-soft);
             text-decoration: none;
             transition: color 0.3s ease;
@@ -275,6 +283,12 @@
             letter-spacing: 0.02em;
             margin-bottom: 1rem;
             color: var(--orange);
+        }
+
+        @container (max-width: 28rem) {
+            .form-row {
+                grid-template-columns: minmax(0, 1fr);
+            }
         }
 
         /* Mobile Responsive */

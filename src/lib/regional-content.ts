@@ -1,7 +1,7 @@
 import type { SiteProfile } from './site-profile';
 
 export function regionalCorporateContactEmail(profile: SiteProfile): string {
-    return profile.id === 'eu' ? 'info@timemission.eu' : 'info@timemission.com';
+    return profile.id === 'eu' ? 'info@timemission.eu' : 'sales@timemission.com';
 }
 
 export function applyRegionalContentTokens(source: string, profile: SiteProfile): string {

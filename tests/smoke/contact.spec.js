@@ -175,3 +175,27 @@ test('contact form focus queues CONTACT_FORM_FOCUS in dataLayer', async ({ page 
   });
   expect(found).toBe(true);
 });
+
+
+test('contact form fields fit their card across screen sizes', async ({ page }) => {
+  await page.goto('/contact');
+  for (const width of [320, 375, 480, 768, 900, 901, 1024, 1280, 1440, 1920]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.locator('#location').selectOption('mount-prospect');
+    await page.locator('#subject').selectOption('corporate');
+    const layout = await page.locator('form.contact-form').evaluate((form) => {
+      const bounds = form.getBoundingClientRect();
+      const fields = [...form.querySelectorAll('input:not([type="hidden"]):not([name="bot-field"]), select, textarea')];
+      return {
+        width: form.clientWidth,
+        scrollWidth: form.scrollWidth,
+        overflowing: fields.filter((field) => {
+          const rect = field.getBoundingClientRect();
+          return rect.left < bounds.left - 1 || rect.right > bounds.right + 1;
+        }).map((field) => field.id),
+      };
+    });
+    expect(layout.overflowing, `Overflowing fields at ${width}px`).toEqual([]);
+    expect(layout.scrollWidth, `Form overflow at ${width}px`).toBeLessThanOrEqual(layout.width + 1);
+  }
+});
