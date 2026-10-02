@@ -1,3 +1,4 @@
+import { SCOTTSDALE_LOCATION_SNAPSHOT, SCOTTSDALE_PAGE_SNAPSHOT } from '../cms/migration-data/20261001_scottsdale_snapshot';
 import { EINDHOVEN_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20260925_eindhoven_checkout_snapshot';
 import { EDISON_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260918_edison_now_open_snapshot';
 import { EDISON_BOOKING_SNAPSHOT } from '../cms/migration-data/20260918_edison_booking_snapshot';
@@ -95,7 +96,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 MOUNT_PROSPECT_ORLAND_PARK_NOON_HOURS_SNAPSHOT.weekdayHours,
             ]),
         );
-        const effectiveSnapshot = LIVE_SITE_LOCATION_SNAPSHOT.map((location) => {
+        const effectiveSnapshot = [...LIVE_SITE_LOCATION_SNAPSHOT, SCOTTSDALE_LOCATION_SNAPSHOT].map((location) => {
             const patch = operationalPatches.get(location.slug);
             const operationalLocation = patch ? {
                 ...location,
@@ -197,6 +198,7 @@ describe('live-site-to-CMS sync snapshot', () => {
         const pageSnapshotByPath = new Map(
             [
                 ...LIVE_SITE_PAGE_SNAPSHOT,
+                SCOTTSDALE_PAGE_SNAPSHOT,
                 EDISON_NOW_OPEN_SNAPSHOT.page,
                 ...HOUSTON_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 PHILADELPHIA_EDUCATORS_PAGE_SNAPSHOT,

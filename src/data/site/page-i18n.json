@@ -107,7 +107,10 @@
         "youronlinechoices.eu",
         "Time Mission Eindhoven",
         "STOP",
-        "HELP"
+        "HELP",
+        "AZ",
+        "AZ – Scottsdale",
+        "Scottsdale"
       ],
       "nl": [
         "\"Fantastisch concept! De hele familie was meteen verslaafd aan de uitdagingen. Er is echt niets vergelijkbaars in Antwerpen. Absolute aanrader!\"",
@@ -1393,7 +1396,10 @@
       "BOOK AHEAD": "BOEK VOORUIT",
       "Eindhoven opens October 16. Online booking is available now, so use Book Now to choose your date and time through our secure checkout.": "Eindhoven opent op 16 oktober. Je kunt nu online boeken. Kies via Boek nu je datum en tijd in onze beveiligde checkout.",
       "Eindhoven opens October 16. Choose your date, rally your team, and get ready to play.": "Eindhoven opent op 16 oktober. Kies je datum, verzamel je team en maak je klaar om te spelen.",
-      "Eindhoven — 25+ Interactive Mission Rooms Opening October 16.": "Eindhoven — 25+ interactieve missiekamers. Opening op 16 oktober."
+      "Eindhoven — 25+ Interactive Mission Rooms Opening October 16.": "Eindhoven — 25+ interactieve missiekamers. Opening op 16 oktober.",
+      "AZ – Scottsdale": "AZ – Scottsdale",
+      "15745 Hayden Rd, Scottsdale, AZ 85260, United States": "15745 Hayden Rd, Scottsdale, AZ 85260, Verenigde Staten",
+      "AZ": "AZ"
     },
     "fr": {
       ", then lets those teams compete across": ", puis permet à ces équipes de s'affronter",
@@ -2590,7 +2596,10 @@
       "BOOK AHEAD": "RÉSERVEZ À L’AVANCE",
       "Eindhoven opens October 16. Online booking is available now, so use Book Now to choose your date and time through our secure checkout.": "Eindhoven ouvre le 16 octobre. La réservation en ligne est disponible. Cliquez sur Réserver pour choisir votre date et votre horaire via notre paiement sécurisé.",
       "Eindhoven opens October 16. Choose your date, rally your team, and get ready to play.": "Eindhoven ouvre le 16 octobre. Choisissez votre date, rassemblez votre équipe et préparez-vous à jouer.",
-      "Eindhoven — 25+ Interactive Mission Rooms Opening October 16.": "Eindhoven — Plus de 25 salles de mission interactives. Ouverture le 16 octobre."
+      "Eindhoven — 25+ Interactive Mission Rooms Opening October 16.": "Eindhoven — Plus de 25 salles de mission interactives. Ouverture le 16 octobre.",
+      "AZ – Scottsdale": "AZ – Scottsdale",
+      "15745 Hayden Rd, Scottsdale, AZ 85260, United States": "15745 Hayden Rd, Scottsdale, AZ 85260, États-Unis",
+      "AZ": "AZ"
     },
     "es": {
       ", then lets those teams compete across": ", luego permite que esos equipos compitan en",
@@ -3787,7 +3796,10 @@
       "BOOK AHEAD": "RESERVA CON ANTELACIÓN",
       "Eindhoven opens October 16. Online booking is available now, so use Book Now to choose your date and time through our secure checkout.": "Eindhoven abre el 16 de octubre. Ya puedes reservar en línea. Usa Reservar para elegir la fecha y la hora mediante nuestro pago seguro.",
       "Eindhoven opens October 16. Choose your date, rally your team, and get ready to play.": "Eindhoven abre el 16 de octubre. Elige la fecha, reúne a tu equipo y prepárate para jugar.",
-      "Eindhoven — 25+ Interactive Mission Rooms Opening October 16.": "Eindhoven — Más de 25 salas de misión interactivas. Apertura el 16 de octubre."
+      "Eindhoven — 25+ Interactive Mission Rooms Opening October 16.": "Eindhoven — Más de 25 salas de misión interactivas. Apertura el 16 de octubre.",
+      "AZ – Scottsdale": "AZ – Scottsdale",
+      "15745 Hayden Rd, Scottsdale, AZ 85260, United States": "15745 Hayden Rd, Scottsdale, AZ 85260, Estados Unidos",
+      "AZ": "AZ"
     }
   },
   "_profiles": {
@@ -4703,6 +4715,16 @@
         "A group taking on an interactive challenge at Time Mission": "Un grupo participando en un desafío interactivo en Time Mission",
         "Time Mission Eindhoven": "Time Mission Eindhoven",
         "Eindhoven": "Eindhoven"
+      }
+    },
+    "/scottsdale": {
+      "es": {
+        "Scottsdale": "Scottsdale",
+        "Scottsdale — 25+ Interactive Mission Rooms Coming Soon.": "Scottsdale — Más de 25 salas de misión interactivas, próximamente.",
+        "Time Mission Scottsdale | Coming Soon": "Time Mission Scottsdale | Próximamente",
+        "Booking opens closer to launch. Contact the Scottsdale team for opening updates and launch timing.": "Las reservas se abrirán más cerca del lanzamiento. Contacta con el equipo de Scottsdale para conocer las novedades y la fecha de apertura.",
+        "Reach out about Scottsdale and we will route your message to the right team.": "Contáctanos sobre Scottsdale y enviaremos tu mensaje al equipo adecuado.",
+        "Time Mission Scottsdale is coming soon at 15745 Hayden Rd, Scottsdale, AZ 85260. Get opening updates and launch details.": "Time Mission Scottsdale abrirá próximamente en 15745 Hayden Rd, Scottsdale, AZ 85260. Conoce las novedades sobre la apertura y el lanzamiento."
       }
     }
   }

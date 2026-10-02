@@ -1189,6 +1189,40 @@
       "phoneE164": null,
       "hreflang": null,
       "localBusinessSchemaEligible": false
+    },
+    {
+      "id": "scottsdale",
+      "slug": "scottsdale",
+      "name": "Time Mission Scottsdale",
+      "shortName": "Scottsdale",
+      "venueName": null,
+      "region": "us",
+      "status": "coming-soon",
+      "address": {
+        "line1": "15745 Hayden Rd",
+        "city": "Scottsdale",
+        "state": "AZ",
+        "zip": "85260",
+        "country": "United States"
+      },
+      "contact": {
+        "phone": "",
+        "email": ""
+      },
+      "hours": {},
+      "bookingUrl": "",
+      "navLabel": "AZ – Scottsdale",
+      "mapUrl": "https://maps.google.com/?q=15745+Hayden+Rd+Scottsdale+AZ+85260",
+      "faqs": [],
+      "ticker": "SCOTTSDALE COMING SOON",
+      "giftCardUrl": "",
+      "countryCode": "US",
+      "locale": null,
+      "timeZone": null,
+      "currency": null,
+      "phoneE164": null,
+      "hreflang": null,
+      "localBusinessSchemaEligible": false
     }
   ]
 }

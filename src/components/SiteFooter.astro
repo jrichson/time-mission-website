@@ -170,7 +170,7 @@ const hasPageLocation = Boolean(pageLocation);
                                         target={locationHrefIsExternal(loc) ? '_blank' : undefined}
                                         rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
                                     >
-                                        <span data-i18n={euFooterI18nKey(loc, 'footer.location')}>{locationListLabel(loc)}</span>{' '}
+                                        <span><span data-i18n={euFooterI18nKey(loc, 'footer.location')}>{locationListLabel(loc)}</span>{loc.status === 'coming-soon' && '*'}</span>{' '}
                                         {statusLabel && <span class="coming-soon-tag" data-i18n={statusBadgeI18n(statusLabel)}>{statusLabel}</span>}
                                     </a>
                                 );

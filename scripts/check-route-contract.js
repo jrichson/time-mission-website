@@ -72,6 +72,7 @@ const SCOPE_FILES = {
     'src/pages/nashville.astro',
     'src/pages/orland-park.astro',
     'src/pages/philadelphia.astro',
+    'src/pages/scottsdale.astro',
     'src/pages/west-nyack.astro',
     'src/pages/locations.astro',
     'data/locations.json',

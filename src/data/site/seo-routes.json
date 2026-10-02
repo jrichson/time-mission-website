@@ -215,6 +215,12 @@
     "ogImage": "/assets/photos/promos/houston-educators-control-room-1200.webp",
     "twitterImage": "/assets/photos/promos/houston-educators-control-room-1200.webp"
   },
+  "/scottsdale": {
+    "title": "Time Mission Scottsdale | Coming Soon",
+    "description": "Time Mission Scottsdale is coming soon at 15745 Hayden Rd, Scottsdale, AZ 85260. Get opening updates and launch details.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
   "/dallas": {
     "title": "Time Mission Dallas | Coming Soon",
     "description": "Time Mission Dallas is coming soon in Dallas, TX. Contact the location team for launch timing and opening updates.",

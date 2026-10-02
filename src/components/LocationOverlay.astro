@@ -78,7 +78,7 @@ function locationLabelI18n(loc: (typeof allLocations)[number]) {
                         target={externalLocationHref ? '_blank' : undefined}
                         rel={externalLocationHref ? 'noopener' : undefined}
                     >
-                        <span data-i18n={locationLabelI18n(loc)}>{locationListLabel(loc)}</span>
+                        <span><span data-i18n={locationLabelI18n(loc)}>{locationListLabel(loc)}</span>{loc.status === 'coming-soon' && '*'}</span>
                         {badge && (
                             <span class="coming-soon-tag" data-i18n={loc.slug === 'eindhoven' ? 'location.eindhovenOpening' : undefined}>
                                 {' '}{badge}
@@ -89,6 +89,7 @@ function locationLabelI18n(loc: (typeof allLocations)[number]) {
                     })}
                 </div>
             ))}
+            <p class="location-coming-soon-note">* <span data-i18n="location.comingSoon">Coming Soon</span></p>
         </div>
         <div class="location-overlay-divider"></div>
         <div class="location-overlay-right" id="locationInfo">

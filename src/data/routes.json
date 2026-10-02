@@ -434,6 +434,16 @@
       "status": 301
     },
     {
+      "id": "scottsdale",
+      "canonicalPath": "/scottsdale",
+      "redirectSources": [
+        "/scottsdale.html"
+      ],
+      "outputFile": "scottsdale.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "dallas",
       "canonicalPath": "/dallas",
       "redirectSources": [

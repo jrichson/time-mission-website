@@ -90,6 +90,35 @@ test('US location selector shows only the Eindhoven opening callout', async ({ p
   expect(badgeSlugs).toEqual(['eindhoven']);
 });
 
+test('Scottsdale is coming soon and location lists mark upcoming venues', async ({ page }) => {
+  await page.goto('/locations');
+
+  const scottsdale = page.locator('.loc-row[href="/scottsdale"]');
+  await expect(scottsdale.locator('.loc-name')).toHaveText('AZ – Scottsdale*');
+  await expect(scottsdale.locator('.loc-status')).toHaveText('Coming Soon');
+  await expect(scottsdale.locator('.loc-address')).toContainText('15745 Hayden Rd, Scottsdale, AZ 85260');
+
+  const upcomingNames = await page.locator('.loc-row.is-coming-soon .loc-name').allTextContents();
+  expect(upcomingNames.every((name) => name.trim().endsWith('*'))).toBe(true);
+  const openNames = await page.locator('.loc-row:not(.is-coming-soon) .loc-name').allTextContents();
+  expect(openNames.every((name) => !name.includes('*'))).toBe(true);
+  await expect(page.locator('#locationDropdown a[data-tm-location-slug="scottsdale"]')).toContainText('AZ – Scottsdale*');
+  await expect(page.locator('.footer-location-list a[href="/scottsdale"]')).toContainText('AZ – Scottsdale*');
+
+  await scottsdale.click();
+  await expect(page).toHaveURL(/\/scottsdale$/);
+  await expect(page).toHaveTitle('Time Mission Scottsdale | Coming Soon');
+  await expect(page.locator('.hero')).toContainText('Coming Soon');
+  await expect(page.locator('.footer-loc-address')).toContainText('15745 Hayden Rd');
+  await expect(page.locator('.footer-loc-address')).toContainText('Scottsdale, AZ 85260');
+  await expect(page.locator('.hero .btn-location-lead')).toHaveAttribute('href', /contact#location=scottsdale&type=updates$/);
+
+  await page.goto('/es/locations');
+  await page.evaluate(async () => { await window.TM.ready; });
+  await expect(page.locator('#locationDropdown a[data-tm-location-slug="scottsdale"]')).toContainText('Scottsdale*');
+  await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]')).toContainText('Eindhoven*');
+});
+
 test('Edison has a local location page whose action links lead to Supercharged NJ', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop-only overlay path');
 
