@@ -113,14 +113,24 @@ for (const origin of ['https://www.timemission.com', 'https://www.timemission.eu
   });
 }
 for (const locale of ['', '/nl']) {
-  test(`Eindhoven ${locale || 'English'} signup redirects to booking`, async ({ page }) => {
-    // The signup page was retired when booking opened; old links land on the bookable page.
+  test(`Eindhoven ${locale || 'English'} signup opens fields`, async ({ page }) => {
     const response = await page.goto('https://www.timemission.eu' + locale + '/eindhoven/signup', { waitUntil: 'domcontentloaded' });
     expect(response.status()).toBe(200);
-    expect(new URL(page.url()).pathname).toMatch(new RegExp('^' + locale + '/eindhoven/?$'));
-    const checkout = 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home';
-    await expect(page.locator('.hero-cta a.btn-primary')).toHaveAttribute('href', checkout);
-    await expect(page.locator('[data-tm-klaviyo-form-trigger]')).toHaveCount(0);
+    // The signup page now embeds the form directly. Keep the check title stable
+    // so the monitor can report recovery against the existing incident IDs.
+    const expectedForm = locale === '/nl' ? 'TsDm2K' : 'XDPbDT';
+    const section = page.locator('[data-tm-form-name="eindhoven_signup"]');
+    await expect(section).toHaveAttribute('data-tm-klaviyo-form-id', expectedForm);
+    const form = section.locator('.klaviyo-form-' + expectedForm);
+    const email = form.locator('input[type="email"]').first();
+    await expect(email).toBeVisible();
+    await expect(form.locator('input[type="tel"]').first()).toBeVisible();
+    await expect(form.getByRole('checkbox').first()).toBeVisible();
+    await expect(form.getByRole('button', {
+      name: locale === '/nl' ? 'IK WIL ER ALS EERSTE BIJ ZIJN!' : 'SIGN UP FOR FIRST ACCESS!', exact: true,
+    })).toBeVisible();
+    await expect(form).toContainText(locale === '/nl' ? 'Schrijf je nu in' : 'Sign up');
+    expect(await email.evaluate(element => element.getBoundingClientRect().height)).toBeGreaterThan(28);
     await checkProviderCsp(page);
   });
 }

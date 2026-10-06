@@ -8,7 +8,7 @@ test('US and consented EU tracking runs while CSP boundaries stay enforced', asy
       window.__trackingCsp.push({ directive: event.effectiveDirective, blocked: event.blockedURI.split('?')[0] });
     });
   });
-  for (const url of ['https://www.timemission.com/philadelphia/educators', 'https://www.timemission.eu/nl/eindhoven']) {
+  for (const url of ['https://www.timemission.com/philadelphia/educators', 'https://www.timemission.eu/nl/eindhoven/signup']) {
     await page.goto(url, { waitUntil: 'domcontentloaded' });
     if (url.includes('.eu/')) {
       await expect.poll(() => page.evaluate(() => window.__TM_CONSENT_STATE__?.analytics_storage)).toBe('denied');
