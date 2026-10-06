@@ -12,9 +12,6 @@
         sun: 'Sun',
     };
     var KLAVIYO_ONSITE_SRC = 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU';
-    var EINDHOVEN_KLAVIYO_FORM_ID = 'W5S6At';
-    var EINDHOVEN_KLAVIYO_DUTCH_FORM_ID = 'VNjiQj';
-    var EINDHOVEN_KLAVIYO_ONSITE_SRC = 'https://static.klaviyo.com/onsite/js/YccPJs/klaviyo.js?company_id=YccPJs';
     var BookingJourney = window.TMBookingJourney;
     if (!BookingJourney) throw new Error('TMBookingJourney must load before location-catalog-view.js');
 
@@ -36,13 +33,10 @@
     }
 
     function ensureKlaviyoOnsiteScript(formId) {
-        var scriptSrc = (formId === EINDHOVEN_KLAVIYO_FORM_ID || formId === EINDHOVEN_KLAVIYO_DUTCH_FORM_ID)
-            ? EINDHOVEN_KLAVIYO_ONSITE_SRC
-            : KLAVIYO_ONSITE_SRC;
-        if (document.querySelector('script[src="' + scriptSrc + '"]')) return;
+        if (document.querySelector('script[src="' + KLAVIYO_ONSITE_SRC + '"]')) return;
         var script = document.createElement('script');
         script.async = true;
-        script.src = scriptSrc;
+        script.src = KLAVIYO_ONSITE_SRC;
         script.setAttribute('data-tm-klaviyo-onsite', formId);
         var parent = document.head || document.body || document.documentElement;
         if (parent) parent.appendChild(script);
@@ -59,23 +53,9 @@
             var formId = String(trigger.getAttribute('data-tm-klaviyo-form-trigger') || '').trim();
             if (!/^[a-z0-9]+$/i.test(formId)) return;
             event.preventDefault();
-            var isEindhovenForm = formId === EINDHOVEN_KLAVIYO_FORM_ID || formId === EINDHOVEN_KLAVIYO_DUTCH_FORM_ID;
-            if (isEindhovenForm) {
-                formId = /^\/nl(?:\/|$)/.test(window.location.pathname)
-                    ? EINDHOVEN_KLAVIYO_DUTCH_FORM_ID
-                    : EINDHOVEN_KLAVIYO_FORM_ID;
-            }
             window._klOnsite = window._klOnsite || [];
             window._klOnsite.push(['openForm', formId]);
             ensureKlaviyoOnsiteScript(formId);
-            // Klaviyo will not reopen a popup the visitor already closed, so also
-            // bring the on-page embed into view when the page has one.
-            var signupEmbed = isEindhovenForm && typeof document.getElementById === 'function'
-                ? document.getElementById('signup')
-                : null;
-            if (signupEmbed && typeof signupEmbed.scrollIntoView === 'function') {
-                signupEmbed.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
         });
     }
 
@@ -312,7 +292,7 @@
                 ? BookingJourney.temporaryClosureCtaLabel(loc)
                 : externalUrl
                 ? externalSiteLabel
-                : signupFormId && !(slug === 'eindhoven' && bookable)
+                : signupFormId
                 ? 'Sign Up'
                 : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
             mapQuery: mapQuery,
@@ -331,7 +311,7 @@
         var opts = options || {};
         var kind = BookingJourney.normalizeKind(opts.kind || 'tickets');
         var signupFormId = kind === 'tickets' ? signupFormIdForLocation(loc) : '';
-        if (signupFormId && !(loc.slug === 'eindhoven' && BookingJourney.isBookableLocation(loc))) {
+        if (signupFormId) {
             return {
                 kind: kind,
                 groupType: '',
@@ -379,7 +359,7 @@
         });
         var labelKey = view.externalUrl
             ? (loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite')
-            : view.signupFormId && !(view.slug === 'eindhoven' && view.bookable)
+            : view.signupFormId
             ? 'location.signUp'
             : view.comingSoon
             ? 'location.contactUs'

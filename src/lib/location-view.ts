@@ -217,7 +217,7 @@ export function locationViewModel(loc: LocationRecord): LocationViewModel {
             ? loc.temporaryClosure?.ctaLabel || 'Get Closure Updates'
             : externalUrl
             ? externalSiteLabel
-            : signupFormId && !(loc.slug === 'eindhoven' && bookable)
+            : signupFormId
             ? 'Sign Up'
             : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
         bookable,

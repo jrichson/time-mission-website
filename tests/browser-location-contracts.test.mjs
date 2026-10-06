@@ -34,7 +34,8 @@ describe('browser location state contracts', () => {
             shortName: 'Eindhoven',
             status: 'coming-soon',
             bookingUrl,
-            signupFormId: 'W5S6At',
+            // Signup-only locations still render the Klaviyo trigger; bookable ones do not.
+            signupFormId: bookingUrl ? '' : 'W5S6At',
             contact: { phone: '+31 (0)40 808 3636', email: 'eindhoven@timemission.nl' },
             hours: {},
           },
@@ -65,22 +66,14 @@ describe('browser location state contracts', () => {
     expect(signupCta.hasAttribute('data-tm-booking-trigger')).toBe(false);
   });
 
-  it.each([
-    ['/eindhoven', 'W5S6At'],
-    ['/nl/eindhoven', 'VNjiQj'],
-    ['/eindhoven/signup', 'W5S6At'],
-    ['/nl/eindhoven/signup', 'VNjiQj'],
-    ['/nl/eindhoven/signup/', 'VNjiQj'],
-    ['/fr/eindhoven/signup', 'W5S6At'],
-    ['/es/eindhoven/signup', 'W5S6At'],
-  ])('opens the correct Klaviyo form on %s', (pathname, expectedFormId) => {
+  it('opens a location signup form through the Klaviyo popup trigger', () => {
     const appendedScripts = [];
     const trigger = createAnchor('#', {
-      attrs: { 'data-tm-klaviyo-form-trigger': 'W5S6At' },
+      attrs: { 'data-tm-klaviyo-form-trigger': 'AbC123' },
       closestSelectors: ['[data-tm-klaviyo-form-trigger]'],
     });
     const { context, window, document } = createBrowserContext();
-    window.location.pathname = pathname;
+    window.location.pathname = '/dallas';
     document.head = {
       appendChild(script) {
         appendedScripts.push(script);
@@ -101,32 +94,12 @@ describe('browser location state contracts', () => {
     document.dispatchEvent(click);
 
     expect(click.defaultPrevented).toBe(true);
-    expect(window._klOnsite).toEqual([['openForm', expectedFormId]]);
+    expect(window._klOnsite).toEqual([['openForm', 'AbC123']]);
     expect(appendedScripts).toHaveLength(1);
     expect(appendedScripts[0]).toMatchObject({
       async: true,
-      src: 'https://static.klaviyo.com/onsite/js/YccPJs/klaviyo.js?company_id=YccPJs',
+      src: 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU',
     });
-  });
-
-  it.each(['/eindhoven', '/nl/eindhoven'])('opens the Eindhoven popup in place on %s', (pathname) => {
-    const trigger = createAnchor('#', {
-      attrs: { 'data-tm-klaviyo-form-trigger': 'W5S6At' },
-      closestSelectors: ['[data-tm-klaviyo-form-trigger]'],
-    });
-    const { context, window, document } = createBrowserContext();
-    let destination;
-    window.location.pathname = pathname;
-    window.location.assign = (url) => { destination = url; };
-    document.head = { appendChild(script) { return script; } };
-    const scrolls = [];
-    document.getElementById = (id) => (id === 'signup' ? { scrollIntoView: (opts) => scrolls.push(opts) } : null);
-    runScript('js/booking-journey.js', context);
-    runScript('js/location-catalog-view.js', context);
-    document.dispatchEvent({ type: 'click', target: trigger, preventDefault() {} });
-    expect(destination).toBeUndefined();
-    expect(window._klOnsite).toHaveLength(1);
-    expect(scrolls).toEqual([{ behavior: 'smooth', block: 'start' }]);
   });
 
   it('homepage clears stale saved location instead of restoring it on hard refresh', async () => {
