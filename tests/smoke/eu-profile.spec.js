@@ -643,17 +643,28 @@ for (const prefix of ['', '/nl', '/fr', '/es']) {
 }
 
 
-test('Eindhoven sends every booking CTA to full-page checkout', async ({ page }) => {
-  await page.goto('/eindhoven');
-  await page.evaluate(async () => { await window.TM.ready; });
-  const checkout = 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home';
-  await expect(page).toHaveTitle('Time Mission Eindhoven | Opens 16th October');
-  await expect(page.locator('.ticker-bar').first()).toContainText('OPENING 16 OCTOBER');
-  await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('href', checkout);
-  await expect(page.locator('.nav-right .btn-tickets')).not.toHaveAttribute('data-tm-booking-trigger', '');
-  await expect(page.locator('.hero-cta a.btn-primary')).toHaveAttribute('href', checkout);
-  await expect(page.locator('.hero-cta a.btn-primary')).toHaveText('Book Now');
-  await expect(page.locator('[data-tm-klaviyo-form-trigger], [data-tm-form-name="eindhoven_signup"]')).toHaveCount(0);
-  await expect(page.locator('main a[href="' + checkout + '"]')).toHaveCount(2);
-  await expect(page.locator('script[src*="guest-agent"]')).toHaveCount(0);
-});
+for (const cta of ['.nav-right .btn-tickets', '.hero-cta a.btn-primary']) {
+  test(`Eindhoven ${cta} opens the Roller checkout sidebar`, async ({ page }) => {
+    await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
+      await route.fulfill({
+        contentType: 'application/javascript',
+        body: 'window.RollerCheckout = { show: function () { window.__rollerCheckoutShown = true; } };',
+      });
+    });
+    await page.goto('/eindhoven');
+    await page.evaluate(async () => { await window.TM.ready; });
+    await expect(page).toHaveTitle('Time Mission Eindhoven | Opens 16th October');
+    await expect(page.locator('.ticker-bar').first()).toContainText('OPENING 16 OCTOBER');
+    await expect(page.locator('.hero-cta a.btn-primary')).toHaveText('Book Now');
+    await expect(page.locator('[data-tm-klaviyo-form-trigger], [data-tm-form-name="eindhoven_signup"]')).toHaveCount(0);
+    await expect(page.locator('script[src*="guest-agent"]')).toHaveCount(0);
+
+    await page.locator(cta).first().click();
+    await page.waitForFunction(() => window.__rollerCheckoutShown === true);
+    await expect(page.locator('#roller-checkout')).toHaveAttribute(
+      'data-checkout',
+      'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
+    );
+    await expect(page).toHaveURL(/\/eindhoven$/);
+  });
+}

@@ -1,3 +1,4 @@
+import { EINDHOVEN_ROLLER_PANEL_SNAPSHOT } from '../cms/migration-data/20261006_eindhoven_roller_panel_snapshot';
 import { EINDHOVEN_BOOKING_SNAPSHOT } from '../cms/migration-data/20261006_eindhoven_booking_snapshot';
 import { SCOTTSDALE_LOCATION_SNAPSHOT, SCOTTSDALE_PAGE_SNAPSHOT } from '../cms/migration-data/20261001_scottsdale_snapshot';
 import { EINDHOVEN_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20260925_eindhoven_checkout_snapshot';
@@ -149,7 +150,14 @@ describe('live-site-to-CMS sync snapshot', () => {
                 return { ...groupFormLocation, externalLinks: { ...groupFormLocation.externalLinks, giftCardUrl: 'https://book.philadelphia.timemission.com/giftcards/en-us/products' } };
             }
             if (location.slug === EINDHOVEN_CHECKOUT_SNAPSHOT.slug) {
-                return { ...groupFormLocation, externalLinks: { ...groupFormLocation.externalLinks, bookingUrl: EINDHOVEN_CHECKOUT_SNAPSHOT.bookingUrl } };
+                return {
+                    ...groupFormLocation,
+                    externalLinks: {
+                        ...groupFormLocation.externalLinks,
+                        bookingUrl: EINDHOVEN_CHECKOUT_SNAPSHOT.bookingUrl,
+                        rollerCheckoutUrl: EINDHOVEN_ROLLER_PANEL_SNAPSHOT.rollerCheckoutUrl,
+                    },
+                };
             }
             if (location.slug === EDISON_BOOKING_SNAPSHOT.slug) {
                 return {

@@ -167,15 +167,6 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
             i18n: loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite',
         };
     }
-    // Eindhoven links straight to its Roller checkout ahead of opening.
-    if (loc.slug === 'eindhoven' && hasTicketBooking(loc)) {
-        return {
-            href: loc.bookingUrl,
-            isBookingTrigger: false,
-            label: 'Book Now',
-            i18n: 'nav.bookNow',
-        };
-    }
     const signupFormId = locationSignupFormId(loc);
     if (signupFormId) {
         return {

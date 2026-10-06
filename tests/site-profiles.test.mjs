@@ -191,6 +191,8 @@ describe('site deployment profiles', () => {
         country: 'Netherlands',
       },
       bookingUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
+      rollerCheckoutUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
+      bookingProvider: 'roller',
       signupFormId: '',
       contact: { phone: '+31 (0)40 808 3636', email: 'eindhoven@timemission.nl' },
       currency: 'EUR',

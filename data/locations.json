@@ -1016,6 +1016,8 @@
       },
       "hours": {},
       "bookingUrl": "https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home",
+      "rollerCheckoutUrl": "https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home",
+      "bookingProvider": "roller",
       "signupFormId": "",
       "groupFormUrls": {
         "default": "https://forms.roller.app/#/timemissioneindhoven/e6ec1f201a1e4d1/form",

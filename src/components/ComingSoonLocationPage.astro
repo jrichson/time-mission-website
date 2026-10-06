@@ -59,10 +59,8 @@ const primaryCtaHref = hasSignupForm
 const primaryCtaClass = isBookable && !hasSignupForm ? 'btn-location-book' : 'btn-location-lead';
 const primaryCtaAttrs = hasSignupForm
     ? `data-tm-klaviyo-form-trigger="${escapeHtml(signupFormId)}" data-i18n="location.signUp"`
-    : isBookable && primaryCta.isBookingTrigger
+    : isBookable
     ? `data-tm-booking-trigger="" data-tm-booking-kind="tickets" data-tm-location="${escapeHtml(location.slug)}" data-tm-booking-url="${escapeHtml(checkoutUrl)}"`
-    : isBookable && primaryCta.i18n
-    ? `data-i18n="${escapeHtml(primaryCta.i18n)}"`
     : '';
 const pageStatusLabel = locationDisplayStatus(location);
 const bookingFaqQuestion = isBookable
