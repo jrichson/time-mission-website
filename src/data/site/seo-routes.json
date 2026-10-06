@@ -228,8 +228,8 @@
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
   "/eindhoven": {
-    "title": "Time Mission Eindhoven | Coming Soon",
-    "description": "Time Mission Eindhoven is coming soon at Hermanus Boexstraat 4, 5611 AJ Eindhoven, as the first Time Mission location in the Netherlands.",
+    "title": "Time Mission Eindhoven | Opens 16th October",
+    "description": "Time Mission Eindhoven opens 16 October at Hermanus Boexstraat 4, 5611 AJ Eindhoven, the first Time Mission location in the Netherlands. Book your mission now.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
@@ -310,12 +310,6 @@
     "description": "This page has drifted out of the timeline. Head back to base and pick up another mission.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
-  },
-  "/eindhoven/signup": {
-    "title": "Sign Up | Time Mission Eindhoven",
-    "description": "Sign up for opening news and updates from Time Mission Eindhoven.",
-    "ogImage": "/assets/photos/TM-Groups-1200.webp",
-    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
   },
   "/nashville/educators": {
     "title": "Nashville Teacher Pass: Free Play January 5–29, 2027 | Time Mission",

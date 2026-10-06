@@ -77,7 +77,7 @@ describe('site deployment profiles', () => {
   });
 
   it('keeps EU answer blocks focused on European venue facts', () => {
-    expect(geoAnswerBlocks.profiles.eu.locations.text).toContain('Eindhoven is coming soon');
+    expect(geoAnswerBlocks.profiles.eu.locations.text).toContain('Eindhoven opens 16 October');
     expect(geoAnswerBlocks.profiles.eu.locations.text).toContain('Hermanus Boexstraat 4');
     expect(geoAnswerBlocks.profiles.eu.pricing.text).toContain('current euro prices');
     expect(geoAnswerBlocks.profiles.eu.pricing.text).not.toContain('Military');
@@ -191,7 +191,7 @@ describe('site deployment profiles', () => {
         country: 'Netherlands',
       },
       bookingUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
-      signupFormId: 'W5S6At',
+      signupFormId: '',
       contact: { phone: '+31 (0)40 808 3636', email: 'eindhoven@timemission.nl' },
       currency: 'EUR',
       locale: 'nl-NL',

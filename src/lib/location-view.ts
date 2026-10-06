@@ -167,7 +167,7 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
             i18n: loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite',
         };
     }
-    // Eindhoven accepts advance bookings while its hero keeps the launch signup.
+    // Eindhoven links straight to its Roller checkout ahead of opening.
     if (loc.slug === 'eindhoven' && hasTicketBooking(loc)) {
         return {
             href: loc.bookingUrl,

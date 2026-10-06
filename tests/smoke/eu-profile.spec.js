@@ -236,7 +236,7 @@ test('every localized EU route renders in each enabled language', async ({ page 
     route.startsWith(`${venue}/`) && expectedRoutes.includes(route.slice(venue.length))
   ));
   const sharedRoutes = expectedRoutes.filter((route) => !isVenueCopy(route));
-  expect(sharedRoutes).toHaveLength(39);
+  expect(sharedRoutes).toHaveLength(38);
   expect(expectedRoutes.length).toBeGreaterThan(sharedRoutes.length);
 
   for (const locale of ['nl', 'fr', 'es']) {
@@ -386,7 +386,7 @@ test('localized EU routes translate their announcement and footer chrome', async
     {
       path: '/es/eindhoven',
       tickerKey: 'ticker.location.eindhoven',
-      ticker: 'PRIMERA UBICACIÓN EN LOS PAÍSES BAJOS, PRÓXIMAMENTE',
+      ticker: 'APERTURA EL 16 DE OCTUBRE',
       city: 'EINDHOVEN',
       tagline: 'Una aventura de juego social en la que los equipos compiten en desafíos inmersivos a través del tiempo y el espacio.',
       experience: 'EXPERIENCIA',
@@ -643,13 +643,17 @@ for (const prefix of ['', '/nl', '/fr', '/es']) {
 }
 
 
-test('Eindhoven opens full-page checkout while the hero keeps signup', async ({ page }) => {
+test('Eindhoven sends every booking CTA to full-page checkout', async ({ page }) => {
   await page.goto('/eindhoven');
   await page.evaluate(async () => { await window.TM.ready; });
   const checkout = 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home';
+  await expect(page).toHaveTitle('Time Mission Eindhoven | Opens 16th October');
+  await expect(page.locator('.ticker-bar').first()).toContainText('OPENING 16 OCTOBER');
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute('href', checkout);
   await expect(page.locator('.nav-right .btn-tickets')).not.toHaveAttribute('data-tm-booking-trigger', '');
-  await expect(page.locator('.hero-cta [data-tm-klaviyo-form-trigger]')).toHaveAttribute('data-tm-klaviyo-form-trigger', 'W5S6At');
-  await expect(page.locator('main a[href="' + checkout + '"]')).toHaveCount(1);
+  await expect(page.locator('.hero-cta a.btn-primary')).toHaveAttribute('href', checkout);
+  await expect(page.locator('.hero-cta a.btn-primary')).toHaveText('Book Now');
+  await expect(page.locator('[data-tm-klaviyo-form-trigger], [data-tm-form-name="eindhoven_signup"]')).toHaveCount(0);
+  await expect(page.locator('main a[href="' + checkout + '"]')).toHaveCount(2);
   await expect(page.locator('script[src*="guest-agent"]')).toHaveCount(0);
 });

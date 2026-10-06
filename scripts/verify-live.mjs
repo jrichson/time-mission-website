@@ -22,7 +22,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const SAMPLE_PATHS = {
   us: ['/', '/houston', '/houston/educators', '/philadelphia'],
-  eu: ['/', '/eindhoven', '/nl/eindhoven/signup'],
+  eu: ['/', '/eindhoven', '/nl/eindhoven'],
 };
 
 function argValue(name) {

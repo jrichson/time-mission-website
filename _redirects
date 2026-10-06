@@ -277,7 +277,12 @@
 /west-nyack/team-building /groups/private-events 301
 /west-nyack/youth-group-camp /groups/private-events 301
 
-/eindhoven/signup.html /eindhoven/signup 301
+# Eindhoven signup retired once booking opened; send visitors to the bookable page.
+/eindhoven/signup /eindhoven 301
+/eindhoven/signup.html /eindhoven 301
+/nl/eindhoven/signup /nl/eindhoven 301
+/fr/eindhoven/signup /fr/eindhoven 301
+/es/eindhoven/signup /es/eindhoven 301
 /houston/world-cup /houston/spinandscore/rules 301
 /houston/world-cup.html /houston/spinandscore/rules 301
 

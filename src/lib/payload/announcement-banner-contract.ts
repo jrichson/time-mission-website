@@ -47,7 +47,7 @@ const ANNOUNCEMENT_LINK_MAX_LENGTH = 2048;
 const ANNOUNCEMENT_MESSAGE_I18N_KEYS = new Map([
     ['SUMMER ADVENTURES AT TIME MISSION ANTWERP', 'ticker.location.antwerp'],
     ['BRUSSELS NOW OPEN', 'ticker.location.brussels'],
-    ['FIRST NETHERLANDS LOCATION COMING SOON', 'ticker.location.eindhoven'],
+    ['OPENING 16 OCTOBER', 'ticker.location.eindhoven'],
     ['20% OFF BACK TO SCHOOL', 'ticker.backToSchool20'],
 ]);
 const ANNOUNCEMENT_LINK_LABEL_I18N_KEYS = new Map([

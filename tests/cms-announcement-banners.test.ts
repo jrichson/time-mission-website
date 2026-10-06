@@ -145,7 +145,7 @@ describe('CMS announcement banners', () => {
     })?.messageI18n).toBe('ticker.location.brussels');
     expect(announcementBannerViewForDoc({
       ...baseBanner,
-      message: 'FIRST NETHERLANDS LOCATION COMING SOON',
+      message: 'OPENING 16 OCTOBER',
     })?.messageI18n).toBe('ticker.location.eindhoven');
     expect(announcementBannerViewForDoc({
       ...baseBanner,

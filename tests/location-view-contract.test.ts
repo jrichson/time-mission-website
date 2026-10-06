@@ -89,12 +89,12 @@ describe('Location View contract', () => {
         expect(locationPhoneHref(eindhoven)).toBe('tel:+31408083636');
     });
 
-    it('routes Eindhoven booking CTAs to checkout while retaining its signup form', () => {
+    it('routes Eindhoven booking CTAs to checkout without a signup form', () => {
         const eindhoven = allLocations.find((loc) => loc.id === 'eindhoven');
         if (!eindhoven) throw new Error('Eindhoven location missing');
         const internalEindhoven = { ...eindhoven, externalUrl: undefined, bookingUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home' };
 
-        expect(locationSignupFormId(eindhoven)).toBe('W5S6At');
+        expect(locationSignupFormId(eindhoven)).toBe('');
         expect(locationCtaView(internalEindhoven)).toEqual({
             href: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
             isBookingTrigger: false,
@@ -103,7 +103,7 @@ describe('Location View contract', () => {
         });
         expect(locationViewModel(internalEindhoven)).toMatchObject({
             bookLabel: 'Book Now',
-            signupFormId: 'W5S6At',
+            signupFormId: '',
         });
     });
 

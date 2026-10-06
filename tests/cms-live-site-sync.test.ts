@@ -1,3 +1,4 @@
+import { EINDHOVEN_BOOKING_SNAPSHOT } from '../cms/migration-data/20261006_eindhoven_booking_snapshot';
 import { SCOTTSDALE_LOCATION_SNAPSHOT, SCOTTSDALE_PAGE_SNAPSHOT } from '../cms/migration-data/20261001_scottsdale_snapshot';
 import { EINDHOVEN_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20260925_eindhoven_checkout_snapshot';
 import { EDISON_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260918_edison_now_open_snapshot';
@@ -108,6 +109,8 @@ describe('live-site-to-CMS sync snapshot', () => {
             } : location;
             const currentLocation = location.slug === PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.slug
                 ? { ...operationalLocation, ticker: PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.ticker }
+                : location.slug === EINDHOVEN_BOOKING_SNAPSHOT.slug
+                ? { ...operationalLocation, ticker: EINDHOVEN_BOOKING_SNAPSHOT.ticker }
                 : REMOVED_TICKER_LOCATIONS.some((slug) => slug === location.slug)
                 ? { ...operationalLocation, ticker: '' }
                 : operationalLocation;
@@ -228,11 +231,8 @@ describe('live-site-to-CMS sync snapshot', () => {
                     metaDescription: pressSeo.metaDescription,
                 };
             }
-            if (page?.path === EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.page.path) {
-                return {
-                    ...page,
-                    metaDescription: EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.page.metaDescription,
-                };
+            if (page?.path === EINDHOVEN_BOOKING_SNAPSHOT.page.path) {
+                return { ...page, ...EINDHOVEN_BOOKING_SNAPSHOT.page };
             }
             return page?.path === PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.path
                 ? { ...page, metaDescription: PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.metaDescription }
