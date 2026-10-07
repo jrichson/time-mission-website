@@ -287,10 +287,10 @@ test('localized EU routes translate page-owned body copy and metadata', async ({
   const routes = [
     {
       path: '/nl/about',
-      title: 'Over | Time Mission',
-      heading: 'HET SPEL IS ECHT',
+      title: 'Over ons | Time Mission',
+      heading: 'DE GAME IS ECHT',
       copySelector: '.about-hero p',
-      copy: 'Deels escape room, deels videogame en helemaal echt.',
+      copy: 'Een beetje escape room, een beetje videogame en helemaal echt.',
       english: 'Part escape room, part video game, all real.',
     },
     {
@@ -673,7 +673,7 @@ test('EU contact form lists only EU locations', async ({ page }) => {
   const generalContact = page.locator('[data-location-contact-general]');
   await expect(generalContact).toBeVisible();
   await expect(generalContact.locator('h3')).toHaveText('Algemene vragen');
-  await expect(generalContact.locator('a[href="/nl/locations"]')).toHaveText('Alle locaties bekijken');
+  await expect(generalContact.locator('a[href="/nl/locations"]')).toHaveText('Bekijk alle locaties');
 
   await page.goto('/nl/about');
   await page.goto('/nl/contact#location=antwerp');
