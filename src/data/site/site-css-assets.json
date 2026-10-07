@@ -2,7 +2,7 @@
   "core": [
     "/css/variables.css",
     "/css/base.css",
-    "/css/layout-guards.css?v=1",
+    "/css/layout-guards.css?v=2",
     "/css/social-proof.css?v=1",
     "/css/small-viewport-overrides.css?v=1",
     "/css/page-shell.css?v=1",

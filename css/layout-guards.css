@@ -54,6 +54,26 @@
     contain: paint;
 }
 
+/* Reserve real space for the scroll cue when laptop browser chrome reduces height. */
+@media (min-width: 769px) and (max-height: 800px) {
+    .hero:has(> .hero-scroll) {
+        flex-direction: column;
+        gap: 2rem;
+        padding-block: calc(var(--tm-ticker-height, 0px) + 7.5rem) 2rem;
+    }
+
+    .hero:has(> .hero-scroll) > .hero-content {
+        margin-top: 0;
+        flex-shrink: 0;
+    }
+
+    .hero > .hero-scroll {
+        position: static;
+        transform: none;
+        flex-shrink: 0;
+    }
+}
+
 .hero-video-container video {
     background: transparent;
     opacity: 0;

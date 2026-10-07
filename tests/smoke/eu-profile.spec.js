@@ -64,6 +64,26 @@ test('Dutch review copy survives reload and Eindhoven content fixes remain visib
   await expect(page.locator('.faq-question').filter({ hasText: /militair|military/i })).toHaveCount(0);
 });
 
+test('short laptop viewports keep scroll cues below the hero buttons', async ({ page }) => {
+  for (const viewport of [{ width: 1280, height: 600 }, { width: 1366, height: 650 }]) {
+    await page.setViewportSize(viewport);
+    for (const route of ['/nl', '/nl/eindhoven', '/nl/antwerp']) {
+      await page.goto(route);
+      await waitForLanguageRuntime(page, true);
+      const cue = page.locator('.hero > .hero-scroll');
+      await expect(cue).toBeVisible();
+      await expect.poll(async () => {
+        const buttons = await page.locator('.hero-cta').boundingBox();
+        const indicator = await cue.boundingBox();
+        return indicator.y - (buttons.y + buttons.height);
+      }, { message: `${route} at ${viewport.width}x${viewport.height}` }).toBeGreaterThanOrEqual(24);
+      const hero = await page.locator('.hero').boundingBox();
+      const indicator = await cue.boundingBox();
+      expect(indicator.y + indicator.height).toBeLessThanOrEqual(hero.y + hero.height);
+    }
+  }
+});
+
 test('EU artifact exposes its identity and isolated location data', async ({ page }) => {
   const markerResponse = await page.request.get('/data/site-profile.json');
   expect(markerResponse.ok()).toBe(true);
