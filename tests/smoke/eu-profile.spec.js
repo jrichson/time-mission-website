@@ -33,6 +33,21 @@ test.beforeEach(async ({ page }) => {
   await prepareSiteSmoke(page);
 });
 
+test('round-two Dutch heading emphasis survives static rendering and language updates', async ({ page, request }) => {
+  const response = await request.get('/nl/groups/birthdays');
+  expect(await response.text()).toContain('<span class="highlight">VERJAARDAGSFEESTJES</span>');
+  await page.goto('/nl/groups/birthdays');
+  await waitForLanguageRuntime(page, true);
+  const emphasis = page.locator('h1 .highlight');
+  await expect(emphasis).toHaveText('VERJAARDAGSFEESTJES');
+  await page.evaluate(() => window.TMI18n.setLanguage('nl'));
+  await expect(emphasis).toHaveText('VERJAARDAGSFEESTJES');
+  expect(await emphasis.evaluate((el) => getComputedStyle(el).backgroundImage)).toContain('linear-gradient');
+
+  const giftCards = await request.get('/nl/gift-cards');
+  expect(await giftCards.text()).toContain('GEEF <span>TIME MISSION</span> CADEAU');
+});
+
 test('round-two Dutch group labels survive location selection and reload', async ({ page }) => {
   for (const [route, label, count] of [
     ['/nl/groups', 'Plan je evenement', 6],

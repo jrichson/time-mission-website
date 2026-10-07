@@ -40,7 +40,7 @@ export interface LazyRuntimeScript {
 export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'navigationContext', src: '/js/navigation-context.js', version: 1 },
     { id: 'progressive', src: '/js/site-progressive.js', version: 1 },
-    { id: 'language', src: '/js/language-switcher.js', version: 6 },
+    { id: 'language', src: '/js/language-switcher.js', version: 7 },
     { id: 'consent', src: '/js/consent-bridge.js', version: 1 },
     { id: 'analytics', src: '/js/analytics.js', version: 1 },
     { id: 'formRegistrationTracking', src: '/js/form-registration-tracking.js', version: 3 },

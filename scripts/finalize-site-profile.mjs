@@ -92,8 +92,8 @@ function replaceTranslatedElements(html, translations) {
 
 function sanitizeTranslatedHtml(value) {
   return String(value || '').replace(/<[^>]*>/g, (tag) => {
-    if (/^<\/?strong>$/i.test(tag)) return tag.toLowerCase();
-    if (/^<span class="copy-emphasis">$/i.test(tag)) return '<span class="copy-emphasis">';
+    if (/^<\/?strong>$|^<span>$/i.test(tag)) return tag.toLowerCase();
+    if (/^<span class="(?:copy-emphasis|highlight)">$/i.test(tag)) return tag.toLowerCase();
     if (/^<\/span>$/i.test(tag)) return '</span>';
     return '';
   });

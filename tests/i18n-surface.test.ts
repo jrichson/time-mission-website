@@ -67,8 +67,11 @@ describe('Language Surface', () => {
     expect(languageSwitcher).toContain('function sanitizeTranslatedHtml');
     expect(languageSwitcher).toContain('sanitizeTranslatedHtml(value)');
 
-    const richTextKeys = Object.keys(catalog.translations.en).filter((key) => key.endsWith('Html'));
-    expect(richTextKeys).toEqual(['home.about.longHtml']);
+    const richTextKeys = Object.entries(catalog.translations.en)
+      .filter(([, value]) => typeof value === 'string' && /<[^>]+>/.test(value))
+      .map(([key]) => key);
+    expect(richTextKeys).toContain('home.about.longHtml');
+    expect(richTextKeys).toContain('groups.birthdays.heading');
 
     for (const translations of Object.values(catalog.translations)) {
       for (const key of richTextKeys) {
@@ -76,7 +79,7 @@ describe('Language Surface', () => {
         expect(typeof html).toBe('string');
         const tags = String(html).match(/<[^>]+>/g) || [];
         for (const tag of tags) {
-          expect(tag).toMatch(/^<\/?strong>$|^<span class="copy-emphasis">$|^<\/span>$/);
+          expect(tag).toMatch(/^<\/?strong>$|^<span(?: class="(?:copy-emphasis|highlight)")?>$|^<\/span>$/);
         }
       }
     }

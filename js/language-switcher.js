@@ -240,7 +240,7 @@
         var template = document.createElement('template');
         template.innerHTML = String(value || '');
         var allowedTags = { STRONG: true, SPAN: true };
-        var allowedSpanClasses = { 'copy-emphasis': true };
+        var allowedSpanClasses = { 'copy-emphasis': true, highlight: true };
 
         Array.prototype.slice.call(template.content.querySelectorAll('*')).forEach(function (node) {
             if (!allowedTags[node.tagName]) {
