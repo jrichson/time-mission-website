@@ -4,11 +4,6 @@ import { ANTWERP_TICKER_SNAPSHOT } from '../migration-data/20261007_antwerp_tick
 export async function up({ db }: MigrateUpArgs): Promise<void> {
   const { slug, previousTicker, ticker } = ANTWERP_TICKER_SNAPSHOT;
   await db.execute(sql`
-    UPDATE "location_details"
-    SET "ticker" = ${ticker}, "updated_at" = now()
-    WHERE "location_slug"::text = ${slug} AND "ticker" = ${previousTicker};
-  `);
-  await db.execute(sql`
     UPDATE "announcement_banners"
     SET "message" = ${ticker}, "updated_at" = now()
     WHERE "message" = ${previousTicker}
