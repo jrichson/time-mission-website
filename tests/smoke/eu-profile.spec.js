@@ -75,6 +75,11 @@ test('round-two Dutch newsletters and reviewed venue content render correctly', 
   await expect(page.locator('.newsletter-legal')).toHaveText(
     'Door je in te schrijven ga je akkoord met onze algemene voorwaarden en privacyverklaring.',
   );
+  await page.goto('/nl/locations');
+  await waitForLanguageRuntime(page, true);
+  await expect(page.locator('.newsletter-inner > p')).toHaveText(
+    'Schrijf je in en ontdek nieuwe missies als eerste. Plus sneak peeks, speciale events, ticketacties en meer.',
+  );
   await page.goto('/nl/groups');
   await expect(page.locator('.group-testimonials')).toHaveCount(0);
   await page.goto('/nl/brussels');
