@@ -48,7 +48,7 @@ export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'bookingFrame', src: '/js/booking-frame.js', version: 1 },
     { id: 'bookingBriqProvider', src: '/js/booking-provider-briq.js', version: 2 },
     { id: 'bookingNavigationAdapters', src: '/js/booking-navigation-adapters.js', version: 2 },
-    { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 14 },
+    { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 15 },
     { id: 'tickerSchedule', src: '/js/ticker-schedule.js', version: 1 },
     { id: 'locations', src: '/js/locations.js', version: 28 },
     { id: 'nav', src: '/js/nav.js', version: 17 },

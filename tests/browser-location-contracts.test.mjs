@@ -6,6 +6,21 @@ import {
 } from './browser-contract-helpers.mjs';
 
 describe('browser location state contracts', () => {
+  it('keeps the Eindhoven opening date translated after the footer runtime loads', () => {
+    const { context, window } = createBrowserContext({
+      TMI18n: { text: (key, fallback) => key === 'location.eindhovenOpeningFull' ? 'Opent 16 oktober' : fallback },
+    });
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+
+    const location = { slug: 'eindhoven', status: 'coming-soon', openingLabel: 'Opening October 16' };
+    expect(window.TMLocationViews.statusLabelForLocation(location)).toBe('Opent 16 oktober');
+    expect(window.TMLocationViews.statusLabelForLocation({ ...location, openingLabel: 'Opening November 20' }))
+      .toBe('Opening November 20');
+    expect(window.TMLocationViews.statusLabelForLocation({ ...location, slug: 'boston' }))
+      .toBe('Opening October 16');
+  });
+
   it.each(['nl', 'fr', 'es'])('restores the venue from a %s shared-page URL', async (locale) => {
     const { context, window } = createBrowserContext({
       __TM_SITE_PROFILE__: { localizedRoutes: true, locales: ['en', 'nl', 'fr', 'es'] },

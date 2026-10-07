@@ -1,5 +1,6 @@
 import { EINDHOVEN_ROLLER_PANEL_SNAPSHOT } from '../cms/migration-data/20261006_eindhoven_roller_panel_snapshot';
 import { EINDHOVEN_BOOKING_SNAPSHOT } from '../cms/migration-data/20261006_eindhoven_booking_snapshot';
+import { ANTWERP_TICKER_SNAPSHOT } from '../cms/migration-data/20261007_antwerp_ticker_snapshot';
 import { SCOTTSDALE_LOCATION_SNAPSHOT, SCOTTSDALE_PAGE_SNAPSHOT } from '../cms/migration-data/20261001_scottsdale_snapshot';
 import { EINDHOVEN_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20260925_eindhoven_checkout_snapshot';
 import { EDISON_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260918_edison_now_open_snapshot';
@@ -112,6 +113,8 @@ describe('live-site-to-CMS sync snapshot', () => {
                 ? { ...operationalLocation, ticker: PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.ticker }
                 : location.slug === EINDHOVEN_BOOKING_SNAPSHOT.slug
                 ? { ...operationalLocation, ticker: EINDHOVEN_BOOKING_SNAPSHOT.ticker }
+                : location.slug === ANTWERP_TICKER_SNAPSHOT.slug
+                ? { ...operationalLocation, ticker: ANTWERP_TICKER_SNAPSHOT.ticker }
                 : REMOVED_TICKER_LOCATIONS.some((slug) => slug === location.slug)
                 ? { ...operationalLocation, ticker: '' }
                 : operationalLocation;

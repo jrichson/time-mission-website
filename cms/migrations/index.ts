@@ -1,3 +1,4 @@
+import * as migration_20261007_090000_antwerp_evergreen_ticker from './20261007_090000_antwerp_evergreen_ticker';
 import * as migration_20261001_090000_add_scottsdale_location_enums from './20261001_090000_add_scottsdale_location_enums';
 import * as migration_20261001_091000_seed_scottsdale_location from './20261001_091000_seed_scottsdale_location';
 import * as migration_20261006_090000_eindhoven_booking from './20261006_090000_eindhoven_booking';
@@ -386,5 +387,10 @@ export const migrations = [
     up: migration_20261006_100000_eindhoven_roller_panel.up,
     down: migration_20261006_100000_eindhoven_roller_panel.down,
     name: '20261006_100000_eindhoven_roller_panel'
+  },
+  {
+    up: migration_20261007_090000_antwerp_evergreen_ticker.up,
+    down: migration_20261007_090000_antwerp_evergreen_ticker.down,
+    name: '20261007_090000_antwerp_evergreen_ticker'
   },
 ];

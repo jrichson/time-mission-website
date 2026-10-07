@@ -85,6 +85,14 @@ const finalCtaText = isBookable
     : `Reach out about ${location.shortName} and we will route your message to the right team.`;
 
 let comingSoonMain = applyTmMediaBase(comingSoonMainRaw);
+if (slug === 'eindhoven') {
+    // A venue that has not opened cannot have location-specific guest reviews.
+    comingSoonMain = comingSoonMain
+        .replace(/    <!-- Testimonials -->\s*<section class="testimonials"[\s\S]*?<\/section>\s*/, '')
+        .replace('<span class="minutes-counter" id="minutesCounter">60</span>', '<span>60–120</span>')
+        .replace('<span class="points-counter" id="pointsCounter">0</span>', '<span aria-hidden="true">+</span>')
+        .replace('class="newsletter-section" id="newsletter"', 'class="newsletter-section" id="newsletter" data-tm-newsletter-visible');
+}
 comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_NAME', location.name);
 comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_SHORT_NAME', location.shortName);
 comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_SLUG', location.slug);

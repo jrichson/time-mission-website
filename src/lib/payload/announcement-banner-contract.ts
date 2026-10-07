@@ -45,6 +45,7 @@ export interface AnnouncementBannerView {
 const INTERNAL_PATH_REGEX = /^\/$|^\/[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
 const ANNOUNCEMENT_LINK_MAX_LENGTH = 2048;
 const ANNOUNCEMENT_MESSAGE_I18N_KEYS = new Map([
+    ['TIME MISSION ANTWERP', 'ticker.location.antwerp'],
     ['SUMMER ADVENTURES AT TIME MISSION ANTWERP', 'ticker.location.antwerp'],
     ['BRUSSELS NOW OPEN', 'ticker.location.brussels'],
     ['OPENING 16 OCTOBER', 'ticker.location.eindhoven'],

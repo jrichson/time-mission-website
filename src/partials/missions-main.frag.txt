@@ -54,6 +54,7 @@
                 </button>
             </div>
         </div>
+        <p class="mission-availability-note">Mission availability varies by location. Check your chosen location for its current lineup.</p>
         <div class="portals-grid">
             <article class="portal-card reveal" data-mission-id="1013" data-category="mental speed">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp 480w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-800.webp 800w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Glitch-Matrix.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>

@@ -33,6 +33,37 @@ test.beforeEach(async ({ page }) => {
   await prepareSiteSmoke(page);
 });
 
+test('Dutch review copy survives reload and Eindhoven content fixes remain visible', async ({ page }) => {
+  await page.goto('/nl/eindhoven');
+  await waitForLanguageRuntime(page, true);
+  await expect(page.locator('#reviews')).toHaveCount(0);
+  await expect(page.locator('.stat-minutes')).toHaveText('60–120');
+  await expect(page.locator('#pointsCounter')).toHaveCount(0);
+  await expect(page.locator('#newsletter')).toBeVisible();
+  await expect(page.locator('#newsletter h2')).toHaveText('MIS NIETS');
+  await expect(page.locator('#newsletter button[type="submit"]')).toHaveText('Schrijf je in');
+  await expect(page.locator('#newsletter-given-name')).toHaveAttribute('placeholder', 'Voornaam');
+  await expect(page.locator('.footer-loc-hours')).toContainText('Opent 16 oktober');
+  await expect(page.locator('.welcome .section-title')).toHaveText('WAT IS TIME MISSION?');
+  await expect(page.locator('.hero-subtitle')).toContainText('Hoe snel, sterk, behendig en slim zijn jullie?');
+  await page.reload();
+  await waitForLanguageRuntime(page, true);
+  await expect(page.locator('.footer-loc-hours')).toContainText('Opent 16 oktober');
+
+  await page.goto('/nl/missions');
+  await waitForLanguageRuntime(page, true);
+  await expect(page.locator('.hero-title')).toHaveText('EINDELOOS VEEL MANIEREN OM TE SPELEN');
+  await expect(page.locator('.mission-availability-note')).toContainText('verschilt per locatie');
+  await expect(page.locator('.filter-tab[data-filter="mental"]')).toContainText('Breinbrekers');
+  await page.locator('.filter-tab[data-filter="mental"]').click();
+  await expect(page.locator('.filter-tab[data-filter="mental"]')).toHaveClass(/active/);
+  await expect(page.locator('.portal-card').filter({ has: page.locator('.portal-title', { hasText: 'LOOKING GLASS' }) }).locator('.portal-desc'))
+    .toHaveText('Jullie zijn observatieagenten in een geheime bunker. Jullie doelwit heeft niets door. Speur de beelden af op zoek naar bewijs.');
+
+  await page.goto('/nl/faq');
+  await expect(page.locator('.faq-question').filter({ hasText: /militair|military/i })).toHaveCount(0);
+});
+
 test('EU artifact exposes its identity and isolated location data', async ({ page }) => {
   const markerResponse = await page.request.get('/data/site-profile.json');
   expect(markerResponse.ok()).toBe(true);
@@ -260,7 +291,7 @@ test('localized runtime writers preserve language after interaction', async ({ p
   await page.evaluate(() => window.TMI18n.ready);
 
   await expect(page.locator('.skip-link')).toHaveText('Ga naar de hoofdinhoud');
-  await expect(page.locator('#locationDropdown')).toHaveAttribute('aria-label', 'Selecteer uw locatie');
+  await expect(page.locator('#locationDropdown')).toHaveAttribute('aria-label', 'Kies je locatie');
   await expect(page.locator('.location-dropdown-close')).toHaveAttribute('aria-label', 'Locatiekiezer sluiten');
   await expect(page.locator('.location-group[data-location-region="europe"] a[data-tm-location-slug="antwerp"] > span').first())
     .toHaveText('België – Antwerpen');
@@ -269,13 +300,13 @@ test('localized runtime writers preserve language after interaction', async ({ p
   await expect(page.locator('#ticketLocation option[value="antwerp"]'))
     .toHaveText('België – Antwerpen');
   await expect(page.locator('#ticketLocation option[value="eindhoven"]'))
-    .toHaveText('Nederland – Eindhoven (Opening October 16)');
+    .toHaveText('Nederland – Eindhoven (Opent 16 oktober)');
   await expect(page.locator('[data-gift-card-location-answer]'))
-    .toContainText('Cadeaubonnen zijn locatiespecifiek.');
+    .toContainText('Cadeaubonnen gelden per locatie.');
 
   await page.evaluate(() => window.TM.select('antwerp'));
   await expect(page.locator('[data-gift-card-location-answer]'))
-    .toContainText('Cadeaubonnen zijn nog niet beschikbaar voor Antwerpen');
+    .toContainText('Voor Antwerpen zijn nog geen cadeaubonnen beschikbaar.');
   await expect(page.locator('#giftCardLocationHint'))
     .toContainText('Cadeaubonnen zijn nog niet beschikbaar voor Antwerpen');
   await expect(page.locator('#giftCardLocationText')).toHaveText('Antwerpen');
@@ -354,10 +385,10 @@ test('localized EU routes translate their announcement and footer chrome', async
     {
       path: '/nl/antwerp',
       tickerKey: 'ticker.location.antwerp',
-      ticker: 'ZOMERAVONTUREN BIJ TIME MISSION ANTWERPEN',
+      ticker: 'TIME MISSION ANTWERPEN',
       city: 'ANTWERPEN',
-      tagline: 'Een sociaal game-avontuur waarin teams het tegen elkaar opnemen in meeslepende uitdagingen door tijd en ruimte.',
-      experience: 'BELEVING',
+      tagline: 'Social gaming in het echt: teams strijden in immersive uitdagingen, dwars door tijd en ruimte.',
+      experience: 'ONTDEK',
       address: 'Adres',
       hours: 'Openingstijden',
       directions: 'Routebeschrijving ↗',
@@ -397,7 +428,7 @@ test('localized EU routes translate their announcement and footer chrome', async
       rights: 'Todos los derechos reservados.',
       developedBy: 'Desarrollado por',
       cookiePreferences: 'Preferencias de cookies',
-      status: 'Opening October 16',
+      status: 'Apertura el 16 de octubre',
     },
   ];
 

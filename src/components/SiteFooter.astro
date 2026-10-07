@@ -62,11 +62,13 @@ function hoursFallbackForLocation(loc: LocationRecord | null): string {
 function hoursFallbackI18nForLocation(loc: LocationRecord | null): string {
     if (!loc) return '';
     const status = locationStatusBadge(loc);
+    if (loc.slug === 'eindhoven' && status === 'Opening October 16') return 'location.eindhovenOpeningFull';
     if (status === 'Coming Soon') return 'location.comingSoon';
     return status ? '' : 'location.hoursComingSoon';
 }
 
-function statusBadgeI18n(statusLabel: string): string | undefined {
+function statusBadgeI18n(statusLabel: string, loc: LocationRecord): string | undefined {
+    if (loc.slug === 'eindhoven' && statusLabel === 'Opening October 16') return 'location.eindhovenOpeningFull';
     return statusLabel === 'Coming Soon' ? 'location.comingSoon' : undefined;
 }
 
@@ -171,7 +173,7 @@ const hasPageLocation = Boolean(pageLocation);
                                         rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
                                     >
                                         <span><span data-i18n={euFooterI18nKey(loc, 'footer.location')}>{locationListLabel(loc)}</span>{loc.status === 'coming-soon' && '*'}</span>{' '}
-                                        {statusLabel && <span class="coming-soon-tag" data-i18n={statusBadgeI18n(statusLabel)}>{statusLabel}</span>}
+                                        {statusLabel && <span class="coming-soon-tag" data-i18n={statusBadgeI18n(statusLabel, loc)}>{statusLabel}</span>}
                                     </a>
                                 );
                             })}

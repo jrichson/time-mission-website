@@ -125,7 +125,9 @@ export const GET: APIRoute = () => {
         `- Dress code: ${faqAnswer('general', "What's the dress code?")}`,
         `- Arrival timing: ${faqAnswer('general', "What if we're late?")}`,
         `- Waiver requirement: ${faqAnswer('general', 'Do I need to sign a waiver?')}`,
-        `- Military discount: ${faqAnswer('general', 'Do you offer a military discount?')}`,
+        ...(activeSiteProfile.id === 'eu' ? [] : [
+            `- Military discount: ${faqAnswer('general', 'Do you offer a military discount?')}`,
+        ]),
         '',
         '## Best For',
         '',

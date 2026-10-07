@@ -5,6 +5,7 @@ import Faq from '../components/Faq.astro';
 import faqs from '../data/site/faqs.json';
 import geoAnswerBlocks from '../data/site/geo-answer-blocks.json';
 import { buildFaqGraph, serializeGraph } from '../lib/schema/graph';
+import { activeSiteProfile } from '../lib/site-profile';
 
 const ld = serializeGraph(buildFaqGraph());
 const page = definePage({ canonicalPath: '/faq' });
@@ -47,7 +48,9 @@ const faqAnswer = geoAnswerBlocks.blocks.faq;
         {
             faqs.sections.map((section) => (
                 <section class="faq-section" id={section.id}>
-                    <Faq heading={section.heading} items={section.items} />
+                    <Faq heading={section.heading} items={section.items.filter((item) =>
+                        activeSiteProfile.id !== 'eu' || item.q !== 'Do you offer a military discount?'
+                    )} />
                 </section>
             ))
         }
