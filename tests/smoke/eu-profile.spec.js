@@ -592,7 +592,7 @@ test('EU contact form lists only EU locations', async ({ page }) => {
   await page.goto('/nl/contact');
   await expect(page.locator('#location optgroup')).toHaveAttribute('label', 'Europa');
   await expect(page.locator('[data-location-contact-empty]'))
-    .toHaveText('Kies een locatie in het formulier om de rechtstreekse contactgegevens te bekijken.');
+    .toHaveText('Kies een locatie in het formulier om de contactgegevens te zien.');
   await page.locator('#location').selectOption('general');
   const generalContact = page.locator('[data-location-contact-general]');
   await expect(generalContact).toBeVisible();
