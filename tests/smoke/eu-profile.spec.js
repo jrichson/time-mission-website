@@ -33,6 +33,42 @@ test.beforeEach(async ({ page }) => {
   await prepareSiteSmoke(page);
 });
 
+test('round-two Dutch group labels survive location selection and reload', async ({ page }) => {
+  for (const [route, label, count] of [
+    ['/nl/groups', 'Plan je evenement', 6],
+    ['/nl/groups/birthdays', 'Aanvragen', 2],
+  ]) {
+    await page.goto(route);
+    await waitForLanguageRuntime(page, true);
+    const actions = page.locator('[data-tm-default-label]');
+    await expect(actions).toHaveCount(count);
+    await expect(actions).toHaveText(Array(count).fill(label));
+    await page.evaluate(() => window.TM.select('antwerp'));
+    await expect(actions).toHaveText(Array(count).fill(label));
+    await page.reload();
+    await waitForLanguageRuntime(page, true);
+    await expect(actions).toHaveText(Array(count).fill(label));
+  }
+});
+
+test('round-two Dutch newsletters and reviewed venue content render correctly', async ({ page }) => {
+  await page.goto('/nl/about');
+  await waitForLanguageRuntime(page, true);
+  await expect(page.locator('h1')).toHaveText('DE GAME IS ECHT');
+  await expect(page.locator('.newsletter-section h2')).toHaveText('MIS NIETS');
+  await expect(page.locator('#newsletter-given-name')).toHaveAttribute('placeholder', 'Voornaam');
+  await expect(page.locator('.newsletter-legal')).toHaveText(
+    'Door je in te schrijven ga je akkoord met onze algemene voorwaarden en privacyverklaring.',
+  );
+  await page.goto('/nl/groups');
+  await expect(page.locator('.group-testimonials')).toHaveCount(0);
+  await page.goto('/nl/brussels');
+  await expect(page.locator('#reviews')).toHaveCount(0);
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    'content', 'Time Mission Brussel is open! 25+ immersive Mission rooms in Terminal 1 in Brussel. Boek nu je missie.',
+  );
+});
+
 test('Dutch review copy survives reload and Eindhoven content fixes remain visible', async ({ page }) => {
   await page.goto('/nl/eindhoven');
   await waitForLanguageRuntime(page, true);

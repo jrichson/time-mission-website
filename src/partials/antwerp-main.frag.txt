@@ -348,7 +348,7 @@
 
             <div class="testimonial-card">
                 <div class="testimonial-rating" role="img" aria-label="5 out of 5 stars">★★★★★</div>
-                <p class="testimonial-text">"We organized our company teambuilding here and it was by far the best activity we've ever done. Everyone was talking about it for weeks after."</p>
+                <p class="testimonial-text" data-i18n="city.antwerp.corporateReview">"We organized our company teambuilding here and it was by far the best activity we've ever done. Everyone was talking about it for weeks after."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Sophie D.</span>
                     <span class="author-location">Antwerpen</span>
@@ -470,7 +470,7 @@
             <form name="newsletter" method="POST" action="/api/newsletter" data-tm-form="newsletter">
                 <input type="hidden" name="form-name" value="newsletter">
                 <p class="visually-hidden">
-                    <label>Do not fill this out if you are human: <input name="bot-field"></label>
+                    <label><span data-i18n="home.newsletter.honeypot">Do not fill this out if you are human:</span> <input name="bot-field"></label>
                 </p>
                 <div class="newsletter-form">
                     <label class="visually-hidden" for="newsletter-given-name" data-i18n="home.newsletter.firstName">First name</label>

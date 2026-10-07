@@ -4,7 +4,9 @@ import locationMainRaw from '../partials/houston-main.frag.txt?raw';
 import { buildOpenLocationPage } from '../lib/location-page-shell';
 
 const slug = 'brussels';
-const cityPage = buildOpenLocationPage({ slug, mainRaw: locationMainRaw });
+// These shared-template testimonials are not verified Brussels reviews.
+const locationMain = locationMainRaw.replace(/    <!-- Testimonials -->\s*<section class="testimonials"[\s\S]*?<\/section>\s*/, '');
+const cityPage = buildOpenLocationPage({ slug, mainRaw: locationMain });
 ---
 
 <OpenLocationPageShell cityPage={cityPage} />

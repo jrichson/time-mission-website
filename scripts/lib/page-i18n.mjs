@@ -1,6 +1,6 @@
 import * as parse5 from 'parse5';
 
-const USER_FACING_ATTRIBUTES = new Set(['alt', 'aria-label', 'label', 'placeholder', 'title']);
+const USER_FACING_ATTRIBUTES = new Set(['alt', 'aria-label', 'label', 'placeholder', 'title', 'data-tm-default-label']);
 const TRANSLATED_META = new Set([
   'description',
   'og:title',

@@ -446,7 +446,7 @@
             <form name="newsletter" method="POST" action="/api/newsletter" data-tm-form="newsletter">
                 <input type="hidden" name="form-name" value="newsletter">
                 <p class="visually-hidden">
-                    <label>Do not fill this out if you are human: <input name="bot-field"></label>
+                    <label><span data-i18n="home.newsletter.honeypot">Do not fill this out if you are human:</span> <input name="bot-field"></label>
                 </p>
                 <div class="newsletter-form">
                     <label class="visually-hidden" for="newsletter-given-name" data-i18n="home.newsletter.firstName">First name</label>

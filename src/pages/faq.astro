@@ -41,7 +41,7 @@ const faqAnswer = geoAnswerBlocks.blocks.faq;
                 <p class="geo-answer-lead">{faqAnswer.summary}</p>
                 <details class="geo-disclosure">
                     <summary>Read the full pre-visit guidance</summary>
-                    <p set:html={faqAnswer.textHtml ?? faqAnswer.text}></p>
+                    <p data-i18n-html="faq.fullGuidance" set:html={faqAnswer.textHtml ?? faqAnswer.text}></p>
                 </details>
             </div>
         </section>
@@ -70,39 +70,39 @@ const faqAnswer = geoAnswerBlocks.blocks.faq;
 
         <section class="newsletter-section">
             <div class="newsletter-inner">
-                <h2>DON'T MISS A THING</h2>
-                <p>Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
+                <h2 data-i18n="home.newsletter.title">DON'T MISS A THING</h2>
+                <p data-i18n="home.newsletter.text">Sign up for sneak peeks and early access to new missions, plus special events, ticket drops, and&nbsp;more.</p>
                 <form name="newsletter" method="POST" action="/api/newsletter" data-tm-form="newsletter">
                     <input type="hidden" name="form-name" value="newsletter" />
                     <p class="visually-hidden">
                         <label>
-                            Do not fill this out if you are human: <input name="bot-field" />
+                            <span data-i18n="home.newsletter.honeypot">Do not fill this out if you are human:</span> <input name="bot-field" />
                         </label>
                     </p>
                     <div class="newsletter-form">
-                        <label class="visually-hidden" for="newsletter-given-name">First name</label>
+                        <label class="visually-hidden" for="newsletter-given-name" data-i18n="home.newsletter.firstName">First name</label>
                         <input
                             type="text"
                             id="newsletter-given-name"
                             name="given_name"
-                            placeholder="First Name"
+                            placeholder="First Name" data-i18n-placeholder="home.newsletter.firstNamePlaceholder"
                             autocomplete="given-name"
                             required
                         />
-                        <label class="visually-hidden" for="newsletter-family-name">Last name</label>
+                        <label class="visually-hidden" for="newsletter-family-name" data-i18n="home.newsletter.lastName">Last name</label>
                         <input
                             type="text"
                             id="newsletter-family-name"
                             name="family_name"
-                            placeholder="Last Name"
+                            placeholder="Last Name" data-i18n-placeholder="home.newsletter.lastNamePlaceholder"
                             autocomplete="family-name"
                         />
-                        <label class="visually-hidden" for="newsletter-email">Email</label>
+                        <label class="visually-hidden" for="newsletter-email" data-i18n="home.newsletter.email">Email</label>
                         <input
                             type="email"
                             id="newsletter-email"
                             name="email"
-                            placeholder="Email"
+                            placeholder="Email" data-i18n-placeholder="home.newsletter.emailPlaceholder"
                             class="full-width"
                             autocomplete="email"
                             required
@@ -110,17 +110,18 @@ const faqAnswer = geoAnswerBlocks.blocks.faq;
                     </div>
                     <label class="newsletter-consent">
                         <input type="checkbox" name="marketing_opt_in" value="yes" required />
-                        <span>I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
+                        <span data-i18n="home.newsletter.consent">I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span>
                     </label>
                     <div class="tm-turnstile" data-tm-turnstile></div>
-                    <button type="submit" class="btn-subscribe">Sign Up</button>
+                    <button type="submit" class="btn-subscribe" data-i18n="home.newsletter.submit">Sign Up</button>
                     <p class="newsletter-legal">
-                        By signing up, you agree to our
-                        <a href="/terms">Terms of Service</a>
+                        <span data-i18n="home.newsletter.legalPrefix">By signing up, you agree to our</span>
                         {' '}
-                        and
+                        <a href="/terms" data-i18n="home.newsletter.terms">Terms of Service</a>
                         {' '}
-                        <a href="/privacy">Privacy Policy</a>.
+                        <span data-i18n="home.newsletter.and">and</span>
+                        {' '}
+                        <a href="/privacy" data-i18n="home.newsletter.privacy">Privacy Policy</a>.
                     </p>
                 </form>
             </div>

@@ -34,6 +34,17 @@ const catalogTranslationLayers = [
   )),
 ];
 
+it('localizes the booking fallback label along with the visible button label', () => {
+  const source = '<main><a data-tm-booking-kind="groups" data-tm-default-label="Inquire Now">Inquire Now</a></main>';
+  const localized = localizePageCopy(source, 'nl', pageI18n, {
+    canonicalPath: '/groups/birthdays',
+    profileId: 'eu',
+  });
+
+  expect(localized).toContain('data-tm-default-label="Aanvragen">Aanvragen</a>');
+  expect(localizePageCopy(source, 'en', pageI18n)).toBe(source);
+});
+
 describe('page translation catalog', () => {
   it('localizes page copy and metadata without changing shared or deferred surfaces', () => {
     const source = `<!doctype html><html><head>

@@ -5,9 +5,13 @@ import groupsMainRaw from '../partials/groups-main.frag.txt?raw';
 import { applyTmMediaBase } from '../lib/tm-media';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
 import { imageObjectNode } from '../lib/schema/media';
+import { activeSiteProfile } from '../lib/site-profile';
 
 const page = definePage({ canonicalPath: '/groups' });
-const groupsMain = applyTmMediaBase(groupsMainRaw);
+// The generic testimonials have not been verified for European venues.
+const groupsMain = applyTmMediaBase(activeSiteProfile.id === 'eu'
+    ? groupsMainRaw.replace(/    <section class="group-testimonials">[\s\S]*?<\/section>\s*/, '')
+    : groupsMainRaw);
 const ld = serializeGraph(buildSimpleGraph([
     { label: 'Home', href: '/' },
     { label: 'Groups & Events', href: '/groups' },

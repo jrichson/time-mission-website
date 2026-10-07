@@ -469,7 +469,7 @@
                 <input type="hidden" name="location_interest" value="{{LOCATION_SHORT_NAME}}">
                 <input type="hidden" name="location_slug" value="{{LOCATION_SLUG}}">
                 <p class="visually-hidden">
-                    <label>Do not fill this out if you are human: <input name="bot-field"></label>
+                    <label><span data-i18n="home.newsletter.honeypot">Do not fill this out if you are human:</span> <input name="bot-field"></label>
                 </p>
                 <div class="newsletter-form">
                     <label class="visually-hidden" for="newsletter-given-name" data-i18n="home.newsletter.firstName">First name</label>

@@ -31,14 +31,14 @@
             <p class="geo-answer-lead">Time Mission works for birthdays, corporate outings, school trips, private events, and holidays because larger parties can split into teams and compete across many short challenge rooms.</p>
             <details class="geo-disclosure">
                 <summary>Read the full group-event guidance</summary>
-                <p>Time Mission is built for group entertainment because every session separates larger parties into <strong>teams of two to five players</strong>, then lets those teams compete across <span class="copy-emphasis">many short rooms</span> instead of waiting on a single attraction. Birthday parties can combine mission play with location-specific party rooms, cake, food, or add-ons where available. Corporate teams can book casual group tickets for offsites or request <strong>full-venue buyouts</strong> with catering, custom run-of-show options, and branded signage depending on the venue. School field trips can use missions for <span class="copy-emphasis">physics, logic, problem solving, teamwork, and social-emotional learning</span>, with weekday availability and chaperone guidance. Private events and holiday parties can scale from small teams to buyouts, with exact capacity, catering, extended hours, and pricing confirmed by the selected location. The format works especially well when groups want <strong>active competition</strong> without a long rules briefing.</p>
+                <p data-i18n-html="groups.fullGuidance">Time Mission is built for group entertainment because every session separates larger parties into <strong>teams of two to five players</strong>, then lets those teams compete across <span class="copy-emphasis">many short rooms</span> instead of waiting on a single attraction. Birthday parties can combine mission play with location-specific party rooms, cake, food, or add-ons where available. Corporate teams can book casual group tickets for offsites or request <strong>full-venue buyouts</strong> with catering, custom run-of-show options, and branded signage depending on the venue. School field trips can use missions for <span class="copy-emphasis">physics, logic, problem solving, teamwork, and social-emotional learning</span>, with weekday availability and chaperone guidance. Private events and holiday parties can scale from small teams to buyouts, with exact capacity, catering, extended hours, and pricing confirmed by the selected location. The format works especially well when groups want <strong>active competition</strong> without a long rules briefing.</p>
             </details>
         </div>
     </section>
     <section class="event-types">
         <div class="event-types-header">
             <span class="event-types-eyebrow">Every Team, Every Occasion</span>
-            <h2 class="event-types-title">Time Mission <span class="highlight">Group Events</span></h2>
+            <h2 class="event-types-title" data-i18n-html="groups.eventsHeading">Time Mission <span class="highlight">Group Events</span></h2>
         </div>
         <div class="event-types-grid">
             <div class="event-type-card reveal">
