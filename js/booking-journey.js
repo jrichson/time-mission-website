@@ -57,13 +57,19 @@
             || key === 'srsltid';
     }
 
-    function collectTrackingParams(search) {
+    // Roller applies a promo code passed as ?code= on its checkout URL.
+    function isPromoParam(name) {
+        return String(name || '').toLowerCase() === 'code';
+    }
+
+    function collectTrackingParams(search, predicate) {
+        var matches = predicate || isTrackingParam;
         var params = [];
         var raw = String(search || '');
         if (raw.charAt(0) === '?') raw = raw.slice(1);
         if (!raw) return params;
         new URLSearchParams(raw).forEach(function (value, name) {
-            if (!isTrackingParam(name)) return;
+            if (!matches(name)) return;
             params.push({
                 name: name,
                 value: value,
@@ -77,7 +83,18 @@
         var value = String(href || '').trim();
         if (!value) return value;
         if (!isExternalHttpUrl(value) && !opts.includeInternal) return value;
-        var tracking = collectTrackingParams(opts.search || getCurrentSearch());
+        return mergeQueryParams(value, collectTrackingParams(opts.search || getCurrentSearch()));
+    }
+
+    function appendPromoParams(href, options) {
+        var opts = options || {};
+        var value = String(href || '').trim();
+        if (!value || !isExternalHttpUrl(value)) return value;
+        return mergeQueryParams(value, collectTrackingParams(opts.search || getCurrentSearch(), isPromoParam));
+    }
+
+    function mergeQueryParams(href, tracking) {
+        var value = href;
         if (!tracking.length) return value;
 
         var hash = '';
@@ -370,6 +387,9 @@
         if (shouldAppendTrackingForPresentation(presentation)) {
             href = appendTrackingParams(href);
         }
+        if (presentation === 'roller') {
+            href = appendPromoParams(href);
+        }
         return {
             kind: kind,
             groupType: groupType,
@@ -546,6 +566,7 @@
         isExternalHttpUrl: isExternalHttpUrl,
         getBookingHref: getBookingHref,
         appendTrackingParams: appendTrackingParams,
+        appendPromoParams: appendPromoParams,
         resolveOpenCheckoutUrl: resolveOpenCheckoutUrl,
         getExternalLocationUrl: getExternalLocationUrl,
         isTemporarilyClosedLocation: isTemporarilyClosedLocation,

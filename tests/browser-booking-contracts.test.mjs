@@ -82,6 +82,41 @@ describe('browser booking contracts', () => {
     });
   });
 
+  it('forwards a landing-page promo code to the Roller checkout only', () => {
+    const { context, window } = createBrowserContext();
+    window.location.search = '?code=OPEN50&utm_source=meta';
+    runScript('js/booking-journey.js', context);
+
+    const eindhoven = {
+      id: 'eindhoven',
+      slug: 'eindhoven',
+      bookingProvider: 'roller',
+      rollerCheckoutUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
+    };
+    expect(window.TMBookingJourney.resolveIntent({ kind: 'tickets', location: eindhoven })).toMatchObject({
+      href: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home?code=OPEN50',
+      presentation: 'roller',
+    });
+
+    const lincoln = {
+      id: 'lincoln',
+      slug: 'lincoln',
+      bookingUrl: 'https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959',
+    };
+    expect(window.TMBookingJourney.resolveIntent({ kind: 'tickets', location: lincoln }).href)
+      .toBe('https://bookings.clubspeed.com/R1/R1LINCOLN?filters=959&utm_source=meta');
+
+    const campaignUrl = 'https://ecom.roller.app/TimeMissionHouston/onlinecheckout/en-US/products?code=SCHOOLNIGHT';
+    const campaignCta = createAnchor('#');
+    campaignCta.setAttribute('data-tm-booking-url', campaignUrl);
+    campaignCta.setAttribute('data-tm-booking-presentation', 'roller');
+    expect(window.TMBookingJourney.resolveIntent({
+      currentTarget: campaignCta,
+      kind: 'tickets',
+      location: { id: 'houston', slug: 'houston', bookingProvider: 'roller', rollerCheckoutUrl: campaignUrl },
+    }).href).toBe(campaignUrl);
+  });
+
   it('lets embedded Roller promo CTAs reach the booking controller', () => {
     const { context, document, window } = createBrowserContext();
     runScript('js/page-houston-promo-after.js', context);
