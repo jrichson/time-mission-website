@@ -117,6 +117,36 @@ describe('browser booking contracts', () => {
     }).href).toBe(campaignUrl);
   });
 
+  it('keeps a promo-coded Roller CTA in the on-page checkout when clicked', () => {
+    const { context, window } = createBrowserContext();
+    window.location.search = '?code=OPEN50&utm_source=meta';
+    runScript('js/booking-journey.js', context);
+
+    const eindhoven = {
+      id: 'eindhoven',
+      slug: 'eindhoven',
+      bookingProvider: 'roller',
+      rollerCheckoutUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
+    };
+    const rendered = window.TMBookingJourney.resolveOutcome({ kind: 'tickets', location: eindhoven });
+    const cta = createAnchor('#');
+    cta.setAttribute('data-tm-booking-url', rendered.cta.bookingUrl);
+    cta.setAttribute('data-tm-booking-kind', 'tickets');
+    cta.setAttribute('data-tm-location', 'eindhoven');
+
+    const clicked = window.TMBookingJourney.resolveOutcome({
+      currentTarget: cta,
+      kind: 'tickets',
+      location: eindhoven,
+      resolveHref: false,
+    });
+    expect(clicked.intent).toMatchObject({
+      href: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home?code=OPEN50',
+      presentation: 'roller',
+    });
+    expect(clicked.action.provider).toBe('roller');
+  });
+
   it('lets embedded Roller promo CTAs reach the booking controller', () => {
     const { context, document, window } = createBrowserContext();
     runScript('js/page-houston-promo-after.js', context);

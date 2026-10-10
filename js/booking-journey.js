@@ -273,8 +273,25 @@
         return normalizeKind(kind) === 'group-tickets';
     }
 
+    // A forwarded promo code must not change which checkout the URL belongs to.
+    function withoutPromoParams(href) {
+        var value = String(href || '').trim();
+        var queryIndex = value.indexOf('?');
+        if (queryIndex === -1) return value;
+        var hashIndex = value.indexOf('#', queryIndex);
+        var hash = hashIndex === -1 ? '' : value.slice(hashIndex);
+        var params = new URLSearchParams(value.slice(queryIndex + 1, hashIndex === -1 ? undefined : hashIndex));
+        var kept = new URLSearchParams();
+        params.forEach(function (paramValue, name) {
+            if (!isPromoParam(name)) kept.append(name, paramValue);
+        });
+        var query = kept.toString();
+        return value.slice(0, queryIndex) + (query ? '?' + query : '') + hash;
+    }
+
     function shouldUseRollerCheckout(loc, href, kind) {
         if (!loc || !(isTicketKind(kind) || isGroupTicketKind(kind))) return false;
+        href = withoutPromoParams(href);
         var roller = (loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
         var groupCheckout = (loc.groupCheckoutUrl && String(loc.groupCheckoutUrl).trim()) || '';
         var typedGroupCheckouts = Object.values(loc.groupCheckoutUrls || {}).map(function (value) {
