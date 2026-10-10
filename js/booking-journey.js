@@ -86,6 +86,10 @@
         return mergeQueryParams(value, collectTrackingParams(opts.search || getCurrentSearch()));
     }
 
+    function isRollerCheckoutHost(href) {
+        return /^https:\/\/ecom\.roller\.app\//i.test(String(href || '').trim());
+    }
+
     function appendPromoParams(href, options) {
         var opts = options || {};
         var value = String(href || '').trim();
@@ -404,7 +408,7 @@
         if (shouldAppendTrackingForPresentation(presentation)) {
             href = appendTrackingParams(href);
         }
-        if (presentation === 'roller') {
+        if (presentation === 'roller' || (presentation === 'link' && isRollerCheckoutHost(href))) {
             href = appendPromoParams(href);
         }
         return {

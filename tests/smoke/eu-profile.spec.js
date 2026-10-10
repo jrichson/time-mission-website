@@ -751,14 +751,11 @@ for (const prefix of ['', '/nl', '/fr', '/es']) {
 
 
 for (const cta of ['.nav-right .btn-tickets', '.hero-cta a.btn-primary']) {
-  test(`Eindhoven ${cta} opens the Roller checkout sidebar`, async ({ page }) => {
-    await page.route('https://cdn.rollerdigital.com/scripts/widget/checkout_iframe.js', async (route) => {
-      await route.fulfill({
-        contentType: 'application/javascript',
-        body: 'window.RollerCheckout = { show: function () { window.__rollerCheckoutShown = true; } };',
-      });
-    });
-    await page.goto('/eindhoven');
+  // iDEAL payments fail inside the Roller overlay, so Book Now opens the checkout page itself.
+  test(`Eindhoven ${cta} opens the Roller checkout page`, async ({ page, context }) => {
+    const checkout = 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products';
+    await context.route('https://ecom.roller.app/**', (route) => route.fulfill({ contentType: 'text/html', body: '<title>Roller</title>' }));
+    await page.goto('/eindhoven?code=OPEN50');
     await page.evaluate(async () => { await window.TM.ready; });
     await expect(page).toHaveTitle('Time Mission Eindhoven | Opens 16th October');
     await expect(page.locator('.ticker-bar').first()).toContainText('OPENING 16 OCTOBER');
@@ -766,12 +763,14 @@ for (const cta of ['.nav-right .btn-tickets', '.hero-cta a.btn-primary']) {
     await expect(page.locator('[data-tm-klaviyo-form-trigger], [data-tm-form-name="eindhoven_signup"]')).toHaveCount(0);
     await expect(page.locator('script[src*="guest-agent"]')).toHaveCount(0);
 
-    await page.locator(cta).first().click();
-    await page.waitForFunction(() => window.__rollerCheckoutShown === true);
-    await expect(page.locator('#roller-checkout')).toHaveAttribute(
-      'data-checkout',
-      'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
-    );
-    await expect(page).toHaveURL(/\/eindhoven$/);
+    const [popup] = await Promise.all([
+      context.waitForEvent('page'),
+      page.locator(cta).first().click(),
+    ]);
+    await popup.waitForLoadState('domcontentloaded');
+    const opened = new URL(popup.url());
+    expect(opened.origin + opened.pathname).toBe(checkout);
+    expect(opened.searchParams.get('code')).toBe('OPEN50');
+    await expect(page.locator('#roller-checkout[data-checkout]')).toHaveCount(0);
   });
 }
