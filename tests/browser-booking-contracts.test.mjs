@@ -147,6 +147,23 @@ describe('browser booking contracts', () => {
     expect(clicked.action.provider).toBe('roller');
   });
 
+  it('forwards a promo code to a Roller checkout opened as a direct link', () => {
+    const { context, window } = createBrowserContext();
+    window.location.search = '?code=OPEN50&utm_source=meta';
+    runScript('js/booking-journey.js', context);
+
+    // iDEAL fails inside the overlay, so Eindhoven links straight to the checkout page.
+    const eindhoven = {
+      id: 'eindhoven',
+      slug: 'eindhoven',
+      bookingUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products',
+    };
+    const outcome = window.TMBookingJourney.resolveOutcome({ kind: 'tickets', location: eindhoven });
+    expect(outcome.intent.presentation).toBe('link');
+    expect(new URL(outcome.intent.href).searchParams.get('code')).toBe('OPEN50');
+    expect(outcome.action.provider).toBe('link');
+  });
+
   it('lets embedded Roller promo CTAs reach the booking controller', () => {
     const { context, document, window } = createBrowserContext();
     runScript('js/page-houston-promo-after.js', context);

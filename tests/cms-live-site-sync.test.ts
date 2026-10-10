@@ -1,4 +1,4 @@
-import { EINDHOVEN_ROLLER_PANEL_SNAPSHOT } from '../cms/migration-data/20261006_eindhoven_roller_panel_snapshot';
+import { EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20261010_eindhoven_direct_checkout_snapshot';
 import { EINDHOVEN_BOOKING_SNAPSHOT } from '../cms/migration-data/20261006_eindhoven_booking_snapshot';
 import { ANTWERP_TICKER_SNAPSHOT } from '../cms/migration-data/20261007_antwerp_ticker_snapshot';
 import { SCOTTSDALE_LOCATION_SNAPSHOT, SCOTTSDALE_PAGE_SNAPSHOT } from '../cms/migration-data/20261001_scottsdale_snapshot';
@@ -157,8 +157,8 @@ describe('live-site-to-CMS sync snapshot', () => {
                     ...groupFormLocation,
                     externalLinks: {
                         ...groupFormLocation.externalLinks,
-                        bookingUrl: EINDHOVEN_CHECKOUT_SNAPSHOT.bookingUrl,
-                        rollerCheckoutUrl: EINDHOVEN_ROLLER_PANEL_SNAPSHOT.rollerCheckoutUrl,
+                        bookingUrl: EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT.bookingUrl,
+                        rollerCheckoutUrl: null,
                     },
                 };
             }
