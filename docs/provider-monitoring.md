@@ -60,4 +60,12 @@ The suite now contains 50 desktop/mobile checks, including Philadelphia/Houston 
 
 The remaining published OpenAI advertising pixel (`bzrcdn.openai.com` script and `bzr.openai.com` event endpoint) and Houston Meta gateway (`fh-118116076e9a4c2a96a99fbb70bea2a0.ecs.us-west-2.on.aws`) were explicitly approved and included in the compatibility policy. Their GTM configuration and event payloads are unchanged.
 
+## Open tracking destinations (2026-10-14)
+
+GTM is edited by non-developers, and a host allowlist meant every new tag silently failed until a code release. On 2026-10-14 GTM version 94 added Dashfi analytics (`js.dashfi.net` script, `web-analytics.dashfi.net` events) and Meta moved the default pixel's gateway to `mpc2-prod-28-is5qnl632q-ue.a.run.app`; both were blocked and failed the monitor. Since then `connect-src` and `frame-src` also allow any `https:` origin, so new tags can send data and use iframes without a release. The explicitly listed hosts stay because the build gates require them.
+
+Script files are still restricted to reviewed hosts: `check-csp-hashes.js` rejects `https:` and other wildcards in `script-src` and `script-src-elem`. A new GTM tag that loads a script file from a new host is still blocked; the daily monitor reports it and the fix is adding that host. `js.dashfi.net` was approved on this basis.
+
+The tracking check loads the US page from `baseURL` (the local build before a release, production in the daily monitor) and checks the live EU page only when `baseURL` is production. With hard-coded production URLs the release gate could not pass until the fix being released was already live.
+
 The Eindhoven signup pages were retired on 2026-10-06 when booking opened. `/eindhoven/signup` and `/nl/eindhoven/signup` redirect to the Eindhoven page. Daily checks assert the redirect, that the hero Book Now button links to the Roller checkout, that no Klaviyo signup trigger remains, and provider CSP. The tracking CSP check now uses `/nl/eindhoven`.

@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-test('US and consented EU tracking runs while CSP boundaries stay enforced', async ({ page }) => {
+test('US and consented EU tracking runs while CSP boundaries stay enforced', async ({ page, baseURL }) => {
   test.slow();
   await page.addInitScript(() => {
     window.__trackingCsp = [];
@@ -8,7 +8,12 @@ test('US and consented EU tracking runs while CSP boundaries stay enforced', asy
       window.__trackingCsp.push({ directive: event.effectiveDirective, blocked: event.blockedURI.split('?')[0] });
     });
   });
-  for (const url of ['https://www.timemission.com/philadelphia/educators', 'https://www.timemission.eu/nl/eindhoven']) {
+  // The US page follows baseURL: the local build before a release, production in the daily monitor.
+  // The live EU page is checked only in the monitor; before a release it still has the old policy,
+  // so checking it would fail the gate until the fix being released is already live.
+  const urls = ['/philadelphia/educators'];
+  if (String(baseURL).startsWith('https://')) urls.push('https://www.timemission.eu/nl/eindhoven');
+  for (const url of urls) {
     await page.goto(url, { waitUntil: 'domcontentloaded' });
     if (url.includes('.eu/')) {
       await expect.poll(() => page.evaluate(() => window.__TM_CONSENT_STATE__?.analytics_storage)).toBe('denied');
