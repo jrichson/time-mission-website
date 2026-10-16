@@ -493,8 +493,10 @@
         display: block;
     }
 
-    /* Coming Soon links stack on their own line on mobile */
-    .location-dropdown a.location-coming-soon {
+    /* Status-tagged links keep the tag beside the name with a gap on mobile */
+    .location-dropdown a.location-coming-soon,
+    .location-dropdown a.location-temporarily-closed,
+    .location-dropdown a.location-open-now {
         display: flex;
         justify-content: flex-start;
     }

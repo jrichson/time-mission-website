@@ -90,6 +90,16 @@ test('US location selector shows only the Dallas and Eindhoven callouts', async 
   expect([...badgeSlugs].sort()).toEqual(['dallas', 'eindhoven']);
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="dallas"] .coming-soon-tag')).toHaveText('Opening Soon');
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"] .coming-soon-tag')).toHaveText('NOW OPEN');
+  await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]')).toHaveClass(/location-open-now/);
+});
+
+test('Dallas signup page header CTA is labelled Ticket Sign-Up', async ({ page }) => {
+  await page.goto('/dallas/signup');
+  await page.evaluate(async () => { await window.TM.ready; });
+
+  const cta = page.locator('.nav .btn-tickets').first();
+  await expect(cta).toHaveAttribute('href', '/dallas/signup');
+  await expect(cta).toContainText('Ticket Sign-Up');
 });
 
 test('Scottsdale is coming soon and location lists mark upcoming venues', async ({ page }) => {

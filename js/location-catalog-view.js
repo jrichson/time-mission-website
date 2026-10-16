@@ -332,7 +332,13 @@
                 rel: '',
             };
         }
-        return BookingJourney.resolveCtaView(loc, options || {});
+        var cta = BookingJourney.resolveCtaView(loc, options || {});
+        if (kind === 'tickets' && cta && !cta.label && BookingJourney.isLeadOnlyComingSoon(loc)
+            && BookingJourney.resolveSignupUrl(loc)) {
+            cta.label = translate('location.ticketSignUp', 'Ticket Sign-Up');
+            cta.labelKey = 'location.ticketSignUp';
+        }
+        return cta;
     }
 
     function externalLocationCta(view) {
