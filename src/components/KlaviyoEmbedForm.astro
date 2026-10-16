@@ -20,13 +20,31 @@ type BackupField = {
 };
 const fields = config.fields as BackupField[];
 const fieldId = (name: string) => `klaviyo-backup-${formId}-${name}`;
+const klaviyoCompany = KLAVIYO_ACCOUNTS[config.site as 'us' | 'eu'];
 ---
 
 <div
     class="tm-klaviyo-embed"
     data-tm-klaviyo-embed={formId}
-    data-tm-klaviyo-company={KLAVIYO_ACCOUNTS[config.site as 'us' | 'eu']}
+    data-tm-klaviyo-company={klaviyoCompany}
 >
+    <script is:inline define:vars={{ klaviyoCompany }}>
+        // Start Klaviyo as early as a head tag would, and record whether it loads or is blocked.
+        (function () {
+            if (window.__tmKlaviyo) return;
+            var record = window.__tmKlaviyo = { state: 'loading' };
+            var script = document.createElement('script');
+            function settle(state) {
+                record.state = state;
+                document.dispatchEvent(new CustomEvent('tm:klaviyo-script', { detail: state }));
+            }
+            script.async = true;
+            script.src = 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=' + klaviyoCompany;
+            script.onload = function () { settle('loaded'); };
+            script.onerror = function () { settle('failed'); };
+            document.head.appendChild(script);
+        })();
+    </script>
     <p class="tm-klaviyo-embed__loading" data-tm-klaviyo-loading role="status" hidden>Loading sign-up form…</p>
     <div
         class={`klaviyo-form-${formId}`}
@@ -86,4 +104,4 @@ const fieldId = (name: string) => `klaviyo-backup-${formId}-${name}`;
         <p>{config.success.text}</p>
     </div>
 </div>
-<script is:inline src="/js/klaviyo-fallback.js?v=3" defer></script>
+<script is:inline src="/js/klaviyo-fallback.js?v=4" defer></script>

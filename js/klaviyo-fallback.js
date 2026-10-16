@@ -1,7 +1,8 @@
 /**
  * Loads Klaviyo embed forms and shows a first-party backup when Klaviyo can't render.
  *
- * This script loads Klaviyo's onsite script itself so it can see the outcome:
+ * KlaviyoEmbedForm's inline loader starts Klaviyo's onsite script early and records the
+ * outcome on window.__tmKlaviyo; this script reacts to it:
  * - script blocked or failing (ad blockers, privacy browsers): backup immediately
  * - script never answers: backup after NO_RESPONSE_MS
  * - script loaded but form still rendering (slow mobile networks): keep the loading
@@ -27,7 +28,14 @@
         scriptListeners.splice(0).forEach(function (listener) { listener(state); });
     }
 
-    function loadKlaviyo(companyId) {
+    function trackKlaviyo(companyId) {
+        var record = window.__tmKlaviyo;
+        if (record) {
+            if (record.state !== 'loading') setScriptState(record.state);
+            else document.addEventListener('tm:klaviyo-script', function (event) { setScriptState(event.detail); }, { once: true });
+            return;
+        }
+        // Inline loader missing (e.g. markup rendered without it): load Klaviyo here instead.
         if (!/^[A-Za-z0-9]+$/.test(companyId)) {
             setScriptState('failed');
             return;
@@ -200,7 +208,7 @@
     function initAll() {
         var roots = document.querySelectorAll('[data-tm-klaviyo-embed]');
         if (!roots.length) return;
-        loadKlaviyo(roots[0].getAttribute('data-tm-klaviyo-company') || '');
+        trackKlaviyo(roots[0].getAttribute('data-tm-klaviyo-company') || '');
         roots.forEach(init);
     }
 

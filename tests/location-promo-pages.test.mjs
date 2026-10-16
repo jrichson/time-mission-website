@@ -45,8 +45,8 @@ describe('location campaign pages', () => {
     expect(page).toContain('locationSlug="houston"');
     // Klaviyo's script is loaded by js/klaviyo-fallback.js for the account on the embed.
     expect(shell).not.toContain('static.klaviyo.com/onsite/js/klaviyo.js');
-    expect(read('src/components/KlaviyoEmbedForm.astro')).toContain('data-tm-klaviyo-company={KLAVIYO_ACCOUNTS[');
-    expect(read('js/klaviyo-fallback.js')).toContain("'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id='");
+    expect(read('src/components/KlaviyoEmbedForm.astro')).toContain('data-tm-klaviyo-company={klaviyoCompany}');
+    expect(read('src/components/KlaviyoEmbedForm.astro')).toContain("'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=' + klaviyoCompany");
     expect(shell).toContain('canonicalPath: `/${locationSlug}/educators`');
     expect(shell).toContain('bodyDataLocation={locationSlug}');
     expect(template).toContain('<span>Educators Free</span>');
