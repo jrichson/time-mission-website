@@ -2,9 +2,14 @@
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { definePage } from '../../lib/define-page';
 import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+import { allLocations } from '../../data/locations';
+import { locationCtaView } from '../../lib/location-view';
 
 const page = definePage({ canonicalPath: '/dallas/signup' });
 const formId = 'QYqsMS';
+const dallas = allLocations.find((loc) => loc.slug === 'dallas');
+if (!dallas) throw new Error('dallas missing from src/data/locations');
+const cta = locationCtaView(dallas);
 const ld = serializeGraph(buildSimpleGraph([
     { label: 'Home', href: '/' },
     { label: 'Dallas', href: '/dallas' },
@@ -12,7 +17,11 @@ const ld = serializeGraph(buildSimpleGraph([
 ]));
 ---
 
-<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-promo-page tm-signup-embed-page" bodyDataLocation="dallas">
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-promo-page tm-signup-embed-page" bodyDataLocation="dallas"
+    bookingCtaHref={cta.href}
+    bookingCtaLabel={cta.label}
+    bookingCtaI18n={cta.i18n}
+>
     <Fragment slot="head-extra">
         <link rel="stylesheet" href="/css/page-promo.css?v=2" />
         <script is:inline async src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU"></script>

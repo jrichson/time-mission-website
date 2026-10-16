@@ -627,6 +627,7 @@ test('EU navigation lists Europe before the United States', async ({ page }) => 
     .toHaveCount(0);
   await expect(europeGroup.locator('a[data-tm-location-slug="eindhoven"] .coming-soon-tag'))
     .toHaveText('NOW OPEN');
+  await expect(europeGroup.locator('a[data-tm-location-slug="eindhoven"]')).toHaveClass(/location-open-now/);
   await expect(usGroup.locator('.coming-soon-tag')).toHaveCount(0);
 
   await page.goto('/locations');
