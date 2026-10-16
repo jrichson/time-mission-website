@@ -21,6 +21,8 @@ TM_SITE_PROFILE = "us"
 PUBLIC_SITE_ORIGIN = "https://www.timemission.com"
 PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAADdV7UFMRdD_WvXW"
 FORM_ALLOWED_ORIGINS = "https://www.timemission.com,https://timemission.com"
+# US Klaviyo account (TNQysU) newsletter list. KLAVIYO_API_KEY is a Pages secret.
+KLAVIYO_LIST_ID = "VKVyVZ"
 
 # The deployment wrapper stages this root configuration beside verified copies of
 # `dist/`, `functions/`, and `migrations/` before Wrangler Direct Upload.
