@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
@@ -225,6 +227,13 @@ describe('site deployment profiles', () => {
     expect(config).toContain('CONTACT_TO_EMAIL_ANTWERP = "antwerp@experience-factory.com"');
     expect(config).toContain('CONTACT_TO_EMAIL_BRUSSELS = "brussels@timemission.com"');
     expect(config).toContain('CONTACT_TO_EMAIL_EINDHOVEN = "eindhoven@timemission.nl"');
+    expect(config).toContain('KLAVIYO_LIST_ID = "RkbAmH"');
+  });
+
+  it('subscribes each site\'s newsletter to its own Klaviyo account list', () => {
+    const usConfig = fs.readFileSync(path.join(root, 'wrangler.toml'), 'utf8');
+    expect(usConfig).toContain('KLAVIYO_LIST_ID = "VKVyVZ"');
+    expect(usConfig).not.toContain('RkbAmH');
   });
 
   it('refuses to render an EU Pages config without an EU D1 UUID', () => {
