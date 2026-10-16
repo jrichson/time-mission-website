@@ -1,15 +1,53 @@
 /**
- * Backup forms for Klaviyo embeds.
- * Klaviyo renders into an empty div. When its script is blocked (ad blockers, privacy
- * browsers) the div stays empty, so after a short wait the first-party backup form is
- * shown instead. It posts to /api/klaviyo-signup, which subscribes to the same list.
+ * Loads Klaviyo embed forms and shows a first-party backup when Klaviyo can't render.
+ *
+ * This script loads Klaviyo's onsite script itself so it can see the outcome:
+ * - script blocked or failing (ad blockers, privacy browsers): backup immediately
+ * - script never answers: backup after NO_RESPONSE_MS
+ * - script loaded but form still rendering (slow mobile networks): keep the loading
+ *   state until the form appears, with the backup as a last resort after SLOW_RENDER_MS
+ * While waiting, a loading message replaces the blank space. The backup posts to
+ * /api/klaviyo-signup, which subscribes to the same list.
  */
 (function () {
     'use strict';
 
-    var WAIT_MS = 6000;
-    var POLL_MS = 500;
+    var NO_RESPONSE_MS = 4000;
+    var SLOW_RENDER_MS = 8000;
+    var POLL_MS = 200;
+    var KLAVIYO_SRC = 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=';
     var TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+
+    // 'loading' until Klaviyo's script loads or fails; shared by every embed on the page.
+    var klaviyoScriptState = 'loading';
+    var scriptListeners = [];
+
+    function setScriptState(state) {
+        klaviyoScriptState = state;
+        scriptListeners.splice(0).forEach(function (listener) { listener(state); });
+    }
+
+    function loadKlaviyo(companyId) {
+        if (!/^[A-Za-z0-9]+$/.test(companyId)) {
+            setScriptState('failed');
+            return;
+        }
+        var src = KLAVIYO_SRC + companyId;
+        var script = document.querySelector('script[src="' + src + '"]');
+        if (script) {
+            // Already on the page from another component; Klaviyo sets window.klaviyo when it runs.
+            if (window.klaviyo && typeof window.klaviyo.push === 'function') setScriptState('loaded');
+            script.addEventListener('load', function () { setScriptState('loaded'); });
+            script.addEventListener('error', function () { setScriptState('failed'); });
+            return;
+        }
+        script = document.createElement('script');
+        script.async = true;
+        script.src = src;
+        script.addEventListener('load', function () { setScriptState('loaded'); });
+        script.addEventListener('error', function () { setScriptState('failed'); });
+        (document.head || document.documentElement).appendChild(script);
+    }
 
     function klaviyoRendered(embed) {
         return Boolean(embed && embed.children.length > 0);
@@ -104,35 +142,55 @@
         root.setAttribute('data-tm-klaviyo-ready', '1');
         var embed = root.querySelector('[data-klaviyo-form-embed]');
         var form = root.querySelector('[data-tm-klaviyo-backup]');
+        var loading = root.querySelector('[data-tm-klaviyo-loading]');
         if (!embed || !form) return;
 
         var touched = false;
         form.addEventListener('input', function () { touched = true; }, { once: true });
         bindSubmit(root, form);
+        if (loading) loading.hidden = false;
+
+        function finishLoading() {
+            if (loading) loading.hidden = true;
+        }
 
         function showBackup() {
             if (klaviyoRendered(embed) || !form.hidden) return;
+            finishLoading();
             form.hidden = false;
             root.setAttribute('data-tm-klaviyo-backup-shown', '1');
             mountTurnstile(form);
         }
 
-        // If Klaviyo recovers before the visitor starts typing, prefer the Klaviyo form.
+        function onKlaviyoRendered() {
+            finishLoading();
+            if (form.hidden) return;
+            // Klaviyo arrived after the backup: keep whichever form the visitor is using.
+            if (touched) embed.hidden = true;
+            else form.hidden = true;
+        }
+
         if (typeof MutationObserver === 'function') {
             new MutationObserver(function () {
-                if (klaviyoRendered(embed) && !touched) form.hidden = true;
+                if (klaviyoRendered(embed)) onKlaviyoRendered();
             }).observe(embed, { childList: true });
         }
 
-        var script = document.querySelector('script[src*="static.klaviyo.com/onsite/js/klaviyo.js"]');
-        if (script) script.addEventListener('error', showBackup);
+        function onScriptState(state) {
+            if (state === 'failed') showBackup();
+        }
+        if (klaviyoScriptState === 'loading') scriptListeners.push(onScriptState);
+        else onScriptState(klaviyoScriptState);
 
         var waited = 0;
         var timer = window.setInterval(function () {
             waited += POLL_MS;
             if (klaviyoRendered(embed)) {
                 window.clearInterval(timer);
-            } else if (waited >= WAIT_MS) {
+                onKlaviyoRendered();
+            } else if (klaviyoScriptState === 'failed'
+                || (klaviyoScriptState === 'loading' && waited >= NO_RESPONSE_MS)
+                || waited >= SLOW_RENDER_MS) {
                 window.clearInterval(timer);
                 showBackup();
             }
@@ -140,7 +198,10 @@
     }
 
     function initAll() {
-        document.querySelectorAll('[data-tm-klaviyo-embed]').forEach(init);
+        var roots = document.querySelectorAll('[data-tm-klaviyo-embed]');
+        if (!roots.length) return;
+        loadKlaviyo(roots[0].getAttribute('data-tm-klaviyo-company') || '');
+        roots.forEach(init);
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAll);

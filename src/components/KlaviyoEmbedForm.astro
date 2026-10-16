@@ -1,5 +1,5 @@
 ---
-import { klaviyoFormConfig } from '../../functions/_shared/klaviyo-forms.mjs';
+import { KLAVIYO_ACCOUNTS, klaviyoFormConfig } from '../../functions/_shared/klaviyo-forms.mjs';
 
 interface Props {
     formId: string;
@@ -22,7 +22,12 @@ const fields = config.fields as BackupField[];
 const fieldId = (name: string) => `klaviyo-backup-${formId}-${name}`;
 ---
 
-<div class="tm-klaviyo-embed" data-tm-klaviyo-embed={formId}>
+<div
+    class="tm-klaviyo-embed"
+    data-tm-klaviyo-embed={formId}
+    data-tm-klaviyo-company={KLAVIYO_ACCOUNTS[config.site as 'us' | 'eu']}
+>
+    <p class="tm-klaviyo-embed__loading" data-tm-klaviyo-loading role="status" hidden>Loading sign-up form…</p>
     <div
         class={`klaviyo-form-${formId}`}
         data-klaviyo-form-embed
@@ -81,4 +86,4 @@ const fieldId = (name: string) => `klaviyo-backup-${formId}-${name}`;
         <p>{config.success.text}</p>
     </div>
 </div>
-<script is:inline src="/js/klaviyo-fallback.js?v=2" defer></script>
+<script is:inline src="/js/klaviyo-fallback.js?v=3" defer></script>
