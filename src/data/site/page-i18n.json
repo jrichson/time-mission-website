@@ -4333,7 +4333,24 @@
           "Sign up to hear first when Dallas tickets go on sale.": "Regístrate para enterarte primero cuando salgan a la venta las entradas de Dallas.",
           "Dallas Ticket Sign-Up | Time Mission": "Registro de entradas de Dallas | Time Mission",
           "Sign up to hear first when tickets go on sale at Time Mission Dallas, opening soon at 5307 E. Mockingbird Ln.": "Regístrate para enterarte primero cuando salgan a la venta las entradas de Time Mission Dallas, que abrirá pronto en 5307 E. Mockingbird Ln.",
-          "Time Mission Dallas Ticket Sign-Up": "Registro de entradas de Time Mission Dallas"
+          "Time Mission Dallas Ticket Sign-Up": "Registro de entradas de Time Mission Dallas",
+          "First Name": "Nombre",
+          "First name": "Nombre",
+          "Last Name": "Apellido",
+          "Email *": "Correo electrónico *",
+          "School Email (edu email) *": "Correo escolar (correo edu) *",
+          "School District": "Distrito escolar",
+          "Grade or Subject": "Grado o materia",
+          "Terms": "Términos",
+          "SIGN-UP FOR FIRST ACCESS": "REGÍSTRATE PARA ACCESO ANTICIPADO",
+          "Submitted ✅ Thank you": "Enviado ✅ Gracias",
+          "Check your email for your unique booking link. It can take up to 10 minutes, so check your spam folder if you don't see it. Don't share or forward the link, it only works once.": "Revisa tu correo electrónico para encontrar tu enlace de reserva único. Puede tardar hasta 10 minutos, así que revisa la carpeta de spam si no lo ves. No compartas ni reenvíes el enlace: solo funciona una vez.",
+          "FREE grand opening tickets are coming! Sign up and watch your inbox for your code and first dibs on booking.": "¡Se vienen entradas GRATIS para la gran inauguración! Regístrate y revisa tu bandeja de entrada para recibir tu código y ser de los primeros en reservar.",
+          "Unlock Free Tickets!": "¡Desbloquea entradas gratis!",
+          "You're on the list!": "¡Ya estás en la lista!",
+          "Watch your inbox for your free ticket code and first dibs on booking.": "Revisa tu bandeja de entrada para recibir tu código de entrada gratis y ser de los primeros en reservar.",
+          "By submitting this form, you agree to receive your promo code and related emails from Time Mission, including marketing emails such as field trip and group information. Consent is not a condition of purchase. You can unsubscribe at any time using the link in any email.": "By submitting this form, you agree to receive your promo code and related emails from Time Mission, including marketing emails such as field trip and group information. Consent is not a condition of purchase. You can unsubscribe at any time using the link in any email.",
+          "By submitting this form, you consent to receive informational (e.g., order updates) and/or marketing texts (e.g., cart reminders) from Time Mission including texts sent by autodialer. Consent is not a condition of purchase. Msg & data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP or clicking the unsubscribe link (where available).": "By submitting this form, you consent to receive informational (e.g., order updates) and/or marketing texts (e.g., cart reminders) from Time Mission including texts sent by autodialer. Consent is not a condition of purchase. Msg & data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP or clicking the unsubscribe link (where available)."
         }
       },
       "preservedSourceTerms": {
@@ -4382,7 +4399,9 @@
           "timemission.com",
           "timemission.com/houston/world-cup",
           "West Nyack",
-          "Yelena M."
+          "Yelena M.",
+          "By submitting this form, you agree to receive your promo code and related emails from Time Mission, including marketing emails such as field trip and group information. Consent is not a condition of purchase. You can unsubscribe at any time using the link in any email.",
+          "By submitting this form, you consent to receive informational (e.g., order updates) and/or marketing texts (e.g., cart reminders) from Time Mission including texts sent by autodialer. Consent is not a condition of purchase. Msg & data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP or clicking the unsubscribe link (where available)."
         ]
       }
     }

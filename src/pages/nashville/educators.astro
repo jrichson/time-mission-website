@@ -1,4 +1,5 @@
 ---
+import KlaviyoEmbedForm from '../../components/KlaviyoEmbedForm.astro';
 import EducatorPage from '../../components/EducatorPage.astro';
 import PromoSplit from '../../components/PromoSplit.astro';
 ---
@@ -35,12 +36,7 @@ import PromoSplit from '../../components/PromoSplit.astro';
         </div>
 
         <section id="teacher-signup" class="tm-promo-form tm-promo-form--live" aria-label="Educator signup form">
-            <div
-                class="klaviyo-form-WC5BHF"
-                data-klaviyo-form-embed
-                data-tm-form-name="educator_appreciation"
-                data-tm-klaviyo-form-id="WC5BHF"
-            ></div>
+            <KlaviyoEmbedForm formId="WC5BHF" formName="educator_appreciation" />
         </section>
 
         <div class="tm-promo-landing__copy">

@@ -252,6 +252,101 @@
     min-height: 10rem;
 }
 
+/* First-party backup shown when Klaviyo's embed script is blocked. */
+.tm-klaviyo-embed [data-klaviyo-form-embed]:empty:has(+ .tm-klaviyo-backup:not([hidden])) {
+    display: none;
+}
+
+.tm-klaviyo-backup,
+.tm-klaviyo-backup__success {
+    display: grid;
+    gap: 1rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--white);
+}
+
+.tm-klaviyo-backup[hidden],
+.tm-klaviyo-backup__success[hidden] {
+    display: none;
+}
+
+.tm-klaviyo-backup__intro,
+.tm-klaviyo-backup__success-title {
+    margin: 0;
+    font-weight: 700;
+    text-align: center;
+}
+
+.tm-klaviyo-backup__fields {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.tm-klaviyo-backup__field {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.tm-klaviyo-backup__label {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.tm-klaviyo-backup__field input {
+    width: 100%;
+    padding: 0.875rem 1.1rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: var(--white);
+    font-family: var(--body);
+    font-size: 1rem;
+}
+
+.tm-klaviyo-backup__field input:focus-visible {
+    border-color: var(--orange);
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
+}
+
+.tm-klaviyo-backup__consent,
+.tm-klaviyo-backup__status {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--gray);
+}
+
+.tm-klaviyo-backup__consent a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.tm-klaviyo-backup__submit {
+    justify-self: stretch;
+    border: none;
+    background: var(--gradient-primary);
+    color: var(--white);
+    font-family: var(--tech);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.tm-klaviyo-backup__submit:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+}
+
+.tm-klaviyo-backup__submit:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}
+
 @media (min-width: 901px) {
     .tm-educator-page .tm-promo-landing__content {
         align-self: start;
