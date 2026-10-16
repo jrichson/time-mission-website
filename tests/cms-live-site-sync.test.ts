@@ -1,5 +1,6 @@
 import { EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20261010_eindhoven_direct_checkout_snapshot';
-import { EINDHOVEN_BOOKING_SNAPSHOT } from '../cms/migration-data/20261006_eindhoven_booking_snapshot';
+import { EINDHOVEN_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20261016_eindhoven_now_open_snapshot';
+import { DALLAS_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261016_dallas_signup_page_snapshot';
 import { ANTWERP_TICKER_SNAPSHOT } from '../cms/migration-data/20261007_antwerp_ticker_snapshot';
 import { SCOTTSDALE_LOCATION_SNAPSHOT, SCOTTSDALE_PAGE_SNAPSHOT } from '../cms/migration-data/20261001_scottsdale_snapshot';
 import { EINDHOVEN_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20260925_eindhoven_checkout_snapshot';
@@ -111,8 +112,8 @@ describe('live-site-to-CMS sync snapshot', () => {
             } : location;
             const currentLocation = location.slug === PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.slug
                 ? { ...operationalLocation, ticker: PHILADELPHIA_NOW_OPEN_SNAPSHOT.location.ticker }
-                : location.slug === EINDHOVEN_BOOKING_SNAPSHOT.slug
-                ? { ...operationalLocation, ticker: EINDHOVEN_BOOKING_SNAPSHOT.ticker }
+                : location.slug === EINDHOVEN_NOW_OPEN_SNAPSHOT.slug
+                ? { ...operationalLocation, ticker: EINDHOVEN_NOW_OPEN_SNAPSHOT.ticker }
                 : location.slug === ANTWERP_TICKER_SNAPSHOT.slug
                 ? { ...operationalLocation, ticker: ANTWERP_TICKER_SNAPSHOT.ticker }
                 : REMOVED_TICKER_LOCATIONS.some((slug) => slug === location.slug)
@@ -155,6 +156,7 @@ describe('live-site-to-CMS sync snapshot', () => {
             if (location.slug === EINDHOVEN_CHECKOUT_SNAPSHOT.slug) {
                 return {
                     ...groupFormLocation,
+                    hours: EINDHOVEN_NOW_OPEN_SNAPSHOT.hours,
                     externalLinks: {
                         ...groupFormLocation.externalLinks,
                         bookingUrl: EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT.bookingUrl,
@@ -221,6 +223,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 NASHVILLE_EDUCATORS_OPENING_PAGE_SNAPSHOT,
                 NASHVILLE_EDUCATORS_DEADLINE_PAGE_SNAPSHOT,
                 DALLAS_EDUCATORS_OPENING_PAGE_SNAPSHOT,
+                DALLAS_SIGNUP_PAGE_SNAPSHOT,
                 ...BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 ...US_SCHOOL_NIGHT_PAGE_SNAPSHOT,
                 EINDHOVEN_SIGNUP_PAGE_SNAPSHOT,
@@ -242,8 +245,8 @@ describe('live-site-to-CMS sync snapshot', () => {
                     metaDescription: pressSeo.metaDescription,
                 };
             }
-            if (page?.path === EINDHOVEN_BOOKING_SNAPSHOT.page.path) {
-                return { ...page, ...EINDHOVEN_BOOKING_SNAPSHOT.page };
+            if (page?.path === EINDHOVEN_NOW_OPEN_SNAPSHOT.page.path) {
+                return { ...page, ...EINDHOVEN_NOW_OPEN_SNAPSHOT.page };
             }
             return page?.path === PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.path
                 ? { ...page, metaDescription: PHILADELPHIA_NOW_OPEN_SNAPSHOT.page.metaDescription }

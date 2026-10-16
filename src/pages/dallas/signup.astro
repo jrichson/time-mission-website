@@ -1,0 +1,32 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { definePage } from '../../lib/define-page';
+import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+
+const page = definePage({ canonicalPath: '/dallas/signup' });
+const formId = 'QYqsMS';
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Dallas', href: '/dallas' },
+    { label: 'Ticket Sign-Up', href: page.canonicalPath },
+]));
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-promo-page tm-signup-embed-page" bodyDataLocation="dallas">
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-promo.css?v=2" />
+        <script is:inline async src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU"></script>
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <section class="tm-signup-embed" aria-labelledby="dallas-signup-title">
+        <h1 id="dallas-signup-title" class="visually-hidden">Time Mission Dallas Ticket Sign-Up</h1>
+        <div
+            class={`tm-signup-embed__form klaviyo-form-${formId}`}
+            data-klaviyo-form-embed
+            data-tm-form-name="dallas_ticket_signup"
+            data-tm-klaviyo-form-id={formId}
+        ></div>
+    </section>
+</SiteLayout>

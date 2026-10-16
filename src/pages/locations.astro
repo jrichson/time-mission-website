@@ -1,4 +1,5 @@
 ---
+import { locationShowsComingSoon } from '../lib/location-status';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { definePage } from '../lib/define-page';
 import { allLocations } from '../data/locations';
@@ -91,15 +92,15 @@ const page = definePage({ canonicalPath: '/locations' });
                                     class:list={[
                                         'loc-row',
                                         'reveal',
-                                        { 'is-coming-soon': loc.status === 'coming-soon' },
+                                        { 'is-coming-soon': locationShowsComingSoon(loc) },
                                         { 'is-temporarily-closed': loc.status === 'temporarily-closed' },
                                     ]}
                                 >
                                     <span class="loc-state">{locationStateBadge(loc)}</span>
                                     <div class="loc-body">
                                         <div class="loc-name">
-                                            <span>{locationListLabel(loc)}</span>{loc.status === 'coming-soon' && '*'}
-                                            {loc.status !== 'coming-soon' && locationStatusBadge(loc) ? (
+                                            <span>{locationListLabel(loc)}</span>{locationShowsComingSoon(loc) && '*'}
+                                            {!locationShowsComingSoon(loc) && locationStatusBadge(loc) ? (
                                                 <span class="loc-coming-soon-tag">{locationStatusBadge(loc)}</span>
                                             ) : null}
                                         </div>

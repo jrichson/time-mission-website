@@ -48,7 +48,7 @@ const ANNOUNCEMENT_MESSAGE_I18N_KEYS = new Map([
     ['TIME MISSION ANTWERP', 'ticker.location.antwerp'],
     ['SUMMER ADVENTURES AT TIME MISSION ANTWERP', 'ticker.location.antwerp'],
     ['BRUSSELS NOW OPEN', 'ticker.location.brussels'],
-    ['OPENING 16 OCTOBER', 'ticker.location.eindhoven'],
+    ['EINDHOVEN NOW OPEN!', 'ticker.location.eindhoven'],
     ['20% OFF BACK TO SCHOOL', 'ticker.backToSchool20'],
 ]);
 const ANNOUNCEMENT_LINK_LABEL_I18N_KEYS = new Map([

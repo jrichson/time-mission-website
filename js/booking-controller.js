@@ -209,6 +209,13 @@
                 cta: translate('booking.eu.cta', 'Visit EU Site'),
             };
         }
+        if (kind === 'tickets' && BookingJourney.isLeadOnlyComingSoon(loc) && BookingJourney.resolveSignupUrl(loc)) {
+            return {
+                title: translate('booking.signup.title', 'Ticket Sign-Up'),
+                intro: translate('booking.signup.intro', 'Sign up to hear first when tickets for this location go on sale.'),
+                cta: translate('location.ticketSignUp', 'Ticket Sign-Up'),
+            };
+        }
         if ((kind === 'tickets' || kind === 'groups') && BookingJourney.isLeadOnlyComingSoon(loc)) {
             return {
                 title: translate('booking.updates.title', 'Contact This Location'),

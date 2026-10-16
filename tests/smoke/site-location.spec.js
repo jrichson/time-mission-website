@@ -81,13 +81,15 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
 });
 
-test('US location selector shows only the Eindhoven opening callout', async ({ page }) => {
+test('US location selector shows only the Dallas and Eindhoven callouts', async ({ page }) => {
   await page.goto('/');
 
   const badgeSlugs = await page.locator('#locationDropdown a:has(.coming-soon-tag)')
     .evaluateAll((links) => links.map((link) => link.getAttribute('data-tm-location-slug')));
 
-  expect(badgeSlugs).toEqual(['eindhoven']);
+  expect([...badgeSlugs].sort()).toEqual(['dallas', 'eindhoven']);
+  await expect(page.locator('#locationDropdown a[data-tm-location-slug="dallas"] .coming-soon-tag')).toHaveText('Opening Soon');
+  await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"] .coming-soon-tag')).toHaveText('NOW OPEN');
 });
 
 test('Scottsdale is coming soon and location lists mark upcoming venues', async ({ page }) => {
@@ -116,7 +118,9 @@ test('Scottsdale is coming soon and location lists mark upcoming venues', async 
   await page.goto('/es/locations');
   await page.evaluate(async () => { await window.TM.ready; });
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="scottsdale"]')).toContainText('Scottsdale*');
-  await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]')).toContainText('Eindhoven*');
+  const eindhoven = page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]');
+  await expect(eindhoven).toContainText('¡YA ABIERTO!');
+  await expect(eindhoven).not.toContainText('*');
 });
 
 test('Edison has a local location page whose action links lead to Supercharged NJ', async ({ page, isMobile }) => {

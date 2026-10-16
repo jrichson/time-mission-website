@@ -1,5 +1,6 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
+import { locationShowsComingSoon } from '../lib/location-status';
 import { allLocations } from '../data/locations';
 import {
     locationsForRegion,
@@ -29,7 +30,8 @@ function statusLabel(loc: (typeof allLocations)[number]) {
 }
 
 function selectorBadge(loc: (typeof allLocations)[number]) {
-    if (loc.slug === 'eindhoven') return 'Opens Oct. 16';
+    if (loc.slug === 'eindhoven') return 'NOW OPEN';
+    if (loc.slug === 'dallas') return 'Opening Soon';
     if (loc.status === 'temporarily-closed'
         && (activeSiteProfile.id === 'us' || loc.region === 'europe')) {
         return statusLabel(loc);
@@ -38,7 +40,7 @@ function selectorBadge(loc: (typeof allLocations)[number]) {
 }
 
 function statusClass(loc: (typeof allLocations)[number]) {
-    if (loc.status === 'coming-soon') return 'location-coming-soon';
+    if (locationShowsComingSoon(loc)) return 'location-coming-soon';
     if (loc.status === 'temporarily-closed') return 'location-temporarily-closed';
     return undefined;
 }
@@ -78,9 +80,9 @@ function locationLabelI18n(loc: (typeof allLocations)[number]) {
                         target={externalLocationHref ? '_blank' : undefined}
                         rel={externalLocationHref ? 'noopener' : undefined}
                     >
-                        <span><span data-i18n={locationLabelI18n(loc)}>{locationListLabel(loc)}</span>{loc.status === 'coming-soon' && '*'}</span>
+                        <span><span data-i18n={locationLabelI18n(loc)}>{locationListLabel(loc)}</span>{locationShowsComingSoon(loc) && '*'}</span>
                         {badge && (
-                            <span class="coming-soon-tag" data-i18n={loc.slug === 'eindhoven' ? 'location.eindhovenOpening' : undefined}>
+                            <span class="coming-soon-tag" data-i18n={loc.slug === 'eindhoven' ? 'location.nowOpen' : loc.slug === 'dallas' ? 'location.openingSoon' : undefined}>
                                 {' '}{badge}
                             </span>
                         )}

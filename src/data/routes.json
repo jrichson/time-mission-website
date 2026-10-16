@@ -599,6 +599,16 @@
       "outputFile": "dallas/educators.html",
       "sitemap": true,
       "status": 301
+    },
+    {
+      "id": "dallas-signup",
+      "canonicalPath": "/dallas/signup",
+      "redirectSources": [
+        "/dallas/signup.html"
+      ],
+      "outputFile": "dallas/signup.html",
+      "sitemap": true,
+      "status": 301
     }
   ],
   "aliases": [

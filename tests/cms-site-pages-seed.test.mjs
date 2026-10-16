@@ -11,6 +11,7 @@ describe('CMS existing-page seed migration', () => {
     const routes = JSON.parse(fs.readFileSync(path.join(root, 'src/data/routes.json'), 'utf8')).routes;
     const migrationFiles = [
       'cms/migration-data/20261001_scottsdale_snapshot.ts',
+      'cms/migration-data/20261016_dallas_signup_page_snapshot.ts',
       'cms/migration-data/20260916_educators_pages_snapshot.ts',
       'cms/migration-data/20260908_admin_promotion_updates_snapshot.ts',
       'cms/migrations/20260508_201500_seed_site_pages.ts',

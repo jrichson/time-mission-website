@@ -77,7 +77,7 @@ describe('site deployment profiles', () => {
   });
 
   it('keeps EU answer blocks focused on European venue facts', () => {
-    expect(geoAnswerBlocks.profiles.eu.locations.text).toContain('Eindhoven opens 16 October');
+    expect(geoAnswerBlocks.profiles.eu.locations.text).toContain('Eindhoven is now open');
     expect(geoAnswerBlocks.profiles.eu.locations.text).toContain('Hermanus Boexstraat 4');
     expect(geoAnswerBlocks.profiles.eu.pricing.text).toContain('current euro prices');
     expect(geoAnswerBlocks.profiles.eu.pricing.text).not.toContain('Military');
@@ -159,7 +159,7 @@ describe('site deployment profiles', () => {
     expect(brussels.externalUrl).toBeUndefined();
   });
 
-  it('publishes verified European venue facts and Eindhoven advance booking', () => {
+  it('publishes verified European venue facts and the open Eindhoven venue', () => {
     const antwerp = location('antwerp');
     const brussels = location('brussels');
     const eindhoven = location('eindhoven');
@@ -183,7 +183,7 @@ describe('site deployment profiles', () => {
       localBusinessSchemaEligible: true,
     });
     expect(eindhoven).toMatchObject({
-      status: 'coming-soon',
+      status: 'open',
       address: {
         line1: 'Hermanus Boexstraat 4',
         city: 'Eindhoven',

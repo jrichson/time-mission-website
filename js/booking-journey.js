@@ -203,7 +203,14 @@
         return slug ? appendTrackingParams('/' + slug + '?book=1', { includeInternal: true }) : fallbackHref;
     }
 
+    function resolveSignupUrl(loc) {
+        var url = String((loc && loc.signupUrl) || '').trim();
+        return /^\/[a-z0-9\/-]+$/.test(url) ? url : '';
+    }
+
     function resolveComingSoonLeadUrl(loc, fallbackSlug) {
+        var signupUrl = resolveSignupUrl(loc);
+        if (signupUrl) return signupUrl;
         var slug = (loc && (loc.slug || loc.id)) || fallbackSlug || '';
         return contactLeadUrl(slug, 'updates');
     }
@@ -594,6 +601,8 @@
         temporaryClosureCtaLabel: temporaryClosureCtaLabel,
         isBookableLocation: isBookableLocation,
         isLeadOnlyComingSoon: isLeadOnlyComingSoon,
+        resolveComingSoonLeadUrl: resolveComingSoonLeadUrl,
+        resolveSignupUrl: resolveSignupUrl,
         resolveGroupCheckoutUrl: resolveGroupCheckoutUrl,
         resolveGroupInquiryLabel: resolveGroupInquiryLabel,
         resolveLocationDestination: resolveLocationDestination,
