@@ -1,4 +1,5 @@
 ---
+import KlaviyoEmbedForm from '../../components/KlaviyoEmbedForm.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { definePage } from '../../lib/define-page';
 import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
@@ -23,7 +24,7 @@ const ld = serializeGraph(buildSimpleGraph([
     bookingCtaI18n={cta.i18n}
 >
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-promo.css?v=2" />
+        <link rel="stylesheet" href="/css/page-promo.css?v=4" />
         <script is:inline async src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TNQysU"></script>
     </Fragment>
     <Fragment slot="json-ld">
@@ -31,11 +32,8 @@ const ld = serializeGraph(buildSimpleGraph([
     </Fragment>
     <section class="tm-signup-embed" aria-labelledby="dallas-signup-title">
         <h1 id="dallas-signup-title" class="visually-hidden">Time Mission Dallas Ticket Sign-Up</h1>
-        <div
-            class={`tm-signup-embed__form klaviyo-form-${formId}`}
-            data-klaviyo-form-embed
-            data-tm-form-name="dallas_ticket_signup"
-            data-tm-klaviyo-form-id={formId}
-        ></div>
+        <div class="tm-signup-embed__form">
+            <KlaviyoEmbedForm formId={formId} formName="dallas_ticket_signup" />
+        </div>
     </section>
 </SiteLayout>

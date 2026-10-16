@@ -3,6 +3,7 @@
   "include": [
     "/api/contact",
     "/api/newsletter",
+    "/api/klaviyo-signup",
     "/api/monitor-status"
   ],
   "exclude": []

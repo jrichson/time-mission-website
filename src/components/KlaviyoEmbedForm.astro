@@ -1,0 +1,71 @@
+---
+import { klaviyoFormConfig } from '../../functions/_shared/klaviyo-forms.mjs';
+
+interface Props {
+    formId: string;
+    formName: string;
+}
+
+const { formId, formName } = Astro.props;
+const config = klaviyoFormConfig(formId);
+if (!config) {
+    throw new Error(`Klaviyo form ${formId} needs a backup entry in functions/_shared/klaviyo-forms.mjs`);
+}
+type BackupField = {
+    name: string;
+    label: string;
+    type: 'text' | 'email' | 'tel';
+    autocomplete?: string;
+    required?: boolean;
+};
+const fields = config.fields as BackupField[];
+const fieldId = (name: string) => `klaviyo-backup-${formId}-${name}`;
+---
+
+<div class="tm-klaviyo-embed" data-tm-klaviyo-embed={formId}>
+    <div
+        class={`klaviyo-form-${formId}`}
+        data-klaviyo-form-embed
+        data-tm-form-name={formName}
+        data-tm-klaviyo-form-id={formId}
+    ></div>
+    <form
+        class="tm-klaviyo-backup"
+        method="POST"
+        action="/api/klaviyo-signup"
+        data-tm-klaviyo-backup={formId}
+        hidden
+    >
+        <input type="hidden" name="klaviyo_form_id" value={formId} />
+        <p class="visually-hidden">
+            <label>Do not fill this out if you are human: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+        </p>
+        {config.intro && <p class="tm-klaviyo-backup__intro">{config.intro}</p>}
+        <div class="tm-klaviyo-backup__fields">
+            {fields.map((field) => (
+                <label class="tm-klaviyo-backup__field" for={fieldId(field.name)}>
+                    <span class="tm-klaviyo-backup__label">{field.label}{field.required ? ' *' : ''}</span>
+                    <input
+                        id={fieldId(field.name)}
+                        name={field.name}
+                        type={field.type}
+                        autocomplete={field.autocomplete || 'off'}
+                        required={field.required || undefined}
+                        inputmode={field.type === 'tel' ? 'tel' : undefined}
+                    />
+                </label>
+            ))}
+        </div>
+        <p class="tm-klaviyo-backup__consent">
+            {config.consent} <a href="/privacy">Privacy Policy</a> &amp; <a href="/terms">Terms</a>.
+        </p>
+        <div class="tm-klaviyo-backup__turnstile" data-tm-klaviyo-turnstile></div>
+        <button type="submit" class="btn-primary tm-klaviyo-backup__submit">{config.submitLabel}</button>
+        <p class="tm-klaviyo-backup__status" role="status" aria-live="polite"></p>
+    </form>
+    <div class="tm-klaviyo-backup__success" data-tm-klaviyo-backup-success hidden>
+        <p class="tm-klaviyo-backup__success-title">{config.success.title}</p>
+        <p>{config.success.text}</p>
+    </div>
+</div>
+<script is:inline src="/js/klaviyo-fallback.js?v=2" defer></script>

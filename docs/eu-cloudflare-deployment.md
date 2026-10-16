@@ -98,7 +98,7 @@ a language-quality review, not a legal approval.
 | `CONTACT_TO_EMAIL` | EU contact recipient |
 | `NEWSLETTER_TO_EMAIL` | EU newsletter recipient |
 | `TURNSTILE_SECRET_KEY` | EU Turnstile verification |
-| `KLAVIYO_API_KEY` | Optional EU newsletter integration |
+| `KLAVIYO_API_KEY` | Private key for the **EU** Klaviyo account (`YccPJs`). Used by the newsletter and Klaviyo backup forms. The US project holds the US account (`TNQysU`) key; never share one key across both. |
 | `KLAVIYO_LIST_ID_*` | Optional EU list routing |
 | `CONTACT_TO_EMAIL_ANTWERP` | Antwerp routing; pinned in `wrangler.eu.toml.tmpl` to `antwerp@experience-factory.com` |
 | `CONTACT_TO_EMAIL_BRUSSELS` | Brussels routing; pinned in `wrangler.eu.toml.tmpl` to `brussels@timemission.com` |

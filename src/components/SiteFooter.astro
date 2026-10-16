@@ -67,7 +67,7 @@ function hoursFallbackI18nForLocation(loc: LocationRecord | null): string {
     return status ? '' : 'location.hoursComingSoon';
 }
 
-function statusBadgeI18n(statusLabel: string, loc: LocationRecord): string | undefined {
+function statusBadgeI18n(statusLabel: string): string | undefined {
     return statusLabel === 'Coming Soon' ? 'location.comingSoon' : undefined;
 }
 
@@ -172,7 +172,7 @@ const hasPageLocation = Boolean(pageLocation);
                                         rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
                                     >
                                         <span><span data-i18n={euFooterI18nKey(loc, 'footer.location')}>{locationListLabel(loc)}</span>{locationShowsComingSoon(loc) && '*'}</span>{' '}
-                                        {statusLabel && <span class="coming-soon-tag" data-i18n={statusBadgeI18n(statusLabel, loc)}>{statusLabel}</span>}
+                                        {statusLabel && <span class="coming-soon-tag" data-i18n={statusBadgeI18n(statusLabel)}>{statusLabel}</span>}
                                     </a>
                                 );
                             })}

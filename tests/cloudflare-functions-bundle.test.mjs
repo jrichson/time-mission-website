@@ -29,6 +29,7 @@ describe('Cloudflare Pages Functions bundle', () => {
         'functions/[[path]].js',
         'functions/api/contact.js',
         'functions/api/newsletter.js',
+        'functions/api/klaviyo-signup.js',
       ],
       format: 'esm',
       metafile: true,
@@ -42,6 +43,7 @@ describe('Cloudflare Pages Functions bundle', () => {
       expect.arrayContaining([
         'functions/_shared/contact-routing-policy.mjs',
         'functions/_shared/form-handler.mjs',
+        'functions/_shared/klaviyo-forms.mjs',
       ]),
     );
     expect(Object.keys(result.metafile.inputs).every((input) => input.startsWith('functions/')))

@@ -1,4 +1,5 @@
 import { tmOpsGroupsRecipient } from './contact-routing-policy.mjs';
+import { klaviyoFormConfig } from './klaviyo-forms.mjs';
 
 const MAX_BODY_BYTES = 16 * 1024;
 const MAX_FIELD_LENGTH = 2000;
@@ -7,6 +8,7 @@ const RATE_LIMIT_MEMORY_MAX_KEYS = 5000;
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const RESEND_EMAIL_URL = 'https://api.resend.com/emails';
 const KLAVIYO_SUBSCRIBE_URL = 'https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/';
+const KLAVIYO_PROFILE_IMPORT_URL = 'https://a.klaviyo.com/api/profile-import/';
 const KLAVIYO_REVISION = '2026-04-15';
 
 const LOCAL_ALLOWED_ORIGINS = [
@@ -463,6 +465,65 @@ export function validateNewsletterSubmission(raw) {
   return data;
 }
 
+// Klaviyo requires E.164; US numbers without a country code get +1.
+function e164Phone(value) {
+  const raw = normalizeText(value, 40);
+  if (!raw) return '';
+  const digits = raw.replace(/\D/g, '');
+  if (raw.startsWith('+')) return digits.length >= 8 && digits.length <= 15 ? `+${digits}` : null;
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length === 11 && digits.startsWith('1')) return `+${digits}`;
+  return null;
+}
+
+function siteProfile(env) {
+  return stringValue(env.TM_SITE_PROFILE).trim().toLowerCase() === 'eu' ? 'eu' : 'us';
+}
+
+export function validateKlaviyoSignupSubmission(raw, env = {}) {
+  const formId = normalizeText(raw.klaviyo_form_id, 20);
+  // Each site's KLAVIYO_API_KEY only reaches its own account's lists.
+  const config = klaviyoFormConfig(formId, siteProfile(env));
+  if (!config) throw new FormError('This signup form is not available.');
+
+  const data = {
+    email: '',
+    familyName: '',
+    formId,
+    formTitle: config.title,
+    givenName: '',
+    listId: config.listId,
+    location: config.location,
+    phone: '',
+    properties: {},
+    smsConsent: false,
+  };
+
+  for (const field of config.fields) {
+    const value = field.type === 'email'
+      ? normalizeEmail(raw[field.name])
+      : normalizeText(raw[field.name], 200);
+    if (field.required && !value) throw new FormError(`${field.label} is required.`);
+    if (!value) continue;
+    if (field.type === 'email') assertEmail(value);
+    if (field.type === 'tel') {
+      const phone = e164Phone(value);
+      if (!phone) throw new FormError('Enter a valid phone number.');
+      data.phone = phone;
+      continue;
+    }
+    if (field.klaviyo === 'email') data.email = value;
+    else if (field.klaviyo === 'first_name') data.givenName = value;
+    else if (field.klaviyo === 'last_name') data.familyName = value;
+    else if (field.property) data.properties[field.property] = value;
+  }
+
+  if (!data.email) throw new FormError('Email is required.');
+  // The form shows the SMS consent disclosure; entering a phone number is the consent.
+  data.smsConsent = Boolean(config.smsConsent && data.phone);
+  return data;
+}
+
 async function verifyTurnstile({ env, fetchImpl, request, token }) {
   const secret = stringValue(env.TURNSTILE_SECRET_KEY).trim();
   if (!secret) {
@@ -566,11 +627,41 @@ function newsletterEmail(data) {
   };
 }
 
+function klaviyoSignupEmail(data) {
+  const fullName = [data.givenName, data.familyName].filter(Boolean).join(' ');
+  const rows = [
+    { label: 'Form', value: `${data.formTitle} (${data.formId})` },
+    { label: 'Name', value: fullName || 'Not provided' },
+    { label: 'Email', value: data.email },
+    { label: 'Phone', value: data.phone || 'Not provided' },
+    { label: 'SMS consent', value: data.smsConsent ? 'Yes' : 'No' },
+    { label: 'Location', value: contactLocationLabel(data.location) },
+    ...Object.entries(data.properties).map(([label, value]) => ({ label, value })),
+  ];
+  const text = [
+    'New Time Mission signup from a backup form (Klaviyo did not load for this visitor)',
+    '',
+    ...rows.map((row) => `${row.label}: ${row.value}`),
+  ].join('\n');
+
+  return {
+    html: notificationEmailHtml({
+      intro: 'Klaviyo did not load for this visitor, so they used the backup form. They are added to the same Klaviyo list when a Klaviyo API key is configured.',
+      preheader: `${fullName || data.email} signed up with ${data.formTitle}`,
+      rows,
+      title: 'New backup form signup',
+    }),
+    replyTo: data.email,
+    subject: `Time Mission backup signup (${data.formTitle}): ${fullName || data.email}`,
+    text,
+  };
+}
+
 async function sendResendEmail({ env, fetchImpl, formType, message }) {
   const apiKey = stringValue(env.FORM_EMAIL_API_KEY).trim();
   const from = stringValue(env.FORM_FROM_EMAIL).trim();
   const recipients = splitEmails(message.to || (
-    formType === 'newsletter'
+    formType === 'newsletter' || formType === 'klaviyo-signup'
       ? env.NEWSLETTER_TO_EMAIL || env.CONTACT_TO_EMAIL
       : env.CONTACT_TO_EMAIL
   ));
@@ -632,6 +723,20 @@ function userAgent(request) {
 }
 
 function payloadForArchive(formType, data) {
+  if (formType === 'klaviyo-signup') {
+    return {
+      email: data.email,
+      familyName: data.familyName,
+      formId: data.formId,
+      givenName: data.givenName,
+      listId: data.listId,
+      location: data.location,
+      phone: data.phone,
+      properties: data.properties,
+      smsConsent: data.smsConsent,
+      source: 'klaviyo-backup-form',
+    };
+  }
   if (formType === 'newsletter') {
     return {
       email: data.email,
@@ -661,7 +766,9 @@ async function archiveFormSubmission({ data, env, formType, request }) {
     return;
   }
 
-  const name = formType === 'newsletter'
+  // Backup Klaviyo signups are marketing signups; the archive only allows contact/newsletter.
+  const archiveType = formType === 'contact' ? 'contact' : 'newsletter';
+  const name = archiveType === 'newsletter'
     ? [data.givenName, data.familyName].filter(Boolean).join(' ')
     : data.name;
   const payload = payloadForArchive(formType, data);
@@ -685,13 +792,13 @@ async function archiveFormSubmission({ data, env, formType, request }) {
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     crypto.randomUUID(),
-    formType,
+    archiveType,
     name || null,
     data.email,
     data.location || null,
     formType === 'contact' ? data.subject : null,
     formType === 'contact' ? data.message : null,
-    formType === 'newsletter' && data.marketingOptIn ? 1 : 0,
+    (formType === 'newsletter' && data.marketingOptIn) || formType === 'klaviyo-signup' ? 1 : 0,
     ipHash || null,
     userAgent(request) || null,
     requestSourceUrl(request),
@@ -772,6 +879,63 @@ async function sendKlaviyoNewsletterSubscription({ data, env, fetchImpl }) {
   }
 }
 
+function klaviyoHeaders(env, apiKey) {
+  return {
+    authorization: `Klaviyo-API-Key ${apiKey}`,
+    accept: 'application/vnd.api+json',
+    'content-type': 'application/vnd.api+json',
+    revision: stringValue(env.KLAVIYO_REVISION).trim() || KLAVIYO_REVISION,
+  };
+}
+
+async function sendKlaviyoBackupSignup({ data, env, fetchImpl }) {
+  const apiKey = stringValue(env.KLAVIYO_API_KEY).trim();
+  // Without a key the signup is still archived and emailed to NEWSLETTER_TO_EMAIL.
+  if (!apiKey) return;
+
+  const profile = {
+    email: data.email,
+    properties: {
+      ...data.properties,
+      klaviyo_backup_form_id: data.formId,
+      location: data.location,
+      source: 'time-mission-website-backup-form',
+    },
+  };
+  if (data.givenName) profile.first_name = data.givenName;
+  if (data.familyName) profile.last_name = data.familyName;
+  if (data.phone) profile.phone_number = data.phone;
+
+  // Subscription jobs ignore custom properties, so store the profile first.
+  const importResponse = await fetchImpl(KLAVIYO_PROFILE_IMPORT_URL, {
+    body: JSON.stringify({ data: { type: 'profile', attributes: profile } }),
+    headers: klaviyoHeaders(env, apiKey),
+    method: 'POST',
+  });
+  if (!importResponse.ok) throw new FormError('Signup failed. Please try again.', 502);
+
+  const subscriptions = { email: { marketing: { consent: 'SUBSCRIBED' } } };
+  if (data.smsConsent) subscriptions.sms = { marketing: { consent: 'SUBSCRIBED' } };
+  const subscriber = { email: data.email, subscriptions };
+  if (data.smsConsent) subscriber.phone_number = data.phone;
+
+  const subscribeResponse = await fetchImpl(KLAVIYO_SUBSCRIBE_URL, {
+    body: JSON.stringify({
+      data: {
+        type: 'profile-subscription-bulk-create-job',
+        attributes: {
+          custom_source: `Website backup form ${data.formId}`,
+          profiles: { data: [{ type: 'profile', attributes: subscriber }] },
+        },
+        relationships: { list: { data: { id: data.listId, type: 'list' } } },
+      },
+    }),
+    headers: klaviyoHeaders(env, apiKey),
+    method: 'POST',
+  });
+  if (!subscribeResponse.ok) throw new FormError('Signup failed. Please try again.', 502);
+}
+
 function successResponse(request, asJSON) {
   if (asJSON) {
     return Response.json({ ok: true });
@@ -797,13 +961,15 @@ function errorResponse(error, asJSON) {
   });
 }
 
-function validateSubmission(formType, raw) {
+function validateSubmission(formType, raw, env) {
+  if (formType === 'klaviyo-signup') return validateKlaviyoSignupSubmission(raw, env);
   return formType === 'newsletter'
     ? validateNewsletterSubmission(raw)
     : validateContactSubmission(raw);
 }
 
 function emailForSubmission(formType, data) {
+  if (formType === 'klaviyo-signup') return klaviyoSignupEmail(data);
   return formType === 'newsletter' ? newsletterEmail(data) : contactEmail(data);
 }
 
@@ -822,6 +988,9 @@ async function archiveSubmission({ data, env, formType, request }) {
 async function deliverSubmission({ data, env, fetchImpl, formType, message }) {
   if (formType === 'newsletter') {
     await sendKlaviyoNewsletterSubscription({ data, env, fetchImpl });
+  }
+  if (formType === 'klaviyo-signup') {
+    await sendKlaviyoBackupSignup({ data, env, fetchImpl });
   }
   await sendResendEmail({ env, fetchImpl, formType, message });
 }
@@ -852,7 +1021,7 @@ export async function handleFormRequest({
       token: raw['cf-turnstile-response'],
     });
 
-    const data = validateSubmission(formType, raw);
+    const data = validateSubmission(formType, raw, env);
     await archiveSubmission({ data, env, formType, request });
 
     const message = applySubmissionRecipients({

@@ -31,7 +31,7 @@ const policyPath = path.join(distDir, 'data/content-security-policy.json');
 const cspValue = fs.existsSync(policyPath) ? JSON.parse(fs.readFileSync(policyPath, 'utf8')).policy : '';
 if (!cspValue) errors.push('dist: no generated Content-Security-Policy');
 const routes = JSON.parse(fs.readFileSync(path.join(distDir, '_routes.json'), 'utf8'));
-const apiRoutes = new Set(['/api/contact', '/api/newsletter', '/api/monitor-status']);
+const apiRoutes = new Set(['/api/contact', '/api/newsletter', '/api/klaviyo-signup', '/api/monitor-status']);
 if (routes.version !== 1 || !Array.isArray(routes.include) || routes.include.length !== apiRoutes.size || new Set(routes.include).size !== apiRoutes.size || routes.include.some(route => !apiRoutes.has(route)) || !Array.isArray(routes.exclude) || routes.exclude.length) {
   errors.push('dist/_routes.json: only explicit API endpoints may invoke Workers');
 }
