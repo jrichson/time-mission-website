@@ -476,9 +476,14 @@ function e164Phone(value) {
   return null;
 }
 
-export function validateKlaviyoSignupSubmission(raw) {
+function siteProfile(env) {
+  return stringValue(env.TM_SITE_PROFILE).trim().toLowerCase() === 'eu' ? 'eu' : 'us';
+}
+
+export function validateKlaviyoSignupSubmission(raw, env = {}) {
   const formId = normalizeText(raw.klaviyo_form_id, 20);
-  const config = klaviyoFormConfig(formId);
+  // Each site's KLAVIYO_API_KEY only reaches its own account's lists.
+  const config = klaviyoFormConfig(formId, siteProfile(env));
   if (!config) throw new FormError('This signup form is not available.');
 
   const data = {
@@ -956,8 +961,8 @@ function errorResponse(error, asJSON) {
   });
 }
 
-function validateSubmission(formType, raw) {
-  if (formType === 'klaviyo-signup') return validateKlaviyoSignupSubmission(raw);
+function validateSubmission(formType, raw, env) {
+  if (formType === 'klaviyo-signup') return validateKlaviyoSignupSubmission(raw, env);
   return formType === 'newsletter'
     ? validateNewsletterSubmission(raw)
     : validateContactSubmission(raw);
@@ -1016,7 +1021,7 @@ export async function handleFormRequest({
       token: raw['cf-turnstile-response'],
     });
 
-    const data = validateSubmission(formType, raw);
+    const data = validateSubmission(formType, raw, env);
     await archiveSubmission({ data, env, formType, request });
 
     const message = applySubmissionRecipients({

@@ -5,7 +5,15 @@
  * backup appears when Klaviyo's script is blocked and posts to /api/klaviyo-signup, which
  * subscribes the visitor to the same list. The server only trusts list IDs from here.
  * Fields, button text, and consent wording mirror the live Klaviyo form.
+ *
+ * The US and EU sites use separate Klaviyo accounts. Each Pages project holds its own
+ * KLAVIYO_API_KEY, so a form may only be submitted on the site whose account owns its list.
  */
+
+export const KLAVIYO_ACCOUNTS = Object.freeze({
+  us: 'TNQysU',
+  eu: 'YccPJs',
+});
 
 const EDUCATOR_CONSENT = 'By submitting this form, you agree to receive your promo code and related emails from Time Mission, including marketing emails such as field trip and group information. Consent is not a condition of purchase. You can unsubscribe at any time using the link in any email.';
 const EDUCATOR_SUCCESS = {
@@ -24,6 +32,7 @@ const EDUCATOR_FIELDS = [
 
 function educatorForm(listId, location) {
   return {
+    site: 'us',
     listId,
     location,
     title: 'Educator signup',
@@ -37,6 +46,7 @@ function educatorForm(listId, location) {
 
 export const KLAVIYO_FORMS = Object.freeze({
   QYqsMS: {
+    site: 'us',
     listId: 'TqyU2B',
     location: 'dallas',
     title: 'Dallas free ticket sign-up',
@@ -63,7 +73,11 @@ export const KLAVIYO_FORMS = Object.freeze({
   YAhjX2: educatorForm('XSawW7', 'philadelphia'),
 });
 
-export function klaviyoFormConfig(formId) {
+/** Returns the form's backup config, or null if it is unknown or belongs to the other site. */
+export function klaviyoFormConfig(formId, site) {
   const id = String(formId || '').trim();
-  return Object.prototype.hasOwnProperty.call(KLAVIYO_FORMS, id) ? KLAVIYO_FORMS[id] : null;
+  if (!Object.prototype.hasOwnProperty.call(KLAVIYO_FORMS, id)) return null;
+  const config = KLAVIYO_FORMS[id];
+  if (site && config.site !== site) return null;
+  return config;
 }

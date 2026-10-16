@@ -196,6 +196,23 @@ describe('Klaviyo backup forms', () => {
     });
   });
 
+  it('rejects a form that belongs to the other site\'s Klaviyo account', async () => {
+    expect(() => validateKlaviyoSignupSubmission(
+      { klaviyo_form_id: 'QYqsMS', email: 'guest@example.com' },
+      { TM_SITE_PROFILE: 'eu' },
+    )).toThrow('This signup form is not available.');
+
+    const calls = [];
+    const response = await handleFormRequest({
+      env: baseEnv({ KLAVIYO_API_KEY: 'eu-account-key', TM_SITE_PROFILE: 'eu' }),
+      fetchImpl: recordingFetch(calls),
+      formType: 'klaviyo-signup',
+      request: signupRequest({ klaviyo_form_id: 'QYqsMS', email: 'guest@example.com' }),
+    });
+    expect(response.status).toBe(400);
+    expect(calls.some((call) => call.url.includes('klaviyo.com'))).toBe(false);
+  });
+
   it('archives and emails signups when no Klaviyo key is configured', async () => {
     const calls = [];
     const response = await handleFormRequest({
@@ -232,6 +249,7 @@ describe('Klaviyo backup forms', () => {
       expect(KLAVIYO_FORMS, `Klaviyo form ${formId} needs a backup entry`).toHaveProperty(formId);
     }
     for (const config of Object.values(KLAVIYO_FORMS)) {
+      expect(['us', 'eu']).toContain(config.site);
       expect(config.listId).toMatch(/^[A-Za-z0-9]{6}$/);
       expect(config.fields.some((field) => field.klaviyo === 'email' && field.required)).toBe(true);
     }
