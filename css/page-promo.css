@@ -252,6 +252,11 @@
     min-height: 10rem;
 }
 
+/* While Klaviyo loads, the loading message holds the space instead of an empty box. */
+.tm-klaviyo-embed [data-klaviyo-form-embed]:empty {
+    min-height: 0;
+}
+
 /* First-party backup shown when Klaviyo's embed script is blocked. */
 .tm-klaviyo-embed [data-klaviyo-form-embed]:empty:has(+ .tm-klaviyo-backup:not([hidden])) {
     display: none;
@@ -266,6 +271,19 @@
     border-radius: 24px;
     background: rgba(255, 255, 255, 0.03);
     color: var(--white);
+}
+
+.tm-klaviyo-embed__loading {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--gray);
+    font-size: 0.95rem;
+}
+
+.tm-klaviyo-embed__loading[hidden],
+.tm-klaviyo-embed [data-klaviyo-form-embed][hidden] {
+    display: none;
 }
 
 .tm-klaviyo-backup[hidden],
