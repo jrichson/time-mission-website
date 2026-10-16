@@ -99,12 +99,12 @@ test('Dutch review copy survives reload and Eindhoven content fixes remain visib
   await expect(page.locator('#newsletter h2')).toHaveText('MIS NIETS');
   await expect(page.locator('#newsletter button[type="submit"]')).toHaveText('Schrijf je in');
   await expect(page.locator('#newsletter-given-name')).toHaveAttribute('placeholder', 'Voornaam');
-  await expect(page.locator('.footer-loc-hours')).toContainText('Opent 16 oktober');
+  await expect(page.locator('.footer-loc-hours')).toContainText('Maandag14:00 – 22:00');
   await expect(page.locator('.welcome .section-title')).toHaveText('WAT IS TIME MISSION?');
   await expect(page.locator('.hero-subtitle')).toContainText('Hoe snel, sterk, behendig en slim zijn jullie?');
   await page.reload();
   await waitForLanguageRuntime(page, true);
-  await expect(page.locator('.footer-loc-hours')).toContainText('Opent 16 oktober');
+  await expect(page.locator('.footer-loc-hours')).toContainText('Maandag14:00 – 22:00');
 
   await page.goto('/nl/missions');
   await waitForLanguageRuntime(page, true);
@@ -376,7 +376,7 @@ test('localized runtime writers preserve language after interaction', async ({ p
   await expect(page.locator('#ticketLocation option[value="antwerp"]'))
     .toHaveText('België – Antwerpen');
   await expect(page.locator('#ticketLocation option[value="eindhoven"]'))
-    .toHaveText('Nederland – Eindhoven (Opent 16 oktober)');
+    .toHaveText('Nederland – Eindhoven');
   await expect(page.locator('[data-gift-card-location-answer]'))
     .toContainText('Cadeaubonnen gelden per locatie.');
 
@@ -493,7 +493,7 @@ test('localized EU routes translate their announcement and footer chrome', async
     {
       path: '/es/eindhoven',
       tickerKey: 'ticker.location.eindhoven',
-      ticker: 'APERTURA EL 16 DE OCTUBRE',
+      ticker: '¡EINDHOVEN YA ESTÁ ABIERTO!',
       city: 'EINDHOVEN',
       tagline: 'Una aventura de juego social en la que los equipos compiten en desafíos inmersivos a través del tiempo y el espacio.',
       experience: 'EXPERIENCIA',
@@ -504,7 +504,7 @@ test('localized EU routes translate their announcement and footer chrome', async
       rights: 'Todos los derechos reservados.',
       developedBy: 'Desarrollado por',
       cookiePreferences: 'Preferencias de cookies',
-      status: 'Apertura el 16 de octubre',
+      firstDay: 'Lunes',
     },
   ];
 
@@ -626,7 +626,7 @@ test('EU navigation lists Europe before the United States', async ({ page }) => 
   await expect(europeGroup.locator('a[data-tm-location-slug="brussels"] .coming-soon-tag'))
     .toHaveCount(0);
   await expect(europeGroup.locator('a[data-tm-location-slug="eindhoven"] .coming-soon-tag'))
-    .toHaveText('Opens Oct. 16');
+    .toHaveText('NOW OPEN');
   await expect(usGroup.locator('.coming-soon-tag')).toHaveCount(0);
 
   await page.goto('/locations');
@@ -757,8 +757,8 @@ for (const cta of ['.nav-right .btn-tickets', '.hero-cta a.btn-primary']) {
     await context.route('https://ecom.roller.app/**', (route) => route.fulfill({ contentType: 'text/html', body: '<title>Roller</title>' }));
     await page.goto('/eindhoven?code=OPEN50');
     await page.evaluate(async () => { await window.TM.ready; });
-    await expect(page).toHaveTitle('Time Mission Eindhoven | Opens 16th October');
-    await expect(page.locator('.ticker-bar').first()).toContainText('OPENING 16 OCTOBER');
+    await expect(page).toHaveTitle('Time Mission Eindhoven | Now Open!');
+    await expect(page.locator('.ticker-bar').first()).toContainText('EINDHOVEN NOW OPEN!');
     await expect(page.locator('.hero-cta a.btn-primary')).toHaveText('Book Now');
     await expect(page.locator('[data-tm-klaviyo-form-trigger], [data-tm-form-name="eindhoven_signup"]')).toHaveCount(0);
     await expect(page.locator('script[src*="guest-agent"]')).toHaveCount(0);

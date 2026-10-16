@@ -31,7 +31,7 @@ function statusLabel(loc: (typeof allLocations)[number]) {
 
 function selectorBadge(loc: (typeof allLocations)[number]) {
     if (loc.slug === 'eindhoven') return 'NOW OPEN';
-    if (loc.slug === 'dallas') return 'Opening Soon';
+    if (loc.slug === 'dallas' && activeSiteProfile.id === 'us') return 'Opening Soon';
     if (loc.status === 'temporarily-closed'
         && (activeSiteProfile.id === 'us' || loc.region === 'europe')) {
         return statusLabel(loc);
