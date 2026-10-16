@@ -228,8 +228,8 @@
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
   "/eindhoven": {
-    "title": "Time Mission Eindhoven | Opens 16th October",
-    "description": "Time Mission Eindhoven opens 16 October at Hermanus Boexstraat 4, 5611 AJ Eindhoven, the first Time Mission location in the Netherlands. Book your mission now.",
+    "title": "Time Mission Eindhoven | Now Open!",
+    "description": "Time Mission Eindhoven is now open at Hermanus Boexstraat 4, 5611 AJ Eindhoven, the first Time Mission location in the Netherlands. Book your mission now.",
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
@@ -322,5 +322,11 @@
     "description": "Time Mission Dallas opens November 2026. Sign up for first access to an exclusive teacher and educator offer.",
     "ogImage": "/assets/photos/promos/houston-educators-control-room-1200.webp",
     "twitterImage": "/assets/photos/promos/houston-educators-control-room-1200.webp"
+  },
+  "/dallas/signup": {
+    "title": "Dallas Ticket Sign-Up | Time Mission",
+    "description": "Sign up to hear first when tickets go on sale at Time Mission Dallas, opening soon at 5307 E. Mockingbird Ln.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
   }
 }

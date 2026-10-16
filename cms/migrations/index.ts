@@ -4,6 +4,8 @@ import * as migration_20261001_091000_seed_scottsdale_location from './20261001_
 import * as migration_20261006_090000_eindhoven_booking from './20261006_090000_eindhoven_booking';
 import * as migration_20261006_100000_eindhoven_roller_panel from './20261006_100000_eindhoven_roller_panel';
 import * as migration_20261010_090000_eindhoven_direct_checkout from './20261010_090000_eindhoven_direct_checkout';
+import * as migration_20261016_090000_eindhoven_now_open from './20261016_090000_eindhoven_now_open';
+import * as migration_20261016_100000_dallas_signup_page from './20261016_100000_dallas_signup_page';
 import * as migration_20260930_100000_school_night_retirement from './20260930_100000_school_night_retirement';
 import * as migration_20260930_090000_educators_december_extension from './20260930_090000_educators_december_extension';
 import * as migration_20260925_090000_eindhoven_checkout from './20260925_090000_eindhoven_checkout';
@@ -398,5 +400,15 @@ export const migrations = [
     up: migration_20261010_090000_eindhoven_direct_checkout.up,
     down: migration_20261010_090000_eindhoven_direct_checkout.down,
     name: '20261010_090000_eindhoven_direct_checkout'
+  },
+  {
+    up: migration_20261016_090000_eindhoven_now_open.up,
+    down: migration_20261016_090000_eindhoven_now_open.down,
+    name: '20261016_090000_eindhoven_now_open'
+  },
+  {
+    up: migration_20261016_100000_dallas_signup_page.up,
+    down: migration_20261016_100000_dallas_signup_page.down,
+    name: '20261016_100000_dallas_signup_page'
   },
 ];

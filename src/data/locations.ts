@@ -63,6 +63,7 @@ export interface LocationRecord {
     };
     bookingUrl: string;
     signupFormId?: string;
+    signupUrl?: string;
     donationUrl?: string;
     externalUrl?: string;
     counterpartUrl?: string;

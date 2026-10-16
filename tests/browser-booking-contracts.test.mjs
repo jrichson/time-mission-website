@@ -91,10 +91,10 @@ describe('browser booking contracts', () => {
       id: 'eindhoven',
       slug: 'eindhoven',
       bookingProvider: 'roller',
-      rollerCheckoutUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
+      rollerCheckoutUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products',
     };
     expect(window.TMBookingJourney.resolveIntent({ kind: 'tickets', location: eindhoven })).toMatchObject({
-      href: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home?code=OPEN50',
+      href: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products?code=OPEN50',
       presentation: 'roller',
     });
 
@@ -126,7 +126,7 @@ describe('browser booking contracts', () => {
       id: 'eindhoven',
       slug: 'eindhoven',
       bookingProvider: 'roller',
-      rollerCheckoutUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home',
+      rollerCheckoutUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products',
     };
     const rendered = window.TMBookingJourney.resolveOutcome({ kind: 'tickets', location: eindhoven });
     const cta = createAnchor('#');
@@ -141,7 +141,7 @@ describe('browser booking contracts', () => {
       resolveHref: false,
     });
     expect(clicked.intent).toMatchObject({
-      href: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/home?code=OPEN50',
+      href: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products?code=OPEN50',
       presentation: 'roller',
     });
     expect(clicked.action.provider).toBe('roller');
@@ -310,6 +310,15 @@ describe('browser booking contracts', () => {
           {
             id: 'dallas',
             slug: 'dallas',
+            status: 'coming-soon',
+            bookingUrl: '',
+            signupUrl: '/dallas/signup',
+            giftCardUrl: '',
+            groupFormUrls: {},
+          },
+          {
+            id: 'nashville',
+            slug: 'nashville',
             status: 'coming-soon',
             bookingUrl: '',
             giftCardUrl: '',
@@ -529,24 +538,35 @@ describe('browser booking contracts', () => {
         trigger: true,
       });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'dallas' }))
-      .toBe('/contact#location=dallas&type=updates');
+      .toBe('/dallas/signup');
     expect(window.TMBooking.getDestination({ kind: 'group-tickets', locationId: 'dallas' }))
-      .toBe('/contact#location=dallas&type=updates');
+      .toBe('/dallas/signup');
+    expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'nashville' }))
+      .toBe('/contact#location=nashville&type=updates');
     expect(window.TMBooking.getDestination({ kind: 'groups', groupType: 'corporate', locationId: 'dallas' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'gift-cards', locationId: 'dallas' }))
       .toBe('');
     expect(window.TMBooking.getDestination({ kind: 'waiver', locationId: 'dallas' }))
       .toBe('');
-    expect(window.LocationContext.getOverlayView('dallas').cta)
+    expect(window.LocationContext.getOverlayView('dallas'))
       .toMatchObject({
-        href: '/contact#location=dallas&type=updates',
-        bookingUrl: '',
-        trigger: false,
+        cta: {
+          href: '/dallas/signup',
+          bookingUrl: '',
+          trigger: false,
+        },
+        bookLabelKey: 'location.ticketSignUp',
       });
     expect(window.LocationContext.getLocationView('dallas'))
       .toMatchObject({
-        bookUrl: '/contact#location=dallas&type=updates',
+        bookUrl: '/dallas/signup',
+        bookLabel: 'Ticket Sign-Up',
+        comingSoon: true,
+      });
+    expect(window.LocationContext.getLocationView('nashville'))
+      .toMatchObject({
+        bookUrl: '/contact#location=nashville&type=updates',
         bookLabel: 'Contact Us',
         comingSoon: true,
       });
@@ -678,7 +698,7 @@ describe('browser booking contracts', () => {
         ? loc.groupCheckoutUrl
         : loc.bookingProvider === 'briq'
         ? '#briq-widget-container'
-        : loc.externalUrl || loc.rollerCheckoutUrl || loc.bookingUrl || (loc.status === 'coming-soon' ? `/contact#location=${slug}&type=updates` : '');
+        : loc.externalUrl || loc.rollerCheckoutUrl || loc.bookingUrl || (loc.status === 'coming-soon' ? loc.signupUrl || `/contact#location=${slug}&type=updates` : '');
       const expectedPresentation = expectedRuntimeHref === '#briq-widget-container'
         ? 'briq-widget'
         : loc.externalUrl && expectedRuntimeHref === loc.externalUrl

@@ -145,7 +145,7 @@ describe('CMS announcement banners', () => {
     })?.messageI18n).toBe('ticker.location.brussels');
     expect(announcementBannerViewForDoc({
       ...baseBanner,
-      message: 'OPENING 16 OCTOBER',
+      message: 'EINDHOVEN NOW OPEN!',
     })?.messageI18n).toBe('ticker.location.eindhoven');
     expect(announcementBannerViewForDoc({
       ...baseBanner,

@@ -164,7 +164,9 @@ export function buildComingSoonLocationPage(slug: string) {
     const isBookable = hasTicketBooking(location);
     const openingLabel = locationOpeningLabel(location);
     const openingDateText = locationOpeningDateText(location);
-    const statusLabel = openingLabel || (isBookable ? 'Now Booking' : 'Coming Soon');
+    const statusLabel = location.status === 'open'
+        ? 'Now Open'
+        : openingLabel || (isBookable ? 'Now Booking' : 'Coming Soon');
     const seo = getSeoForRoute(canonicalPath);
 
     return {

@@ -25,6 +25,10 @@ export function hasTicketBooking(loc: LocationStatusFields): boolean {
     return Boolean(String(loc.rollerCheckoutUrl || loc.bookingUrl || '').trim());
 }
 
+export function locationShowsComingSoon(loc: Pick<LocationRecord, 'status'>): boolean {
+    return loc.status === 'coming-soon';
+}
+
 export function locationTemporaryClosureLabel(loc: Pick<LocationRecord, 'status' | 'temporaryClosure'>): string {
     if (loc.status !== 'temporarily-closed') return '';
     return String(loc.temporaryClosure?.label || '').trim() || 'Temporarily Closed';

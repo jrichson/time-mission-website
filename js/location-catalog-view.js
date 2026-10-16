@@ -66,9 +66,6 @@
 
     function comingSoonLabelForLocation(loc) {
         var openingLabel = openingLabelForLocation(loc);
-        if (normalizeLocation(loc && (loc.slug || loc.id)) === 'eindhoven' && openingLabel === 'Opening October 16') {
-            return translate('location.eindhovenOpeningFull', openingLabel);
-        }
         if (openingLabel && openingLabel.toLowerCase() !== 'coming soon') return openingLabel;
         return translate('location.comingSoon', openingLabel || 'Coming Soon');
     }
@@ -253,7 +250,7 @@
             return contactLeadUrl(slug, 'closure');
         }
         if (BookingJourney.isLeadOnlyComingSoon(loc)) {
-            return contactLeadUrl(slug, 'updates');
+            return BookingJourney.resolveComingSoonLeadUrl(loc, slug);
         }
         return '#';
     }
@@ -297,6 +294,8 @@
                 ? externalSiteLabel
                 : signupFormId
                 ? 'Sign Up'
+                : comingSoon && !bookable && BookingJourney.resolveSignupUrl(loc)
+                ? 'Ticket Sign-Up'
                 : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
             mapQuery: mapQuery,
             mapDirectionsUrl: mapQuery ? 'https://www.google.com/maps/dir/?api=1&destination=' + mapQuery : '',
@@ -364,6 +363,8 @@
             ? (loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite')
             : view.signupFormId
             ? 'location.signUp'
+            : view.comingSoon && BookingJourney.resolveSignupUrl(loc)
+            ? 'location.ticketSignUp'
             : view.comingSoon
             ? 'location.contactUs'
             : 'nav.bookNow';

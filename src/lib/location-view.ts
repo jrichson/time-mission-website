@@ -4,6 +4,7 @@ import {
     locationDisplayStatus,
     locationOpeningLabel,
     locationTemporaryClosureLabel,
+    locationShowsComingSoon,
 } from './location-status';
 import { upcomingLocationSpecialHours } from './location-hours';
 
@@ -86,7 +87,7 @@ export function locationStateBadge(loc: Pick<LocationRecord, 'address' | 'countr
 export function locationStatusBadge(loc: LocationRecord): string {
     const closureLabel = locationTemporaryClosureLabel(loc);
     if (closureLabel) return closureLabel;
-    if (loc.status !== 'coming-soon') return '';
+    if (!locationShowsComingSoon(loc)) return '';
     return locationOpeningLabel(loc) || 'Coming Soon';
 }
 
@@ -120,6 +121,13 @@ export function locationSignupFormId(
 ): string {
     const formId = String(loc?.signupFormId || '').trim();
     return /^[a-z0-9]+$/i.test(formId) ? formId : '';
+}
+
+export function locationSignupUrl(
+    loc: Pick<LocationRecord, 'signupUrl'> | null | undefined,
+): string {
+    const url = String(loc?.signupUrl || '').trim();
+    return /^\/[a-z0-9/-]+$/.test(url) ? url : '';
 }
 
 export function locationMarket(loc: Pick<LocationRecord, 'address'>): string {
@@ -177,6 +185,15 @@ export function locationCtaView(loc: LocationRecord): LocationCtaView {
             signupFormId,
         };
     }
+    const signupUrl = locationSignupUrl(loc);
+    if (signupUrl) {
+        return {
+            href: signupUrl,
+            isBookingTrigger: false,
+            label: 'Ticket Sign-Up',
+            i18n: 'location.ticketSignUp',
+        };
+    }
     const isBookable = hasTicketBooking(loc);
     if (isBookable) {
         return {
@@ -210,6 +227,8 @@ export function locationViewModel(loc: LocationRecord): LocationViewModel {
             ? externalSiteLabel
             : signupFormId
             ? 'Sign Up'
+            : locationSignupUrl(loc)
+            ? 'Ticket Sign-Up'
             : (bookable || !comingSoon ? 'Book Now' : 'Contact Us'),
         bookable,
         externalUrl,

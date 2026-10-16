@@ -1002,7 +1002,7 @@
       "shortName": "Eindhoven",
       "venueName": null,
       "region": "europe",
-      "status": "coming-soon",
+      "status": "open",
       "address": {
         "line1": "Hermanus Boexstraat 4",
         "city": "Eindhoven",
@@ -1010,11 +1010,51 @@
         "zip": "5611 AJ",
         "country": "Netherlands"
       },
+      "geo": {
+        "latitude": 51.4410183,
+        "longitude": 5.4778558
+      },
       "contact": {
         "phone": "+31 (0)40 808 3636",
         "email": "eindhoven@timemission.nl"
       },
-      "hours": {},
+      "hours": {
+        "mon": {
+          "open": "14:00",
+          "close": "22:00",
+          "label": "14:00 – 22:00"
+        },
+        "tue": {
+          "open": "14:00",
+          "close": "22:00",
+          "label": "14:00 – 22:00"
+        },
+        "wed": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12:00 – 22:00"
+        },
+        "thu": {
+          "open": "14:00",
+          "close": "22:00",
+          "label": "14:00 – 22:00"
+        },
+        "fri": {
+          "open": "12:00",
+          "close": "23:00",
+          "label": "12:00 – 23:00"
+        },
+        "sat": {
+          "open": "12:00",
+          "close": "23:00",
+          "label": "12:00 – 23:00"
+        },
+        "sun": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12:00 – 22:00"
+        }
+      },
       "bookingUrl": "https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products",
       "signupFormId": "",
       "groupFormUrls": {
@@ -1030,7 +1070,7 @@
       "navLabel": "Netherlands – Eindhoven",
       "mapUrl": "https://maps.google.com/?q=Hermanus+Boexstraat+4+Eindhoven+5611+AJ+Netherlands",
       "faqs": [],
-      "ticker": "OPENING 16 OCTOBER",
+      "ticker": "EINDHOVEN NOW OPEN!",
       "giftCardUrl": "",
       "countryCode": "NL",
       "locale": "nl-NL",
@@ -1038,8 +1078,7 @@
       "currency": "EUR",
       "phoneE164": "+31408083636",
       "hreflang": "nl-NL",
-      "localBusinessSchemaEligible": false,
-      "openingLabel": "Opening October 16"
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "dallas",
@@ -1063,6 +1102,7 @@
       },
       "hours": {},
       "bookingUrl": "",
+      "signupUrl": "/dallas/signup",
       "navLabel": "TX – Dallas",
       "mapUrl": "https://maps.google.com/?q=5307+E.+Mockingbird+Ln+Suite+200+%26+201+Dallas+TX+75206",
       "faqs": [],

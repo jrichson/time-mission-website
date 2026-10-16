@@ -1,7 +1,7 @@
 ---
 import { allLocations } from '../data/locations';
 import { hasTicketBooking, locationDisplayStatus, locationOpeningDateText, locationOpeningLabel } from '../lib/location-status';
-import { locationContactHref, locationCtaView, locationSignupFormId } from '../lib/location-view';
+import { locationContactHref, locationCtaView, locationSignupFormId, locationSignupUrl } from '../lib/location-view';
 import { locationPurchaseTermsFaqItemHtml } from '../lib/location-policy-faq';
 import { applyTmMediaBase } from '../lib/tm-media';
 import comingSoonMainRaw from '../partials/houston-main.frag.txt?raw';
@@ -13,7 +13,8 @@ interface Props {
 const { slug } = Astro.props;
 const location = allLocations.find((l) => l.slug === slug);
 if (!location) throw new Error(`${slug} missing from src/data/locations`);
-if (location.status !== 'coming-soon') {
+// Eindhoven opened on 16 October 2026 and keeps its launch page layout.
+if (location.status !== 'coming-soon' && !(slug === 'eindhoven' && location.status === 'open')) {
     throw new Error(`${slug} is not configured as a coming-soon location`);
 }
 
@@ -43,16 +44,21 @@ const isBookable = hasTicketBooking(location);
 const primaryCta = locationCtaView(location);
 const signupFormId = locationSignupFormId(location);
 const hasSignupForm = Boolean(signupFormId);
+const signupUrl = locationSignupUrl(location);
 const hasExternalLocationSite = Boolean(String(location.externalUrl || '').trim());
 const openingLabel = locationOpeningLabel(location);
 const openingDateText = locationOpeningDateText(location);
 const primaryCtaLabel = hasSignupForm
     ? 'Sign Up'
+    : signupUrl
+    ? primaryCta.label
     : isBookable || hasExternalLocationSite
     ? primaryCta.label
     : 'Contact This Location';
 const primaryCtaHref = hasSignupForm
     ? '#'
+    : signupUrl
+    ? signupUrl
     : isBookable || hasExternalLocationSite
     ? primaryCta.href
     : locationContactHref(location);
@@ -74,6 +80,8 @@ const bookingFaqAnswer = isBookable
         : `Yes. Online booking is available for ${location.shortName}. Use Book Now to choose your date and time through our secure checkout.`
     : hasExternalLocationSite
     ? `Visit the ${location.venueName || location.shortName} website for opening updates and location details.`
+    : signupUrl
+    ? `Booking opens closer to launch. Use Ticket Sign-Up to hear first when ${location.shortName} tickets go on sale.`
     : `Booking opens closer to launch. Contact the ${location.shortName} team for opening updates and launch timing.`;
 const finalCtaTitle = isBookable ? (openingLabel ? 'BOOK AHEAD' : 'BOOK YOUR MISSION') : 'STAY CLOSE TO LAUNCH';
 const finalCtaText = isBookable
@@ -82,6 +90,8 @@ const finalCtaText = isBookable
         : `Tickets for ${location.shortName} are available now. Choose your date, rally your team, and get ready to play.`
     : hasExternalLocationSite
     ? `Visit the ${location.venueName || location.shortName} website for opening updates and location details.`
+    : signupUrl
+    ? `Sign up to hear first when ${location.shortName} tickets go on sale.`
     : `Reach out about ${location.shortName} and we will route your message to the right team.`;
 
 let comingSoonMain = applyTmMediaBase(comingSoonMainRaw);

@@ -9,6 +9,20 @@
     overflow: clip;
 }
 
+/* Standalone embedded signup form, centered with no surrounding campaign copy. */
+.tm-signup-embed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100svh;
+    padding: var(--promo-page-offset) 1rem 4rem;
+}
+
+.tm-signup-embed__form {
+    width: 100%;
+    max-width: 40rem;
+}
+
 .tm-promo-landing {
     padding-top: var(--promo-page-offset);
     background:
