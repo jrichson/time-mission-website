@@ -50,6 +50,14 @@ export const KLAVIYO_FORMS = Object.freeze({
     listId: 'TqyU2B',
     location: 'dallas',
     title: 'Dallas free ticket sign-up',
+    // Same banner as the Klaviyo form, served from our domain so blockers don't hide it.
+    image: {
+      src: '/assets/photos/promos/dallas-free-ticket-signup-1200.webp',
+      srcset: '/assets/photos/promos/dallas-free-ticket-signup-480.webp 480w, /assets/photos/promos/dallas-free-ticket-signup-800.webp 800w, /assets/photos/promos/dallas-free-ticket-signup-1200.webp 1200w',
+      width: 1200,
+      height: 628,
+      alt: 'Time Mission Dallas free ticket sign-up',
+    },
     intro: 'FREE grand opening tickets are coming! Sign up and watch your inbox for your code and first dibs on booking.',
     fields: [
       { name: 'given_name', label: 'First name', type: 'text', autocomplete: 'given-name', klaviyo: 'first_name' },

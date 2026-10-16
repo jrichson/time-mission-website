@@ -15,6 +15,8 @@ test('Dallas signup shows the backup form when Klaviyo is blocked and submits it
   const backup = page.locator('[data-tm-klaviyo-backup="QYqsMS"]');
   await expect(backup).toBeVisible({ timeout: 10000 });
   await expect(backup).toContainText('Msg & data rates may apply');
+  await expect(backup.getByRole('img', { name: 'Time Mission Dallas free ticket sign-up' }))
+    .toHaveAttribute('src', '/assets/photos/promos/dallas-free-ticket-signup-1200.webp');
 
   await backup.getByLabel('First name').fill('Ana');
   await backup.getByLabel('Email *').fill('ana@example.com');
