@@ -273,6 +273,14 @@
     display: none;
 }
 
+.tm-klaviyo-backup__image {
+    display: block;
+    width: 100%;
+    max-width: 30rem;
+    height: auto;
+    margin: 0 auto;
+}
+
 .tm-klaviyo-backup__intro,
 .tm-klaviyo-backup__success-title {
     margin: 0;

@@ -40,6 +40,19 @@ const fieldId = (name: string) => `klaviyo-backup-${formId}-${name}`;
         <p class="visually-hidden">
             <label>Do not fill this out if you are human: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
         </p>
+        {config.image && (
+            <img
+                class="tm-klaviyo-backup__image"
+                src={config.image.src}
+                srcset={config.image.srcset}
+                sizes="(max-width: 700px) 90vw, 560px"
+                width={config.image.width}
+                height={config.image.height}
+                alt={config.image.alt}
+                loading="lazy"
+                decoding="async"
+            />
+        )}
         {config.intro && <p class="tm-klaviyo-backup__intro">{config.intro}</p>}
         <div class="tm-klaviyo-backup__fields">
             {fields.map((field) => (
