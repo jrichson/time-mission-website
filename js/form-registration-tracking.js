@@ -8,6 +8,7 @@
 
     var EVENT_NAME = 'COMPLETE_REGISTRATION';
     var KLAVIYO_EVENT_NAME = 'klaviyoForms';
+    var KLAVIYO_BACKUP_EVENT_NAME = 'tm:klaviyo-backup-submit';
     var SUCCESS_PATH = '/contact-thank-you';
     var EMAIL_FIELD_NAMES = ['email'];
     var FIRST_FIELD_NAMES = ['given_name', 'first_name', 'firstname', 'name'];
@@ -152,7 +153,7 @@
         return clean(configuredName || 'klaviyo_' + formId, 80);
     }
 
-    function pushKlaviyoRegistration(detail) {
+    function pushKlaviyoRegistration(detail, provider) {
         var formId = clean(detail && detail.formId, 80);
         if (!formId) return;
 
@@ -163,7 +164,7 @@
             FORM_ID: formId,
             FORM_NAME: formName,
             PAGE_PATH: window.location.pathname || '/',
-            PROVIDER: 'klaviyo',
+            PROVIDER: provider,
             CONSENT_PROFILE: consentProfile(),
             CONSENT_SNAPSHOT: consentSnapshot(),
         };
@@ -195,7 +196,11 @@
         window.addEventListener(KLAVIYO_EVENT_NAME, function (event) {
             var detail = event && event.detail;
             if (!detail || detail.type !== 'submit') return;
-            pushKlaviyoRegistration(detail);
+            pushKlaviyoRegistration(detail, 'klaviyo');
+        });
+        // First-party backup shown when Klaviyo is blocked: same event, told apart only by PROVIDER.
+        window.addEventListener(KLAVIYO_BACKUP_EVENT_NAME, function (event) {
+            pushKlaviyoRegistration(event && event.detail, 'klaviyo_backup');
         });
     }
 

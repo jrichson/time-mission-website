@@ -469,6 +469,43 @@ describe('analytics routing context', () => {
     expect(JSON.stringify(event)).not.toContain('+15555550123');
   });
 
+  it('tracks Klaviyo backup signups as the same Klaviyo form registration', () => {
+    const formElement = {
+      getAttribute(name) {
+        return name === 'data-tm-form-name' ? 'dallas_ticket_signup' : null;
+      },
+    };
+    const { context, window, document } = createBrowserContext(grantedConsentWindow());
+    window.location.pathname = '/dallas/signup';
+    document.body.dataset.location = 'dallas';
+    document.querySelector = (selector) => (
+      selector === '[data-tm-klaviyo-form-id="QYqsMS"]' ? formElement : null
+    );
+
+    runScript('js/form-registration-tracking.js', context);
+    window.dispatchEvent({ type: 'tm:klaviyo-backup-submit', detail: { formId: 'QYqsMS' } });
+
+    const events = window.dataLayer.filter((entry) => (
+      entry && entry.event_name === 'COMPLETE_REGISTRATION'
+    ));
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({
+      event: 'COMPLETE_REGISTRATION',
+      conversion_source: 'klaviyo_form',
+      form_id: 'QYqsMS',
+      form_name: 'dallas_ticket_signup',
+      ga4_event_name: 'complete_registration',
+      standard_event_name: 'CompleteRegistration',
+    });
+    expect(events[0].parameters).toMatchObject({
+      FORM_ID: 'QYqsMS',
+      FORM_NAME: 'dallas_ticket_signup',
+      LOCATION_SLUG: 'dallas',
+      PAGE_PATH: '/dallas/signup',
+      PROVIDER: 'klaviyo_backup',
+    });
+  });
+
   it('distinguishes unannotated Klaviyo forms and ignores non-completion activity', () => {
     const { context, window } = createBrowserContext(grantedConsentWindow());
 
