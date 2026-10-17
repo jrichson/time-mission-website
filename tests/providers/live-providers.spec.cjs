@@ -120,7 +120,8 @@ for (const locale of ['', '/nl']) {
     const response = await page.goto('https://www.timemission.eu' + locale + '/eindhoven/signup', { waitUntil: 'domcontentloaded' });
     expect(response.status()).toBe(200);
     expect(new URL(page.url()).pathname).toMatch(new RegExp('^' + locale + '/eindhoven/?$'));
-    const checkout = 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products';
+    // Roller takes its interface language from the checkout path, so /nl opens the Dutch checkout.
+    const checkout = 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/' + (locale ? 'nl' : 'en') + '/products';
     // Book Now carries the checkout as a link or, for the sidebar, as its booking URL.
     const book = page.locator('.hero-cta a.btn-primary');
     await expect.poll(async () => [await book.getAttribute('href'), await book.getAttribute('data-tm-booking-url')]).toContain(checkout);
