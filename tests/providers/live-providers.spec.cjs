@@ -118,7 +118,8 @@ for (const locale of ['', '/nl']) {
     const response = await page.goto('https://www.timemission.eu' + locale + '/eindhoven/signup', { waitUntil: 'domcontentloaded' });
     expect(response.status()).toBe(200);
     expect(new URL(page.url()).pathname).toMatch(new RegExp('^' + locale + '/eindhoven/?$'));
-    const checkout = 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products';
+    // Roller takes its interface language from the checkout path, so /nl opens the Dutch checkout.
+    const checkout = 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/' + (locale ? 'nl' : 'en') + '/products';
     // Book Now carries the checkout as a link or as its booking URL. It opens the checkout page,
     // not the Roller overlay, because iDEAL payments fail inside the overlay.
     const book = page.locator('.hero-cta a.btn-primary');
