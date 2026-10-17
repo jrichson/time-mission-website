@@ -117,6 +117,74 @@ describe('browser booking contracts', () => {
     }).href).toBe(campaignUrl);
   });
 
+  it('opens the Roller checkout in the page language', () => {
+    const eindhoven = {
+      id: 'eindhoven',
+      slug: 'eindhoven',
+      bookingUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products',
+    };
+    const profile = { localizedRoutes: true, locales: ['en', 'nl', 'fr', 'es'], defaultLocale: 'en' };
+    const brussels = {
+      id: 'brussels',
+      slug: 'brussels',
+      bookingUrl: 'https://ecom.roller.app/terminal1/timemission/nl/products',
+    };
+    const houstonCampaign = {
+      id: 'houston',
+      slug: 'houston',
+      bookingUrl: 'https://ecom.roller.app/TimeMissionHouston/onlinecheckout/en-US/products',
+    };
+    const resolveOn = (pathname, search = '', location = eindhoven) => {
+      const { context, window } = createBrowserContext({ __TM_SITE_PROFILE__: profile });
+      window.location.pathname = pathname;
+      window.location.search = search;
+      runScript('js/navigation-context.js', context);
+      runScript('js/booking-journey.js', context);
+      return window.TMBookingJourney.resolveIntent({ kind: 'tickets', location }).href;
+    };
+
+    expect(resolveOn('/fr/brussels', '', brussels))
+      .toBe('https://ecom.roller.app/terminal1/timemission/fr/products');
+    expect(resolveOn('/brussels', '', brussels))
+      .toBe('https://ecom.roller.app/terminal1/timemission/en/products');
+    expect(resolveOn('/houston', '', houstonCampaign)).toBe(houstonCampaign.bookingUrl);
+
+    expect(resolveOn('/nl/eindhoven'))
+      .toBe('https://ecom.roller.app/timemissioneindhoven/onlinecheckout/nl/products');
+    expect(resolveOn('/nl/eindhoven', '?code=ANYCODE'))
+      .toBe('https://ecom.roller.app/timemissioneindhoven/onlinecheckout/nl/products?code=ANYCODE');
+    expect(resolveOn('/fr/eindhoven'))
+      .toBe('https://ecom.roller.app/timemissioneindhoven/onlinecheckout/fr/products');
+    expect(resolveOn('/eindhoven')).toBe(eindhoven.bookingUrl);
+  });
+
+  it('keeps a localized Roller CTA in the on-page checkout when clicked', () => {
+    const { context, window } = createBrowserContext({
+      __TM_SITE_PROFILE__: { localizedRoutes: true, locales: ['en', 'nl'], defaultLocale: 'en' },
+    });
+    window.location.pathname = '/nl/eindhoven';
+    runScript('js/navigation-context.js', context);
+    runScript('js/booking-journey.js', context);
+
+    const eindhoven = {
+      id: 'eindhoven',
+      slug: 'eindhoven',
+      bookingProvider: 'roller',
+      rollerCheckoutUrl: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products',
+    };
+    const cta = createAnchor('#');
+    cta.setAttribute('data-tm-booking-url', 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/nl/products');
+    expect(window.TMBookingJourney.resolveIntent({
+      currentTarget: cta,
+      kind: 'tickets',
+      location: eindhoven,
+      resolveHref: false,
+    })).toMatchObject({
+      href: 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/nl/products',
+      presentation: 'roller',
+    });
+  });
+
   it('keeps a promo-coded Roller CTA in the on-page checkout when clicked', () => {
     const { context, window } = createBrowserContext();
     window.location.search = '?code=OPEN50&utm_source=meta';

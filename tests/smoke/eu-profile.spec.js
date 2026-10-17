@@ -774,4 +774,19 @@ for (const cta of ['.nav-right .btn-tickets', '.hero-cta a.btn-primary']) {
     expect(opened.searchParams.get('code')).toBe('OPEN50');
     await expect(page.locator('#roller-checkout[data-checkout]')).toHaveCount(0);
   });
+
+  test(`Dutch Eindhoven ${cta} opens the Dutch Roller checkout`, async ({ page, context }) => {
+    await context.route('https://ecom.roller.app/**', (route) => route.fulfill({ contentType: 'text/html', body: '<title>Roller</title>' }));
+    await page.goto('/nl/eindhoven');
+    await page.evaluate(async () => { await window.TM.ready; });
+
+    const [popup] = await Promise.all([
+      context.waitForEvent('page'),
+      page.locator(cta).first().click(),
+    ]);
+    await popup.waitForLoadState('domcontentloaded');
+    const opened = new URL(popup.url());
+    expect(opened.origin + opened.pathname).toBe('https://ecom.roller.app/timemissioneindhoven/onlinecheckout/nl/products');
+    expect(opened.searchParams.has('code')).toBe(false);
+  });
 }
