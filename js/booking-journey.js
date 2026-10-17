@@ -90,6 +90,30 @@
         return /^https:\/\/ecom\.roller\.app\//i.test(String(href || '').trim());
     }
 
+    // The first language-shaped path segment, e.g. /venue/onlinecheckout/en/ or /terminal1/timemission/nl/.
+    var ROLLER_CHECKOUT_LANGUAGE = /^(https:\/\/ecom\.roller\.app\/(?:[^/?#]+\/)+?)([a-z]{2}(?:-[a-z]{2})?)(?=\/)/i;
+
+    function currentPageLocale() {
+        var nav = window.TMNavigation;
+        if (!nav || typeof nav.pathContext !== 'function' || !window.location) return '';
+        return nav.pathContext(window.location.pathname).locale || '';
+    }
+
+    // Roller picks its UI language from the checkout path, so follow the page language.
+    // A stored regional variant of the page language (en-US on an English page) is kept.
+    function localizeRollerCheckout(href) {
+        var value = String(href || '').trim();
+        var locale = currentPageLocale();
+        if (!locale) return value;
+        return value.replace(ROLLER_CHECKOUT_LANGUAGE, function (match, prefix, language) {
+            return language.split('-')[0].toLowerCase() === locale ? match : prefix + locale;
+        });
+    }
+
+    function rollerCheckoutKey(href) {
+        return String(href || '').trim().replace(ROLLER_CHECKOUT_LANGUAGE, '$1*');
+    }
+
     function appendPromoParams(href, options) {
         var opts = options || {};
         var value = String(href || '').trim();
@@ -302,12 +326,10 @@
 
     function shouldUseRollerCheckout(loc, href, kind) {
         if (!loc || !(isTicketKind(kind) || isGroupTicketKind(kind))) return false;
-        href = withoutPromoParams(href);
-        var roller = (loc.rollerCheckoutUrl && String(loc.rollerCheckoutUrl).trim()) || '';
-        var groupCheckout = (loc.groupCheckoutUrl && String(loc.groupCheckoutUrl).trim()) || '';
-        var typedGroupCheckouts = Object.values(loc.groupCheckoutUrls || {}).map(function (value) {
-            return String(value || '').trim();
-        });
+        href = rollerCheckoutKey(withoutPromoParams(href));
+        var roller = rollerCheckoutKey(loc.rollerCheckoutUrl);
+        var groupCheckout = rollerCheckoutKey(loc.groupCheckoutUrl);
+        var typedGroupCheckouts = Object.values(loc.groupCheckoutUrls || {}).map(rollerCheckoutKey);
         return !!roller && (href === roller || href === groupCheckout || typedGroupCheckouts.indexOf(href) !== -1);
     }
 
@@ -416,7 +438,7 @@
             href = appendTrackingParams(href);
         }
         if (presentation === 'roller' || (presentation === 'link' && isRollerCheckoutHost(href))) {
-            href = appendPromoParams(href);
+            href = appendPromoParams(localizeRollerCheckout(href));
         }
         return {
             kind: kind,
