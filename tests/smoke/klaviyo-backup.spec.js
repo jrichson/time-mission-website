@@ -29,6 +29,16 @@ test('Dallas signup shows the backup form when Klaviyo is blocked and submits it
   await expect(backup).toBeHidden();
   expect(submitted).toContain('klaviyo_form_id=QYqsMS');
   expect(submitted).toContain('email=ana%40example.com');
+
+  const registration = await page.evaluate(() => window.dataLayer.find((entry) => (
+    entry?.event_name === 'COMPLETE_REGISTRATION' && entry?.form_id === 'QYqsMS'
+  )));
+  expect(registration).toMatchObject({
+    conversion_source: 'klaviyo_form',
+    form_name: 'dallas_ticket_signup',
+    parameters: { FORM_ID: 'QYqsMS', LOCATION_SLUG: 'dallas', PROVIDER: 'klaviyo_backup' },
+  });
+  expect(JSON.stringify(registration)).not.toContain('ana@example.com');
 });
 
 test('backup form stays hidden when Klaviyo renders its own form', async ({ page }) => {

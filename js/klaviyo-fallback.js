@@ -8,7 +8,8 @@
  * - script loaded but form still rendering (slow mobile networks): keep the loading
  *   state until the form appears, with the backup as a last resort after SLOW_RENDER_MS
  * While waiting, a loading message replaces the blank space. The backup posts to
- * /api/klaviyo-signup, which subscribes to the same list.
+ * /api/klaviyo-signup, which subscribes to the same list, then fires tm:klaviyo-backup-submit
+ * so the signup is tracked like a Klaviyo form submit.
  */
 (function () {
     'use strict';
@@ -133,6 +134,10 @@
                     });
                 })
                 .then(function () {
+                    // form-registration-tracking.js turns this into the same CompleteRegistration as Klaviyo's form.
+                    window.dispatchEvent(new CustomEvent('tm:klaviyo-backup-submit', {
+                        detail: { formId: root.getAttribute('data-tm-klaviyo-embed') || '' },
+                    }));
                     form.hidden = true;
                     var success = root.querySelector('[data-tm-klaviyo-backup-success]');
                     if (success) success.hidden = false;
