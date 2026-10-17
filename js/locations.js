@@ -403,6 +403,16 @@
                 });
             }
 
+            // Location page CTAs are rendered with the stored checkout URL; resolve them for this page.
+            document.querySelectorAll('.btn-location-book[data-tm-location]').forEach(el => {
+                const ctaLocationId = el.getAttribute('data-tm-location');
+                const ctaView = getLocationView(ctaLocationId);
+                if (!ctaView || !ctaView.bookable) return;
+                applyBookingCtaView(el, getBookingCtaView('tickets', ctaLocationId, {
+                    pageLocationSlug: pageLocationSlug,
+                }));
+            });
+
             document.querySelectorAll('[data-tm-booking-kind="groups"][data-tm-group-type]').forEach(el => {
                 const defaultLabel = el.dataset.tmDefaultLabel || el.textContent.trim();
                 const label = BookingJourney.resolveGroupInquiryLabel(

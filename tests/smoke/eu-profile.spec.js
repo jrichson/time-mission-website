@@ -779,6 +779,9 @@ for (const cta of ['.nav-right .btn-tickets', '.hero-cta a.btn-primary']) {
     await context.route('https://ecom.roller.app/**', (route) => route.fulfill({ contentType: 'text/html', body: '<title>Roller</title>' }));
     await page.goto('/nl/eindhoven');
     await page.evaluate(async () => { await window.TM.ready; });
+    // The link itself must point at the Dutch checkout so copying or opening it in a new tab works.
+    await expect(page.locator(cta).first())
+      .toHaveAttribute('href', 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/nl/products');
 
     const [popup] = await Promise.all([
       context.waitForEvent('page'),
