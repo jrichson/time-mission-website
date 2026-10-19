@@ -1,5 +1,6 @@
 import { EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20261010_eindhoven_direct_checkout_snapshot';
 import { EINDHOVEN_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20261016_eindhoven_now_open_snapshot';
+import { EDISON_HOURS_SNAPSHOT } from '../cms/migration-data/20261019_edison_hours_snapshot';
 import { DALLAS_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261016_dallas_signup_page_snapshot';
 import { ANTWERP_TICKER_SNAPSHOT } from '../cms/migration-data/20261007_antwerp_ticker_snapshot';
 import { SCOTTSDALE_LOCATION_SNAPSHOT, SCOTTSDALE_PAGE_SNAPSHOT } from '../cms/migration-data/20261001_scottsdale_snapshot';
@@ -168,6 +169,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 return {
                     ...groupFormLocation,
                     ticker: EDISON_NOW_OPEN_SNAPSHOT.ticker,
+                    hours: EDISON_HOURS_SNAPSHOT.hours,
                     externalLinks: {
                         ...groupFormLocation.externalLinks,
                         externalUrl: EDISON_BOOKING_SNAPSHOT.externalUrl,

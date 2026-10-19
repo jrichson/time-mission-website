@@ -6,6 +6,7 @@ import * as migration_20261006_100000_eindhoven_roller_panel from './20261006_10
 import * as migration_20261010_090000_eindhoven_direct_checkout from './20261010_090000_eindhoven_direct_checkout';
 import * as migration_20261016_090000_eindhoven_now_open from './20261016_090000_eindhoven_now_open';
 import * as migration_20261016_100000_dallas_signup_page from './20261016_100000_dallas_signup_page';
+import * as migration_20261019_090000_edison_hours from './20261019_090000_edison_hours';
 import * as migration_20260930_100000_school_night_retirement from './20260930_100000_school_night_retirement';
 import * as migration_20260930_090000_educators_december_extension from './20260930_090000_educators_december_extension';
 import * as migration_20260925_090000_eindhoven_checkout from './20260925_090000_eindhoven_checkout';
@@ -410,5 +411,10 @@ export const migrations = [
     up: migration_20261016_100000_dallas_signup_page.up,
     down: migration_20261016_100000_dallas_signup_page.down,
     name: '20261016_100000_dallas_signup_page'
+  },
+  {
+    up: migration_20261019_090000_edison_hours.up,
+    down: migration_20261019_090000_edison_hours.down,
+    name: '20261019_090000_edison_hours'
   },
 ];
