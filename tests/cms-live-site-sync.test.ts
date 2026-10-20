@@ -1,6 +1,7 @@
 import { EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20261010_eindhoven_direct_checkout_snapshot';
 import { EINDHOVEN_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20261016_eindhoven_now_open_snapshot';
 import { EDISON_HOURS_SNAPSHOT } from '../cms/migration-data/20261019_edison_hours_snapshot';
+import { BRUSSELS_HOURS_SNAPSHOT } from '../cms/migration-data/20261020_brussels_hours_snapshot';
 import { DALLAS_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261016_dallas_signup_page_snapshot';
 import { ANTWERP_TICKER_SNAPSHOT } from '../cms/migration-data/20261007_antwerp_ticker_snapshot';
 import { SCOTTSDALE_LOCATION_SNAPSHOT, SCOTTSDALE_PAGE_SNAPSHOT } from '../cms/migration-data/20261001_scottsdale_snapshot';
@@ -42,13 +43,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 function readJson(relativePath: string): unknown {
     return JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
-}
-
-function withoutNullHourFields(hours: Record<string, Record<string, unknown>>) {
-    return Object.fromEntries(Object.entries(hours).map(([day, row]) => [
-        day,
-        Object.fromEntries(Object.entries(row).filter(([, value]) => value != null)),
-    ]));
 }
 
 describe('live-site-to-CMS sync snapshot', () => {
@@ -180,7 +174,7 @@ describe('live-site-to-CMS sync snapshot', () => {
             return location.slug === BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT.slug
                 ? {
                     ...groupFormLocation,
-                    hours: withoutNullHourFields(BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT.hours),
+                    hours: BRUSSELS_HOURS_SNAPSHOT.hours,
                     groupFormUrls: BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT.groupFormUrls,
                 }
                 : groupFormLocation;

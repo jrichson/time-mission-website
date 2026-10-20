@@ -697,6 +697,7 @@ async function sendResendEmail({ env, fetchImpl, formType, message }) {
 
 function contactRecipientsFor(env, data) {
   if (data.location === 'edison') return ['info@SuperchargedNJ.com'];
+  if (data.location === 'dallas') return ['dallas@timemission.com'];
   const groupsRecipient = tmOpsGroupsRecipient(data.location, data.subject);
   if (groupsRecipient) return [groupsRecipient];
   const locationRecipients = locationSpecificEnv(env, 'CONTACT_TO_EMAIL', data.location, 'CONTACT_TO_EMAIL');

@@ -336,6 +336,25 @@ describe('Cloudflare form handler', () => {
     },
   );
 
+  it('routes Dallas contacts to the Dallas inbox regardless of configured defaults', async () => {
+    const calls = [];
+    const response = await handleFormRequest({
+      env: { ...env, FORM_RATE_LIMIT_KV: mockKv(), CONTACT_TO_EMAIL_DALLAS: 'old@example.com' },
+      fetchImpl: (url, init) => {
+        calls.push({ url: String(url), body: typeof init.body === 'string' ? JSON.parse(init.body) : null });
+        return fetchOk(url);
+      },
+      formType: 'contact',
+      request: formRequest('/api/contact', {
+        'cf-turnstile-response': 'token', email: 'guest@example.com',
+        location: 'dallas', message: 'When do you open?', name: 'Guest', phone: '2145550123', subject: 'groups',
+      }),
+    });
+    expect(response.status).toBe(200);
+    expect(calls.at(-1).url).toBe('https://api.resend.com/emails');
+    expect(calls.at(-1).body.to).toEqual(['dallas@timemission.com']);
+  });
+
   it('routes EU contact submissions to each configured location inbox', async () => {
     const calls = [];
     const fetchImpl = (url, init) => {
