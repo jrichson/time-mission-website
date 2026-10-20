@@ -27,11 +27,11 @@ describe('Brussels operational details', () => {
     expect(brussels).toBeDefined();
     expect(brussels.contact.email).toBe('brussels@timemission.com');
     expect(brussels.hours).toEqual({
-      mon: { label: 'Closed' },
-      tue: { label: 'Closed' },
-      wed: { open: '14:00', close: '20:00', label: '14:00 – 20:00' },
-      thu: { open: '16:00', close: '23:00', label: '16:00 – 23:00' },
-      fri: { open: '16:00', close: '23:00', label: '16:00 – 23:00' },
+      mon: { open: '12:00', close: '20:00', label: '12:00 – 20:00' },
+      tue: { open: '12:00', close: '20:00', label: '12:00 – 20:00' },
+      wed: { open: '12:00', close: '20:00', label: '12:00 – 20:00' },
+      thu: { open: '14:00', close: '23:00', label: '14:00 – 23:00' },
+      fri: { open: '14:00', close: '23:00', label: '14:00 – 23:00' },
       sat: { open: '12:00', close: '23:00', label: '12:00 – 23:00' },
       sun: { open: '10:00', close: '20:00', label: '10:00 – 20:00' },
     });
@@ -41,13 +41,13 @@ describe('Brussels operational details', () => {
     expect(brussels.groupFormPresentation).toBe('iframe');
   });
 
-  it('keeps closed days visible while omitting them from structured opening hours', () => {
+  it('shows every open day in the hours list and structured opening hours', () => {
     expect(locationHoursRows(brussels)).toEqual([
-      { day: 'Monday', label: 'Closed' },
-      { day: 'Tuesday', label: 'Closed' },
-      { day: 'Wednesday', label: '14:00 – 20:00' },
-      { day: 'Thursday', label: '16:00 – 23:00' },
-      { day: 'Friday', label: '16:00 – 23:00' },
+      { day: 'Monday', label: '12:00 – 20:00' },
+      { day: 'Tuesday', label: '12:00 – 20:00' },
+      { day: 'Wednesday', label: '12:00 – 20:00' },
+      { day: 'Thursday', label: '14:00 – 23:00' },
+      { day: 'Friday', label: '14:00 – 23:00' },
       { day: 'Saturday', label: '12:00 – 23:00' },
       { day: 'Sunday', label: '10:00 – 20:00' },
     ]);
@@ -58,9 +58,11 @@ describe('Brussels operational details', () => {
       opens,
       closes,
     }))).toEqual([
-      { dayOfWeek: 'Wednesday', opens: '14:00', closes: '20:00' },
-      { dayOfWeek: 'Thursday', opens: '16:00', closes: '23:00' },
-      { dayOfWeek: 'Friday', opens: '16:00', closes: '23:00' },
+      { dayOfWeek: 'Monday', opens: '12:00', closes: '20:00' },
+      { dayOfWeek: 'Tuesday', opens: '12:00', closes: '20:00' },
+      { dayOfWeek: 'Wednesday', opens: '12:00', closes: '20:00' },
+      { dayOfWeek: 'Thursday', opens: '14:00', closes: '23:00' },
+      { dayOfWeek: 'Friday', opens: '14:00', closes: '23:00' },
       { dayOfWeek: 'Saturday', opens: '12:00', closes: '23:00' },
       { dayOfWeek: 'Sunday', opens: '10:00', closes: '20:00' },
     ]);
