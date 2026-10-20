@@ -216,10 +216,11 @@ describe('Klaviyo backup forms', () => {
     expect(calls.some((call) => call.url.includes('klaviyo.com'))).toBe(false);
   });
 
-  it('archives and emails signups when no Klaviyo key is configured', async () => {
+  it('archives signups without emailing when no Klaviyo key is configured', async () => {
     const calls = [];
+    const db = mockD1();
     const response = await handleFormRequest({
-      env: baseEnv(),
+      env: { ...baseEnv(), FORM_SUBMISSIONS_DB: db },
       fetchImpl: recordingFetch(calls),
       formType: 'klaviyo-signup',
       request: signupRequest({
@@ -232,12 +233,8 @@ describe('Klaviyo backup forms', () => {
     expect(response.status).toBe(200);
     expect(calls.map((call) => call.url)).toEqual([
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      'https://api.resend.com/emails',
     ]);
-    const email = JSON.parse(calls[1].init.body);
-    expect(email.to).toEqual(['newsletter@timemission.com']);
-    expect(email.subject).toContain('Dallas free ticket sign-up');
-    expect(email.text).toContain('Why the backup showed: Klaviyo was blocked in their browser (after 0.3s)');
+    expect(db.statements).toHaveLength(1);
   });
 
   it('ignores backup reasons and wait times it does not recognize', () => {

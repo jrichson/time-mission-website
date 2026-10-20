@@ -18,11 +18,6 @@ const LOCAL_ALLOWED_ORIGINS = [
 
 // Why klaviyo-fallback.js showed the backup instead of Klaviyo's own form.
 const KLAVIYO_BACKUP_REASONS = new Set(['blocked', 'no_response', 'slow_render']);
-const KLAVIYO_BACKUP_REASON_LABELS = {
-  blocked: 'Klaviyo was blocked in their browser',
-  no_response: 'Klaviyo did not respond',
-  slow_render: 'Klaviyo loaded but its form did not appear in time',
-};
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const memoryRateLimits = new Map();
 
@@ -638,48 +633,11 @@ function newsletterEmail(data) {
   };
 }
 
-function backupReasonLabel(data) {
-  const label = KLAVIYO_BACKUP_REASON_LABELS[data.backupReason] || 'Unknown';
-  return data.backupWaitMs === null ? label : `${label} (after ${(data.backupWaitMs / 1000).toFixed(1)}s)`;
-}
-
-function klaviyoSignupEmail(data) {
-  const fullName = [data.givenName, data.familyName].filter(Boolean).join(' ');
-  const rows = [
-    { label: 'Form', value: `${data.formTitle} (${data.formId})` },
-    { label: 'Name', value: fullName || 'Not provided' },
-    { label: 'Email', value: data.email },
-    { label: 'Phone', value: data.phone || 'Not provided' },
-    { label: 'SMS consent', value: data.smsConsent ? 'Yes' : 'No' },
-    { label: 'Location', value: contactLocationLabel(data.location) },
-    { label: 'Why the backup showed', value: backupReasonLabel(data) },
-    ...Object.entries(data.properties).map(([label, value]) => ({ label, value })),
-  ];
-  const text = [
-    'New Time Mission signup from a backup form (not added to Klaviyo: no Klaviyo API key on this site)',
-    '',
-    ...rows.map((row) => `${row.label}: ${row.value}`),
-  ].join('\n');
-
-  return {
-    html: notificationEmailHtml({
-      // Only sent when the signup could not go to Klaviyo; synced signups need no email.
-      intro: 'This visitor used the backup form instead of the Klaviyo form. This site has no Klaviyo API key, so they were not added to the Klaviyo list. Add them by hand.',
-      preheader: `${fullName || data.email} signed up with ${data.formTitle}`,
-      rows,
-      title: 'New backup form signup',
-    }),
-    replyTo: data.email,
-    subject: `Time Mission backup signup (${data.formTitle}): ${fullName || data.email}`,
-    text,
-  };
-}
-
 async function sendResendEmail({ env, fetchImpl, formType, message }) {
   const apiKey = stringValue(env.FORM_EMAIL_API_KEY).trim();
   const from = stringValue(env.FORM_FROM_EMAIL).trim();
   const recipients = splitEmails(message.to || (
-    formType === 'newsletter' || formType === 'klaviyo-signup'
+    formType === 'newsletter'
       ? env.NEWSLETTER_TO_EMAIL || env.CONTACT_TO_EMAIL
       : env.CONTACT_TO_EMAIL
   ));
@@ -909,11 +867,13 @@ function klaviyoHeaders(env, apiKey) {
   };
 }
 
-// Returns whether the signup reached Klaviyo.
 async function sendKlaviyoBackupSignup({ data, env, fetchImpl }) {
   const apiKey = stringValue(env.KLAVIYO_API_KEY).trim();
-  // Without a key the signup is still archived and emailed to NEWSLETTER_TO_EMAIL.
-  if (!apiKey) return false;
+  // Backup signups never email the team; without a key they are only in D1.
+  if (!apiKey) {
+    console.error('KLAVIYO_API_KEY is not set; backup signup kept in D1 only.', data.formId);
+    return;
+  }
 
   const profile = {
     email: data.email,
@@ -957,7 +917,6 @@ async function sendKlaviyoBackupSignup({ data, env, fetchImpl }) {
     method: 'POST',
   });
   if (!subscribeResponse.ok) throw new FormError('Signup failed. Please try again.', 502);
-  return true;
 }
 
 function successResponse(request, asJSON) {
@@ -993,7 +952,7 @@ function validateSubmission(formType, raw, env) {
 }
 
 function emailForSubmission(formType, data) {
-  if (formType === 'klaviyo-signup') return klaviyoSignupEmail(data);
+  if (formType === 'klaviyo-signup') return null;
   return formType === 'newsletter' ? newsletterEmail(data) : contactEmail(data);
 }
 
@@ -1014,8 +973,9 @@ async function deliverSubmission({ data, env, fetchImpl, formType, message }) {
     await sendKlaviyoNewsletterSubscription({ data, env, fetchImpl });
   }
   if (formType === 'klaviyo-signup') {
-    // A signup already in Klaviyo needs no email; it is still archived in D1.
-    if (await sendKlaviyoBackupSignup({ data, env, fetchImpl })) return;
+    // Backup signups go only to Klaviyo (and the D1 archive), never to email.
+    await sendKlaviyoBackupSignup({ data, env, fetchImpl });
+    return;
   }
   await sendResendEmail({ env, fetchImpl, formType, message });
 }
