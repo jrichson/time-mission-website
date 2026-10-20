@@ -128,7 +128,7 @@ describe('Klaviyo backup forms', () => {
     });
   });
 
-  it('imports the profile, subscribes to the registry list, and still emails the team', async () => {
+  it('imports the profile and subscribes to the registry list without emailing the team', async () => {
     const calls = [];
     const env = baseEnv({ KLAVIYO_API_KEY: 'klaviyo-private-key' });
     const response = await handleFormRequest({
@@ -139,6 +139,8 @@ describe('Klaviyo backup forms', () => {
         klaviyo_form_id: 'QYqsMS',
         email: 'guest@example.com',
         given_name: 'Ana',
+        backup_reason: 'slow_render',
+        backup_wait_ms: '15012',
         list_id: 'ATTACKER_LIST',
         phone: '214-555-0100',
       }),
@@ -149,13 +151,12 @@ describe('Klaviyo backup forms', () => {
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       'https://a.klaviyo.com/api/profile-import/',
       'https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/',
-      'https://api.resend.com/emails',
     ]);
     expect(JSON.parse(calls[1].init.body).data.attributes).toMatchObject({
       email: 'guest@example.com',
       first_name: 'Ana',
       phone_number: '+12145550100',
-      properties: { klaviyo_backup_form_id: 'QYqsMS', location: 'dallas' },
+      properties: { klaviyo_backup_form_id: 'QYqsMS', klaviyo_backup_reason: 'slow_render', location: 'dallas' },
     });
     const subscribe = JSON.parse(calls[2].init.body).data;
     expect(subscribe.relationships.list.data.id).toBe('TqyU2B');
@@ -167,13 +168,15 @@ describe('Klaviyo backup forms', () => {
         sms: { marketing: { consent: 'SUBSCRIBED' } },
       },
     });
-    const email = JSON.parse(calls[3].init.body);
-    expect(email.to).toEqual(['newsletter@timemission.com']);
-    expect(email.subject).toContain('Dallas free ticket sign-up');
 
     const archived = env.FORM_SUBMISSIONS_DB.statements[0].params;
     expect(archived[1]).toBe('newsletter');
-    expect(JSON.parse(archived.at(-1))).toMatchObject({ formId: 'QYqsMS', source: 'klaviyo-backup-form' });
+    expect(JSON.parse(archived.at(-1))).toMatchObject({
+      backupReason: 'slow_render',
+      backupWaitMs: 15012,
+      formId: 'QYqsMS',
+      source: 'klaviyo-backup-form',
+    });
   });
 
   it('never subscribes educator phone numbers to SMS', async () => {
@@ -219,13 +222,31 @@ describe('Klaviyo backup forms', () => {
       env: baseEnv(),
       fetchImpl: recordingFetch(calls),
       formType: 'klaviyo-signup',
-      request: signupRequest({ klaviyo_form_id: 'QYqsMS', email: 'guest@example.com' }),
+      request: signupRequest({
+        klaviyo_form_id: 'QYqsMS',
+        email: 'guest@example.com',
+        backup_reason: 'blocked',
+        backup_wait_ms: '312',
+      }),
     });
     expect(response.status).toBe(200);
     expect(calls.map((call) => call.url)).toEqual([
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       'https://api.resend.com/emails',
     ]);
+    const email = JSON.parse(calls[1].init.body);
+    expect(email.to).toEqual(['newsletter@timemission.com']);
+    expect(email.subject).toContain('Dallas free ticket sign-up');
+    expect(email.text).toContain('Why the backup showed: Klaviyo was blocked in their browser (after 0.3s)');
+  });
+
+  it('ignores backup reasons and wait times it does not recognize', () => {
+    expect(validateKlaviyoSignupSubmission({
+      klaviyo_form_id: 'QYqsMS',
+      email: 'guest@example.com',
+      backup_reason: '<script>',
+      backup_wait_ms: 'soon',
+    })).toMatchObject({ backupReason: '', backupWaitMs: null });
   });
 
   it('gives every Klaviyo form on the site a backup entry', () => {
