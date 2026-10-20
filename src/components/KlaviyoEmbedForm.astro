@@ -60,6 +60,8 @@ const klaviyoCompany = KLAVIYO_ACCOUNTS[config.site as 'us' | 'eu'];
         hidden
     >
         <input type="hidden" name="klaviyo_form_id" value={formId} />
+        <input type="hidden" name="backup_reason" value="" />
+        <input type="hidden" name="backup_wait_ms" value="" />
         <p class="visually-hidden">
             <label>Do not fill this out if you are human: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
         </p>
@@ -104,4 +106,4 @@ const klaviyoCompany = KLAVIYO_ACCOUNTS[config.site as 'us' | 'eu'];
         <p>{config.success.text}</p>
     </div>
 </div>
-<script is:inline src="/js/klaviyo-fallback.js?v=5" defer></script>
+<script is:inline src="/js/klaviyo-fallback.js?v=6" defer></script>

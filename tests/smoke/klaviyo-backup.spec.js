@@ -29,6 +29,8 @@ test('Dallas signup shows the backup form when Klaviyo is blocked and submits it
   await expect(backup).toBeHidden();
   expect(submitted).toContain('klaviyo_form_id=QYqsMS');
   expect(submitted).toContain('email=ana%40example.com');
+  expect(submitted).toContain('backup_reason=blocked');
+  expect(submitted).toMatch(/backup_wait_ms=\d+/);
 
   const registration = await page.evaluate(() => window.dataLayer.find((entry) => (
     entry?.event_name === 'COMPLETE_REGISTRATION' && entry?.form_id === 'QYqsMS'
@@ -89,4 +91,22 @@ test('a Klaviyo script that never answers falls back after four seconds', async 
   await page.waitForTimeout(2500);
   await expect(backup).toBeHidden();
   await expect(backup).toBeVisible({ timeout: 4000 });
+  await expect(backup.locator('input[name="backup_reason"]')).toHaveValue('no_response');
+});
+
+test('a loaded Klaviyo that never draws its form falls back after fifteen seconds', async ({ page }) => {
+  test.setTimeout(30000);
+  await page.route('https://static.klaviyo.com/onsite/js/klaviyo.js*', (route) => route.fulfill({
+    contentType: 'application/javascript',
+    body: 'window.klaviyo = { push: function () {} };',
+  }));
+
+  await page.goto('/dallas/signup');
+  const backup = page.locator('[data-tm-klaviyo-backup="QYqsMS"]');
+  // Past the old eight-second cutoff, slow phones still get the loading message.
+  await page.waitForTimeout(10000);
+  await expect(backup).toBeHidden();
+  await expect(page.locator('[data-tm-klaviyo-loading]')).toBeVisible();
+  await expect(backup).toBeVisible({ timeout: 7000 });
+  await expect(backup.locator('input[name="backup_reason"]')).toHaveValue('slow_render');
 });

@@ -5,17 +5,19 @@
  * outcome on window.__tmKlaviyo; this script reacts to it:
  * - script blocked or failing (ad blockers, privacy browsers): backup immediately
  * - script never answers: backup after NO_RESPONSE_MS
- * - script loaded but form still rendering (slow mobile networks): keep the loading
- *   state until the form appears, with the backup as a last resort after SLOW_RENDER_MS
+ * - script loaded but form still rendering (slow phones and in-app browsers): keep the
+ *   loading state until the form appears, with the backup as a last resort after SLOW_RENDER_MS
  * While waiting, a loading message replaces the blank space. The backup posts to
- * /api/klaviyo-signup, which subscribes to the same list, then fires tm:klaviyo-backup-submit
- * so the signup is tracked like a Klaviyo form submit.
+ * /api/klaviyo-signup with which of these happened and how long the visitor waited, and the
+ * handler subscribes them to the same list. It then fires tm:klaviyo-backup-submit so the
+ * signup is tracked like a Klaviyo form submit.
  */
 (function () {
     'use strict';
 
     var NO_RESPONSE_MS = 4000;
-    var SLOW_RENDER_MS = 8000;
+    // Klaviyo's own form bundle can take 7-10s to arrive on slow phones once its loader runs.
+    var SLOW_RENDER_MS = 15000;
     var POLL_MS = 200;
     var KLAVIYO_SRC = 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=';
     var TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
@@ -158,6 +160,8 @@
         var loading = root.querySelector('[data-tm-klaviyo-loading]');
         if (!embed || !form) return;
 
+        // Wall-clock time: interval ticks slow down in background tabs.
+        var started = Date.now();
         var touched = false;
         form.addEventListener('input', function () { touched = true; }, { once: true });
         bindSubmit(root, form);
@@ -167,9 +171,17 @@
             if (loading) loading.hidden = true;
         }
 
-        function showBackup() {
+        function setField(name, value) {
+            var input = form.querySelector('input[name="' + name + '"]');
+            if (input) input.value = value;
+        }
+
+        // reason: 'blocked', 'no_response' or 'slow_render'.
+        function showBackup(reason) {
             if (klaviyoRendered(embed) || !form.hidden) return;
             finishLoading();
+            setField('backup_reason', reason);
+            setField('backup_wait_ms', String(Date.now() - started));
             form.hidden = false;
             root.setAttribute('data-tm-klaviyo-backup-shown', '1');
             mountTurnstile(form);
@@ -190,22 +202,25 @@
         }
 
         function onScriptState(state) {
-            if (state === 'failed') showBackup();
+            if (state === 'failed') showBackup('blocked');
         }
         if (klaviyoScriptState === 'loading') scriptListeners.push(onScriptState);
         else onScriptState(klaviyoScriptState);
 
-        var waited = 0;
         var timer = window.setInterval(function () {
-            waited += POLL_MS;
+            var waited = Date.now() - started;
             if (klaviyoRendered(embed)) {
                 window.clearInterval(timer);
                 onKlaviyoRendered();
-            } else if (klaviyoScriptState === 'failed'
-                || (klaviyoScriptState === 'loading' && waited >= NO_RESPONSE_MS)
-                || waited >= SLOW_RENDER_MS) {
+            } else if (klaviyoScriptState === 'failed') {
                 window.clearInterval(timer);
-                showBackup();
+                showBackup('blocked');
+            } else if (klaviyoScriptState === 'loading' && waited >= NO_RESPONSE_MS) {
+                window.clearInterval(timer);
+                showBackup('no_response');
+            } else if (waited >= SLOW_RENDER_MS) {
+                window.clearInterval(timer);
+                showBackup('slow_render');
             }
         }, POLL_MS);
     }
