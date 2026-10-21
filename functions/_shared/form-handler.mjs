@@ -512,6 +512,9 @@ export function validateKlaviyoSignupSubmission(raw, env = {}) {
     if (field.required && !value) throw new FormError(`${field.label} is required.`);
     if (!value) continue;
     if (field.type === 'email') assertEmail(value);
+    if (field.type === 'select' && !field.options.some((option) => option.value === value)) {
+      throw new FormError(`Choose a ${field.label.toLowerCase()}.`);
+    }
     if (field.type === 'tel') {
       const phone = e164Phone(value);
       if (!phone) throw new FormError('Enter a valid phone number.');

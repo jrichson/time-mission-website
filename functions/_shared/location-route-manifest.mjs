@@ -132,7 +132,8 @@ export const PREFIXABLE_CANONICAL_PATHS = [
   "/cookies",
   "/accessibility",
   "/licensing",
-  "/waiver"
+  "/waiver",
+  "/creators"
 ];
 export const PREFIXABLE_ROUTE_ALIASES = [
   [
@@ -254,6 +255,10 @@ export const PREFIXABLE_ROUTE_ALIASES = [
   [
     "/waiver.html",
     "/waiver"
+  ],
+  [
+    "/creators.html",
+    "/creators"
   ],
   [
     "/adult-birthday-parties",

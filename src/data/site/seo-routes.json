@@ -328,5 +328,65 @@
     "description": "Sign up to hear first when tickets go on sale at Time Mission Dallas, opening soon at 5307 E. Mockingbird Ln.",
     "ogImage": "/assets/photos/TM-Groups-1200.webp",
     "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
+  "/creators": {
+    "title": "Time Mission Creator Program",
+    "description": "Apply to the Time Mission Creator Program. Tell us about you and your audience, and our team will reach out about collab opportunities.",
+    "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
+    "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
+  },
+  "/philadelphia/creators": {
+    "title": "Creator Program | Time Mission Philadelphia",
+    "description": "Apply to the Time Mission Creator Program at Time Mission Philadelphia. Tell us about you and your audience, and our team will reach out about collab opportunities.",
+    "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
+    "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
+  },
+  "/houston/creators": {
+    "title": "Creator Program | Time Mission Houston",
+    "description": "Apply to the Time Mission Creator Program at Time Mission Houston. Tell us about you and your audience, and our team will reach out about collab opportunities.",
+    "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
+    "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
+  },
+  "/dallas/creators": {
+    "title": "Creator Program | Time Mission Dallas",
+    "description": "Apply to the Time Mission Creator Program at Time Mission Dallas. Tell us about you and your audience, and our team will reach out about collab opportunities.",
+    "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
+    "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
+  },
+  "/orland-park/creators": {
+    "title": "Creator Program | Time Mission Orland Park",
+    "description": "Apply to the Time Mission Creator Program at Time Mission Orland Park. Tell us about you and your audience, and our team will reach out about collab opportunities.",
+    "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
+    "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
+  },
+  "/mount-prospect/creators": {
+    "title": "Creator Program | Time Mission Mount Prospect",
+    "description": "Apply to the Time Mission Creator Program at Time Mission Mount Prospect. Tell us about you and your audience, and our team will reach out about collab opportunities.",
+    "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
+    "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
+  },
+  "/manassas/creators": {
+    "title": "Creator Program | Time Mission Manassas",
+    "description": "Apply to the Time Mission Creator Program at Time Mission Manassas. Tell us about you and your audience, and our team will reach out about collab opportunities.",
+    "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
+    "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
+  },
+  "/nashville/creators": {
+    "title": "Creator Program | Time Mission Nashville",
+    "description": "Apply to the Time Mission Creator Program at Time Mission Nashville. Tell us about you and your audience, and our team will reach out about collab opportunities.",
+    "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
+    "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
+  },
+  "/west-nyack/creators": {
+    "title": "Creator Program | Time Mission West Nyack",
+    "description": "Apply to the Time Mission Creator Program at Time Mission West Nyack. Tell us about you and your audience, and our team will reach out about collab opportunities.",
+    "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
+    "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
+  },
+  "/lincoln/creators": {
+    "title": "Creator Program | Time Mission Lincoln",
+    "description": "Apply to the Time Mission Creator Program at Time Mission Lincoln. Tell us about you and your audience, and our team will reach out about collab opportunities.",
+    "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
+    "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
   }
 }

@@ -128,6 +128,33 @@ describe('Klaviyo backup forms', () => {
     });
   });
 
+  it('accepts only the creator form dropdown options and keeps answers as profile properties', () => {
+    const answers = {
+      klaviyo_form_id: 'WKi36B',
+      email: 'creator@example.com',
+      given_name: 'Ana',
+      social_handle: '@ana',
+      creator_platform: 'TikTok',
+      audience_size: '5K to 25K',
+      creator_location: 'Orland Park',
+    };
+    expect(validateKlaviyoSignupSubmission(answers)).toMatchObject({
+      givenName: 'Ana',
+      listId: 'VQWtvH',
+      properties: {
+        'Audience Size': '5K to 25K',
+        'Creator Location': 'Orland Park',
+        'Creator Platform': 'TikTok',
+        'Social Handle': '@ana',
+      },
+      smsConsent: false,
+    });
+    expect(() => validateKlaviyoSignupSubmission({ ...answers, creator_platform: 'MySpace' }))
+      .toThrow('Choose a primary platform.');
+    expect(() => validateKlaviyoSignupSubmission({ ...answers, social_handle: '' }))
+      .toThrow('Instagram or TikTok handle (@yourname) is required.');
+  });
+
   it('imports the profile and subscribes to the registry list without emailing the team', async () => {
     const calls = [];
     const env = baseEnv({ KLAVIYO_API_KEY: 'klaviyo-private-key' });
@@ -261,7 +288,7 @@ describe('Klaviyo backup forms', () => {
       if (String(loc.signupFormId || '').trim()) referenced.add(loc.signupFormId.trim());
     }
     expect([...referenced].sort()).toEqual(
-      expect.arrayContaining(['QYqsMS', 'SmY6Us', 'TwcrHA', 'TzbcnW', 'WC5BHF', 'XmbdNb', 'YAhjX2', 'YsG3eB']),
+      expect.arrayContaining(['QYqsMS', 'SmY6Us', 'TwcrHA', 'TzbcnW', 'WC5BHF', 'WKi36B', 'XmbdNb', 'YAhjX2', 'YsG3eB']),
     );
     for (const formId of referenced) {
       expect(KLAVIYO_FORMS, `Klaviyo form ${formId} needs a backup entry`).toHaveProperty(formId);

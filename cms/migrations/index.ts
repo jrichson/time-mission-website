@@ -1,3 +1,4 @@
+import * as migration_20261021_090000_creator_pages from './20261021_090000_creator_pages';
 import * as migration_20261007_090000_antwerp_evergreen_ticker from './20261007_090000_antwerp_evergreen_ticker';
 import * as migration_20261001_090000_add_scottsdale_location_enums from './20261001_090000_add_scottsdale_location_enums';
 import * as migration_20261001_091000_seed_scottsdale_location from './20261001_091000_seed_scottsdale_location';
@@ -422,5 +423,10 @@ export const migrations = [
     up: migration_20261020_090000_brussels_hours.up,
     down: migration_20261020_090000_brussels_hours.down,
     name: '20261020_090000_brussels_hours'
+  },
+  {
+    up: migration_20261021_090000_creator_pages.up,
+    down: migration_20261021_090000_creator_pages.down,
+    name: '20261021_090000_creator_pages'
   },
 ];

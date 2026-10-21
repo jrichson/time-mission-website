@@ -9,6 +9,7 @@ import {
   localizedOutputFile,
   localizedPath,
   resolveSiteProfile,
+  routeServesProfile,
 } from '../config/site-profiles.mjs';
 import {
   compileRegionalHtmlRoutes,
@@ -39,8 +40,14 @@ function routeOutputPath(route) {
 }
 
 function routeIsIncluded(route) {
+  if (!routeServesProfile(route, profile)) return false;
   const location = locationForCanonicalPath(route.canonicalPath, locations);
   return !location || isInternalLocation(location, profile);
+}
+
+// Routes limited to the other site are built by Astro anyway; drop them and redirect there.
+function otherSiteRoutes() {
+  return (routesDocument.routes || []).filter((route) => !routeServesProfile(route, profile));
 }
 
 function replaceTranslatedAttributes(html, translations) {
@@ -220,6 +227,12 @@ function writeLocalizedRoutes() {
 }
 
 function removeExternalLocationArtifacts() {
+  for (const route of otherSiteRoutes()) {
+    for (const locale of profile.locales) {
+      fs.rmSync(path.join(distDir, localizedOutputFile(route, locale, profile)), { force: true });
+    }
+  }
+
   for (const location of locations) {
     if (isInternalLocation(location, profile)) continue;
 
@@ -277,6 +290,10 @@ function writeProfileRedirects() {
     if (location && !isInternalLocation(location, profile)) {
       externalRoutes.set(route.canonicalPath, String(location.counterpartUrl || '').trim());
     }
+  }
+
+  for (const route of otherSiteRoutes()) {
+    externalRoutes.set(route.canonicalPath, '');
   }
 
   const regionalRedirects = [];

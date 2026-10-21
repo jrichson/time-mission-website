@@ -609,6 +609,109 @@
       "outputFile": "dallas/signup.html",
       "sitemap": true,
       "status": 301
+    },
+    {
+      "id": "creators",
+      "canonicalPath": "/creators",
+      "redirectSources": [
+        "/creators.html"
+      ],
+      "outputFile": "creators.html",
+      "sitemap": true,
+      "status": 301,
+      "siteProfiles": [
+        "us"
+      ]
+    },
+    {
+      "id": "philadelphia-creators",
+      "canonicalPath": "/philadelphia/creators",
+      "redirectSources": [
+        "/philadelphia/creators.html"
+      ],
+      "outputFile": "philadelphia/creators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "houston-creators",
+      "canonicalPath": "/houston/creators",
+      "redirectSources": [
+        "/houston/creators.html"
+      ],
+      "outputFile": "houston/creators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "dallas-creators",
+      "canonicalPath": "/dallas/creators",
+      "redirectSources": [
+        "/dallas/creators.html"
+      ],
+      "outputFile": "dallas/creators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "orland-park-creators",
+      "canonicalPath": "/orland-park/creators",
+      "redirectSources": [
+        "/orland-park/creators.html"
+      ],
+      "outputFile": "orland-park/creators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "mount-prospect-creators",
+      "canonicalPath": "/mount-prospect/creators",
+      "redirectSources": [
+        "/mount-prospect/creators.html"
+      ],
+      "outputFile": "mount-prospect/creators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "manassas-creators",
+      "canonicalPath": "/manassas/creators",
+      "redirectSources": [
+        "/manassas/creators.html"
+      ],
+      "outputFile": "manassas/creators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "nashville-creators",
+      "canonicalPath": "/nashville/creators",
+      "redirectSources": [
+        "/nashville/creators.html"
+      ],
+      "outputFile": "nashville/creators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "west-nyack-creators",
+      "canonicalPath": "/west-nyack/creators",
+      "redirectSources": [
+        "/west-nyack/creators.html"
+      ],
+      "outputFile": "west-nyack/creators.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "lincoln-creators",
+      "canonicalPath": "/lincoln/creators",
+      "redirectSources": [
+        "/lincoln/creators.html"
+      ],
+      "outputFile": "lincoln/creators.html",
+      "sitemap": true,
+      "status": 301
     }
   ],
   "aliases": [
