@@ -9,6 +9,7 @@ const {
 } = require('./lib/rendered-page-contract');
 const {
   isInternalLocation,
+  routeServesProfile,
   resolveSiteProfile,
 } = require('../config/site-profiles.mjs');
 
@@ -86,6 +87,7 @@ const schemaRoutes = routesData.routes.filter((route) => {
     return route.canonicalPath === locationPath
       || route.canonicalPath.startsWith(`${locationPath}/`);
   });
+  if (!routeServesProfile(route, profile)) return false;
   return !location || isInternalLocation(location, profile);
 });
 

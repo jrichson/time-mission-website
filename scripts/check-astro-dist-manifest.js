@@ -8,6 +8,7 @@ const { walkDeployFiles } = require('./lib/cloudflare-artifact-contract.cjs');
 const {
   isInternalLocation,
   resolveSiteProfile,
+  routeServesProfile,
 } = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
@@ -30,7 +31,7 @@ const externalRouteOutputs = new Set(
         return route.canonicalPath === locationPath
           || route.canonicalPath.startsWith(`${locationPath}/`);
       });
-      return location && !isInternalLocation(location, profile);
+      return (location && !isInternalLocation(location, profile)) || !routeServesProfile(route, profile);
     })
     .map((route) => route.outputFile),
 );
