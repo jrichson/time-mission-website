@@ -11,6 +11,7 @@ const { normalizeCanonicalPath } = require('./lib/validation-core');
 const {
   isInternalLocation,
   resolveSiteProfile,
+  routeServesProfile,
 } = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
@@ -406,6 +407,8 @@ function validateDist(registry, errors) {
         || route.canonicalPath.startsWith(`${locationPath}/`);
     });
     if (location && !isInternalLocation(location, profile)) continue;
+    const registered = (registry.routes || []).find((entry) => entry.canonicalPath === route.canonicalPath);
+    if (registered && !routeServesProfile(registered, profile)) continue;
 
     const outputFile = surface.outputFileFor(route.canonicalPath) || route.outputFile;
     const target = path.join(distRoot, outputFile);

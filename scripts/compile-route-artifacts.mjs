@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { publicLocationsForProfile, resolveSiteProfile } from '../config/site-profiles.mjs';
+import { publicLocationsForProfile, resolveSiteProfile, routeServesProfile } from '../config/site-profiles.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -142,7 +142,8 @@ function normalizePath(value) {
 function compileLocationRouteManifest(registry, locationsDocument) {
   const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
   const locationPaths = locations.map((loc) => normalizePath(`/${loc.slug || loc.id}`));
-  const routes = Array.isArray(registry.routes) ? registry.routes : [];
+  const routes = (Array.isArray(registry.routes) ? registry.routes : [])
+    .filter((route) => routeServesProfile(route, siteProfile));
   const aliases = Array.isArray(registry.aliases) ? registry.aliases : [];
   const routeByPath = new Map(routes.map((route) => [normalizePath(route.canonicalPath), route]));
   const locationOwnsPath = (canonicalPath) =>

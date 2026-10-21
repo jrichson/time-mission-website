@@ -4,6 +4,7 @@ const { loadRouteRegistry, compileRouteContract, verifySitemapXml } = require('.
 const { runCheck } = require('./lib/validation-core');
 const {
     isInternalLocation,
+    routeServesProfile,
     localizedPath,
     resolveSiteProfile,
 } = require('../config/site-profiles.mjs');
@@ -32,7 +33,7 @@ for (const route of registry.routes || []) {
     const shouldInclude = location
         ? isInternalLocation(location, profile)
         : route.sitemap === true;
-    if (!shouldInclude) continue;
+    if (!shouldInclude || !routeServesProfile(route, profile)) continue;
     for (const locale of profile.locales) {
         contract.sitemapUrls.push(
             `${profile.origin}${localizedPath(route.canonicalPath, locale, profile)}`,

@@ -7,6 +7,7 @@ const {
   localizedOutputFile,
   localizedPath,
   resolveSiteProfile,
+  routeServesProfile,
 } = require('../config/site-profiles.mjs');
 
 const root = path.resolve(__dirname, '..');
@@ -56,6 +57,7 @@ function localeHtmlLang(locale, canonicalPath) {
 const validationEntries = profile.localizedRoutes
   ? (routesDocument.routes || [])
     .filter((route) => {
+      if (!routeServesProfile(route, profile)) return false;
       const location = locationForCanonicalPath(route.canonicalPath);
       return !location || isInternalLocation(location, profile);
     })
@@ -67,6 +69,7 @@ const validationEntries = profile.localizedRoutes
   : outputFiles
     .filter((relPath) => {
       const route = (routesDocument.routes || []).find((item) => item.outputFile === relPath);
+      if (route && !routeServesProfile(route, profile)) return false;
       const location = route && locationForCanonicalPath(route.canonicalPath);
       return !location || isInternalLocation(location, profile);
     })

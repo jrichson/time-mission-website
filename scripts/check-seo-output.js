@@ -3,6 +3,7 @@ const path = require('node:path');
 const { extractHeadMetadata, readDistRouteHtml } = require('./lib/rendered-page-contract');
 const {
   isInternalLocation,
+  routeServesProfile,
   resolveSiteProfile,
 } = require('../config/site-profiles.mjs');
 
@@ -59,6 +60,7 @@ for (const route of routesData.routes) {
     return cp === locationPath || cp.startsWith(`${locationPath}/`);
   });
   if (location && !isInternalLocation(location, profile)) continue;
+  if (!routeServesProfile(route, profile)) continue;
 
   const { outFile, exists, html } = readDistRouteHtml(root, route);
   if (!exists) {
