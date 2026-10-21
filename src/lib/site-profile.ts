@@ -6,6 +6,7 @@ import {
     publicLocationForProfile,
     publicLocationsForProfile,
     resolveSiteProfile,
+    routeServesProfile,
 } from '../../config/site-profiles.mjs';
 
 export interface SiteProfile {
@@ -33,4 +34,5 @@ export {
     publicLocationForProfile,
     publicLocationsForProfile,
     resolveSiteProfile,
+    routeServesProfile,
 };

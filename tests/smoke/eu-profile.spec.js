@@ -735,6 +735,16 @@ test('US venue HTML and form artifacts are absent from the EU package', async ()
   expect(redirects).toContain('/nl/houston https://www.timemission.com/houston 301');
 });
 
+test('EU sends the US-only Creator Program page to timemission.com', async () => {
+  for (const relPath of ['creators.html', 'nl/creators.html', 'philadelphia/creators.html']) {
+    expect(fs.existsSync(path.join(REPO_ROOT, 'dist', relPath)), relPath).toBe(false);
+  }
+  const redirects = fs.readFileSync(path.join(REPO_ROOT, 'dist', '_redirects'), 'utf8');
+  expect(redirects).toContain('/creators https://www.timemission.com/creators 301');
+  expect(redirects).toContain('/es/creators https://www.timemission.com/es/creators 301');
+  expect(fs.readFileSync(path.join(REPO_ROOT, 'dist', 'sitemap.xml'), 'utf8')).not.toContain('/creators');
+});
+
 for (const prefix of ['', '/nl', '/fr', '/es']) {
   test(`EU Edison is open in ${prefix || 'English'} location listings`, async ({ page }) => {
     await page.goto(`${prefix}/locations`);

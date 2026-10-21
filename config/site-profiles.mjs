@@ -154,6 +154,11 @@ export function locationsDocumentProfileState(document, profile = resolveSitePro
   return documentProfile === profile.id ? 'profiled' : 'mismatched';
 }
 
+/** False for a route that routes.json limits to other sites with "siteProfiles". */
+export function routeServesProfile(route, profile = resolveSiteProfile()) {
+  return !Array.isArray(route?.siteProfiles) || route.siteProfiles.includes(profile.id);
+}
+
 export function isInternalLocation(location, profile = resolveSiteProfile()) {
   return location?.region === profile.internalRegion;
 }

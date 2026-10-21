@@ -14,7 +14,7 @@ import {
     landingShouldAppearInSitemap,
 } from '../lib/payload/load';
 import { compilePublicUrlSurface, type PublicUrlRegistry } from '../lib/public-url-surface';
-import { activeSiteProfile, isInternalLocation, localizedPath } from '../lib/site-profile';
+import { activeSiteProfile, isInternalLocation, localizedPath, routeServesProfile } from '../lib/site-profile';
 
 export const prerender = true;
 
@@ -46,7 +46,7 @@ export const GET: APIRoute = async () => {
         const shouldInclude = location
             ? isInternalLocation(location, activeSiteProfile)
             : route.sitemap === true;
-        if (!shouldInclude) continue;
+        if (!shouldInclude || !routeServesProfile(route, activeSiteProfile)) continue;
 
         addLocalizedUrls(canonicalPath);
     }

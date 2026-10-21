@@ -10,6 +10,7 @@ import {
   localizedPath,
   publicLocationsForProfile,
   resolveSiteProfile,
+  routeServesProfile,
 } from '../config/site-profiles.mjs';
 import { LOCATION_ROUTE_ENTRIES } from '../functions/_shared/location-route-manifest.mjs';
 import {
@@ -31,6 +32,7 @@ function readJson(filePath) {
 }
 
 function routeIsIncluded(route) {
+  if (!routeServesProfile(route, profile)) return false;
   const location = locationForCanonicalPath(route.canonicalPath, locations);
   return !location || isInternalLocation(location, profile);
 }

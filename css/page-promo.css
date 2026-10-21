@@ -172,6 +172,10 @@
     white-space: nowrap;
 }
 
+.tm-promo-landing__title--creators {
+    font-size: clamp(3rem, 5.2vw, 6.25rem);
+}
+
 .tm-promo-landing__copy {
     display: grid;
     gap: 1rem;
@@ -321,7 +325,8 @@
     color: var(--gray);
 }
 
-.tm-klaviyo-backup__field input {
+.tm-klaviyo-backup__field input,
+.tm-klaviyo-backup__field select {
     width: 100%;
     padding: 0.875rem 1.1rem;
     background: transparent;
@@ -332,7 +337,19 @@
     font-size: 1rem;
 }
 
-.tm-klaviyo-backup__field input:focus-visible {
+.tm-klaviyo-backup__field select {
+    appearance: none;
+    padding-right: 2.75rem;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 1rem center / 1rem;
+}
+
+.tm-klaviyo-backup__field select option {
+    background: var(--black);
+    color: var(--white);
+}
+
+.tm-klaviyo-backup__field input:focus-visible,
+.tm-klaviyo-backup__field select:focus-visible {
     border-color: var(--orange);
     outline: 2px solid var(--orange);
     outline-offset: 2px;
@@ -437,7 +454,8 @@
         font-size: clamp(3.45rem, 17vw, 5.75rem);
     }
 
-    .tm-promo-landing__title--educators {
+    .tm-promo-landing__title--educators,
+    .tm-promo-landing__title--creators {
         font-size: clamp(2.85rem, 13vw, 4.75rem);
     }
 

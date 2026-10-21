@@ -110,3 +110,36 @@ test('a loaded Klaviyo that never draws its form falls back after fifteen second
   await expect(backup).toBeVisible({ timeout: 7000 });
   await expect(backup.locator('input[name="backup_reason"]')).toHaveValue('slow_render');
 });
+
+test('Creator pages share one form and the backup preselects the page location', async ({ page }) => {
+  await page.route(KLAVIYO_SCRIPTS, (route) => route.abort('blockedbyclient'));
+  let submitted = null;
+  await page.route('**/api/klaviyo-signup', async (route) => {
+    submitted = route.request().postData();
+    await route.fulfill({ json: { ok: true } });
+  });
+
+  await page.goto('/creators');
+  await expect(page).toHaveTitle('Time Mission Creator Program');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Time Mission\s+Creator Program/);
+  await expect(page.locator('[name="creator_location"]')).toHaveValue('');
+
+  await page.goto('/orland-park/creators');
+  await expect(page).toHaveTitle('Creator Program | Time Mission Orland Park');
+  await expect(page.locator('.tm-promo-landing__eyebrow')).toHaveText('Orland Park · Creator Program');
+  await expect(page.locator('[data-klaviyo-form-embed]')).toHaveClass('klaviyo-form-WKi36B');
+  const backup = page.locator('[data-tm-klaviyo-backup="WKi36B"]');
+  await expect(backup).toBeVisible({ timeout: 2500 });
+  await expect(backup.locator('[name="creator_location"]')).toHaveValue('Orland Park');
+
+  await backup.getByLabel('Email *').fill('creator@example.com');
+  await backup.getByLabel('Instagram or TikTok handle (@yourname) *').fill('@creator');
+  await backup.getByLabel('Primary platform *').selectOption('TikTok');
+  await backup.getByLabel('Audience size (followers) *').selectOption('5K to 25K');
+  await backup.getByRole('button', { name: 'Submit Application' }).click();
+
+  await expect(page.locator('[data-tm-klaviyo-backup-success]')).toContainText('Application received!');
+  expect(submitted).toContain('klaviyo_form_id=WKi36B');
+  expect(submitted).toContain('creator_location=Orland+Park');
+  expect(submitted).toContain('creator_platform=TikTok');
+});

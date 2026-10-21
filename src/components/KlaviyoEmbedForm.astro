@@ -4,9 +4,11 @@ import { KLAVIYO_ACCOUNTS, klaviyoFormConfig } from '../../functions/_shared/kla
 interface Props {
     formId: string;
     formName: string;
+    // Preselected backup answers by field name, e.g. the location a page is about.
+    backupDefaults?: Record<string, string>;
 }
 
-const { formId, formName } = Astro.props;
+const { formId, formName, backupDefaults = {} } = Astro.props;
 const config = klaviyoFormConfig(formId);
 if (!config) {
     throw new Error(`Klaviyo form ${formId} needs a backup entry in functions/_shared/klaviyo-forms.mjs`);
@@ -14,9 +16,10 @@ if (!config) {
 type BackupField = {
     name: string;
     label: string;
-    type: 'text' | 'email' | 'tel';
+    type: 'text' | 'email' | 'tel' | 'select';
     autocomplete?: string;
     required?: boolean;
+    options?: { label: string; value: string }[];
 };
 const fields = config.fields as BackupField[];
 const fieldId = (name: string) => `klaviyo-backup-${formId}-${name}`;
@@ -83,6 +86,18 @@ const klaviyoCompany = KLAVIYO_ACCOUNTS[config.site as 'us' | 'eu'];
             {fields.map((field) => (
                 <label class="tm-klaviyo-backup__field" for={fieldId(field.name)}>
                     <span class="tm-klaviyo-backup__label">{field.label}{field.required ? ' *' : ''}</span>
+                    {field.type === 'select' ? (
+                        <select
+                            id={fieldId(field.name)}
+                            name={field.name}
+                            required={field.required || undefined}
+                        >
+                            <option value="" selected={!backupDefaults[field.name] || undefined}>Choose one</option>
+                            {(field.options || []).map((option) => (
+                                <option value={option.value} selected={backupDefaults[field.name] === option.value || undefined}>{option.label}</option>
+                            ))}
+                        </select>
+                    ) : (
                     <input
                         id={fieldId(field.name)}
                         name={field.name}
@@ -91,6 +106,7 @@ const klaviyoCompany = KLAVIYO_ACCOUNTS[config.site as 'us' | 'eu'];
                         required={field.required || undefined}
                         inputmode={field.type === 'tel' ? 'tel' : undefined}
                     />
+                    )}
                 </label>
             ))}
         </div>
