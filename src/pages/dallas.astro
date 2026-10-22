@@ -5,8 +5,9 @@ import { buildComingSoonLocationPage } from '../lib/location-page-shell';
 const slug = 'dallas';
 const cityPage = buildComingSoonLocationPage(slug);
 // Tickets are on sale before opening: the header CTA books, while the hero keeps the ticket sign-up.
+// Uses Roller's ecom host until book.dallas.timemission.com has a DNS record.
 const rollerCheckout = {
-    url: 'https://book.dallas.timemission.com/timemissiondallas/onlinecheckout/en-us/home',
+    url: 'https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products',
     locationSlug: slug,
 };
 ---
