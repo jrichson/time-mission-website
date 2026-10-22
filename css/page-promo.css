@@ -180,9 +180,22 @@
     font-size: clamp(3rem, 5.2vw, 6.25rem);
 }
 
-/* The holiday party art is a square graphic with its headline at the top: never crop that off. */
+/* The holiday party art is a square graphic with text: show all of it, sized to fit the screen. */
+.tm-holiday-party-page .tm-promo-landing__media {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: clamp(1.5rem, 3vw, 3rem);
+}
+
+.tm-holiday-party-page .tm-promo-landing__media picture {
+    width: min(100%, calc(100svh - var(--promo-page-offset) - 6rem));
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1 / 1;
+}
+
 .tm-holiday-party-page .tm-promo-landing__media img {
-    object-position: center top;
     filter: none;
 }
 
@@ -461,8 +474,12 @@
         font-size: clamp(3.8rem, 15vw, 7rem);
     }
 
+    .tm-holiday-party-page .tm-promo-landing__media {
+        padding: 0;
+    }
+
     .tm-holiday-party-page .tm-promo-landing__media picture {
-        aspect-ratio: 1 / 1;
+        width: 100%;
     }
 }
 
