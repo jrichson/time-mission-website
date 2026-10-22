@@ -9,6 +9,8 @@ interface Props {
     formLabel: string;
     locationName: string;
     locationSlug: string;
+    /** Placed below another page's hero: an H2 heading and no back link. */
+    embedded?: boolean;
 }
 
 const {
@@ -16,21 +18,29 @@ const {
     formLabel,
     locationName,
     locationSlug,
+    embedded = false,
 } = Astro.props;
 
 const formConfig = jotformGroupFormConfigFor(locationSlug);
 const formAction = `https://submit.jotform.com/submit/${formConfig.formId}`;
+const Heading = embedded ? 'h2' : 'h1';
 ---
 
-<section class="group-inquiry" aria-labelledby="group-inquiry-title">
+<section
+    class:list={['group-inquiry', { 'group-inquiry--embedded': embedded }]}
+    id={embedded ? 'group-inquiry' : undefined}
+    aria-labelledby="group-inquiry-title"
+>
     <div class="group-inquiry__grid">
         <aside class="group-inquiry__intro">
-            <a class="group-inquiry__back" href={formKey === 'default' ? '/groups' : `/groups/${formKey}`}>
-                <span aria-hidden="true">←</span>
-                Back to group events
-            </a>
+            {!embedded && (
+                <a class="group-inquiry__back" href={formKey === 'default' ? '/groups' : `/groups/${formKey}`}>
+                    <span aria-hidden="true">←</span>
+                    Back to group events
+                </a>
+            )}
             <p class="group-inquiry__eyebrow">{locationName} / Group inquiry</p>
-            <h1 id="group-inquiry-title">Let’s build your <span>{formLabel}</span></h1>
+            <Heading id="group-inquiry-title" class="group-inquiry__title">Let’s build your <span>{formLabel}</span></Heading>
             <p class="group-inquiry__lede">
                 Tell us what you have in mind. A Time Mission group specialist will follow up with availability and next steps.
             </p>

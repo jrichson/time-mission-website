@@ -712,6 +712,56 @@
       "outputFile": "lincoln/creators.html",
       "sitemap": true,
       "status": 301
+    },
+    {
+      "id": "philadelphia-holiday-party",
+      "canonicalPath": "/philadelphia/holiday-party",
+      "redirectSources": [
+        "/philadelphia/holiday-party.html"
+      ],
+      "outputFile": "philadelphia/holiday-party.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "houston-holiday-party",
+      "canonicalPath": "/houston/holiday-party",
+      "redirectSources": [
+        "/houston/holiday-party.html"
+      ],
+      "outputFile": "houston/holiday-party.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "orland-park-holiday-party",
+      "canonicalPath": "/orland-park/holiday-party",
+      "redirectSources": [
+        "/orland-park/holiday-party.html"
+      ],
+      "outputFile": "orland-park/holiday-party.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "mount-prospect-holiday-party",
+      "canonicalPath": "/mount-prospect/holiday-party",
+      "redirectSources": [
+        "/mount-prospect/holiday-party.html"
+      ],
+      "outputFile": "mount-prospect/holiday-party.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "manassas-holiday-party",
+      "canonicalPath": "/manassas/holiday-party",
+      "redirectSources": [
+        "/manassas/holiday-party.html"
+      ],
+      "outputFile": "manassas/holiday-party.html",
+      "sitemap": true,
+      "status": 301
     }
   ],
   "aliases": [

@@ -736,7 +736,7 @@ test('US venue HTML and form artifacts are absent from the EU package', async ()
 });
 
 test('EU sends the US-only Creator Program page to timemission.com', async () => {
-  for (const relPath of ['creators.html', 'nl/creators.html', 'philadelphia/creators.html']) {
+  for (const relPath of ['creators.html', 'nl/creators.html', 'philadelphia/creators.html', 'houston/holiday-party.html']) {
     expect(fs.existsSync(path.join(REPO_ROOT, 'dist', relPath)), relPath).toBe(false);
   }
   const redirects = fs.readFileSync(path.join(REPO_ROOT, 'dist', '_redirects'), 'utf8');
