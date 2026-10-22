@@ -180,6 +180,12 @@
     font-size: clamp(3rem, 5.2vw, 6.25rem);
 }
 
+/* The holiday party art is a square graphic with its headline at the top: never crop that off. */
+.tm-holiday-party-page .tm-promo-landing__media img {
+    object-position: center top;
+    filter: none;
+}
+
 .tm-promo-landing__copy {
     display: grid;
     gap: 1rem;
@@ -453,6 +459,10 @@
 
     .tm-promo-landing__title {
         font-size: clamp(3.8rem, 15vw, 7rem);
+    }
+
+    .tm-holiday-party-page .tm-promo-landing__media picture {
+        aspect-ratio: 1 / 1;
     }
 }
 
