@@ -180,7 +180,7 @@
     font-size: clamp(3rem, 5.2vw, 6.25rem);
 }
 
-/* The holiday party art is a square graphic with text: show all of it, sized to fit the screen. */
+/* The holiday party art is a portrait graphic with text: show all of it, sized to fit the screen. */
 .tm-holiday-party-page .tm-promo-landing__media {
     display: flex;
     align-items: flex-start;
@@ -189,10 +189,10 @@
 }
 
 .tm-holiday-party-page .tm-promo-landing__media picture {
-    width: min(100%, calc(100svh - var(--promo-page-offset) - 6rem));
+    width: min(100%, calc((100svh - var(--promo-page-offset) - 6rem) * 1202 / 1336));
     height: auto;
     min-height: 0;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1202 / 1336;
 }
 
 .tm-holiday-party-page .tm-promo-landing__media img {
