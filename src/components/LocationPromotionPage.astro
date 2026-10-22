@@ -9,15 +9,26 @@ interface Props {
     bookingUrl: string;
     campaignLabel: string;
     ctaId: string;
+    ctaLabel?: string;
     eyebrow: string;
     headlineLines: readonly [string, string];
+    /** Direct Roller links only: open the checkout in the page language instead of the stored one. */
+    localizeCheckout?: boolean;
+    image?: {
+        alt: string;
+        position?: 'center' | 'left' | 'right';
+        src: string;
+        srcSet: string;
+    };
+    subhead?: string;
     intro?: string;
     locationName: string;
     locationSlug: string;
-    offerCopy: string;
+    offerCopy?: string;
+    paragraphs?: readonly string[];
     pageSlug: string;
-    promoCode: string;
-    runThrough: string;
+    promoCode?: string;
+    runThrough?: string;
     disclosure?: string;
 }
 
@@ -26,12 +37,22 @@ const {
     bookingUrl,
     campaignLabel,
     ctaId,
+    ctaLabel = 'Book Now',
     eyebrow,
     headlineLines,
+    localizeCheckout = false,
+    image = {
+        alt: 'A group taking on an interactive challenge at Time Mission',
+        position: 'center',
+        src: '/assets/photos/TM-Groups-1200.webp',
+        srcSet: '/assets/photos/TM-Groups-480.webp 480w, /assets/photos/TM-Groups-800.webp 800w, /assets/photos/TM-Groups-1200.webp 1200w, /assets/photos/TM-Groups.webp 1920w',
+    },
+    subhead,
     intro,
     locationName,
     locationSlug,
     offerCopy,
+    paragraphs = [],
     pageSlug,
     promoCode,
     runThrough,
@@ -59,7 +80,7 @@ const ld = serializeGraph(buildSimpleGraph([
     bodyDataLocation={locationSlug}
 >
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-promo.css?v=7" />
+        <link rel="stylesheet" href="/css/page-promo.css?v=9" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
@@ -68,10 +89,10 @@ const ld = serializeGraph(buildSimpleGraph([
     <PromoSplit
         backLink={{ href: `/${locationSlug}`, label: locationName }}
         eyebrow={eyebrow}
-        imageAlt="A group taking on an interactive challenge at Time Mission"
-        imagePosition="center"
-        imageSrc="/assets/photos/TM-Groups-1200.webp"
-        imageSrcSet="/assets/photos/TM-Groups-480.webp 480w, /assets/photos/TM-Groups-800.webp 800w, /assets/photos/TM-Groups-1200.webp 1200w, /assets/photos/TM-Groups.webp 1920w"
+        imageAlt={image.alt}
+        imagePosition={image.position}
+        imageSrc={image.src}
+        imageSrcSet={image.srcSet}
     >
         <h1 id="promo-title" class="tm-promo-landing__title">
             <span>{headlineLines[0]}</span>{' '}
@@ -79,9 +100,11 @@ const ld = serializeGraph(buildSimpleGraph([
         </h1>
 
         <div class="tm-promo-landing__copy">
+            {subhead && <p class="tm-promo-landing__subhead">{subhead}</p>}
             {intro && <p>{intro}</p>}
-            <p>{offerCopy}</p>
-            <p>Book with the button below or use code <strong>{promoCode}</strong>. {runThrough}</p>
+            {offerCopy && <p>{offerCopy}</p>}
+            {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+            {promoCode && <p>Book with the button below or use code <strong>{promoCode}</strong>. {runThrough}</p>}
         </div>
 
         <div class="tm-promo-landing__rule" aria-hidden="true"></div>
@@ -92,8 +115,9 @@ const ld = serializeGraph(buildSimpleGraph([
             {...bookingAttributes}
             data-tm-location={locationSlug}
             data-tm-promo-cta={ctaId}
+            data-tm-localize-checkout={bookingPresentation === 'direct' && localizeCheckout ? '' : undefined}
         >
-            Book Now
+            {ctaLabel}
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M13 6l6 6-6 6"></path>
             </svg>
@@ -102,6 +126,6 @@ const ld = serializeGraph(buildSimpleGraph([
     </PromoSplit>
 
     <Fragment slot="after-site-scripts">
-        <script is:inline defer src="/js/page-houston-promo-after.js?v=3"></script>
+        <script is:inline defer src="/js/page-houston-promo-after.js?v=4"></script>
     </Fragment>
 </SiteLayout>

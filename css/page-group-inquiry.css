@@ -15,6 +15,11 @@
     background-size: 80px 80px, 80px 80px, auto, auto;
 }
 
+.group-inquiry--embedded {
+    min-height: 0;
+    padding-top: clamp(4rem, 7vw, 6rem);
+}
+
 .group-inquiry::after {
     position: absolute;
     top: 8rem;
@@ -73,7 +78,7 @@
     text-transform: uppercase;
 }
 
-.group-inquiry__intro h1 {
+.group-inquiry__title {
     max-width: 11ch;
     margin: 0;
     color: var(--white);
@@ -85,7 +90,7 @@
     text-transform: uppercase;
 }
 
-.group-inquiry__intro h1 span {
+.group-inquiry__title span {
     display: block;
     color: var(--orange);
 }
@@ -376,7 +381,7 @@
         grid-template-columns: 1fr;
     }
 
-    .group-inquiry__intro h1 {
+    .group-inquiry__title {
         max-width: 13ch;
     }
 
@@ -398,7 +403,7 @@
         margin-bottom: 2.5rem;
     }
 
-    .group-inquiry__intro h1 {
+    .group-inquiry__title {
         font-size: clamp(3.5rem, 18vw, 5rem);
     }
 

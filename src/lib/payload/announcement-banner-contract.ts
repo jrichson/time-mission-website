@@ -50,6 +50,7 @@ const ANNOUNCEMENT_MESSAGE_I18N_KEYS = new Map([
     ['BRUSSELS NOW OPEN', 'ticker.location.brussels'],
     ['EINDHOVEN NOW OPEN!', 'ticker.location.eindhoven'],
     ['20% OFF BACK TO SCHOOL', 'ticker.backToSchool20'],
+    ['LATE NIGHT SPECIAL 🍸 – THU - SAT', 'ticker.lateNightSpecial'],
 ]);
 const ANNOUNCEMENT_LINK_LABEL_I18N_KEYS = new Map([
     ['LEARN MORE', 'ticker.learnMore'],

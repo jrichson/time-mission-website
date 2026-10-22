@@ -176,6 +176,16 @@
     font-size: clamp(3rem, 5.2vw, 6.25rem);
 }
 
+.tm-promo-landing__title--holiday {
+    font-size: clamp(3rem, 5.2vw, 6.25rem);
+}
+
+/* The holiday party art is a square graphic with its headline at the top: never crop that off. */
+.tm-holiday-party-page .tm-promo-landing__media img {
+    object-position: center top;
+    filter: none;
+}
+
 .tm-promo-landing__copy {
     display: grid;
     gap: 1rem;
@@ -187,6 +197,15 @@
 
 .tm-promo-landing__copy p {
     margin: 0;
+}
+
+.tm-promo-landing__copy .tm-promo-landing__subhead {
+    color: var(--white);
+    font-family: var(--tech);
+    font-size: clamp(0.85rem, 1.2vw, 1rem);
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+    text-transform: uppercase;
 }
 
 .tm-promo-landing__copy strong {
@@ -246,6 +265,16 @@
     color: var(--gray-light);
     font-size: 0.75rem;
     line-height: 1.7;
+}
+
+.tm-promo-fine-print {
+    padding: 0 clamp(1.25rem, 4vw, 4rem) clamp(3rem, 6vw, 5rem);
+    background: var(--black);
+}
+
+.tm-promo-fine-print .tm-promo-landing__terms {
+    max-width: 72rem;
+    margin: 0 auto;
 }
 
 .tm-promo-form {
@@ -430,6 +459,10 @@
 
     .tm-promo-landing__title {
         font-size: clamp(3.8rem, 15vw, 7rem);
+    }
+
+    .tm-holiday-party-page .tm-promo-landing__media picture {
+        aspect-ratio: 1 / 1;
     }
 }
 

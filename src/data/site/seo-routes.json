@@ -388,5 +388,41 @@
     "description": "Apply to the Time Mission Creator Program at Time Mission Lincoln. Tell us about you and your audience, and our team will reach out about collab opportunities.",
     "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
     "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
+  },
+  "/philadelphia/holiday-party": {
+    "title": "Holiday Parties | Time Mission Philadelphia",
+    "description": "Book a holiday party for 20+ guests at Time Mission Philadelphia by Nov 19 and get $100 in gift cards. Team up for 25+ interactive mission rooms.",
+    "ogImage": "/assets/photos/groups/holiday-parties-1200.webp",
+    "twitterImage": "/assets/photos/groups/holiday-parties-1200.webp"
+  },
+  "/houston/holiday-party": {
+    "title": "Holiday Parties | Time Mission Houston",
+    "description": "Book a holiday party for 20+ guests at Time Mission Houston by Nov 19 and get $100 in gift cards. Team up for 25+ interactive mission rooms.",
+    "ogImage": "/assets/photos/groups/holiday-parties-1200.webp",
+    "twitterImage": "/assets/photos/groups/holiday-parties-1200.webp"
+  },
+  "/orland-park/holiday-party": {
+    "title": "Holiday Parties | Time Mission Orland Park",
+    "description": "Book a holiday party for 20+ guests at Time Mission Orland Park by Nov 19 and get $100 in gift cards. Team up for 25+ interactive mission rooms.",
+    "ogImage": "/assets/photos/groups/holiday-parties-1200.webp",
+    "twitterImage": "/assets/photos/groups/holiday-parties-1200.webp"
+  },
+  "/mount-prospect/holiday-party": {
+    "title": "Holiday Parties | Time Mission Mount Prospect",
+    "description": "Book a holiday party for 20+ guests at Time Mission Mount Prospect by Nov 19 and get $100 in gift cards. Team up for 25+ interactive mission rooms.",
+    "ogImage": "/assets/photos/groups/holiday-parties-1200.webp",
+    "twitterImage": "/assets/photos/groups/holiday-parties-1200.webp"
+  },
+  "/manassas/holiday-party": {
+    "title": "Holiday Parties | Time Mission Manassas",
+    "description": "Book a holiday party for 20+ guests at Time Mission Manassas by Nov 19 and get $100 in gift cards. Team up for 25+ interactive mission rooms.",
+    "ogImage": "/assets/photos/groups/holiday-parties-1200.webp",
+    "twitterImage": "/assets/photos/groups/holiday-parties-1200.webp"
+  },
+  "/brussels/late-night-special": {
+    "title": "Late Night Special | Time Mission Brussels",
+    "description": "Every Thursday to Saturday from 6 PM, get 90 minutes across 25+ interactive mission rooms plus a robot-made cocktail for €31.99 per person.",
+    "ogImage": "/assets/photos/promos/brussels-late-night-1200.webp",
+    "twitterImage": "/assets/photos/promos/brussels-late-night-1200.webp"
   }
 }

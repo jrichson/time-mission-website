@@ -209,6 +209,45 @@
             gap: 0.5rem;
         }
 
+/* Keep both hero buttons on one line on phones (e.g. "Ticket Sign-Up" + "See Missions"). */
+@media (max-width: 768px) {
+            .hero-cta {
+                gap: 0.5rem;
+            }
+            .hero-cta .btn-primary,
+            .hero-cta .btn-secondary {
+                white-space: nowrap;
+                flex: 0 1 auto;
+                min-width: 0;
+            }
+        }
+
+@media (max-width: 480px) {
+            .hero-content {
+                padding-inline: 1rem;
+            }
+            .hero-cta .btn-primary,
+            .hero-cta .btn-secondary {
+                --button-current-padding-x: 0.9rem;
+                gap: 0.35rem;
+                font-size: 0.6875rem !important;
+                letter-spacing: 0.03em !important;
+            }
+            .hero-cta svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+@media (max-width: 360px) {
+            .hero-cta .btn-primary,
+            .hero-cta .btn-secondary {
+                --button-current-padding-x: 0.75rem;
+                font-size: 0.625rem !important;
+                letter-spacing: 0.02em !important;
+            }
+        }
+
 .btn-primary {
             display: inline-flex;
             align-items: center;

@@ -9,6 +9,7 @@ interface Props {
     bookingCtaIsBookingTrigger?: boolean;
     bookingCtaI18n?: string;
     bookingCtaSignupFormId?: string;
+    bookingCtaRollerCheckout?: { url: string; locationSlug: string } | null;
 }
 
 const {
@@ -18,11 +19,16 @@ const {
     bookingCtaIsBookingTrigger = true,
     bookingCtaI18n = 'nav.bookNow',
     bookingCtaSignupFormId = '',
+    bookingCtaRollerCheckout = null,
 } = Astro.props;
 const bookingCtaAttrs = {
     ...(bookingCtaIsBookingTrigger ? { 'data-tm-booking-trigger': '', 'data-tm-booking-kind': 'tickets' } : {}),
     ...(bookingCtaI18n ? { 'data-i18n': bookingCtaI18n } : {}),
     ...(bookingCtaSignupFormId ? { 'data-tm-klaviyo-form-trigger': bookingCtaSignupFormId } : {}),
+    ...(bookingCtaRollerCheckout ? {
+        'data-tm-roller-checkout': bookingCtaRollerCheckout.url,
+        'data-tm-location': bookingCtaRollerCheckout.locationSlug,
+    } : {}),
 };
 
 const navTranslationKeys: Record<string, string> = {
@@ -61,6 +67,6 @@ const navTranslationKeys: Record<string, string> = {
         </a>
     </div>
     <div class="mobile-menu-cta">
-        <a href={bookingCtaHref} class="btn-tickets" {...bookingCtaAttrs}>{bookingCtaLabel}</a>
+        <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets" {...bookingCtaAttrs}>{bookingCtaLabel}</a>
     </div>
 </div>
