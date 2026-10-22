@@ -397,6 +397,7 @@
                 document.querySelectorAll('.btn-tickets, .btn-book-now').forEach(el => {
                     const bookingKind = (el.getAttribute('data-tm-booking-kind') || 'tickets').toLowerCase();
                     if (bookingKind !== 'tickets') return;
+                    if (el.hasAttribute('data-tm-roller-checkout')) return;
                     applyBookingCtaView(el, getBookingCtaView('tickets', locView.locationId || loc.id || loc.slug, {
                         pageLocationSlug: pageLocationSlug,
                     }));

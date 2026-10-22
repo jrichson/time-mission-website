@@ -19,6 +19,7 @@ interface Props {
     bookingCtaIsBookingTrigger?: boolean;
     bookingCtaI18n?: string;
     bookingCtaSignupFormId?: string;
+    bookingCtaRollerCheckout?: { url: string; locationSlug: string } | null;
     locationTicker?: string;
     locationTickerI18n?: string;
 }
@@ -31,6 +32,7 @@ const {
     bookingCtaIsBookingTrigger = true,
     bookingCtaI18n = 'nav.bookNow',
     bookingCtaSignupFormId = '',
+    bookingCtaRollerCheckout = null,
     locationTicker = '',
     locationTickerI18n = '',
 } = Astro.props;
@@ -38,6 +40,10 @@ const bookingCtaAttrs = {
     ...(bookingCtaIsBookingTrigger ? { 'data-tm-booking-trigger': '', 'data-tm-booking-kind': 'tickets' } : {}),
     ...(bookingCtaI18n ? { 'data-i18n': bookingCtaI18n } : {}),
     ...(bookingCtaSignupFormId ? { 'data-tm-klaviyo-form-trigger': bookingCtaSignupFormId } : {}),
+    ...(bookingCtaRollerCheckout ? {
+        'data-tm-roller-checkout': bookingCtaRollerCheckout.url,
+        'data-tm-location': bookingCtaRollerCheckout.locationSlug,
+    } : {}),
 };
 
 type TickerMessage =
@@ -190,6 +196,6 @@ function externalLinkAttrs(href: string | null | undefined) {
                 <polyline points="6,9 12,15 18,9"></polyline>
             </svg>
         </button>
-        <a href={bookingCtaHref} class="btn-tickets" {...bookingCtaAttrs}>{bookingCtaLabel}</a>
+        <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets" {...bookingCtaAttrs}>{bookingCtaLabel}</a>
     </div>
 </nav>

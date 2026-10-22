@@ -507,6 +507,27 @@
         };
     }
 
+    // A CTA pinned to one Roller checkout, independent of the visitor's selected location.
+    function openFixedRollerCheckout(event) {
+        var btn = event.currentTarget;
+        var href = String(btn.getAttribute('data-tm-roller-checkout') || '').trim();
+        if (!href || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
+        event.preventDefault();
+        var locationSlug = BookingJourney.normalizeLocation(btn.getAttribute('data-tm-location') || '');
+        var ctaId = (btn.className && String(btn.className).split(' ')[0]) || 'roller_checkout';
+        tmTrack('booking_click', {
+            cta_id: ctaId,
+            destination_url: safeDestination(href).split('?')[0],
+            location_slug: locationSlug,
+        });
+        tmTrack('checkout_start', {
+            destination_url: safeDestination(href),
+            location_slug: locationSlug,
+            cta_id: ctaId,
+        });
+        executeNavigationAction({ provider: 'roller', href: href }, getLocation(locationSlug), {});
+    }
+
     function open(opts) {
         var detail = opts || {};
         if (mountedPanel) {
@@ -671,6 +692,10 @@
             pageLocationSlug: pageLocationSlug,
             openPanel: openPanel,
             setPanelIntent: setPanelIntent,
+        });
+        attach(document, {
+            selector: '[data-tm-roller-checkout]',
+            handler: openFixedRollerCheckout,
         });
 
         return { syncCtaHref: syncCtaHref };

@@ -4,6 +4,11 @@ import { buildComingSoonLocationPage } from '../lib/location-page-shell';
 
 const slug = 'dallas';
 const cityPage = buildComingSoonLocationPage(slug);
+// Tickets are on sale before opening: the header CTA books, while the hero keeps the ticket sign-up.
+const rollerCheckout = {
+    url: 'https://book.dallas.timemission.com/timemissiondallas/onlinecheckout/en-us/home',
+    locationSlug: slug,
+};
 ---
 
-<ComingSoonLocationPageShell cityPage={cityPage} />
+<ComingSoonLocationPageShell cityPage={cityPage} bookingCtaRollerCheckout={rollerCheckout} />

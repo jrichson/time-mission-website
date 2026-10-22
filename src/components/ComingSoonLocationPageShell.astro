@@ -22,9 +22,11 @@ interface Props {
         pageInit: unknown;
         pageTitle: string;
     };
+    /** Ticket sales that open before the venue does: the header CTA opens this Roller checkout. */
+    bookingCtaRollerCheckout?: { url: string; locationSlug: string } | null;
 }
 
-const { cityPage } = Astro.props;
+const { cityPage, bookingCtaRollerCheckout = null } = Astro.props;
 const slug = cityPage.location.slug;
 const lang = activeSiteProfile.localizedRoutes
     ? activeSiteProfile.defaultLocale
@@ -39,10 +41,11 @@ const pageCss = locationPageCssHref(slug);
     lang={lang}
     bodyDataLocation={cityPage.location.slug}
     bookingCtaHref={cityPage.cta.href}
-    bookingCtaLabel={cityPage.cta.label}
-    bookingCtaIsBookingTrigger={cityPage.cta.isBookingTrigger}
-    bookingCtaI18n={cityPage.cta.i18n}
-    bookingCtaSignupFormId={cityPage.cta.signupFormId}
+    bookingCtaLabel={bookingCtaRollerCheckout ? 'Book Now' : cityPage.cta.label}
+    bookingCtaIsBookingTrigger={bookingCtaRollerCheckout ? false : cityPage.cta.isBookingTrigger}
+    bookingCtaI18n={bookingCtaRollerCheckout ? 'nav.bookNow' : cityPage.cta.i18n}
+    bookingCtaSignupFormId={bookingCtaRollerCheckout ? '' : cityPage.cta.signupFormId}
+    bookingCtaRollerCheckout={bookingCtaRollerCheckout}
 >
     <Fragment slot="head-extra">
         <LocationPageHeadLinks pageCss={pageCss} />
