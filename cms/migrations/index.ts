@@ -1,5 +1,6 @@
 import * as migration_20261021_090000_creator_pages from './20261021_090000_creator_pages';
 import * as migration_20261022_090000_holiday_party_pages from './20261022_090000_holiday_party_pages';
+import * as migration_20261022_100000_brussels_late_night_special from './20261022_100000_brussels_late_night_special';
 import * as migration_20261007_090000_antwerp_evergreen_ticker from './20261007_090000_antwerp_evergreen_ticker';
 import * as migration_20261001_090000_add_scottsdale_location_enums from './20261001_090000_add_scottsdale_location_enums';
 import * as migration_20261001_091000_seed_scottsdale_location from './20261001_091000_seed_scottsdale_location';
@@ -434,5 +435,10 @@ export const migrations = [
     up: migration_20261022_090000_holiday_party_pages.up,
     down: migration_20261022_090000_holiday_party_pages.down,
     name: '20261022_090000_holiday_party_pages'
+  },
+  {
+    up: migration_20261022_100000_brussels_late_night_special.up,
+    down: migration_20261022_100000_brussels_late_night_special.down,
+    name: '20261022_100000_brussels_late_night_special'
   },
 ];

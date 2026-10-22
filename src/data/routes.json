@@ -507,6 +507,17 @@
       "status": 301
     },
     {
+      "id": "brussels-late-night-special",
+      "canonicalPath": "/brussels/late-night-special",
+      "externalUrl": "https://timemission.eu/brussels/late-night-special",
+      "redirectSources": [
+        "/brussels/late-night-special.html"
+      ],
+      "outputFile": "brussels/late-night-special.html",
+      "sitemap": false,
+      "status": 301
+    },
+    {
       "id": "privacy",
       "canonicalPath": "/privacy",
       "redirectSources": [

@@ -5,6 +5,10 @@ import { BRUSSELS_HOURS_SNAPSHOT } from '../cms/migration-data/20261020_brussels
 import { DALLAS_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261016_dallas_signup_page_snapshot';
 import { CREATOR_PAGES_SNAPSHOT } from '../cms/migration-data/20261021_creator_pages_snapshot';
 import { HOLIDAY_PARTY_PAGES_SNAPSHOT } from '../cms/migration-data/20261022_holiday_party_pages_snapshot';
+import {
+    BRUSSELS_LATE_NIGHT_SPECIAL_PAGE_SNAPSHOT,
+    BRUSSELS_LATE_NIGHT_TICKER_SNAPSHOT,
+} from '../cms/migration-data/20261022_brussels_late_night_special_snapshot';
 import { ANTWERP_TICKER_SNAPSHOT } from '../cms/migration-data/20261007_antwerp_ticker_snapshot';
 import { SCOTTSDALE_LOCATION_SNAPSHOT, SCOTTSDALE_PAGE_SNAPSHOT } from '../cms/migration-data/20261001_scottsdale_snapshot';
 import { EINDHOVEN_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20260925_eindhoven_checkout_snapshot';
@@ -113,6 +117,8 @@ describe('live-site-to-CMS sync snapshot', () => {
                 ? { ...operationalLocation, ticker: EINDHOVEN_NOW_OPEN_SNAPSHOT.ticker }
                 : location.slug === ANTWERP_TICKER_SNAPSHOT.slug
                 ? { ...operationalLocation, ticker: ANTWERP_TICKER_SNAPSHOT.ticker }
+                : location.slug === BRUSSELS_LATE_NIGHT_TICKER_SNAPSHOT.slug
+                ? { ...operationalLocation, ticker: BRUSSELS_LATE_NIGHT_TICKER_SNAPSHOT.ticker }
                 : REMOVED_TICKER_LOCATIONS.some((slug) => slug === location.slug)
                 ? { ...operationalLocation, ticker: '' }
                 : operationalLocation;
@@ -224,6 +230,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 DALLAS_SIGNUP_PAGE_SNAPSHOT,
                 ...CREATOR_PAGES_SNAPSHOT,
                 ...HOLIDAY_PARTY_PAGES_SNAPSHOT,
+                ...BRUSSELS_LATE_NIGHT_SPECIAL_PAGE_SNAPSHOT,
                 ...BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 ...US_SCHOOL_NIGHT_PAGE_SNAPSHOT,
                 EINDHOVEN_SIGNUP_PAGE_SNAPSHOT,

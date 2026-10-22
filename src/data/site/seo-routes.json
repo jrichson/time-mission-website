@@ -418,5 +418,11 @@
     "description": "Book a holiday party for 20+ guests at Time Mission Manassas by Nov 19 and get $100 in gift cards. Team up for 25+ interactive mission rooms.",
     "ogImage": "/assets/photos/groups/holiday-parties-1200.webp",
     "twitterImage": "/assets/photos/groups/holiday-parties-1200.webp"
+  },
+  "/brussels/late-night-special": {
+    "title": "Late Night Special | Time Mission Brussels",
+    "description": "Every Thursday to Saturday from 6 PM, get 90 minutes across 25+ interactive mission rooms plus a robot-made cocktail for €31.99 per person.",
+    "ogImage": "/assets/photos/promos/brussels-late-night-1200.webp",
+    "twitterImage": "/assets/photos/promos/brussels-late-night-1200.webp"
   }
 }

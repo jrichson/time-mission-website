@@ -153,7 +153,7 @@ describe('browser data, consent, and i18n contracts', () => {
     expect(byId.get('brussels')?.externalUrl).toBe('https://timemission.eu/brussels');
     expect(byId.get('brussels')?.navLabel).toBe('Belgium – Brussels');
     expect(byId.get('brussels')?.status).toBe('open');
-    expect(byId.get('brussels')?.ticker).toBe('BRUSSELS NOW OPEN');
+    expect(byId.get('brussels')?.ticker).toBe('LATE NIGHT SPECIAL 🍸 – THU - SAT');
     expect(byId.get('eindhoven')).not.toHaveProperty('counterpartUrl');
     expect(byId.get('eindhoven')).toMatchObject({
       address: { zip: '5611 AJ' },

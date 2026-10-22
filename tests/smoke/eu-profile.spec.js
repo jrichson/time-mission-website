@@ -231,6 +231,35 @@ test('Brussels back-to-school page publishes the weekday offer and localized SCH
   await expect(page.locator('.tm-promo-landing__copy')).toContainText('SCHOOL20');
 });
 
+test('Brussels Late Night Special page books the robot cocktail offer on Roller', async ({ page }) => {
+  const checkout = 'https://ecom.roller.app/terminal1/timemissionspecialoffer/en/home';
+  await page.route('https://ecom.roller.app/**', async (route) => {
+    await route.fulfill({
+      contentType: 'text/html',
+      body: '<!doctype html><title>Roller progressive checkout</title>',
+    });
+  });
+  await page.goto('/brussels/late-night-special');
+
+  await expect(page).toHaveTitle('Late Night Special | Time Mission Brussels');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Your Night Out,\s+Upgraded/i);
+  await expect(page.locator('.tm-promo-landing__copy')).toContainText('90 minutes + a robot-made cocktail. €31.99 per person.');
+  await expect(page.locator('.tm-promo-landing__copy')).not.toContainText('use code');
+  const promoCta = page.locator('.tm-promo-landing__cta');
+  await expect(promoCta).toHaveText(/Book Your Night/);
+  await expect(promoCta).toHaveAttribute('href', checkout);
+  await expect(promoCta).not.toHaveAttribute('data-tm-booking-trigger', '');
+  await Promise.all([
+    page.waitForURL(checkout),
+    promoCta.click(),
+  ]);
+  await expect(page).toHaveTitle('Roller progressive checkout');
+
+  await page.goto('/fr/brussels/late-night-special');
+  await expect(page).toHaveTitle('Spécial soirée | Time Mission Bruxelles');
+  await expect(page.locator('.tm-promo-landing__cta')).toHaveText(/Réservez votre soirée/);
+});
+
 test('wide animated announcement ticker remains populated across the viewport', async ({ page }) => {
   await page.setViewportSize({ width: 2048, height: 900 });
   await page.goto('/');
@@ -343,7 +372,7 @@ test('every localized EU route renders in each enabled language', async ({ page 
     route.startsWith(`${venue}/`) && expectedRoutes.includes(route.slice(venue.length))
   ));
   const sharedRoutes = expectedRoutes.filter((route) => !isVenueCopy(route));
-  expect(sharedRoutes).toHaveLength(38);
+  expect(sharedRoutes).toHaveLength(39);
   expect(expectedRoutes.length).toBeGreaterThan(sharedRoutes.length);
 
   for (const locale of ['nl', 'fr', 'es']) {
@@ -477,7 +506,7 @@ test('localized EU routes translate their announcement and footer chrome', async
     {
       path: '/fr/brussels',
       tickerKey: 'ticker.location.brussels',
-      ticker: 'BRUXELLES EST OUVERT',
+      ticker: 'SPÉCIAL SOIRÉE 🍸 – JEU - SAM',
       city: 'BRUXELLES',
       tagline: "Une aventure de jeu social où les équipes s'affrontent dans des défis immersifs à travers le temps et l'espace.",
       experience: 'EXPÉRIENCE',
@@ -558,9 +587,9 @@ test('Brussels location ticker follows runtime language changes', async ({ page 
   const tickerCopy = page.locator('[data-i18n="ticker.location.brussels"]').first();
 
   for (const expected of [
-    { locale: 'fr', copy: 'BRUXELLES EST OUVERT' },
-    { locale: 'nl', copy: 'BRUSSEL NU OPEN' },
-    { locale: 'es', copy: 'BRUSELAS YA ESTÁ ABIERTO' },
+    { locale: 'fr', copy: 'SPÉCIAL SOIRÉE 🍸 – JEU - SAM' },
+    { locale: 'nl', copy: 'LATE NIGHT SPECIAL 🍸 – DO - ZA' },
+    { locale: 'es', copy: 'ESPECIAL NOCTURNO 🍸 – JUE - SÁB' },
   ]) {
     await page.evaluate((locale) => window.TMI18n.setLanguage(locale), expected.locale);
     await expect(tickerCopy).toHaveText(expected.copy);
