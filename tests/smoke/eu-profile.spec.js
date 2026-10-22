@@ -232,7 +232,7 @@ test('Brussels back-to-school page publishes the weekday offer and localized SCH
 });
 
 test('Brussels Late Night Special page books the robot cocktail offer on Roller', async ({ page }) => {
-  const checkout = 'https://ecom.roller.app/terminal1/timemissionspecialoffer/en/home';
+  const checkout = 'https://ecom.roller.app/terminal1/timemission/en/product/1435277';
   await page.route('https://ecom.roller.app/**', async (route) => {
     await route.fulfill({
       contentType: 'text/html',
@@ -259,12 +259,12 @@ test('Brussels Late Night Special page books the robot cocktail offer on Roller'
   await expect(page).toHaveTitle('Spécial soirée | Time Mission Bruxelles');
   await expect(page.locator('.tm-promo-landing__cta')).toHaveText(/Réservez votre soirée/);
   await expect(page.locator('.tm-promo-landing__cta'))
-    .toHaveAttribute('href', 'https://ecom.roller.app/terminal1/timemissionspecialoffer/fr/home');
+    .toHaveAttribute('href', 'https://ecom.roller.app/terminal1/timemission/fr/product/1435277');
 
   await page.goto('/nl/brussels/late-night-special');
   await expect(page.locator('.tm-promo-landing__copy')).toContainText('25+ interactieve Mission rooms');
   await expect(page.locator('.tm-promo-landing__cta'))
-    .toHaveAttribute('href', 'https://ecom.roller.app/terminal1/timemissionspecialoffer/nl/home');
+    .toHaveAttribute('href', 'https://ecom.roller.app/terminal1/timemission/nl/product/1435277');
 });
 
 test('wide animated announcement ticker remains populated across the viewport', async ({ page }) => {
