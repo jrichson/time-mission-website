@@ -1,6 +1,23 @@
 (function () {
     'use strict';
 
+    // Opted-in Roller links open the checkout in the page language (Roller reads it from the path).
+    function localizedCheckout(link) {
+        var href = String(link.getAttribute('href') || '').trim();
+        var journey = window.TMBookingJourney;
+        if (!link.hasAttribute('data-tm-localize-checkout') || !journey || typeof journey.localizeRollerCheckout !== 'function') return href;
+        return journey.localizeRollerCheckout(href);
+    }
+
+    function localizeLinks() {
+        document.querySelectorAll('[data-tm-promo-cta][data-tm-localize-checkout]').forEach(function (link) {
+            link.setAttribute('href', localizedCheckout(link));
+        });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', localizeLinks, { once: true });
+    else localizeLinks();
+
     document.addEventListener('click', function (event) {
         var link = event.target && event.target.closest
             ? event.target.closest('[data-tm-promo-cta]')
@@ -8,7 +25,7 @@
         if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         if (link.hasAttribute('data-tm-booking-trigger')) return;
 
-        var destination = String(link.getAttribute('href') || '').trim();
+        var destination = localizedCheckout(link);
         if (!/^https:\/\/ecom\.roller\.app\//i.test(destination)) return;
         var analytics = window.TMAnalytics;
         var safeDestination = analytics && typeof analytics.safeDestination === 'function'
@@ -32,7 +49,7 @@
 
         event.preventDefault();
         window.setTimeout(function () {
-            window.location.assign(String(link.getAttribute('href') || destination).trim());
+            window.location.assign(destination);
         }, 0);
     }, true);
 })();

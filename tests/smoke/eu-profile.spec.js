@@ -258,6 +258,13 @@ test('Brussels Late Night Special page books the robot cocktail offer on Roller'
   await page.goto('/fr/brussels/late-night-special');
   await expect(page).toHaveTitle('Spécial soirée | Time Mission Bruxelles');
   await expect(page.locator('.tm-promo-landing__cta')).toHaveText(/Réservez votre soirée/);
+  await expect(page.locator('.tm-promo-landing__cta'))
+    .toHaveAttribute('href', 'https://ecom.roller.app/terminal1/timemissionspecialoffer/fr/home');
+
+  await page.goto('/nl/brussels/late-night-special');
+  await expect(page.locator('.tm-promo-landing__copy')).toContainText('25+ interactieve Mission rooms');
+  await expect(page.locator('.tm-promo-landing__cta'))
+    .toHaveAttribute('href', 'https://ecom.roller.app/terminal1/timemissionspecialoffer/nl/home');
 });
 
 test('wide animated announcement ticker remains populated across the viewport', async ({ page }) => {

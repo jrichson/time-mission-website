@@ -44,7 +44,7 @@ export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'consent', src: '/js/consent-bridge.js', version: 1 },
     { id: 'analytics', src: '/js/analytics.js', version: 1 },
     { id: 'formRegistrationTracking', src: '/js/form-registration-tracking.js', version: 4 },
-    { id: 'bookingJourney', src: '/js/booking-journey.js', version: 15 },
+    { id: 'bookingJourney', src: '/js/booking-journey.js', version: 16 },
     { id: 'bookingFrame', src: '/js/booking-frame.js', version: 1 },
     { id: 'bookingBriqProvider', src: '/js/booking-provider-briq.js', version: 2 },
     { id: 'bookingNavigationAdapters', src: '/js/booking-navigation-adapters.js', version: 2 },

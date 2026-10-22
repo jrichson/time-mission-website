@@ -12,6 +12,8 @@ interface Props {
     ctaLabel?: string;
     eyebrow: string;
     headlineLines: readonly [string, string];
+    /** Direct Roller links only: open the checkout in the page language instead of the stored one. */
+    localizeCheckout?: boolean;
     image?: {
         alt: string;
         position?: 'center' | 'left' | 'right';
@@ -38,6 +40,7 @@ const {
     ctaLabel = 'Book Now',
     eyebrow,
     headlineLines,
+    localizeCheckout = false,
     image = {
         alt: 'A group taking on an interactive challenge at Time Mission',
         position: 'center',
@@ -112,6 +115,7 @@ const ld = serializeGraph(buildSimpleGraph([
             {...bookingAttributes}
             data-tm-location={locationSlug}
             data-tm-promo-cta={ctaId}
+            data-tm-localize-checkout={bookingPresentation === 'direct' && localizeCheckout ? '' : undefined}
         >
             {ctaLabel}
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -122,6 +126,6 @@ const ld = serializeGraph(buildSimpleGraph([
     </PromoSplit>
 
     <Fragment slot="after-site-scripts">
-        <script is:inline defer src="/js/page-houston-promo-after.js?v=3"></script>
+        <script is:inline defer src="/js/page-houston-promo-after.js?v=4"></script>
     </Fragment>
 </SiteLayout>

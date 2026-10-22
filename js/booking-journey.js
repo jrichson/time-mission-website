@@ -617,6 +617,7 @@
         getBookingHref: getBookingHref,
         appendTrackingParams: appendTrackingParams,
         appendPromoParams: appendPromoParams,
+        localizeRollerCheckout: localizeRollerCheckout,
         resolveOpenCheckoutUrl: resolveOpenCheckoutUrl,
         getExternalLocationUrl: getExternalLocationUrl,
         isTemporarilyClosedLocation: isTemporarilyClosedLocation,
