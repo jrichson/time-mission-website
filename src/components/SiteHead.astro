@@ -4,6 +4,7 @@ import siteCssAssets from '../data/site/site-css-assets.json';
 import { allLocations } from '../data/locations';
 import { getSeoForRoute, resolveLandingHeadSeo, type LandingHeadInput } from '../lib/seo/catalog';
 import { activeSiteProfile } from '../lib/site-profile';
+import { tmMediaBase } from '../lib/tm-media';
 
 interface Props {
     canonicalPath: string;
@@ -47,7 +48,8 @@ const siteDesigner = 'Jefferson Richardson';
 const siteDeveloper = 'Compatible Dev';
 const siteCoreCss = siteCssAssets.core;
 // Animated link preview: iMessage plays og:video inline; other apps fall back to og:image.
-const homeOgVideo = canonicalPath === '/' ? `${activeSiteProfile.origin}/assets/social/time-mission-preview.mp4` : null;
+// Served from R2 because iMessage needs byte-range (206) responses, which Pages does not send.
+const homeOgVideo = canonicalPath === '/' ? `${tmMediaBase() || activeSiteProfile.origin}/assets/social/time-mission-preview.mp4` : null;
 
 const defaultGtmContainerId = activeSiteProfile.id === 'us' ? 'GTM-WQPWRNJB' : '';
 const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || defaultGtmContainerId).trim();
