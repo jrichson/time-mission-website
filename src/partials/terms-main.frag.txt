@@ -26,5 +26,8 @@
         <p>We collect certain information you provide during transactions on our website, such as your email address or phone number ("Customer Data"), to improve the accuracy of our advertising campaigns and measure their effectiveness. This data may be securely hashed (e.g., using SHA-256) and shared with third-party providers like Google Ads to match interactions with our advertisements to actions on our website, helping us measure ad performance, optimize targeting, and attribute conversions. All data shared is encrypted and processed in compliance with applicable privacy laws; we do not share raw personal information.</p>
         <p>Advertising measurement is performed only where permitted by applicable law. When consent is required, advertising-related processing begins only after you make an explicit choice through our consent controls. You can withdraw that choice through Manage Preferences in the site footer; please refer to our <a href="/privacy">Privacy Policy</a> for more information.</p>
 
-        <p class="legal-updated">Last Updated: January 2025</p>
+        <h2>Text Message Marketing</h2>
+        <p>By opting in, you agree to receive recurring automated promotional and personalized marketing text messages from Time Mission at the number provided. Message frequency varies. Message and data rates may apply. Reply STOP to unsubscribe or HELP for assistance. Consent is not a condition of purchase. For full messaging terms, see our <a href="https://time-mission.myklpages.com/p/mobile-terms-of-service">Mobile Terms of Service</a>.</p>
+
+        <p class="legal-updated">Last Updated: October 2026</p>
     </section>
