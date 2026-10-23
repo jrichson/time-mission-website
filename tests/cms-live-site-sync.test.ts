@@ -44,6 +44,7 @@ import { BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT } from '../cms/migration-data/202
 import { MOUNT_PROSPECT_ORLAND_PARK_NOON_HOURS_SNAPSHOT } from '../cms/migration-data/20260907_mount_prospect_orland_park_noon_hours_snapshot';
 import { US_SCHOOL_NIGHT_PAGE_SNAPSHOT } from '../cms/migration-data/20260908_school_night_promotions_snapshot';
 import { EDUCATORS_DECEMBER_EXTENSION_PAGE_SNAPSHOT } from '../cms/migration-data/20260930_educators_december_extension_snapshot';
+import { HOME_LINK_PREVIEW_PAGE_SNAPSHOT } from '../cms/migration-data/20261023_home_link_preview_snapshot';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -234,6 +235,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 ...BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 ...US_SCHOOL_NIGHT_PAGE_SNAPSHOT,
                 EINDHOVEN_SIGNUP_PAGE_SNAPSHOT,
+                HOME_LINK_PREVIEW_PAGE_SNAPSHOT,
             ]
                 .map((page) => [page.path, page]),
         );
