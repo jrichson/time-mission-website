@@ -1,3 +1,4 @@
+import * as migration_20261023_090000_home_link_preview from './20261023_090000_home_link_preview';
 import * as migration_20261021_090000_creator_pages from './20261021_090000_creator_pages';
 import * as migration_20261022_090000_holiday_party_pages from './20261022_090000_holiday_party_pages';
 import * as migration_20261022_100000_brussels_late_night_special from './20261022_100000_brussels_late_night_special';
@@ -440,5 +441,10 @@ export const migrations = [
     up: migration_20261022_100000_brussels_late_night_special.up,
     down: migration_20261022_100000_brussels_late_night_special.down,
     name: '20261022_100000_brussels_late_night_special'
+  },
+  {
+    up: migration_20261023_090000_home_link_preview.up,
+    down: migration_20261023_090000_home_link_preview.down,
+    name: '20261023_090000_home_link_preview'
   },
 ];
