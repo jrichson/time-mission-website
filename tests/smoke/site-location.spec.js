@@ -442,3 +442,23 @@ test('selected location updates shared footer contact panel', async ({ page }) =
   await expect(footer.locator('.footer-locations-dropdown')).toBeVisible();
   await expect(footer.locator('.footer-locations-title')).toHaveText('Locations');
 });
+
+test('location pages link to their own subpages from the Groups card', async ({ page }) => {
+  const routes = require(path.join(REPO_ROOT, 'src/data/routes.json')).routes;
+  const hasHoustonHolidayPage = routes.some((route) => route.canonicalPath === '/houston/holiday-party' && route.sitemap === true);
+
+  await page.goto('/west-nyack');
+  const westNyackLinks = page.locator('#groups .location-local-links');
+  await expect(westNyackLinks.locator('.location-local-links-label')).toHaveText('At Time Mission West Nyack');
+  await expect(westNyackLinks.getByRole('link', { name: 'Creator Program' })).toHaveAttribute('href', '/west-nyack/creators');
+
+  await page.goto('/houston');
+  const houstonLinks = page.locator('#groups .location-local-links');
+  await expect(houstonLinks.getByRole('link', { name: 'Educators' })).toHaveAttribute('href', '/houston/educators');
+  await expect(page.locator('#groups .groups-event-type').filter({ hasText: 'Holidays' }))
+    .toHaveAttribute('href', hasHoustonHolidayPage ? '/houston/holiday-party' : '/groups/holidays');
+
+  // Edison has no subpages, so the card keeps its original layout.
+  await page.goto('/edison');
+  await expect(page.locator('#groups .location-local-links')).toHaveCount(0);
+});
