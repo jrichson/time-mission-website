@@ -8,6 +8,8 @@ import { getSeoForRoute } from './seo/catalog';
 import { locationPurchaseTermsFaqItemHtml } from './location-policy-faq';
 import { locationTeamSize } from './location-team-size';
 import { applyTmMediaBase } from './tm-media';
+import routes from '../data/routes.json';
+import { activeSiteProfile, routeServesProfile } from './site-profile';
 
 function locationBySlug(slug: string): LocationRecord {
     const location = allLocations.find((entry) => entry.slug === slug);
@@ -139,6 +141,68 @@ function withTemporaryClosureStrip(mainRaw: string, location: LocationRecord): s
     return `${mainRaw.slice(0, firstSectionClose + '</section>'.length)}${notice}${mainRaw.slice(firstSectionClose + '</section>'.length)}`;
 }
 
+// Labels for the location subpages linked from the Groups card. Unknown pages fall back
+// to the first part of their SEO title ("Creator Program | Time Mission Houston").
+const LOCAL_SUBPAGE_LABELS: Record<string, string> = {
+    'holiday-party': 'Holiday Parties',
+    educators: 'Educators',
+    creators: 'Creator Program',
+    signup: 'Ticket Sign-Up',
+};
+
+interface LocalSubpage {
+    href: string;
+    label: string;
+    segment: string;
+}
+
+// Indexable pages under /{slug}/ on this site, e.g. /houston/holiday-party. Rules and
+// legal pages are left out: they are not destinations people look for.
+function localSubpages(location: LocationRecord): LocalSubpage[] {
+    const prefix = `/${location.slug}/`;
+    return (routes as { routes: Array<{ canonicalPath: string; sitemap?: boolean; siteProfiles?: string[] }> }).routes
+        .filter((route) => (
+            route.canonicalPath.startsWith(prefix)
+            && route.sitemap === true
+            && routeServesProfile(route, activeSiteProfile)
+            && !/\/rules$/.test(route.canonicalPath)
+        ))
+        .map((route) => {
+            const segment = route.canonicalPath.slice(prefix.length);
+            const label = LOCAL_SUBPAGE_LABELS[segment] ?? getSeoForRoute(route.canonicalPath).title.split(' | ')[0];
+            return { href: route.canonicalPath, label, segment };
+        });
+}
+
+function withLocalSubpageLinks(mainRaw: string, location: LocationRecord): string {
+    const subpages = localSubpages(location);
+    if (subpages.length === 0) return mainRaw;
+
+    // While a location runs its own holiday party page, the Holidays icon goes there
+    // and the page is not listed again below.
+    const holidayCard = 'href="/groups/holidays" class="groups-event-type"';
+    const holidayPage = subpages.find((page) => page.segment === 'holiday-party');
+    const swapHolidayCard = Boolean(holidayPage) && mainRaw.includes(holidayCard);
+    const html = swapHolidayCard
+        ? mainRaw.replace(holidayCard, `href="${escapeHtml(holidayPage!.href)}" class="groups-event-type"`)
+        : mainRaw;
+    const listed = swapHolidayCard ? subpages.filter((page) => page !== holidayPage) : subpages;
+    const planningButton = html.indexOf('class="btn-start-planning"');
+    const insertAt = planningButton === -1 ? -1 : html.indexOf('</a>', planningButton);
+    if (listed.length === 0 || insertAt === -1) return html;
+
+    const labelId = `local-links-${location.slug}`;
+    const nav = `
+            <nav class="location-local-links" aria-labelledby="${labelId}">
+                <p class="location-local-links-label" id="${labelId}">At ${escapeHtml(location.name)}</p>
+                <ul class="location-local-links-list">
+${listed.map((page) => `                    <li><a href="${escapeHtml(page.href)}">${escapeHtml(page.label)}</a></li>`).join('\n')}
+                </ul>
+            </nav>`;
+    const end = insertAt + '</a>'.length;
+    return `${html.slice(0, end)}${nav}${html.slice(end)}`;
+}
+
 export function buildOpenLocationPage({
     mainRaw,
     slug,
@@ -152,7 +216,7 @@ export function buildOpenLocationPage({
         canonicalPath,
         ld: locationJsonLd(location),
         location,
-        mainHtml: applyTmMediaBase(withTemporaryClosureStrip(withLocationTemplateTokens(mainRaw, location), location)),
+        mainHtml: applyTmMediaBase(withLocalSubpageLinks(withTemporaryClosureStrip(withLocationTemplateTokens(mainRaw, location), location), location)),
         page: definePage({ canonicalPath }),
         pageInit: cityPageInit(location, locationPageTaglines(slug)),
     };
