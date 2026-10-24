@@ -475,6 +475,33 @@
         return true;
     }
 
+    // Briq restores its own state from the return URL after a payment redirect,
+    // so wait for it to open instead of clicking the toggle (which would reset it).
+    function waitForBriqWidgetOpen(attempt) {
+        var main = getBriqWidgetMain();
+        var container = getBriqWidgetContainer();
+        if (main && main.classList.contains('bw-open')) {
+            stopBriqOpenRetry();
+            fitBriqWidgetLayout();
+            setBriqWidgetMainVisibility(true);
+            setBriqLoadingState(container, false);
+            scheduleBriqWidgetFit();
+            observeBriqClose();
+            return true;
+        }
+        if (attempt > 100) {
+            stopBriqOpenRetry();
+            setBriqWidgetMainVisibility(true);
+            setBriqLoadingState(container, false);
+            return false;
+        }
+        stopBriqOpenRetry();
+        briqOpenRetryTimer = setTimeout(function () {
+            waitForBriqWidgetOpen(attempt + 1);
+        }, 100);
+        return true;
+    }
+
     function closeBriqWidget(options) {
         var container = getBriqWidgetContainer();
         stopBriqOpenRetry();
@@ -522,6 +549,31 @@
         return true;
     }
 
+    // Remount the widget on the current page so Briq can finish a redirected payment.
+    // Never navigates away: that would drop the payment parameters from the URL.
+    function resumeBriqWidget(loc) {
+        var host = ensureBriqWidgetHost(loc);
+        if (!host || host.domainMismatch) return false;
+        var container = host.container;
+        setBriqWidgetMainVisibility(false);
+        fitBriqWidgetLayout();
+        setBriqPanelMode(true);
+        openPanel({
+            kind: 'tickets',
+            locationId: (loc && (loc.id || loc.slug)) || '',
+            briqPanel: true,
+        });
+        ensureBriqResizeHandler();
+        setBriqLoadingState(container, true);
+        loadBriqWidgetScript(function () {
+            waitForBriqWidgetOpen(0);
+            setTimeout(scheduleBriqWidgetFit, 600);
+        }, function () {
+            setBriqErrorState(container);
+        });
+        return true;
+    }
+
     function localizeBriqUi() {
         var container = getBriqWidgetContainer();
         if (!container) return;
@@ -541,6 +593,7 @@
 
     window.TMBookingBriq = {
         open: showBriqWidget,
+        resume: resumeBriqWidget,
         close: closeBriqWidget,
         setPanelAdapter: function (adapter) {
             panelAdapter = adapter || null;
