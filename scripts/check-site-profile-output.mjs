@@ -15,6 +15,7 @@ import {
 import { LOCATION_ROUTE_ENTRIES } from '../functions/_shared/location-route-manifest.mjs';
 import {
   compileRegionalHtmlRoutes,
+  hreflangAlternates,
   localeHtmlLang,
   locationForCanonicalPath,
 } from './lib/regional-html-routes.mjs';
@@ -184,15 +185,9 @@ function checkRegisteredHtml() {
         errors.push(`${relPath}: US profile must not emit language alternates`);
       }
       if (profile.localizedRoutes) {
-        for (const alternateLocale of profile.locales) {
-          const expectedLang = localeHtmlLang(alternateLocale, route.canonicalPath, locations);
-          const expectedUrl = `${profile.origin}${localizedPath(
-            route.canonicalPath,
-            alternateLocale,
-            profile,
-          )}`;
-          if (!html.includes(`hreflang="${expectedLang}" href="${expectedUrl}"`)) {
-            errors.push(`${relPath}: missing reciprocal ${expectedLang} alternate`);
+        for (const { lang, href } of hreflangAlternates(route, profile, locations, routesDocument.routes || [])) {
+          if (!html.includes(`hreflang="${lang}" href="${href}"`)) {
+            errors.push(`${relPath}: missing reciprocal ${lang} alternate (${href})`);
           }
         }
       }

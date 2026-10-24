@@ -9,6 +9,7 @@ const {
   resolveSiteProfile,
   routeServesProfile,
 } = require('../config/site-profiles.mjs');
+const { hreflangAlternates } = require('./lib/regional-html-routes.mjs');
 
 const root = path.resolve(__dirname, '..');
 const errors = [];
@@ -62,6 +63,7 @@ const validationEntries = profile.localizedRoutes
       return !location || isInternalLocation(location, profile);
     })
     .flatMap((route) => profile.locales.map((locale) => ({
+      route,
       canonicalPath: route.canonicalPath,
       locale,
       relPath: localizedOutputFile(route, locale, profile),
@@ -81,7 +83,7 @@ const validationEntries = profile.localizedRoutes
 
 let validated = 0;
 
-for (const { canonicalPath, locale, relPath } of validationEntries) {
+for (const { route, canonicalPath, locale, relPath } of validationEntries) {
   const distPath = path.join(distDir, relPath);
   if (!fs.existsSync(distPath)) {
     errors.push(`${relPath}: file missing from dist/ — manifest claims it should be Astro-rendered`);
@@ -114,12 +116,10 @@ for (const { canonicalPath, locale, relPath } of validationEntries) {
       `${relPath}: emits <link rel="alternate" hreflang> tag (forbidden per locked decision D-02 — different cities are not language alternates per Google docs)`,
     );
   }
-  if (profile.localizedRoutes && canonicalPath) {
-    for (const alternateLocale of profile.locales) {
-      const language = localeHtmlLang(alternateLocale, canonicalPath);
-      const href = `${profile.origin}${localizedPath(canonicalPath, alternateLocale, profile)}`;
-      if (!html.includes(`hreflang="${language}" href="${href}"`)) {
-        errors.push(`${relPath}: missing reciprocal ${language} alternate`);
+  if (profile.localizedRoutes && route) {
+    for (const { lang, href } of hreflangAlternates(route, profile, locations, routesDocument.routes || [])) {
+      if (!html.includes(`hreflang="${lang}" href="${href}"`)) {
+        errors.push(`${relPath}: missing reciprocal ${lang} alternate (${href})`);
       }
     }
   }

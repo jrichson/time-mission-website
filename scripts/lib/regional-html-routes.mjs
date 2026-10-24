@@ -48,6 +48,61 @@ export function localeHtmlLang(locale, canonicalPath, locations) {
   return locale;
 }
 
+// Pages both sites publish (About, Missions, Groups, FAQ...) are regional variants of
+// each other, so their hreflang cluster spans timemission.com and timemission.eu.
+// The US site takes the bare language codes; the EU site takes country-tagged English
+// and Spanish so Google sends Belgian and Dutch searchers to .eu and everyone else to .com.
+const COUNTERPART_PROFILES = {
+  us: { origin: 'https://www.timemission.com', locales: ['en', 'es'] },
+  eu: { origin: 'https://www.timemission.eu', locales: ['en', 'nl', 'fr', 'es'] },
+};
+const SHARED_ROUTE_LANGS = {
+  us: { en: ['en'], es: ['es'] },
+  eu: { en: ['en-BE', 'en-NL'], nl: ['nl'], fr: ['fr'], es: ['es-BE', 'es-NL'] },
+};
+
+function profileLocalizedPath(canonicalPath, locale) {
+  if (locale === 'en') return canonicalPath;
+  return canonicalPath === '/' ? `/${locale}` : `/${locale}${canonicalPath}`;
+}
+
+// Only canonical paths owned by a registry route qualify: CMS pages found by walking
+// dist/ may exist on one site only, and an alternate pointing at a 404 breaks the cluster.
+// City-scoped copies (e.g. /antwerp/about) canonicalize to the shared path and follow it.
+export function isSharedRegionalRoute(route, locations, registeredRoutes = []) {
+  const canonicalPath = route?.canonicalPath;
+  if (!canonicalPath || locationForCanonicalPath(canonicalPath, locations)) return false;
+  return registeredRoutes.some((registered) => (
+    registered?.canonicalPath === canonicalPath && !Array.isArray(registered.siteProfiles)
+  ));
+}
+
+// Returns the full hreflang cluster for a route as [{ lang, href }], x-default last.
+export function hreflangAlternates(route, profile, locations, registeredRoutes = []) {
+  const canonicalPath = route.canonicalPath;
+  if (!isSharedRegionalRoute(route, locations, registeredRoutes)) {
+    const alternates = profile.locales.map((locale) => ({
+      lang: localeHtmlLang(locale, canonicalPath, locations),
+      href: `${profile.origin}${profileLocalizedPath(canonicalPath, locale)}`,
+    }));
+    alternates.push({ lang: 'x-default', href: `${profile.origin}${canonicalPath}` });
+    return alternates;
+  }
+
+  const alternates = [];
+  for (const id of ['us', 'eu']) {
+    const origin = id === profile.id ? profile.origin : COUNTERPART_PROFILES[id].origin;
+    for (const locale of COUNTERPART_PROFILES[id].locales) {
+      for (const lang of SHARED_ROUTE_LANGS[id][locale]) {
+        alternates.push({ lang, href: `${origin}${profileLocalizedPath(canonicalPath, locale)}` });
+      }
+    }
+  }
+  const usOrigin = profile.id === 'us' ? profile.origin : COUNTERPART_PROFILES.us.origin;
+  alternates.push({ lang: 'x-default', href: `${usOrigin}${canonicalPath}` });
+  return alternates;
+}
+
 export function compileRegionalHtmlRoutes(distDir, profile, registeredRoutes = []) {
   const routesByOutput = new Map();
   for (const route of registeredRoutes) {

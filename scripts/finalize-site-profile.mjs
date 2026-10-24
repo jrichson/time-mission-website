@@ -13,6 +13,7 @@ import {
 } from '../config/site-profiles.mjs';
 import {
   compileRegionalHtmlRoutes,
+  hreflangAlternates,
   localeHtmlLang,
   locationForCanonicalPath,
 } from './lib/regional-html-routes.mjs';
@@ -158,15 +159,10 @@ function localizedUrl(canonicalPath, locale) {
   return `${profile.origin}${localizedPath(canonicalPath, locale, profile)}`;
 }
 
-function hreflangMarkup(canonicalPath) {
-  const links = profile.locales.map((locale) => {
-    const href = localizedUrl(canonicalPath, locale);
-    return `<link rel="alternate" hreflang="${localeHtmlLang(locale, canonicalPath, locations)}" href="${href}">`;
-  });
-  links.push(
-    `<link rel="alternate" hreflang="x-default" href="${localizedUrl(canonicalPath, profile.defaultLocale)}">`,
-  );
-  return links.join('');
+function hreflangMarkup(route) {
+  return hreflangAlternates(route, profile, locations, routesDocument.routes || [])
+    .map(({ lang, href }) => `<link rel="alternate" hreflang="${lang}" href="${href}">`)
+    .join('');
 }
 
 function localizeHtml(source, route, locale) {
@@ -183,7 +179,7 @@ function localizeHtml(source, route, locale) {
     )
     .replace(
       /<link rel="canonical" href="[^"]*"\s*\/?>/i,
-      `<link rel="canonical" href="${canonicalUrl}">${hreflangMarkup(route.canonicalPath)}`,
+      `<link rel="canonical" href="${canonicalUrl}">${hreflangMarkup(route)}`,
     )
     .replace(/(<meta property="og:url" content=")[^"]*(">)/i, `$1${canonicalUrl}$2`);
 

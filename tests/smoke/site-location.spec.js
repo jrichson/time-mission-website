@@ -119,7 +119,7 @@ test('Scottsdale is coming soon and location lists mark upcoming venues', async 
 
   await scottsdale.click();
   await expect(page).toHaveURL(/\/scottsdale$/);
-  await expect(page).toHaveTitle('Time Mission Scottsdale | Coming Soon');
+  await expect(page).toHaveTitle('Time Mission Scottsdale, AZ | Coming Soon');
   await expect(page.locator('.hero')).toContainText('Coming Soon');
   await expect(page.locator('.footer-loc-address')).toContainText('15745 Hayden Rd');
   await expect(page.locator('.footer-loc-address')).toContainText('Scottsdale, AZ 85260');
@@ -155,7 +155,7 @@ test('Edison has a local location page whose action links lead to Supercharged N
 
   await edison.click();
   await expect(page).toHaveURL(/\/edison\?utm_source=paid&utm_campaign=edison$/);
-  await expect(page).toHaveTitle('Time Mission Edison | Now Open');
+  await expect(page).toHaveTitle('Time Mission Edison, NJ – 25+ Interactive Mission Rooms');
   await expect(page.locator('.ticker-bar')).toHaveCount(0);
   await expect(page.locator('.hero .btn-location-book')).toHaveAttribute(
     'href',
@@ -328,7 +328,7 @@ test('Philadelphia is now open across its banner, selector, and booking experien
   const checkoutUrl = 'https://book.philadelphia.timemission.com/timemissionphiladelphiapa/onlinecheckout/en-us/home';
   const philadelphiaMenuLink = page.locator('#locationDropdown a[data-tm-location-slug="philadelphia"]').first();
 
-  await expect(page).toHaveTitle('Time Mission Philadelphia – 25+ Interactive Mission Rooms');
+  await expect(page).toHaveTitle('Time Mission Philadelphia, PA – 25+ Interactive Mission Rooms');
   await expect(page.locator('.tm-closure-strip')).toHaveCount(0);
   await expect(page.locator('#temporaryClosureModal')).toHaveCount(0);
   await expect(page.locator('.ticker-bar')).toHaveCount(0);
@@ -346,7 +346,7 @@ test('Boston coming-soon page publishes the address and lead-only CTAs', async (
   const bostonMenuLink = page.locator('#locationDropdown a[data-tm-location-slug="boston"]').first();
   const footer = page.locator('footer.footer');
 
-  await expect(page).toHaveTitle('Time Mission Boston | Coming Soon');
+  await expect(page).toHaveTitle('Time Mission Boston, MA | Coming Soon');
   await expect(page.locator('.ticker-bar')).toHaveCount(0);
   await expect(bostonMenuLink.locator('.coming-soon-tag')).toHaveCount(0);
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
