@@ -79,13 +79,10 @@ export const GET: APIRoute = async () => {
 
     items.sort();
 
-    // Build-time stamp serves as `<lastmod>` for every URL. Static-site snapshots
-    // freshness at deploy time, so this is the truthful answer at sitemap-fetch
-    // moment. Google deprecated `priority` (always 0.5 effectively) but uses
-    // `lastmod` to schedule recrawls — emitting it is the only useful sitemap signal.
-    const lastmod = new Date().toISOString().slice(0, 10);
+    // No <lastmod>: every deploy would stamp every URL with the same date, and Google
+    // ignores lastmod on sites where it does not track real content changes.
     const body = [...new Set(items)]
-        .map((loc) => `  <url><loc>${escapeXml(loc)}</loc><lastmod>${lastmod}</lastmod></url>`)
+        .map((loc) => `  <url><loc>${escapeXml(loc)}</loc></url>`)
         .join('\n');
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
