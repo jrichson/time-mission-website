@@ -701,7 +701,70 @@
         return { syncCtaHref: syncCtaHref };
     }
 
+    // Briq payment redirects (3-D Secure, wallets, pay-by-link) come back to the page they
+    // started on with the booking state in `bw=` (base64) or `bwr=` (raw), plus Stripe's
+    // `payment_intent`/`redirect_status`. Returns the encoded business-unit domain ('' when
+    // absent), or null when the URL is not a Briq payment return.
+    function parseBriqPaymentReturn() {
+        var hash = (window.location.hash || '').replace(/^#/, '');
+        var search = (window.location.search || '').replace(/^\?/, '');
+        var raw = '';
+        var hasPaymentKey = false;
+        (hash + '&' + search).split('&').forEach(function (part) {
+            if (part.indexOf('bwpk=') === 0) {
+                hasPaymentKey = true;
+            } else if (part.indexOf('bwr=') === 0) {
+                try { raw = decodeURIComponent(part.slice(4)); } catch (e) { raw = part.slice(4); }
+            } else if (part.indexOf('bw=') === 0) {
+                try {
+                    raw = window.atob(decodeURIComponent(part.slice(3))
+                        .replace(/\*/g, '+').replace(/-/g, '+').replace(/_/g, '/').replace(/,/g, '='));
+                } catch (e) { raw = ''; }
+            }
+        });
+        var state = {};
+        raw.split('|and|').forEach(function (pair) {
+            var idx = pair.indexOf('|is|');
+            if (idx > 0) state[pair.slice(0, idx)] = pair.slice(idx + 4);
+        });
+        var query = new URLSearchParams(search);
+        var stripeReturn = !!(query.get('payment_intent') && query.get('redirect_status'));
+        if (!state.pk && !state.bk && !hasPaymentKey && !stripeReturn) return null;
+        return state.bu || '';
+    }
+
+    function scheduleBriqPaymentResume(domain) {
+        function resume() {
+            var records = window.TM && Array.isArray(window.TM.locations) ? window.TM.locations : [];
+            var candidates = records.filter(function (record) {
+                return record.bookingProvider === 'briq' && record.briqWidget && record.briqWidget.domain
+                    && (!domain || record.briqWidget.domain === domain);
+            });
+            // Never guess the venue if the return link is ambiguous.
+            if (candidates.length !== 1) return;
+            if (!window.TMBookingBriq || typeof window.TMBookingBriq.resume !== 'function') return;
+            window.TMBookingBriq.resume(candidates[0]);
+        }
+        function whenReady() {
+            if (window.TM && window.TM.ready && typeof window.TM.ready.then === 'function') {
+                window.TM.ready.then(resume);
+            } else {
+                resume();
+            }
+        }
+        if (document.readyState === 'complete') {
+            setTimeout(whenReady, 0);
+        } else {
+            window.addEventListener('load', function () { setTimeout(whenReady, 0); });
+        }
+    }
+
     function scheduleAutoRedirect() {
+        var briqReturnDomain = parseBriqPaymentReturn();
+        if (briqReturnDomain !== null) {
+            scheduleBriqPaymentResume(briqReturnDomain);
+            return;
+        }
         var pageLocationSlug = BookingJourney.normalizeLocation((document.body && document.body.dataset.location) || '');
         // Briq's hosted links return to our homepage with their widget state.
         var briqState = /^#bwr=(?:bu\|is\|([^|]+)\|and\|)?o\|is\|true$/.exec(window.location.hash || '');
