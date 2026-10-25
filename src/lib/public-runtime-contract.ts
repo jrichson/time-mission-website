@@ -51,7 +51,7 @@ export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 15 },
     { id: 'tickerSchedule', src: '/js/ticker-schedule.js', version: 1 },
     { id: 'locations', src: '/js/locations.js', version: 30 },
-    { id: 'nav', src: '/js/nav.js', version: 24 },
+    { id: 'nav', src: '/js/nav.js', version: 26 },
     { id: 'bookingController', src: '/js/booking-controller.js', version: 24 },
     { id: 'ticketPanel', src: '/js/ticket-panel.js', version: 12 },
     { id: 'a11y', src: '/js/a11y.js', version: null },

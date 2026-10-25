@@ -52,6 +52,14 @@
         if (location) {
             rows = rows.map(function (row, i) { return Object.assign({}, row, { rank: i + 1 }); });
         }
+        var searchInput = board.querySelector('[data-leaderboard-search]');
+        var query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        if (query) {
+            rows = rows.filter(function (row) {
+                return String(row.team).toLowerCase().indexOf(query) !== -1
+                    || locationName(row.locationSlug).toLowerCase().indexOf(query) !== -1;
+            });
+        }
         rows = rows.slice(0, limit);
 
         var tbody = board.querySelector('[data-leaderboard-rows]');
@@ -71,7 +79,12 @@
             tbody.appendChild(tr);
         });
         var empty = board.querySelector('.leaderboard-empty');
-        if (empty) empty.hidden = rows.length > 0;
+        if (empty) {
+            empty.hidden = rows.length > 0;
+            empty.textContent = query
+                ? translate('leaderboard.noMatch', 'No teams match your search.')
+                : translate('leaderboard.empty', 'No scores yet for this view.');
+        }
     }
 
     function fillLocations(board, data) {
@@ -115,6 +128,8 @@
                 });
                 var select = board.querySelector('[data-leaderboard-location]');
                 if (select) select.addEventListener('change', function () { render(board, data); });
+                var search = board.querySelector('[data-leaderboard-search]');
+                if (search) search.addEventListener('input', function () { render(board, data); });
                 document.addEventListener('tm:language-changed', function () { render(board, data); });
             });
         })

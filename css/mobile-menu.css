@@ -180,8 +180,8 @@
         display: none !important;
     }
 
-    /* The nav button moves to the bottom bar on phones */
-    .nav .btn-tickets {
+    /* The location selector's Book Now is redundant with the bottom TICKETS bar */
+    .location-dropdown .location-info-actions {
         display: none !important;
     }
 

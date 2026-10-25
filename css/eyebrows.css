@@ -1,6 +1,6 @@
 /* ==========================================
    EYEBROWS
-   Section labels as plain type with a short TM26 rule, instead of tinted pills.
+   Section labels as plain spaced type, instead of tinted pills.
    Loaded last in core so it wins over older per-page pill styles.
    ========================================== */
 
@@ -27,18 +27,15 @@
     -webkit-text-fill-color: currentColor;
 }
 
+/* No decorative rule: the label stands on its own */
 .section-badge::before,
 [class*="-eyebrow"]:not(.hero-eyebrow)::before,
 [class*="__eyebrow"]::before,
 .tm-resource-kicker::before,
 .tm-blog-kicker::before,
 .tm-landing-kicker::before {
-    content: '';
-    flex-shrink: 0;
-    width: 28px;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--gradient-tm26);
+    content: none !important;
+    display: none !important;
 }
 
 /* Old pill icons/dots inside badges are dropped; the rule does that job now */
@@ -54,8 +51,4 @@
         letter-spacing: 0.18em !important;
     }
 
-    .section-badge::before,
-    [class*="-eyebrow"]:not(.hero-eyebrow)::before {
-        width: 20px;
-    }
 }

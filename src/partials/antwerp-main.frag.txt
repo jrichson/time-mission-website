@@ -21,7 +21,7 @@
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <a href="#experiences" class="btn-secondary" data-i18n="home.hero.seeMissions">See Missions</a>
+                <a href="/missions" class="btn-secondary" data-i18n="home.hero.seeMissions">Explore Missions</a>
             </div>
         </div>
         <div class="hero-scroll">

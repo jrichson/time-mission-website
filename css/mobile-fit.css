@@ -1,0 +1,123 @@
+/* ==========================================
+   MOBILE FIT
+   On phones each section should read in about one screen:
+   tighter padding, shorter photos, clamped intros, compact stat tiles.
+   ========================================== */
+
+@media (max-width: 768px) {
+    /* Section intros: three lines max */
+    .experiences-header .welcome-text,
+    .groups-cta-card .welcome-text,
+    .cta-section .cta-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        font-size: 1rem !important;
+        line-height: 1.55 !important;
+    }
+
+    .section-title {
+        margin-bottom: 0.75rem !important;
+    }
+
+    /* Stats: compact 2x2 tiles */
+    .stats {
+        padding-top: 0.5rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    .stats-grid {
+        gap: 0.75rem !important;
+    }
+
+    .stat-card {
+        padding: 1rem 0.75rem !important;
+        min-height: 0 !important;
+    }
+
+    .stat-card .stat-icon {
+        width: 36px !important;
+        height: 36px !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .stat-card .stat-icon svg {
+        width: 22px !important;
+        height: 22px !important;
+    }
+
+    .stat-card .stat-number {
+        font-size: 1.9rem !important;
+        line-height: 1.1;
+    }
+
+    .stat-card .stat-label {
+        font-size: 0.62rem !important;
+    }
+
+    /* The intro right above already links to About */
+    .stats .welcome-learn-mobile {
+        display: none !important;
+    }
+
+    /* Missions carousel */
+    .experiences {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+
+    .experiences-header {
+        margin-bottom: 1.25rem !important;
+    }
+
+    .experiences-scroll .experience-card {
+        height: 340px !important;
+    }
+
+    /* Groups: shorter photo, tighter card */
+    .groups-cta-photo,
+    .final-cta .cta-photo {
+        height: 200px !important;
+    }
+
+    .groups-cta-card {
+        padding-top: 1.75rem !important;
+        padding-bottom: 1.75rem !important;
+    }
+
+    .groups-event-types {
+        margin: 1rem 0 !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Leaderboard teaser: table only, the full page has search and intro */
+    .leaderboard-section {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+
+    .home-main .leaderboard-intro,
+    .home-main .leaderboard-filters {
+        display: none !important;
+    }
+
+    .leaderboard-table td {
+        padding-top: 0.7rem !important;
+        padding-bottom: 0.7rem !important;
+    }
+
+    .leaderboard-cta {
+        margin-top: 1rem !important;
+    }
+
+    /* FAQ teaser and final CTA */
+    .mini-faq {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+
+    .mini-faq-header {
+        margin-bottom: 1rem !important;
+    }
+}

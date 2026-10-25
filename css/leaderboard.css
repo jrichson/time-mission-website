@@ -27,11 +27,60 @@
 
 .leaderboard-controls {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.leaderboard-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.leaderboard-search {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-sizing: border-box;
+    width: min(100%, 360px);
+    height: 44px;
+    padding: 0 1.1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--gray-light);
+    transition: border-color var(--motion-fast) ease, background var(--motion-fast) ease;
+}
+
+.leaderboard-search:focus-within {
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.leaderboard-search svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.leaderboard-search input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    background: none;
+    color: var(--white);
+    font-family: var(--body);
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.leaderboard-search input::placeholder {
+    color: var(--gray);
 }
 
 .leaderboard-tabs {
@@ -91,16 +140,6 @@
     padding: clamp(1rem, 3vw, 2.25rem) clamp(1rem, 3vw, 2.5rem);
     background: linear-gradient(180deg, rgba(18, 18, 26, 0.96), rgba(10, 10, 14, 0.96));
     clip-path: polygon(24px 0, calc(100% - 24px) 0, 100% 24px, 100% calc(100% - 24px), calc(100% - 24px) 100%, 24px 100%, 0 calc(100% - 24px), 0 24px);
-}
-
-.leaderboard-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 24px;
-    right: 24px;
-    height: 2px;
-    background: var(--gradient-tm26);
 }
 
 .leaderboard-table {
@@ -205,8 +244,15 @@ td.lb-col-score {
 
 @media (max-width: 768px) {
     .leaderboard-controls {
-        flex-direction: column;
         align-items: stretch;
+    }
+
+    .leaderboard-filters {
+        flex-direction: column;
+    }
+
+    .leaderboard-search {
+        width: 100%;
     }
 
     .leaderboard-tabs {

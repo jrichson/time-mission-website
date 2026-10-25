@@ -507,3 +507,84 @@
 .location-dropdown a.location-info-book {
     margin-top: 1.5rem;
 }
+
+/* ---- Use my location ---- */
+.location-geo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin: -1.25rem auto 1.75rem;
+}
+
+.location-use-mine {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+    border: 0;
+    background: none;
+    color: var(--white);
+    font-family: var(--body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.location-use-mine svg {
+    width: 16px;
+    height: 16px;
+}
+
+.location-use-mine:hover span {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.location-use-mine.is-loading svg {
+    animation: tm-geo-pulse 1s ease-in-out infinite;
+}
+
+@keyframes tm-geo-pulse {
+    50% { opacity: 0.3; }
+}
+
+.location-geo-status {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--gray-light);
+}
+
+.location-geo-status[hidden],
+.location-use-mine[hidden] {
+    display: none !important;
+}
+
+/* ---- Phones ---- */
+@media (max-width: 768px) {
+    /* Logo, language and close share one centre line */
+    .location-dropdown-controls {
+        top: calc(2rem - 2px + env(safe-area-inset-top, 0px));
+        right: calc(1.25rem + env(safe-area-inset-right, 0px));
+        gap: 0.5rem;
+    }
+
+    .location-dropdown-header {
+        min-height: 40px;
+    }
+
+    .location-geo {
+        margin: -0.5rem auto 1.25rem;
+    }
+
+    /* Name and address first, then map and hours */
+    .location-overlay-right .location-info-content {
+        order: -1;
+    }
+}
+
+@media (max-width: 1100px) {
+    .location-overlay-right .location-info-content {
+        order: -1;
+    }
+}

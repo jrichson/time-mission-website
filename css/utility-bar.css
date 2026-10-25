@@ -405,3 +405,45 @@ body:has(.nav.scrolled) .utility-bar {
     color: var(--white);
 }
 
+
+/* ---- Phones: name opens the selector, icon-only Mission Rewards ---- */
+@media (max-width: 768px) {
+    .utility-change,
+    .utility-hours-label,
+    .utility-account-btn .utility-account-label,
+    .utility-account-btn .utility-caret {
+        display: none !important;
+    }
+
+    .utility-location-name {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        min-width: 0;
+    }
+
+    .utility-location-name::after {
+        content: '';
+        flex-shrink: 0;
+        width: 6px;
+        height: 6px;
+        margin-top: -3px;
+        border-right: 1.5px solid currentColor;
+        border-bottom: 1.5px solid currentColor;
+        transform: rotate(45deg);
+    }
+
+    .utility-hours {
+        color: var(--white-soft);
+    }
+
+    .utility-account-btn {
+        width: 32px;
+        justify-content: center;
+    }
+
+    .utility-account-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+}

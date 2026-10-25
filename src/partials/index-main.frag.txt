@@ -21,7 +21,7 @@
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <a href="#experiences" class="btn-secondary" data-i18n="home.hero.seeMissions">See Missions</a>
+                <a href="/missions" class="btn-secondary" data-i18n="home.hero.seeMissions">Explore Missions</a>
             </div>
         </div>
         <div class="hero-scroll">
@@ -37,23 +37,37 @@
     </section>
 
     <!-- Welcome Section -->
-    <section class="welcome welcome--feature" id="about">
-        <div class="welcome-feature reveal">
-            <div class="welcome-media">
-                <picture>
-                    <source srcset="/assets/photos/experiences/_Time-Mission_0450-800.webp 800w, /assets/photos/experiences/_Time-Mission_0450-1200.webp 1200w, /assets/photos/experiences/_Time-Mission_0450.webp 1920w" sizes="(max-width: 900px) 100vw, 70vw" type="image/webp">
-                    <img src="/assets/photos/experiences/_Time-Mission_0450.jpg" alt="Two players working a mission challenge together at Time Mission" width="1200" height="800" loading="lazy" decoding="async">
-                </picture>
-            </div>
-            <div class="welcome-card">
-                <h2 class="welcome-card-title">
-                    <span data-i18n="home.about.titleLine1">What is</span>
-                    <span class="welcome-card-title-accent" data-i18n="home.about.titleLine2">Time Mission?</span>
-                </h2>
-                <p class="welcome-card-text" data-i18n="home.about.lede">A real-life video game where every door opens a new challenge. Your ticket unlocks all 25+ missions, so chase high scores, try new ones and replay your favorites.</p>
-                <p class="welcome-card-kicker" data-i18n="home.about.kicker">Teams of 2 to 5. Ages 6 to 106.</p>
-                <a href="/about" class="btn-secondary welcome-learn-desktop" data-i18n="home.about.learn">Learn About Time Mission</a>
-                <details class="geo-disclosure welcome-geo-disclosure">
+    <section class="welcome welcome--intro" id="about">
+        <div class="intro-head reveal">
+            <h2 class="section-title intro-title">
+                <span data-i18n="home.about.titleLine1">What is</span>
+                <span data-i18n="home.about.titleLine2">Time Mission?</span>
+            </h2>
+            <p class="intro-lede" data-i18n="home.about.lede">A real-life video game where every door opens a new challenge. Your ticket unlocks all 25+ missions, so chase high scores, try new ones and replay your favorites.</p>
+            <a href="/about" class="btn-secondary" data-i18n="home.about.learn">Learn About Time Mission</a>
+        </div>
+        <div class="intro-shots reveal">
+                <figure class="intro-shot">
+                    <picture>
+                        <source srcset="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1-800.webp 800w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1-1200.webp 1200w" sizes="(max-width: 768px) 80vw, 33vw" type="image/webp">
+                        <img src="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1-800.webp" alt="Players racing across a lit-up floor grid in a Time Mission room" width="800" height="533" loading="lazy" decoding="async">
+                    </picture>
+                </figure>
+                <figure class="intro-shot">
+                    <picture>
+                        <source srcset="/assets/photos/experiences/_Time-Mission_0450-800.webp 800w, /assets/photos/experiences/_Time-Mission_0450-1200.webp 1200w" sizes="(max-width: 768px) 80vw, 33vw" type="image/webp">
+                        <img src="/assets/photos/experiences/_Time-Mission_0450-800.webp" alt="Two players working a mission challenge together at Time Mission" width="800" height="533" loading="lazy" decoding="async">
+                    </picture>
+                </figure>
+                <figure class="intro-shot">
+                    <picture>
+                        <source srcset="/assets/photos/experiences/Time-Mission_Big-Bang-800.webp 800w, /assets/photos/experiences/Time-Mission_Big-Bang-1200.webp 1200w" sizes="(max-width: 768px) 80vw, 33vw" type="image/webp">
+                        <img src="/assets/photos/experiences/Time-Mission_Big-Bang-800.webp" alt="A team aiming at targets in a glowing Time Mission room" width="800" height="533" loading="lazy" decoding="async">
+                    </picture>
+                </figure>
+        </div>
+        <div class="intro-more">
+            <details class="geo-disclosure welcome-geo-disclosure">
                     <summary data-i18n="home.about.summary">Read the full Time Mission overview</summary>
                     <p class="welcome-text" data-i18n="home.about.short">
                     Time Mission is an indoor challenge-room attraction where teams of 2 to 5 players move through short physical, logic, skill, and coordination missions instead of one long escape-room scenario.
@@ -62,7 +76,6 @@
                     Time Mission is a live, team-based entertainment experience where groups of <strong>two to five players</strong> move through <span class="copy-emphasis">25 or more short mission rooms</span> during a timed session. Each room is a self-contained challenge lasting <strong>about one to five minutes</strong>, so players can choose the order, replay favorites, and build a score across the venue. The format blends escape-room puzzles, arcade-style scoring, physical tasks, and cooperative problem solving without locking a group into one long scenario. Sessions are sold in <span class="copy-emphasis">60, 90, or 120 minute lengths</span>, with most groups completing <strong>15 to 20 missions in a 90 minute visit</strong>. Time Mission works for <span class="copy-emphasis">families, friends, birthdays, team outings, field trips, date nights, and private events</span> because different rooms test speed, strength, skill, memory, logic, and coordination. The experience is designed so mixed-ability groups can contribute in different ways rather than relying on one kind of player.
                     </p>
                 </details>
-            </div>
         </div>
     </section>
 

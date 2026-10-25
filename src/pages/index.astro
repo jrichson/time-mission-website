@@ -36,11 +36,11 @@ const pageInit = {
         <link rel="stylesheet" href="/css/page-index.css?v=4" />
         <link rel="stylesheet" href="/css/page-index-hero.css?v=3" />
         <link rel="stylesheet" href="/css/page-index-intro-stats.css?v=1" />
-        <link rel="stylesheet" href="/css/page-index-how.css?v=1" />
+        <link rel="stylesheet" href="/css/page-index-how.css?v=3" />
         <link rel="stylesheet" href="/css/page-index-experiences.css?v=1" />
         <link rel="stylesheet" href="/css/page-index-groups.css?v=1" />
         <link rel="stylesheet" href="/css/page-index-flow.css?v=1" />
-        <link rel="stylesheet" href="/css/leaderboard.css?v=1" />
+        <link rel="stylesheet" href="/css/leaderboard.css?v=2" />
         <link rel="stylesheet" href="/css/faq.css?v=5" />
     </Fragment>
     <Fragment slot="json-ld">
@@ -50,8 +50,7 @@ const pageInit = {
         <Fragment set:html={indexMainBeforeProof} />
         {activeSiteProfile.id === 'us' && <HomeTestimonials />}
         <section class="leaderboard-section" id="leaderboard">
-            <div class="section-badge" data-i18n="leaderboard.badge">Leaderboard</div>
-            <h2 class="section-title" data-i18n="leaderboard.homeTitle">Top Teams</h2>
+            <h2 class="section-title" data-i18n="leaderboard.homeTitle">Leaderboard</h2>
             <p class="leaderboard-intro" data-i18n="leaderboard.intro">Every mission you beat adds to your team score. Here's who's on top right now.</p>
             <Leaderboard limit={5} showViewAll />
         </section>
@@ -59,7 +58,7 @@ const pageInit = {
     </div>
     <Fragment slot="after-site-scripts">
         <PageWidgetsScripts pageInit={pageInit} />
-        <script defer is:inline src="/js/leaderboard.js?v=1"></script>
+        <script defer is:inline src="/js/leaderboard.js?v=2"></script>
         <script defer is:inline src="/js/social-feed.js?v=1"></script>
     </Fragment>
 </SiteLayout>

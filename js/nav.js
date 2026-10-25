@@ -647,7 +647,10 @@
         if (loc.status === 'coming-soon') {
             utilityHours.textContent = translate('location.comingSoon', 'Coming Soon');
         } else if (today && today.label) {
-            utilityHours.appendChild(document.createTextNode(translate('utility.openToday', 'Open today:') + ' '));
+            const label = document.createElement('span');
+            label.className = 'utility-hours-label';
+            label.textContent = translate('utility.openToday', 'Open today:') + ' ';
+            utilityHours.appendChild(label);
             const strong = document.createElement('strong');
             strong.textContent = translateHoursText(today.label);
             utilityHours.appendChild(strong);
@@ -655,6 +658,18 @@
             utilityHours.textContent = translate('utility.closedToday', 'Closed today');
         }
         utilityHours.hidden = !utilityHours.textContent;
+    }
+
+    // Phones: the location name itself opens the selector (no separate "Change" button)
+    if (utilityName) {
+        utilityName.addEventListener('click', function (e) {
+            if (!narrowPickerQuery.matches || !isPlainPrimaryClick(e)) return;
+            const trigger = document.getElementById('utilityChange') || document.getElementById('utilityChoose');
+            if (!trigger) return;
+            e.preventDefault();
+            e.stopPropagation();
+            trigger.click();
+        });
     }
 
     document.querySelectorAll('[data-utility-change-location]').forEach(function (btn) {
@@ -845,7 +860,7 @@
         return geo;
     }
 
-    function applyDistanceOrder(position) {
+    function applyDistanceOrder(position, forcePick) {
         if (!locationOverlay || !position) return;
         let nearest = null;
         const groups = Array.from(locationOverlay.querySelectorAll('.location-group'));
@@ -898,7 +913,7 @@
             if (label) label.appendChild(tag);
             // Nothing chosen yet: phones pick the nearest venue for the visitor; desktop previews it.
             const current = window.TM && window.TM.current;
-            if (!current && narrowPickerQuery.matches) {
+            if (forcePick || (!current && narrowPickerQuery.matches)) {
                 syncAllLocations(nearest.link.dataset.city, nearest.link.dataset.tmLocationSlug, { cta_id: 'nav_location_nearest' });
                 syncLocationSelectionLinks();
             } else if (!current) {
@@ -908,23 +923,46 @@
         locationOverlay.classList.add('has-distances');
     }
 
-    function sortLocationsByDistance() {
-        const saved = readSavedPosition();
+    const geoButton = locationOverlay ? locationOverlay.querySelector('[data-location-use-mine]') : null;
+    const geoStatus = locationOverlay ? locationOverlay.querySelector('[data-location-geo-status]') : null;
+
+    function setGeoStatus(key, fallback) {
+        if (!geoStatus) return;
+        geoStatus.hidden = !key;
+        geoStatus.textContent = key ? translate(key, fallback) : '';
+        if (geoButton) geoButton.classList.toggle('is-loading', key === 'location.geoFinding');
+    }
+
+    // Opening the selector reuses saved coords or asks quietly; the button asks again and reports problems.
+    function sortLocationsByDistance(fromButton) {
+        const saved = fromButton ? null : readSavedPosition();
         if (saved) {
             applyDistanceOrder(saved);
             return;
         }
         if (geoRequestInFlight || !window.isSecureContext || !navigator.geolocation) return;
         geoRequestInFlight = true;
+        if (fromButton) setGeoStatus('location.geoFinding', 'Finding your location…');
         navigator.geolocation.getCurrentPosition(function (pos) {
             geoRequestInFlight = false;
+            setGeoStatus('');
             const position = { lat: pos.coords.latitude, lng: pos.coords.longitude };
             savePosition(position.lat, position.lng);
-            applyDistanceOrder(position);
-        }, function () {
-            // Blocked, unavailable or timed out: keep the standard list, no message
+            applyDistanceOrder(position, fromButton === true);
+        }, function (err) {
             geoRequestInFlight = false;
+            if (!fromButton) return; // quiet on open: keep the standard list
+            if (err && err.code === 1) setGeoStatus('location.geoBlocked', 'Location is off for this site. Allow it in your browser or phone settings, then try again.');
+            else setGeoStatus('location.geoFailed', "We couldn't find you. Try again or search above.");
         }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 10 * 60 * 1000 });
+    }
+
+    if (geoButton) {
+        if (!window.isSecureContext || !navigator.geolocation) {
+            geoButton.hidden = true;
+        } else {
+            geoButton.addEventListener('click', function () { sortLocationsByDistance(true); });
+        }
     }
 
     const navLoadContext = getLocationContext();

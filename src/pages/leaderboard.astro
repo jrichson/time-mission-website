@@ -13,20 +13,19 @@ const ld = serializeGraph(buildSimpleGraph([
 
 <SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise leaderboard-page">
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/leaderboard.css?v=1" />
+        <link rel="stylesheet" href="/css/leaderboard.css?v=2" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <header class="leaderboard-page-header">
-        <div class="section-badge" data-i18n="leaderboard.badge">Leaderboard</div>
-        <h1 class="section-title" data-i18n="leaderboard.pageTitle">The Leaderboard</h1>
+        <h1 class="section-title" data-i18n="leaderboard.pageTitle">Leaderboard</h1>
         <p class="leaderboard-intro" data-i18n="leaderboard.pageIntro">The top Time Mission teams this week, this month and of all time. Pick a location to see who rules your venue.</p>
     </header>
     <section class="leaderboard-section">
         <Leaderboard limit={25} showLocationFilter />
     </section>
     <Fragment slot="after-site-scripts">
-        <script is:inline defer src="/js/leaderboard.js?v=1"></script>
+        <script is:inline defer src="/js/leaderboard.js?v=2"></script>
     </Fragment>
 </SiteLayout>

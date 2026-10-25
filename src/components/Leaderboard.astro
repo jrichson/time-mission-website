@@ -22,6 +22,12 @@ const periods = [
                 <button type="button" role="tab" class="leaderboard-tab" data-period={period.id} aria-selected={index === 0 ? 'true' : 'false'} data-i18n={period.i18n}>{period.label}</button>
             ))}
         </div>
+        <div class="leaderboard-filters">
+        <label class="leaderboard-search">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+            <span class="visually-hidden" data-i18n="leaderboard.searchLabel">Search teams</span>
+            <input type="search" autocomplete="off" placeholder="Search teams or locations" data-i18n-placeholder="leaderboard.searchPlaceholder" data-leaderboard-search />
+        </label>
         {showLocationFilter && (
             <label class="leaderboard-filter">
                 <span class="visually-hidden" data-i18n="leaderboard.filterLocation">Location</span>
@@ -30,6 +36,7 @@ const periods = [
                 </select>
             </label>
         )}
+        </div>
     </div>
 
     <div class="leaderboard-card">
