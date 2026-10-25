@@ -730,6 +730,34 @@
     document.addEventListener('tm:language-changed', syncBoldHoverLabels);
     syncBoldHoverLabels();
 
+    // Location overlay search: filter the location list as you type
+    const locationSearch = document.getElementById('locationSearch');
+    if (locationSearch && locationOverlay) {
+        const searchEmpty = locationOverlay.querySelector('.location-search-empty');
+        function syncSearchPlaceholder() {
+            locationSearch.placeholder = translate('location.searchPlaceholder', 'Search by city or state');
+        }
+        function filterLocations() {
+            const query = locationSearch.value.trim().toLowerCase();
+            let matches = 0;
+            locationOverlay.querySelectorAll('.location-group').forEach(function (group) {
+                let groupMatches = 0;
+                group.querySelectorAll('a[data-tm-location-slug]').forEach(function (link) {
+                    const text = (link.textContent + ' ' + (link.dataset.city || '') + ' ' + (link.dataset.tmLocationSlug || '')).toLowerCase();
+                    const show = !query || text.indexOf(query) !== -1;
+                    link.hidden = !show;
+                    if (show) groupMatches += 1;
+                });
+                group.hidden = groupMatches === 0;
+                matches += groupMatches;
+            });
+            if (searchEmpty) searchEmpty.hidden = matches > 0;
+        }
+        locationSearch.addEventListener('input', filterLocations);
+        document.addEventListener('tm:language-changed', syncSearchPlaceholder);
+        syncSearchPlaceholder();
+    }
+
     const navLoadContext = getLocationContext();
     if (navLoadContext && navLoadContext.ready && typeof navLoadContext.ready.then === 'function') {
         navLoadContext.ready.then(function () {

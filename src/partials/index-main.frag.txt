@@ -37,23 +37,21 @@
     </section>
 
     <!-- Welcome Section -->
-    <section class="welcome welcome--split" id="about">
-        <div class="welcome-split reveal">
+    <section class="welcome welcome--feature" id="about">
+        <div class="welcome-feature reveal">
             <div class="welcome-media">
                 <picture>
-                    <source srcset="/assets/photos/experiences/_Time-Mission_0230-480.webp 480w, /assets/photos/experiences/_Time-Mission_0230-800.webp 800w, /assets/photos/experiences/_Time-Mission_0230-1200.webp 1200w" sizes="(max-width: 900px) 100vw, 45vw" type="image/webp">
-                    <img src="/assets/photos/experiences/_Time-Mission_0230.jpg" alt="Two players solving a hieroglyphics challenge in a Time Mission room" width="800" height="1200" loading="lazy" decoding="async">
+                    <source srcset="/assets/photos/experiences/_Time-Mission_0450-800.webp 800w, /assets/photos/experiences/_Time-Mission_0450-1200.webp 1200w, /assets/photos/experiences/_Time-Mission_0450.webp 1920w" sizes="(max-width: 900px) 100vw, 70vw" type="image/webp">
+                    <img src="/assets/photos/experiences/_Time-Mission_0450.jpg" alt="Two players working a mission challenge together at Time Mission" width="1200" height="800" loading="lazy" decoding="async">
                 </picture>
             </div>
-            <div class="welcome-copy">
-                <div class="section-badge" data-i18n="home.about.badge">ABOUT US</div>
-                <h2 class="section-title" data-i18n="home.about.title">WHAT IS TIME MISSION?</h2>
-                <p class="welcome-lede" data-i18n="home.about.lede">One ticket. Unlimited play across 25+ missions. Pick your path and conquer them all.</p>
-                <ul class="welcome-points">
-                    <li data-i18n="home.about.point1">Teams of 2 to 5: friends, family, coworkers, rivals</li>
-                    <li data-i18n="home.about.point2">Play the missions in any order, as many times as you want</li>
-                    <li data-i18n="home.about.point3">Every win adds to your team score</li>
-                </ul>
+            <div class="welcome-card">
+                <h2 class="welcome-card-title">
+                    <span data-i18n="home.about.titleLine1">What is</span>
+                    <span class="welcome-card-title-accent" data-i18n="home.about.titleLine2">Time Mission?</span>
+                </h2>
+                <p class="welcome-card-text" data-i18n="home.about.lede">One ticket. Unlimited play across 25+ missions. Grab a team of 2 to 5, pick your path and play them in any order, as many times as you want.</p>
+                <p class="welcome-card-kicker" data-i18n="home.about.kicker">Every win adds to your team score.</p>
                 <a href="/about" class="btn-secondary welcome-learn-desktop" data-i18n="home.about.learn">Learn About Time Mission</a>
                 <details class="geo-disclosure welcome-geo-disclosure">
                     <summary data-i18n="home.about.summary">Read the full Time Mission overview</summary>

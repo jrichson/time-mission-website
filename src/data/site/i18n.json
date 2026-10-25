@@ -210,7 +210,7 @@
       "home.hero.swipe": "Swipe",
       "home.about.badge": "ABOUT US",
       "home.about.title": "WHAT IS TIME MISSION?",
-      "home.about.lede": "One ticket. Unlimited play across 25+ missions. Pick your path and conquer them all.",
+      "home.about.lede": "One ticket. Unlimited play across 25+ missions. Grab a team of 2 to 5, pick your path and play them in any order, as many times as you want.",
       "home.about.short": "Time Mission is an indoor challenge-room attraction where teams of 2 to 5 players move through short physical, logic, skill, and coordination missions instead of one long escape-room scenario.",
       "home.about.summary": "Read the full Time Mission overview",
       "home.about.long": "Time Mission is a live, team-based entertainment experience where groups of two to five players move through 25 or more short mission rooms during a timed session. Each room is a self-contained challenge lasting about one to five minutes, so players can choose the order, replay favorites, and build a score across the venue. The format blends escape-room puzzles, arcade-style scoring, physical tasks, and cooperative problem solving without locking a group into one long scenario. Sessions are sold in 60, 90, or 120 minute lengths, with most groups completing 15 to 20 missions in a 90 minute visit. Time Mission works for families, friends, birthdays, team outings, field trips, date nights, and private events because different rooms test speed, strength, skill, memory, logic, and coordination. The experience is designed so mixed-ability groups can contribute in different ways rather than relying on one kind of player.",
@@ -322,9 +322,12 @@
       "faq.fullGuidance": "Before visiting Time Mission, guests should <strong>book through the location page</strong> for the venue they plan to attend and review that page for current hours, ticket options, and group packages. Mission sessions are built for teams, repeat attempts, and a mix of <span class=\"copy-emphasis\">physical, skill, logic, and coordination challenges</span>. Age rules are important: younger players may need an adult present, while older children and teens can often participate more independently depending on the venue policy. <strong>Comfortable clothing and closed-toe shoes</strong> are recommended because several missions involve movement, balance, or fast reactions. Larger groups can usually split into teams, rotate through missions, and compare scores. For <span class=\"copy-emphasis\">birthdays, corporate events, school trips, or private events</span>, use the group-event pages or contact form so Time Mission can match the visit format to the group size and occasion beforehand.",
       "locations.fullGuidance": "Time Mission currently has <strong>three open European venues</strong>. <strong>Brussels is open at Terminal 1</strong> on Avenue Impératrice Charlotte and uses Terminal 1's Roller checkout for live ticket prices and availability. <strong>Antwerp is open at Experience Factory</strong> on Michiganstraat and uses the Experience Factory booking system. Opening hours, packages, and venue policies can differ, so guests should check the selected location and its checkout before travelling. <span class=\"copy-emphasis\">Eindhoven is now open</span> at Hermanus Boexstraat 4, 5611 AJ Eindhoven, Netherlands, and tickets are on sale now through its Roller checkout. European locations appear first throughout timemission.eu. United States venues are listed afterwards for visitors planning travel, and their location links continue to timemission.com. For directions, direct contact details, current hours, group enquiries, and tickets, choose the relevant Brussels, Antwerp, or Eindhoven entry on the official Locations page.",
       "city.antwerp.corporateReview": "\"We organized our company teambuilding here and it was by far the best activity we've ever done. Everyone was talking about it for weeks after.\"",
-      "home.about.point1": "Teams of 2 to 5: friends, family, coworkers, rivals",
-      "home.about.point2": "Play the missions in any order, as many times as you want",
-      "home.about.point3": "Every win adds to your team score"
+      "location.searchLabel": "Search locations",
+      "location.searchPlaceholder": "Search by city or state",
+      "location.searchEmpty": "No locations match your search.",
+      "home.about.titleLine1": "What is",
+      "home.about.titleLine2": "Time Mission?",
+      "home.about.kicker": "Every win adds to your team score."
     },
     "es": {
       "language.label": "Idioma",
@@ -504,7 +507,7 @@
       "home.hero.swipe": "Deslizar",
       "home.about.badge": "SOBRE NOSOTROS",
       "home.about.title": "¿QUÉ ES TIME MISSION?",
-      "home.about.lede": "Una entrada. Juego ilimitado en más de 25 misiones. Elige tu camino y conquístalas todas.",
+      "home.about.lede": "Una entrada. Juego ilimitado en más de 25 misiones. Forma un equipo de 2 a 5, elige tu camino y juégalas en el orden que quieras, tantas veces como quieras.",
       "home.about.short": "Time Mission es una atracción de salas de desafío bajo techo donde equipos de 2 a 5 jugadores recorren misiones cortas de actividad física, lógica, habilidad y coordinación en lugar de un solo escape room largo.",
       "home.about.summary": "Leer la descripción completa de Time Mission",
       "home.about.long": "Time Mission es una experiencia de entretenimiento en vivo y en equipo donde grupos de dos a cinco jugadores recorren 25 o más salas de misión cortas durante una sesión con tiempo limitado. Cada sala es un desafío independiente de aproximadamente uno a cinco minutos, para que los jugadores elijan el orden, repitan sus favoritas y acumulen puntuación en todo el venue. El formato combina acertijos de escape room, puntuación estilo arcade, retos físicos y resolución cooperativa de problemas sin encerrar al grupo en un solo escenario largo. Las sesiones se venden en opciones de 60, 90 o 120 minutos, y la mayoría de los grupos completa de 15 a 20 misiones en una visita de 90 minutos. Time Mission funciona para familias, amigos, cumpleaños, salidas de equipo, excursiones escolares, citas nocturnas y eventos privados porque distintas salas ponen a prueba velocidad, fuerza, habilidad, memoria, lógica y coordinación. La experiencia está diseñada para que grupos con habilidades variadas puedan aportar de distintas maneras, no solo con un tipo de jugador.",
@@ -616,9 +619,12 @@
       "faq.fullGuidance": "Antes de visitar Time Mission, los invitados debería <strong>las reservas a través de la página de ubicación</strong> para el lugar al que planean asistir y revise esa página para conocer los horarios actuales, las opciones de boletos y los paquetes grupales. Las sesiones de misión están diseñadas para equipos, intentos repetidos y una combinación de <span class=\"copy-emphasis\">desafíos físicos, de habilidad, lógica y coordinación</span>. Las reglas de edad son importantes: los jugadores más jóvenes pueden necesitar la presencia de un adulto, mientras que los niños mayores y los adolescentes a menudo pueden participar de forma más independiente según la política del lugar. <strong>Ropa cómoda y zapatos cerrados</strong> se recomiendan porque varias misiones implican movimiento, equilibrio o reacciones rápidas. Los grupos más grandes generalmente pueden dividirse en equipos, rotar en misiones y comparar puntuaciones. Para <span class=\"copy-emphasis\">cumpleaños, eventos corporativos, viajes escolares o eventos privados</span>, use las páginas de eventos grupales o el formulario de contacto para que Time Mission pueda hacer coincidir el formato de visita con el tamaño del grupo y la ocasión de antemano.",
       "locations.fullGuidance": "Time Mission actualmente tiene <strong>tres sedes europeas abiertas</strong>. <strong>Bruselas está abierta en la Terminal 1</strong> en Avenue Impératrice Charlotte y utiliza la caja registradora de la Terminal 1 para conocer los precios y la disponibilidad de los boletos en vivo. <strong>Amberes está abierto en Experience Factory</strong> en Michiganstraat y utiliza el sistema de reservas Experience Factory. Los horarios de apertura, los paquetes y las políticas del lugar pueden diferir, por lo que los huéspedes deben verificar la ubicación seleccionada y su proceso de pago antes de viajar. <span class=\"copy-emphasis\">Eindhoven ya está abierto</span> en Hermanus Boexstraat 4, 5611 AJ Eindhoven, Países Bajos, y las entradas ya están a la venta a través de su pago de Roller. Las ubicaciones europeas aparecen primero en timemission.eu. Los lugares en Estados Unidos se enumeran a continuación para los visitantes que planean viajar, y sus enlaces de ubicación continúan en timemission.com. Para obtener direcciones, detalles de contacto directo, horarios actuales, consultas de grupos y boletos, elija la entrada correspondiente a Bruselas, Amberes o Eindhoven en la página oficial de Ubicaciones.",
       "city.antwerp.corporateReview": "\"Organizamos aquí nuestra actividad de equipo y fue, con diferencia, la mejor que hemos hecho. Todos siguieron hablando de ella durante semanas.\"",
-      "home.about.point1": "Equipos de 2 a 5: amigos, familia, compañeros, rivales",
-      "home.about.point2": "Juega las misiones en cualquier orden, tantas veces como quieras",
-      "home.about.point3": "Cada victoria suma a la puntuación de tu equipo"
+      "location.searchLabel": "Buscar ubicaciones",
+      "location.searchPlaceholder": "Busca por ciudad o estado",
+      "location.searchEmpty": "Ninguna ubicación coincide con tu búsqueda.",
+      "home.about.titleLine1": "¿Qué es",
+      "home.about.titleLine2": "Time Mission?",
+      "home.about.kicker": "Cada victoria suma a la puntuación de tu equipo."
     },
     "nl": {
       "language.label": "Taal",
@@ -769,7 +775,7 @@
       "home.hero.swipe": "Veeg",
       "home.about.badge": "OVER ONS",
       "home.about.title": "WAT IS TIME MISSION?",
-      "home.about.lede": "Eén ticket. Onbeperkt spelen in 25+ missies. Kies je eigen pad en verover ze allemaal.",
+      "home.about.lede": "Eén ticket. Onbeperkt spelen in 25+ missies. Stel een team van 2 tot 5 samen, kies je pad en speel ze in elke volgorde, zo vaak als je wilt.",
       "home.about.short": "Time Mission is een overdekte attractie waar teams van 2 tot 5 spelers korte missies spelen vol actie, logica, behendigheid en coördinatie. Geen escape room van een uur, maar steeds een nieuwe uitdaging van een paar minuten.",
       "home.about.summary": "Lees alles over Time Mission",
       "home.about.long": "Time Mission is live entertainment voor teams. Groepen van twee tot vijf spelers gaan tijdens een speelsessie door 25 of meer korte Mission rooms. Elke Mission room is een losse uitdaging van één tot vijf minuten. Jullie kiezen zelf de volgorde, spelen je favorieten opnieuw en bouwen samen een score op. Denk aan puzzels zoals in een escape room, punten scoren zoals in een arcadehal, fysieke opdrachten en samen problemen oplossen, zonder dat je vastzit aan één lang scenario. Je kiest een speelsessie van 60, 90 of 120 minuten; in 90 minuten spelen de meeste groepen 15 tot 20 missies. Time Mission werkt voor gezinnen, vrienden, verjaardagen, teamuitjes, schooluitjes, date nights en besloten evenementen, omdat elke Mission room iets anders test: snelheid, kracht, behendigheid, geheugen, logica of coördinatie. Zo telt iedereen in de groep mee, niet alleen de sportiefste of de slimste.",
@@ -910,9 +916,12 @@
       "faq.fullGuidance": "Boek je bezoek aan Time Mission <strong>via de pagina van de locatie</strong> waar je wilt spelen, en check daar de actuele openingstijden, tickets en groepsarrangementen. De speelsessies zijn gemaakt voor teams, voor opnieuw proberen en voor een mix van <strong>fysieke, behendigheids-, logische en coördinatie-uitdagingen</strong>. Let op de leeftijdsregels: jongere spelers hebben soms een volwassene nodig, terwijl oudere kinderen en tieners vaak zelfstandiger kunnen meedoen, afhankelijk van de regels van de locatie. <strong>Draag comfortabele kleding en dichte schoenen</strong>, want bij verschillende missies moet je bewegen, je evenwicht bewaren of snel reageren. Grotere groepen splitsen zich meestal op in teams, wisselen af tussen missies en vergelijken hun scores. Voor verjaardagen, bedrijfsevenementen, schooluitjes of besloten evenementen gebruik je de pagina's over groepsevenementen of het contactformulier, zodat Time Mission het bezoek vooraf kan afstemmen op de grootte van je groep en de gelegenheid.",
       "locations.fullGuidance": "Time Mission heeft op dit moment <strong>drie open locaties in Europa</strong>. <strong>Brussel is open in Terminal 1</strong> aan de Avenue Impératrice Charlotte en gebruikt de Roller-checkout van Terminal 1 voor actuele prijzen en beschikbaarheid. <strong>Antwerpen is open in Experience Factory</strong> aan de Michiganstraat en gebruikt het boekingssysteem van Experience Factory. Openingstijden, arrangementen en huisregels kunnen verschillen, dus check de gekozen locatie en de checkout voordat je vertrekt. <strong>Eindhoven is nu open</strong> aan de Hermanus Boexstraat 4, 5611 AJ Eindhoven, en tickets zijn nu te koop via de Roller-checkout. Op timemission.eu staan de Europese locaties altijd eerst. Locaties in de Verenigde Staten staan daarna, voor wie een reis plant; die links gaan naar timemission.com. Voor routebeschrijvingen, contactgegevens, actuele openingstijden, groepsaanvragen en tickets kies je Brussel, Antwerpen of Eindhoven op de officiële pagina Locaties.",
       "city.antwerp.corporateReview": "\"We organiseerden onze teambuilding hier en het was veruit de beste activiteit die we ooit gedaan hebben. Iedereen had het er weken later nog over.\"",
-      "home.about.point1": "Teams van 2 tot 5: vrienden, familie, collega's, rivalen",
-      "home.about.point2": "Speel de missies in elke volgorde, zo vaak als je wilt",
-      "home.about.point3": "Elke overwinning telt mee voor jullie teamscore"
+      "location.searchLabel": "Locaties zoeken",
+      "location.searchPlaceholder": "Zoek op stad of land",
+      "location.searchEmpty": "Geen locaties gevonden.",
+      "home.about.titleLine1": "Wat is",
+      "home.about.titleLine2": "Time Mission?",
+      "home.about.kicker": "Elke overwinning telt mee voor jullie teamscore."
     },
     "fr": {
       "language.label": "Langue",
@@ -1063,7 +1072,7 @@
       "home.hero.swipe": "Balayer",
       "home.about.badge": "À PROPOS",
       "home.about.title": "QU'EST-CE QUE TIME MISSION ?",
-      "home.about.lede": "Un billet. Jeu illimité sur plus de 25 missions. Choisissez votre parcours et relevez-les toutes.",
+      "home.about.lede": "Un billet. Jeu illimité sur plus de 25 missions. Formez une équipe de 2 à 5, choisissez votre parcours et jouez-les dans l'ordre de votre choix, autant de fois que vous voulez.",
       "home.about.short": "Time Mission est une expérience de défis en intérieur où des équipes de 2 à 5 joueurs enchaînent de courtes missions physiques, logiques et d'adresse.",
       "home.about.summary": "Lire la présentation complète de Time Mission",
       "home.about.long": "Time Mission est une expérience de jeu en équipe où des groupes de deux à cinq joueurs parcourent au moins 25 salles de mission pendant une session chronométrée. Chaque salle propose un défi autonome d'environ une à cinq minutes. Les joueurs choisissent l'ordre, rejouent leurs missions préférées et cumulent un score. Le concept associe énigmes, scores de type arcade, épreuves physiques et résolution de problèmes en coopération sans imposer un seul long scénario. Les sessions durent 60, 90 ou 120 minutes et la plupart des groupes réalisent 15 à 20 missions en 90 minutes. Time Mission convient aux familles, amis, anniversaires, sorties d'équipe, voyages scolaires, rendez-vous et événements privés, car chaque salle sollicite des compétences différentes. Chacun peut ainsi contribuer à sa manière.",
@@ -1204,9 +1213,12 @@
       "faq.fullGuidance": "Avant de visiter Time Mission, les invités devraient <strong>réservation via la page de localisation</strong> pour le lieu auquel ils prévoient de se rendre et consultez cette page pour connaître les horaires actuels, les options de billets et les forfaits de groupe. Les sessions de mission sont conçues pour les équipes, les tentatives répétées et un mélange de <span class=\"copy-emphasis\">défis physiques, d'habileté, de logique et de coordination</span>. Les règles d'âge sont importantes : les jeunes joueurs peuvent avoir besoin de la présence d'un adulte, tandis que les enfants plus âgés et les adolescents peuvent souvent participer de manière plus indépendante en fonction de la politique du site. <strong>Vêtements confortables et chaussures fermées</strong> sont recommandés car plusieurs missions impliquent du mouvement, de l'équilibre ou des réactions rapides. Les groupes plus importants peuvent généralement se diviser en équipes, effectuer une rotation entre les missions et comparer les scores. Pour <span class=\"copy-emphasis\">anniversaires, événements d'entreprise, voyages scolaires ou événements privés</span>, d'utiliser les pages d'événements de groupe ou le formulaire de contact afin que Time Mission puisse adapter au préalable le format de visite à la taille et à l'occasion du groupe.",
       "locations.fullGuidance": "Time Mission propose actuellement <strong>trois sites européens ouverts</strong>. <strong>Bruxelles est ouverte au Terminal 1</strong> sur l'avenue Impératrice Charlotte et utilise la caisse Roller du terminal 1 pour connaître les prix et la disponibilité des billets en direct. <strong>Anvers est ouvert à Experience Factory</strong> sur Michiganstraat et utilise le système de réservation Experience Factory. Les horaires d'ouverture, les forfaits et les politiques du lieu peuvent différer, les clients doivent donc vérifier l'emplacement sélectionné et sa caisse avant de voyager. <span class=\"copy-emphasis\">Eindhoven est maintenant ouvert</span> à Hermanus Boexstraat 4, 5611 AJ Eindhoven, Pays-Bas, et les billets sont en vente dès maintenant via son paiement Roller. Les sites européens apparaissent en premier sur timemission.eu. Les sites aux États-Unis sont ensuite répertoriés pour les visiteurs planifiant un voyage, et leurs liens de localisation continuent vers timemission.com. Pour les directions, les coordonnées directes, les horaires actuels, les demandes de groupe et les billets, choisissez l'entrée appropriée à Bruxelles, Anvers ou Eindhoven sur la page officielle des emplacements.",
       "city.antwerp.corporateReview": "\"Nous avons organisé notre activité de cohésion d'équipe ici et c'était de loin la meilleure que nous ayons jamais faite. Tout le monde en a parlé pendant des semaines.\"",
-      "home.about.point1": "Équipes de 2 à 5 : amis, famille, collègues, rivaux",
-      "home.about.point2": "Jouez les missions dans l'ordre de votre choix, autant de fois que vous voulez",
-      "home.about.point3": "Chaque victoire fait grimper le score de votre équipe"
+      "location.searchLabel": "Rechercher un lieu",
+      "location.searchPlaceholder": "Rechercher par ville ou pays",
+      "location.searchEmpty": "Aucun lieu ne correspond à votre recherche.",
+      "home.about.titleLine1": "Qu'est-ce que",
+      "home.about.titleLine2": "Time Mission ?",
+      "home.about.kicker": "Chaque victoire fait grimper le score de votre équipe."
     }
   }
 }
