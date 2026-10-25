@@ -182,14 +182,14 @@ function externalLinkAttrs(href: string | null | undefined) {
         </div>
         <div class="utility-right">
             <LanguageSwitcher currentLang={currentLang} placement="desktop" />
-            <a class="utility-link" href="/gift-cards" data-i18n="utility.giftCards">Gift Cards</a>
+            <a class="utility-link" href="/gift-cards"><span class="bold-hover" data-i18n="utility.giftCards" data-label="Gift Cards">Gift Cards</span></a>
             <div class="utility-account">
                 <button type="button" class="utility-account-btn" id="utilityAccountBtn" aria-haspopup="true" aria-expanded="false" aria-controls="utilityAccountMenu" aria-label="Open account menu" data-i18n-aria-label="utility.accountMenu">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="8" r="4"></circle>
                         <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
                     </svg>
-                    <span class="utility-account-label" data-i18n="utility.account">My Account</span>
+                    <span class="utility-account-label bold-hover" data-i18n="utility.account" data-label="My Account">My Account</span>
                     <svg class="utility-caret" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6,9 12,15 18,9"></polyline>
                     </svg>

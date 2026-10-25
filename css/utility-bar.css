@@ -140,7 +140,7 @@ body:has(.nav.scrolled) .utility-bar {
     background: none;
     color: var(--white);
     font: inherit;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     transition: color var(--motion-fast) ease;
 }
@@ -374,3 +374,29 @@ body:has(.nav.scrolled) .utility-bar {
         padding: 0 0.4rem 0 0.625rem;
     }
 }
+
+/* Simple bold-on-hover for the utility links; the hidden bold copy reserves width so nothing shifts */
+.bold-hover {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bold-hover::after {
+    content: attr(data-label);
+    font-weight: 700;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.utility-link:hover .bold-hover,
+.language-menu-btn:hover .bold-hover,
+.language-menu-btn[aria-expanded="true"] .bold-hover,
+.utility-account-btn:hover .bold-hover,
+.utility-account-btn[aria-expanded="true"] .bold-hover {
+    font-weight: 700;
+    color: var(--white);
+}
+

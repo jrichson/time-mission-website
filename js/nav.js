@@ -674,7 +674,10 @@
 
         function syncLanguageMenu() {
             const option = select.options[select.selectedIndex];
-            if (current && option) current.textContent = option.textContent.trim();
+            if (current && option) {
+                current.textContent = option.textContent.trim();
+                current.setAttribute('data-label', current.textContent);
+            }
             list.querySelectorAll('[data-language-option]').forEach(function (item) {
                 if (item.getAttribute('data-language-option') === select.value) item.setAttribute('aria-current', 'true');
                 else item.removeAttribute('aria-current');
@@ -717,6 +720,15 @@
         document.addEventListener('tm:language-changed', syncLanguageMenu);
         syncLanguageMenu();
     });
+
+    // Keep the bold-hover width reservation in step with translated labels
+    function syncBoldHoverLabels() {
+        document.querySelectorAll('.bold-hover').forEach(function (el) {
+            el.setAttribute('data-label', el.textContent.trim());
+        });
+    }
+    document.addEventListener('tm:language-changed', syncBoldHoverLabels);
+    syncBoldHoverLabels();
 
     const navLoadContext = getLocationContext();
     if (navLoadContext && navLoadContext.ready && typeof navLoadContext.ready.then === 'function') {

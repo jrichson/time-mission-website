@@ -158,7 +158,8 @@
 
 /* Gradient underline grows from the center on hover / active page */
 .nav-links a {
-    padding-bottom: 6px;
+    /* Equal space above and below keeps the label centered in the glass bar */
+    padding: 6px 0;
     background-image: var(--gradient-tm26);
     background-repeat: no-repeat;
     background-position: 50% 100%;

@@ -38,7 +38,7 @@ const label = languageSurface.translateString('language.label', currentCode) || 
     {useMenu && (
         <div class="language-menu" data-language-menu>
             <button type="button" class="language-menu-btn" aria-haspopup="true" aria-expanded="false" data-i18n-aria-label="language.label" aria-label={label}>
-                <span data-language-menu-current>{currentLanguage?.nativeLabel}</span>
+                <span class="bold-hover" data-language-menu-current data-label={currentLanguage?.nativeLabel}>{currentLanguage?.nativeLabel}</span>
                 <svg class="language-menu-caret" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="6,9 12,15 18,9"></polyline>
                 </svg>

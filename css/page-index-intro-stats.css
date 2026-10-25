@@ -123,13 +123,14 @@
 
 /* "Learn About Time Mission", desktop shows inside welcome, mobile shows after stats */
 .welcome-learn-mobile {
-    display: none;
+    /* !important: the shared button rule forces display with !important */
+    display: none !important;
     margin: 2rem auto 0;
 }
 
 @media (max-width: 768px) {
     .welcome-learn-desktop { display: none !important; }
-    .welcome-learn-mobile { display: inline-flex; }
+    .welcome-learn-mobile { display: inline-flex !important; }
 }
 
 .stats-grid {
