@@ -14,29 +14,27 @@
     z-index: 1001;
     box-sizing: border-box;
     height: var(--tm-utility-height);
-    background: linear-gradient(90deg, #120a10 0%, #0D0D0D 45%, #0D0D0D 55%, #140a12 100%);
+    /* Transparent over the hero video; text-shadow keeps it legible */
+    background: transparent;
     max-width: 100vw;
     font-family: var(--body);
     font-size: 0.8rem;
     color: var(--white-soft);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+    transition: background var(--motion-standard) ease, backdrop-filter var(--motion-standard) ease;
+}
+
+/* Once the page scrolls past the hero, give it a light glass backing like the nav */
+body:has(.nav.scrolled) .utility-bar {
+    background: rgba(13, 13, 13, 0.55);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
 
 .utility-bar--no-ticker {
     top: 0;
     padding-top: env(safe-area-inset-top, 0px);
     height: calc(var(--tm-utility-height) + env(safe-area-inset-top, 0px));
-}
-
-/* TM26 gradient hairline under the bar */
-.utility-bar::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: var(--gradient-tm26);
-    opacity: 0.7;
 }
 
 .utility-inner {
