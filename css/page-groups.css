@@ -139,7 +139,7 @@
             cursor: pointer;
             font-family: var(--tech);
             font-size: 0.72rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.12em;
             line-height: 1.5;
             list-style: none;
@@ -198,7 +198,7 @@
             padding: 1rem 2rem;
             border-radius: 100px;
             font-family: var(--tech);
-            font-weight: 400;
+            font-weight: 600;
             font-size: 0.9rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -221,7 +221,7 @@
             padding: 1rem 2rem;
             border-radius: 100px;
             font-family: var(--tech);
-            font-weight: 400;
+            font-weight: 600;
             font-size: 0.9rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -290,7 +290,7 @@
             display: inline-block;
             font-family: var(--tech);
             font-size: 0.75rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--orange);
@@ -390,7 +390,7 @@
             display: inline-block;
             font-family: var(--tech);
             font-size: 0.75rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--orange);
@@ -465,7 +465,7 @@
         }
 
         .group-testimonial-meta {
-            font-family: var(--tech);
+            font-family: var(--tech); font-weight: 600;
             font-size: 0.7rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -487,7 +487,7 @@
             display: inline-block;
             font-family: var(--tech);
             font-size: 0.75rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--orange);
@@ -604,7 +604,7 @@
             color: var(--white);
             font-family: var(--tech);
             font-size: 0.7rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             text-decoration: none;
@@ -678,7 +678,7 @@
             padding-top: 1rem;
             font-family: var(--tech);
             font-size: 0.78rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             text-decoration: none;

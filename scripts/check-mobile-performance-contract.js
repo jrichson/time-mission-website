@@ -69,8 +69,6 @@ runCheck({
     for (const href of [
       '/assets/fonts/BebasNeue-Regular.woff2',
       '/assets/fonts/DMSans-Normal.woff2',
-      '/assets/fonts/MonumentExtended-Regular.otf',
-      '/assets/fonts/MonumentExtended-Ultrabold.otf',
     ]) {
       if (!linkTags(siteHead).some((tag) => {
         const a = attrs(tag);
@@ -78,6 +76,14 @@ runCheck({
       })) {
         errors.push(`SiteHead.astro: missing local font preload for ${href}`);
       }
+    }
+    // Display type (Termina) comes from the Adobe Fonts web project; it must load early with a preconnect.
+    const headLinks = linkTags(siteHead).map(attrs);
+    if (!headLinks.some((a) => a.rel === 'stylesheet' && /^https:\/\/use\.typekit\.net\/[a-z0-9]+\.css$/.test(a.href || ''))) {
+      errors.push('SiteHead.astro: missing Adobe Fonts (Termina) stylesheet link');
+    }
+    if (!headLinks.some((a) => a.rel === 'preconnect' && a.href === 'https://use.typekit.net')) {
+      errors.push('SiteHead.astro: missing preconnect for https://use.typekit.net');
     }
 
     const landingPage = read('src/pages/c/[slug].astro');

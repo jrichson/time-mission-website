@@ -310,9 +310,9 @@
 
 .stat-number {
             font-family: var(--tech);
-            font-weight: 400;
+            font-weight: 600;
             font-size: 3rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--white);
             line-height: 1;
             margin-bottom: 0.5rem;
@@ -358,7 +358,7 @@
             position: absolute;
             font-family: var(--tech);
             font-size: 1rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--glow-color);
             pointer-events: none;
             white-space: nowrap;

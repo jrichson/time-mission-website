@@ -1,0 +1,47 @@
+/* ==========================================
+   BUTTON SCALE — one height, padding and type size for every pill button
+   (fill / outline styles stay with each component). Loaded last in core CSS.
+   The nav BOOK button and the mobile bottom BOOK bar keep their own larger sizes.
+   ========================================== */
+
+:root {
+    --btn-height: 52px;
+    --btn-pad-x: 2rem;
+    --btn-font-size: 0.85rem;
+    --btn-letter-spacing: 0.08em;
+}
+
+@media (max-width: 480px) {
+    :root {
+        --btn-height: 48px;
+        --btn-pad-x: 1.4rem;
+        --btn-font-size: 0.78rem;
+        --btn-letter-spacing: 0.06em;
+    }
+}
+
+:is(
+    .btn-primary,
+    .btn-secondary,
+    .btn-outline,
+    .btn-tickets,
+    .btn-book-now,
+    .btn-group-tickets,
+    .btn-start-planning,
+    .btn-see-all-faq,
+    .btn-ticket-book
+):not(.mobile-book-btn) {
+    min-height: var(--btn-height) !important;
+    padding-block: 0 !important;
+    padding-inline: var(--btn-pad-x) !important;
+    font-size: var(--btn-font-size) !important;
+    letter-spacing: var(--btn-letter-spacing) !important;
+    line-height: 1.2 !important;
+}
+
+/* Nav BOOK: short label, a touch more presence */
+.nav .btn-tickets {
+    min-height: 52px !important;
+    padding-inline: 2.25rem !important;
+    font-size: 1rem !important;
+}

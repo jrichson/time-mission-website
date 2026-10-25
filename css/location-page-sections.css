@@ -295,7 +295,7 @@
             text-decoration: none;
             font-family: var(--tech);
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
             border-radius: 100px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -335,7 +335,7 @@
             margin: 0 0 0.5rem;
             font-family: var(--tech);
             font-size: 0.72rem;
-            font-weight: 400;
+            font-weight: 600;
             color: var(--gray);
             text-transform: uppercase;
             letter-spacing: 0.12em;
@@ -549,7 +549,7 @@
             text-decoration: none;
             font-family: var(--tech);
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
             border-radius: 100px;
             text-transform: uppercase;
             letter-spacing: 0.08em;

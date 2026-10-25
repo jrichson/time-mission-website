@@ -162,7 +162,7 @@
 
 .group-inquiry__callout a::after {
     content: '→';
-    font-family: var(--tech);
+    font-family: var(--tech); font-weight: 600;
     font-size: 0.9rem;
 }
 

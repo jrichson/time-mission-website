@@ -51,7 +51,7 @@
     --display: 'Bebas Neue', sans-serif;
     --body: 'DM Sans', sans-serif;
     --mono: 'DM Sans', sans-serif;
-    --tech: 'Monument Extended', 'Orbitron', sans-serif;
+    --tech: 'termina', 'Monument Extended', 'Orbitron', sans-serif;
 
     /* Layout rhythm — shared by event-type & long-form marketing sections */
     --space-page-inline: clamp(1.25rem, 4vw, 2rem);

@@ -25,7 +25,7 @@
     border-radius: 100px;
     font-family: var(--tech);
     font-size: 0.7rem;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--orange);
@@ -67,7 +67,7 @@
     cursor: pointer;
     font-family: var(--tech);
     font-size: 0.72rem;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.12em;
     line-height: 1.5;
     list-style: none;
@@ -492,7 +492,7 @@
 
 .stat-number {
     font-family: var(--tech);
-    font-weight: 700;
+    font-weight: 800;
     font-size: clamp(2.25rem, 7vw, 3rem);
     color: var(--white);
     line-height: 1;
@@ -539,7 +539,7 @@
     position: absolute;
     font-family: var(--tech);
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--glow-color);
     pointer-events: none;
     white-space: nowrap;

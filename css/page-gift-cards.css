@@ -65,7 +65,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: var(--tech);
+            font-family: var(--tech); font-weight: 600;
             font-size: 6.5cqw;
             line-height: 1;
             letter-spacing: 0.02em;
@@ -163,7 +163,7 @@
             color: var(--white);
             text-decoration: none;
             font-family: var(--tech);
-            font-weight: 400;
+            font-weight: 600;
             font-size: 0.85rem;
             letter-spacing: 0.1em;
             border-radius: 100px;

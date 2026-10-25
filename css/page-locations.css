@@ -77,7 +77,7 @@
             cursor: pointer;
             font-family: var(--tech);
             font-size: 0.72rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.12em;
             line-height: 1.5;
             list-style: none;
@@ -139,7 +139,7 @@
         .loc-group-title {
             font-family: var(--tech);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--orange);
@@ -177,7 +177,7 @@
         .loc-state {
             font-family: var(--tech);
             font-size: 0.7rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.12em;
             color: var(--orange);
             text-transform: uppercase;
@@ -213,7 +213,7 @@
         }
 
         .loc-status {
-            font-family: var(--tech);
+            font-family: var(--tech); font-weight: 600;
             font-size: 0.68rem;
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -255,7 +255,7 @@
             border-radius: 100px;
             font-family: var(--tech);
             font-size: 0.6rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--cyan);

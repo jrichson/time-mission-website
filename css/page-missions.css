@@ -143,7 +143,7 @@
             cursor: pointer;
             font-family: var(--tech);
             font-size: 0.72rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.12em;
             line-height: 1.5;
             list-style: none;
@@ -598,7 +598,7 @@
             text-decoration: none;
             font-family: var(--tech);
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
             border-radius: 100px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-transform: uppercase;
@@ -620,7 +620,7 @@
             padding: 1rem 2rem;
             border-radius: 100px;
             font-family: var(--tech);
-            font-weight: 400;
+            font-weight: 600;
             font-size: 0.85rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -677,7 +677,7 @@
             );
         }
         .portal-card .portal-era {
-            font-family: var(--tech);
+            font-family: var(--tech); font-weight: 600;
             font-size: 0.55rem;
             letter-spacing: 0.15em;
             color: var(--orange);

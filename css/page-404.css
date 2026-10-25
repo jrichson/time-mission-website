@@ -52,7 +52,7 @@
             border-radius: 100px;
             font-family: var(--tech);
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--orange);
             margin-bottom: 1.5rem;
             text-transform: uppercase;
@@ -128,7 +128,7 @@
         }
 
         .error-links-title {
-            font-family: var(--tech);
+            font-family: var(--tech); font-weight: 600;
             font-size: 0.75rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;

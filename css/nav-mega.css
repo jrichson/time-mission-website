@@ -98,7 +98,7 @@
     }
 
     .mega-card-title {
-        font-family: var(--tech);
+        font-family: var(--tech); font-weight: 600;
         font-size: 0.82rem;
         letter-spacing: 0.06em;
         text-transform: uppercase;

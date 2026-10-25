@@ -137,7 +137,7 @@
 .hero-title .line-1 {
             display: block;
             font-family: var(--tech);
-            font-weight: 400;
+            font-weight: 600;
             font-size: clamp(1.1rem, 3.1vw, 2.4rem);
             letter-spacing: 0.30em;
             color: var(--white);
@@ -259,7 +259,7 @@
             text-decoration: none;
             font-family: var(--tech);
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
             border-radius: 100px;
             transition: background var(--motion-standard) ease, border-color var(--motion-standard) ease, box-shadow var(--motion-standard) ease, color var(--motion-standard) ease, opacity var(--motion-standard) ease, transform var(--motion-standard) ease;
             text-transform: uppercase;
@@ -283,7 +283,7 @@
             text-decoration: none;
             font-family: var(--tech);
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
             border-radius: 100px;
             transition: background var(--motion-standard) ease, border-color var(--motion-standard) ease, box-shadow var(--motion-standard) ease, color var(--motion-standard) ease, opacity var(--motion-standard) ease, transform var(--motion-standard) ease;
             text-transform: uppercase;
@@ -373,7 +373,7 @@
             border-radius: 100px;
             font-family: var(--tech);
             font-size: 0.7rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.15em;
             text-transform: uppercase;
             color: var(--orange);

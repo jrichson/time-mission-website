@@ -211,7 +211,7 @@
     border-radius: 6px;
     background: rgba(13, 13, 13, 0.72);
     color: var(--white);
-    font-family: var(--tech);
+    font-family: var(--tech); font-weight: 600;
     font-size: 0.68rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -307,9 +307,9 @@
     padding: 0.75rem 1.5rem;
     min-height: var(--target-comfortable);
     text-decoration: none;
-    font-family: 'Monument Extended', 'Orbitron', sans-serif;
+    font-family: var(--tech);
     font-size: 0.85rem;
-    font-weight: 400;
+    font-weight: 600;
     border-radius: 100px;
     transition:
         transform var(--motion-standard) ease,
