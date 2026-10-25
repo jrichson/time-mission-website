@@ -82,7 +82,7 @@ function checkHeaders(errors, rel) {
     'X-Content-Type-Options: nosniff',
     'X-Frame-Options: SAMEORIGIN',
     'Referrer-Policy: strict-origin-when-cross-origin',
-    'Permissions-Policy: camera=(), microphone=(), geolocation=()',
+    'Permissions-Policy: camera=(), microphone=(), geolocation=(self)', // geolocation: nearest-location sort in the selector
     'Content-Security-Policy:',
     "default-src 'self'",
     "script-src 'self'",

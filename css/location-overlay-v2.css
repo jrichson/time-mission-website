@@ -363,3 +363,47 @@
         min-height: 48px !important;
     }
 }
+
+/* ---- Nearest-location sort ---- */
+.location-overlay-left .location-link-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+}
+
+.location-distance {
+    margin-left: auto;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--gray-light);
+    white-space: nowrap;
+}
+
+.location-distance + .coming-soon-tag {
+    margin-left: 0.5rem;
+}
+
+.location-nearest-tag {
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--gradient-tm26);
+    color: var(--white);
+    font-family: var(--tech);
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.location-overlay-left .location-group a.is-nearest {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--white);
+}
+
+/* With distances shown, the distance sits at the right; the chevron follows it */
+.location-dropdown.has-distances .location-overlay-left .location-group a::after {
+    margin-left: 0.75rem;
+}

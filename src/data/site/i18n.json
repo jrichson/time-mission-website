@@ -327,7 +327,8 @@
       "location.searchEmpty": "No locations match your search.",
       "home.about.titleLine1": "What is",
       "home.about.titleLine2": "Time Mission?",
-      "home.about.kicker": "Every win adds to your team score."
+      "home.about.kicker": "Every win adds to your team score.",
+      "location.nearest": "Nearest"
     },
     "es": {
       "language.label": "Idioma",
@@ -624,7 +625,8 @@
       "location.searchEmpty": "Ninguna ubicación coincide con tu búsqueda.",
       "home.about.titleLine1": "¿Qué es",
       "home.about.titleLine2": "Time Mission?",
-      "home.about.kicker": "Cada victoria suma a la puntuación de tu equipo."
+      "home.about.kicker": "Cada victoria suma a la puntuación de tu equipo.",
+      "location.nearest": "Más cerca"
     },
     "nl": {
       "language.label": "Taal",
@@ -921,7 +923,8 @@
       "location.searchEmpty": "Geen locaties gevonden.",
       "home.about.titleLine1": "Wat is",
       "home.about.titleLine2": "Time Mission?",
-      "home.about.kicker": "Elke overwinning telt mee voor jullie teamscore."
+      "home.about.kicker": "Elke overwinning telt mee voor jullie teamscore.",
+      "location.nearest": "Dichtstbij"
     },
     "fr": {
       "language.label": "Langue",
@@ -1218,7 +1221,8 @@
       "location.searchEmpty": "Aucun lieu ne correspond à votre recherche.",
       "home.about.titleLine1": "Qu'est-ce que",
       "home.about.titleLine2": "Time Mission ?",
-      "home.about.kicker": "Chaque victoire fait grimper le score de votre équipe."
+      "home.about.kicker": "Chaque victoire fait grimper le score de votre équipe.",
+      "location.nearest": "Le plus proche"
     }
   }
 }

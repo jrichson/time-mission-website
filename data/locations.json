@@ -1100,6 +1100,10 @@
         "zip": "75206",
         "country": "United States"
       },
+      "geo": {
+        "latitude": 32.837,
+        "longitude": -96.7737
+      },
       "contact": {
         "phone": "",
         "email": ""
@@ -1179,6 +1183,10 @@
         "zip": "02109",
         "country": "United States"
       },
+      "geo": {
+        "latitude": 42.3596,
+        "longitude": -71.0527
+      },
       "contact": {
         "phone": "",
         "email": ""
@@ -1212,6 +1220,10 @@
         "state": "NJ",
         "zip": "08817",
         "country": "United States"
+      },
+      "geo": {
+        "latitude": 40.5236,
+        "longitude": -74.3585
       },
       "contact": {
         "phone": "(908) 624-8242",
@@ -1284,6 +1296,10 @@
         "state": "AZ",
         "zip": "85260",
         "country": "United States"
+      },
+      "geo": {
+        "latitude": 33.628,
+        "longitude": -111.907
       },
       "contact": {
         "phone": "",

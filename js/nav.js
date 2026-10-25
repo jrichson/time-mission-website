@@ -408,6 +408,7 @@
     if (locationBtn && locationOverlay) {
         function openLocationOverlay() {
             locationOverlay.classList.add('open');
+            sortLocationsByDistance();
             if (navEl) navEl.classList.add('location-open');
             requestAnimationFrame(syncLocationSelectionLinks);
             // Defer scroll lock so it doesn't interrupt the overlay's fade-in transition
@@ -756,6 +757,137 @@
         locationSearch.addEventListener('input', filterLocations);
         document.addEventListener('tm:language-changed', syncSearchPlaceholder);
         syncSearchPlaceholder();
+    }
+
+    // Nearest location (Topgolf-style): ask for the browser position only when the selector
+    // opens, sort each region by Haversine distance, show the distance and mark the nearest.
+    // The position is remembered so the prompt doesn't repeat; blocked/unsupported falls back
+    // silently to the normal list.
+    const GEO_STORAGE_KEY = 'tm_geo_position';
+    const GEO_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+    let geoRequestInFlight = false;
+
+    function distanceMiles(lat1, lon1, lat2, lon2) {
+        const R = 3958.8;
+        const toRad = function (d) { return d * Math.PI / 180; };
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a = Math.pow(Math.sin(dLat / 2), 2)
+            + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.pow(Math.sin(dLon / 2), 2);
+        return 2 * R * Math.asin(Math.sqrt(a));
+    }
+
+    function readSavedPosition() {
+        try {
+            const saved = JSON.parse(localStorage.getItem(GEO_STORAGE_KEY) || 'null');
+            if (saved && typeof saved.lat === 'number' && typeof saved.lng === 'number'
+                && Date.now() - (saved.savedAt || 0) < GEO_MAX_AGE_MS) {
+                return saved;
+            }
+        } catch (e) { /* storage unavailable */ }
+        return null;
+    }
+
+    function savePosition(lat, lng) {
+        try {
+            localStorage.setItem(GEO_STORAGE_KEY, JSON.stringify({ lat: lat, lng: lng, savedAt: Date.now() }));
+        } catch (e) { /* storage unavailable */ }
+    }
+
+    function usesKilometers() {
+        const profile = window.__TM_SITE_PROFILE__ || {};
+        return profile.id === 'eu';
+    }
+
+    function formatDistance(miles) {
+        const value = usesKilometers() ? miles * 1.609344 : miles;
+        const unit = usesKilometers() ? 'km' : 'mi';
+        const rounded = value < 10 ? Math.round(value * 10) / 10 : Math.round(value);
+        return rounded.toLocaleString() + ' ' + unit;
+    }
+
+    function venueCoords(slug) {
+        const loc = window.TM && typeof window.TM.get === 'function' ? window.TM.get(slug) : null;
+        const geo = loc && loc.geo;
+        if (!geo || typeof geo.latitude !== 'number' || typeof geo.longitude !== 'number') return null;
+        return geo;
+    }
+
+    function applyDistanceOrder(position) {
+        if (!locationOverlay || !position) return;
+        let nearest = null;
+        const groups = Array.from(locationOverlay.querySelectorAll('.location-group'));
+        groups.forEach(function (group) {
+            const links = Array.from(group.querySelectorAll('a[data-tm-location-slug]'));
+            let groupMin = Infinity;
+            links.forEach(function (link) {
+                const geo = venueCoords(link.dataset.tmLocationSlug);
+                const miles = geo ? distanceMiles(position.lat, position.lng, geo.latitude, geo.longitude) : Infinity;
+                link.dataset.distance = String(miles);
+                link.classList.remove('is-nearest');
+                let chip = link.querySelector('.location-distance');
+                if (Number.isFinite(miles)) {
+                    if (!chip) {
+                        chip = document.createElement('span');
+                        chip.className = 'location-distance';
+                        const label = link.querySelector('.location-link-label');
+                        if (label) label.after(chip);
+                        else link.appendChild(chip);
+                    }
+                    chip.textContent = formatDistance(miles);
+                    groupMin = Math.min(groupMin, miles);
+                    const isComingSoon = link.classList.contains('location-coming-soon');
+                    if (!isComingSoon && (!nearest || miles < nearest.miles)) nearest = { link: link, miles: miles };
+                } else if (chip) {
+                    chip.remove();
+                }
+            });
+            links.sort(function (a, b) { return Number(a.dataset.distance) - Number(b.dataset.distance); })
+                .forEach(function (link) { group.appendChild(link); });
+            group.dataset.distance = String(groupMin);
+        });
+        // Closest region first (e.g. Europe on top for visitors in Europe)
+        const parent = groups[0] && groups[0].parentElement;
+        if (parent) {
+            const anchorNode = parent.querySelector('.location-search-empty');
+            groups.slice().sort(function (a, b) { return Number(a.dataset.distance) - Number(b.dataset.distance); })
+                .forEach(function (group) { parent.insertBefore(group, anchorNode || null); });
+        }
+        if (nearest) {
+            nearest.link.classList.add('is-nearest');
+            nearest.link.parentElement.insertBefore(nearest.link, nearest.link.parentElement.querySelector('a[data-tm-location-slug]'));
+            const tag = document.createElement('span');
+            tag.className = 'location-nearest-tag';
+            tag.setAttribute('data-i18n', 'location.nearest');
+            tag.textContent = translate('location.nearest', 'Nearest');
+            const oldTag = locationOverlay.querySelector('.location-nearest-tag');
+            if (oldTag) oldTag.remove();
+            const label = nearest.link.querySelector('.location-link-label');
+            if (label) label.appendChild(tag);
+            // Preview the nearest venue's details when nothing is selected yet
+            const current = window.TM && window.TM.current;
+            if (!current && !narrowPickerQuery.matches) showLocationInfo(nearest.link.dataset.tmLocationSlug);
+        }
+        locationOverlay.classList.add('has-distances');
+    }
+
+    function sortLocationsByDistance() {
+        const saved = readSavedPosition();
+        if (saved) {
+            applyDistanceOrder(saved);
+            return;
+        }
+        if (geoRequestInFlight || !window.isSecureContext || !navigator.geolocation) return;
+        geoRequestInFlight = true;
+        navigator.geolocation.getCurrentPosition(function (pos) {
+            geoRequestInFlight = false;
+            const position = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            savePosition(position.lat, position.lng);
+            applyDistanceOrder(position);
+        }, function () {
+            // Blocked, unavailable or timed out: keep the standard list, no message
+            geoRequestInFlight = false;
+        }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 10 * 60 * 1000 });
     }
 
     const navLoadContext = getLocationContext();

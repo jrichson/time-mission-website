@@ -14,7 +14,7 @@
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self)
   Link: <https://www.timemission.com/license.xml>; rel="license"; type="application/rsl+xml"
 
 /license.xml
@@ -23,7 +23,7 @@
 # Houston Guest Agent hybrid mode requests microphone access only after user action.
 /houston
   ! Permissions-Policy
-  Permissions-Policy: camera=(), microphone=(self), geolocation=()
+  Permissions-Policy: camera=(), microphone=(self), geolocation=(self)
 /houston/*
   ! Permissions-Policy
-  Permissions-Policy: camera=(), microphone=(self), geolocation=()
+  Permissions-Policy: camera=(), microphone=(self), geolocation=(self)
