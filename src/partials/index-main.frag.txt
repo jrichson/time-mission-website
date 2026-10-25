@@ -50,8 +50,8 @@
                     <span data-i18n="home.about.titleLine1">What is</span>
                     <span class="welcome-card-title-accent" data-i18n="home.about.titleLine2">Time Mission?</span>
                 </h2>
-                <p class="welcome-card-text" data-i18n="home.about.lede">One ticket. Unlimited play across 25+ missions. Grab a team of 2 to 5, pick your path and play them in any order, as many times as you want.</p>
-                <p class="welcome-card-kicker" data-i18n="home.about.kicker">Every win adds to your team score.</p>
+                <p class="welcome-card-text" data-i18n="home.about.lede">A real-life video game where every door opens a new challenge. Your ticket unlocks all 25+ missions, so chase high scores, try new ones and replay your favorites.</p>
+                <p class="welcome-card-kicker" data-i18n="home.about.kicker">Teams of 2 to 5. Ages 6 to 106.</p>
                 <a href="/about" class="btn-secondary welcome-learn-desktop" data-i18n="home.about.learn">Learn About Time Mission</a>
                 <details class="geo-disclosure welcome-geo-disclosure">
                     <summary data-i18n="home.about.summary">Read the full Time Mission overview</summary>

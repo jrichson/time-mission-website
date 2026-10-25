@@ -13,8 +13,8 @@ const languages = i18n.languages.filter((language) => activeSiteProfile.locales.
 const languageSurface = compileLanguageSurface(i18n as I18nCatalog);
 const currentCode = languageSurface.resolveLanguage(currentLang)?.code || languageSurface.defaultLanguage;
 const switcherId = `language-select-${placement}`;
-// Desktop (utility bar) gets a styled menu with full language names; the select stays as the source of truth.
-const useMenu = placement === 'desktop';
+// Utility bar and location overlay get a styled menu with full language names; the select stays as the source of truth.
+const useMenu = placement === 'desktop' || placement === 'overlay';
 const currentLanguage = languages.find((language) => language.code === currentCode) || languages[0];
 const label = languageSurface.translateString('language.label', currentCode) || 'Language';
 ---

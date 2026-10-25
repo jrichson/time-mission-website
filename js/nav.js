@@ -526,6 +526,38 @@
         el.style.whiteSpace = 'pre-line';
     }
 
+    // Compact hours: consecutive days with the same hours collapse into one row ("Mon – Thu  12pm – 9pm").
+    function renderHoursList(el, value) {
+        if (!el) return;
+        const lines = String(value || '').split('\n').map(function (line) { return line.trim(); }).filter(Boolean);
+        const rows = [];
+        const parsed = lines.every(function (line) {
+            const match = line.match(/^([^:]+):\s*(.+)$/);
+            if (!match) return false;
+            const last = rows[rows.length - 1];
+            if (last && last.hours === match[2]) last.to = match[1];
+            else rows.push({ from: match[1], to: '', hours: match[2] });
+            return true;
+        });
+        if (!parsed || !rows.length) {
+            setMultilineText(el, value);
+            return;
+        }
+        el.textContent = '';
+        el.style.whiteSpace = '';
+        rows.forEach(function (row) {
+            const item = document.createElement('div');
+            item.className = 'location-hours-row';
+            const days = document.createElement('span');
+            days.className = 'location-hours-days';
+            days.textContent = row.to ? row.from + ' – ' + row.to : row.from;
+            const hours = document.createElement('span');
+            hours.textContent = row.hours.replace(/\s+-\s+/g, ' – ');
+            item.append(days, hours);
+            el.appendChild(item);
+        });
+    }
+
     function renderMapEmbed(target, embedUrl) {
         if (!target) return;
         target.textContent = '';
@@ -563,7 +595,7 @@
         setAddressText(addrEl, data.addressText, locationName);
         addrEl.href = data.mapDirectionsUrl || '#';
         infoPanel.querySelector('.location-info-phone').textContent = data.phone;
-        setMultilineText(infoPanel.querySelector('.location-info-hours'), translateHoursText(data.hoursText));
+        renderHoursList(infoPanel.querySelector('.location-info-hours'), translateHoursText(data.hoursText));
         var bookBtn = infoPanel.querySelector('.location-info-book');
         if (bookBtn) {
             bookBtn.textContent = translate(overlayView.bookLabelKey, overlayView.bookLabelFallback);
@@ -864,9 +896,14 @@
             if (oldTag) oldTag.remove();
             const label = nearest.link.querySelector('.location-link-label');
             if (label) label.appendChild(tag);
-            // Preview the nearest venue's details when nothing is selected yet
+            // Nothing chosen yet: phones pick the nearest venue for the visitor; desktop previews it.
             const current = window.TM && window.TM.current;
-            if (!current && !narrowPickerQuery.matches) showLocationInfo(nearest.link.dataset.tmLocationSlug);
+            if (!current && narrowPickerQuery.matches) {
+                syncAllLocations(nearest.link.dataset.city, nearest.link.dataset.tmLocationSlug, { cta_id: 'nav_location_nearest' });
+                syncLocationSelectionLinks();
+            } else if (!current) {
+                showLocationInfo(nearest.link.dataset.tmLocationSlug);
+            }
         }
         locationOverlay.classList.add('has-distances');
     }

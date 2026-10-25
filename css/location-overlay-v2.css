@@ -407,3 +407,103 @@
 .location-dropdown.has-distances .location-overlay-left .location-group a::after {
     margin-left: 0.75rem;
 }
+
+/* ---- Header controls: same language menu as the utility bar ---- */
+.location-dropdown-controls {
+    gap: 1rem;
+}
+
+.location-dropdown .language-switcher--overlay {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 40px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.9rem;
+}
+
+.location-dropdown .language-switcher--overlay .language-switcher-icon {
+    color: var(--white);
+}
+
+.location-dropdown .language-switcher--overlay .language-menu-btn {
+    height: 40px;
+    font-size: 0.9rem;
+}
+
+.location-dropdown .language-switcher--overlay .language-menu-list {
+    z-index: 3;
+}
+
+.location-dropdown-controls .location-dropdown-close {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--white);
+}
+
+.location-dropdown-controls .location-dropdown-close:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ---- Detail card lines up with the first location row, not the region label ---- */
+@media (min-width: 769px) {
+    .location-overlay-right {
+        margin-top: var(--location-group-title-offset, 2.56rem);
+    }
+}
+
+/* ---- Map with compact hours underneath ---- */
+.location-info-media {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+}
+
+.location-info-hours-section {
+    padding: 0 0.25rem;
+}
+
+.location-info-hours-section:has(.location-info-hours:empty) {
+    display: none;
+}
+
+.location-info-hours-section h4 {
+    margin-bottom: 0.6rem;
+}
+
+.location-info-hours {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 1.25rem;
+    line-height: 1.4;
+}
+
+.location-hours-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-size: 0.9rem;
+    color: var(--white);
+}
+
+.location-hours-days {
+    font-size: 0.75rem;
+    color: var(--gray-light);
+}
+
+.location-info-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.location-dropdown a.location-info-book {
+    margin-top: 1.5rem;
+}

@@ -1,0 +1,61 @@
+/* ==========================================
+   EYEBROWS
+   Section labels as plain type with a short TM26 rule, instead of tinted pills.
+   Loaded last in core so it wins over older per-page pill styles.
+   ========================================== */
+
+.section-badge,
+[class*="-eyebrow"]:not(.hero-eyebrow),
+[class*="__eyebrow"],
+.tm-resource-kicker,
+.tm-blog-kicker,
+.tm-landing-kicker {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    font-family: var(--tech);
+    font-size: 0.72rem !important;
+    font-weight: 700;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase;
+    color: var(--white-soft) !important;
+    -webkit-text-fill-color: currentColor;
+}
+
+.section-badge::before,
+[class*="-eyebrow"]:not(.hero-eyebrow)::before,
+[class*="__eyebrow"]::before,
+.tm-resource-kicker::before,
+.tm-blog-kicker::before,
+.tm-landing-kicker::before {
+    content: '';
+    flex-shrink: 0;
+    width: 28px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--gradient-tm26);
+}
+
+/* Old pill icons/dots inside badges are dropped; the rule does that job now */
+.section-badge svg,
+.section-badge .pulse {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .section-badge,
+    [class*="-eyebrow"]:not(.hero-eyebrow) {
+        font-size: 0.66rem !important;
+        letter-spacing: 0.18em !important;
+    }
+
+    .section-badge::before,
+    [class*="-eyebrow"]:not(.hero-eyebrow)::before {
+        width: 20px;
+    }
+}
