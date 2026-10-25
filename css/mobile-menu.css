@@ -20,7 +20,7 @@
         z-index: 999;
         background: var(--black);
         padding:
-            calc(100px + env(safe-area-inset-top, 0px))
+            calc(var(--tm-ticker-height) + var(--tm-utility-height) + 96px + env(safe-area-inset-top, 0px))
             calc(1.5rem + env(safe-area-inset-right, 0px))
             calc(2rem + env(safe-area-inset-bottom, 0px))
             calc(1.5rem + env(safe-area-inset-left, 0px));
@@ -35,30 +35,12 @@
         visibility: visible;
     }
 
-    /* Move nav to top when mobile menu is open */
-    .nav.menu-open {
-        top: calc(env(safe-area-inset-top, 0px) + 8px);
+    body:has(.nav--no-ticker) .mobile-menu {
+        padding-top: calc(var(--tm-utility-height) + 96px + env(safe-area-inset-top, 0px));
     }
 
-    /* Hide ticker + utility bar when mobile menu is open */
-    .ticker-bar.menu-hidden,
-    .utility-bar.menu-hidden {
-        display: none;
-    }
-
-    /* Hide tickets when mobile menu is open */
-    .nav.menu-open .btn-tickets {
-        display: none !important;
-    }
-
-    /* Show city name next to pin when menu is open */
-    .nav.menu-open .location-btn {
-        display: flex !important;
-    }
-
-    .nav.menu-open .location-btn #locationText {
-        display: inline !important;
-    }
+    /* The header (ticker, utility bar, glass nav) stays exactly where it is while the menu is open;
+       the menu slides in underneath it. */
 
     .mobile-menu-links {
         list-style: none;
@@ -162,3 +144,40 @@
         text-align: center;
     }
 }
+
+/* ---- Mobile BOOK bar: full-width button pinned to the bottom of the screen ---- */
+.mobile-book-bar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-book-bar {
+        display: block;
+        position: fixed;
+        left: 1rem;
+        right: 1rem;
+        bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+        z-index: 1000;
+    }
+
+    .mobile-book-bar .mobile-book-btn {
+        justify-content: center;
+        width: 100%;
+        min-height: 56px;
+        padding: 0 1.5rem;
+        font-size: 1.05rem;
+        letter-spacing: 0.1em;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 4px 18px var(--tm26-glow);
+    }
+
+    /* The nav button moves to the bottom bar on phones */
+    .nav .btn-tickets {
+        display: none !important;
+    }
+
+    /* Leave room so the bar never covers the end of the page */
+    body {
+        padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    }
+}
+

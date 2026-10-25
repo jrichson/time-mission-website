@@ -43,9 +43,8 @@
     border-color: rgba(255, 255, 255, 0.12);
 }
 
-/* Location now lives in the utility bar; keep the button (it opens the overlay) but hide it in the nav.
-   The mobile menu shows it again while open (mobile-menu.css). */
-.nav:not(.menu-open) .location-btn {
+/* Location now lives in the utility bar; keep the button (it opens the overlay) but hide it in the nav. */
+.nav .location-btn {
     display: none !important;
 }
 
@@ -155,6 +154,21 @@
 .nav-links a.active {
     color: var(--white);
     font-weight: 700;
+}
+
+/* Gradient underline grows from the center on hover / active page */
+.nav-links a {
+    padding-bottom: 6px;
+    background-image: var(--gradient-tm26);
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+    background-size: 0% 2px;
+    transition: color var(--motion-standard) ease, background-size var(--motion-standard) var(--ease-standard);
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    background-size: 100% 2px;
 }
 
 /* ---- Nav Right (Location + Tickets) ---- */
@@ -305,6 +319,14 @@
     box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
 }
 
+/* Nav BOOK button: short label, so give it more presence */
+.nav .btn-tickets {
+    --button-current-padding-x: 2.25rem;
+    padding: 0.8rem 2.25rem;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+}
+
 .btn-tickets:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(238, 1, 50, 0.6);
@@ -418,6 +440,12 @@
         font-size: 0.75rem;
         white-space: nowrap;
     }
+
+    .nav .btn-tickets {
+        --button-current-padding-x: 1.6rem;
+        padding: 0.55rem 1.6rem;
+        font-size: 0.9rem;
+    }
 }
 
 /* ---- Keyboard focus (visible only for keyboard / AT) ---- */
@@ -488,11 +516,12 @@
         letter-spacing: 0.02em;
     }
 
+    .nav .btn-tickets,
     .nav.has-location .btn-tickets {
-        --button-current-padding-x: 0.75rem;
-        padding-right: 0.75rem;
-        padding-left: 0.75rem;
-        font-size: 0.7rem;
+        --button-current-padding-x: 1.4rem;
+        padding-right: 1.4rem;
+        padding-left: 1.4rem;
+        font-size: 0.85rem;
     }
 
     .location-btn.has-location {
@@ -528,11 +557,12 @@
         font-size: 0.68rem;
     }
 
+    .nav .btn-tickets,
     .nav.has-location .btn-tickets {
-        --button-current-padding-x: 0.75rem;
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-        font-size: 0.68rem;
+        --button-current-padding-x: 1.2rem;
+        padding-left: 1.2rem;
+        padding-right: 1.2rem;
+        font-size: 0.8rem;
     }
 
     .location-btn.has-location {

@@ -178,7 +178,7 @@ function externalLinkAttrs(href: string | null | undefined) {
             <a class="utility-location-name" id="utilityLocationName" href="/locations" hidden></a>
             <button type="button" class="utility-choose" id="utilityChoose" data-utility-change-location data-i18n="utility.chooseLocation">Choose your location</button>
             <span class="utility-hours" id="utilityHours" hidden></span>
-            <button type="button" class="utility-change" id="utilityChange" data-utility-change-location hidden data-i18n="utility.changeLocation">Change location</button>
+            <button type="button" class="utility-change" id="utilityChange" data-utility-change-location hidden><span class="utility-change-long" data-i18n="utility.changeLocation">Change location</span><span class="utility-change-short" data-i18n="utility.change">Change</span></button>
         </div>
         <div class="utility-right">
             <LanguageSwitcher currentLang={currentLang} placement="desktop" />
@@ -244,6 +244,11 @@ function externalLinkAttrs(href: string | null | undefined) {
                 <polyline points="6,9 12,15 18,9"></polyline>
             </svg>
         </button>
-        <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets" {...bookingCtaAttrs}>{bookingCtaLabel}</a>
+        <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets" {...{ ...bookingCtaAttrs, 'data-i18n': undefined }}><span data-i18n="nav.book">Book</span></a>
     </div>
 </nav>
+
+<!-- Mobile: BOOK pinned across the bottom of the screen (the nav button hides on small screens) -->
+<div class="mobile-book-bar">
+    <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets mobile-book-btn" {...{ ...bookingCtaAttrs, 'data-i18n': undefined }}><span data-i18n="nav.book">Book</span></a>
+</div>

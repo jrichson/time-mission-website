@@ -320,11 +320,23 @@ body:has(.nav.scrolled) .utility-bar {
     }
 }
 
-@media (max-width: 1024px) {
 
-    .utility-change,
+.utility-change-short {
+    display: none;
+}
+
+@media (max-width: 1024px) {
     .utility-link {
         display: none;
+    }
+
+    /* Short "Change" on small screens so location can still be switched */
+    .utility-change-long {
+        display: none;
+    }
+
+    .utility-change-short {
+        display: inline;
     }
 }
 
