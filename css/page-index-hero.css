@@ -240,7 +240,7 @@
 
 .btn-primary:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(199, 69, 30, 0.6);
+    box-shadow: 0 20px 40px rgba(238, 1, 50, 0.6);
 }
 
 .btn-secondary {

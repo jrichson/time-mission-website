@@ -37,11 +37,12 @@
 
     /* Move nav to top when mobile menu is open */
     .nav.menu-open {
-        top: env(safe-area-inset-top, 0px);
+        top: calc(env(safe-area-inset-top, 0px) + 8px);
     }
 
-    /* Hide ticker when mobile menu is open */
-    .ticker-bar.menu-hidden {
+    /* Hide ticker + utility bar when mobile menu is open */
+    .ticker-bar.menu-hidden,
+    .utility-bar.menu-hidden {
         display: none;
     }
 
@@ -52,7 +53,7 @@
 
     /* Show city name next to pin when menu is open */
     .nav.menu-open .location-btn {
-        display: flex;
+        display: flex !important;
     }
 
     .nav.menu-open .location-btn #locationText {

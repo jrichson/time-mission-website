@@ -99,7 +99,7 @@
       window.CookieConsent.run({
         cookie: { name: 'tm_consent_v1' },
         guiOptions: {
-            consentModal: { layout: 'box', position: 'bottom center' },
+            consentModal: { layout: 'bar inline', position: 'bottom' },
             preferencesModal: { layout: 'box' },
         },
         categories: {

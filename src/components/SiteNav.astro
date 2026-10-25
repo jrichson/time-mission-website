@@ -114,6 +114,13 @@ const fallbackTickerI18n = locationTickerI18n || (fallbackTickerMessage && 'text
 const fallbackTickerBehavior: TickerBehavior = locationTickerMessage ? 'auto' : 'animated';
 const fallbackTickerSource = locationTickerMessage ? 'location' : 'default';
 
+// Account links are placeholders until the booking/account provider is wired up.
+const accountLinks = [
+    { label: 'Edit Account', i18n: 'utility.editAccount', href: '#account' },
+    { label: 'Manage Tickets', i18n: 'utility.manageTickets', href: '#tickets' },
+    { label: 'Rewards', i18n: 'utility.rewards', href: '#rewards' },
+];
+
 function externalLinkAttrs(href: string | null | undefined) {
     return /^https?:\/\//i.test(String(href || '').trim())
         ? { target: '_blank', rel: 'noopener' }
@@ -160,6 +167,43 @@ function externalLinkAttrs(href: string | null | undefined) {
     </div>
 )}
 
+<!-- Utility Bar: current location + hours (left), language, gift cards + account (right) -->
+<div class={`utility-bar${tickerMessages.length > 0 ? '' : ' utility-bar--no-ticker'}`} role="region" aria-label="Location and account" data-i18n-aria-label="utility.label">
+    <div class="utility-inner">
+        <div class="utility-left">
+            <svg class="utility-pin" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <a class="utility-location-name" id="utilityLocationName" href="/locations" hidden></a>
+            <button type="button" class="utility-choose" id="utilityChoose" data-utility-change-location data-i18n="utility.chooseLocation">Choose your location</button>
+            <span class="utility-hours" id="utilityHours" hidden></span>
+            <button type="button" class="utility-change" id="utilityChange" data-utility-change-location hidden data-i18n="utility.changeLocation">Change location</button>
+        </div>
+        <div class="utility-right">
+            <LanguageSwitcher currentLang={currentLang} placement="desktop" />
+            <a class="utility-link" href="/gift-cards" data-i18n="utility.giftCards">Gift Cards</a>
+            <div class="utility-account">
+                <button type="button" class="utility-account-btn" id="utilityAccountBtn" aria-haspopup="true" aria-expanded="false" aria-controls="utilityAccountMenu" aria-label="Open account menu" data-i18n-aria-label="utility.accountMenu">
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="4"></circle>
+                        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+                    </svg>
+                    <span class="utility-account-label" data-i18n="utility.account">My Account</span>
+                    <svg class="utility-caret" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6,9 12,15 18,9"></polyline>
+                    </svg>
+                </button>
+                <ul class="utility-account-menu" id="utilityAccountMenu" hidden>
+                    {accountLinks.map((link) => (
+                        <li><a href={link.href} data-i18n={link.i18n}>{link.label}</a></li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Navigation -->
 <nav class={`nav${tickerMessages.length > 0 ? '' : ' nav--no-ticker'}`} id="nav">
     <div class="nav-left">
@@ -185,7 +229,6 @@ function externalLinkAttrs(href: string | null | undefined) {
     </div>
 
     <div class="nav-right">
-        <LanguageSwitcher currentLang={currentLang} placement="desktop" />
         <button class="location-btn" id="locationBtn" aria-label="Change location" data-i18n-aria-label="nav.changeLocation">
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>

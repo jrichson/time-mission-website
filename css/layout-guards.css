@@ -128,18 +128,28 @@
     line-height: 1.2;
 }
 
+/* Group card hover actions: always side by side, sharing the width evenly */
 .event-type-actions {
-    width: auto !important;
-    max-width: calc(100% - 1rem) !important;
-    flex-wrap: wrap !important;
+    width: calc(100% - 2rem) !important;
+    max-width: 26rem !important;
+    flex-wrap: nowrap !important;
 }
 
 .event-type-cta {
+    flex: 1 1 0 !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    white-space: normal !important;
+    padding-inline: 0.75rem !important;
+    white-space: nowrap !important;
     text-align: center;
     line-height: 1.2;
+}
+
+@media (max-width: 1200px) {
+    .event-type-cta {
+        font-size: 0.62rem !important;
+        letter-spacing: 0.06em !important;
+    }
 }
 
 @media (max-width: 480px) {

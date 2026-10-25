@@ -611,7 +611,7 @@
                 border-color var(--motion-standard) ease,
                 background var(--motion-standard) ease,
                 color var(--motion-standard) ease;
-            box-shadow: 0 8px 24px rgba(239, 75, 35, 0.45);
+            box-shadow: 0 8px 24px var(--tm26-glow);
             border: none;
             cursor: pointer;
         }

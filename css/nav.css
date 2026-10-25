@@ -5,31 +5,48 @@
 
 /* @font-face declarations live in base.css (single source) */
 
-/* ---- Navigation ---- */
+/* ---- Navigation (contained liquid-glass bar) ---- */
 .nav {
     position: fixed;
-    top: calc(var(--tm-ticker-height) + env(safe-area-inset-top, 0px));
+    top: calc(var(--tm-ticker-height) + var(--tm-utility-height) + env(safe-area-inset-top, 0px) + 12px);
     left: 0;
     right: 0;
+    width: min(1400px, calc(100% - 3rem));
+    margin: 0 auto;
     z-index: 1000;
-    padding: 1rem 2rem;
+    padding: 0.6rem 0.75rem 0.6rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+        0 10px 30px rgba(0, 0, 0, 0.25);
     transition:
         background var(--motion-standard) ease,
         border-color var(--motion-standard) ease,
-        backdrop-filter var(--motion-standard) ease;
+        box-shadow var(--motion-standard) ease;
 }
 
 .nav--no-ticker {
-    top: env(safe-area-inset-top, 0px);
+    top: calc(var(--tm-utility-height) + env(safe-area-inset-top, 0px) + 12px);
 }
 
+/* Scrolled: same glass, slightly denser so links stay readable over content */
 .nav.scrolled {
-    background: rgba(13, 13, 13, 0.95);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 107, 44, 0.2);
+    background: linear-gradient(180deg, rgba(30, 30, 34, 0.72) 0%, rgba(18, 18, 22, 0.62) 100%);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Location now lives in the utility bar; keep the button (it opens the overlay) but hide it in the nav.
+   The mobile menu shows it again while open (mobile-menu.css). */
+.nav:not(.menu-open) .location-btn {
+    display: none !important;
 }
 
 .nav-left {
@@ -280,7 +297,7 @@
 
 .btn-tickets:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+    box-shadow: 0 10px 30px rgba(238, 1, 50, 0.6);
 }
 
 /* ---- Mobile Nav Overrides ---- */
@@ -328,7 +345,14 @@
 
 @media (max-width: 768px) {
     .nav {
-        padding: 0.75rem 1rem;
+        top: calc(var(--tm-ticker-height) + var(--tm-utility-height) + env(safe-area-inset-top, 0px) + 8px);
+        width: calc(100% - 1.5rem);
+        padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+        border-radius: 16px;
+    }
+
+    .nav--no-ticker {
+        top: calc(var(--tm-utility-height) + env(safe-area-inset-top, 0px) + 8px);
     }
 
     .nav-left {
@@ -350,7 +374,6 @@
     }
 
     .location-btn {
-        display: inline-flex;
         align-items: center;
         justify-content: center;
         min-width: var(--target-min);
@@ -414,7 +437,7 @@
 
 @media (max-width: 480px) {
     .nav {
-        padding: 0.625rem 0.75rem;
+        padding: 0.4rem 0.4rem 0.4rem 0.625rem;
     }
 
     .nav-left {
@@ -476,8 +499,8 @@
 
 @media (max-width: 360px) {
     .nav {
-        padding-left: 0.625rem;
-        padding-right: 0.625rem;
+        padding-left: 0.5rem;
+        padding-right: 0.4rem;
     }
 
     .nav-logo img {

@@ -200,7 +200,7 @@
 
 .btn-group-tickets:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+    box-shadow: 0 10px 30px rgba(238, 1, 50, 0.6);
 }
 
 @media (max-width: 768px) {

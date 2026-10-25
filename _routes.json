@@ -4,7 +4,8 @@
     "/api/contact",
     "/api/newsletter",
     "/api/klaviyo-signup",
-    "/api/monitor-status"
+    "/api/monitor-status",
+    "/api/social-feed"
   ],
   "exclude": []
 }

@@ -117,7 +117,7 @@
         .stats[data-stats-style="arcade-slots"] .stat-card {
             text-align: center;
             padding: 2rem 1.5rem;
-            background: linear-gradient(180deg, rgba(249, 164, 26, 0.08) 0%, rgba(199, 69, 30, 0.05) 100%);
+            background: linear-gradient(180deg, rgba(249, 164, 26, 0.08) 0%, rgba(238, 1, 50, 0.05) 100%);
             border: 2px solid rgba(249, 164, 26, 0.25);
             border-radius: 20px;
             position: relative;
@@ -247,7 +247,7 @@
 
         .btn-group-tickets:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+            box-shadow: 0 10px 30px rgba(238, 1, 50, 0.6);
         }
 
         /* How It Works */

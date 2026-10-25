@@ -329,6 +329,7 @@
 
     // Mobile menu toggle
     const tickerBar = document.querySelector('.ticker-bar');
+    const utilityBar = document.querySelector('.utility-bar');
 
     if (menuBtn && mobileMenu && navEl) {
         menuBtn.addEventListener('click', () => {
@@ -336,6 +337,7 @@
             mobileMenu.classList.toggle('open');
             navEl.classList.toggle('menu-open');
             if (tickerBar) tickerBar.classList.toggle('menu-hidden');
+            if (utilityBar) utilityBar.classList.toggle('menu-hidden');
             document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
         });
 
@@ -346,6 +348,7 @@
                 navEl.classList.remove('menu-open');
                 mobileMenu.classList.remove('open');
                 if (tickerBar) tickerBar.classList.remove('menu-hidden');
+                if (utilityBar) utilityBar.classList.remove('menu-hidden');
                 document.body.style.overflow = '';
             });
         });
@@ -587,6 +590,74 @@
         updateLocationScopedLinks();
     }
 
+    // Utility bar: show the selected location + today's hours, and the account menu.
+    const utilityName = document.getElementById('utilityLocationName');
+    const utilityHours = document.getElementById('utilityHours');
+    const utilityChoose = document.getElementById('utilityChoose');
+    const utilityChange = document.getElementById('utilityChange');
+
+    function renderUtilityLocation(loc) {
+        if (!utilityName) return;
+        const hasLoc = !!(loc && (loc.shortName || loc.name));
+        utilityName.hidden = !hasLoc;
+        if (utilityChoose) utilityChoose.hidden = hasLoc;
+        if (utilityChange) utilityChange.hidden = !hasLoc;
+        if (!hasLoc) {
+            if (utilityHours) utilityHours.hidden = true;
+            return;
+        }
+        utilityName.textContent = loc.shortName || loc.name;
+        utilityName.setAttribute('href', localizedPathContext(window.location.pathname || '/').localePrefix + '/' + (loc.slug || loc.id));
+        if (!utilityHours) return;
+        const today = window.TM && typeof window.TM.getTodayHours === 'function' ? window.TM.getTodayHours() : null;
+        utilityHours.textContent = '';
+        if (loc.status === 'coming-soon') {
+            utilityHours.textContent = translate('location.comingSoon', 'Coming Soon');
+        } else if (today && today.label) {
+            utilityHours.appendChild(document.createTextNode(translate('utility.openToday', 'Open today:') + ' '));
+            const strong = document.createElement('strong');
+            strong.textContent = translateHoursText(today.label);
+            utilityHours.appendChild(strong);
+        } else if (loc.hours && Object.keys(loc.hours).length) {
+            utilityHours.textContent = translate('utility.closedToday', 'Closed today');
+        }
+        utilityHours.hidden = !utilityHours.textContent;
+    }
+
+    document.querySelectorAll('[data-utility-change-location]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (locationBtn) locationBtn.click();
+        });
+    });
+
+    if (window.TM && window.TM.ready && typeof window.TM.ready.then === 'function') {
+        window.TM.ready.then(function () { renderUtilityLocation(window.TM.current); });
+    }
+
+    const accountBtn = document.getElementById('utilityAccountBtn');
+    const accountMenu = document.getElementById('utilityAccountMenu');
+    if (accountBtn && accountMenu) {
+        function setAccountMenu(open) {
+            accountMenu.hidden = !open;
+            accountBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+        accountBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            setAccountMenu(accountMenu.hidden);
+        });
+        document.addEventListener('click', function (e) {
+            if (!accountMenu.hidden && !accountMenu.contains(e.target)) setAccountMenu(false);
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !accountMenu.hidden) {
+                setAccountMenu(false);
+                accountBtn.focus();
+            }
+        });
+    }
+
     const navLoadContext = getLocationContext();
     if (navLoadContext && navLoadContext.ready && typeof navLoadContext.ready.then === 'function') {
         navLoadContext.ready.then(function () {
@@ -598,18 +669,22 @@
     if (navLoadContext && typeof navLoadContext.subscribe === 'function') {
         navLoadContext.subscribe(function (loc) {
             syncNavLocationState(loc);
+            renderUtilityLocation(loc);
         });
     }
 
     document.addEventListener('tm:locations-ready', function (event) {
         syncNavLocationState(event.detail || null);
+        renderUtilityLocation(event.detail || null);
     });
 
     document.addEventListener('tm:location-changed', function (event) {
         syncNavLocationState(event.detail || null);
+        renderUtilityLocation(event.detail || null);
     });
 
     document.addEventListener('tm:language-changed', function () {
         if (activeLocationInfoRef) showLocationInfo(activeLocationInfoRef);
+        if (window.TM) renderUtilityLocation(window.TM.current);
     });
 })();

@@ -51,7 +51,7 @@ export const publicRuntimeScripts: RuntimeScript[] = [
     { id: 'locationCatalogView', src: '/js/location-catalog-view.js', version: 15 },
     { id: 'tickerSchedule', src: '/js/ticker-schedule.js', version: 1 },
     { id: 'locations', src: '/js/locations.js', version: 30 },
-    { id: 'nav', src: '/js/nav.js', version: 17 },
+    { id: 'nav', src: '/js/nav.js', version: 18 },
     { id: 'bookingController', src: '/js/booking-controller.js', version: 24 },
     { id: 'ticketPanel', src: '/js/ticket-panel.js', version: 12 },
     { id: 'a11y', src: '/js/a11y.js', version: null },
@@ -59,7 +59,7 @@ export const publicRuntimeScripts: RuntimeScript[] = [
 
 export const lazyRuntimeScripts: LazyRuntimeScript[] = [
     { id: 'cookieconsent', trigger: 'consent-ui', src: '/js/cookieconsent.umd.js', version: null },
-    { id: 'cookieConsent', trigger: 'consent-ui', src: '/js/cookie-consent.js', version: 2, dependsOn: ['cookieconsent'] },
+    { id: 'cookieConsent', trigger: 'consent-ui', src: '/js/cookie-consent.js', version: 3, dependsOn: ['cookieconsent'] },
     { id: 'contactFormAnalytics', trigger: 'contact-form', src: '/js/contact-form-analytics.js', version: 1 },
     { id: 'formProtection', trigger: 'turnstile-form', src: '/js/form-protection.js', version: 1 },
     { id: 'webVitalsLibrary', trigger: 'web-vitals', src: '/js/web-vitals.iife.js', version: null },

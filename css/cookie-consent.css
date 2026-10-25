@@ -26,155 +26,156 @@
 }
 
 /* ==========================================================================
-   Bottom-left card placement for vanilla-cookieconsent's .cm--box layout.
-   CSS-only: js/cookie-consent.js owns gate behavior.
-   Note: js/cookie-consent.js already sets guiOptions.consentModal.layout: 'box'
-   (line 59), so .cm--box selectors apply at runtime without a JS follow-up.
+   Slim bottom bar (vanilla-cookieconsent layout: 'bar inline', position: 'bottom')
+   Text on the left, actions on the right; stacks on mobile.
+   Accept and Reject keep equal size (EU consent: no nudging toward Accept).
    ========================================================================== */
-
-/* Qualify with library position classes so our rules win regardless of stylesheet load order.
-   vanilla-cookieconsent appends .cm--bottom .cm--center (per js guiOptions position: 'bottom center')
-   which makes the library's own selector more specific than a bare .cm--box rule.
-   Listing those combos here matches specificity and guarantees our placement applies. */
-.cm--box,
-.cm.cm--box,
-.cm--box.cm--bottom.cm--center,
-.cm--box.cm--bottom.cm--left {
-    position: fixed;
-    bottom: 24px;
-    left: 24px;
-    right: auto;
-    top: auto;
-    max-width: 380px;
-    width: calc(100vw - 48px); /* leaves 24px gutter on each side until 380px is the cap */
-    margin: 0;
-    padding: 1.25rem 1.25rem 1rem;
-    background: rgba(20, 20, 24, 0.92);
-    backdrop-filter: blur(12px) saturate(1.1);
-    -webkit-backdrop-filter: blur(12px) saturate(1.1);
-    border: 1px solid rgba(255, 107, 44, 0.18); /* var(--orange) at 18% — literal rgba so it survives library specificity */
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    z-index: 9999; /* above page content; below .location-dropdown (10001) */
-    color: var(--white);
+#cc-main .cm--bar,
+#cc-main .cm.cm--bar.cm--inline {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    border-radius: 0 !important;
+    background: rgba(13, 13, 13, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid transparent;
+    border-image: var(--gradient-tm26) 1;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.45);
     font-family: var(--body);
 }
 
-/* Match modal typography to the rest of the site. */
-.cm--box .cm__title,
-.cm--box .cm__heading {
-    font-family: var(--tech); /* Orbitron / Monument Extended */
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--white);
-    margin: 0 0 0.5rem;
-}
-
-.cm--box .cm__desc,
-.cm--box .cm__texts p {
-    font-family: var(--body); /* DM Sans */
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--white);
-    margin: 0 0 1rem;
-}
-
-/* Keep the primary and reject actions visually balanced. */
-.cm--box .cm__btns {
+#cc-main .cm--bar .cm__body {
+    max-width: 1280px !important;
+    width: 100% !important;
+    margin: 0 auto;
     display: flex;
     flex-direction: row;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.85rem 2rem calc(0.85rem + env(safe-area-inset-bottom, 0px)) !important;
 }
 
-.cm--box .cm__btn[data-role="all"] {
-    flex: 1 1 0;
-    background: var(--gradient-primary);
+#cc-main .cm--bar .cm__texts {
+    flex: 1 1 auto;
+    width: auto !important;
+    max-width: none !important;
+    padding: 0;
+}
+
+#cc-main .cm--bar .cm__title {
+    display: none;
+}
+
+#cc-main .cm--bar .cm__desc {
+    padding: 0;
+    margin: 0;
+    max-height: none;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--white-soft);
+}
+
+#cc-main .cm--bar .cm__desc a {
     color: var(--white);
-    border: none;
-    font-weight: 600;
-}
-
-.cm--box .cm__btn[data-role="necessary"],
-.cm--box .cm__btn[data-role="reject"] {
-    flex: 1 1 0;
-    background: transparent;
-    color: var(--orange);
-    border: 1px solid var(--orange);
-    font-weight: 600;
-}
-
-/* Keep preferences as a tertiary action below the main choices. */
-.cm--box .cm__btn[data-role="manage"],
-.cm--box .cm__btn[data-role="show"] {
-    flex: 1 1 100%;
-    background: transparent;
-    color: var(--gray);
-    border: none;
     text-decoration: underline;
-    font-weight: 400;
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    min-height: 44px; /* preserve tap-target floor on the tertiary too */
+    text-underline-offset: 2px;
 }
 
-/* Use the same slide/fade motion as other lightweight overlays. */
-@keyframes tm-cm-slide-up {
-    from {
-        opacity: 0;
-        transform: translateY(16px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+#cc-main .cm--bar .cm__btns {
+    flex: 0 0 auto;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 !important;
+    border: 0 !important;
 }
 
-.cm--box.cm--anim,
-.cm--box {
-    animation: tm-cm-slide-up 220ms cubic-bezier(0.32, 0.72, 0, 1) both;
+#cc-main .cm--bar .cm__btn-group {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 !important;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .cm--box,
-    .cm--box.cm--anim {
-        animation: none;
-    }
+/* Settings link sits after Accept/Reject */
+#cc-main .cm--bar .cm__btn-group:last-child {
+    order: 2;
 }
 
-/* On small screens, keep the card clear of viewport edges and stack choices. */
-@media (max-width: 640px) {
-    .cm--box,
-    .cm.cm--box {
-        left: 16px;
-        right: 16px;
-        bottom: calc(16px + env(safe-area-inset-bottom, 0px)); /* clear iOS home indicator */
-        max-width: none;
-        width: auto;
-        padding: 1rem;
-    }
+#cc-main .cm--bar .cm__btn {
+    min-width: 0;
+    min-height: 44px;
+    margin: 0 !important;
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    font-family: var(--body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
 
-    .cm--box .cm__btns {
+#cc-main .cm--bar .cm__btn[data-role="all"] {
+    background: var(--gradient-tm26);
+    border: 1px solid transparent;
+    color: var(--white);
+}
+
+#cc-main .cm--bar .cm__btn[data-role="necessary"] {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: var(--white);
+}
+
+#cc-main .cm--bar .cm__btn[data-role="show"] {
+    background: transparent;
+    border: 0;
+    color: var(--gray-light);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 500;
+    padding: 0 0.5rem;
+}
+
+#cc-main .cm--bar .cm__btn[data-role="necessary"]:hover {
+    border-color: var(--white);
+}
+
+#cc-main .cm--bar .cm__btn[data-role="show"]:hover {
+    color: var(--white);
+}
+
+@media (max-width: 900px) {
+    #cc-main .cm--bar .cm__body {
         flex-direction: column;
-        gap: 0.5rem;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px)) !important;
     }
 
-    .cm--box .cm__btn[data-role="all"] {
-        order: 1; /* Accept on top */
-        flex: 1 1 100%;
+    #cc-main .cm--bar .cm__desc {
+        font-size: 0.8rem;
     }
 
-    .cm--box .cm__btn[data-role="necessary"],
-    .cm--box .cm__btn[data-role="reject"] {
-        order: 2;
-        flex: 1 1 100%;
+    #cc-main .cm--bar .cm__btns {
+        width: 100%;
+        justify-content: space-between;
     }
 
-    .cm--box .cm__btn[data-role="manage"],
-    .cm--box .cm__btn[data-role="show"] {
-        order: 3;
-        margin-top: 0.25rem;
+    /* Accept + Reject share the row equally; settings link sits at the end */
+    #cc-main .cm--bar .cm__btn-group:first-child {
+        flex: 1 1 auto;
+    }
+
+    #cc-main .cm--bar .cm__btn-group:first-child .cm__btn {
+        flex: 1 1 0;
+        padding: 0 0.75rem;
+    }
+
+    #cc-main .cm--bar .cm__btn {
+        font-size: 0.8rem;
     }
 }
