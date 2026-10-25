@@ -22,7 +22,7 @@ body.tm-blog-page,
     min-height: min(74vh, 45rem);
     align-items: end;
     overflow: hidden;
-    padding: clamp(7rem, 13vw, 10rem) 0 clamp(3rem, 8vw, 5rem);
+    padding: calc(clamp(7rem, 13vw, 10rem) + var(--tm-header-extra, 0px)) 0 clamp(3rem, 8vw, 5rem);
 }
 
 .tm-blog-hero--compact {

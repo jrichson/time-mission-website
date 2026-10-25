@@ -59,7 +59,7 @@
     .hero:has(> .hero-scroll) {
         flex-direction: column;
         gap: 2rem;
-        padding-block: calc(var(--tm-ticker-height, 0px) + 7.5rem) 2rem;
+        padding-block: calc(var(--tm-ticker-height, 0px) + var(--tm-header-extra, 0px) + 7.5rem) 2rem;
     }
 
     .hero:has(> .hero-scroll) > .hero-content {

@@ -645,7 +645,12 @@
         }
         accountBtn.addEventListener('click', function (e) {
             e.stopPropagation();
-            setAccountMenu(accountMenu.hidden);
+            const open = accountMenu.hidden;
+            if (open) document.dispatchEvent(new CustomEvent('tm:utility-menu-open', { detail: accountMenu }));
+            setAccountMenu(open);
+        });
+        document.addEventListener('tm:utility-menu-open', function (e) {
+            if (e.detail !== accountMenu) setAccountMenu(false);
         });
         document.addEventListener('click', function (e) {
             if (!accountMenu.hidden && !accountMenu.contains(e.target)) setAccountMenu(false);
@@ -657,6 +662,61 @@
             }
         });
     }
+
+    // Utility bar language menu: drives the hidden language <select> (language-switcher.js owns the change).
+    document.querySelectorAll('[data-language-menu]').forEach(function (menu) {
+        const form = menu.closest('[data-language-switcher]');
+        const select = form ? form.querySelector('[data-language-select]') : null;
+        const btn = menu.querySelector('.language-menu-btn');
+        const list = menu.querySelector('.language-menu-list');
+        const current = menu.querySelector('[data-language-menu-current]');
+        if (!select || !btn || !list) return;
+
+        function syncLanguageMenu() {
+            const option = select.options[select.selectedIndex];
+            if (current && option) current.textContent = option.textContent.trim();
+            list.querySelectorAll('[data-language-option]').forEach(function (item) {
+                if (item.getAttribute('data-language-option') === select.value) item.setAttribute('aria-current', 'true');
+                else item.removeAttribute('aria-current');
+            });
+        }
+        function setLanguageMenu(open) {
+            list.hidden = !open;
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const open = list.hidden;
+            if (open) document.dispatchEvent(new CustomEvent('tm:utility-menu-open', { detail: menu }));
+            setLanguageMenu(open);
+        });
+        document.addEventListener('tm:utility-menu-open', function (e) {
+            if (e.detail !== menu) setLanguageMenu(false);
+        });
+        list.addEventListener('click', function (e) {
+            const item = e.target.closest('[data-language-option]');
+            if (!item) return;
+            setLanguageMenu(false);
+            const code = item.getAttribute('data-language-option');
+            if (code === select.value) return;
+            select.value = code;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+            syncLanguageMenu();
+        });
+        document.addEventListener('click', function (e) {
+            if (!list.hidden && !menu.contains(e.target)) setLanguageMenu(false);
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !list.hidden) {
+                setLanguageMenu(false);
+                btn.focus();
+            }
+        });
+        select.addEventListener('change', syncLanguageMenu);
+        document.addEventListener('tm:language-changed', syncLanguageMenu);
+        syncLanguageMenu();
+    });
 
     const navLoadContext = getLocationContext();
     if (navLoadContext && navLoadContext.ready && typeof navLoadContext.ready.then === 'function') {

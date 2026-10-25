@@ -85,8 +85,11 @@
 
     /* Fixed ticker bar content height (nav offset = this + safe-area-inset-top in nav.css) */
     --tm-ticker-height: 36px;
-    /* Fixed utility bar (location / account) under the ticker */
-    --tm-utility-height: 40px;
+    /* Fixed utility bar (location / account) under the ticker; includes the gap above the glass nav
+       so its content sits centered between the page top and the nav */
+    --tm-utility-height: 52px;
+    /* Extra top space pages need for the utility bar (added to each page's opening section) */
+    --tm-header-extra: var(--tm-utility-height);
 
     /*
      * Responsive breakpoints (conventions across CSS):
@@ -101,6 +104,6 @@
 @media (max-width: 768px) {
     :root {
         --tm-ticker-height: 40px;
-        --tm-utility-height: 36px;
+        --tm-utility-height: 44px;
     }
 }

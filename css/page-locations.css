@@ -5,7 +5,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 120px 2rem 4rem;
+            padding: calc(120px + var(--tm-header-extra, 0px)) 2rem 4rem;
             background: radial-gradient(circle at 50% 30%, rgba(255, 107, 44, 0.08) 0%, transparent 50%);
             text-align: center;
         }
@@ -308,7 +308,7 @@
         }
 
         @media (max-width: 480px) {
-            .hero { padding: 100px 1rem 2.5rem; min-height: 50vh; }
+            .hero { padding: calc(100px + var(--tm-header-extra, 0px)) 1rem 2.5rem; min-height: 50vh; }
             .hero-title { font-size: 2rem; line-height: 1.15; }
             .locations-grid { padding-left: 0.75rem; padding-right: 0.75rem; }
         }

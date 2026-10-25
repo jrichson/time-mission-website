@@ -21,7 +21,7 @@ body.tm-resource-page {
     min-height: min(76vh, 46rem);
     align-items: end;
     overflow: hidden;
-    padding: clamp(7rem, 13vw, 10rem) 0 clamp(3rem, 8vw, 5rem);
+    padding: calc(clamp(7rem, 13vw, 10rem) + var(--tm-header-extra, 0px)) 0 clamp(3rem, 8vw, 5rem);
 }
 
 .tm-resource-hero--compact {
@@ -446,7 +446,7 @@ body.tm-resource-page {
 
     .tm-resource-hero {
         min-height: 68vh;
-        padding-top: 6.5rem;
+        padding-top: calc(6.5rem + var(--tm-header-extra, 0px));
     }
 
     .tm-resource-hero h1 {

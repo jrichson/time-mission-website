@@ -6,7 +6,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 10rem 2rem 4rem;
+            padding: calc(10rem + var(--tm-header-extra, 0px)) 2rem 4rem;
             overflow: hidden;
         }
 
@@ -877,7 +877,7 @@
             .hero {
                 min-height: 60vh;
                 min-height: 60svh;
-                padding: 8rem 1.5rem 3rem;
+                padding: calc(8rem + var(--tm-header-extra, 0px)) 1.5rem 3rem;
             }
 
             .hero-title {

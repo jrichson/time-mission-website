@@ -1,7 +1,7 @@
 /* Campaign pages — image-first mobile, split-screen desktop. */
 
 .tm-promo-page {
-    --promo-page-offset: calc(var(--tm-ticker-height) + 7rem + env(safe-area-inset-top, 0px));
+    --promo-page-offset: calc(var(--tm-ticker-height) + var(--tm-header-extra, 0px) + 7rem + env(safe-area-inset-top, 0px));
     background: var(--black);
 }
 
@@ -446,7 +446,7 @@
 
 @media (max-width: 900px) {
     .tm-promo-page {
-        --promo-page-offset: calc(var(--tm-ticker-height) + 6.5rem + env(safe-area-inset-top, 0px));
+        --promo-page-offset: calc(var(--tm-ticker-height) + var(--tm-header-extra, 0px) + 6.5rem + env(safe-area-inset-top, 0px));
     }
 
     .tm-promo-landing__split {

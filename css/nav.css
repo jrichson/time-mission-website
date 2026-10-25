@@ -8,7 +8,7 @@
 /* ---- Navigation (contained liquid-glass bar) ---- */
 .nav {
     position: fixed;
-    top: calc(var(--tm-ticker-height) + var(--tm-utility-height) + env(safe-area-inset-top, 0px) + 12px);
+    top: calc(var(--tm-ticker-height) + var(--tm-utility-height) + env(safe-area-inset-top, 0px));
     left: 0;
     right: 0;
     width: min(1400px, calc(100% - 3rem));
@@ -34,7 +34,7 @@
 }
 
 .nav--no-ticker {
-    top: calc(var(--tm-utility-height) + env(safe-area-inset-top, 0px) + 12px);
+    top: calc(var(--tm-utility-height) + env(safe-area-inset-top, 0px));
 }
 
 /* Scrolled: same glass, slightly denser so links stay readable over content */
@@ -130,21 +130,31 @@
 }
 
 .nav-links a {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
     color: var(--white-soft, #E5E5E5);
     text-decoration: none;
     font-size: 1.02rem;
     font-weight: 500;
-    transition:
-        color var(--motion-standard) ease,
-        -webkit-text-stroke-color var(--motion-standard) ease;
-    -webkit-text-stroke: 0.45px transparent;
+    transition: color var(--motion-standard) ease;
 }
 
-/* Hover/active: bold white. Stroke fakes the heavier weight so the links don't shift. */
+/* Reserve the bold width up front so hovering doesn't shift the other links */
+.nav-links a::after {
+    content: attr(data-label);
+    font-weight: 700;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Hover/active: bold white */
 .nav-links a:hover,
 .nav-links a.active {
     color: var(--white);
-    -webkit-text-stroke-color: var(--white);
+    font-weight: 700;
 }
 
 /* ---- Nav Right (Location + Tickets) ---- */
@@ -345,14 +355,14 @@
 
 @media (max-width: 768px) {
     .nav {
-        top: calc(var(--tm-ticker-height) + var(--tm-utility-height) + env(safe-area-inset-top, 0px) + 8px);
+        top: calc(var(--tm-ticker-height) + var(--tm-utility-height) + env(safe-area-inset-top, 0px));
         width: calc(100% - 1.5rem);
         padding: 0.5rem 0.5rem 0.5rem 1rem;
         border-radius: 999px;
     }
 
     .nav--no-ticker {
-        top: calc(var(--tm-utility-height) + env(safe-area-inset-top, 0px) + 8px);
+        top: calc(var(--tm-utility-height) + env(safe-area-inset-top, 0px));
     }
 
     .nav-left {

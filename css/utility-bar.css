@@ -73,7 +73,7 @@ body:has(.nav.scrolled) .utility-bar {
 }
 
 .utility-location-name:hover {
-    color: var(--tm26-amber);
+    color: var(--white-soft);
 }
 
 .utility-hours {
@@ -101,21 +101,16 @@ body:has(.nav.scrolled) .utility-bar {
     color: var(--white);
 }
 
+/* Quiet secondary action: shouldn't outshine the location name */
 .utility-change {
-    font-family: var(--tech);
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    background: var(--gradient-tm26);
-    background-origin: border-box;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--gray-light);
 }
 
 .utility-choose:hover,
 .utility-change:hover {
-    filter: brightness(1.2);
+    color: var(--white);
 }
 
 .utility-link {
@@ -152,7 +147,7 @@ body:has(.nav.scrolled) .utility-bar {
 
 .utility-account-btn:hover,
 .utility-account-btn[aria-expanded="true"] {
-    color: var(--tm26-amber);
+    color: var(--white);
 }
 
 .utility-account-btn svg {
@@ -170,63 +165,159 @@ body:has(.nav.scrolled) .utility-bar {
     transform: rotate(180deg);
 }
 
-.utility-account-menu {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    min-width: 200px;
-    margin: 0;
-    padding: 0.5rem;
-    list-style: none;
-    background: var(--dark);
-    border: 1px solid var(--border-bright);
-    border-radius: 12px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-    z-index: 1002;
+/* Language switcher in the utility bar: globe + full language name, menu styled like the account menu */
+.utility-right .language-switcher {
+    position: relative;
+    min-height: 28px;
+    gap: 0.4rem;
+    font-size: 0.8rem;
 }
 
-.utility-account-menu::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 12px;
-    right: 12px;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--gradient-tm26);
-    background-origin: border-box;
-}
-
-.utility-account-menu a {
-    display: block;
-    padding: 0.65rem 0.75rem;
-    border-radius: 8px;
-    color: var(--white-soft);
-    font-weight: 500;
-    text-decoration: none;
-}
-
-.utility-account-menu a:hover,
-.utility-account-menu a:focus-visible {
-    background: rgba(255, 255, 255, 0.06);
+.utility-right .language-switcher-icon {
     color: var(--white);
 }
 
-/* Language switcher sits in the utility bar (desktop) */
-.utility-right .language-switcher {
-    min-height: 28px;
-    font-size: 0.75rem;
+.language-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--white-soft);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color var(--motion-fast) ease;
 }
 
-.utility-right .language-switcher select {
-    background-color: transparent;
-    border-color: rgba(255, 255, 255, 0.18);
-    border-radius: 999px;
-    min-height: 28px;
-    height: 28px;
-    padding-top: 0;
-    padding-bottom: 0;
-    font-size: 0.75rem;
+.language-menu-btn:hover,
+.language-menu-btn[aria-expanded="true"] {
+    color: var(--white);
+}
+
+.language-menu-caret {
+    width: 10px;
+    height: 10px;
+    transition: transform var(--motion-fast) ease;
+}
+
+.language-menu-btn[aria-expanded="true"] .language-menu-caret {
+    transform: rotate(180deg);
+}
+
+/* ---- Utility dropdowns (account + language): frosted glass panel ---- */
+.utility-account-menu,
+.language-menu-list {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 220px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    background: rgba(22, 22, 28, 0.82);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 20px 50px rgba(0, 0, 0, 0.45);
+    text-shadow: none;
+    z-index: 1002;
+    animation: utility-menu-in 160ms var(--ease-standard) both;
+}
+
+.language-menu-list {
+    min-width: 180px;
+}
+
+@keyframes utility-menu-in {
+    from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.utility-account-menu a,
+.language-menu-list button {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    color: var(--white-soft);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--motion-fast) ease, color var(--motion-fast) ease;
+}
+
+.utility-account-menu a svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--gray-light);
+    transition: color var(--motion-fast) ease;
+}
+
+.utility-account-menu a:hover,
+.utility-account-menu a:focus-visible,
+.language-menu-list button:hover,
+.language-menu-list button:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--white);
+    outline: none;
+}
+
+.utility-account-menu a:hover svg,
+.utility-account-menu a:focus-visible svg {
+    color: var(--white);
+}
+
+/* Current language: white with a check mark */
+.language-menu-list button {
+    justify-content: space-between;
+}
+
+.language-menu-list button[aria-current="true"] {
+    color: var(--white);
+    font-weight: 600;
+}
+
+.language-menu-list button[aria-current="true"]::after {
+    content: '';
+    width: 14px;
+    height: 14px;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Triggers: no browser focus box on click; a soft ring for keyboard users */
+.utility-account-btn:focus,
+.language-menu-btn:focus {
+    outline: none;
+}
+
+.utility-account-btn:focus-visible,
+.language-menu-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 4px;
+    border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .utility-account-menu,
+    .language-menu-list {
+        animation: none;
+    }
 }
 
 @media (max-width: 1024px) {

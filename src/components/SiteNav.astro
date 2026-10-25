@@ -116,9 +116,9 @@ const fallbackTickerSource = locationTickerMessage ? 'location' : 'default';
 
 // Account links are placeholders until the booking/account provider is wired up.
 const accountLinks = [
-    { label: 'Edit Account', i18n: 'utility.editAccount', href: '#account' },
-    { label: 'Manage Tickets', i18n: 'utility.manageTickets', href: '#tickets' },
-    { label: 'Rewards', i18n: 'utility.rewards', href: '#rewards' },
+    { label: 'Edit Account', i18n: 'utility.editAccount', href: '#account', icon: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>' },
+    { label: 'Manage Tickets', i18n: 'utility.manageTickets', href: '#tickets', icon: '<path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 5v14" stroke-dasharray="2 2"/>' },
+    { label: 'Rewards', i18n: 'utility.rewards', href: '#rewards', icon: '<path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8-4.3-4.1 5.9-.9z"/>' },
 ];
 
 function externalLinkAttrs(href: string | null | undefined) {
@@ -196,7 +196,12 @@ function externalLinkAttrs(href: string | null | undefined) {
                 </button>
                 <ul class="utility-account-menu" id="utilityAccountMenu" hidden>
                     {accountLinks.map((link) => (
-                        <li><a href={link.href} data-i18n={link.i18n}>{link.label}</a></li>
+                        <li>
+                            <a href={link.href}>
+                                <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={link.icon}></svg>
+                                <span data-i18n={link.i18n}>{link.label}</span>
+                            </a>
+                        </li>
                     ))}
                 </ul>
             </div>
@@ -221,10 +226,10 @@ function externalLinkAttrs(href: string | null | undefined) {
 
     <div class="nav-center">
         <ul class="nav-links">
-            <li><a href="/about" data-i18n="nav.about">About</a></li>
-            <li><a href="/missions" data-i18n="nav.missions">Missions</a></li>
-            <li><a href="/groups" data-i18n="nav.groups">Groups</a></li>
-            <li><a href="/faq" data-i18n="nav.faq">FAQ</a></li>
+            <li><a href="/about" data-i18n="nav.about" data-label="About">About</a></li>
+            <li><a href="/missions" data-i18n="nav.missions" data-label="Missions">Missions</a></li>
+            <li><a href="/groups" data-i18n="nav.groups" data-label="Groups">Groups</a></li>
+            <li><a href="/faq" data-i18n="nav.faq" data-label="FAQ">FAQ</a></li>
         </ul>
     </div>
 
