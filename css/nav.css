@@ -128,7 +128,7 @@
     list-style: none;
 }
 
-.nav-links a {
+.nav-links > li > a {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
@@ -140,7 +140,7 @@
 }
 
 /* Reserve the bold width up front so hovering doesn't shift the other links */
-.nav-links a::after {
+.nav-links > li > a::after {
     content: attr(data-label);
     font-weight: 700;
     height: 0;
@@ -150,14 +150,14 @@
 }
 
 /* Hover/active: bold white */
-.nav-links a:hover,
-.nav-links a.active {
+.nav-links > li > a:hover,
+.nav-links > li > a.active {
     color: var(--white);
     font-weight: 700;
 }
 
 /* Gradient underline grows from the center on hover / active page */
-.nav-links a {
+.nav-links > li > a {
     /* Equal space above and below keeps the label centered in the glass bar */
     padding: 6px 0;
     background-image: var(--gradient-tm26);
@@ -167,8 +167,8 @@
     transition: color var(--motion-standard) ease, background-size var(--motion-standard) var(--ease-standard);
 }
 
-.nav-links a:hover,
-.nav-links a.active {
+.nav-links > li > a:hover,
+.nav-links > li > a.active {
     background-size: 100% 2px;
 }
 
@@ -454,7 +454,7 @@
 .location-btn:focus-visible,
 .language-switcher select:focus-visible,
 .location-dropdown-close:focus-visible,
-.nav-links a:focus-visible,
+.nav-links > li > a:focus-visible,
 .btn-tickets:focus-visible,
 .location-dropdown a.location-info-book:focus-visible,
 .mobile-menu-links a:focus-visible,

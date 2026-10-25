@@ -72,8 +72,13 @@ body:has(.nav.scrolled) .utility-bar {
     white-space: nowrap;
 }
 
-.utility-location-name:hover {
-    color: var(--white-soft);
+.utility-location-name:hover,
+.utility-location-name:focus-visible {
+    background: var(--gradient-tm26);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
 }
 
 .utility-hours {

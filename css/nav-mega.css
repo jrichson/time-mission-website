@@ -1,0 +1,155 @@
+/* ==========================================
+   DESKTOP MEGA MENUS
+   Hover/focus a nav item to open a glass panel of image cards + quick links.
+   Desktop only; phones use the full-screen mobile menu.
+   ========================================== */
+
+.mega-panel {
+    display: none;
+}
+
+@media (min-width: 1025px) and (hover: hover) {
+    /* Panel spans the glass nav; .nav (fixed) is its containing block */
+    .mega-panel {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 2rem;
+        position: absolute;
+        top: calc(100% + 12px);
+        left: 0;
+        right: 0;
+        padding: 1.5rem;
+        border-radius: 28px;
+        background: rgba(18, 18, 24, 0.86);
+        backdrop-filter: blur(24px) saturate(160%);
+        -webkit-backdrop-filter: blur(24px) saturate(160%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.08),
+            0 30px 60px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-6px);
+        transition: opacity 0.2s ease, transform 0.2s var(--ease-standard), visibility 0s linear 0.2s;
+        z-index: 1002;
+        text-align: left;
+    }
+
+    /* Invisible bridge so the pointer can travel from the link to the panel */
+    .mega-panel::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -16px;
+        height: 16px;
+    }
+
+    .has-mega:hover > .mega-panel,
+    .has-mega:focus-within > .mega-panel {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition-delay: 0.08s, 0.08s, 0s;
+    }
+
+    /* Keep the underline on the item whose panel is open */
+    .has-mega:hover > a,
+    .has-mega:focus-within > a {
+        color: var(--white);
+        font-weight: 700;
+        background-size: 100% 2px;
+    }
+
+    .mega-cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .mega-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        color: var(--white);
+        text-decoration: none;
+    }
+
+    .mega-card-media {
+        display: block;
+        aspect-ratio: 3 / 2;
+        margin-bottom: 0.5rem;
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--dark-light);
+    }
+
+    .mega-card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s var(--ease-standard), filter 0.3s ease;
+    }
+
+    .mega-card:hover .mega-card-media img,
+    .mega-card:focus-visible .mega-card-media img {
+        transform: scale(1.06);
+        filter: brightness(1.1);
+    }
+
+    .mega-card-title {
+        font-family: var(--tech);
+        font-size: 0.82rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .mega-card-text {
+        font-size: 0.85rem;
+        line-height: 1.4;
+        color: var(--gray-light);
+    }
+
+    .mega-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 190px;
+        margin: 0;
+        padding: 0 0 0 1.5rem;
+        list-style: none;
+        border-left: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mega-links a {
+        display: block;
+        padding: 0.6rem 0.75rem;
+        border-radius: 10px;
+        color: var(--white-soft);
+        font-size: 0.92rem;
+        font-weight: 500;
+        text-decoration: none;
+        background: none;
+        transition: background var(--motion-fast) ease, color var(--motion-fast) ease;
+    }
+
+    .mega-links li:first-child a {
+        color: var(--white);
+        font-weight: 700;
+    }
+
+    .mega-links a:hover,
+    .mega-links a:focus-visible {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--white);
+        outline: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mega-panel,
+    .mega-card-media img {
+        transition: none !important;
+        transform: none !important;
+    }
+}

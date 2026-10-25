@@ -121,6 +121,57 @@ const accountLinks = [
     { label: 'Rewards', i18n: 'utility.rewards', href: '#rewards', icon: '<path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8-4.3-4.1 5.9-.9z"/>' },
 ];
 
+
+// Desktop mega-menu panels (hover/focus on a nav item). Images are the 480w crops already in /assets.
+const megaMenus: Record<string, {
+    cards: { title: string; text: string; href: string; img: string; i18n?: string }[];
+    links: { label: string; href: string; i18n?: string }[];
+}> = {
+    '/missions': {
+        cards: [
+            { title: 'Magma Mayhem', text: 'Dodge the lava. Hit the targets.', href: '/missions', img: '/assets/photos/experiences/Time-Mission-Magma-Mayhem-1-480.webp' },
+            { title: 'Alien Awakening', text: 'Crack the code before they wake.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Alien_Awakening-480.webp' },
+            { title: 'Big Bang', text: 'Rebuild the universe, fast.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Big-Bang-480.webp' },
+            { title: 'Server Heist', text: 'Slip past the lasers.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Server_Heist5-480.webp' },
+        ],
+        links: [
+            { label: 'All 25+ missions', href: '/missions' },
+            { label: 'Physical', href: '/missions?filter=physical' },
+            { label: 'Mental', href: '/missions?filter=mental' },
+            { label: 'Skill', href: '/missions?filter=skill' },
+            { label: 'Speed', href: '/missions?filter=speed' },
+        ],
+    },
+    '/groups': {
+        cards: [
+            { title: 'Birthdays', text: 'Games, cake and a crew to celebrate.', href: '/groups/birthdays', img: '/assets/photos/experiences/_Time-Mission_0321-480.webp', i18n: 'home.groups.birthdays' },
+            { title: 'Corporate', text: 'Team building people actually enjoy.', href: '/groups/corporate', img: '/assets/photos/groups/corporate-events-480.webp', i18n: 'home.groups.corporate' },
+            { title: 'Field Trips', text: 'Learning disguised as pure fun.', href: '/groups/field-trips', img: '/assets/photos/groups/field-trips-480.webp', i18n: 'home.groups.fieldTrips' },
+            { title: 'Bachelor/ette', text: 'Make the last night out legendary.', href: '/groups/bachelor-ette', img: '/assets/photos/groups/bachelor-bachelorette-480.webp', i18n: 'home.groups.bachelor' },
+        ],
+        links: [
+            { label: 'All groups & parties', href: '/groups' },
+            { label: 'Private Events', href: '/groups/private-events', i18n: 'home.groups.privateEvents' },
+            { label: 'Holidays', href: '/groups/holidays', i18n: 'home.groups.holidays' },
+            { label: 'Plan an event', href: '/contact?type=event' },
+        ],
+    },
+    '/about': {
+        cards: [
+            { title: 'Our Story', text: 'What Time Mission is and how it works.', href: '/about', img: '/assets/photos/venue/_Time-Mission_0024-480.webp' },
+            { title: 'Locations', text: 'Find a Time Mission near you.', href: '/locations', img: '/assets/photos/venue/_Time-Mission_0042-480.webp', i18n: 'nav.locations' },
+            { title: 'Gift Cards', text: 'Give the gift of adventure.', href: '/gift-cards', img: '/assets/photos/experiences/_Time-Mission_0450-480.webp', i18n: 'nav.giftCards' },
+            { title: 'Blog', text: 'News, tips and new missions.', href: '/blog', img: '/assets/photos/venue/_Time-Mission_0078-480.webp' },
+        ],
+        links: [
+            { label: 'FAQ', href: '/faq', i18n: 'nav.faq' },
+            { label: 'Contact', href: '/contact', i18n: 'nav.contact' },
+            { label: 'Press', href: '/press' },
+            { label: 'Waiver', href: '/waiver' },
+        ],
+    },
+};
+
 function externalLinkAttrs(href: string | null | undefined) {
     return /^https?:\/\//i.test(String(href || '').trim())
         ? { target: '_blank', rel: 'noopener' }
@@ -184,12 +235,12 @@ function externalLinkAttrs(href: string | null | undefined) {
             <LanguageSwitcher currentLang={currentLang} placement="desktop" />
             <a class="utility-link" href="/gift-cards"><span class="bold-hover" data-i18n="utility.giftCards" data-label="Gift Cards">Gift Cards</span></a>
             <div class="utility-account">
-                <button type="button" class="utility-account-btn" id="utilityAccountBtn" aria-haspopup="true" aria-expanded="false" aria-controls="utilityAccountMenu" aria-label="Open account menu" data-i18n-aria-label="utility.accountMenu">
+                <button type="button" class="utility-account-btn" id="utilityAccountBtn" aria-haspopup="true" aria-expanded="false" aria-controls="utilityAccountMenu" aria-label="Open Mission Rewards menu" data-i18n-aria-label="utility.accountMenu">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="8" r="4"></circle>
                         <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
                     </svg>
-                    <span class="utility-account-label bold-hover" data-i18n="utility.account" data-label="My Account">My Account</span>
+                    <span class="utility-account-label bold-hover" data-i18n="utility.account" data-label="Mission Rewards">Mission Rewards</span>
                     <svg class="utility-caret" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6,9 12,15 18,9"></polyline>
                     </svg>
@@ -226,10 +277,37 @@ function externalLinkAttrs(href: string | null | undefined) {
 
     <div class="nav-center">
         <ul class="nav-links">
-            <li><a href="/about" data-i18n="nav.about" data-label="About">About</a></li>
-            <li><a href="/missions" data-i18n="nav.missions" data-label="Missions">Missions</a></li>
-            <li><a href="/groups" data-i18n="nav.groups" data-label="Groups">Groups</a></li>
-            <li><a href="/faq" data-i18n="nav.faq" data-label="FAQ">FAQ</a></li>
+            {[
+                { href: '/about', i18n: 'nav.about', label: 'About' },
+                { href: '/missions', i18n: 'nav.missions', label: 'Missions' },
+                { href: '/groups', i18n: 'nav.groups', label: 'Groups' },
+                { href: '/faq', i18n: 'nav.faq', label: 'FAQ' },
+            ].map((item) => {
+                const mega = megaMenus[item.href];
+                return (
+                    <li class={mega ? 'has-mega' : undefined}>
+                        <a href={item.href} data-i18n={item.i18n} data-label={item.label} aria-haspopup={mega ? 'true' : undefined}>{item.label}</a>
+                        {mega && (
+                            <div class="mega-panel">
+                                <div class="mega-cards">
+                                    {mega.cards.map((card) => (
+                                        <a class="mega-card" href={card.href}>
+                                            <span class="mega-card-media"><img src={card.img} alt="" width="480" height="320" loading="lazy" decoding="async" /></span>
+                                            <span class="mega-card-title" data-i18n={card.i18n}>{card.title}</span>
+                                            <span class="mega-card-text">{card.text}</span>
+                                        </a>
+                                    ))}
+                                </div>
+                                <ul class="mega-links">
+                                    {mega.links.map((link) => (
+                                        <li><a href={link.href} data-i18n={link.i18n}>{link.label}</a></li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </li>
+                );
+            })}
         </ul>
     </div>
 
