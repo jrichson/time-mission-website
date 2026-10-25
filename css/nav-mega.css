@@ -76,6 +76,7 @@
     }
 
     .mega-card-media {
+        position: relative;
         display: block;
         aspect-ratio: 3 / 2;
         margin-bottom: 0.5rem;
@@ -89,6 +90,27 @@
         height: 100%;
         object-fit: cover;
         transition: transform 0.5s var(--ease-standard), filter 0.3s ease;
+    }
+
+    /* Faint TM26 gradient stroke around the photo on hover */
+    .mega-card-media::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        border-radius: inherit;
+        background: var(--gradient-tm26);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+        opacity: 0;
+        transition: opacity var(--motion-standard) ease;
+        pointer-events: none;
+    }
+
+    .mega-card:hover .mega-card-media::after,
+    .mega-card:focus-visible .mega-card-media::after {
+        opacity: 0.85;
     }
 
     .mega-card:hover .mega-card-media img,

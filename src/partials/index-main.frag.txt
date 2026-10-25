@@ -37,47 +37,34 @@
     </section>
 
     <!-- Welcome Section -->
-    <section class="welcome" id="about">
-        <div class="welcome-content reveal">
-            <div class="section-badge" data-i18n="home.about.badge">ABOUT US</div>
-            <h2 class="section-title" data-i18n="home.about.title">WHAT IS TIME MISSION?</h2>
-            <p class="welcome-lede" data-i18n="home.about.lede">Grab your crew and race through 25+ quick-fire mission rooms. Every room is a new challenge, and every win adds to your team score.</p>
-            <ol class="intro-steps">
-                <li class="intro-step">
-                    <span class="intro-step-num">01</span>
-                    <span class="intro-step-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    </span>
-                    <h3 class="intro-step-title" data-i18n="home.how.step1Title">Grab your crew</h3>
-                    <p class="intro-step-text" data-i18n="home.how.step1Text">Teams of 2 to 5. Friends, family, coworkers, rivals.</p>
-                </li>
-                <li class="intro-step">
-                    <span class="intro-step-num">02</span>
-                    <span class="intro-step-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                    </span>
-                    <h3 class="intro-step-title" data-i18n="home.how.step2Title">Play the rooms</h3>
-                    <p class="intro-step-text" data-i18n="home.how.step2Text">1 to 5 minute missions that test speed, strength, skill and smarts. Pick any order.</p>
-                </li>
-                <li class="intro-step">
-                    <span class="intro-step-num">03</span>
-                    <span class="intro-step-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
-                    </span>
-                    <h3 class="intro-step-title" data-i18n="home.how.step3Title">Beat the board</h3>
-                    <p class="intro-step-text" data-i18n="home.how.step3Text">Rack up points, replay your favorites and chase a higher score.</p>
-                </li>
-            </ol>
-            <details class="geo-disclosure welcome-geo-disclosure">
-                <summary data-i18n="home.about.summary">Read the full Time Mission overview</summary>
-                <p class="welcome-text" data-i18n="home.about.short">
-                Time Mission is an indoor challenge-room attraction where teams of 2 to 5 players move through short physical, logic, skill, and coordination missions instead of one long escape-room scenario.
-                </p>
-                <p class="welcome-text" data-i18n-html="home.about.longHtml">
-                Time Mission is a live, team-based entertainment experience where groups of <strong>two to five players</strong> move through <span class="copy-emphasis">25 or more short mission rooms</span> during a timed session. Each room is a self-contained challenge lasting <strong>about one to five minutes</strong>, so players can choose the order, replay favorites, and build a score across the venue. The format blends escape-room puzzles, arcade-style scoring, physical tasks, and cooperative problem solving without locking a group into one long scenario. Sessions are sold in <span class="copy-emphasis">60, 90, or 120 minute lengths</span>, with most groups completing <strong>15 to 20 missions in a 90 minute visit</strong>. Time Mission works for <span class="copy-emphasis">families, friends, birthdays, team outings, field trips, date nights, and private events</span> because different rooms test speed, strength, skill, memory, logic, and coordination. The experience is designed so mixed-ability groups can contribute in different ways rather than relying on one kind of player.
-                </p>
-            </details>
-            <a href="/about" class="btn-secondary welcome-learn-desktop u-mt-lg" data-i18n="home.about.learn">Learn About Time Mission</a>
+    <section class="welcome welcome--split" id="about">
+        <div class="welcome-split reveal">
+            <div class="welcome-media">
+                <picture>
+                    <source srcset="/assets/photos/experiences/_Time-Mission_0230-480.webp 480w, /assets/photos/experiences/_Time-Mission_0230-800.webp 800w, /assets/photos/experiences/_Time-Mission_0230-1200.webp 1200w" sizes="(max-width: 900px) 100vw, 45vw" type="image/webp">
+                    <img src="/assets/photos/experiences/_Time-Mission_0230.jpg" alt="Two players solving a hieroglyphics challenge in a Time Mission room" width="800" height="1200" loading="lazy" decoding="async">
+                </picture>
+            </div>
+            <div class="welcome-copy">
+                <div class="section-badge" data-i18n="home.about.badge">ABOUT US</div>
+                <h2 class="section-title" data-i18n="home.about.title">WHAT IS TIME MISSION?</h2>
+                <p class="welcome-lede" data-i18n="home.about.lede">One ticket. Unlimited play across 25+ missions. Pick your path and conquer them all.</p>
+                <ul class="welcome-points">
+                    <li data-i18n="home.about.point1">Teams of 2 to 5: friends, family, coworkers, rivals</li>
+                    <li data-i18n="home.about.point2">Play the missions in any order, as many times as you want</li>
+                    <li data-i18n="home.about.point3">Every win adds to your team score</li>
+                </ul>
+                <a href="/about" class="btn-secondary welcome-learn-desktop" data-i18n="home.about.learn">Learn About Time Mission</a>
+                <details class="geo-disclosure welcome-geo-disclosure">
+                    <summary data-i18n="home.about.summary">Read the full Time Mission overview</summary>
+                    <p class="welcome-text" data-i18n="home.about.short">
+                    Time Mission is an indoor challenge-room attraction where teams of 2 to 5 players move through short physical, logic, skill, and coordination missions instead of one long escape-room scenario.
+                    </p>
+                    <p class="welcome-text" data-i18n-html="home.about.longHtml">
+                    Time Mission is a live, team-based entertainment experience where groups of <strong>two to five players</strong> move through <span class="copy-emphasis">25 or more short mission rooms</span> during a timed session. Each room is a self-contained challenge lasting <strong>about one to five minutes</strong>, so players can choose the order, replay favorites, and build a score across the venue. The format blends escape-room puzzles, arcade-style scoring, physical tasks, and cooperative problem solving without locking a group into one long scenario. Sessions are sold in <span class="copy-emphasis">60, 90, or 120 minute lengths</span>, with most groups completing <strong>15 to 20 missions in a 90 minute visit</strong>. Time Mission works for <span class="copy-emphasis">families, friends, birthdays, team outings, field trips, date nights, and private events</span> because different rooms test speed, strength, skill, memory, logic, and coordination. The experience is designed so mixed-ability groups can contribute in different ways rather than relying on one kind of player.
+                    </p>
+                </details>
+            </div>
         </div>
     </section>
 
