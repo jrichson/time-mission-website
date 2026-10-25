@@ -1,0 +1,265 @@
+/* ==========================================
+   LEADERBOARD (homepage section + /leaderboard page)
+   ========================================== */
+
+.leaderboard-section {
+    padding: clamp(4rem, 8vw, 6rem) clamp(1.25rem, 4vw, 2rem);
+    text-align: center;
+}
+
+.leaderboard-section .section-title {
+    margin-bottom: 0.75rem;
+}
+
+.leaderboard-intro {
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    color: var(--gray-light);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.leaderboard {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.leaderboard-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.leaderboard-tabs {
+    display: inline-flex;
+    padding: 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard-tab {
+    padding: 0.6rem 1.2rem;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--gray-light);
+    font-family: var(--tech);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background var(--motion-fast) ease, color var(--motion-fast) ease;
+}
+
+.leaderboard-tab:hover {
+    color: var(--white);
+}
+
+.leaderboard-tab[aria-selected="true"] {
+    background: var(--gradient-tm26);
+    color: var(--white);
+}
+
+.leaderboard-filter select {
+    height: 44px;
+    padding: 0 2.5rem 0 1.1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.05)
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpolyline points='6,9 12,15 18,9'/%3E%3C/svg%3E")
+        right 1rem center / 12px no-repeat;
+    color: var(--white);
+    font-family: var(--body);
+    font-size: 0.9rem;
+    appearance: none;
+    cursor: pointer;
+}
+
+.leaderboard-filter select option {
+    background: var(--dark);
+}
+
+/* Card with angled corners, a nod to the game HUD */
+.leaderboard-card {
+    position: relative;
+    padding: clamp(1rem, 3vw, 2.25rem) clamp(1rem, 3vw, 2.5rem);
+    background: linear-gradient(180deg, rgba(18, 18, 26, 0.96), rgba(10, 10, 14, 0.96));
+    clip-path: polygon(24px 0, calc(100% - 24px) 0, 100% 24px, 100% calc(100% - 24px), calc(100% - 24px) 100%, 24px 100%, 0 calc(100% - 24px), 0 24px);
+}
+
+.leaderboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 24px;
+    right: 24px;
+    height: 2px;
+    background: var(--gradient-tm26);
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaderboard-table th {
+    padding: 0 0 1rem;
+    font-family: var(--tech);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--tm26-amber);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard-table td {
+    padding: 1.05rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    color: var(--white-soft);
+    font-size: 1rem;
+    vertical-align: middle;
+}
+
+.leaderboard-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.leaderboard-table tbody tr {
+    transition: background var(--motion-fast) ease;
+}
+
+.leaderboard-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.lb-col-rank { width: 16%; }
+.lb-col-team { width: 34%; }
+.lb-col-location { width: 22%; }
+.lb-col-missions { width: 12%; }
+.lb-col-score { width: 16%; text-align: right !important; }
+
+.lb-rank {
+    font-family: var(--tech);
+    font-size: clamp(1.4rem, 2.4vw, 2rem);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--white);
+}
+
+.lb-top .lb-rank {
+    background: var(--gradient-tm26);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.lb-col-team {
+    font-weight: 600;
+    color: var(--white) !important;
+}
+
+.lb-col-location,
+.lb-col-missions {
+    color: var(--gray-light) !important;
+}
+
+td.lb-col-score {
+    font-family: var(--tech);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--white) !important;
+}
+
+.leaderboard-empty {
+    padding: 2rem 0 1rem;
+    text-align: center;
+    color: var(--gray-light);
+}
+
+.leaderboard-cta {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+/* Page header for /leaderboard */
+.leaderboard-page-header {
+    padding: calc(9rem + var(--tm-header-extra, 0px)) clamp(1.25rem, 4vw, 2rem) 2.5rem;
+    text-align: center;
+}
+
+.leaderboard-page-header .section-title {
+    margin-bottom: 0.75rem;
+}
+
+.leaderboard-page .leaderboard-section {
+    padding-top: 0;
+}
+
+@media (max-width: 768px) {
+    .leaderboard-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .leaderboard-tabs {
+        justify-content: space-between;
+    }
+
+    .leaderboard-tab {
+        flex: 1;
+        padding: 0.6rem 0.5rem;
+        font-size: 0.62rem;
+    }
+
+    .leaderboard-filter select {
+        width: 100%;
+    }
+
+    /* Drop the missions column on phones */
+    .lb-col-missions {
+        display: none;
+    }
+
+    .lb-col-rank { width: 20%; }
+    .lb-col-team { width: 40%; }
+    .lb-col-location { width: 0; }
+
+    .leaderboard-table td {
+        font-size: 0.9rem;
+    }
+
+    /* Location tucks under the team name */
+    .leaderboard-table thead .lb-col-location {
+        display: none;
+    }
+
+    .leaderboard-table tbody td.lb-col-location {
+        display: none;
+    }
+
+    .leaderboard-page-header {
+        padding-top: calc(7rem + var(--tm-header-extra, 0px));
+    }
+}
+
+.lb-team-sub {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .lb-team-sub {
+        display: block;
+        margin-top: 0.2rem;
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: var(--gray-light);
+    }
+}

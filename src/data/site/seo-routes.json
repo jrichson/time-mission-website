@@ -71,6 +71,12 @@
     "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
     "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
   },
+  "/leaderboard": {
+    "title": "Leaderboard | Time Mission",
+    "description": "See the top Time Mission teams this week, this month and of all time. Play more missions, climb the board.",
+    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
+    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
+  },
   "/blog": {
     "title": "Blog | Time Mission",
     "description": "Updates from Time Mission locations, including openings, mission notes, group ideas, and local event news.",

@@ -7,6 +7,7 @@ import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 import { homePageTaglines } from '../lib/page-taglines';
 import PageWidgetsScripts from '../components/PageWidgetsScripts.astro';
 import HomeTestimonials from '../components/HomeTestimonials.astro';
+import Leaderboard from '../components/Leaderboard.astro';
 import { activeSiteProfile } from '../lib/site-profile';
 import { splitHtmlSlot } from '../lib/regional-content';
 
@@ -39,6 +40,7 @@ const pageInit = {
         <link rel="stylesheet" href="/css/page-index-experiences.css?v=1" />
         <link rel="stylesheet" href="/css/page-index-groups.css?v=1" />
         <link rel="stylesheet" href="/css/page-index-flow.css?v=1" />
+        <link rel="stylesheet" href="/css/leaderboard.css?v=1" />
         <link rel="stylesheet" href="/css/faq.css?v=5" />
     </Fragment>
     <Fragment slot="json-ld">
@@ -47,10 +49,17 @@ const pageInit = {
     <div class="home-main">
         <Fragment set:html={indexMainBeforeProof} />
         {activeSiteProfile.id === 'us' && <HomeTestimonials />}
+        <section class="leaderboard-section" id="leaderboard">
+            <div class="section-badge" data-i18n="leaderboard.badge">Leaderboard</div>
+            <h2 class="section-title" data-i18n="leaderboard.homeTitle">Top Teams</h2>
+            <p class="leaderboard-intro" data-i18n="leaderboard.intro">Every mission you beat adds to your team score. Here's who's on top right now.</p>
+            <Leaderboard limit={5} showViewAll />
+        </section>
         <Fragment set:html={indexMainAfterProof} />
     </div>
     <Fragment slot="after-site-scripts">
         <PageWidgetsScripts pageInit={pageInit} />
+        <script defer is:inline src="/js/leaderboard.js?v=1"></script>
         <script defer is:inline src="/js/social-feed.js?v=1"></script>
     </Fragment>
 </SiteLayout>

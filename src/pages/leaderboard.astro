@@ -1,0 +1,32 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Leaderboard from '../components/Leaderboard.astro';
+import { definePage } from '../lib/define-page';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+
+const page = definePage({ canonicalPath: '/leaderboard' });
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Leaderboard', href: '/leaderboard' },
+]));
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise leaderboard-page">
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/leaderboard.css?v=1" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <header class="leaderboard-page-header">
+        <div class="section-badge" data-i18n="leaderboard.badge">Leaderboard</div>
+        <h1 class="section-title" data-i18n="leaderboard.pageTitle">The Leaderboard</h1>
+        <p class="leaderboard-intro" data-i18n="leaderboard.pageIntro">The top Time Mission teams this week, this month and of all time. Pick a location to see who rules your venue.</p>
+    </header>
+    <section class="leaderboard-section">
+        <Leaderboard limit={25} showLocationFilter />
+    </section>
+    <Fragment slot="after-site-scripts">
+        <script is:inline defer src="/js/leaderboard.js?v=1"></script>
+    </Fragment>
+</SiteLayout>

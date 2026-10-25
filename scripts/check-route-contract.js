@@ -26,6 +26,7 @@ const SCOPE_FILES = {
     'src/pages/groups.astro',
     'src/pages/gift-cards.astro',
     'src/pages/donation.astro',
+    'src/pages/leaderboard.astro',
     'src/pages/blog.astro',
     'src/pages/blog/[slug].astro',
     'src/pages/faq.astro',

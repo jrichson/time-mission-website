@@ -168,6 +168,16 @@
         font-size: 1.05rem;
         letter-spacing: 0.1em;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 4px 18px var(--tm26-glow);
+        /* Always-on flowing gradient (same motion as the desktop hover) */
+        background-image: linear-gradient(90deg, #FAAE17 0%, #F23929 17%, #EE0132 30%, #FF1BCE 50%, #EE0132 70%, #F23929 83%, #FAAE17 100%) !important;
+        background-size: 200% 100% !important;
+        animation: tm26-flow 3s linear infinite;
+    }
+
+    /* The bottom TICKETS bar replaces the hero's Book Now on phones */
+    .hero-cta .btn-tickets,
+    .hero-cta .btn-primary {
+        display: none !important;
     }
 
     /* The nav button moves to the bottom bar on phones */
@@ -178,6 +188,12 @@
     /* Leave room so the bar never covers the end of the page */
     body {
         padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+    .mobile-book-bar .mobile-book-btn {
+        animation: none;
     }
 }
 

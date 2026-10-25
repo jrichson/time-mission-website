@@ -1,3 +1,4 @@
+import { LEADERBOARD_PAGE_SNAPSHOT } from '../cms/migration-data/20261025_leaderboard_page_snapshot';
 import { EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20261010_eindhoven_direct_checkout_snapshot';
 import { EINDHOVEN_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20261016_eindhoven_now_open_snapshot';
 import { EDISON_HOURS_SNAPSHOT } from '../cms/migration-data/20261019_edison_hours_snapshot';
@@ -238,6 +239,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 EINDHOVEN_SIGNUP_PAGE_SNAPSHOT,
                 HOME_LINK_PREVIEW_PAGE_SNAPSHOT,
                 ...LOCATION_SEARCH_TITLES_PAGE_SNAPSHOT,
+                LEADERBOARD_PAGE_SNAPSHOT,
             ]
                 .map((page) => [page.path, page]),
         );
