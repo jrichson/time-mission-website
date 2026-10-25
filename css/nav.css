@@ -14,11 +14,11 @@
     width: min(1400px, calc(100% - 3rem));
     margin: 0 auto;
     z-index: 1000;
-    padding: 0.6rem 0.75rem 0.6rem 1.5rem;
+    padding: 0.6rem 0.75rem 0.6rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 20px;
+    border-radius: 999px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%);
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
@@ -132,20 +132,19 @@
 .nav-links a {
     color: var(--white-soft, #E5E5E5);
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 1.02rem;
     font-weight: 500;
     transition:
         color var(--motion-standard) ease,
-        text-shadow var(--motion-standard) ease;
+        -webkit-text-stroke-color var(--motion-standard) ease;
+    -webkit-text-stroke: 0.45px transparent;
 }
 
-.nav-links a:hover {
-    color: var(--orange);
-    text-shadow: 0 0 10px rgba(249, 164, 26, 0.4);
-}
-
+/* Hover/active: bold white. Stroke fakes the heavier weight so the links don't shift. */
+.nav-links a:hover,
 .nav-links a.active {
-    color: var(--orange);
+    color: var(--white);
+    -webkit-text-stroke-color: var(--white);
 }
 
 /* ---- Nav Right (Location + Tickets) ---- */
@@ -278,6 +277,7 @@
     align-items: center;
     gap: 0.5rem;
     background: var(--gradient-primary);
+    background-origin: border-box;
     color: var(--white);
     padding: 0.75rem 1.5rem;
     min-height: var(--target-comfortable);
@@ -347,8 +347,8 @@
     .nav {
         top: calc(var(--tm-ticker-height) + var(--tm-utility-height) + env(safe-area-inset-top, 0px) + 8px);
         width: calc(100% - 1.5rem);
-        padding: 0.5rem 0.5rem 0.5rem 0.75rem;
-        border-radius: 16px;
+        padding: 0.5rem 0.5rem 0.5rem 1rem;
+        border-radius: 999px;
     }
 
     .nav--no-ticker {

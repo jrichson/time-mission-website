@@ -149,6 +149,7 @@
     width: 100%;
     padding: var(--button-padding-y) var(--button-padding-x);
     background: var(--gradient-primary);
+    background-origin: border-box;
     color: var(--white);
     text-decoration: none;
     font-family: var(--display);

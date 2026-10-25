@@ -31,6 +31,7 @@
     right: 14%;
     height: 2px;
     background: var(--gradient-primary);
+    background-origin: border-box;
     z-index: 0;
     transform: scaleX(0);
     transform-origin: center;
@@ -52,6 +53,7 @@
     align-items: center;
     justify-content: center;
     background: var(--gradient-primary);
+    background-origin: border-box;
     border: none;
     border-radius: 50%;
     font-family: var(--display);
@@ -65,6 +67,7 @@
 .step-card:nth-child(3) .step-number,
 .step-card:nth-child(4) .step-number {
     background: var(--gradient-primary);
+    background-origin: border-box;
 }
 
 .step-title {

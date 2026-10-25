@@ -148,6 +148,7 @@
             gap: 0.75rem;
             padding: 1rem 2rem;
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             border: none;
             border-radius: 100px;

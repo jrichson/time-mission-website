@@ -199,3 +199,65 @@
         letter-spacing: 0.1em !important;
     }
 }
+
+/* Secondary (outline) buttons: TM26 gradient outline on hover instead of orange.
+   Drawn as a masked ring so it follows the pill radius over any background. */
+.btn-secondary {
+    position: relative;
+    isolation: isolate;
+}
+
+.btn-secondary::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+    border-color: transparent !important;
+    color: var(--white) !important;
+    box-shadow: 0 6px 22px rgba(238, 1, 50, 0.22);
+}
+
+.btn-secondary:hover::before,
+.btn-secondary:focus-visible::before {
+    opacity: 1;
+}
+
+/* Gradient buttons: on hover the TM26 gradient flows across the button (like the hero "MISSION").
+   The gradient mirrors itself so the loop has no seam. */
+@keyframes tm26-flow {
+    from { background-position: 0% 50%; }
+    to { background-position: 200% 50%; }
+}
+
+.btn-tickets:hover,
+.btn-primary:hover,
+.nav-arrow:hover,
+.event-type-cta:not(.ghost):hover,
+#cc-main .cm__btn[data-role="all"]:hover {
+    background-image: linear-gradient(90deg, #FAAE17 0%, #F23929 17%, #EE0132 30%, #FF1BCE 50%, #EE0132 70%, #F23929 83%, #FAAE17 100%) !important;
+    background-size: 200% 100% !important;
+    background-origin: border-box;
+    animation: tm26-flow 2.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-tickets:hover,
+    .btn-primary:hover,
+    .nav-arrow:hover,
+    .event-type-cta:not(.ghost):hover,
+    #cc-main .cm__btn[data-role="all"]:hover {
+        animation: none;
+    }
+}

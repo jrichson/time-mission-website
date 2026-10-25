@@ -43,7 +43,11 @@ body:has(.nav.scrolled) .utility-bar {
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0 2rem;
+    /* Same width and inner padding as the glass nav so content lines up with it */
+    box-sizing: border-box;
+    width: min(1400px, calc(100% - 3rem));
+    margin: 0 auto;
+    padding: 0 0.75rem 0 2rem;
 }
 
 .utility-left,
@@ -58,20 +62,18 @@ body:has(.nav.scrolled) .utility-bar {
     width: 14px;
     height: 14px;
     flex-shrink: 0;
-    color: var(--tm26-amber);
+    color: var(--white);
 }
 
 .utility-location-name {
     font-weight: 700;
     color: var(--white);
-    text-decoration: underline;
-    text-decoration-color: rgba(250, 174, 23, 0.6);
-    text-underline-offset: 3px;
+    text-decoration: none;
     white-space: nowrap;
 }
 
 .utility-location-name:hover {
-    text-decoration-color: var(--tm26-amber);
+    color: var(--tm26-amber);
 }
 
 .utility-hours {
@@ -105,6 +107,7 @@ body:has(.nav.scrolled) .utility-bar {
     letter-spacing: 0.12em;
     text-transform: uppercase;
     background: var(--gradient-tm26);
+    background-origin: border-box;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -137,21 +140,19 @@ body:has(.nav.scrolled) .utility-bar {
     align-items: center;
     gap: 0.4rem;
     height: 28px;
-    padding: 0 0.75rem;
-    border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.04);
+    padding: 0;
+    border: 0;
+    background: none;
     color: var(--white);
     font: inherit;
     font-weight: 600;
     cursor: pointer;
-    transition: border-color var(--motion-fast) ease, background var(--motion-fast) ease;
+    transition: color var(--motion-fast) ease;
 }
 
 .utility-account-btn:hover,
 .utility-account-btn[aria-expanded="true"] {
-    border-color: var(--tm26-pink);
-    background: rgba(255, 27, 206, 0.08);
+    color: var(--tm26-amber);
 }
 
 .utility-account-btn svg {
@@ -193,6 +194,7 @@ body:has(.nav.scrolled) .utility-bar {
     height: 2px;
     border-radius: 2px;
     background: var(--gradient-tm26);
+    background-origin: border-box;
 }
 
 .utility-account-menu a {
@@ -227,11 +229,7 @@ body:has(.nav.scrolled) .utility-bar {
     font-size: 0.75rem;
 }
 
-@media (max-width: 1200px) {
-    @media (max-width: 1024px) {
-    .utility-inner {
-        padding: 0 1rem;
-    }
+@media (max-width: 1024px) {
 
     .utility-change,
     .utility-link {
@@ -258,8 +256,18 @@ body:has(.nav.scrolled) .utility-bar {
         display: none;
     }
 
+    .utility-inner {
+        width: calc(100% - 1.5rem);
+        padding: 0 0.5rem 0 1rem;
+    }
+
     .utility-account-btn {
         height: 26px;
-        padding: 0 0.55rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .utility-inner {
+        padding: 0 0.4rem 0 0.625rem;
     }
 }

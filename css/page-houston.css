@@ -204,6 +204,7 @@
             right: 14%;
             height: 2px;
             background: var(--gradient-primary);
+            background-origin: border-box;
             z-index: 0;
             transform: scaleX(0);
             transform-origin: center;

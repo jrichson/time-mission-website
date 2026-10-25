@@ -23,6 +23,7 @@
 
         .hero-title span {
             background: var(--gradient-accent);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;

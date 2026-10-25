@@ -82,6 +82,7 @@
 
         .hero-title .highlight {
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -192,6 +193,7 @@
             align-items: center;
             gap: 0.5rem;
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             padding: 1rem 2rem;
             border-radius: 100px;
@@ -431,6 +433,7 @@
             font-size: 1.2rem;
             letter-spacing: 0.2em;
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -597,6 +600,7 @@
             padding: 0.65rem 1.1rem;
             border-radius: 100px;
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             font-family: var(--tech);
             font-size: 0.7rem;
@@ -792,6 +796,7 @@
 
         .event-info-body h3 .highlight {
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;

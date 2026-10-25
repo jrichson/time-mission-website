@@ -174,8 +174,9 @@
 
 .nav-arrow:hover {
     background: var(--gradient-primary);
+    background-origin: border-box;
     border-color: transparent;
-    box-shadow: 0 4px 20px rgba(239, 75, 35, 0.5);
+    box-shadow: 0 4px 20px var(--tm26-glow);
 }
 
 .nav-arrow svg {

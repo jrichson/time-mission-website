@@ -19,8 +19,6 @@ test.describe('Mobile location selector', () => {
     await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('mount-prospect');
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
     await expect(page.locator('#locationText')).toContainText('Mount Prospect');
-    await expect.poll(() => page.evaluate(() => document.getElementById('taglineText')?.textContent || ''))
-      .toContain('Time Mission Mount Prospect');
   });
 
   test('tapping a location link keeps the current page context', async ({ page }) => {

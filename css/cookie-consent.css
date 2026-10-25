@@ -23,6 +23,7 @@
 .cm__btn[data-role="all"],
 .pm__btn[data-role="all"] {
     background: var(--gradient-primary);
+    background-origin: border-box;
 }
 
 /* ==========================================================================
@@ -120,6 +121,7 @@
 
 #cc-main .cm--bar .cm__btn[data-role="all"] {
     background: var(--gradient-tm26);
+    background-origin: border-box;
     border: 1px solid transparent;
     color: var(--white);
 }

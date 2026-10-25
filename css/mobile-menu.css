@@ -130,6 +130,7 @@
         width: 100%;
         padding: 1rem;
         background: var(--gradient-primary);
+        background-origin: border-box;
         color: var(--white);
         text-align: center;
         text-decoration: none;

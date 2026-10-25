@@ -165,8 +165,9 @@
 
 .nav-arrow:hover {
             background: var(--gradient-primary);
+            background-origin: border-box;
             border-color: transparent;
-            box-shadow: 0 4px 20px rgba(239, 75, 35, 0.5);
+            box-shadow: 0 4px 20px var(--tm26-glow);
         }
 
 .nav-arrow svg {
@@ -415,6 +416,7 @@
             align-items: center;
             justify-content: center;
             background: var(--gradient-primary);
+            background-origin: border-box;
             border: none;
             border-radius: 50%;
             font-family: var(--display);
@@ -428,6 +430,7 @@
         .step-card:nth-child(3) .step-number,
         .step-card:nth-child(4) .step-number {
             background: var(--gradient-primary);
+            background-origin: border-box;
         }
 
 .step-title {

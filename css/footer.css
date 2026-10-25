@@ -181,6 +181,7 @@ html {
     min-height: var(--target-min);
     padding: 0.875rem 1.75rem;
     background: var(--gradient-primary);
+    background-origin: border-box;
     border: none;
     border-radius: var(--button-radius-pill);
     color: var(--white);
