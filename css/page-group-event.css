@@ -149,7 +149,7 @@
         }
 
         @media (max-width: 600px) {
-            .hero { min-height: 60vh; padding: calc(clamp(6.5rem, 18vw, 8rem) + var(--tm-header-extra, 0px)) var(--space-page-inline) clamp(2.5rem, 5vw, 3rem); }
+            .hero { min-height: 60vh; padding: calc(clamp(7.5rem, 20vw, 9rem) + var(--tm-header-extra, 0px)) var(--space-page-inline) clamp(2.5rem, 5vw, 3rem); }
             .hero-title { font-size: clamp(2.5rem, 12vw, 4rem); }
             .hero-cta { gap: var(--space-gutter); }
             .hero-cta .btn-primary,
@@ -679,7 +679,7 @@
         /* Ticket panel styles are owned by /css/ticket-panel.css. */
 
         @media (max-width: 480px) {
-            .hero { padding: calc(100px + var(--tm-header-extra, 0px)) 1rem 2.5rem; min-height: 55vh; }
+            .hero { padding: calc(116px + var(--tm-header-extra, 0px)) 1rem 2.5rem; min-height: 55vh; }
             .hero-title { font-size: 2rem; line-height: 1.15; }
             .hero-subtitle { font-size: 0.95rem; }
             .event-page-feature-grid { grid-template-columns: 1fr; gap: 1.25rem; }

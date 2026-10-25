@@ -14,7 +14,7 @@
         }
 
         .gift-card-hero {
-            padding: calc(4.25rem + var(--tm-header-extra, 0px)) 2rem 5rem;
+            padding: calc(6.5rem + var(--tm-header-extra, 0px)) 2rem 5rem;
             max-width: 1200px;
             margin: 0 auto;
         }

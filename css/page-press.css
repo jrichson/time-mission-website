@@ -446,7 +446,7 @@ body.tm-resource-page {
 
     .tm-resource-hero {
         min-height: 68vh;
-        padding-top: calc(6.5rem + var(--tm-header-extra, 0px));
+        padding-top: calc(7.5rem + var(--tm-header-extra, 0px));
     }
 
     .tm-resource-hero h1 {

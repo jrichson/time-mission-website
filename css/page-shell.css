@@ -119,7 +119,7 @@ body.has-noise::before {
 
 @media (max-width: 480px) {
     .page-header {
-        padding: calc(6.5rem + var(--tm-header-extra, 0px)) 1rem 2rem;
+        padding: calc(7.5rem + var(--tm-header-extra, 0px)) 1rem 2rem;
     }
 
     .page-header::before {
