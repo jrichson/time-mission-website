@@ -354,7 +354,14 @@
       "location.useMine": "Use my location",
       "location.geoFinding": "Finding your location…",
       "location.geoBlocked": "Location is off for this site. Allow it in your browser or phone settings, then try again.",
-      "location.geoFailed": "We couldn't find you. Try again or search above."
+      "location.geoFailed": "We couldn't find you. Try again or search above.",
+      "footer.explore": "Explore",
+      "footer.groups": "Groups",
+      "footer.help": "Help",
+      "footer.howToPlay": "How to Play",
+      "footer.allGroups": "All Groups",
+      "footer.newsletter.title": "Get first dibs on new missions",
+      "footer.newsletter.text": "Sneak peeks, ticket drops and special events, straight to your inbox."
     },
     "es": {
       "language.label": "Idioma",
@@ -678,7 +685,14 @@
       "location.useMine": "Usar mi ubicación",
       "location.geoFinding": "Buscando tu ubicación…",
       "location.geoBlocked": "La ubicación está desactivada para este sitio. Actívala en la configuración del navegador o del teléfono e inténtalo de nuevo.",
-      "location.geoFailed": "No pudimos encontrarte. Inténtalo de nuevo o busca arriba."
+      "location.geoFailed": "No pudimos encontrarte. Inténtalo de nuevo o busca arriba.",
+      "footer.explore": "Explorar",
+      "footer.groups": "Grupos",
+      "footer.help": "Ayuda",
+      "footer.howToPlay": "Cómo jugar",
+      "footer.allGroups": "Todos los grupos",
+      "footer.newsletter.title": "Sé el primero en probar nuevas misiones",
+      "footer.newsletter.text": "Adelantos, lanzamientos de entradas y eventos especiales, directo a tu correo."
     },
     "nl": {
       "language.label": "Taal",
@@ -1002,7 +1016,14 @@
       "location.useMine": "Gebruik mijn locatie",
       "location.geoFinding": "Je locatie zoeken…",
       "location.geoBlocked": "Locatie staat uit voor deze site. Sta het toe in je browser- of telefooninstellingen en probeer het opnieuw.",
-      "location.geoFailed": "We konden je niet vinden. Probeer het opnieuw of zoek hierboven."
+      "location.geoFailed": "We konden je niet vinden. Probeer het opnieuw of zoek hierboven.",
+      "footer.explore": "Ontdekken",
+      "footer.groups": "Groepen",
+      "footer.help": "Hulp",
+      "footer.howToPlay": "Hoe speel je",
+      "footer.allGroups": "Alle groepen",
+      "footer.newsletter.title": "Als eerste nieuwe missies spelen",
+      "footer.newsletter.text": "Previews, ticketacties en speciale events, direct in je inbox."
     },
     "fr": {
       "language.label": "Langue",
@@ -1326,7 +1347,14 @@
       "location.useMine": "Utiliser ma position",
       "location.geoFinding": "Recherche de votre position…",
       "location.geoBlocked": "La localisation est désactivée pour ce site. Autorisez-la dans les réglages du navigateur ou du téléphone, puis réessayez.",
-      "location.geoFailed": "Impossible de vous localiser. Réessayez ou utilisez la recherche ci-dessus."
+      "location.geoFailed": "Impossible de vous localiser. Réessayez ou utilisez la recherche ci-dessus.",
+      "footer.explore": "Explorer",
+      "footer.groups": "Groupes",
+      "footer.help": "Aide",
+      "footer.howToPlay": "Comment jouer",
+      "footer.allGroups": "Tous les groupes",
+      "footer.newsletter.title": "Soyez les premiers sur les nouvelles missions",
+      "footer.newsletter.text": "Avant-premières, sorties de billets et événements spéciaux, directement dans votre boîte mail."
     }
   }
 }

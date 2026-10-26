@@ -422,6 +422,10 @@ body:has(.nav.scrolled) .utility-bar {
         min-width: 0;
     }
 
+    .utility-location-name[hidden] {
+        display: none !important;
+    }
+
     .utility-location-name::after {
         content: '';
         flex-shrink: 0;

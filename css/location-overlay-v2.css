@@ -22,6 +22,7 @@
 
 .location-dropdown-title {
     font-family: var(--display);
+    text-transform: var(--display-case, none);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 400;
     letter-spacing: 0.02em;
@@ -241,6 +242,7 @@
 
 .location-info-name {
     font-family: var(--display);
+    text-transform: var(--display-case, none);
     font-size: 2.4rem;
     font-weight: 400;
     letter-spacing: 0.02em;

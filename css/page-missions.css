@@ -75,6 +75,7 @@
 
         .hero-title {
             font-family: var(--display);
+            text-transform: var(--display-case, none);
             font-size: clamp(3rem, 7vw, 5.5rem);
             line-height: 1;
             letter-spacing: 0.02em;
@@ -117,6 +118,7 @@
 
         .geo-answer-inner h2 {
             font-family: var(--display);
+            text-transform: var(--display-case, none);
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.05;
             letter-spacing: 0.02em;
@@ -384,6 +386,7 @@
 
         .portal-title {
             font-family: var(--display);
+            text-transform: var(--display-case, none);
             font-size: 2rem;
             letter-spacing: 0.02em;
             margin-bottom: 0.5rem;
@@ -569,6 +572,7 @@
 
         .cta-title {
             font-family: var(--display);
+            text-transform: var(--display-case, none);
             font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: 0.02em;
             margin-bottom: 1rem;

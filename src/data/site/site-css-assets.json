@@ -1,25 +1,27 @@
 {
   "core": [
-    "/css/variables.css?v=3",
+    "/css/variables.css?v=4",
     "/css/base.css",
     "/css/layout-guards.css?v=4",
     "/css/social-proof.css?v=1",
     "/css/small-viewport-overrides.css?v=1",
     "/css/page-shell.css?v=1",
     "/css/nav-ticker.css?v=1",
-    "/css/utility-bar.css?v=8",
+    "/css/utility-bar.css?v=9",
     "/css/nav.css?v=27",
     "/css/nav-mega.css?v=4",
-    "/css/mobile-menu.css?v=5",
+    "/css/mobile-menu.css?v=6",
     "/css/language-suggestion.css?v=2",
     "/css/location-overlay.css?v=2",
     "/css/location-overlay-v2.css?v=5",
     "/css/footer.css?v=6",
+    "/css/footer-v2.css?v=1",
     "/css/newsletter.css?v=5",
     "/css/ticket-panel.css?v=2",
     "/css/buttons.css?v=1",
     "/css/eyebrows.css?v=2",
     "/css/faq-modern.css?v=1",
-    "/css/mobile-fit.css?v=1"
+    "/css/mobile-fit.css?v=1",
+    "/css/termina-headings.css?v=2"
   ]
 }

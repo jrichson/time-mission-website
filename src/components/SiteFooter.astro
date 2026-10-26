@@ -88,6 +88,30 @@ const hasPageLocation = Boolean(pageLocation);
 ---
 
 <footer class="footer">
+    <div class="footer-signup">
+        <div class="footer-signup-copy">
+            <h2 class="footer-signup-title" data-i18n="footer.newsletter.title">Get first dibs on new missions</h2>
+            <p data-i18n="footer.newsletter.text">Sneak peeks, ticket drops and special events, straight to your inbox.</p>
+        </div>
+        <form class="footer-signup-form" name="newsletter" method="POST" action="/api/newsletter" data-tm-form="newsletter">
+            <input type="hidden" name="form-name" value="newsletter">
+            <p class="visually-hidden">
+                <label><span data-i18n="home.newsletter.honeypot">Do not fill this out if you are human:</span> <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+            </p>
+            <div class="footer-signup-fields">
+                <label class="visually-hidden" for="footer-signup-name" data-i18n="home.newsletter.firstName">First name</label>
+                <input type="text" id="footer-signup-name" name="given_name" placeholder="First name" data-i18n-placeholder="home.newsletter.firstNamePlaceholder" autocomplete="given-name" required>
+                <label class="visually-hidden" for="footer-signup-email" data-i18n="home.newsletter.email">Email</label>
+                <input type="email" id="footer-signup-email" name="email" placeholder="Email" data-i18n-placeholder="home.newsletter.emailPlaceholder" autocomplete="email" required>
+                <button type="submit" class="btn-primary footer-signup-submit" data-i18n="home.newsletter.submit">Sign Up</button>
+            </div>
+            <label class="footer-signup-consent">
+                <input type="checkbox" name="marketing_opt_in" value="yes" required>
+                <span><span data-i18n="home.newsletter.consent">I'd like to receive news, updates, and special offers from Time&nbsp;Mission.</span> <a href="/privacy" data-i18n="footer.privacy">Privacy</a></span>
+            </label>
+            <div class="tm-turnstile" data-tm-turnstile></div>
+        </form>
+    </div>
     <div class="footer-grid">
         <div class="footer-brand">
             <a href="/" class="footer-brand-home" aria-label="Time Mission homepage" data-i18n-aria-label="footer.homeAria">
@@ -121,20 +145,34 @@ const hasPageLocation = Boolean(pageLocation);
             </div>
         </div>
         <div class="footer-column">
-            <h3 class="footer-title" data-i18n="footer.experience">EXPERIENCE</h3>
+            <h3 class="footer-title" data-i18n="footer.explore">Explore</h3>
             <ul class="footer-links">
-                <li><a href="/" data-i18n="nav.home">Home</a></li>
-                <li><a href="/about" data-i18n="nav.about">About</a></li>
                 <li><a href="/missions" data-i18n="nav.missions">Missions</a></li>
-                <li><a href="/groups" data-i18n="nav.groups">Groups</a></li>
+                <li><a href="/leaderboard" data-i18n="leaderboard.badge">Leaderboard</a></li>
+                <li><a href="/about" data-i18n="footer.howToPlay">How to Play</a></li>
                 <li><a href="/gift-cards" data-i18n="nav.giftCards">Gift Cards</a></li>
-                <li><a href="/faq" data-i18n="nav.faq">FAQ</a></li>
+                <li><a href="/locations" data-i18n="nav.locations">Locations</a></li>
+                <li><a href="/blog">Blog</a></li>
             </ul>
         </div>
         <div class="footer-column">
-            <h3 class="footer-title" data-i18n="footer.info">INFO</h3>
+            <h3 class="footer-title" data-i18n="footer.groups">Groups</h3>
             <ul class="footer-links">
+                <li><a href="/groups/birthdays" data-i18n="home.groups.birthdays">Birthdays</a></li>
+                <li><a href="/groups/corporate" data-i18n="home.groups.corporate">Corporate</a></li>
+                <li><a href="/groups/field-trips" data-i18n="home.groups.fieldTrips">Field Trips</a></li>
+                <li><a href="/groups/private-events" data-i18n="home.groups.privateEvents">Private Events</a></li>
+                <li><a href="/groups/holidays" data-i18n="home.groups.holidays">Holidays</a></li>
+                <li><a href="/groups" data-i18n="footer.allGroups">All Groups</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3 class="footer-title" data-i18n="footer.help">Help</h3>
+            <ul class="footer-links">
+                <li><a href="/faq" data-i18n="nav.faq">FAQ</a></li>
                 <li><a href={contactHref} data-i18n="location.contactUs">Contact Us</a></li>
+                <li><a href="/waiver" data-i18n="footer.waiver">Waiver</a></li>
+                <li><a href="/press" data-i18n="footer.press">Press</a></li>
                 {teamApplicationUrl && (
                     <li>
                         <a href={teamApplicationUrl} target="_blank" rel="noopener" data-i18n="footer.joinTeam">
@@ -142,10 +180,7 @@ const hasPageLocation = Boolean(pageLocation);
                         </a>
                     </li>
                 )}
-                <li><a href="/press" data-i18n="footer.press">Press</a></li>
                 <li data-tm-donation-link hidden><a href="/donation" data-i18n="footer.donation">Donation</a></li>
-                <li><a href="/waiver" data-i18n="footer.waiver">Waiver</a></li>
-                <li><a href="/licensing" data-i18n="footer.licensing">Licensing</a></li>
             </ul>
         </div>
         <div class="footer-column footer-locations-column">

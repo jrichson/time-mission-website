@@ -1,0 +1,58 @@
+/* ==========================================
+   TERMINA HEADINGS (test)
+   --display now points at Termina. Termina is roughly twice as wide as Bebas Neue,
+   so display headings get a smaller size and a heavier weight here.
+   To roll back: restore --display in variables.css and drop this file from site-css-assets.json.
+   ========================================== */
+
+.section-title,
+.faq-heading,
+.cta-title,
+.footer-signup-title,
+.location-dropdown-title,
+.location-info-name,
+.page-hero h1,
+.page-header h1,
+[class*="-hero"] h1:not(.hero-title),
+[class*="-header"] h1 {
+    font-family: var(--display);
+    text-transform: var(--display-case, none);
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    text-transform: uppercase;
+    line-height: 1.08 !important;
+}
+
+.section-title,
+.faq-heading,
+.cta-title,
+[class*="-hero"] h1:not(.hero-title),
+[class*="-header"] h1 {
+    font-size: clamp(1.55rem, 3.1vw, 2.6rem) !important;
+}
+
+/* Long answer headings on FAQ, groups, missions and locations pages */
+h2[id$="-answer-title"],
+h2[id$="-answer-summary-title"] {
+    font-size: clamp(1.3rem, 2.4vw, 2rem) !important;
+    line-height: 1.15 !important;
+}
+
+.footer-signup-title,
+.location-dropdown-title {
+    font-size: clamp(1.4rem, 2.6vw, 2.1rem) !important;
+}
+
+.location-info-name {
+    font-size: 1.5rem !important;
+}
+
+@media (max-width: 768px) {
+    .section-title,
+    .faq-heading,
+    .cta-title,
+    [class*="-hero"] h1:not(.hero-title),
+    [class*="-header"] h1 {
+        font-size: clamp(1.35rem, 6.2vw, 1.75rem) !important;
+    }
+}

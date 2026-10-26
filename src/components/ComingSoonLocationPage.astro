@@ -108,6 +108,7 @@ comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_SHORT_NAME', location.sh
 comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_SLUG', location.slug);
 comingSoonMain = replaceToken(comingSoonMain, 'LOCATION_PAGE_STATUS_LABEL', pageStatusLabel);
 comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_LABEL', primaryCtaLabel);
+comingSoonMain = replaceToken(comingSoonMain, 'HERO_CTA_LABEL', primaryCtaLabel === 'Book Now' ? 'Tickets' : primaryCtaLabel);
 comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_HREF', primaryCtaHref);
 comingSoonMain = replaceToken(comingSoonMain, 'PRIMARY_CTA_CLASS', primaryCtaClass);
 comingSoonMain = replaceRawToken(comingSoonMain, 'PRIMARY_CTA_ATTRS', primaryCtaAttrs);

@@ -174,11 +174,6 @@
         animation: tm26-flow 3s linear infinite;
     }
 
-    /* The bottom TICKETS bar replaces the hero's Book Now on phones */
-    .hero-cta .btn-tickets,
-    .hero-cta .btn-primary {
-        display: none !important;
-    }
 
     /* The location selector's Book Now is redundant with the bottom TICKETS bar */
     .location-dropdown .location-info-actions {

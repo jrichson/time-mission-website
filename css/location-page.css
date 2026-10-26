@@ -122,6 +122,7 @@
 
 .hero-title {
             font-family: var(--display);
+            text-transform: var(--display-case, none);
             font-size: clamp(4rem, 12vw, 10rem);
             font-weight: 400;
             line-height: 0.9;
@@ -382,6 +383,7 @@
 
 .section-title {
             font-family: var(--display);
+            text-transform: var(--display-case, none);
             font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: 0.02em;
             margin-bottom: 1.5rem;

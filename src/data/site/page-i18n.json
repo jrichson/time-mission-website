@@ -115,6 +115,8 @@
         "\"Fantastisch concept! De hele familie was meteen verslaafd aan de uitdagingen. Er is echt niets vergelijkbaars in Antwerpen. Absolute aanrader!\"",
         "\"Het verjaardagsfeestje van mijn zoon was onvergetelijk. De kinderen waren volledig in de ban en het personeel was super vriendelijk en behulpzaam.\"",
         "Antwerpen",
+        "BE",
+        "BOOK YOUR ADVENTURE",
         "CASTLE CONQUEST",
         "CONTROL ROOM",
         "Contact",
@@ -139,9 +141,12 @@
         "PRIVATE EYE",
         "Persian Palace",
         "Pirates Attack",
+        "STEP INTO THE",
         "Scroll",
         "Swipe",
         "Team",
+        "Tickets",
+        "Time Mission Eindhoven:",
         "Time Mission Houston:",
         "Time Mission Manassas:",
         "Time Mission Mount Prospect:",
@@ -149,11 +154,7 @@
         "Time Mission Palisades (West Nyack):",
         "Time Mission Philadelphia:",
         "Timing",
-        "USA Office, Time Mission Corp Inc.",
-        "STEP INTO THE",
-        "BOOK YOUR ADVENTURE",
-        "BE",
-        "Time Mission Eindhoven:"
+        "USA Office, Time Mission Corp Inc."
       ],
       "fr": [
         "Assistance",
@@ -1413,7 +1414,8 @@
       "See the top Time Mission teams this week, this month and of all time. Play more missions, climb the board.": "Bekijk de beste Time Mission-teams van deze week, deze maand en aller tijden. Speel meer missies en klim op de ranglijst.",
       "Explore Missions": "Ontdek de missies",
       "Players racing across a lit-up floor grid in a Time Mission room": "Spelers rennen over een verlichte vloer in een Time Mission-kamer",
-      "A team aiming at targets in a glowing Time Mission room": "Een team mikt op doelen in een oplichtende Time Mission-kamer"
+      "A team aiming at targets in a glowing Time Mission room": "Een team mikt op doelen in een oplichtende Time Mission-kamer",
+      "Tickets": "Tickets"
     },
     "fr": {
       ", then lets those teams compete across": ", puis permet à ces équipes de s'affronter",
@@ -2622,7 +2624,8 @@
       "See the top Time Mission teams this week, this month and of all time. Play more missions, climb the board.": "Découvrez les meilleures équipes Time Mission cette semaine, ce mois-ci et de tous les temps. Jouez plus de missions et grimpez au classement.",
       "Explore Missions": "Explorer les missions",
       "Players racing across a lit-up floor grid in a Time Mission room": "Des joueurs courent sur un sol lumineux dans une salle Time Mission",
-      "A team aiming at targets in a glowing Time Mission room": "Une équipe vise des cibles dans une salle lumineuse Time Mission"
+      "A team aiming at targets in a glowing Time Mission room": "Une équipe vise des cibles dans une salle lumineuse Time Mission",
+      "Tickets": "Billets"
     },
     "es": {
       ", then lets those teams compete across": ", luego permite que esos equipos compitan en",
@@ -3831,7 +3834,8 @@
       "See the top Time Mission teams this week, this month and of all time. Play more missions, climb the board.": "Descubre los mejores equipos de Time Mission esta semana, este mes y de todos los tiempos. Juega más misiones y escala en la clasificación.",
       "Explore Missions": "Explorar misiones",
       "Players racing across a lit-up floor grid in a Time Mission room": "Jugadores corriendo sobre un suelo iluminado en una sala de Time Mission",
-      "A team aiming at targets in a glowing Time Mission room": "Un equipo apuntando a objetivos en una sala luminosa de Time Mission"
+      "A team aiming at targets in a glowing Time Mission room": "Un equipo apuntando a objetivos en una sala luminosa de Time Mission",
+      "Tickets": "Entradas"
     }
   },
   "_profiles": {

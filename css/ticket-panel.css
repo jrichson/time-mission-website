@@ -51,6 +51,7 @@
 
 .ticket-panel-header h2 {
     font-family: var(--display);
+    text-transform: var(--display-case, none);
     font-size: 1.5rem;
     letter-spacing: 0.02em;
     margin: 0;
@@ -153,6 +154,7 @@
     color: var(--white);
     text-decoration: none;
     font-family: var(--display);
+    text-transform: var(--display-case, none);
     font-weight: 400;
     font-size: 1.3rem;
     letter-spacing: 0.06em;
@@ -237,6 +239,7 @@
 .booking-frame-header h3 {
     margin: 0;
     font-family: var(--display);
+    text-transform: var(--display-case, none);
     font-size: clamp(1rem, 2.5vw, 1.35rem);
     font-weight: 400;
     letter-spacing: 0.02em;
@@ -288,6 +291,7 @@
 
 .ticket-panel-info h3 {
     font-family: var(--display);
+    text-transform: var(--display-case, none);
     font-size: 1rem;
     letter-spacing: 0.05em;
     margin-bottom: 1rem;

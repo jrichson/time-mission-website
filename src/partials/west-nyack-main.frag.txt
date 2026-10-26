@@ -16,7 +16,7 @@
             <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive missions. Test your speed, strength, skill, and&nbsp;smarts.</p>
             <div class="hero-cta">
                 <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets" data-tm-location="west-nyack">
-                    Book Now
+                    Tickets
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>

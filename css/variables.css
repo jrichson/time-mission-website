@@ -48,7 +48,9 @@
     --gold-glow: rgba(255, 196, 0, 0.15);
 
     /* Typography */
-    --display: 'Bebas Neue', sans-serif;
+    --display: 'termina', 'Bebas Neue', sans-serif;
+    /* Bebas Neue is caps-only; Termina needs the uppercase made explicit */
+    --display-case: uppercase;
     --body: 'DM Sans', sans-serif;
     --mono: 'DM Sans', sans-serif;
     --tech: 'termina', 'Monument Extended', 'Orbitron', sans-serif;

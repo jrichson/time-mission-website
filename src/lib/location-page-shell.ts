@@ -97,6 +97,8 @@ function withLocationTemplateTokens(mainRaw: string, location: LocationRecord): 
     resolved = replaceToken(resolved, 'TEAM_SIZE_MAX', teamSize.max);
     resolved = replaceToken(resolved, 'LOCATION_PAGE_STATUS_LABEL', locationPageStatusLabel(location));
     resolved = replaceToken(resolved, 'PRIMARY_CTA_LABEL', primaryCta.label);
+    // The hero's booking button reads "Tickets"; the nav says Book Now and the page-end CTA keeps its label.
+    resolved = replaceToken(resolved, 'HERO_CTA_LABEL', primaryCta.label === 'Book Now' ? 'Tickets' : primaryCta.label);
     resolved = replaceToken(resolved, 'PRIMARY_CTA_HREF', primaryCta.href);
     resolved = replaceToken(resolved, 'PRIMARY_CTA_CLASS', isBookable ? 'btn-location-book' : 'btn-location-lead');
     resolved = replaceRawToken(resolved, 'PRIMARY_CTA_ATTRS', locationPrimaryCtaAttrs(location));
