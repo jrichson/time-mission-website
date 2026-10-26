@@ -17,6 +17,7 @@
 [class*="-header"] h1 {
     font-family: var(--display);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-weight: 700 !important;
     letter-spacing: 0 !important;
     text-transform: uppercase;
@@ -55,4 +56,17 @@ h2[id$="-answer-summary-title"] {
     [class*="-header"] h1 {
         font-size: clamp(1.35rem, 6.2vw, 1.75rem) !important;
     }
+}
+
+/* Page heroes (groups, events, promos): two lines at most at any width.
+   The homepage/venue "Step into the Mission" title keeps its own sizing. */
+.hero-title:not(:has(.line-2)) {
+    font-size: clamp(1.25rem, 4.8vw, 3.5rem) !important;
+    line-height: 1.05 !important;
+    max-width: none !important;
+}
+
+/* Give two-line page heroes room: the old 800px column fit Bebas, not Termina */
+.hero-content:has(> .hero-title:not(:has(.line-2))) {
+    max-width: min(1100px, 100%) !important;
 }

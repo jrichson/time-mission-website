@@ -660,10 +660,26 @@
         utilityHours.hidden = !utilityHours.textContent;
     }
 
-    // Phones: the location name itself opens the selector (no separate "Change" button)
+    // Mega-menu mission pools: show a random three each visit (server renders the first three).
+    document.querySelectorAll('[data-mega-random]').forEach(function (group) {
+        const count = parseInt(group.getAttribute('data-mega-random'), 10) || 3;
+        const pool = Array.prototype.filter.call(group.children, function (el) {
+            return !/--all\b/.test(el.className);
+        });
+        for (let i = pool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+        }
+        pool.forEach(function (el, i) {
+            el.hidden = i >= count;
+            if (i < count) group.insertBefore(el, group.querySelector('[class*="--all"]'));
+        });
+    });
+
+    // The location name itself opens the selector (phones have no separate "Change" button)
     if (utilityName) {
         utilityName.addEventListener('click', function (e) {
-            if (!narrowPickerQuery.matches || !isPlainPrimaryClick(e)) return;
+            if (!isPlainPrimaryClick(e)) return;
             const trigger = document.getElementById('utilityChange') || document.getElementById('utilityChoose');
             if (!trigger) return;
             e.preventDefault();

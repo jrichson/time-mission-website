@@ -202,12 +202,14 @@
 
 /* Secondary (outline) buttons: TM26 gradient outline on hover instead of orange.
    Drawn as a masked ring so it follows the pill radius over any background. */
-.btn-secondary {
+.btn-secondary,
+.btn-start-planning {
     position: relative;
     isolation: isolate;
 }
 
-.btn-secondary::before {
+.btn-secondary::before,
+.btn-start-planning::before {
     content: '';
     position: absolute;
     inset: -1px;
@@ -223,14 +225,18 @@
 }
 
 .btn-secondary:hover,
-.btn-secondary:focus-visible {
+.btn-secondary:focus-visible,
+.btn-start-planning:hover,
+.btn-start-planning:focus-visible {
     border-color: transparent !important;
     color: var(--white) !important;
     box-shadow: 0 6px 22px rgba(238, 1, 50, 0.22);
 }
 
 .btn-secondary:hover::before,
-.btn-secondary:focus-visible::before {
+.btn-secondary:focus-visible::before,
+.btn-start-planning:hover::before,
+.btn-start-planning:focus-visible::before {
     opacity: 1;
 }
 

@@ -1,17 +1,15 @@
 /* ==========================================
    FAQ: editorial list
-   Hairline dividers and numbered questions instead of stacked boxed cards.
+   Hairline dividers instead of stacked boxed cards.
    Loaded late in core; !important beats older per-page card styles.
    ========================================== */
 
 :is(.faq-list, .mini-faq-grid, .faq-section, .event-page-faq-inner, div):has(> :is(.faq-item, .mini-faq-item)) {
-    counter-reset: tm-faq;
     gap: 0 !important;
 }
 
 .faq-item,
 .mini-faq-item {
-    counter-increment: tm-faq;
     margin: 0 !important;
     border: 0 !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -44,20 +42,6 @@
     cursor: pointer;
 }
 
-/* Index number */
-.faq-question::before,
-.mini-faq-q::before {
-    content: counter(tm-faq, decimal-leading-zero);
-    flex-shrink: 0;
-    width: 2.25rem;
-    font-family: var(--tech);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--gray);
-    transition: color var(--motion-fast, 0.15s) ease;
-}
-
 .faq-question h3,
 .faq-question h4,
 .faq-question-text,
@@ -80,15 +64,6 @@
     color: var(--white) !important;
 }
 
-.faq-question:hover::before,
-.mini-faq-q:hover::before,
-.faq-item.active .faq-question::before,
-.mini-faq-item.open .mini-faq-q::before {
-    background: var(--gradient-tm26);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
 
 /* Plus in a thin ring; turns into an x when open */
 .faq-icon,
@@ -140,7 +115,7 @@ svg.faq-icon,
 .faq-answer-content,
 .faq-answer > p,
 .mini-faq-a > p {
-    padding: 0 3.5rem 1.75rem 3.5rem !important;
+    padding: 0 3.5rem 1.75rem 0 !important;
     max-width: 52rem;
     font-size: 1rem !important;
     line-height: 1.7 !important;
@@ -165,16 +140,11 @@ svg.faq-icon,
         padding: 1.25rem 0 !important;
     }
 
-    .faq-question::before,
-    .mini-faq-q::before {
-        width: 1.6rem;
-        font-size: 0.65rem;
-    }
 
     .faq-answer-content,
     .faq-answer > p,
     .mini-faq-a > p {
-        padding: 0 0 1.4rem 2.5rem !important;
+        padding: 0 0 1.4rem 0 !important;
         font-size: 0.95rem !important;
     }
 }

@@ -51,7 +51,9 @@
 
 .ticket-panel-header h2 {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 1.5rem;
     letter-spacing: 0.02em;
     margin: 0;
@@ -155,7 +157,8 @@
     text-decoration: none;
     font-family: var(--display);
     text-transform: var(--display-case, none);
-    font-weight: 400;
+    line-height: var(--display-leading, normal);
+    font-weight: var(--display-weight, 400);
     font-size: 1.3rem;
     letter-spacing: 0.06em;
     border-radius: var(--button-radius-pill);
@@ -240,8 +243,9 @@
     margin: 0;
     font-family: var(--display);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(1rem, 2.5vw, 1.35rem);
-    font-weight: 400;
+    font-weight: var(--display-weight, 400);
     letter-spacing: 0.02em;
     color: var(--white);
 }
@@ -291,7 +295,9 @@
 
 .ticket-panel-info h3 {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 1rem;
     letter-spacing: 0.05em;
     margin-bottom: 1rem;

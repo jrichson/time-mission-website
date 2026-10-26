@@ -3,6 +3,8 @@
 export const megaMenus: Record<string, {
     cards: { title: string; text: string; href: string; img: string; i18n?: string }[];
     links: { label: string; href: string; i18n?: string }[];
+    // When set, `cards` is a pool: three are shown at random (nav.js) and this tile comes last.
+    viewAll?: { title: string; text: string; href: string; img: string; i18n?: string };
 }> = {
     '/missions': {
         cards: [
@@ -10,7 +12,13 @@ export const megaMenus: Record<string, {
             { title: 'Alien Awakening', text: 'Crack the code before they wake.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Alien_Awakening-480.webp' },
             { title: 'Big Bang', text: 'Rebuild the universe, fast.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Big-Bang-480.webp' },
             { title: 'Server Heist', text: 'Slip past the lasers.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Server_Heist5-480.webp' },
+            { title: 'Glitch Matrix', text: 'Find the pattern before it finds you.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp' },
+            { title: 'Jungle Temple', text: 'Brave the traps of a lost temple.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Jungle-Temple-480.webp' },
+            { title: 'Orbital Relay', text: 'Keep the station running.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Orbital_Relay-480.webp' },
+            { title: 'Piano Piano', text: 'Play it back, note for note.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Piano_Piano-480.webp' },
+            { title: 'Pirates Attack', text: 'Defend the ship. Sink the raiders.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Pirates_Attack-480.webp' },
         ],
+        viewAll: { title: 'View All', text: 'See all 25+ missions.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Orbital_Pit-480.webp' },
         links: [
             { label: 'Leaderboard', href: '/leaderboard', i18n: 'leaderboard.badge' },
             { label: 'All 25+ missions', href: '/missions' },

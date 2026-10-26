@@ -34,7 +34,9 @@
 
 .section-title {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(2.5rem, 5vw, 4rem);
     letter-spacing: 0.02em;
     margin-bottom: 1.5rem;
@@ -211,7 +213,9 @@
 
 .stats[data-stats-style="arcade-slots"] .stat-number {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 4rem;
     background: var(--gradient-accent);
     background-origin: border-box;
@@ -288,7 +292,9 @@
 
 .stats[data-stats-style="counter-wheels"] .stat-number {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 2.5rem;
     color: var(--white);
     line-height: 1;
@@ -296,7 +302,9 @@
 
 .stats[data-stats-style="counter-wheels"] .stat-unit {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 1rem;
     color: var(--orange);
 }
@@ -378,7 +386,9 @@
 
 .stats[data-stats-style="flip-cards"] .stat-number {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 3.5rem;
     background: var(--gradient-accent);
     background-origin: border-box;
@@ -398,7 +408,9 @@
 
 .stats[data-stats-style="flip-cards"] .stat-back-title {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 1.5rem;
     color: var(--white);
     margin-bottom: 0.5rem;

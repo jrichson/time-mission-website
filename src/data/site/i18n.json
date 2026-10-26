@@ -360,7 +360,7 @@
       "footer.help": "Help",
       "footer.howToPlay": "How to Play",
       "footer.allGroups": "All Groups",
-      "footer.newsletter.title": "Get first dibs on new missions",
+      "footer.newsletter.title": "Join our newsletter",
       "footer.newsletter.text": "Sneak peeks, ticket drops and special events, straight to your inbox."
     },
     "es": {
@@ -691,7 +691,7 @@
       "footer.help": "Ayuda",
       "footer.howToPlay": "Cómo jugar",
       "footer.allGroups": "Todos los grupos",
-      "footer.newsletter.title": "Sé el primero en probar nuevas misiones",
+      "footer.newsletter.title": "Únete a nuestro boletín",
       "footer.newsletter.text": "Adelantos, lanzamientos de entradas y eventos especiales, directo a tu correo."
     },
     "nl": {
@@ -1022,7 +1022,7 @@
       "footer.help": "Hulp",
       "footer.howToPlay": "Hoe speel je",
       "footer.allGroups": "Alle groepen",
-      "footer.newsletter.title": "Als eerste nieuwe missies spelen",
+      "footer.newsletter.title": "Schrijf je in voor onze nieuwsbrief",
       "footer.newsletter.text": "Previews, ticketacties en speciale events, direct in je inbox."
     },
     "fr": {
@@ -1353,7 +1353,7 @@
       "footer.help": "Aide",
       "footer.howToPlay": "Comment jouer",
       "footer.allGroups": "Tous les groupes",
-      "footer.newsletter.title": "Soyez les premiers sur les nouvelles missions",
+      "footer.newsletter.title": "Inscrivez-vous à notre newsletter",
       "footer.newsletter.text": "Avant-premières, sorties de billets et événements spéciaux, directement dans votre boîte mail."
     }
   }

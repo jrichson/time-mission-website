@@ -150,8 +150,9 @@
     color: var(--white);
     font-family: var(--display);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(4rem, 7vw, 7.75rem);
-    font-weight: 400;
+    font-weight: var(--display-weight, 400);
     letter-spacing: 0.01em;
     line-height: 0.84;
     text-transform: uppercase;

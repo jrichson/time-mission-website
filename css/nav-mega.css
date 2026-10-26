@@ -282,3 +282,36 @@
 .mobile-menu .mobile-menu-cta {
     display: none !important;
 }
+
+/* Pool cards beyond the random three stay hidden */
+.mega-card[hidden],
+.mobile-mega-card[hidden] {
+    display: none !important;
+}
+
+/* "View All" tile: dimmed photo with an arrow */
+.mega-card--all .mega-card-media {
+    position: relative;
+}
+
+.mega-card--all .mega-card-media img {
+    filter: brightness(0.45) saturate(0.8);
+}
+
+.mega-card-all-arrow {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--white);
+    font-size: 2rem;
+    transition: transform var(--motion-fast) ease;
+}
+
+.mega-card--all:hover .mega-card-all-arrow {
+    transform: translateX(6px);
+}
+
+.mobile-mega-card--all img {
+    filter: brightness(0.45);
+}

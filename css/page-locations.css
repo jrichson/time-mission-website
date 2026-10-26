@@ -15,7 +15,9 @@
         }
 .hero-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(3rem, 8vw, 5rem);
             letter-spacing: 0.02em;
             margin-bottom: 1rem;
@@ -50,7 +52,9 @@
 
         .geo-answer-inner h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.05;
             letter-spacing: 0.02em;
@@ -199,7 +203,9 @@
 
         .loc-name {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.35rem;
             letter-spacing: 0.02em;
             color: var(--white);

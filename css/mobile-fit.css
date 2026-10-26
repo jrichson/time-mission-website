@@ -121,3 +121,13 @@
         margin-bottom: 1rem !important;
     }
 }
+
+/* One "Learn About Time Mission" button per page: the one in the intro.
+   The second copy under the stat tiles is retired at every width. */
+a.btn-secondary.welcome-learn-mobile {
+    display: none !important;
+}
+
+a.btn-secondary.welcome-learn-desktop {
+    display: inline-flex !important;
+}

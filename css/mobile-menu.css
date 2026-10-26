@@ -192,3 +192,11 @@
     }
 }
 
+
+/* Phones: BOOK NOW sits in the nav and TICKETS in the bottom bar, so the hero keeps only Explore Missions */
+@media (max-width: 768px) {
+    .hero-cta .btn-tickets,
+    .hero-cta .btn-primary {
+        display: none !important;
+    }
+}

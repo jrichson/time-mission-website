@@ -1,7 +1,9 @@
     
         .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: 0.02em;
             margin-bottom: 1.5rem;
@@ -30,7 +32,9 @@
 
         .faq-answer-summary h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.05;
             letter-spacing: 0.02em;
@@ -120,7 +124,9 @@
 
         .cta-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             margin-bottom: 1rem;
         }

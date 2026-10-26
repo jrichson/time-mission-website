@@ -8,7 +8,9 @@
 
         .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: 0.02em;
             margin-bottom: 1.5rem;
@@ -48,7 +50,9 @@
 
         .contact-form-card h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.8rem;
             letter-spacing: 0.02em;
             margin-bottom: 0.5rem;
@@ -185,7 +189,9 @@
 
         .locations-info h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.8rem;
             letter-spacing: 0.02em;
             margin-bottom: 0.5rem;
@@ -217,7 +223,9 @@
 
         .location-contact-card h3 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.2rem;
             letter-spacing: 0.02em;
             margin-bottom: 1rem;
@@ -284,7 +292,9 @@
 
         .general-contact h3 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.1rem;
             letter-spacing: 0.02em;
             margin-bottom: 1rem;

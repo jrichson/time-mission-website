@@ -75,7 +75,9 @@
 
         .about-hero h1 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(3rem, 7vw, 5.5rem);
             letter-spacing: 0.02em;
             color: var(--white);
@@ -103,7 +105,9 @@
         /* Base section title */
         .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: 0.02em;
             margin-bottom: 1.5rem;
@@ -135,7 +139,9 @@
 
         .what-is .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: 0.02em;
             margin-bottom: 1.5rem;
@@ -261,7 +267,9 @@
 
         .steps-header .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: 0.02em;
         }
@@ -458,7 +466,9 @@
 
         .step-node span {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.75rem;
             color: var(--orange);
             line-height: 1;
@@ -479,7 +489,9 @@
 
         .step-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.4rem;
             letter-spacing: 0.02em;
             color: var(--white);
@@ -673,7 +685,9 @@
 
         .before-arrive-header .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: 0.02em;
         }
@@ -744,7 +758,9 @@
 
         .checklist-content h3 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.2rem;
             letter-spacing: 0.02em;
             color: var(--white);
@@ -806,7 +822,9 @@
 
         .about-cta .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: 0.02em;
             margin-bottom: 1rem;

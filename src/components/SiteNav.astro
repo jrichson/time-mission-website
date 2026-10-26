@@ -240,14 +240,21 @@ import { megaMenus } from '../lib/mega-menus';
                         <a href={item.href} data-i18n={item.i18n} data-label={item.label} aria-haspopup={mega ? 'true' : undefined}>{item.label}</a>
                         {mega && (
                             <div class="mega-panel">
-                                <div class="mega-cards">
-                                    {mega.cards.map((card) => (
-                                        <a class="mega-card" href={card.href}>
+                                <div class="mega-cards" data-mega-random={mega.viewAll ? '3' : undefined}>
+                                    {mega.cards.map((card, index) => (
+                                        <a class="mega-card" href={card.href} hidden={mega.viewAll && index >= 3 ? true : undefined}>
                                             <span class="mega-card-media"><img src={card.img} alt="" width="480" height="320" loading="lazy" decoding="async" /></span>
                                             <span class="mega-card-title" data-i18n={card.i18n}>{card.title}</span>
                                             <span class="mega-card-text">{card.text}</span>
                                         </a>
                                     ))}
+                                    {mega.viewAll && (
+                                        <a class="mega-card mega-card--all" href={mega.viewAll.href}>
+                                            <span class="mega-card-media"><img src={mega.viewAll.img} alt="" width="480" height="320" loading="lazy" decoding="async" /><span class="mega-card-all-arrow" aria-hidden="true">→</span></span>
+                                            <span class="mega-card-title">{mega.viewAll.title}</span>
+                                            <span class="mega-card-text">{mega.viewAll.text}</span>
+                                        </a>
+                                    )}
                                 </div>
                                 <ul class="mega-links">
                                     {mega.links.map((link) => (

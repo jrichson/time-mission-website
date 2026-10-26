@@ -23,8 +23,9 @@
 .location-dropdown-title {
     font-family: var(--display);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 400;
+    font-weight: var(--display-weight, 400);
     letter-spacing: 0.02em;
     text-transform: uppercase;
     color: var(--white);
@@ -243,8 +244,9 @@
 .location-info-name {
     font-family: var(--display);
     text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 2.4rem;
-    font-weight: 400;
+    font-weight: var(--display-weight, 400);
     letter-spacing: 0.02em;
     line-height: 1;
     margin-bottom: 0.75rem;
@@ -588,5 +590,118 @@
 @media (max-width: 1100px) {
     .location-overlay-right .location-info-content {
         order: -1;
+    }
+}
+
+/* ---- Row layout: name, status text, distance pinned right, chevron ---- */
+.location-overlay-left .location-group a > .location-link-label { order: 0; flex: 1 1 auto; }
+.location-overlay-left .location-group a > .coming-soon-tag { order: 1; }
+.location-overlay-left .location-group a > .location-distance { order: 2; }
+.location-overlay-left .location-group a::after { order: 3; }
+
+.location-overlay-left .location-group a > .location-distance {
+    flex: 0 0 4.5rem;
+    margin-left: 0;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Status and Nearest as plain labels, not pills */
+.location-overlay-left .coming-soon-tag,
+.location-dropdown .location-overlay-left .coming-soon-tag {
+    margin-left: 0;
+    padding: 0;
+    border-radius: 0;
+    background: none !important;
+    border: 0 !important;
+    color: var(--tm26-amber, #FAAE17) !important;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.location-overlay-left .location-open-now .coming-soon-tag {
+    color: #4ade80 !important;
+}
+
+.location-nearest-tag {
+    padding: 0;
+    border-radius: 0;
+    background: var(--gradient-tm26);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.6rem;
+}
+
+.location-overlay-left .location-group a:has(.coming-soon-tag)::after {
+    margin-left: 0.75rem;
+}
+
+/* ---- Desktop: keep the whole detail card on screen ---- */
+@media (min-width: 769px) {
+    .location-dropdown {
+        padding-top: calc(2rem + env(safe-area-inset-top, 0px));
+    }
+
+    .location-dropdown-controls {
+        top: calc(2rem + env(safe-area-inset-top, 0px));
+    }
+
+    .location-dropdown-title {
+        margin: 0 auto 1rem;
+    }
+
+    /* Search and "Use my location" share one row */
+    .location-search-row {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        margin: 0 auto 1.5rem;
+    }
+
+    .location-search-row .location-search {
+        flex: 1;
+        margin: 0;
+    }
+
+    .location-search-row .location-geo {
+        flex: 0 0 auto;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+        max-width: 16rem;
+        margin: 0;
+        width: auto;
+    }
+
+    .location-overlay-right {
+        top: 1rem;
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+
+    .location-map,
+    .location-map iframe {
+        min-height: 230px !important;
+    }
+
+    .location-info-media {
+        gap: 1rem;
+    }
+
+    .location-info-hours {
+        gap: 0.35rem 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .location-search-row {
+        display: block;
+        width: 100%;
+    }
+
+    .location-search-row .location-geo {
+        margin: 0.75rem 0 1.25rem;
     }
 }

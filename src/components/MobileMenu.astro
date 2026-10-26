@@ -67,9 +67,9 @@ const navTranslationKeys: Record<string, string> = {
                             <svg class="mobile-menu-chevron" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"></polyline></svg>
                         </summary>
                         <div class="mobile-mega">
-                            <div class="mobile-mega-cards">
-                                {mega.cards.map((card) => (
-                                    <a class="mobile-mega-card" href={card.href}>
+                            <div class="mobile-mega-cards" data-mega-random={mega.viewAll ? '3' : undefined}>
+                                {mega.cards.map((card, index) => (
+                                    <a class="mobile-mega-card" href={card.href} hidden={mega.viewAll && index >= 3 ? true : undefined}>
                                         <img src={card.img} alt="" width="480" height="320" loading="lazy" decoding="async" />
                                         <span class="mobile-mega-card-copy">
                                             <span class="mobile-mega-card-title" data-i18n={card.i18n}>{card.title}</span>
@@ -77,6 +77,15 @@ const navTranslationKeys: Record<string, string> = {
                                         </span>
                                     </a>
                                 ))}
+                                {mega.viewAll && (
+                                    <a class="mobile-mega-card mobile-mega-card--all" href={mega.viewAll.href}>
+                                        <img src={mega.viewAll.img} alt="" width="480" height="320" loading="lazy" decoding="async" />
+                                        <span class="mobile-mega-card-copy">
+                                            <span class="mobile-mega-card-title">{mega.viewAll.title} →</span>
+                                            <span class="mobile-mega-card-text">{mega.viewAll.text}</span>
+                                        </span>
+                                    </a>
+                                )}
                             </div>
                             <ul class="mobile-mega-links">
                                 {mega.links.map((link) => (

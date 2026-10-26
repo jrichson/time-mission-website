@@ -51,6 +51,8 @@
     --display: 'termina', 'Bebas Neue', sans-serif;
     /* Bebas Neue is caps-only; Termina needs the uppercase made explicit */
     --display-case: uppercase;
+    --display-leading: 1.05;
+    --display-weight: 700;
     --body: 'DM Sans', sans-serif;
     --mono: 'DM Sans', sans-serif;
     --tech: 'termina', 'Monument Extended', 'Orbitron', sans-serif;
