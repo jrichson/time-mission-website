@@ -212,40 +212,47 @@
 
 .mobile-mega-cards {
     display: flex;
-    gap: 0.75rem;
-    margin: 0 -1.5rem;
-    padding: 0 1.5rem 0.25rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 1.5rem;
-    scrollbar-width: none;
-}
-
-.mobile-mega-cards::-webkit-scrollbar {
-    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .mobile-menu-links .mobile-mega-card {
-    flex: 0 0 44%;
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0;
-    scroll-snap-align: start;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.4rem 0;
     font-family: var(--body);
-    font-size: 0.85rem;
-    font-weight: 600;
     letter-spacing: 0;
     text-transform: none;
 }
 
 .mobile-mega-card img {
+    flex-shrink: 0;
     display: block;
-    width: 100% !important;
-    height: auto !important;
-    aspect-ratio: 4 / 3;
+    width: 84px !important;
+    height: 60px !important;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 10px;
+}
+
+.mobile-mega-card-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.mobile-mega-card-title {
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.mobile-mega-card-text {
+    color: var(--gray-light);
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.35;
 }
 
 .mobile-mega-links {

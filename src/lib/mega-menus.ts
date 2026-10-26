@@ -12,6 +12,7 @@ export const megaMenus: Record<string, {
             { title: 'Server Heist', text: 'Slip past the lasers.', href: '/missions', img: '/assets/photos/experiences/Time-Mission_Server_Heist5-480.webp' },
         ],
         links: [
+            { label: 'Leaderboard', href: '/leaderboard', i18n: 'leaderboard.badge' },
             { label: 'All 25+ missions', href: '/missions' },
             { label: 'Physical', href: '/missions?filter=physical' },
             { label: 'Mental', href: '/missions?filter=mental' },

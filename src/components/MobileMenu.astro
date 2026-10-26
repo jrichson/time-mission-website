@@ -32,6 +32,9 @@ const bookingCtaAttrs = {
     } : {}),
 };
 
+// Top level mirrors the desktop nav; everything else lives inside the expandable sections.
+const mobileTopLevel = ['/about', '/missions', '/groups', '/faq'];
+
 const navTranslationKeys: Record<string, string> = {
     '/': 'nav.home',
     '/about': 'nav.about',
@@ -47,7 +50,7 @@ const navTranslationKeys: Record<string, string> = {
 <!-- Full-Screen Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
     <ul class="mobile-menu-links">
-        {nav.primary.map((item) => {
+        {nav.primary.filter((item) => mobileTopLevel.includes(item.href)).map((item) => {
             const mega = megaMenus[item.href];
             if (!mega) {
                 return (
@@ -68,7 +71,10 @@ const navTranslationKeys: Record<string, string> = {
                                 {mega.cards.map((card) => (
                                     <a class="mobile-mega-card" href={card.href}>
                                         <img src={card.img} alt="" width="480" height="320" loading="lazy" decoding="async" />
-                                        <span class="mobile-mega-card-title" data-i18n={card.i18n}>{card.title}</span>
+                                        <span class="mobile-mega-card-copy">
+                                            <span class="mobile-mega-card-title" data-i18n={card.i18n}>{card.title}</span>
+                                            <span class="mobile-mega-card-text">{card.text}</span>
+                                        </span>
                                     </a>
                                 ))}
                             </div>
