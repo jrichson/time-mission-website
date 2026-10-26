@@ -112,7 +112,7 @@ runCheck({
       'src/pages/groups/field-trips.astro': '/assets/photos/groups/field-trips-480.webp',
       'src/pages/groups/holidays.astro': '/assets/photos/groups/holiday-parties-480.webp',
       'src/pages/groups/private-events.astro': '/assets/photos/venue/_Time-Mission_0024-480.webp',
-      'src/pages/missions.astro': '/assets/photos/experiences/experiences-hero-640.webp',
+      'src/pages/missions.astro': '/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp',
     };
     for (const [file, href] of Object.entries(responsivePreloads)) {
       if (!hasPreload(file, href, true)) {
@@ -121,8 +121,10 @@ runCheck({
     }
 
     const missionsHtml = read('src/partials/missions-main.frag.txt');
-    if (!/media="\(max-width: 768px\)"[^>]+srcset="\/assets\/photos\/experiences\/experiences-hero-640\.webp 640w, \/assets\/photos\/experiences\/experiences-hero-960\.webp 960w"/.test(missionsHtml)) {
-      errors.push('src/partials/missions-main.frag.txt: mobile hero picture must cap the LCP candidate set at 960w');
+    // The missions page opens straight on the tile grid: the first tile is the LCP image.
+    const firstMissionImg = imgTags(missionsHtml).find((tag) => tag.includes('src="/assets/photos/experiences/Time-Mission'));
+    if (!firstMissionImg || attrs(firstMissionImg).loading !== 'eager' || attrs(firstMissionImg).fetchpriority !== 'high') {
+      errors.push('src/partials/missions-main.frag.txt: first mission tile image must load eagerly with fetchpriority="high"');
     }
 
     for (const tag of imgTags(missionsHtml).filter((tag) => tag.includes('src="/assets/photos/experiences/Time-Mission'))) {

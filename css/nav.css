@@ -106,7 +106,8 @@
         transform: rotate(45deg) translate(5px, 5px);
     }
     .nav-menu-btn.active .hamburger span:nth-child(2) {
-        opacity: 0;
+        opacity: 0 !important;
+        transform: scaleX(0);
     }
     .nav-menu-btn.active .hamburger span:nth-child(3) {
         transform: rotate(-45deg) translate(5px, -5px);

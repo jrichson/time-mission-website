@@ -1415,7 +1415,8 @@
       "Explore Missions": "Ontdek de missies",
       "Players racing across a lit-up floor grid in a Time Mission room": "Spelers rennen over een verlichte vloer in een Time Mission-kamer",
       "A team aiming at targets in a glowing Time Mission room": "Een team mikt op doelen in een oplichtende Time Mission-kamer",
-      "Tickets": "Tickets"
+      "Tickets": "Tickets",
+      "The Missions": "De missies"
     },
     "fr": {
       ", then lets those teams compete across": ", puis permet à ces équipes de s'affronter",
@@ -2625,7 +2626,8 @@
       "Explore Missions": "Explorer les missions",
       "Players racing across a lit-up floor grid in a Time Mission room": "Des joueurs courent sur un sol lumineux dans une salle Time Mission",
       "A team aiming at targets in a glowing Time Mission room": "Une équipe vise des cibles dans une salle lumineuse Time Mission",
-      "Tickets": "Billets"
+      "Tickets": "Billets",
+      "The Missions": "Les missions"
     },
     "es": {
       ", then lets those teams compete across": ", luego permite que esos equipos compitan en",
@@ -3835,7 +3837,8 @@
       "Explore Missions": "Explorar misiones",
       "Players racing across a lit-up floor grid in a Time Mission room": "Jugadores corriendo sobre un suelo iluminado en una sala de Time Mission",
       "A team aiming at targets in a glowing Time Mission room": "Un equipo apuntando a objetivos en una sala luminosa de Time Mission",
-      "Tickets": "Entradas"
+      "Tickets": "Entradas",
+      "The Missions": "Las misiones"
     }
   },
   "_profiles": {

@@ -1,36 +1,6 @@
-    <section class="hero">
-        <div class="hero-bg">
-            <picture><source media="(max-width: 768px)" srcset="/assets/photos/experiences/experiences-hero-640.webp 640w, /assets/photos/experiences/experiences-hero-960.webp 960w" sizes="100vw" type="image/webp"><source srcset="/assets/photos/experiences/experiences-hero-640.webp 640w, /assets/photos/experiences/experiences-hero-960.webp 960w, /assets/photos/experiences/experiences-hero-1280.webp 1280w, /assets/photos/experiences/experiences-hero.webp 1920w" sizes="100vw" type="image/webp"><img src="/assets/photos/experiences/experiences-hero.jpg" alt="Players competing in Time Mission challenges" width="1600" height="2398" loading="eager" fetchpriority="high" decoding="async"></picture>
-        </div>
-        <div class="hero-content">
-            <div class="section-badge">THE MISSIONS</div>
-            <h1 class="hero-title">UNLIMITED WAYS TO <span class="highlight">PLAY</span></h1>
-            <p class="hero-subtitle">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
-            <div class="hero-cta">
-                <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets">
-                    Book Now
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </a>
-                <a href="/faq" class="btn-secondary">FAQs</a>
-            </div>
-        </div>
-    </section>
-
-    <section class="geo-answer-section" aria-labelledby="missions-answer-title">
-        <div class="geo-answer-inner">
-            <div class="section-badge">Mission Format</div>
-            <h2 id="missions-answer-title">How do Time Mission rooms work?</h2>
-            <p class="geo-answer-lead">Time Mission rooms are fast, replayable challenges that let teams try physical, logic, skill, and coordination missions in any order while building a score across the venue.</p>
-            <details class="geo-disclosure">
-                <summary>Read the full mission-room guidance</summary>
-                <p>Time Mission mission rooms are <strong>short, challenge-based environments</strong> where teams move through quick <span class="copy-emphasis">physical, logic, skill, and coordination tests</span> instead of staying in one escape room for a full hour. Each room is designed for <strong>repeat play</strong>: players can try a challenge, learn the pattern, improve their score, and continue to another room. The format works for <span class="copy-emphasis">first-time visitors, families, date nights, friend groups, school groups, and team events</span> because the missions vary in intensity and difficulty. Some challenges reward communication, some reward timing, and others reward observation or problem-solving. Sessions are booked by location, and <strong>team size, age rules, accessibility details, and available packages</strong> can vary by venue. The easiest way to choose is to start with your nearest Time Mission location, review the current mission lineup, and reserve a session online today.</p>
-            </details>
-        </div>
-    </section>
-    <section class="portals-section" id="portals">
+   <section class="portals-section" id="portals">
         <div class="filter-section">
+            <h1 class="missions-title">The Missions <span class="missions-count">30</span></h1>
             <div class="filter-tabs">
                 <button class="filter-tab active" data-filter="all">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
@@ -56,8 +26,8 @@
         </div>
         <p class="mission-availability-note">Mission availability varies by location. Check your chosen location for its current lineup.</p>
         <div class="portals-grid">
-            <article class="portal-card reveal" data-mission-id="1013" data-category="mental speed">
-                <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp 480w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-800.webp 800w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Glitch-Matrix.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
+            <article class="portal-card portal-card--feature reveal" data-mission-id="1013" data-category="mental speed">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp 480w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-800.webp 800w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Glitch-Matrix.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/></svg>Mental</span><span class="portal-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span></div>
                     <h2 class="portal-title">GLITCH MATRIX</h2>
@@ -73,7 +43,7 @@
                 </div>
             </article>
             <article class="portal-card reveal" data-mission-id="1017" data-category="physical skill">
-                <picture><source srcset="/assets/photos/experiences/Time-Mission_Big-Bang-480.webp 480w, /assets/photos/experiences/Time-Mission_Big-Bang-800.webp 800w, /assets/photos/experiences/Time-Mission_Big-Bang-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Big-Bang.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Big-Bang-480.webp 480w, /assets/photos/experiences/Time-Mission_Big-Bang-800.webp 800w, /assets/photos/experiences/Time-Mission_Big-Bang-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Big-Bang.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" width="1920" height="1280" loading="eager" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6.5 6v12M17.5 6v12M3 9.5v5M21 9.5v5M6.5 12h11"/></svg>Physical</span><span class="portal-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>Skill</span></div>
                     <h2 class="portal-title">BIG BANG</h2>
@@ -88,8 +58,8 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-mission-id="1033" data-category="speed physical">
-                <picture><source srcset="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1-480.webp 480w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1-800.webp 800w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1-1200.webp 1200w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
+            <article class="portal-card portal-card--feature reveal" data-mission-id="1033" data-category="speed physical">
+                <picture><source srcset="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1-480.webp 480w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1-800.webp 800w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1-1200.webp 1200w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1.jpg" alt="Magma Mayhem" width="1920" height="1280" loading="eager" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Speed</span><span class="portal-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6.5 6v12M17.5 6v12M3 9.5v5M21 9.5v5M6.5 12h11"/></svg>Physical</span></div>
                     <h2 class="portal-title">MAGMA MAYHEM</h2>
@@ -105,7 +75,7 @@
                 </div>
             </article>
             <article class="portal-card reveal" data-mission-id="1019" data-category="mental">
-                <picture><source srcset="/assets/photos/experiences/Time-Mission_Persian-0Palace-480.webp 480w, /assets/photos/experiences/Time-Mission_Persian-0Palace-800.webp 800w, /assets/photos/experiences/Time-Mission_Persian-0Palace-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Persian-0Palace.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Persian-0Palace.jpg" alt="Persian Palace" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
+                <picture><source srcset="/assets/photos/experiences/Time-Mission_Persian-0Palace-480.webp 480w, /assets/photos/experiences/Time-Mission_Persian-0Palace-800.webp 800w, /assets/photos/experiences/Time-Mission_Persian-0Palace-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Persian-0Palace.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Persian-0Palace.jpg" alt="Persian Palace" width="1920" height="1280" loading="eager" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge mental">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/></svg>
@@ -142,7 +112,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-mission-id="1012" data-category="physical">
+            <article class="portal-card portal-card--feature reveal" data-mission-id="1012" data-category="physical">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Jungle-Temple-480.webp 480w, /assets/photos/experiences/Time-Mission_Jungle-Temple-800.webp 800w, /assets/photos/experiences/Time-Mission_Jungle-Temple-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Jungle-Temple.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical">
@@ -562,7 +532,7 @@
                     </a>
                 </div>
             </article>
-            <article class="portal-card reveal" data-mission-id="1024" data-category="physical">
+            <article class="portal-card portal-card--feature reveal" data-mission-id="1024" data-category="physical">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Orbital_Pit-480.webp 480w, /assets/photos/experiences/Time-Mission_Orbital_Pit-800.webp 800w, /assets/photos/experiences/Time-Mission_Orbital_Pit-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Orbital_Pit.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Orbital_Pit.jpeg" alt="Orbital Pit" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
                 <div class="portal-overlay">
                     <div class="portal-badges"><span class="portal-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6.5 6v12M17.5 6v12M3 9.5v5M21 9.5v5M6.5 12h11"/></svg>Physical</span></div>
@@ -584,7 +554,18 @@
             </div>
         </div>
     </section>
-    <section class="cta-section">
+    <section class="geo-answer-section" aria-labelledby="missions-answer-title">
+        <div class="geo-answer-inner">
+            <div class="section-badge">Mission Format</div>
+            <h2 id="missions-answer-title">How do Time Mission rooms work?</h2>
+            <p class="geo-answer-lead">Time Mission rooms are fast, replayable challenges that let teams try physical, logic, skill, and coordination missions in any order while building a score across the venue.</p>
+            <details class="geo-disclosure">
+                <summary>Read the full mission-room guidance</summary>
+                <p>Time Mission mission rooms are <strong>short, challenge-based environments</strong> where teams move through quick <span class="copy-emphasis">physical, logic, skill, and coordination tests</span> instead of staying in one escape room for a full hour. Each room is designed for <strong>repeat play</strong>: players can try a challenge, learn the pattern, improve their score, and continue to another room. The format works for <span class="copy-emphasis">first-time visitors, families, date nights, friend groups, school groups, and team events</span> because the missions vary in intensity and difficulty. Some challenges reward communication, some reward timing, and others reward observation or problem-solving. Sessions are booked by location, and <strong>team size, age rules, accessibility details, and available packages</strong> can vary by venue. The easiest way to choose is to start with your nearest Time Mission location, review the current mission lineup, and reserve a session online today.</p>
+            </details>
+        </div>
+    </section>
+     <section class="cta-section">
         <div class="cta-content reveal">
             <h2 class="cta-title">READY TO <span>PLAY?</span></h2>
             <p class="cta-text">Experience a lineup of missions across 60, 90, or 120-minute sessions. Book your mission today.</p>
