@@ -1,5 +1,5 @@
     <!-- Hero -->
-    <section class="about-hero">
+    <section class="about-hero tm-page-header">
         <div class="about-hero-bg">
             <picture><source srcset="/assets/photos/venue/_Time-Mission_0078-480.webp 480w, /assets/photos/venue/_Time-Mission_0078-800.webp 800w, /assets/photos/venue/_Time-Mission_0078-1200.webp 1200w, /assets/photos/venue/_Time-Mission_0078.webp 1920w" sizes="100vw" type="image/webp"><img src="/assets/photos/venue/_Time-Mission_0078.jpg" alt="Time Mission venue" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="async"></picture>
         </div>

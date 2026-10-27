@@ -1,5 +1,5 @@
 <!-- HERO (groups.html-style: photo bg + centered copy) -->
-    <section class="hero">
+    <section class="hero tm-page-header">
         <div class="hero-bg">
             <picture><source srcset="/assets/photos/groups/corporate-events-480.webp 480w, /assets/photos/groups/corporate-events-800.webp 800w, /assets/photos/groups/corporate-events-1200.webp 1200w, /assets/photos/groups/corporate-events-1600.webp 1600w" sizes="100vw" type="image/webp"><img src="/assets/photos/groups/corporate-events.jpg" alt="Corporate team event at Time Mission" width="1920" height="1536" fetchpriority="high" decoding="async"></picture>
         </div>

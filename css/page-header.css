@@ -1,0 +1,179 @@
+/* ==========================================================================
+   Standard page header: split layout, crisp framed media, grid texture.
+   Replaces the full-bleed faded photo heroes on interior pages.
+   ========================================================================== */
+body .tm-page-header {
+    position: relative;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    min-height: 0 !important;
+    height: auto !important;
+    width: min(1280px, 100%) !important;
+    max-width: 1280px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box;
+    padding: calc(var(--page-header-offset, 150px) + clamp(1rem, 3vw, 2.5rem)) clamp(1.25rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem) !important;
+    background: none !important;
+    overflow: visible !important;
+    text-align: left !important;
+    isolation: isolate;
+}
+
+body .tm-page-header::before {
+    content: '';
+    position: absolute;
+    inset: 0 calc(50% - 50vw);
+    z-index: -1;
+    display: block !important;
+    background:
+        radial-gradient(45% 60% at 78% 45%, rgba(238, 1, 50, 0.10), transparent 70%),
+        radial-gradient(35% 50% at 12% 30%, rgba(255, 140, 0, 0.06), transparent 70%),
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        var(--black, #0a0a0a);
+    background-size: auto, auto, 80px 80px, 80px 80px, auto;
+    mask-image: linear-gradient(#000 75%, transparent);
+    -webkit-mask-image: linear-gradient(#000 75%, transparent);
+    pointer-events: none;
+}
+
+body .tm-page-header::after {
+    display: none !important;
+}
+
+/* Media: framed, sharp, no fade */
+body .tm-page-header > .hero-bg,
+body .tm-page-header > .about-hero-bg {
+    position: relative !important;
+    inset: auto !important;
+    order: 2;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 5 / 4;
+    border-radius: 28px;
+    overflow: hidden;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    box-shadow: 0 30px 80px -30px rgba(238, 1, 50, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+body .tm-page-header > .hero-bg::before,
+body .tm-page-header > .hero-bg::after,
+body .tm-page-header > .about-hero-bg::before,
+body .tm-page-header > .about-hero-bg::after {
+    display: none !important;
+}
+
+body .tm-page-header > .hero-bg picture,
+body .tm-page-header > .about-hero-bg picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+body .tm-page-header > .hero-bg img,
+body .tm-page-header > .hero-bg video,
+body .tm-page-header > .about-hero-bg img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+}
+
+/* Thin gradient ring on the frame */
+body .tm-page-header > .hero-bg,
+body .tm-page-header > .about-hero-bg {
+    border: 0 !important;
+}
+
+body .tm-page-header .tm-page-header-ring {
+    display: none;
+}
+
+/* Copy */
+body .tm-page-header > .hero-content,
+body .tm-page-header > .about-hero-content {
+    position: relative !important;
+    order: 1;
+    z-index: 1;
+    max-width: 720px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+    transform: none !important;
+}
+
+body .tm-page-header .section-badge {
+    justify-content: flex-start !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+body .tm-page-header h1,
+body .tm-page-header .hero-title {
+    margin: 0.85rem 0 1.1rem !important;
+    font-size: clamp(2rem, 3vw, 2.6rem) !important;
+    max-width: none !important;
+    width: auto !important;
+    text-align: left !important;
+}
+
+body .tm-page-header .hero-content > p,
+body .tm-page-header .about-hero-content > p,
+body .tm-page-header .hero-subtitle {
+    max-width: 52ch !important;
+    margin: 0 0 1.75rem !important;
+    color: rgba(255, 255, 255, 0.72) !important;
+    font-size: clamp(1rem, 1.25vw, 1.125rem) !important;
+    line-height: 1.65 !important;
+    text-align: left !important;
+}
+
+body .tm-page-header .hero-cta {
+    justify-content: flex-start !important;
+    margin: 0 !important;
+}
+
+body .tm-page-header .stem-seals {
+    justify-content: flex-start !important;
+    margin-left: 0 !important;
+}
+
+body .tm-page-header .scroll-indicator,
+body .tm-page-header .hero-scroll {
+    display: none !important;
+}
+
+@media (max-width: 900px) {
+    body .tm-page-header {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.75rem;
+        padding-top: calc(var(--page-header-offset-mobile, 120px) + 0.75rem) !important;
+        padding-bottom: 2.75rem !important;
+    }
+
+    body .tm-page-header > .hero-bg,
+    body .tm-page-header > .about-hero-bg {
+        order: 1;
+        aspect-ratio: 16 / 10;
+        border-radius: 22px;
+    }
+
+    body .tm-page-header > .hero-content,
+    body .tm-page-header > .about-hero-content {
+        order: 2;
+        max-width: none !important;
+    }
+
+    body .tm-page-header h1,
+    body .tm-page-header .hero-title {
+        font-size: clamp(1.45rem, 6.2vw, 2.4rem) !important;
+    }
+}

@@ -1,4 +1,4 @@
-    <section class="hero">
+    <section class="hero tm-page-header">
         <div class="hero-bg">
             <video autoplay muted loop playsinline poster="/assets/video/groups-hero-poster-960.webp" preload="none">
                 <source src="{{TM_MEDIA_BASE}}/assets/video/groups-hero.mp4" media="(min-width: 769px)" type="video/mp4">
