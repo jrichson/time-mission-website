@@ -47,9 +47,12 @@ const siteAuthor = 'Ari Simon';
 const siteDesigner = 'Jefferson Richardson';
 const siteDeveloper = 'Compatible Dev';
 const siteCoreCss = siteCssAssets.core;
-// Animated link preview: iMessage plays og:video inline; other apps fall back to og:image.
+// Animated link preview on every page: iMessage plays og:video inline; other apps fall back to og:image.
 // Served from R2 because iMessage needs byte-range (206) responses, which Pages does not send.
-const homeOgVideo = canonicalPath === '/' ? `${tmMediaBase() || activeSiteProfile.origin}/assets/social/time-mission-preview.mp4` : null;
+// noindex pages (thank-you, 404) keep a still image.
+const homeOgVideo = robotsValue && /noindex/i.test(robotsValue)
+    ? null
+    : `${tmMediaBase() || activeSiteProfile.origin}/assets/social/time-mission-preview.mp4`;
 
 const defaultGtmContainerId = activeSiteProfile.id === 'us' ? 'GTM-WQPWRNJB' : '';
 const gtmContainerId = String(import.meta.env.PUBLIC_GTM_CONTAINER_ID || defaultGtmContainerId).trim();
