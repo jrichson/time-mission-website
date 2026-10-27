@@ -69,18 +69,19 @@ const coverageItems = [
 
 <SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-resource-page">
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-press.css?v=3" />
+        <link rel="stylesheet" href="/css/page-press.css?v=4" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={pressNewsMain} />
     <section class="tm-resource-section">
-        <div class="tm-resource-shell tm-resource-release-list">
+        <div class="tm-resource-shell tm-resource-release-list tm-resource-card-grid">
             {coverageItems.map((article, index) => (
                 <PressResourceCard
                     {...article}
                     external
+                    variant="card"
                     ignoreKickerI18n={false}
                     ignoreSummaryI18n={false}
                     loading={index < 2 ? 'eager' : 'lazy'}

@@ -1418,7 +1418,18 @@
       "Tickets": "Tickets",
       "The Missions": "De missies",
       "Best in STEM award seal from STEM.org": "Best in STEM-awardzegel van STEM.org",
-      "Recognized by STEM.org": "Erkend door STEM.org"
+      "Recognized by STEM.org": "Erkend door STEM.org",
+      "Official news, images, logo files, and media contacts in one place.": "Officieel nieuws, afbeeldingen, logobestanden en mediacontacten op één plek.",
+      "View all coverage": "Bekijk alle berichtgeving",
+      "All press releases": "Alle persberichten",
+      "Press Kit": "Perskit",
+      "Send your deadline, outlet, topic, and image needs. We will route it to the right team.": "Stuur je deadline, medium, onderwerp en beeldwensen. We sturen het door naar het juiste team.",
+      "Most Popular": "Meest populair",
+      "Team Building": "Teambuilding",
+      "Seasonal": "Seizoensgebonden",
+      "Schools": "Scholen",
+      "Full Buyout": "Volledige afhuur",
+      "Night Out": "Avondje uit"
     },
     "fr": {
       ", then lets those teams compete across": ", puis permet à ces équipes de s'affronter",
@@ -2631,7 +2642,18 @@
       "Tickets": "Billets",
       "The Missions": "Les missions",
       "Best in STEM award seal from STEM.org": "Sceau du prix Best in STEM de STEM.org",
-      "Recognized by STEM.org": "Reconnu par STEM.org"
+      "Recognized by STEM.org": "Reconnu par STEM.org",
+      "Official news, images, logo files, and media contacts in one place.": "Actualités officielles, images, logos et contacts presse au même endroit.",
+      "View all coverage": "Voir toute la couverture",
+      "All press releases": "Tous les communiqués de presse",
+      "Press Kit": "Kit presse",
+      "Send your deadline, outlet, topic, and image needs. We will route it to the right team.": "Envoyez votre échéance, votre média, votre sujet et vos besoins en images. Nous transmettrons à la bonne équipe.",
+      "Most Popular": "Le plus populaire",
+      "Team Building": "Team building",
+      "Seasonal": "Saisonnier",
+      "Schools": "Écoles",
+      "Full Buyout": "Privatisation",
+      "Night Out": "Soirée"
     },
     "es": {
       ", then lets those teams compete across": ", luego permite que esos equipos compitan en",
@@ -3844,7 +3866,18 @@
       "Tickets": "Entradas",
       "The Missions": "Las misiones",
       "Best in STEM award seal from STEM.org": "Sello del premio Best in STEM de STEM.org",
-      "Recognized by STEM.org": "Reconocido por STEM.org"
+      "Recognized by STEM.org": "Reconocido por STEM.org",
+      "Official news, images, logo files, and media contacts in one place.": "Noticias oficiales, imágenes, logotipos y contactos de prensa en un solo lugar.",
+      "View all coverage": "Ver toda la cobertura",
+      "All press releases": "Todos los comunicados de prensa",
+      "Press Kit": "Kit de prensa",
+      "Send your deadline, outlet, topic, and image needs. We will route it to the right team.": "Envíanos tu fecha límite, medio, tema y las imágenes que necesitas. Lo enviaremos al equipo adecuado.",
+      "Most Popular": "Más popular",
+      "Team Building": "Team building",
+      "Seasonal": "De temporada",
+      "Schools": "Escuelas",
+      "Full Buyout": "Reserva completa",
+      "Night Out": "Noche de fiesta"
     }
   },
   "_profiles": {

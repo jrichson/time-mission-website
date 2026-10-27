@@ -671,3 +671,462 @@ body.tm-resource-page {
         min-height: 48px;
     }
 }
+
+/* ==========================================
+   Press round 2: centered hero like the rest of the site, one aligned column,
+   no gradient strips on tiles
+   ========================================== */
+.tm-resource-hero {
+    min-height: 0 !important;
+    align-items: center !important;
+    padding: calc(clamp(6.5rem, 10vw, 8rem) + var(--tm-header-extra, 0px)) 0 clamp(3rem, 6vw, 4.5rem) !important;
+    text-align: center;
+}
+
+.tm-resource-hero-media::after {
+    background:
+        linear-gradient(180deg, rgba(5, 5, 8, 0.55), rgba(5, 5, 8, 0.82) 70%, var(--tm-resource-bg)) !important;
+}
+
+.tm-resource-hero-copy {
+    width: min(100% - 2rem, 52rem) !important;
+    margin: 0 auto !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tm-resource-hero h1 {
+    max-width: none !important;
+    margin-bottom: 1rem !important;
+}
+
+.tm-resource-hero p {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: 1.05rem !important;
+}
+
+.tm-resource-hero .tm-resource-actions {
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+.tm-resource-kicker {
+    color: var(--white-soft) !important;
+    letter-spacing: 0.22em !important;
+}
+
+/* Sub-nav and sections share one centered column */
+.tm-resource-subnav-inner {
+    justify-content: center;
+}
+
+.tm-resource-section-head {
+    width: 100% !important;
+    margin: 0 auto 2rem !important;
+    text-align: center;
+}
+
+.tm-resource-tile::before {
+    display: none !important;
+}
+
+.tm-resource-tile {
+    padding: 1.6rem 1.4rem !important;
+}
+
+/* Media contact: one centered call-to-action band */
+.tm-resource-split {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+    text-align: center;
+    gap: 1rem !important;
+    max-width: 44rem;
+}
+
+.tm-resource-split .tm-resource-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 640px) {
+    .tm-resource-hero .tm-resource-actions {
+        flex-wrap: wrap;
+    }
+}
+
+/* ==========================================
+   Press round 3: press-room layout
+   Compact header (no photo) + inline tabs; news as image cards; releases as a
+   dated list; press kit tiles; contact band. Applies to every press page.
+   ========================================== */
+.tm-resource-page .tm-resource-hero-media {
+    display: none !important;
+}
+
+.tm-resource-page .tm-resource-hero {
+    padding: calc(clamp(6.5rem, 9vw, 7.5rem) + var(--tm-header-extra, 0px)) 0 1rem !important;
+    background:
+        radial-gradient(60% 120% at 50% 0%, rgba(238, 1, 50, 0.12), transparent 70%) !important;
+}
+
+.tm-resource-page .tm-resource-hero .tm-resource-kicker,
+.tm-resource-page .tm-resource-hero .tm-resource-secondary,
+.tm-resource-page .tm-resource-hero .tm-resource-actions {
+    display: none !important;
+}
+
+.tm-resource-page .tm-resource-hero h1 {
+    font-size: clamp(1.8rem, 4.2vw, 3.4rem) !important;
+    margin-bottom: 0.75rem !important;
+}
+
+.tm-press-brand {
+    background: var(--gradient-tm26);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.tm-resource-page .tm-resource-hero p {
+    margin-bottom: 0 !important;
+    color: var(--gray-light) !important;
+}
+
+/* Tabs read as one row of links separated by thin dividers */
+.tm-resource-subnav {
+    border: 0 !important;
+}
+
+.tm-resource-subnav-inner {
+    gap: 0 !important;
+    padding-bottom: clamp(1.5rem, 3vw, 2.5rem) !important;
+}
+
+.tm-resource-subnav a {
+    min-height: 44px !important;
+    padding: 0 1.4rem !important;
+}
+
+.tm-resource-subnav a + a {
+    border-left: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+.tm-resource-subnav a::after {
+    left: 1.4rem !important;
+    right: 1.4rem !important;
+    bottom: 4px !important;
+}
+
+/* Section blocks */
+.tm-press-block {
+    padding-top: clamp(2rem, 4vw, 3rem) !important;
+    padding-bottom: clamp(2rem, 4vw, 3rem) !important;
+}
+
+.tm-press-block-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.tm-press-block-head h2 {
+    margin: 0 !important;
+    font-size: clamp(1.2rem, 2vw, 1.6rem) !important;
+}
+
+.tm-press-more {
+    color: var(--gray-light);
+    font-family: var(--tech);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.tm-press-more:hover {
+    color: var(--white);
+}
+
+/* ---- News cards (image top) ---- */
+.tm-resource-card-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1.25rem !important;
+}
+
+.tm-resource-release--card {
+    position: relative;
+    isolation: isolate;
+    display: flex !important;
+    flex-direction: column;
+    grid-template-columns: none !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    border-radius: 20px !important;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    transition: transform var(--motion-standard) ease;
+}
+
+.tm-resource-release--card::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.tm-resource-release--card:hover {
+    transform: translateY(-4px);
+}
+
+.tm-resource-release--card:hover::after {
+    opacity: 1;
+}
+
+.tm-resource-release--card .tm-resource-release-media {
+    display: block;
+    aspect-ratio: 16 / 9;
+    min-height: 0 !important;
+    border-radius: 0 !important;
+    overflow: hidden;
+}
+
+.tm-resource-release--card .tm-resource-release-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tm-resource-release--card .tm-resource-release-copy {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.6rem;
+    padding: 1.25rem 1.35rem 1.4rem !important;
+}
+
+.tm-resource-release--card .tm-resource-release-source-copy {
+    display: flex;
+    flex-direction: column;
+}
+
+.tm-resource-release--card h2 {
+    order: 1;
+    margin: 0 0 0.75rem !important;
+    font-family: var(--body) !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    line-height: 1.35 !important;
+    text-transform: none !important;
+}
+
+.tm-resource-release--card .tm-resource-kicker {
+    order: 2;
+    margin: 0 !important;
+    color: var(--gray-light) !important;
+    font-family: var(--body) !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+}
+
+.tm-resource-release--card .tm-resource-kicker {
+    font-size: 0 !important;
+}
+
+.tm-resource-release--card .tm-resource-kicker > span:first-child {
+    display: none;
+}
+
+.tm-resource-release--card .tm-resource-kicker time {
+    font-size: 0.85rem;
+}
+
+.tm-resource-release--card .tm-resource-release-source {
+    order: 3;
+    margin: 0.35rem 0 0 !important;
+    color: var(--white-soft) !important;
+    font-size: 0.85rem !important;
+}
+
+.tm-resource-release--card .tm-resource-release-source::before {
+    content: 'Source: ';
+    color: var(--gray-light);
+}
+
+.tm-resource-release--card .tm-resource-release-source-copy > p:not(.tm-resource-kicker):not(.tm-resource-release-source),
+.tm-resource-release--card .tm-resource-button {
+    display: none !important;
+}
+
+/* ---- Releases list (date over title, hairline dividers) ---- */
+.tm-resource-release--row {
+    display: block !important;
+    grid-template-columns: none !important;
+    padding: 1.5rem 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+}
+
+.tm-resource-release-list > .tm-resource-release--row:first-child {
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.tm-resource-release--row .tm-resource-release-media,
+.tm-resource-release--row .tm-resource-button,
+.tm-resource-release--row .tm-resource-release-source-copy > p:not(.tm-resource-kicker) {
+    display: none !important;
+}
+
+.tm-resource-release--row .tm-resource-release-copy {
+    padding: 0 !important;
+}
+
+.tm-resource-release--row .tm-resource-kicker {
+    margin: 0 0 0.4rem !important;
+    color: var(--gray-light) !important;
+    font-family: var(--body) !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+}
+
+.tm-resource-release--row h2 {
+    margin: 0 !important;
+    max-width: 52rem;
+    font-family: var(--body) !important;
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    line-height: 1.35 !important;
+    text-transform: none !important;
+}
+
+.tm-resource-release-title-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.tm-resource-release--row:hover .tm-resource-release-title-link,
+.tm-resource-release--card:hover .tm-resource-release-title-link {
+    background: var(--gradient-tm26);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Feature cards on other pages keep the title link looking like a heading */
+.tm-resource-release--feature .tm-resource-release-title-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* ---- Press kit + contact ---- */
+.tm-press-kit {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.tm-press-contact .tm-resource-shell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    padding: clamp(2rem, 5vw, 3.5rem) 1.5rem;
+    border-radius: 24px;
+    background:
+        radial-gradient(80% 140% at 0% 0%, rgba(250, 174, 23, 0.14), transparent 60%),
+        radial-gradient(80% 140% at 100% 100%, rgba(255, 27, 206, 0.16), transparent 60%),
+        rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    text-align: center;
+}
+
+.tm-press-contact h2 {
+    margin: 0 !important;
+    font-size: clamp(1.2rem, 2.4vw, 1.8rem) !important;
+}
+
+.tm-press-contact p {
+    margin: 0 0 0.5rem !important;
+    color: var(--gray-light) !important;
+}
+
+@media (max-width: 900px) {
+    .tm-resource-card-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .tm-resource-subnav-inner {
+        justify-content: flex-start !important;
+    }
+
+    .tm-resource-subnav a {
+        padding: 0 1rem !important;
+    }
+
+    .tm-press-kit {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Round 3 fixes */
+.tm-resource-release--row .tm-resource-release-copy,
+.tm-resource-release--row .tm-resource-release-source-copy {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+.tm-press-kit .tm-resource-tile {
+    min-height: 0 !important;
+}
+
+@media (max-width: 640px) {
+    .tm-resource-shell {
+        width: min(100% - 2.5rem, 74rem) !important;
+    }
+
+    .tm-press-block-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+}
+
+.tm-resource-release--card .tm-resource-kicker-sep {
+    display: none;
+}
+
+.tm-resource-release--row h2,
+.tm-resource-release--card h2 {
+    max-width: 52rem !important;
+    width: auto !important;
+}
+
+.tm-resource-release--row h2,
+.tm-resource-release--card h2 {
+    text-wrap: pretty;
+}

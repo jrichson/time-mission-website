@@ -158,3 +158,43 @@ section.groups-cta .groups-cta-buttons {
         font-size: 0.8rem;
     }
 }
+
+/* Venue pages: the "At Time Mission <venue>" links sit on their own row under the buttons */
+section.groups-cta .groups-cta-buttons {
+    flex-wrap: wrap !important;
+}
+
+section.groups-cta .location-local-links {
+    flex: 0 0 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    margin: 1.25rem 0 0 !important;
+    padding: 1rem 0 0 !important;
+    border: 0 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    text-align: left !important;
+}
+
+section.groups-cta .location-local-links-label {
+    margin: 0 !important;
+    color: var(--gray-light) !important;
+    font-size: 0.66rem !important;
+    letter-spacing: 0.16em !important;
+    white-space: nowrap;
+}
+
+section.groups-cta .location-local-links-list {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none;
+}
+
+section.groups-cta .location-local-links-list a {
+    padding: 0 !important;
+    font-size: 0.9rem !important;
+}

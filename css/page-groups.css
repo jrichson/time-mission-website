@@ -937,3 +937,165 @@
                 white-space: nowrap;
             }
         }
+
+/* ==========================================
+   Group type cards v2: right under the hero, panel cards with a tag on the
+   photo, centered copy and a Learn More button
+   ========================================== */
+.event-types {
+    padding-top: clamp(3rem, 5vw, 4rem) !important;
+}
+
+.event-types-grid {
+    gap: 1.25rem !important;
+}
+
+.event-type-card {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    padding: 0 0 1.75rem !important;
+    border-radius: 22px !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    text-align: center;
+    transition: transform var(--motion-standard) ease, border-color var(--motion-standard) ease;
+}
+
+.event-type-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.event-type-photo {
+    position: relative;
+    width: 100%;
+    border-radius: 0 !important;
+    margin-bottom: 1.6rem !important;
+    overflow: visible !important;
+}
+
+.event-type-photo picture {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+}
+
+.event-type-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Tag straddling the bottom edge of the photo */
+.event-type-tag {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    z-index: 3;
+    transform: translate(-50%, 50%);
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    background: var(--gradient-tm26);
+    color: var(--white);
+    font-family: var(--tech);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 6px 16px rgba(238, 1, 50, 0.35);
+}
+
+.event-type-card h3 {
+    margin: 0.4rem 1.5rem 0.75rem !important;
+    font-size: clamp(1.15rem, 1.8vw, 1.45rem) !important;
+    line-height: 1.1 !important;
+}
+
+.event-type-card p {
+    margin: 0 1.6rem 1.4rem !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Learn More as an outline button with the gradient ring hover */
+.event-type-card .event-type-learn-more {
+    position: relative;
+    isolation: isolate;
+    margin-top: auto !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 44px;
+    padding: 0 1.4rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    color: var(--white) !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.12em;
+}
+
+.event-type-card .event-type-learn-more svg {
+    color: var(--white) !important;
+}
+
+.event-type-card .event-type-learn-more::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.event-type-card .event-type-learn-more:hover {
+    border-color: transparent;
+}
+
+.event-type-card .event-type-learn-more:hover::before {
+    opacity: 1;
+}
+
+/* Hover actions over the photo stay above the tag */
+.event-type-actions {
+    z-index: 4;
+}
+
+.event-type-photo {
+    height: auto !important;
+    aspect-ratio: auto !important;
+    background: none !important;
+}
+
+.event-type-photo::after {
+    inset: 0 0 auto 0 !important;
+    aspect-ratio: 16 / 10;
+    height: auto !important;
+}
+
+.event-types-title {
+    font-size: clamp(1.5rem, 4vw, 2.8rem) !important;
+    line-height: 1.08 !important;
+}
+
+@media (max-width: 768px) {
+    .event-types-title {
+        font-size: clamp(1.35rem, 6.4vw, 1.8rem) !important;
+    }
+
+    .event-types {
+        padding-top: 2.5rem !important;
+    }
+}

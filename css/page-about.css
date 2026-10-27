@@ -1014,3 +1014,109 @@
 .steps .timeline-step {
     gap: 1.25rem !important;
 }
+
+/* Match the press tiles: no gradient strip on the step cards */
+.steps .timeline-step::before {
+    display: none !important;
+}
+
+/* ==========================================
+   How It Works v3: open columns, no boxes
+   ========================================== */
+.steps .timeline {
+    gap: 0 !important;
+}
+
+.steps .timeline-step {
+    padding: 0.5rem 2rem 0.5rem !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: none !important;
+    gap: 1rem !important;
+}
+
+.steps .timeline-step + .timeline-step {
+    border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.steps .timeline-step:hover {
+    transform: none !important;
+}
+
+.steps .step-node span {
+    font-size: clamp(3rem, 5vw, 4.25rem) !important;
+    letter-spacing: 0 !important;
+}
+
+.steps .step-title {
+    margin: 0 0 0.6rem !important;
+    font-size: 0.95rem !important;
+    line-height: 1.25 !important;
+}
+
+.steps .step-desc {
+    font-size: 0.95rem !important;
+}
+
+@media (max-width: 1000px) {
+    .steps .timeline {
+        gap: 2.5rem 0 !important;
+    }
+
+    .steps .timeline-step:nth-child(3) {
+        border-left: 0 !important;
+    }
+}
+
+@media (max-width: 560px) {
+    .steps .timeline {
+        gap: 0 !important;
+    }
+
+    .steps .timeline-step,
+    .steps .timeline-step + .timeline-step {
+        padding: 1.4rem 0 !important;
+        border-left: 0 !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .steps .timeline-step:first-child {
+        border-top: 0 !important;
+    }
+}
+
+/* ==========================================
+   Before You Arrive: brand gradient instead of orange
+   ========================================== */
+.checklist-item {
+    border-color: rgba(255, 255, 255, 0.09) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)) !important;
+}
+
+.checklist-item::before {
+    inset: -1px !important;
+    padding: 1.5px !important;
+    border-radius: inherit !important;
+    background: var(--gradient-tm26) !important;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0) !important;
+    opacity: 0 !important;
+}
+
+.checklist-item:hover::before {
+    opacity: 1 !important;
+}
+
+.checklist-item:hover {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5) !important;
+}
+
+.checklist-icon {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.checklist-icon svg,
+.checklist-item:hover svg {
+    color: var(--white) !important;
+    stroke: url(#tm26-icon-gradient) !important;
+}
