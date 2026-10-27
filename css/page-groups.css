@@ -1161,3 +1161,49 @@
     padding-block: 0 !important;
     font-size: 0.66rem !important;
 }
+
+/* Plan an Event: same ring + glow hover as every other ghost button */
+.event-type-card .event-type-cta.ghost {
+    position: relative;
+    isolation: isolate;
+    transition: box-shadow var(--motion-standard) ease, border-color var(--motion-standard) ease;
+}
+
+.event-type-card .event-type-cta.ghost::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.event-type-card .event-type-cta.ghost:hover,
+.event-type-card .event-type-cta.ghost:focus-visible {
+    border-color: transparent !important;
+    box-shadow: 0 6px 22px rgba(238, 1, 50, 0.22) !important;
+}
+
+.event-type-card .event-type-cta.ghost:hover::before,
+.event-type-card .event-type-cta.ghost:focus-visible::before {
+    opacity: 1;
+}
+
+/* Less gradient: tags go neutral glass, Book Now loses its resting glow */
+.event-type-card .event-type-tag {
+    background: rgba(12, 12, 14, 0.82) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+.event-type-card .event-type-cta.btn-tickets:not(:hover):not(:focus-visible) {
+    box-shadow: none !important;
+}

@@ -98,20 +98,6 @@ body .tm-page-header > .about-hero-content {
     height: auto !important;
 }
 
-/* TM26 gradient hairline along the top of the panel */
-body .tm-page-header > .hero-content::before,
-body .tm-page-header > .about-hero-content::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 24px;
-    right: 24px;
-    height: 1px;
-    border-radius: 1px;
-    background: var(--gradient-tm26);
-    opacity: 0.7;
-}
-
 /* Left column: label + title. Right column: copy + buttons. */
 body .tm-page-header .section-badge {
     grid-column: 1;

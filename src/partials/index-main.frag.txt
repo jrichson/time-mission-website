@@ -39,6 +39,7 @@
     <!-- Welcome Section -->
     <section class="welcome welcome--intro" id="about">
         <div class="intro-head reveal">
+            <picture class="intro-photo"><source srcset="/assets/photos/experiences/_Time-Mission_0321-480.webp 480w, /assets/photos/experiences/_Time-Mission_0321-800.webp 800w" sizes="100vw" type="image/webp" media="(max-width: 768px)"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Players racing through a mission challenge" width="800" height="533" loading="lazy" decoding="async"></picture>
             <h2 class="section-title intro-title">
                 <span data-i18n="home.about.titleLine1">What's the</span>
                 <span data-i18n="home.about.titleLine2">Mission?</span>

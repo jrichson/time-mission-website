@@ -45,8 +45,8 @@ export const megaMenus: Record<string, {
     '/about': {
         cards: [
             { title: 'How to Play', text: 'Team up, pick your missions, beat the clock.', href: '/about', img: '/assets/photos/venue/_Time-Mission_0024-480.webp' },
-            { title: 'Locations', text: 'Find a Time Mission near you.', href: '/locations', img: '/assets/photos/venue/_Time-Mission_0042-480.webp', i18n: 'nav.locations' },
-            { title: 'Gift Cards', text: 'Give the gift of adventure.', href: '/gift-cards', img: '/assets/photos/experiences/_Time-Mission_0450-480.webp', i18n: 'nav.giftCards' },
+            { title: 'Locations', text: 'Find a Time Mission near you.', href: '/locations', img: '/assets/photos/nav/mega-locations-map-480.webp', i18n: 'nav.locations' },
+            { title: 'Gift Cards', text: 'Give the gift of adventure.', href: '/gift-cards', img: '/assets/photos/nav/mega-gift-card-480.webp', i18n: 'nav.giftCards' },
             { title: 'Blog', text: 'News, tips and new missions.', href: '/blog', img: '/assets/photos/venue/_Time-Mission_0078-480.webp' },
         ],
         links: [

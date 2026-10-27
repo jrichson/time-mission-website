@@ -1438,7 +1438,8 @@
       "Pick Your": "Kies je",
       "Party": "feest",
       "What's the": "Wat is",
-      "Mission?": "de missie?"
+      "Mission?": "de missie?",
+      "Players racing through a mission challenge": "Spelers in een missie-uitdaging"
     },
     "fr": {
       ", then lets those teams compete across": ", puis permet à ces équipes de s'affronter",
@@ -2671,7 +2672,8 @@
       "Pick Your": "Choisissez votre",
       "Party": "fête",
       "What's the": "Quelle est",
-      "Mission?": "la mission ?"
+      "Mission?": "la mission ?",
+      "Players racing through a mission challenge": "Joueurs lancés dans un défi de mission"
     },
     "es": {
       ", then lets those teams compete across": ", luego permite que esos equipos compitan en",
@@ -3904,7 +3906,8 @@
       "Pick Your": "Elige tu",
       "Party": "fiesta",
       "What's the": "¿Cuál es",
-      "Mission?": "la misión?"
+      "Mission?": "la misión?",
+      "Players racing through a mission challenge": "Jugadores en un desafío de misión"
     }
   },
   "_profiles": {
