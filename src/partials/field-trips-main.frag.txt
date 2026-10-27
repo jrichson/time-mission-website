@@ -18,6 +18,7 @@
             </div>
             <div class="stem-seals">
                 <picture class="stem-seal"><source srcset="/assets/photos/awards/best-in-stem-seal-160.webp 1x, /assets/photos/awards/best-in-stem-seal-320.webp 2x" type="image/webp"><img src="/assets/photos/awards/best-in-stem-seal.png" alt="Best in STEM award seal from STEM.org" width="160" height="209" loading="lazy" decoding="async"></picture>
+                <picture class="stem-seal stem-seal--round"><source srcset="/assets/photos/awards/stem-accredited-badge-160.webp 1x, /assets/photos/awards/stem-accredited-badge-320.webp 2x" type="image/webp"><img src="/assets/photos/awards/stem-accredited-badge.png" alt="STEM.org Accredited Educational Experience badge" width="160" height="160" loading="lazy" decoding="async"></picture>
                 <p class="stem-seals-label">Recognized by STEM.org</p>
             </div>
         </div>

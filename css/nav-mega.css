@@ -376,3 +376,39 @@
 @media (prefers-reduced-motion: reduce) {
     .mega-card--all:hover .mega-card-all-cta { animation: none; }
 }
+
+/* View All tile, round 3: just "All Missions" + arrow */
+.mega-card--all .mega-card-all-count {
+    max-width: 9ch;
+    font-size: clamp(1.25rem, 1.6vw, 1.6rem);
+    line-height: 1.05;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.mega-card-all-arrow {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gradient-tm26);
+    color: var(--white);
+    box-shadow: 0 8px 22px rgba(238, 1, 50, 0.35);
+    transition: transform var(--motion-fast) ease;
+}
+
+.mega-card-all-arrow svg {
+    width: 18px;
+    height: 18px;
+}
+
+.mega-card--all:hover .mega-card-all-arrow,
+.mega-card--all:focus-visible .mega-card-all-arrow {
+    transform: translateX(4px);
+}
+
+.mega-card--all .mega-card-title,
+.mega-card--all .mega-card-text {
+    display: none;
+}

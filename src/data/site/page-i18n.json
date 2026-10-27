@@ -1429,7 +1429,8 @@
       "Seasonal": "Seizoensgebonden",
       "Schools": "Scholen",
       "Full Buyout": "Volledige afhuur",
-      "Night Out": "Avondje uit"
+      "Night Out": "Avondje uit",
+      "STEM.org Accredited Educational Experience badge": "Badge voor door STEM.org geaccrediteerde educatieve ervaring"
     },
     "fr": {
       ", then lets those teams compete across": ", puis permet à ces équipes de s'affronter",
@@ -2653,7 +2654,8 @@
       "Seasonal": "Saisonnier",
       "Schools": "Écoles",
       "Full Buyout": "Privatisation",
-      "Night Out": "Soirée"
+      "Night Out": "Soirée",
+      "STEM.org Accredited Educational Experience badge": "Badge d'expérience éducative accréditée par STEM.org"
     },
     "es": {
       ", then lets those teams compete across": ", luego permite que esos equipos compitan en",
@@ -3877,7 +3879,8 @@
       "Seasonal": "De temporada",
       "Schools": "Escuelas",
       "Full Buyout": "Reserva completa",
-      "Night Out": "Noche de fiesta"
+      "Night Out": "Noche de fiesta",
+      "STEM.org Accredited Educational Experience badge": "Insignia de experiencia educativa acreditada por STEM.org"
     }
   },
   "_profiles": {

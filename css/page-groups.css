@@ -1099,3 +1099,65 @@
         padding-top: 2.5rem !important;
     }
 }
+
+/* Equal-height cards, Learn More centered and pinned to the bottom */
+.event-type-card {
+    height: 100%;
+}
+
+.event-type-card .event-type-learn-more {
+    align-self: center !important;
+    margin: auto auto 0 !important;
+}
+
+/* ---- Round 6: card actions live at the bottom of the card, not on the photo ---- */
+.event-type-card .event-type-actions {
+    position: static !important;
+    transform: none !important;
+    opacity: 1 !important;
+    display: flex !important;
+    gap: 0.6rem;
+    width: calc(100% - 3rem) !important;
+    max-width: 24rem !important;
+    margin: 0 auto !important;
+}
+
+.event-type-card .event-type-photo::after {
+    display: none !important;
+}
+
+.event-type-card .event-type-cta.ghost {
+    background: transparent !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Learn more becomes a quiet text link above the buttons */
+.event-type-card .event-type-learn-more.event-type-learn-more--text {
+    min-height: 0;
+    margin: auto auto 1.1rem !important;
+    padding: 0.25rem 0 !important;
+    border: 0 !important;
+    border-radius: 0;
+    color: rgba(255, 255, 255, 0.75) !important;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.3);
+    text-underline-offset: 5px;
+}
+
+.event-type-card .event-type-learn-more--text::before {
+    display: none !important;
+}
+
+.event-type-card .event-type-learn-more--text:hover {
+    color: var(--white) !important;
+    text-decoration-color: var(--white);
+}
+
+.event-type-card .event-type-actions .event-type-cta {
+    height: 44px !important;
+    min-height: 44px !important;
+    padding-block: 0 !important;
+    font-size: 0.66rem !important;
+}

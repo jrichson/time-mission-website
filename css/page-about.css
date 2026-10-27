@@ -1120,3 +1120,42 @@
     color: var(--white) !important;
     stroke: url(#tm26-icon-gradient) !important;
 }
+
+/* Before You Arrive v3: glass cards, solid TM26 icon tiles with white icons */
+.checklist-item {
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    border-radius: 24px !important;
+    background:
+        radial-gradient(70% 120% at 0% 0%, rgba(250, 174, 23, 0.10), transparent 60%),
+        radial-gradient(70% 120% at 100% 100%, rgba(255, 27, 206, 0.10), transparent 60%),
+        rgba(255, 255, 255, 0.03) !important;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+
+.checklist-icon {
+    width: 56px !important;
+    height: 56px !important;
+    border: 0 !important;
+    border-radius: 16px !important;
+    background: var(--gradient-tm26) !important;
+    box-shadow: 0 10px 26px -6px rgba(238, 1, 50, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transition: transform var(--motion-standard, 0.3s) ease, box-shadow var(--motion-standard, 0.3s) ease;
+}
+
+.checklist-icon svg,
+.checklist-item:hover svg {
+    width: 26px !important;
+    height: 26px !important;
+    color: var(--white) !important;
+    stroke: var(--white) !important;
+}
+
+.checklist-item:hover .checklist-icon {
+    transform: translateY(-2px) rotate(-4deg);
+    box-shadow: 0 14px 32px -6px rgba(255, 27, 206, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .checklist-item:hover .checklist-icon { transform: none; }
+}

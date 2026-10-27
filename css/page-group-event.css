@@ -734,3 +734,13 @@
         width: 58px;
     }
 }
+
+.stem-seal--round img {
+    width: 84px;
+}
+
+@media (max-width: 768px) {
+    .stem-seal--round img {
+        width: 68px;
+    }
+}

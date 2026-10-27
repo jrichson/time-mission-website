@@ -33,13 +33,13 @@ const ld = serializeGraph(buildSimpleGraph([
             media="(max-width: 768px)"
         />
         <link rel="stylesheet" href="/css/page-missions.css?v=4" />
-        <link rel="stylesheet" href="/css/page-missions-tiles.css?v=5" />
+        <link rel="stylesheet" href="/css/page-missions-tiles.css?v=6" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={missionsMain} />
     <Fragment slot="after-site-scripts">
-        <script is:inline defer src="/js/page-missions-after.js?v=3"></script>
+        <script is:inline defer src="/js/page-missions-after.js?v=4"></script>
     </Fragment>
 </SiteLayout>

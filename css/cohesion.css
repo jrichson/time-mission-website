@@ -1,0 +1,111 @@
+/* ==========================================================================
+   One continuous surface for every page.
+   - The page itself carries a single fixed 80px grid and a faint brand glow.
+   - Sections no longer paint their own band color or their own grid, so
+     there are no seams, mismatched grid sizes, or "stacked boards".
+   - Emphasis comes from glass panels and cards, not from section bands.
+   ========================================================================== */
+:root {
+    --surface: #0c0c0e;
+    --surface-grid: rgba(255, 255, 255, 0.035);
+    --glass-bg: rgba(255, 255, 255, 0.035);
+    --glass-border: rgba(255, 255, 255, 0.09);
+}
+
+html,
+body {
+    background-color: var(--surface) !important;
+}
+
+body {
+    background-image:
+        linear-gradient(var(--surface-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--surface-grid) 1px, transparent 1px) !important;
+    background-size: 80px 80px !important;
+    background-attachment: fixed !important;
+}
+
+/* Sections are transparent: no band colors */
+body main section:not(.hero):not(.about-hero),
+body main .tm-page-header,
+body main .tm-resource-section,
+body main .tm-resource-hero,
+body main .tm-resource-subnav {
+    background-color: transparent !important;
+}
+
+/* Per-section grid overlays are replaced by the page grid */
+body .welcome::before,
+body .stats::before,
+body .experiences::before,
+body .groups-cta::before,
+body .mini-faq::before,
+body .cta-section::before,
+body .newsletter-section::before,
+body .testimonials::before,
+body .what-is::before,
+body .steps::before,
+body .about-cta::before,
+body .event-page-section::before,
+body .event-page-faq::before,
+body .event-page-cta::before,
+body .event-info::before,
+body .event-types::before,
+body .faq::before,
+body .portals-section::before {
+    display: none !important;
+}
+
+/* Shared glass panel recipe (also used by the press contact band) */
+.tm-glass {
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    background:
+        radial-gradient(80% 140% at 0% 0%, rgba(250, 174, 23, 0.12), transparent 60%),
+        radial-gradient(80% 140% at 100% 100%, rgba(255, 27, 206, 0.14), transparent 60%),
+        var(--glass-bg);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* ---- Mobile: the fixed Tickets bar is the one filled gradient button ---- */
+@media (max-width: 768px) {
+    body .nav-right .btn-tickets,
+    body main .btn-primary:not(.mobile-book-btn),
+    body main .btn-tickets:not(.mobile-book-btn),
+    body main .btn-group-tickets,
+    body main .btn-start-planning,
+    body main .btn-book-now {
+        background: transparent !important;
+        background-image: none !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        box-shadow: none !important;
+        color: var(--white) !important;
+        animation: none !important;
+    }
+
+    body .nav-right .btn-tickets::before,
+    body .nav-right .btn-tickets::after,
+    body main .btn-primary:not(.mobile-book-btn)::after,
+    body main .btn-tickets:not(.mobile-book-btn)::after {
+        box-shadow: none !important;
+    }
+
+    body .nav-right .btn-tickets svg,
+    body main .btn-primary:not(.mobile-book-btn) svg,
+    body main .btn-tickets:not(.mobile-book-btn) svg {
+        color: var(--white) !important;
+        stroke: currentColor !important;
+    }
+
+    body .nav-right .btn-tickets {
+        min-height: 42px !important;
+        padding: 0 1.15rem !important;
+        font-size: 0.78rem !important;
+    }
+
+    /* Scroll hint sits above the Tickets bar instead of behind it */
+    body .hero .hero-scroll {
+        bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+}

@@ -387,3 +387,11 @@
         padding: 0 1rem !important;
     }
 }
+
+/* Feature tiles size themselves (2x2 of 4:5 tiles), so they never collapse
+   when a venue hides the tiles that used to define their rows. */
+@media (min-width: 1201px) {
+    .portal-card.portal-card--feature {
+        aspect-ratio: 4 / 5 !important;
+    }
+}

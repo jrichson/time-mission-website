@@ -8,7 +8,7 @@ body .tm-page-header {
     min-height: 0 !important;
     height: auto !important;
     padding: 0 0 clamp(2.5rem, 5vw, 4rem) !important;
-    background: var(--black, #0a0a0a) !important;
+    background: transparent !important;
     overflow: visible !important;
     text-align: left !important;
 }
@@ -82,14 +82,15 @@ body .tm-page-header > .about-hero-content {
     max-width: none !important;
     margin: clamp(-150px, -12vw, -96px) auto 0 !important;
     padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 4.5vw, 4rem) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 24px;
     background:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        #121214;
-    background-size: 40px 40px, 40px 40px, auto;
-    box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7);
+        radial-gradient(80% 140% at 0% 0%, rgba(250, 174, 23, 0.12), transparent 60%),
+        radial-gradient(80% 140% at 100% 100%, rgba(255, 27, 206, 0.14), transparent 60%),
+        rgba(18, 18, 20, 0.72);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.75);
     text-align: left !important;
     transform: none !important;
     opacity: 1 !important;
@@ -105,9 +106,10 @@ body .tm-page-header > .about-hero-content::before {
     top: -1px;
     left: 24px;
     right: 24px;
-    height: 2px;
-    border-radius: 2px;
+    height: 1px;
+    border-radius: 1px;
     background: var(--gradient-tm26);
+    opacity: 0.7;
 }
 
 /* Left column: label + title. Right column: copy + buttons. */

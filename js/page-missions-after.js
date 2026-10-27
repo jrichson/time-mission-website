@@ -53,6 +53,12 @@
         var visibleCount = 0;
 
         updateFilterCounts(hiddenMissionIds);
+        var titleCount = document.querySelector('.missions-count');
+        if (titleCount) {
+            titleCount.textContent = String(portalCards.filter(function (card) {
+                return !hiddenMissionIds[card.dataset.missionId];
+            }).length);
+        }
 
         portalCards.forEach(function (card) {
             var isVisible = !hiddenMissionIds[card.dataset.missionId] && cardMatchesFilter(card, filter);
