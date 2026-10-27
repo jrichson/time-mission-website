@@ -349,3 +349,30 @@
     font-size: 1.3rem;
     font-weight: 700;
 }
+
+/* View All tile: no photo zoom/overlay on hover; the button flows like the other gradient buttons */
+.mega-card--all .mega-card-media::after {
+    display: none !important;
+}
+
+.mega-card--all .mega-card-all-media {
+    transition: border-color var(--motion-fast) ease;
+}
+
+.mega-card--all:hover .mega-card-all-media,
+.mega-card--all:focus-visible .mega-card-all-media {
+    border-color: rgba(255, 255, 255, 0.28);
+}
+
+.mega-card--all:hover .mega-card-all-cta,
+.mega-card--all:focus-visible .mega-card-all-cta {
+    transform: none;
+    background-image: linear-gradient(90deg, #FAAE17 0%, #F23929 17%, #EE0132 30%, #FF1BCE 50%, #EE0132 70%, #F23929 83%, #FAAE17 100%);
+    background-size: 200% 100%;
+    animation: tm26-flow 2.4s linear infinite;
+    box-shadow: 0 8px 24px rgba(238, 1, 50, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mega-card--all:hover .mega-card-all-cta { animation: none; }
+}
