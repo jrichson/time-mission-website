@@ -87,7 +87,7 @@ const publicSiteProfile = {
         function loadConsentUi() {
             if (getProfile() === 'us_open') return;
             appendStyle('/css/cookieconsent.css');
-            appendStyle('/css/cookie-consent.css');
+            appendStyle('/css/cookie-consent.css?v=2');
             appendLazyScript('cookieconsent', function () {
                 appendLazyScript('cookieConsent');
             });

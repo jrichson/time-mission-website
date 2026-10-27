@@ -22,7 +22,7 @@ body.tm-blog-page,
     min-height: min(74vh, 45rem);
     align-items: end;
     overflow: hidden;
-    padding: clamp(7rem, 13vw, 10rem) 0 clamp(3rem, 8vw, 5rem);
+    padding: calc(clamp(7rem, 13vw, 10rem) + var(--tm-header-extra, 0px)) 0 clamp(3rem, 8vw, 5rem);
 }
 
 .tm-blog-hero--compact {
@@ -79,8 +79,11 @@ body.tm-blog-page,
 .tm-blog-card h3,
 .tm-blog-empty h2,
 .tm-blog-empty h3 {
-    font-family: var(--display, "Bebas Neue", sans-serif);
-    letter-spacing: 0;
+    font-family: var(--display);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
+    font-weight: var(--display-weight, 400);
+    letter-spacing: var(--display-tracking, 0.02em);
     text-wrap: balance;
 }
 
@@ -275,8 +278,10 @@ body.tm-blog-page,
 .tm-blog-body :where(h2, h3, h4, h5, h6) {
     margin: 2.2rem 0 0.8rem;
     color: #fff;
-    font-family: var(--display, "Bebas Neue", sans-serif);
-    letter-spacing: 0;
+    font-family: var(--display);
+    text-transform: var(--display-case, none);
+    font-weight: var(--display-weight, 400);
+    letter-spacing: var(--display-tracking, 0.02em);
     line-height: 1;
     text-wrap: balance;
 }

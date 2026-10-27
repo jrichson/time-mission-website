@@ -23,7 +23,7 @@
     color: #ff8a7a;
     font-family: var(--tech);
     font-size: 0.7rem;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.16em;
     line-height: 1.4;
     text-transform: uppercase;
@@ -34,9 +34,11 @@
     margin: 0 0 0.75rem;
     color: var(--white);
     font-family: var(--display);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(2rem, 6vw, 4rem);
-    font-weight: 400;
-    letter-spacing: 0.02em;
+    font-weight: var(--display-weight, 400);
+    letter-spacing: var(--display-tracking, 0.02em);
     line-height: 0.95;
     text-transform: uppercase;
 }
@@ -72,7 +74,7 @@
     border-radius: var(--button-radius-pill);
     font-family: var(--tech);
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.09em;
     line-height: 1.2;
     text-align: center;
@@ -88,6 +90,7 @@
 .tm-closure-button--primary {
     border: 1px solid rgba(255, 107, 44, 0.52);
     background: var(--gradient-primary);
+    background-origin: border-box;
     color: var(--white);
 }
 

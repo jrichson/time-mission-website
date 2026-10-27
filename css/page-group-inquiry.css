@@ -83,9 +83,11 @@
     margin: 0;
     color: var(--white);
     font-family: var(--display);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(4rem, 6.9vw, 6.5rem);
-    font-weight: 400;
-    letter-spacing: -0.02em;
+    font-weight: var(--display-weight, 400);
+    letter-spacing: var(--display-tracking, 0.02em);
     line-height: 0.82;
     text-transform: uppercase;
 }
@@ -153,8 +155,11 @@
     background: var(--orange);
     color: var(--black);
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(2rem, 3vw, 2.65rem);
-    letter-spacing: 0.02em;
+    letter-spacing: var(--display-tracking, 0.02em);
     line-height: 1;
     text-decoration: none;
     transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
@@ -162,7 +167,7 @@
 
 .group-inquiry__callout a::after {
     content: '→';
-    font-family: var(--tech);
+    font-family: var(--tech); font-weight: 600;
     font-size: 0.9rem;
 }
 
@@ -215,8 +220,11 @@
     margin: 0;
     color: var(--white);
     font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(2.25rem, 4vw, 3.4rem);
-    font-weight: 400;
+    font-weight: var(--display-weight, 400);
     line-height: 0.95;
     text-transform: uppercase;
 }

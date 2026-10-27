@@ -17,6 +17,8 @@ interface Props {
     publisher?: string;
     summary: string;
     title: string;
+    // 'feature': image beside copy (default); 'card': image on top, for news grids; 'row': date + title list.
+    variant?: 'feature' | 'card' | 'row';
 }
 
 const {
@@ -37,6 +39,7 @@ const {
     publisher = '',
     summary,
     title,
+    variant = 'feature',
 } = Astro.props;
 const externalLinkAttributes = external
     ? { rel: 'noopener noreferrer', target: '_blank' }
@@ -50,7 +53,7 @@ const pressCoverageTrackingAttributes = external && publisher
     : {};
 ---
 
-<article class="tm-resource-release" aria-labelledby={`${id}-title`}>
+<article class={`tm-resource-release tm-resource-release--${variant}`} aria-labelledby={`${id}-title`}>
     <a
         class="tm-resource-release-media"
         href={href}
@@ -75,12 +78,13 @@ const pressCoverageTrackingAttributes = external && publisher
                 {publisher ? (
                     <>
                         <span data-page-i18n="ignore">{publisher}</span>
-                        {' · '}
+                        <span class="tm-resource-kicker-sep" aria-hidden="true">{' · '}</span>
                         <time datetime={publishDateIso}>{publishDate}</time>
                     </>
                 ) : kicker}
             </p>
-            <h2 id={`${id}-title`} data-page-i18n="ignore">{title}</h2>
+            <h2 id={`${id}-title`} data-page-i18n="ignore"><a class="tm-resource-release-title-link" href={href} {...externalLinkAttributes} {...pressCoverageTrackingAttributes}>{title}</a></h2>
+            {publisher && <p class="tm-resource-release-source"><span data-page-i18n="ignore">{publisher}</span></p>}
             <p data-page-i18n={ignoreSummaryI18n ? 'ignore' : undefined}>{summary}</p>
         </div>
         <a

@@ -38,6 +38,10 @@
             var touchVelocity = 0;
             var lastTouchX = 0;
             var lastTouchTime = 0;
+            // Phones: step one card at a time with a pause, so it reads as swipeable
+            var stepMode = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+            var stepTimer = null;
+            var lastTouchEnd = 0;
 
             // Measure actual rendered width of original cards
             var originalCards = scrollEl.querySelectorAll('.experience-card:not([aria-hidden])');
@@ -65,7 +69,7 @@
 
             // Auto-scroll loop
             function autoScroll() {
-                if (!isHovering && !isDragging && !isTouching) {
+                if (!stepMode && !isHovering && !isDragging && !isTouching) {
                     scrollPos += autoScrollSpeed;
                     scrollPos = wrapPos(scrollPos);
                     applyPos();
@@ -76,9 +80,19 @@
             function startAutoScroll() {
                 if (animationId || reduceMotion) return;
                 animationId = requestAnimationFrame(autoScroll);
+                if (stepMode && !stepTimer) {
+                    stepTimer = window.setInterval(function () {
+                        if (isTouching || Date.now() - lastTouchEnd < 5000) return;
+                        smoothSlide(1);
+                    }, 2800);
+                }
             }
 
             function stopAutoScroll() {
+                if (stepTimer) {
+                    window.clearInterval(stepTimer);
+                    stepTimer = null;
+                }
                 if (!animationId) return;
                 cancelAnimationFrame(animationId);
                 animationId = null;
@@ -150,6 +164,7 @@
 
             scrollEl.addEventListener('touchend', function () {
                 isTouching = false;
+                lastTouchEnd = Date.now();
                 // Momentum coast
                 var velocity = touchVelocity * 15;
                 function coast() {
@@ -203,7 +218,7 @@
                     return;
                 }
 
-                scrollEl.style.transition = 'transform 0.4s ease';
+                scrollEl.style.transition = stepMode ? 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)' : 'transform 0.4s ease';
                 scrollPos = target;
                 applyPos();
 

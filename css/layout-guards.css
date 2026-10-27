@@ -28,10 +28,37 @@
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
 }
 
+/* Mission cards: crisp TM26 gradient ring and a soft brand glow below, instead of an orange haze */
+.experience-card {
+    isolation: isolate;
+}
+
+.experience-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.experience-card:hover::after,
+.experience-card:focus-within::after {
+    opacity: 1;
+}
+
 .experience-card:hover {
     box-shadow:
-        0 18px 42px rgba(0, 0, 0, 0.45),
-        0 0 28px rgba(255, 107, 44, 0.18) !important;
+        0 24px 48px -12px rgba(0, 0, 0, 0.7),
+        0 18px 40px -18px rgba(238, 1, 50, 0.55),
+        0 10px 50px -20px rgba(255, 27, 206, 0.45) !important;
 }
 
 .hero,
@@ -59,7 +86,7 @@
     .hero:has(> .hero-scroll) {
         flex-direction: column;
         gap: 2rem;
-        padding-block: calc(var(--tm-ticker-height, 0px) + 7.5rem) 2rem;
+        padding-block: calc(var(--tm-ticker-height, 0px) + var(--tm-header-extra, 0px) + 7.5rem) 2rem;
     }
 
     .hero:has(> .hero-scroll) > .hero-content {
@@ -128,18 +155,28 @@
     line-height: 1.2;
 }
 
+/* Group card hover actions: always side by side, sharing the width evenly */
 .event-type-actions {
-    width: auto !important;
-    max-width: calc(100% - 1rem) !important;
-    flex-wrap: wrap !important;
+    width: calc(100% - 2rem) !important;
+    max-width: 26rem !important;
+    flex-wrap: nowrap !important;
 }
 
 .event-type-cta {
+    flex: 1 1 0 !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    white-space: normal !important;
+    padding-inline: 0.75rem !important;
+    white-space: nowrap !important;
     text-align: center;
     line-height: 1.2;
+}
+
+@media (max-width: 1200px) {
+    .event-type-cta {
+        font-size: 0.62rem !important;
+        letter-spacing: 0.06em !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -188,4 +225,96 @@
         font-size: 0.72rem !important;
         letter-spacing: 0.1em !important;
     }
+}
+
+/* Secondary (outline) buttons: TM26 gradient outline on hover instead of orange.
+   Drawn as a masked ring so it follows the pill radius over any background. */
+.btn-secondary,
+.btn-start-planning {
+    position: relative;
+    isolation: isolate;
+}
+
+.btn-secondary::before,
+.btn-start-planning::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus-visible,
+.btn-start-planning:hover,
+.btn-start-planning:focus-visible {
+    border-color: transparent !important;
+    color: var(--white) !important;
+    box-shadow: 0 6px 22px rgba(238, 1, 50, 0.22);
+}
+
+.btn-secondary:hover::before,
+.btn-secondary:focus-visible::before,
+.btn-start-planning:hover::before,
+.btn-start-planning:focus-visible::before {
+    opacity: 1;
+}
+
+/* Gradient buttons: on hover the TM26 gradient flows across the button (like the hero "MISSION").
+   The gradient mirrors itself so the loop has no seam. */
+@keyframes tm26-flow {
+    from { background-position: 0% 50%; }
+    to { background-position: 200% 50%; }
+}
+
+.btn-tickets:hover,
+.btn-primary:hover,
+.nav-arrow:hover,
+.event-type-cta:not(.ghost):hover,
+#cc-main .cm__btn[data-role="all"]:hover {
+    background-image: linear-gradient(90deg, #FAAE17 0%, #F23929 17%, #EE0132 30%, #FF1BCE 50%, #EE0132 70%, #F23929 83%, #FAAE17 100%) !important;
+    background-size: 200% 100% !important;
+    background-origin: border-box;
+    animation: tm26-flow 2.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-tickets:hover,
+    .btn-primary:hover,
+    .nav-arrow:hover,
+    .event-type-cta:not(.ghost):hover,
+    #cc-main .cm__btn[data-role="all"]:hover {
+        animation: none;
+    }
+}
+
+/* Stats cards: glass panel (matches the press contact band) tinted by
+   each card's own glow color, with a soft brand counter-glow. */
+body .stats .stat-card {
+    border-radius: 24px !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    background:
+        radial-gradient(90% 90% at 0% 0%, var(--glow-color-alpha, rgba(250, 174, 23, 0.14)), transparent 62%),
+        radial-gradient(90% 90% at 100% 100%, rgba(255, 27, 206, 0.10), transparent 62%),
+        rgba(255, 255, 255, 0.03) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+body .stats .stat-card::before {
+    border-radius: 24px !important;
+    padding: 1px !important;
+    opacity: 0.35;
+}
+
+body .stats .stat-card:hover {
+    border-color: rgba(255, 255, 255, 0.16) !important;
 }

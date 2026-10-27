@@ -12,7 +12,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: var(--space-hero-top) var(--space-page-inline) var(--space-hero-bottom);
+            padding: calc(var(--space-hero-top) + var(--tm-header-extra, 0px)) var(--space-page-inline) var(--space-hero-bottom);
             overflow: hidden;
         }
 
@@ -67,15 +67,19 @@
 
         .hero-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(3rem, 7vw, 5.5rem);
             line-height: 1;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin-bottom: 1.25rem;
         }
 
         .hero-title .highlight {
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -106,7 +110,7 @@
             border-radius: 100px;
             font-family: var(--tech);
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             text-decoration: none;
@@ -119,13 +123,14 @@
 
         .hero-cta .btn-primary {
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
         }
 
         .hero-cta .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+            box-shadow: 0 10px 30px rgba(238, 1, 50, 0.6);
         }
 
         .hero-cta .btn-secondary {
@@ -147,7 +152,7 @@
         }
 
         @media (max-width: 600px) {
-            .hero { min-height: 60vh; padding: clamp(6.5rem, 18vw, 8rem) var(--space-page-inline) clamp(2.5rem, 5vw, 3rem); }
+            .hero { min-height: 60vh; padding: calc(clamp(7.5rem, 20vw, 9rem) + var(--tm-header-extra, 0px)) var(--space-page-inline) clamp(2.5rem, 5vw, 3rem); }
             .hero-title { font-size: clamp(2.5rem, 12vw, 4rem); }
             .hero-cta { gap: var(--space-gutter); }
             .hero-cta .btn-primary,
@@ -284,15 +289,19 @@
 
         .event-page-section-header h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.25rem, 5vw, 3.75rem);
             line-height: 1.05;
-            letter-spacing: 0.01em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0 0 1.25rem;
         }
 
         .event-page-section-header h2 .highlight {
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -353,8 +362,11 @@
 
         .event-page-feature-card h3 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.35rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin: 0 0 0.75rem;
             color: var(--white);
         }
@@ -369,7 +381,7 @@
         .event-page-step-number {
             font-family: var(--tech);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.2em;
             color: var(--orange);
             text-transform: uppercase;
@@ -414,6 +426,10 @@
 
         .event-page-split-copy h2 {
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.05;
             margin: 0 0 1rem;
@@ -422,6 +438,7 @@
 
         .event-page-split-copy h2 .highlight {
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -493,14 +510,18 @@
 
         .event-page-cta-inner h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0 0 1rem;
         }
 
         .event-page-cta-inner h2 .highlight {
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -530,7 +551,7 @@
             border-radius: 100px;
             font-family: var(--tech);
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             text-decoration: none;
@@ -543,13 +564,14 @@
 
         .event-page-cta-buttons .btn-primary {
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
         }
 
         .event-page-cta-buttons .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+            box-shadow: 0 10px 30px rgba(238, 1, 50, 0.6);
         }
 
         .event-page-cta-buttons .btn-secondary {
@@ -573,7 +595,7 @@
         .event-page-cross-sell-title {
             font-family: var(--tech);
             font-size: 0.7rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.5);
@@ -626,7 +648,7 @@
         .event-page-cross-sell-grid span {
             font-family: var(--tech);
             font-size: 0.72rem;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: 0.1em;
             line-height: 1.15;
             text-transform: uppercase;
@@ -673,10 +695,52 @@
         /* Ticket panel styles are owned by /css/ticket-panel.css. */
 
         @media (max-width: 480px) {
-            .hero { padding: 100px 1rem 2.5rem; min-height: 55vh; }
+            .hero { padding: calc(116px + var(--tm-header-extra, 0px)) 1rem 2.5rem; min-height: 55vh; }
             .hero-title { font-size: 2rem; line-height: 1.15; }
             .hero-subtitle { font-size: 0.95rem; }
             .event-page-feature-grid { grid-template-columns: 1fr; gap: 1.25rem; }
             .event-page-feature-card { padding: 1.5rem 1.25rem; }
             .event-page-section { padding-left: 1rem; padding-right: 1rem; }
         }
+
+/* Award seals (field trips hero) */
+.stem-seals {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.stem-seal img {
+    display: block;
+    width: 72px;
+    height: auto;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45));
+}
+
+.stem-seals-label {
+    margin: 0;
+    font-family: var(--tech);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--white-soft);
+}
+
+@media (max-width: 768px) {
+    .stem-seal img {
+        width: 58px;
+    }
+}
+
+.stem-seal--round img {
+    width: 84px;
+}
+
+@media (max-width: 768px) {
+    .stem-seal--round img {
+        width: 68px;
+    }
+}

@@ -1,0 +1,63 @@
+---
+// Leaderboard table shell. Rows are rendered by /js/leaderboard.js from /data/leaderboard.json
+// (sample data today; swap the fetch for the leaderboard API later, same shape).
+interface Props {
+    limit?: number;
+    showLocationFilter?: boolean;
+    showViewAll?: boolean;
+}
+
+const { limit = 5, showLocationFilter = false, showViewAll = false } = Astro.props;
+const periods = [
+    { id: 'week', label: 'This Week', i18n: 'leaderboard.week' },
+    { id: 'month', label: 'This Month', i18n: 'leaderboard.month' },
+    { id: 'all', label: 'All Time', i18n: 'leaderboard.all' },
+];
+---
+
+<div class="leaderboard" data-leaderboard data-limit={limit}>
+    <div class="leaderboard-controls">
+        <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard period" data-i18n-aria-label="leaderboard.periodLabel">
+            {periods.map((period, index) => (
+                <button type="button" role="tab" class="leaderboard-tab" data-period={period.id} aria-selected={index === 0 ? 'true' : 'false'} data-i18n={period.i18n}>{period.label}</button>
+            ))}
+        </div>
+        <div class="leaderboard-filters">
+        <label class="leaderboard-search">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+            <span class="visually-hidden" data-i18n="leaderboard.searchLabel">Search teams</span>
+            <input type="search" autocomplete="off" placeholder="Search teams or locations" data-i18n-placeholder="leaderboard.searchPlaceholder" data-leaderboard-search />
+        </label>
+        {showLocationFilter && (
+            <label class="leaderboard-filter">
+                <span class="visually-hidden" data-i18n="leaderboard.filterLocation">Location</span>
+                <select data-leaderboard-location>
+                    <option value="" data-i18n="leaderboard.allLocations">All locations</option>
+                </select>
+            </label>
+        )}
+        </div>
+    </div>
+
+    <div class="leaderboard-card">
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th scope="col" class="lb-col-rank" data-i18n="leaderboard.rank">Rank</th>
+                    <th scope="col" class="lb-col-team" data-i18n="leaderboard.team">Team</th>
+                    <th scope="col" class="lb-col-location" data-i18n="leaderboard.location">Location</th>
+                    <th scope="col" class="lb-col-missions" data-i18n="leaderboard.missions">Missions</th>
+                    <th scope="col" class="lb-col-score" data-i18n="leaderboard.score">Score</th>
+                </tr>
+            </thead>
+            <tbody data-leaderboard-rows></tbody>
+        </table>
+        <p class="leaderboard-empty" hidden data-i18n="leaderboard.empty">No scores yet for this view.</p>
+    </div>
+
+    {showViewAll && (
+        <div class="leaderboard-cta">
+            <a href="/leaderboard" class="btn-secondary" data-i18n="leaderboard.viewAll">View Full Leaderboard</a>
+        </div>
+    )}
+</div>

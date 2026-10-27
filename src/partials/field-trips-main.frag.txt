@@ -1,5 +1,5 @@
     <!-- HERO (groups.html-style: photo bg + centered copy) -->
-    <section class="hero">
+    <section class="hero tm-page-header">
         <div class="hero-bg">
             <picture><source srcset="/assets/photos/groups/field-trips-480.webp 480w, /assets/photos/groups/field-trips-800.webp 800w, /assets/photos/groups/field-trips-1200.webp 1200w, /assets/photos/groups/field-trips-1600.webp 1600w" sizes="100vw" type="image/webp"><img src="/assets/photos/groups/field-trips.jpg" alt="Students on a Time Mission field trip" width="1920" height="1280" fetchpriority="high" decoding="async"></picture>
         </div>
@@ -15,6 +15,11 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
                 <a href="#" class="btn-secondary" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="field-trips" data-tm-default-label="Inquire Now">Inquire Now</a>
+            </div>
+            <div class="stem-seals">
+                <picture class="stem-seal"><source srcset="/assets/photos/awards/best-in-stem-seal-160.webp 1x, /assets/photos/awards/best-in-stem-seal-320.webp 2x" type="image/webp"><img src="/assets/photos/awards/best-in-stem-seal.png" alt="Best in STEM award seal from STEM.org" width="160" height="209" loading="lazy" decoding="async"></picture>
+                <picture class="stem-seal stem-seal--round"><source srcset="/assets/photos/awards/stem-accredited-badge-160.webp 1x, /assets/photos/awards/stem-accredited-badge-320.webp 2x" type="image/webp"><img src="/assets/photos/awards/stem-accredited-badge.png" alt="STEM.org Accredited Educational Experience badge" width="160" height="160" loading="lazy" decoding="async"></picture>
+                <p class="stem-seals-label">Recognized by STEM.org</p>
             </div>
         </div>
     </section>

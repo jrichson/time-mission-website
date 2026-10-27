@@ -116,6 +116,7 @@ export const PREFIXABLE_CANONICAL_PATHS = [
   "/groups/private-events",
   "/gift-cards",
   "/donation",
+  "/leaderboard",
   "/blog",
   "/faq",
   "/contact",
@@ -183,6 +184,10 @@ export const PREFIXABLE_ROUTE_ALIASES = [
   [
     "/donation.html",
     "/donation"
+  ],
+  [
+    "/leaderboard.html",
+    "/leaderboard"
   ],
   [
     "/blog.html",

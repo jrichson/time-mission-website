@@ -152,6 +152,16 @@
       "status": 301
     },
     {
+      "id": "leaderboard",
+      "canonicalPath": "/leaderboard",
+      "redirectSources": [
+        "/leaderboard.html"
+      ],
+      "outputFile": "leaderboard.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "blog",
       "canonicalPath": "/blog",
       "redirectSources": [

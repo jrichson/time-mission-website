@@ -1,0 +1,156 @@
+/* ==========================================
+   HOMEPAGE "WHAT IS TIME MISSION": short centred intro over a three-photo strip
+   Homepage only
+   ========================================== */
+
+.welcome--intro {
+    padding: clamp(4.5rem, 9vw, 8rem) clamp(1.25rem, 4vw, 2rem) clamp(3rem, 6vw, 5rem);
+    text-align: center;
+}
+
+.intro-head {
+    position: relative;
+    z-index: 1;
+    max-width: 44rem;
+    margin: 0 auto;
+}
+
+.intro-title {
+    margin-bottom: 1.25rem;
+}
+
+.intro-title span {
+    display: inline;
+}
+
+.intro-lede {
+    max-width: 36rem;
+    margin: 0 auto 2rem;
+    color: var(--gray-light);
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    line-height: 1.65;
+}
+
+/* Three photos, middle one raised */
+.intro-shots {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    max-width: 1280px;
+    margin: clamp(3rem, 6vw, 4.5rem) auto 0;
+    align-items: center;
+}
+
+.intro-shot {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--dark);
+}
+
+.intro-shot:nth-child(2) {
+    transform: translateY(-1.5rem);
+}
+
+.intro-shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-standard, ease);
+}
+
+.intro-shot:hover img {
+    transform: scale(1.04);
+}
+
+/* Long-form overview stays available, quietly, below the photos */
+.intro-more {
+    position: relative;
+    z-index: 1;
+    max-width: 44rem;
+    margin: 2.5rem auto 0;
+}
+
+.intro-more .geo-disclosure summary {
+    justify-content: center;
+    color: var(--gray-light);
+    font-family: var(--body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.intro-more .geo-disclosure summary:hover {
+    color: var(--white);
+}
+
+.intro-more .geo-disclosure .welcome-text {
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+/* Phones: one screen tall, swipeable strip */
+@media (max-width: 768px) {
+    .welcome--intro {
+        padding-top: 3.5rem;
+        padding-bottom: 2.5rem;
+    }
+
+    .intro-title {
+        margin-bottom: 0.75rem;
+    }
+
+    .intro-lede {
+        margin-bottom: 1.25rem;
+        font-size: 1rem;
+        line-height: 1.55;
+    }
+
+    .intro-more {
+        margin-top: 1.25rem;
+    }
+
+    .intro-shots {
+        display: flex;
+        gap: 0.75rem;
+        margin: 1.75rem -1.25rem 0;
+        padding: 0 1.25rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+    }
+
+    .intro-shots::-webkit-scrollbar {
+        display: none;
+    }
+
+    .intro-shot {
+        flex: 0 0 72%;
+        aspect-ratio: 4 / 3;
+        scroll-snap-align: center;
+        border-radius: 16px;
+    }
+
+    .intro-shot:nth-child(2) {
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-shot img {
+        transition: none;
+    }
+}
+
+/* The missions carousel now follows the intro directly, so the two read as one section */
+.welcome--intro {
+    padding-bottom: 0 !important;
+}
+
+.welcome--intro + .experiences {
+    padding-top: clamp(2rem, 4vw, 3rem) !important;
+}

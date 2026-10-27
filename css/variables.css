@@ -31,9 +31,15 @@
     --gray-light: #a0a0a0;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #f9a41a 0%, #ef4b23 50%, #c7451e 100%);
+    /* TM26 brand gradient (amber → red → pink), from TM26_Gradient.svg */
+    --gradient-tm26: linear-gradient(90deg, #FAAE17 0%, #F9991A 3.8%, #F56323 14.25%, #F23929 24%, #F01A2E 32.7%, #EE0831 40.2%, #EE0132 45.5%, #EF0238 52.6%, #F00547 61.7%, #F30961 71.9%, #F70F86 82.8%, #FC17B4 94.3%, #FF1BCE 100%);
+    --tm26-amber: #FAAE17;
+    --tm26-red: #EE0132;
+    --tm26-pink: #FF1BCE;
+    --tm26-glow: rgba(238, 1, 50, 0.35);
+    --gradient-primary: var(--gradient-tm26);
     --gradient-secondary: linear-gradient(135deg, #00E5FF 0%, #AAFF00 100%);
-    --gradient-accent: linear-gradient(90deg, #f9a41a 0%, #ef4b23 50%, #c7451e 100%);
+    --gradient-accent: var(--gradient-tm26);
 
     /* Glows */
     --orange-glow: rgba(255, 107, 44, 0.15);
@@ -42,10 +48,16 @@
     --gold-glow: rgba(255, 196, 0, 0.15);
 
     /* Typography */
-    --display: 'Bebas Neue', sans-serif;
+    --display: 'termina', 'Bebas Neue', sans-serif;
+    /* Bebas Neue is caps-only; Termina needs the uppercase made explicit */
+    --display-case: uppercase;
+    --display-leading: 1.05;
+    --display-weight: 700;
+    /* Wide tracking reads more tech/futuristic in Termina */
+    --display-tracking: 0.06em;
     --body: 'DM Sans', sans-serif;
     --mono: 'DM Sans', sans-serif;
-    --tech: 'Monument Extended', 'Orbitron', sans-serif;
+    --tech: 'termina', 'Monument Extended', 'Orbitron', sans-serif;
 
     /* Layout rhythm — shared by event-type & long-form marketing sections */
     --space-page-inline: clamp(1.25rem, 4vw, 2rem);
@@ -79,6 +91,11 @@
 
     /* Fixed ticker bar content height (nav offset = this + safe-area-inset-top in nav.css) */
     --tm-ticker-height: 36px;
+    /* Fixed utility bar (location / account) under the ticker; includes the gap above the glass nav
+       so its content sits centered between the page top and the nav */
+    --tm-utility-height: 52px;
+    /* Extra top space pages need for the utility bar (added to each page's opening section) */
+    --tm-header-extra: var(--tm-utility-height);
 
     /*
      * Responsive breakpoints (conventions across CSS):
@@ -93,5 +110,6 @@
 @media (max-width: 768px) {
     :root {
         --tm-ticker-height: 40px;
+        --tm-utility-height: 44px;
     }
 }

@@ -56,7 +56,7 @@ export function applyStaticSecurity(distDir, policy) {
   // must not consume the same quota needed by contact forms and daily alerts.
   fs.writeFileSync(path.join(distDir, '_routes.json'), JSON.stringify({
     version: 1,
-    include: ['/api/contact', '/api/newsletter', '/api/klaviyo-signup', '/api/monitor-status'],
+    include: ['/api/contact', '/api/newsletter', '/api/klaviyo-signup', '/api/monitor-status', '/api/social-feed'],
     exclude: [],
   }, null, 2) + '\n');
 }

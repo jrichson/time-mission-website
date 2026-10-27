@@ -1,0 +1,453 @@
+/* ==========================================
+   SHARED UTILITY BAR
+   Location + today's hours (left), language, gift cards + account (right).
+   Included on all pages, between the announcement ticker and the nav.
+   ========================================== */
+
+/* ---- Utility Bar (location + hours / language, gift cards + account) ---- */
+/* Sits under the optional announcement ticker; .utility-bar--no-ticker pins it to the top. */
+.utility-bar {
+    position: fixed;
+    top: calc(var(--tm-ticker-height) + env(safe-area-inset-top, 0px));
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    box-sizing: border-box;
+    height: var(--tm-utility-height);
+    /* Transparent over the hero video; text-shadow keeps it legible */
+    background: transparent;
+    max-width: 100vw;
+    font-family: var(--body);
+    font-size: 0.8rem;
+    color: var(--white-soft);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+    transition: background var(--motion-standard) ease, backdrop-filter var(--motion-standard) ease;
+}
+
+/* Once the page scrolls past the hero, give it a light glass backing like the nav */
+body:has(.nav.scrolled) .utility-bar {
+    background: rgba(13, 13, 13, 0.55);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+.utility-bar--no-ticker {
+    top: 0;
+    padding-top: env(safe-area-inset-top, 0px);
+    height: calc(var(--tm-utility-height) + env(safe-area-inset-top, 0px));
+}
+
+.utility-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    /* Same width and inner padding as the glass nav so content lines up with it */
+    box-sizing: border-box;
+    width: min(1400px, calc(100% - 3rem));
+    margin: 0 auto;
+    padding: 0 0.75rem 0 2rem;
+}
+
+.utility-left,
+.utility-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.utility-pin {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: var(--white);
+}
+
+.utility-location-name {
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.utility-location-name:hover,
+.utility-location-name:focus-visible {
+    background: var(--gradient-tm26);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+}
+
+.utility-hours {
+    color: var(--gray-light);
+    white-space: nowrap;
+}
+
+.utility-hours strong {
+    color: var(--white);
+    font-weight: 600;
+}
+
+.utility-choose,
+.utility-change {
+    background: none;
+    border: 0;
+    padding: 0.25rem 0;
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.utility-choose {
+    font-weight: 700;
+    color: var(--white);
+}
+
+/* Quiet secondary action: shouldn't outshine the location name */
+.utility-change {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--gray-light);
+}
+
+.utility-choose:hover,
+.utility-change:hover {
+    color: var(--white);
+}
+
+.utility-link {
+    color: var(--white-soft);
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 0.25rem 0;
+    transition: color var(--motion-fast) ease;
+}
+
+.utility-link:hover {
+    color: var(--white);
+}
+
+.utility-account {
+    position: relative;
+}
+
+.utility-account-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--white);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color var(--motion-fast) ease;
+}
+
+.utility-account-btn:hover,
+.utility-account-btn[aria-expanded="true"] {
+    color: var(--white);
+}
+
+.utility-account-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.utility-account-btn .utility-caret {
+    width: 10px;
+    height: 10px;
+    transition: transform var(--motion-fast) ease;
+}
+
+.utility-account-btn[aria-expanded="true"] .utility-caret {
+    transform: rotate(180deg);
+}
+
+/* Language switcher in the utility bar: globe + full language name, menu styled like the account menu */
+.utility-right .language-switcher {
+    position: relative;
+    min-height: 28px;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+}
+
+.utility-right .language-switcher-icon {
+    color: var(--white);
+}
+
+.language-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--white-soft);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color var(--motion-fast) ease;
+}
+
+.language-menu-btn:hover,
+.language-menu-btn[aria-expanded="true"] {
+    color: var(--white);
+}
+
+.language-menu-caret {
+    width: 10px;
+    height: 10px;
+    transition: transform var(--motion-fast) ease;
+}
+
+.language-menu-btn[aria-expanded="true"] .language-menu-caret {
+    transform: rotate(180deg);
+}
+
+/* ---- Utility dropdowns (account + language): frosted glass panel ---- */
+.utility-account-menu,
+.language-menu-list {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 220px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    background: rgba(22, 22, 28, 0.82);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 20px 50px rgba(0, 0, 0, 0.45);
+    text-shadow: none;
+    z-index: 1002;
+    animation: utility-menu-in 160ms var(--ease-standard) both;
+}
+
+.language-menu-list {
+    min-width: 180px;
+}
+
+@keyframes utility-menu-in {
+    from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.utility-account-menu a,
+.language-menu-list button {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    color: var(--white-soft);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--motion-fast) ease, color var(--motion-fast) ease;
+}
+
+.utility-account-menu a svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--gray-light);
+    transition: color var(--motion-fast) ease;
+}
+
+.utility-account-menu a:hover,
+.utility-account-menu a:focus-visible,
+.language-menu-list button:hover,
+.language-menu-list button:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--white);
+    outline: none;
+}
+
+.utility-account-menu a:hover svg,
+.utility-account-menu a:focus-visible svg {
+    color: var(--white);
+}
+
+/* Current language: white with a check mark */
+.language-menu-list button {
+    justify-content: space-between;
+}
+
+.language-menu-list button[aria-current="true"] {
+    color: var(--white);
+    font-weight: 600;
+}
+
+.language-menu-list button[aria-current="true"]::after {
+    content: '';
+    width: 14px;
+    height: 14px;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Triggers: no browser focus box on click; a soft ring for keyboard users */
+.utility-account-btn:focus,
+.language-menu-btn:focus {
+    outline: none;
+}
+
+.utility-account-btn:focus-visible,
+.language-menu-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 4px;
+    border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .utility-account-menu,
+    .language-menu-list {
+        animation: none;
+    }
+}
+
+
+.utility-change-short {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .utility-link {
+        display: none;
+    }
+
+    /* Short "Change" on small screens so location can still be switched */
+    .utility-change-long {
+        display: none;
+    }
+
+    .utility-change-short {
+        display: inline;
+    }
+}
+
+@media (max-width: 768px) {
+    .utility-bar {
+        font-size: 0.72rem;
+    }
+
+    .utility-left {
+        gap: 0.5rem;
+    }
+
+    .utility-location-name,
+    .utility-hours {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .utility-account-label {
+        display: none;
+    }
+
+    .utility-inner {
+        width: calc(100% - 1.5rem);
+        padding: 0 0.5rem 0 1rem;
+    }
+
+    .utility-account-btn {
+        height: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    .utility-inner {
+        padding: 0 0.4rem 0 0.625rem;
+    }
+}
+
+/* Simple bold-on-hover for the utility links; the hidden bold copy reserves width so nothing shifts */
+.bold-hover {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bold-hover::after {
+    content: attr(data-label);
+    font-weight: 700;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.utility-link:hover .bold-hover,
+.language-menu-btn:hover .bold-hover,
+.language-menu-btn[aria-expanded="true"] .bold-hover,
+.utility-account-btn:hover .bold-hover,
+.utility-account-btn[aria-expanded="true"] .bold-hover {
+    font-weight: 700;
+    color: var(--white);
+}
+
+
+/* ---- Phones: name opens the selector, icon-only Mission Rewards ---- */
+@media (max-width: 768px) {
+    .utility-change,
+    .utility-hours-label,
+    .utility-account-btn .utility-account-label,
+    .utility-account-btn .utility-caret {
+        display: none !important;
+    }
+
+    .utility-location-name {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        min-width: 0;
+    }
+
+    .utility-location-name[hidden] {
+        display: none !important;
+    }
+
+    .utility-location-name::after {
+        content: '';
+        flex-shrink: 0;
+        width: 6px;
+        height: 6px;
+        margin-top: -3px;
+        border-right: 1.5px solid currentColor;
+        border-bottom: 1.5px solid currentColor;
+        transform: rotate(45deg);
+    }
+
+    .utility-hours {
+        color: var(--white-soft);
+    }
+
+    .utility-account-btn {
+        width: 32px;
+        justify-content: center;
+    }
+
+    .utility-account-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+}

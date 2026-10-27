@@ -127,7 +127,7 @@
     text-decoration: none;
     font-family: var(--tech);
     font-size: 0.85rem;
-    font-weight: 400;
+    font-weight: 600;
     border-radius: 100px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -184,12 +184,13 @@
     align-items: center;
     gap: 0.5rem;
     background: var(--gradient-primary);
+    background-origin: border-box;
     color: var(--white);
     padding: 0.85rem 2rem;
     text-decoration: none;
     font-family: var(--tech);
     font-size: 0.85rem;
-    font-weight: 400;
+    font-weight: 600;
     border-radius: 100px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -200,7 +201,7 @@
 
 .btn-group-tickets:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+    box-shadow: 0 10px 30px rgba(238, 1, 50, 0.6);
 }
 
 @media (max-width: 768px) {

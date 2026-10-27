@@ -126,8 +126,11 @@
 
 .experience-title {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 2rem;
-    letter-spacing: 0.02em;
+    letter-spacing: var(--display-tracking, 0.02em);
     margin-bottom: 0.5rem;
 }
 
@@ -174,8 +177,9 @@
 
 .nav-arrow:hover {
     background: var(--gradient-primary);
+    background-origin: border-box;
     border-color: transparent;
-    box-shadow: 0 4px 20px rgba(239, 75, 35, 0.5);
+    box-shadow: 0 4px 20px var(--tm26-glow);
 }
 
 .nav-arrow svg {

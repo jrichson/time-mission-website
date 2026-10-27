@@ -1,8 +1,11 @@
     
         .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1.5rem;
         }
 
@@ -29,9 +32,12 @@
 
         .faq-answer-summary h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.05;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin: 0 0 1rem;
             color: var(--white);
         }
@@ -56,7 +62,7 @@
             cursor: pointer;
             font-family: var(--tech);
             font-size: 0.72rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.12em;
             line-height: 1.5;
             list-style: none;
@@ -118,6 +124,10 @@
 
         .cta-title {
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             margin-bottom: 1rem;
         }
@@ -133,6 +143,7 @@
             align-items: center;
             gap: 0.75rem;
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             padding: 1rem 2rem;
             text-decoration: none;
@@ -147,7 +158,7 @@
 
         .btn-primary:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(199, 69, 30, 0.6);
+            box-shadow: 0 20px 40px rgba(238, 1, 50, 0.6);
         }
 
         @media (max-width: 480px) {

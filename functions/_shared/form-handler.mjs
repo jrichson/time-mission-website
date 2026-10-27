@@ -460,7 +460,7 @@ export function validateNewsletterSubmission(raw) {
     marketingOptIn: optInIsChecked(raw.marketing_opt_in),
   };
 
-  if (!data.givenName) throw new FormError('First name is required.');
+  // First name is optional: the footer signup asks for email only.
   assertEmail(data.email);
   if (!data.marketingOptIn) throw new FormError('Marketing consent is required.');
 

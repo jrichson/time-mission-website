@@ -1,0 +1,643 @@
+{
+  "_comment": "SAMPLE DATA for the website-v2 design. Replace with the leaderboard API response (same shape) when it is ready.",
+  "source": "sample",
+  "updatedAt": "2026-10-25T00:00:00Z",
+  "periods": {
+    "week": [
+      {
+        "rank": 1,
+        "team": "Magma Mayhem Makers",
+        "locationSlug": "mount-prospect",
+        "missions": 23,
+        "score": 27443
+      },
+      {
+        "rank": 2,
+        "team": "The Lava Walkers",
+        "locationSlug": "mount-prospect",
+        "missions": 23,
+        "score": 25114
+      },
+      {
+        "rank": 3,
+        "team": "Mind Benders",
+        "locationSlug": "houston",
+        "missions": 21,
+        "score": 24340
+      },
+      {
+        "rank": 4,
+        "team": "The Escape Artists",
+        "locationSlug": "orland-park",
+        "missions": 24,
+        "score": 23420
+      },
+      {
+        "rank": 5,
+        "team": "Zero Gravity",
+        "locationSlug": "west-nyack",
+        "missions": 26,
+        "score": 23370
+      },
+      {
+        "rank": 6,
+        "team": "Mission Possible",
+        "locationSlug": "manassas",
+        "missions": 25,
+        "score": 23107
+      },
+      {
+        "rank": 7,
+        "team": "Koi Kings",
+        "locationSlug": "orland-park",
+        "missions": 19,
+        "score": 22492
+      },
+      {
+        "rank": 8,
+        "team": "Button Mashers",
+        "locationSlug": "mount-prospect",
+        "missions": 25,
+        "score": 21889
+      },
+      {
+        "rank": 9,
+        "team": "Laser Legends",
+        "locationSlug": "mount-prospect",
+        "missions": 23,
+        "score": 21834
+      },
+      {
+        "rank": 10,
+        "team": "Rookie Rampage",
+        "locationSlug": "philadelphia",
+        "missions": 20,
+        "score": 21675
+      },
+      {
+        "rank": 11,
+        "team": "The Overachievers",
+        "locationSlug": "orland-park",
+        "missions": 25,
+        "score": 21552
+      },
+      {
+        "rank": 12,
+        "team": "Orbit Raiders",
+        "locationSlug": "orland-park",
+        "missions": 21,
+        "score": 21328
+      },
+      {
+        "rank": 13,
+        "team": "Team Turbo",
+        "locationSlug": "orland-park",
+        "missions": 19,
+        "score": 21114
+      },
+      {
+        "rank": 14,
+        "team": "Code Crackers",
+        "locationSlug": "houston",
+        "missions": 23,
+        "score": 20792
+      },
+      {
+        "rank": 15,
+        "team": "Pixel Pirates",
+        "locationSlug": "lincoln",
+        "missions": 21,
+        "score": 20074
+      },
+      {
+        "rank": 16,
+        "team": "Couch Potato Heroes",
+        "locationSlug": "orland-park",
+        "missions": 17,
+        "score": 19756
+      },
+      {
+        "rank": 17,
+        "team": "Neon Ninjas",
+        "locationSlug": "mount-prospect",
+        "missions": 22,
+        "score": 19183
+      },
+      {
+        "rank": 18,
+        "team": "Cosmic Crew",
+        "locationSlug": "manassas",
+        "missions": 22,
+        "score": 19106
+      },
+      {
+        "rank": 19,
+        "team": "Fast & Curious",
+        "locationSlug": "orland-park",
+        "missions": 16,
+        "score": 18512
+      },
+      {
+        "rank": 20,
+        "team": "Speed Demons",
+        "locationSlug": "philadelphia",
+        "missions": 16,
+        "score": 17768
+      },
+      {
+        "rank": 21,
+        "team": "Team Tartarus",
+        "locationSlug": "orland-park",
+        "missions": 14,
+        "score": 17292
+      },
+      {
+        "rank": 22,
+        "team": "Sore Winners",
+        "locationSlug": "mount-prospect",
+        "missions": 15,
+        "score": 16222
+      },
+      {
+        "rank": 23,
+        "team": "Puzzle Punchers",
+        "locationSlug": "houston",
+        "missions": 14,
+        "score": 14615
+      },
+      {
+        "rank": 24,
+        "team": "Glitch Squad",
+        "locationSlug": "orland-park",
+        "missions": 14,
+        "score": 14561
+      },
+      {
+        "rank": 25,
+        "team": "Chaos Controllers",
+        "locationSlug": "philadelphia",
+        "missions": 14,
+        "score": 14444
+      },
+      {
+        "rank": 26,
+        "team": "Quantum Quokkas",
+        "locationSlug": "lincoln",
+        "missions": 14,
+        "score": 14098
+      },
+      {
+        "rank": 27,
+        "team": "Brain Freeze",
+        "locationSlug": "west-nyack",
+        "missions": 16,
+        "score": 13930
+      },
+      {
+        "rank": 28,
+        "team": "The Dino Hunters",
+        "locationSlug": "mount-prospect",
+        "missions": 15,
+        "score": 13433
+      },
+      {
+        "rank": 29,
+        "team": "The Time Benders",
+        "locationSlug": "mount-prospect",
+        "missions": 15,
+        "score": 12998
+      },
+      {
+        "rank": 30,
+        "team": "Night Owls",
+        "locationSlug": "lincoln",
+        "missions": 14,
+        "score": 12307
+      }
+    ],
+    "month": [
+      {
+        "rank": 1,
+        "team": "Cosmic Crew",
+        "locationSlug": "philadelphia",
+        "missions": 81,
+        "score": 92494
+      },
+      {
+        "rank": 2,
+        "team": "Code Crackers",
+        "locationSlug": "lincoln",
+        "missions": 75,
+        "score": 87063
+      },
+      {
+        "rank": 3,
+        "team": "The Dino Hunters",
+        "locationSlug": "edison",
+        "missions": 77,
+        "score": 81227
+      },
+      {
+        "rank": 4,
+        "team": "Team Turbo",
+        "locationSlug": "lincoln",
+        "missions": 72,
+        "score": 77129
+      },
+      {
+        "rank": 5,
+        "team": "Sore Winners",
+        "locationSlug": "philadelphia",
+        "missions": 68,
+        "score": 73173
+      },
+      {
+        "rank": 6,
+        "team": "The Time Benders",
+        "locationSlug": "edison",
+        "missions": 62,
+        "score": 70103
+      },
+      {
+        "rank": 7,
+        "team": "Night Owls",
+        "locationSlug": "houston",
+        "missions": 63,
+        "score": 69651
+      },
+      {
+        "rank": 8,
+        "team": "Quantum Quokkas",
+        "locationSlug": "houston",
+        "missions": 82,
+        "score": 69010
+      },
+      {
+        "rank": 9,
+        "team": "Chaos Controllers",
+        "locationSlug": "manassas",
+        "missions": 70,
+        "score": 67338
+      },
+      {
+        "rank": 10,
+        "team": "Glitch Squad",
+        "locationSlug": "west-nyack",
+        "missions": 70,
+        "score": 65100
+      },
+      {
+        "rank": 11,
+        "team": "The Escape Artists",
+        "locationSlug": "orland-park",
+        "missions": 58,
+        "score": 64637
+      },
+      {
+        "rank": 12,
+        "team": "Orbit Raiders",
+        "locationSlug": "lincoln",
+        "missions": 55,
+        "score": 62233
+      },
+      {
+        "rank": 13,
+        "team": "Puzzle Punchers",
+        "locationSlug": "manassas",
+        "missions": 64,
+        "score": 61643
+      },
+      {
+        "rank": 14,
+        "team": "Koi Kings",
+        "locationSlug": "philadelphia",
+        "missions": 57,
+        "score": 60666
+      },
+      {
+        "rank": 15,
+        "team": "Fast & Curious",
+        "locationSlug": "lincoln",
+        "missions": 63,
+        "score": 60466
+      },
+      {
+        "rank": 16,
+        "team": "Couch Potato Heroes",
+        "locationSlug": "west-nyack",
+        "missions": 53,
+        "score": 59263
+      },
+      {
+        "rank": 17,
+        "team": "Pixel Pirates",
+        "locationSlug": "mount-prospect",
+        "missions": 54,
+        "score": 58808
+      },
+      {
+        "rank": 18,
+        "team": "Neon Ninjas",
+        "locationSlug": "orland-park",
+        "missions": 66,
+        "score": 58575
+      },
+      {
+        "rank": 19,
+        "team": "Button Mashers",
+        "locationSlug": "edison",
+        "missions": 50,
+        "score": 58080
+      },
+      {
+        "rank": 20,
+        "team": "Mind Benders",
+        "locationSlug": "mount-prospect",
+        "missions": 52,
+        "score": 56844
+      },
+      {
+        "rank": 21,
+        "team": "The Lava Walkers",
+        "locationSlug": "philadelphia",
+        "missions": 47,
+        "score": 55600
+      },
+      {
+        "rank": 22,
+        "team": "Mission Possible",
+        "locationSlug": "philadelphia",
+        "missions": 58,
+        "score": 55593
+      },
+      {
+        "rank": 23,
+        "team": "Team Tartarus",
+        "locationSlug": "manassas",
+        "missions": 47,
+        "score": 53832
+      },
+      {
+        "rank": 24,
+        "team": "Speed Demons",
+        "locationSlug": "philadelphia",
+        "missions": 52,
+        "score": 53427
+      },
+      {
+        "rank": 25,
+        "team": "Zero Gravity",
+        "locationSlug": "west-nyack",
+        "missions": 46,
+        "score": 53343
+      },
+      {
+        "rank": 26,
+        "team": "Rookie Rampage",
+        "locationSlug": "mount-prospect",
+        "missions": 58,
+        "score": 49860
+      },
+      {
+        "rank": 27,
+        "team": "Brain Freeze",
+        "locationSlug": "edison",
+        "missions": 48,
+        "score": 49224
+      },
+      {
+        "rank": 28,
+        "team": "Magma Mayhem Makers",
+        "locationSlug": "mount-prospect",
+        "missions": 44,
+        "score": 47753
+      },
+      {
+        "rank": 29,
+        "team": "Laser Legends",
+        "locationSlug": "mount-prospect",
+        "missions": 47,
+        "score": 45252
+      },
+      {
+        "rank": 30,
+        "team": "The Overachievers",
+        "locationSlug": "philadelphia",
+        "missions": 45,
+        "score": 42021
+      }
+    ],
+    "all": [
+      {
+        "rank": 1,
+        "team": "Orbit Raiders",
+        "locationSlug": "philadelphia",
+        "missions": 276,
+        "score": 322299
+      },
+      {
+        "rank": 2,
+        "team": "Speed Demons",
+        "locationSlug": "philadelphia",
+        "missions": 278,
+        "score": 320117
+      },
+      {
+        "rank": 3,
+        "team": "Code Crackers",
+        "locationSlug": "houston",
+        "missions": 281,
+        "score": 303848
+      },
+      {
+        "rank": 4,
+        "team": "Chaos Controllers",
+        "locationSlug": "mount-prospect",
+        "missions": 269,
+        "score": 293994
+      },
+      {
+        "rank": 5,
+        "team": "Mind Benders",
+        "locationSlug": "west-nyack",
+        "missions": 259,
+        "score": 286016
+      },
+      {
+        "rank": 6,
+        "team": "Zero Gravity",
+        "locationSlug": "manassas",
+        "missions": 278,
+        "score": 279262
+      },
+      {
+        "rank": 7,
+        "team": "Night Owls",
+        "locationSlug": "manassas",
+        "missions": 253,
+        "score": 270486
+      },
+      {
+        "rank": 8,
+        "team": "The Dino Hunters",
+        "locationSlug": "philadelphia",
+        "missions": 244,
+        "score": 267443
+      },
+      {
+        "rank": 9,
+        "team": "Rookie Rampage",
+        "locationSlug": "edison",
+        "missions": 262,
+        "score": 257446
+      },
+      {
+        "rank": 10,
+        "team": "Koi Kings",
+        "locationSlug": "west-nyack",
+        "missions": 280,
+        "score": 253082
+      },
+      {
+        "rank": 11,
+        "team": "Puzzle Punchers",
+        "locationSlug": "orland-park",
+        "missions": 229,
+        "score": 246082
+      },
+      {
+        "rank": 12,
+        "team": "Glitch Squad",
+        "locationSlug": "west-nyack",
+        "missions": 243,
+        "score": 244947
+      },
+      {
+        "rank": 13,
+        "team": "Couch Potato Heroes",
+        "locationSlug": "edison",
+        "missions": 253,
+        "score": 244581
+      },
+      {
+        "rank": 14,
+        "team": "Brain Freeze",
+        "locationSlug": "houston",
+        "missions": 285,
+        "score": 243196
+      },
+      {
+        "rank": 15,
+        "team": "The Lava Walkers",
+        "locationSlug": "lincoln",
+        "missions": 200,
+        "score": 231441
+      },
+      {
+        "rank": 16,
+        "team": "Pixel Pirates",
+        "locationSlug": "west-nyack",
+        "missions": 195,
+        "score": 223526
+      },
+      {
+        "rank": 17,
+        "team": "Fast & Curious",
+        "locationSlug": "manassas",
+        "missions": 227,
+        "score": 222652
+      },
+      {
+        "rank": 18,
+        "team": "Sore Winners",
+        "locationSlug": "philadelphia",
+        "missions": 224,
+        "score": 209020
+      },
+      {
+        "rank": 19,
+        "team": "Team Tartarus",
+        "locationSlug": "houston",
+        "missions": 231,
+        "score": 207152
+      },
+      {
+        "rank": 20,
+        "team": "Button Mashers",
+        "locationSlug": "manassas",
+        "missions": 187,
+        "score": 206480
+      },
+      {
+        "rank": 21,
+        "team": "Laser Legends",
+        "locationSlug": "west-nyack",
+        "missions": 175,
+        "score": 198299
+      },
+      {
+        "rank": 22,
+        "team": "Magma Mayhem Makers",
+        "locationSlug": "orland-park",
+        "missions": 167,
+        "score": 196541
+      },
+      {
+        "rank": 23,
+        "team": "Cosmic Crew",
+        "locationSlug": "houston",
+        "missions": 195,
+        "score": 196143
+      },
+      {
+        "rank": 24,
+        "team": "Mission Possible",
+        "locationSlug": "mount-prospect",
+        "missions": 192,
+        "score": 194685
+      },
+      {
+        "rank": 25,
+        "team": "Neon Ninjas",
+        "locationSlug": "orland-park",
+        "missions": 158,
+        "score": 184258
+      },
+      {
+        "rank": 26,
+        "team": "The Time Benders",
+        "locationSlug": "manassas",
+        "missions": 180,
+        "score": 182562
+      },
+      {
+        "rank": 27,
+        "team": "The Overachievers",
+        "locationSlug": "manassas",
+        "missions": 206,
+        "score": 175150
+      },
+      {
+        "rank": 28,
+        "team": "Team Turbo",
+        "locationSlug": "manassas",
+        "missions": 169,
+        "score": 169915
+      },
+      {
+        "rank": 29,
+        "team": "The Escape Artists",
+        "locationSlug": "edison",
+        "missions": 157,
+        "score": 147955
+      },
+      {
+        "rank": 30,
+        "team": "Quantum Quokkas",
+        "locationSlug": "west-nyack",
+        "missions": 160,
+        "score": 132371
+      }
+    ]
+  }
+}

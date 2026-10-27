@@ -5,31 +5,47 @@
 
 /* @font-face declarations live in base.css (single source) */
 
-/* ---- Navigation ---- */
+/* ---- Navigation (contained liquid-glass bar) ---- */
 .nav {
     position: fixed;
-    top: calc(var(--tm-ticker-height) + env(safe-area-inset-top, 0px));
+    top: calc(var(--tm-ticker-height) + var(--tm-utility-height) + env(safe-area-inset-top, 0px));
     left: 0;
     right: 0;
+    width: min(1400px, calc(100% - 3rem));
+    margin: 0 auto;
     z-index: 1000;
-    padding: 1rem 2rem;
+    padding: 0.6rem 0.75rem 0.6rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+        0 10px 30px rgba(0, 0, 0, 0.25);
     transition:
         background var(--motion-standard) ease,
         border-color var(--motion-standard) ease,
-        backdrop-filter var(--motion-standard) ease;
+        box-shadow var(--motion-standard) ease;
 }
 
 .nav--no-ticker {
-    top: env(safe-area-inset-top, 0px);
+    top: calc(var(--tm-utility-height) + env(safe-area-inset-top, 0px));
 }
 
+/* Scrolled: same glass, slightly denser so links stay readable over content */
 .nav.scrolled {
-    background: rgba(13, 13, 13, 0.95);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 107, 44, 0.2);
+    background: linear-gradient(180deg, rgba(30, 30, 34, 0.72) 0%, rgba(18, 18, 22, 0.62) 100%);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Location now lives in the utility bar; keep the button (it opens the overlay) but hide it in the nav. */
+.nav .location-btn {
+    display: none !important;
 }
 
 .nav-left {
@@ -90,7 +106,8 @@
         transform: rotate(45deg) translate(5px, 5px);
     }
     .nav-menu-btn.active .hamburger span:nth-child(2) {
-        opacity: 0;
+        opacity: 0 !important;
+        transform: scaleX(0);
     }
     .nav-menu-btn.active .hamburger span:nth-child(3) {
         transform: rotate(-45deg) translate(5px, -5px);
@@ -112,23 +129,48 @@
     list-style: none;
 }
 
-.nav-links a {
+.nav-links > li > a {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
     color: var(--white-soft, #E5E5E5);
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 1.02rem;
     font-weight: 500;
-    transition:
-        color var(--motion-standard) ease,
-        text-shadow var(--motion-standard) ease;
+    transition: color var(--motion-standard) ease;
 }
 
-.nav-links a:hover {
-    color: var(--orange);
-    text-shadow: 0 0 10px rgba(249, 164, 26, 0.4);
+/* Reserve the bold width up front so hovering doesn't shift the other links */
+.nav-links > li > a::after {
+    content: attr(data-label);
+    font-weight: 700;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
 }
 
-.nav-links a.active {
-    color: var(--orange);
+/* Hover/active: bold white */
+.nav-links > li > a:hover,
+.nav-links > li > a.active {
+    color: var(--white);
+    font-weight: 700;
+}
+
+/* Gradient underline grows from the center on hover / active page */
+.nav-links > li > a {
+    /* Equal space above and below keeps the label centered in the glass bar */
+    padding: 6px 0;
+    background-image: var(--gradient-tm26);
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+    background-size: 0% 2px;
+    transition: color var(--motion-standard) ease, background-size var(--motion-standard) var(--ease-standard);
+}
+
+.nav-links > li > a:hover,
+.nav-links > li > a.active {
+    background-size: 100% 2px;
 }
 
 /* ---- Nav Right (Location + Tickets) ---- */
@@ -170,7 +212,7 @@
     border-radius: 6px;
     background: rgba(13, 13, 13, 0.72);
     color: var(--white);
-    font-family: var(--tech);
+    font-family: var(--tech); font-weight: 600;
     font-size: 0.68rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -261,13 +303,14 @@
     align-items: center;
     gap: 0.5rem;
     background: var(--gradient-primary);
+    background-origin: border-box;
     color: var(--white);
     padding: 0.75rem 1.5rem;
     min-height: var(--target-comfortable);
     text-decoration: none;
-    font-family: 'Monument Extended', 'Orbitron', sans-serif;
+    font-family: var(--tech);
     font-size: 0.85rem;
-    font-weight: 400;
+    font-weight: 600;
     border-radius: 100px;
     transition:
         transform var(--motion-standard) ease,
@@ -278,9 +321,17 @@
     box-shadow: 0 4px 15px rgba(239, 75, 35, 0.4);
 }
 
+/* Nav BOOK button: short label, so give it more presence */
+.nav .btn-tickets {
+    --button-current-padding-x: 2.25rem;
+    padding: 0.8rem 2.25rem;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+}
+
 .btn-tickets:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+    box-shadow: 0 10px 30px rgba(238, 1, 50, 0.6);
 }
 
 /* ---- Mobile Nav Overrides ---- */
@@ -328,7 +379,14 @@
 
 @media (max-width: 768px) {
     .nav {
-        padding: 0.75rem 1rem;
+        top: calc(var(--tm-ticker-height) + var(--tm-utility-height) + env(safe-area-inset-top, 0px));
+        width: calc(100% - 1.5rem);
+        padding: 0.5rem 0.5rem 0.5rem 1rem;
+        border-radius: 999px;
+    }
+
+    .nav--no-ticker {
+        top: calc(var(--tm-utility-height) + env(safe-area-inset-top, 0px));
     }
 
     .nav-left {
@@ -350,7 +408,6 @@
     }
 
     .location-btn {
-        display: inline-flex;
         align-items: center;
         justify-content: center;
         min-width: var(--target-min);
@@ -385,6 +442,12 @@
         font-size: 0.75rem;
         white-space: nowrap;
     }
+
+    .nav .btn-tickets {
+        --button-current-padding-x: 1.6rem;
+        padding: 0.55rem 1.6rem;
+        font-size: 0.9rem;
+    }
 }
 
 /* ---- Keyboard focus (visible only for keyboard / AT) ---- */
@@ -392,7 +455,7 @@
 .location-btn:focus-visible,
 .language-switcher select:focus-visible,
 .location-dropdown-close:focus-visible,
-.nav-links a:focus-visible,
+.nav-links > li > a:focus-visible,
 .btn-tickets:focus-visible,
 .location-dropdown a.location-info-book:focus-visible,
 .mobile-menu-links a:focus-visible,
@@ -414,7 +477,7 @@
 
 @media (max-width: 480px) {
     .nav {
-        padding: 0.625rem 0.75rem;
+        padding: 0.4rem 0.4rem 0.4rem 0.625rem;
     }
 
     .nav-left {
@@ -455,11 +518,12 @@
         letter-spacing: 0.02em;
     }
 
+    .nav .btn-tickets,
     .nav.has-location .btn-tickets {
-        --button-current-padding-x: 0.75rem;
-        padding-right: 0.75rem;
-        padding-left: 0.75rem;
-        font-size: 0.7rem;
+        --button-current-padding-x: 1.4rem;
+        padding-right: 1.4rem;
+        padding-left: 1.4rem;
+        font-size: 0.85rem;
     }
 
     .location-btn.has-location {
@@ -476,8 +540,8 @@
 
 @media (max-width: 360px) {
     .nav {
-        padding-left: 0.625rem;
-        padding-right: 0.625rem;
+        padding-left: 0.5rem;
+        padding-right: 0.4rem;
     }
 
     .nav-logo img {
@@ -495,11 +559,12 @@
         font-size: 0.68rem;
     }
 
+    .nav .btn-tickets,
     .nav.has-location .btn-tickets {
-        --button-current-padding-x: 0.75rem;
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-        font-size: 0.68rem;
+        --button-current-padding-x: 1.2rem;
+        padding-left: 1.2rem;
+        padding-right: 1.2rem;
+        font-size: 0.8rem;
     }
 
     .location-btn.has-location {

@@ -1,0 +1,187 @@
+/* ==========================================================================
+   Standard page header: full-width cover photo on top, title panel
+   overlapping its bottom edge (title left, copy + buttons right).
+   ========================================================================== */
+body .tm-page-header {
+    position: relative;
+    display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 0 clamp(2.5rem, 5vw, 4rem) !important;
+    background: transparent !important;
+    overflow: visible !important;
+    text-align: left !important;
+}
+
+body .tm-page-header::before,
+body .tm-page-header::after {
+    display: none !important;
+}
+
+/* Cover media: crisp, no fade */
+body .tm-page-header > .hero-bg,
+body .tm-page-header > .about-hero-bg {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: clamp(380px, 62vh, 640px) !important;
+    overflow: hidden;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+body .tm-page-header > .hero-bg::before,
+body .tm-page-header > .hero-bg::after,
+body .tm-page-header > .about-hero-bg::before,
+body .tm-page-header > .about-hero-bg::after {
+    display: none !important;
+}
+
+/* Only a short shade at the top so the glass nav stays readable */
+body .tm-page-header > .hero-bg,
+body .tm-page-header > .about-hero-bg {
+    -webkit-mask-image: none;
+    mask-image: none;
+}
+
+body .tm-page-header > .hero-bg picture,
+body .tm-page-header > .about-hero-bg picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+body .tm-page-header > .hero-bg img,
+body .tm-page-header > .hero-bg video,
+body .tm-page-header > .about-hero-bg img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+}
+
+body .tm-page-header .tm-page-header-shade {
+    display: none;
+}
+
+/* Title panel overlapping the photo */
+body .tm-page-header > .hero-content,
+body .tm-page-header > .about-hero-content {
+    position: relative !important;
+    z-index: 2;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    column-gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+    width: min(1180px, calc(100% - 2.5rem)) !important;
+    max-width: none !important;
+    margin: clamp(-150px, -12vw, -96px) auto 0 !important;
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 4.5vw, 4rem) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 24px;
+    background:
+        radial-gradient(80% 140% at 0% 0%, rgba(250, 174, 23, 0.12), transparent 60%),
+        radial-gradient(80% 140% at 100% 100%, rgba(255, 27, 206, 0.14), transparent 60%),
+        rgba(18, 18, 20, 0.72);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.75);
+    text-align: left !important;
+    transform: none !important;
+    opacity: 1 !important;
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+/* Left column: label + title. Right column: copy + buttons. */
+body .tm-page-header .section-badge {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    justify-content: flex-start !important;
+    margin: 0 !important;
+}
+
+body .tm-page-header h1,
+body .tm-page-header .hero-title {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start;
+    max-width: none !important;
+    width: auto !important;
+    margin: 0.75rem 0 0 !important;
+    font-size: clamp(1.8rem, 2.8vw, 2.45rem) !important;
+    text-align: left !important;
+}
+
+body .tm-page-header .hero-content > p,
+body .tm-page-header .about-hero-content > p,
+body .tm-page-header .hero-subtitle {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    max-width: 56ch !important;
+    margin: 0 !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-size: clamp(1rem, 1.2vw, 1.1rem) !important;
+    line-height: 1.65 !important;
+    text-align: left !important;
+}
+
+body .tm-page-header .hero-cta {
+    grid-column: 2;
+    grid-row: 3;
+    justify-content: flex-start !important;
+    margin: 1.5rem 0 0 !important;
+}
+
+body .tm-page-header .stem-seals {
+    grid-column: 2;
+    grid-row: 4;
+    justify-content: flex-start !important;
+    margin: 1.25rem 0 0 !important;
+}
+
+body .tm-page-header .scroll-indicator,
+body .tm-page-header .hero-scroll {
+    display: none !important;
+}
+
+@media (max-width: 900px) {
+    body .tm-page-header > .hero-bg,
+    body .tm-page-header > .about-hero-bg {
+        height: clamp(300px, 52vh, 440px) !important;
+    }
+
+    body .tm-page-header > .hero-content,
+    body .tm-page-header > .about-hero-content {
+        grid-template-columns: minmax(0, 1fr);
+        width: calc(100% - 1.5rem) !important;
+        margin-top: -72px !important;
+        padding: 1.75rem 1.25rem !important;
+        border-radius: 20px;
+    }
+
+    body .tm-page-header .section-badge,
+    body .tm-page-header h1,
+    body .tm-page-header .hero-title,
+    body .tm-page-header .hero-content > p,
+    body .tm-page-header .about-hero-content > p,
+    body .tm-page-header .hero-subtitle,
+    body .tm-page-header .hero-cta,
+    body .tm-page-header .stem-seals {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    body .tm-page-header h1,
+    body .tm-page-header .hero-title {
+        margin-bottom: 1rem !important;
+        font-size: clamp(1.45rem, 6.2vw, 2.2rem) !important;
+    }
+}

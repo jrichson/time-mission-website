@@ -77,9 +77,11 @@
 
 .briq-widget-loader-title {
     font-family: var(--display);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(1.1rem, 4vw, 1.45rem);
-    font-weight: 400;
-    letter-spacing: 0.05em;
+    font-weight: var(--display-weight, 400);
+    letter-spacing: var(--display-tracking, 0.02em);
     text-transform: uppercase;
 }
 

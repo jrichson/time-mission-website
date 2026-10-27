@@ -69,8 +69,6 @@ runCheck({
     for (const href of [
       '/assets/fonts/BebasNeue-Regular.woff2',
       '/assets/fonts/DMSans-Normal.woff2',
-      '/assets/fonts/MonumentExtended-Regular.otf',
-      '/assets/fonts/MonumentExtended-Ultrabold.otf',
     ]) {
       if (!linkTags(siteHead).some((tag) => {
         const a = attrs(tag);
@@ -78,6 +76,14 @@ runCheck({
       })) {
         errors.push(`SiteHead.astro: missing local font preload for ${href}`);
       }
+    }
+    // Display type (Termina) comes from the Adobe Fonts web project; it must load early with a preconnect.
+    const headLinks = linkTags(siteHead).map(attrs);
+    if (!headLinks.some((a) => a.rel === 'stylesheet' && /^https:\/\/use\.typekit\.net\/[a-z0-9]+\.css$/.test(a.href || ''))) {
+      errors.push('SiteHead.astro: missing Adobe Fonts (Termina) stylesheet link');
+    }
+    if (!headLinks.some((a) => a.rel === 'preconnect' && a.href === 'https://use.typekit.net')) {
+      errors.push('SiteHead.astro: missing preconnect for https://use.typekit.net');
     }
 
     const landingPage = read('src/pages/c/[slug].astro');
@@ -89,12 +95,12 @@ runCheck({
     for (const file of fs.readdirSync(pagesDir).filter((name) => name.endsWith('.astro'))) {
       const rel = path.join('src', 'pages', file);
       const html = read(rel);
-      if (html.includes('/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp') && !hasPreload(rel, '/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp')) {
+      if (html.includes('/assets/photos/experiences/light-floor-hero-poster-1200.webp') && !hasPreload(rel, '/assets/photos/experiences/light-floor-hero-poster-1200.webp')) {
         errors.push(`${rel}: hero first-paint image preload must use the static WebP with fetchpriority="high"`);
       }
     }
 
-    if (!hasPreload('src/components/LocationPageHeadLinks.astro', '/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp')) {
+    if (!hasPreload('src/components/LocationPageHeadLinks.astro', '/assets/photos/experiences/light-floor-hero-poster-1200.webp')) {
       errors.push('src/components/LocationPageHeadLinks.astro: location hero first-paint image must preload the static WebP with fetchpriority="high"');
     }
 
@@ -106,7 +112,7 @@ runCheck({
       'src/pages/groups/field-trips.astro': '/assets/photos/groups/field-trips-480.webp',
       'src/pages/groups/holidays.astro': '/assets/photos/groups/holiday-parties-480.webp',
       'src/pages/groups/private-events.astro': '/assets/photos/venue/_Time-Mission_0024-480.webp',
-      'src/pages/missions.astro': '/assets/photos/experiences/experiences-hero-640.webp',
+      'src/pages/missions.astro': '/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp',
     };
     for (const [file, href] of Object.entries(responsivePreloads)) {
       if (!hasPreload(file, href, true)) {
@@ -115,8 +121,10 @@ runCheck({
     }
 
     const missionsHtml = read('src/partials/missions-main.frag.txt');
-    if (!/media="\(max-width: 768px\)"[^>]+srcset="\/assets\/photos\/experiences\/experiences-hero-640\.webp 640w, \/assets\/photos\/experiences\/experiences-hero-960\.webp 960w"/.test(missionsHtml)) {
-      errors.push('src/partials/missions-main.frag.txt: mobile hero picture must cap the LCP candidate set at 960w');
+    // The missions page opens straight on the tile grid: the first tile is the LCP image.
+    const firstMissionImg = imgTags(missionsHtml).find((tag) => tag.includes('src="/assets/photos/experiences/Time-Mission'));
+    if (!firstMissionImg || attrs(firstMissionImg).loading !== 'eager' || attrs(firstMissionImg).fetchpriority !== 'high') {
+      errors.push('src/partials/missions-main.frag.txt: first mission tile image must load eagerly with fetchpriority="high"');
     }
 
     for (const tag of imgTags(missionsHtml).filter((tag) => tag.includes('src="/assets/photos/experiences/Time-Mission'))) {

@@ -37,7 +37,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 10rem 2rem 6rem;
+            padding: calc(10rem + var(--tm-header-extra, 0px)) 2rem 6rem;
             overflow: hidden;
         }
 
@@ -75,9 +75,12 @@
 
         .hero-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(3rem, 7vw, 5.5rem);
             line-height: 1;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin-bottom: 1.5rem;
             text-wrap: balance;
@@ -86,6 +89,7 @@
 
         .hero-title .highlight {
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -116,9 +120,12 @@
 
         .geo-answer-inner h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.05;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0 0 1rem;
         }
@@ -142,7 +149,7 @@
             cursor: pointer;
             font-family: var(--tech);
             font-size: 0.72rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.12em;
             line-height: 1.5;
             list-style: none;
@@ -233,16 +240,17 @@
             height: 14px;
         }
 
-        .filter-tab:hover { border-color: var(--orange); color: var(--orange); }
+        .filter-tab:hover { border-color: var(--tm26-red); color: var(--white); }
         .filter-tab[data-filter="physical"]:hover { border-color: var(--magenta); color: var(--magenta); }
         .filter-tab[data-filter="mental"]:hover   { border-color: var(--cyan);    color: var(--cyan); }
         .filter-tab[data-filter="skill"]:hover    { border-color: var(--lime);    color: var(--lime); }
         .filter-tab[data-filter="speed"]:hover    { border-color: var(--orange);  color: var(--orange); }
 
         .filter-tab.active {
-            background: var(--orange);
-            border-color: var(--orange);
-            color: var(--black);
+            background: var(--gradient-tm26);
+            background-origin: border-box;
+            border-color: transparent;
+            color: var(--white);
         }
         .filter-tab[data-filter="physical"].active { background: var(--magenta); border-color: var(--magenta); color: var(--black); }
         .filter-tab[data-filter="mental"].active   { background: var(--cyan);    border-color: var(--cyan);    color: var(--black); }
@@ -382,8 +390,11 @@
 
         .portal-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 2rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 0.5rem;
             line-height: 1;
         }
@@ -472,7 +483,7 @@
             .hero {
                 min-height: 60vh;
                 min-height: 60svh;
-                padding: 8rem 1.5rem 3rem;
+                padding: calc(8rem + var(--tm-header-extra, 0px)) 1.5rem 3rem;
             }
             .geo-answer-section {
                 padding: 2rem 1rem;
@@ -567,8 +578,11 @@
 
         .cta-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1rem;
         }
 
@@ -590,12 +604,13 @@
             align-items: center;
             gap: 0.75rem;
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             padding: 1rem 2rem;
             text-decoration: none;
             font-family: var(--tech);
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
             border-radius: 100px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-transform: uppercase;
@@ -605,7 +620,7 @@
 
         .btn-primary:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(199, 69, 30, 0.6);
+            box-shadow: 0 20px 40px rgba(238, 1, 50, 0.6);
         }
 
         .btn-secondary {
@@ -617,7 +632,7 @@
             padding: 1rem 2rem;
             border-radius: 100px;
             font-family: var(--tech);
-            font-weight: 400;
+            font-weight: 600;
             font-size: 0.85rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -674,7 +689,7 @@
             );
         }
         .portal-card .portal-era {
-            font-family: var(--tech);
+            font-family: var(--tech); font-weight: 600;
             font-size: 0.55rem;
             letter-spacing: 0.15em;
             color: var(--orange);

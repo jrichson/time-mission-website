@@ -1,0 +1,397 @@
+/* ==========================================
+   MISSIONS PAGE: tile grid
+   Dense grid of photo tiles. Name and category show at rest; the description,
+   tags and Book Now slide up on hover/focus (or when a tile is tapped open).
+   Loads after page-missions.css.
+   ========================================== */
+
+/* Filter bar sits under the utility bar + glass nav */
+.filter-section {
+    top: calc(var(--tm-ticker-height, 0px) + var(--tm-utility-height) + 84px) !important;
+    padding: 1rem 2rem !important;
+    z-index: 20 !important;
+    margin-bottom: 1rem;
+    background: rgba(13, 13, 13, 0.82) !important;
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.filter-section.stuck {
+    background: rgba(13, 13, 13, 0.82) !important;
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.portals-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+    max-width: 1440px !important;
+    padding: 0 2rem;
+    box-sizing: border-box;
+}
+
+.portal-card,
+.portal-card.featured {
+    grid-column: auto !important;
+    aspect-ratio: 4 / 5 !important;
+    border-radius: 18px !important;
+    background: var(--dark);
+    isolation: isolate;
+}
+
+.portal-card:hover {
+    transform: none !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Gradient ring on hover, same language as the buttons */
+.portal-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.portal-card:hover::after,
+.portal-card:focus-within::after {
+    opacity: 1;
+}
+
+.portal-card picture,
+.portal-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.portal-card img {
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-standard, ease);
+}
+
+.portal-card:hover img {
+    transform: scale(1.06);
+}
+
+.portal-overlay {
+    padding: 1.1rem !important;
+    background: linear-gradient(180deg, transparent 0%, transparent 45%, rgba(10, 10, 14, 0.75) 72%, rgba(10, 10, 14, 0.96) 100%) !important;
+}
+
+/* Category chips pinned to the top corner */
+.portal-badges {
+    position: absolute;
+    top: 0.9rem;
+    left: 0.9rem;
+    margin: 0 !important;
+    gap: 0.35rem !important;
+}
+
+.portal-badge {
+    padding: 0.28rem 0.55rem !important;
+    font-size: 0.56rem !important;
+}
+
+.portal-title {
+    margin: 0 !important;
+    font-size: clamp(1rem, 1.35vw, 1.3rem) !important;
+    line-height: 1.1 !important;
+}
+
+/* Details stay tucked away until the tile is hovered, focused or opened */
+.portal-desc,
+.portal-meta,
+.portal-cta {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    margin: 0 !important;
+    transition: max-height 0.35s ease, opacity 0.25s ease, margin 0.35s ease;
+}
+
+.portal-card:hover .portal-desc,
+.portal-card:focus-within .portal-desc,
+.portal-card.expanded .portal-desc {
+    max-height: 6.5em;
+    opacity: 1;
+    margin-top: 0.5rem !important;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    -webkit-line-clamp: 4;
+}
+
+.portal-card:hover .portal-meta,
+.portal-card:focus-within .portal-meta,
+.portal-card.expanded .portal-meta {
+    max-height: 4rem;
+    opacity: 1;
+    margin-top: 0.6rem !important;
+}
+
+.portal-card:hover .portal-cta,
+.portal-card:focus-within .portal-cta,
+.portal-card.expanded .portal-cta {
+    max-height: 4rem;
+    opacity: 1;
+    margin-top: 0.8rem !important;
+}
+
+.portal-card.expanded .portal-overlay {
+    padding-top: 1.1rem !important;
+}
+
+@media (max-width: 1200px) {
+    .portals-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 860px) {
+    .portals-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+        padding: 0 1rem;
+    }
+
+    .filter-section {
+        top: calc(var(--tm-ticker-height, 0px) + var(--tm-utility-height) + 76px) !important;
+        padding: 0.75rem 1rem !important;
+    }
+
+    .portal-card,
+    .portal-card.featured {
+        aspect-ratio: 3 / 4 !important;
+        border-radius: 14px !important;
+    }
+
+    .portal-overlay {
+        padding: 0.8rem !important;
+    }
+
+    .portal-title {
+        font-size: 0.9rem !important;
+    }
+
+    /* Category chips become small icon dots */
+    .portal-badges {
+        top: 0.6rem;
+        left: 0.6rem;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 0.25rem !important;
+    }
+
+    .portal-badge {
+        width: 26px;
+        height: 26px;
+        padding: 0 !important;
+        justify-content: center;
+        border-radius: 999px !important;
+        font-size: 0 !important;
+        gap: 0 !important;
+    }
+
+    .portal-badge svg {
+        width: 13px !important;
+        height: 13px !important;
+        margin: 0 !important;
+    }
+
+    /* Booking lives in the bottom TICKETS bar on phones */
+    .portal-card .portal-cta {
+        display: none !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .portal-card img,
+    .portal-desc,
+    .portal-meta,
+    .portal-cta {
+        transition: none;
+    }
+}
+
+/* ---- No hero: the page opens on a slim title + filter bar ---- */
+.portals-section {
+    padding-top: calc(var(--tm-ticker-height, 0px) + var(--tm-utility-height) + 100px) !important;
+}
+
+.filter-section {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    max-width: 1440px;
+    margin: 0 auto 1rem !important;
+    box-sizing: border-box;
+    border-radius: 0 0 18px 18px;
+}
+
+.missions-title {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0;
+    font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
+    font-weight: 700;
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--white);
+}
+
+.missions-count {
+    font-family: var(--body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--gray-light);
+}
+
+.filter-section .filter-tabs {
+    margin: 0 !important;
+    justify-content: flex-end !important;
+}
+
+.mission-availability-note {
+    max-width: 1440px;
+    margin: 0 auto 1rem !important;
+    padding: 0 2rem;
+    box-sizing: border-box;
+    text-align: left !important;
+    font-size: 0.8rem !important;
+    color: var(--gray) !important;
+}
+
+/* Feature tiles take a 2x2 spot; dense flow fills the gaps */
+.portals-grid {
+    grid-auto-flow: dense;
+}
+
+.portal-card.portal-card--feature {
+    grid-column: span 2 !important;
+    grid-row: span 2;
+    aspect-ratio: auto !important;
+}
+
+.portal-card--feature .portal-title {
+    font-size: clamp(1.4rem, 2.4vw, 2.2rem) !important;
+}
+
+/* Choose-your-mission feel: hovering one tile dims the rest */
+@media (hover: hover) and (min-width: 861px) {
+    .portals-grid:hover .portal-card:not(:hover) {
+        filter: brightness(0.55) saturate(0.85);
+    }
+
+    .portal-card {
+        transition: filter 0.3s ease, box-shadow 0.3s ease !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .portal-card.portal-card--feature {
+        grid-column: span 2 !important;
+        grid-row: span 1;
+        aspect-ratio: 16 / 10 !important;
+    }
+}
+
+@media (max-width: 860px) {
+    .portals-section {
+        padding-top: calc(var(--tm-ticker-height, 0px) + var(--tm-utility-height) + 88px) !important;
+    }
+
+    .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    /* One swipeable row of compact chips */
+    .filter-section .filter-tabs {
+        display: flex !important;
+        grid-template-columns: none !important;
+        justify-content: flex-start !important;
+        flex-wrap: nowrap !important;
+        gap: 0.5rem !important;
+        margin: 0 -1rem !important;
+        padding: 0 1rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .filter-section .filter-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-section .filter-tab {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-height: 38px !important;
+        padding: 0 0.9rem !important;
+        font-size: 0.8rem !important;
+    }
+
+    .missions-title {
+        font-size: 1.1rem;
+    }
+
+    .mission-availability-note {
+        font-size: 0.72rem !important;
+    }
+
+    .mission-availability-note {
+        padding: 0 1rem;
+    }
+
+    .portal-card.portal-card--feature {
+        aspect-ratio: 16 / 11 !important;
+    }
+}
+
+/* ---- Round 2: no boxed/sticky bar (the glass nav is already a bar) ---- */
+.filter-section,
+.filter-section.stuck {
+    position: static !important;
+    background: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 2rem !important;
+    margin: 0 auto 0.75rem !important;
+}
+
+/* One ticket covers every mission, so tiles don't get their own Book Now */
+.portal-card .portal-cta {
+    display: none !important;
+}
+
+@media (max-width: 860px) {
+    .filter-section,
+    .filter-section.stuck {
+        padding: 0 1rem !important;
+    }
+}
+
+/* Feature tiles size themselves (2x2 of 4:5 tiles), so they never collapse
+   when a venue hides the tiles that used to define their rows. */
+@media (min-width: 1201px) {
+    .portal-card.portal-card--feature {
+        aspect-ratio: 4 / 5 !important;
+    }
+}

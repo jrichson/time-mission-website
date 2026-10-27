@@ -6,7 +6,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 10rem 2rem 4rem;
+            padding: calc(10rem + var(--tm-header-extra, 0px)) 2rem 4rem;
             overflow: hidden;
         }
 
@@ -72,9 +72,12 @@
 
         .hero-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(3rem, 7vw, 5.5rem);
             line-height: 1;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin-bottom: 1.5rem;
             animation: fadeInUp 0.6s ease 0.1s both;
@@ -82,6 +85,7 @@
 
         .hero-title .highlight {
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -112,9 +116,12 @@
 
         .geo-answer-inner h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.05;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0 0 1rem;
         }
@@ -138,7 +145,7 @@
             cursor: pointer;
             font-family: var(--tech);
             font-size: 0.72rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.12em;
             line-height: 1.5;
             list-style: none;
@@ -192,11 +199,12 @@
             align-items: center;
             gap: 0.5rem;
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             padding: 1rem 2rem;
             border-radius: 100px;
             font-family: var(--tech);
-            font-weight: 400;
+            font-weight: 600;
             font-size: 0.9rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -219,7 +227,7 @@
             padding: 1rem 2rem;
             border-radius: 100px;
             font-family: var(--tech);
-            font-weight: 400;
+            font-weight: 600;
             font-size: 0.9rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -241,6 +249,10 @@
 
         .section-title {
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 6vw, 4.5rem);
             line-height: 1;
             margin-bottom: 1rem;
@@ -288,7 +300,7 @@
             display: inline-block;
             font-family: var(--tech);
             font-size: 0.75rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--orange);
@@ -297,9 +309,12 @@
 
         .why-tm-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
             line-height: 1;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0 0 1.25rem;
         }
@@ -351,10 +366,12 @@
 
         .why-tm-item h3 {
             font-family: var(--display);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.4rem;
-            font-weight: 400;
+            font-weight: var(--display-weight, 400);
             line-height: 1.1;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0 0 0.75rem;
             text-transform: uppercase;
@@ -388,7 +405,7 @@
             display: inline-block;
             font-family: var(--tech);
             font-size: 0.75rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--orange);
@@ -397,9 +414,12 @@
 
         .group-testimonials-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
             line-height: 1;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0;
         }
@@ -431,6 +451,7 @@
             font-size: 1.2rem;
             letter-spacing: 0.2em;
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -462,7 +483,7 @@
         }
 
         .group-testimonial-meta {
-            font-family: var(--tech);
+            font-family: var(--tech); font-weight: 600;
             font-size: 0.7rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -484,7 +505,7 @@
             display: inline-block;
             font-family: var(--tech);
             font-size: 0.75rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--orange);
@@ -493,9 +514,12 @@
 
         .event-types-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
             line-height: 1;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0;
         }
@@ -597,10 +621,11 @@
             padding: 0.65rem 1.1rem;
             border-radius: 100px;
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             font-family: var(--tech);
             font-size: 0.7rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             text-decoration: none;
@@ -611,7 +636,7 @@
                 border-color var(--motion-standard) ease,
                 background var(--motion-standard) ease,
                 color var(--motion-standard) ease;
-            box-shadow: 0 8px 24px rgba(239, 75, 35, 0.45);
+            box-shadow: 0 8px 24px var(--tm26-glow);
             border: none;
             cursor: pointer;
         }
@@ -646,10 +671,12 @@
 
         .event-type-card h3 {
             font-family: var(--display);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.75rem;
-            font-weight: 400;
+            font-weight: var(--display-weight, 400);
             line-height: 1.05;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0 0 0.85rem;
             text-transform: uppercase;
@@ -674,7 +701,7 @@
             padding-top: 1rem;
             font-family: var(--tech);
             font-size: 0.78rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             text-decoration: none;
@@ -783,8 +810,11 @@
 
         .event-info-body h3 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1.5rem;
             line-height: 1.1;
             text-align: left;
@@ -792,6 +822,7 @@
 
         .event-info-body h3 .highlight {
             background: var(--gradient-primary);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -872,7 +903,7 @@
             .hero {
                 min-height: 60vh;
                 min-height: 60svh;
-                padding: 8rem 1.5rem 3rem;
+                padding: calc(8rem + var(--tm-header-extra, 0px)) 1.5rem 3rem;
             }
 
             .hero-title {
@@ -906,3 +937,299 @@
                 white-space: nowrap;
             }
         }
+
+/* ==========================================
+   Group type cards v2: right under the hero, panel cards with a tag on the
+   photo, centered copy and a Learn More button
+   ========================================== */
+.event-types {
+    padding-top: clamp(3rem, 5vw, 4rem) !important;
+}
+
+.event-types-grid {
+    gap: 1.25rem !important;
+}
+
+.event-type-card {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    padding: 0 0 1.75rem !important;
+    border-radius: 22px !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    text-align: center;
+    transition: transform var(--motion-standard) ease, border-color var(--motion-standard) ease;
+}
+
+.event-type-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.event-type-photo {
+    position: relative;
+    width: 100%;
+    border-radius: 0 !important;
+    margin-bottom: 1.6rem !important;
+    overflow: visible !important;
+}
+
+.event-type-photo picture {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+}
+
+.event-type-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Tag straddling the bottom edge of the photo */
+.event-type-tag {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    z-index: 3;
+    transform: translate(-50%, 50%);
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    background: var(--gradient-tm26);
+    color: var(--white);
+    font-family: var(--tech);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 6px 16px rgba(238, 1, 50, 0.35);
+}
+
+.event-type-card h3 {
+    margin: 0.4rem 1.5rem 0.75rem !important;
+    font-size: clamp(1.15rem, 1.8vw, 1.45rem) !important;
+    line-height: 1.1 !important;
+}
+
+.event-type-card p {
+    margin: 0 1.6rem 1.4rem !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Learn More as an outline button with the gradient ring hover */
+.event-type-card .event-type-learn-more {
+    position: relative;
+    isolation: isolate;
+    margin-top: auto !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 44px;
+    padding: 0 1.4rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    color: var(--white) !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.12em;
+}
+
+.event-type-card .event-type-learn-more svg {
+    color: var(--white) !important;
+}
+
+.event-type-card .event-type-learn-more::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.event-type-card .event-type-learn-more:hover {
+    border-color: transparent;
+}
+
+.event-type-card .event-type-learn-more:hover::before {
+    opacity: 1;
+}
+
+/* Hover actions over the photo stay above the tag */
+.event-type-actions {
+    z-index: 4;
+}
+
+.event-type-photo {
+    height: auto !important;
+    aspect-ratio: auto !important;
+    background: none !important;
+}
+
+.event-type-photo::after {
+    inset: 0 0 auto 0 !important;
+    aspect-ratio: 16 / 10;
+    height: auto !important;
+}
+
+.event-types-title {
+    font-size: clamp(1.5rem, 4vw, 2.8rem) !important;
+    line-height: 1.08 !important;
+}
+
+@media (max-width: 768px) {
+    .event-types-title {
+        font-size: clamp(1.35rem, 6.4vw, 1.8rem) !important;
+    }
+
+    .event-types {
+        padding-top: 2.5rem !important;
+    }
+}
+
+/* Equal-height cards, Learn More centered and pinned to the bottom */
+.event-type-card {
+    height: 100%;
+}
+
+.event-type-card .event-type-learn-more {
+    align-self: center !important;
+    margin: auto auto 0 !important;
+}
+
+/* ---- Round 6: card actions live at the bottom of the card, not on the photo ---- */
+.event-type-card .event-type-actions {
+    position: static !important;
+    transform: none !important;
+    opacity: 1 !important;
+    display: flex !important;
+    gap: 0.6rem;
+    width: calc(100% - 3rem) !important;
+    max-width: 24rem !important;
+    margin: 0 auto !important;
+}
+
+.event-type-card .event-type-photo::after {
+    display: none !important;
+}
+
+.event-type-card .event-type-cta.ghost {
+    background: transparent !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Learn more becomes a quiet text link above the buttons */
+.event-type-card .event-type-learn-more.event-type-learn-more--text {
+    min-height: 0;
+    margin: auto auto 1.1rem !important;
+    padding: 0.25rem 0 !important;
+    border: 0 !important;
+    border-radius: 0;
+    color: rgba(255, 255, 255, 0.75) !important;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.3);
+    text-underline-offset: 5px;
+}
+
+.event-type-card .event-type-learn-more--text::before {
+    display: none !important;
+}
+
+.event-type-card .event-type-learn-more--text:hover {
+    color: var(--white) !important;
+    text-decoration-color: var(--white);
+}
+
+.event-type-card .event-type-actions .event-type-cta {
+    height: 44px !important;
+    min-height: 44px !important;
+    padding-block: 0 !important;
+    font-size: 0.66rem !important;
+}
+
+/* Plan an Event: same ring + glow hover as every other ghost button */
+.event-type-card .event-type-cta.ghost {
+    position: relative;
+    isolation: isolate;
+    transition: box-shadow var(--motion-standard) ease, border-color var(--motion-standard) ease;
+}
+
+.event-type-card .event-type-cta.ghost::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.event-type-card .event-type-cta.ghost:hover,
+.event-type-card .event-type-cta.ghost:focus-visible {
+    border-color: transparent !important;
+    box-shadow: 0 6px 22px rgba(238, 1, 50, 0.22) !important;
+}
+
+.event-type-card .event-type-cta.ghost:hover::before,
+.event-type-card .event-type-cta.ghost:focus-visible::before {
+    opacity: 1;
+}
+
+/* Less gradient: tags go neutral glass, Book Now loses its resting glow */
+.event-type-card .event-type-tag {
+    background: rgba(12, 12, 14, 0.82) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+.event-type-card .event-type-cta.btn-tickets:not(:hover):not(:focus-visible) {
+    box-shadow: none !important;
+}
+
+/* Buttons size to their label (venues can swap in "25+ Group Inquire") and
+   stack when both can't fit side by side, so text never spills out. */
+.event-type-card .event-type-actions {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.event-type-card .event-type-actions .event-type-cta {
+    flex: 1 1 auto !important;
+    min-width: max-content !important;
+    padding-inline: 1.1rem !important;
+}
+
+/* Consistent rows: the two card buttons always stack full width */
+.event-type-card .event-type-actions {
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    gap: 0.55rem !important;
+}
+
+.event-type-card .event-type-actions .event-type-cta {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}

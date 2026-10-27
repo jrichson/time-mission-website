@@ -1,0 +1,228 @@
+/* ==========================================
+   HOVER UNIFY
+   One hover language sitewide (no leftover orange):
+   - Ghost/outline buttons: white text, TM26 gradient ring
+   - Filled buttons: flowing TM26 gradient
+   - Cards: soft white border lift
+   - Text links: white; icon links: gradient icon
+   - Keyboard focus: white ring
+   Loaded last in core.
+   ========================================== */
+
+/* ---- Ghost / outline buttons ---- */
+.btn-secondary,
+.btn-start-planning,
+.btn-see-all-faq,
+.tm-resource-secondary,
+.group-form-thank-you__actions a:not(:first-child),
+.event-page-cta-buttons .btn-secondary,
+.hero-cta .btn-secondary,
+.footer-loc-change,
+.location-dropdown-close {
+    position: relative;
+    isolation: isolate;
+}
+
+.btn-see-all-faq {
+    color: var(--white) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-see-all-faq::before,
+.group-form-thank-you__actions a:not(:first-child)::before,
+.footer-loc-change::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus-visible,
+.btn-start-planning:hover,
+.btn-start-planning:focus-visible,
+.btn-see-all-faq:hover,
+.btn-see-all-faq:focus-visible,
+.group-form-thank-you__actions a:not(:first-child):hover,
+.footer-loc-change:hover {
+    color: var(--white) !important;
+    border-color: transparent !important;
+    background: transparent !important;
+    box-shadow: 0 6px 22px rgba(238, 1, 50, 0.22) !important;
+}
+
+.btn-see-all-faq:hover::before,
+.btn-see-all-faq:focus-visible::before,
+.group-form-thank-you__actions a:not(:first-child):hover::before,
+.footer-loc-change:hover::before {
+    opacity: 1;
+}
+
+.btn-see-all-faq:hover svg,
+.btn-secondary:hover svg,
+.btn-start-planning:hover svg {
+    color: var(--white) !important;
+    stroke: currentColor;
+}
+
+/* ---- Filled buttons ---- */
+.btn-ticket-book,
+.btn-subscribe,
+.footer-signup-submit,
+.tm-klaviyo-backup__submit,
+.tm-closure-button,
+.error-cta .btn-primary,
+.group-form-thank-you__actions a:first-child {
+    background-image: var(--gradient-tm26) !important;
+    background-origin: border-box;
+    border-color: transparent !important;
+    color: var(--white) !important;
+}
+
+.btn-ticket-book:hover,
+.btn-subscribe:hover,
+.footer-signup-submit:hover,
+.tm-klaviyo-backup__submit:hover,
+.tm-closure-button:hover,
+.error-cta .btn-primary:hover,
+.group-form-thank-you__actions a:first-child:hover,
+.location-dropdown a.location-info-book:hover {
+    background-image: linear-gradient(90deg, #FAAE17 0%, #F23929 17%, #EE0132 30%, #FF1BCE 50%, #EE0132 70%, #F23929 83%, #FAAE17 100%) !important;
+    background-size: 200% 100% !important;
+    animation: tm26-flow 2.4s linear infinite;
+    color: var(--white) !important;
+    box-shadow: 0 10px 28px rgba(238, 1, 50, 0.4) !important;
+}
+
+/* ---- Cards ---- */
+.faq-item:hover,
+.mini-faq-item:hover,
+.checklist-item:hover,
+.event-page-feature-card:hover,
+.location-contact-card:hover,
+.loc-row:hover,
+.event-page-cross-sell-grid a:hover {
+    border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+.loc-row:hover .loc-arrow,
+.groups-event-type:hover svg,
+.groups-event-type:hover span {
+    color: var(--white) !important;
+}
+
+/* ---- Text links ---- */
+.footer-links a:hover,
+.footer-legal a:hover,
+.footer-link-button:hover,
+.footer-location-toggle:hover,
+.footer-location-list a:hover,
+.footer-loc-phone:hover,
+.footer-loc-hours-summary:hover,
+.mobile-menu-links a:hover,
+.mobile-menu-links a:active,
+.contact-info-item a:hover,
+.location-local-links-list a:hover,
+.location-dropdown a:hover,
+.ticket-panel-close:hover,
+.booking-frame-close:hover {
+    color: var(--white) !important;
+}
+
+.footer-loc-hours-summary:hover svg,
+.location-btn:hover svg:first-of-type {
+    color: var(--white) !important;
+}
+
+/* ---- Icon links: gradient icon (gradient defined once in the footer) ---- */
+@media (hover: hover) {
+    .mobile-menu-socials a:hover,
+    .location-overlay-social a:hover,
+    .ugc-socials a:hover {
+        color: var(--white) !important;
+        transform: translateY(-2px);
+    }
+
+    .mobile-menu-socials a:hover svg[fill="currentColor"],
+    .location-overlay-social a:hover svg[fill="currentColor"],
+    .ugc-socials a:hover svg[fill="currentColor"] {
+        fill: url(#tm26-icon-gradient);
+    }
+
+    .mobile-menu-socials a:hover svg[stroke="currentColor"],
+    .location-overlay-social a:hover svg[stroke="currentColor"],
+    .ugc-socials a:hover svg[stroke="currentColor"] {
+        stroke: url(#tm26-icon-gradient);
+    }
+}
+
+/* ---- Keyboard focus and form fields: white, not orange ---- */
+:is(a, button, summary, select, [tabindex]):focus-visible {
+    outline-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+:is(input, select, textarea):focus,
+:is(input, select, textarea):focus-visible {
+    border-color: rgba(255, 255, 255, 0.45) !important;
+    box-shadow: none !important;
+}
+
+/* About page carousel dots */
+.carousel-dot.active::before {
+    background: var(--gradient-tm26) !important;
+}
+
+/* ---- Round 2 (found by the hover crawl) ---- */
+/* Filled buttons: brand-red glow, not orange */
+.btn-primary:hover,
+.btn-tickets:hover,
+.btn-book-now:hover,
+.btn-gift-card:hover {
+    box-shadow: 0 10px 28px rgba(238, 1, 50, 0.4) !important;
+}
+
+/* Text-link buttons (e.g. groups cards): white text, gradient underline */
+.btn-link {
+    color: var(--white) !important;
+    background-image: linear-gradient(var(--white), var(--white)) !important;
+    background-size: 0 1px !important;
+    background-position: 0 100% !important;
+    background-repeat: no-repeat !important;
+    transition: background-size var(--motion-standard) ease !important;
+}
+
+.btn-link svg {
+    color: var(--white) !important;
+    stroke: currentColor !important;
+}
+
+.btn-link:hover {
+    color: var(--white) !important;
+    background-image: var(--gradient-tm26) !important;
+    background-size: 100% 2px !important;
+    box-shadow: none !important;
+}
+
+/* Card hovers: no orange icons or glows */
+.event-page-feature-card:hover,
+.checklist-item:hover {
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.36) !important;
+}
+
+.event-page-feature-card:hover svg,
+.checklist-item:hover svg {
+    color: var(--white) !important;
+    stroke: currentColor;
+}
+
+.loc-row:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}

@@ -329,6 +329,7 @@
 
     // Mobile menu toggle
     const tickerBar = document.querySelector('.ticker-bar');
+    const utilityBar = document.querySelector('.utility-bar');
 
     if (menuBtn && mobileMenu && navEl) {
         menuBtn.addEventListener('click', () => {
@@ -336,6 +337,7 @@
             mobileMenu.classList.toggle('open');
             navEl.classList.toggle('menu-open');
             if (tickerBar) tickerBar.classList.toggle('menu-hidden');
+            if (utilityBar) utilityBar.classList.toggle('menu-hidden');
             document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
         });
 
@@ -346,6 +348,7 @@
                 navEl.classList.remove('menu-open');
                 mobileMenu.classList.remove('open');
                 if (tickerBar) tickerBar.classList.remove('menu-hidden');
+                if (utilityBar) utilityBar.classList.remove('menu-hidden');
                 document.body.style.overflow = '';
             });
         });
@@ -405,6 +408,7 @@
     if (locationBtn && locationOverlay) {
         function openLocationOverlay() {
             locationOverlay.classList.add('open');
+            sortLocationsByDistance();
             if (navEl) navEl.classList.add('location-open');
             requestAnimationFrame(syncLocationSelectionLinks);
             // Defer scroll lock so it doesn't interrupt the overlay's fade-in transition
@@ -522,6 +526,38 @@
         el.style.whiteSpace = 'pre-line';
     }
 
+    // Compact hours: consecutive days with the same hours collapse into one row ("Mon – Thu  12pm – 9pm").
+    function renderHoursList(el, value) {
+        if (!el) return;
+        const lines = String(value || '').split('\n').map(function (line) { return line.trim(); }).filter(Boolean);
+        const rows = [];
+        const parsed = lines.every(function (line) {
+            const match = line.match(/^([^:]+):\s*(.+)$/);
+            if (!match) return false;
+            const last = rows[rows.length - 1];
+            if (last && last.hours === match[2]) last.to = match[1];
+            else rows.push({ from: match[1], to: '', hours: match[2] });
+            return true;
+        });
+        if (!parsed || !rows.length) {
+            setMultilineText(el, value);
+            return;
+        }
+        el.textContent = '';
+        el.style.whiteSpace = '';
+        rows.forEach(function (row) {
+            const item = document.createElement('div');
+            item.className = 'location-hours-row';
+            const days = document.createElement('span');
+            days.className = 'location-hours-days';
+            days.textContent = row.to ? row.from + ' – ' + row.to : row.from;
+            const hours = document.createElement('span');
+            hours.textContent = row.hours.replace(/\s+-\s+/g, ' – ');
+            item.append(days, hours);
+            el.appendChild(item);
+        });
+    }
+
     function renderMapEmbed(target, embedUrl) {
         if (!target) return;
         target.textContent = '';
@@ -559,7 +595,7 @@
         setAddressText(addrEl, data.addressText, locationName);
         addrEl.href = data.mapDirectionsUrl || '#';
         infoPanel.querySelector('.location-info-phone').textContent = data.phone;
-        setMultilineText(infoPanel.querySelector('.location-info-hours'), translateHoursText(data.hoursText));
+        renderHoursList(infoPanel.querySelector('.location-info-hours'), translateHoursText(data.hoursText));
         var bookBtn = infoPanel.querySelector('.location-info-book');
         if (bookBtn) {
             bookBtn.textContent = translate(overlayView.bookLabelKey, overlayView.bookLabelFallback);
@@ -587,6 +623,406 @@
         updateLocationScopedLinks();
     }
 
+    // Utility bar: show the selected location + today's hours, and the account menu.
+    const utilityName = document.getElementById('utilityLocationName');
+    const utilityHours = document.getElementById('utilityHours');
+    const utilityChoose = document.getElementById('utilityChoose');
+    const utilityChange = document.getElementById('utilityChange');
+
+    function renderUtilityLocation(loc) {
+        if (!utilityName) return;
+        const hasLoc = !!(loc && (loc.shortName || loc.name));
+        utilityName.hidden = !hasLoc;
+        if (utilityChoose) utilityChoose.hidden = hasLoc;
+        if (utilityChange) utilityChange.hidden = !hasLoc;
+        if (!hasLoc) {
+            if (utilityHours) utilityHours.hidden = true;
+            return;
+        }
+        utilityName.textContent = loc.shortName || loc.name;
+        utilityName.setAttribute('href', localizedPathContext(window.location.pathname || '/').localePrefix + '/' + (loc.slug || loc.id));
+        if (!utilityHours) return;
+        const today = window.TM && typeof window.TM.getTodayHours === 'function' ? window.TM.getTodayHours() : null;
+        utilityHours.textContent = '';
+        if (loc.status === 'coming-soon') {
+            utilityHours.textContent = translate('location.comingSoon', 'Coming Soon');
+        } else if (today && today.label) {
+            const label = document.createElement('span');
+            label.className = 'utility-hours-label';
+            label.textContent = translate('utility.openToday', 'Open today:') + ' ';
+            utilityHours.appendChild(label);
+            const strong = document.createElement('strong');
+            strong.textContent = translateHoursText(today.label);
+            utilityHours.appendChild(strong);
+        } else if (loc.hours && Object.keys(loc.hours).length) {
+            utilityHours.textContent = translate('utility.closedToday', 'Closed today');
+        }
+        utilityHours.hidden = !utilityHours.textContent;
+    }
+
+    // Mission Rewards: each venue's Roller account login. No venue (or none listed) opens the selector.
+    const ACCOUNT_LOGIN_URLS = {
+        manassas: 'https://book.manassas.timemission.com/onlinecheckout/en-us/login',
+        'mount-prospect': 'https://book.mountprospect.timemission.com/onlinecheckout/en-us/login',
+        'orland-park': 'https://book.orlandpark.timemission.com/onlinecheckout/en-us/login',
+        philadelphia: 'https://book.philadelphia.timemission.com/onlinecheckout/en-us/login',
+        houston: 'https://book.houston.timemission.com/onlinecheckout/en-us/login',
+    };
+
+    function accountLoginUrl() {
+        const loc = window.TM && window.TM.current;
+        return loc ? ACCOUNT_LOGIN_URLS[loc.slug || loc.id] || '' : '';
+    }
+
+    function syncAccountLinks() {
+        const url = accountLoginUrl();
+        document.querySelectorAll('[data-tm-account-link]').forEach(function (a) {
+            if (url) {
+                a.setAttribute('href', url);
+                a.setAttribute('target', '_blank');
+                a.setAttribute('rel', 'noopener');
+            } else {
+                a.setAttribute('href', '/locations');
+                a.removeAttribute('target');
+                a.removeAttribute('rel');
+            }
+        });
+    }
+
+    document.addEventListener('click', function (e) {
+        const link = e.target.closest && e.target.closest('[data-tm-account-link]');
+        if (!link || accountLoginUrl()) return;
+        const trigger = document.getElementById('utilityChange') || document.getElementById('utilityChoose');
+        if (!trigger) return;
+        e.preventDefault();
+        trigger.click();
+    });
+    document.addEventListener('tm:locations-ready', syncAccountLinks);
+    document.addEventListener('tm:location-changed', syncAccountLinks);
+    if (window.TM && window.TM.ready && typeof window.TM.ready.then === 'function') window.TM.ready.then(syncAccountLinks);
+
+    // Mega-menu mission pools: show a random three each visit (server renders the first three).
+    document.querySelectorAll('[data-mega-random]').forEach(function (group) {
+        const count = parseInt(group.getAttribute('data-mega-random'), 10) || 3;
+        const pool = Array.prototype.filter.call(group.children, function (el) {
+            return !/--all\b/.test(el.className);
+        });
+        for (let i = pool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+        }
+        pool.forEach(function (el, i) {
+            el.hidden = i >= count;
+            if (i < count) group.insertBefore(el, group.querySelector('[class*="--all"]'));
+        });
+    });
+
+    // The location name itself opens the selector (phones have no separate "Change" button)
+    if (utilityName) {
+        utilityName.addEventListener('click', function (e) {
+            if (!isPlainPrimaryClick(e)) return;
+            const trigger = document.getElementById('utilityChange') || document.getElementById('utilityChoose');
+            if (!trigger) return;
+            e.preventDefault();
+            e.stopPropagation();
+            trigger.click();
+        });
+    }
+
+    document.querySelectorAll('[data-utility-change-location]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (locationBtn) locationBtn.click();
+        });
+    });
+
+    if (window.TM && window.TM.ready && typeof window.TM.ready.then === 'function') {
+        window.TM.ready.then(function () { renderUtilityLocation(window.TM.current); });
+    }
+
+    const accountBtn = document.getElementById('utilityAccountBtn');
+    const accountMenu = document.getElementById('utilityAccountMenu');
+    if (accountBtn && accountMenu) {
+        function setAccountMenu(open) {
+            accountMenu.hidden = !open;
+            accountBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+        accountBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const open = accountMenu.hidden;
+            if (open) document.dispatchEvent(new CustomEvent('tm:utility-menu-open', { detail: accountMenu }));
+            setAccountMenu(open);
+        });
+        document.addEventListener('tm:utility-menu-open', function (e) {
+            if (e.detail !== accountMenu) setAccountMenu(false);
+        });
+        document.addEventListener('click', function (e) {
+            if (!accountMenu.hidden && !accountMenu.contains(e.target)) setAccountMenu(false);
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !accountMenu.hidden) {
+                setAccountMenu(false);
+                accountBtn.focus();
+            }
+        });
+    }
+
+    // Utility bar language menu: drives the hidden language <select> (language-switcher.js owns the change).
+    document.querySelectorAll('[data-language-menu]').forEach(function (menu) {
+        const form = menu.closest('[data-language-switcher]');
+        const select = form ? form.querySelector('[data-language-select]') : null;
+        const btn = menu.querySelector('.language-menu-btn');
+        const list = menu.querySelector('.language-menu-list');
+        const current = menu.querySelector('[data-language-menu-current]');
+        if (!select || !btn || !list) return;
+
+        function syncLanguageMenu() {
+            const option = select.options[select.selectedIndex];
+            if (current && option) {
+                current.textContent = option.textContent.trim();
+                current.setAttribute('data-label', current.textContent);
+            }
+            list.querySelectorAll('[data-language-option]').forEach(function (item) {
+                if (item.getAttribute('data-language-option') === select.value) item.setAttribute('aria-current', 'true');
+                else item.removeAttribute('aria-current');
+            });
+        }
+        function setLanguageMenu(open) {
+            list.hidden = !open;
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const open = list.hidden;
+            if (open) document.dispatchEvent(new CustomEvent('tm:utility-menu-open', { detail: menu }));
+            setLanguageMenu(open);
+        });
+        document.addEventListener('tm:utility-menu-open', function (e) {
+            if (e.detail !== menu) setLanguageMenu(false);
+        });
+        list.addEventListener('click', function (e) {
+            const item = e.target.closest('[data-language-option]');
+            if (!item) return;
+            setLanguageMenu(false);
+            const code = item.getAttribute('data-language-option');
+            if (code === select.value) return;
+            select.value = code;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+            syncLanguageMenu();
+        });
+        document.addEventListener('click', function (e) {
+            if (!list.hidden && !menu.contains(e.target)) setLanguageMenu(false);
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !list.hidden) {
+                setLanguageMenu(false);
+                btn.focus();
+            }
+        });
+        select.addEventListener('change', syncLanguageMenu);
+        document.addEventListener('tm:language-changed', syncLanguageMenu);
+        syncLanguageMenu();
+    });
+
+    // Keep the bold-hover width reservation in step with translated labels
+    function syncBoldHoverLabels() {
+        document.querySelectorAll('.bold-hover').forEach(function (el) {
+            el.setAttribute('data-label', el.textContent.trim());
+        });
+    }
+    document.addEventListener('tm:language-changed', syncBoldHoverLabels);
+    syncBoldHoverLabels();
+
+    // Location overlay search: filter the location list as you type
+    const locationSearch = document.getElementById('locationSearch');
+    if (locationSearch && locationOverlay) {
+        const searchEmpty = locationOverlay.querySelector('.location-search-empty');
+        function syncSearchPlaceholder() {
+            locationSearch.placeholder = translate('location.searchPlaceholder', 'Search by city or state');
+        }
+        function filterLocations() {
+            const query = locationSearch.value.trim().toLowerCase();
+            let matches = 0;
+            locationOverlay.querySelectorAll('.location-group').forEach(function (group) {
+                let groupMatches = 0;
+                group.querySelectorAll('a[data-tm-location-slug]').forEach(function (link) {
+                    const text = (link.textContent + ' ' + (link.dataset.city || '') + ' ' + (link.dataset.tmLocationSlug || '')).toLowerCase();
+                    const show = !query || text.indexOf(query) !== -1;
+                    link.hidden = !show;
+                    if (show) groupMatches += 1;
+                });
+                group.hidden = groupMatches === 0;
+                matches += groupMatches;
+            });
+            if (searchEmpty) searchEmpty.hidden = matches > 0;
+        }
+        locationSearch.addEventListener('input', filterLocations);
+        document.addEventListener('tm:language-changed', syncSearchPlaceholder);
+        syncSearchPlaceholder();
+    }
+
+    // Nearest location (Topgolf-style): ask for the browser position only when the selector
+    // opens, sort each region by Haversine distance, show the distance and mark the nearest.
+    // The position is remembered so the prompt doesn't repeat; blocked/unsupported falls back
+    // silently to the normal list.
+    const GEO_STORAGE_KEY = 'tm_geo_position';
+    const GEO_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+    let geoRequestInFlight = false;
+
+    function distanceMiles(lat1, lon1, lat2, lon2) {
+        const R = 3958.8;
+        const toRad = function (d) { return d * Math.PI / 180; };
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a = Math.pow(Math.sin(dLat / 2), 2)
+            + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.pow(Math.sin(dLon / 2), 2);
+        return 2 * R * Math.asin(Math.sqrt(a));
+    }
+
+    function readSavedPosition() {
+        try {
+            const saved = JSON.parse(localStorage.getItem(GEO_STORAGE_KEY) || 'null');
+            if (saved && typeof saved.lat === 'number' && typeof saved.lng === 'number'
+                && Date.now() - (saved.savedAt || 0) < GEO_MAX_AGE_MS) {
+                return saved;
+            }
+        } catch (e) { /* storage unavailable */ }
+        return null;
+    }
+
+    function savePosition(lat, lng) {
+        try {
+            localStorage.setItem(GEO_STORAGE_KEY, JSON.stringify({ lat: lat, lng: lng, savedAt: Date.now() }));
+        } catch (e) { /* storage unavailable */ }
+    }
+
+    function usesKilometers() {
+        const profile = window.__TM_SITE_PROFILE__ || {};
+        return profile.id === 'eu';
+    }
+
+    function formatDistance(miles) {
+        const value = usesKilometers() ? miles * 1.609344 : miles;
+        const unit = usesKilometers() ? 'km' : 'mi';
+        const rounded = value < 10 ? Math.round(value * 10) / 10 : Math.round(value);
+        return rounded.toLocaleString() + ' ' + unit;
+    }
+
+    function venueCoords(slug) {
+        const loc = window.TM && typeof window.TM.get === 'function' ? window.TM.get(slug) : null;
+        const geo = loc && loc.geo;
+        if (!geo || typeof geo.latitude !== 'number' || typeof geo.longitude !== 'number') return null;
+        return geo;
+    }
+
+    function applyDistanceOrder(position, forcePick) {
+        if (!locationOverlay || !position) return;
+        let nearest = null;
+        const groups = Array.from(locationOverlay.querySelectorAll('.location-group'));
+        groups.forEach(function (group) {
+            const links = Array.from(group.querySelectorAll('a[data-tm-location-slug]'));
+            let groupMin = Infinity;
+            links.forEach(function (link) {
+                const geo = venueCoords(link.dataset.tmLocationSlug);
+                const miles = geo ? distanceMiles(position.lat, position.lng, geo.latitude, geo.longitude) : Infinity;
+                link.dataset.distance = String(miles);
+                link.classList.remove('is-nearest');
+                let chip = link.querySelector('.location-distance');
+                if (Number.isFinite(miles)) {
+                    if (!chip) {
+                        chip = document.createElement('span');
+                        chip.className = 'location-distance';
+                        const label = link.querySelector('.location-link-label');
+                        if (label) label.after(chip);
+                        else link.appendChild(chip);
+                    }
+                    chip.textContent = formatDistance(miles);
+                    groupMin = Math.min(groupMin, miles);
+                    const isComingSoon = link.classList.contains('location-coming-soon');
+                    if (!isComingSoon && (!nearest || miles < nearest.miles)) nearest = { link: link, miles: miles };
+                } else if (chip) {
+                    chip.remove();
+                }
+            });
+            links.sort(function (a, b) { return Number(a.dataset.distance) - Number(b.dataset.distance); })
+                .forEach(function (link) { group.appendChild(link); });
+            group.dataset.distance = String(groupMin);
+        });
+        // Closest region first (e.g. Europe on top for visitors in Europe)
+        const parent = groups[0] && groups[0].parentElement;
+        if (parent) {
+            const anchorNode = parent.querySelector('.location-search-empty');
+            groups.slice().sort(function (a, b) { return Number(a.dataset.distance) - Number(b.dataset.distance); })
+                .forEach(function (group) { parent.insertBefore(group, anchorNode || null); });
+        }
+        if (nearest) {
+            nearest.link.classList.add('is-nearest');
+            nearest.link.parentElement.insertBefore(nearest.link, nearest.link.parentElement.querySelector('a[data-tm-location-slug]'));
+            const tag = document.createElement('span');
+            tag.className = 'location-nearest-tag';
+            tag.setAttribute('data-i18n', 'location.nearest');
+            tag.textContent = translate('location.nearest', 'Nearest');
+            const oldTag = locationOverlay.querySelector('.location-nearest-tag');
+            if (oldTag) oldTag.remove();
+            // Sits beside the distance (right side), not after the name, so long names don't push it around
+            const label = nearest.link.querySelector('.location-link-label');
+            if (label) label.after(tag);
+            // Nothing chosen yet: phones pick the nearest venue for the visitor; desktop previews it.
+            const current = window.TM && window.TM.current;
+            if (forcePick || (!current && narrowPickerQuery.matches)) {
+                syncAllLocations(nearest.link.dataset.city, nearest.link.dataset.tmLocationSlug, { cta_id: 'nav_location_nearest' });
+                syncLocationSelectionLinks();
+            } else if (!current) {
+                showLocationInfo(nearest.link.dataset.tmLocationSlug);
+            }
+        }
+        locationOverlay.classList.add('has-distances');
+    }
+
+    const geoButton = locationOverlay ? locationOverlay.querySelector('[data-location-use-mine]') : null;
+    const geoStatus = locationOverlay ? locationOverlay.querySelector('[data-location-geo-status]') : null;
+
+    function setGeoStatus(key, fallback) {
+        if (!geoStatus) return;
+        geoStatus.hidden = !key;
+        geoStatus.textContent = key ? translate(key, fallback) : '';
+        if (geoButton) geoButton.classList.toggle('is-loading', key === 'location.geoFinding');
+    }
+
+    // Opening the selector reuses saved coords or asks quietly; the button asks again and reports problems.
+    function sortLocationsByDistance(fromButton) {
+        const saved = fromButton ? null : readSavedPosition();
+        if (saved) {
+            applyDistanceOrder(saved);
+            return;
+        }
+        if (geoRequestInFlight || !window.isSecureContext || !navigator.geolocation) return;
+        geoRequestInFlight = true;
+        if (fromButton) setGeoStatus('location.geoFinding', 'Finding your location…');
+        navigator.geolocation.getCurrentPosition(function (pos) {
+            geoRequestInFlight = false;
+            setGeoStatus('');
+            const position = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            savePosition(position.lat, position.lng);
+            applyDistanceOrder(position, fromButton === true);
+        }, function (err) {
+            geoRequestInFlight = false;
+            if (!fromButton) return; // quiet on open: keep the standard list
+            if (err && err.code === 1) setGeoStatus('location.geoBlocked', 'Location is off for this site. Allow it in your browser or phone settings, then try again.');
+            else setGeoStatus('location.geoFailed', "We couldn't find you. Try again or search above.");
+        }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 10 * 60 * 1000 });
+    }
+
+    if (geoButton) {
+        if (!window.isSecureContext || !navigator.geolocation) {
+            geoButton.hidden = true;
+        } else {
+            geoButton.addEventListener('click', function () { sortLocationsByDistance(true); });
+        }
+    }
+
     const navLoadContext = getLocationContext();
     if (navLoadContext && navLoadContext.ready && typeof navLoadContext.ready.then === 'function') {
         navLoadContext.ready.then(function () {
@@ -598,18 +1034,22 @@
     if (navLoadContext && typeof navLoadContext.subscribe === 'function') {
         navLoadContext.subscribe(function (loc) {
             syncNavLocationState(loc);
+            renderUtilityLocation(loc);
         });
     }
 
     document.addEventListener('tm:locations-ready', function (event) {
         syncNavLocationState(event.detail || null);
+        renderUtilityLocation(event.detail || null);
     });
 
     document.addEventListener('tm:location-changed', function (event) {
         syncNavLocationState(event.detail || null);
+        renderUtilityLocation(event.detail || null);
     });
 
     document.addEventListener('tm:language-changed', function () {
         if (activeLocationInfoRef) showLocationInfo(activeLocationInfoRef);
+        if (window.TM) renderUtilityLocation(window.TM.current);
     });
 })();

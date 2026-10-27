@@ -1,7 +1,10 @@
 .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1.5rem;
         }
 
@@ -14,7 +17,7 @@
         }
 
         .gift-card-hero {
-            padding: 4.25rem 2rem 5rem;
+            padding: calc(6.5rem + var(--tm-header-extra, 0px)) 2rem 5rem;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -65,7 +68,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: var(--tech);
+            font-family: var(--tech); font-weight: 600;
             font-size: 6.5cqw;
             line-height: 1;
             letter-spacing: 0.02em;
@@ -134,13 +137,17 @@
 
         .gift-card-info h1 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 2.5rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             line-height: 1.1;
         }
 
         .gift-card-info h1 span {
             background: var(--gradient-accent);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -158,10 +165,11 @@
             gap: 0.75rem;
             padding: 1rem 2.5rem;
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             text-decoration: none;
             font-family: var(--tech);
-            font-weight: 400;
+            font-weight: 600;
             font-size: 0.85rem;
             letter-spacing: 0.1em;
             border-radius: 100px;
@@ -208,8 +216,11 @@
 
         .faq-section.gift-faq .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 0;
         }
 
@@ -226,13 +237,17 @@
 
         .cta-content h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1rem;
         }
 
         .cta-content h2 span {
             background: var(--gradient-accent);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;

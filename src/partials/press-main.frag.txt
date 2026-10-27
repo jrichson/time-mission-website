@@ -1,69 +1,15 @@
-    <section class="tm-resource-hero">
-        <picture class="tm-resource-hero-media" aria-hidden="true">
-            <source srcset="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" type="image/jpeg">
-            <img src="/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg" alt="" width="1600" height="1067" loading="eager" fetchpriority="high" decoding="async">
-        </picture>
+    <section class="tm-resource-hero tm-resource-hero--compact tm-press-head">
         <div class="tm-resource-shell tm-resource-hero-copy">
-            <p class="tm-resource-kicker">Press Room</p>
-            <h1>TIME MISSION PRESS ROOM</h1>
-            <p>Find official Time Mission news, images, logo files, brand guidance, and media contact information in one place.</p>
-            <div class="tm-resource-actions">
-                <a href="/press/brand-guidelines" class="tm-resource-button">Open Brand Guide</a>
-                <a href="/press/images" class="tm-resource-secondary">Browse Press Images</a>
-                <a href="/press/releases" class="tm-resource-secondary">Read Press Releases</a>
-            </div>
+            <h1><img class="tm-press-logo" src="/assets/logo/time-mission-horizontal-white.svg" alt="Time Mission" width="1920" height="516" decoding="async"><span class="tm-press-title">Press Room</span></h1>
+            <p>Official news, images, logo files, and media contacts in one place.</p>
         </div>
     </section>
 
     <nav class="tm-resource-subnav" aria-label="Press resources">
         <div class="tm-resource-shell tm-resource-subnav-inner">
+            <a href="/press/in-the-news">In the News</a>
             <a href="/press/releases">Press Releases</a>
             <a href="/press/images">Press Images</a>
-            <a href="/press/in-the-news">In the News</a>
             <a href="/press/brand-guidelines">Brand Guidelines</a>
         </div>
     </nav>
-
-    <section class="tm-resource-section">
-        <div class="tm-resource-shell">
-            <div class="tm-resource-section-head">
-                <p class="tm-resource-kicker">Resources</p>
-                <h2>Everything media and partners need</h2>
-            </div>
-            <div class="tm-resource-grid">
-                <a class="tm-resource-tile tm-resource-tile--link" href="/press/releases">
-                    <span>Official</span>
-                    <h3>Press Releases</h3>
-                    <p>Official announcements about new locations, openings, and company updates.</p>
-                </a>
-                <a class="tm-resource-tile tm-resource-tile--link" href="/press/images">
-                    <span>Media</span>
-                    <h3>Press Images</h3>
-                    <p>Official photography and logo assets for stories about Time Mission.</p>
-                </a>
-                <a class="tm-resource-tile tm-resource-tile--link" href="/press/in-the-news">
-                    <span>Coverage</span>
-                    <h3>In the News</h3>
-                    <p>Recent coverage, local stories, and editorial mentions.</p>
-                </a>
-                <a class="tm-resource-tile tm-resource-tile--link" href="/press/brand-guidelines">
-                    <span>Brand</span>
-                    <h3>Brand Guide</h3>
-                    <p>Logo files, naming guidance, and simple usage rules for media and partners.</p>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section class="tm-resource-section tm-resource-section--quiet">
-        <div class="tm-resource-shell tm-resource-split">
-            <div>
-                <p class="tm-resource-kicker">Media Contact</p>
-                <h2>Need a source, image, or quote?</h2>
-            </div>
-            <div class="tm-resource-copy">
-                <p>Working on a story? Send your deadline, outlet, topic, and image needs through contact. We will route it to the right team.</p>
-                <a href="/contact" class="tm-resource-secondary">Contact Media Team</a>
-            </div>
-        </div>
-    </section>

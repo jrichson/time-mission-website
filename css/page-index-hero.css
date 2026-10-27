@@ -20,12 +20,12 @@
     width: 100%;
     height: 100%;
     z-index: 1;
-    background: var(--black) url('/assets/photos/experiences/magma-mayhem-hero-poster.jpg') center/cover no-repeat;
-    background-image: url('/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp');
+    background: var(--black) url('/assets/photos/experiences/light-floor-hero-poster.jpg') center/cover no-repeat;
+    background-image: url('/assets/photos/experiences/light-floor-hero-poster-1200.webp');
 }
 
 .hero-video-container.is-video-fallback {
-    background-image: url('/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp');
+    background-image: url('/assets/photos/experiences/light-floor-hero-poster-1200.webp');
 }
 
 .hero-video-container video {
@@ -125,10 +125,12 @@
 
 .hero-title {
     font-family: var(--display);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(4rem, 12vw, 10rem);
-    font-weight: 400;
+    font-weight: var(--display-weight, 400);
     line-height: 0.9;
-    letter-spacing: 0.02em;
+    letter-spacing: var(--display-tracking, 0.02em);
     margin-bottom: 1rem;
     animation: fadeInUp 0.8s ease 0.4s both;
     text-align: center;
@@ -140,7 +142,7 @@
 .hero-title .line-1 {
     display: block;
     font-family: var(--tech);
-    font-weight: 400;
+    font-weight: 600;
     font-size: clamp(1.1rem, 3.1vw, 2.4rem);
     letter-spacing: 0.30em;
     color: var(--white);
@@ -225,12 +227,13 @@
     align-items: center;
     gap: 0.75rem;
     background: var(--gradient-primary);
+    background-origin: border-box;
     color: var(--white);
     padding: 1rem 2rem;
     text-decoration: none;
     font-family: var(--tech);
     font-size: 0.85rem;
-    font-weight: 400;
+    font-weight: 600;
     border-radius: 100px;
     transition: background var(--motion-standard) ease, border-color var(--motion-standard) ease, box-shadow var(--motion-standard) ease, color var(--motion-standard) ease, opacity var(--motion-standard) ease, transform var(--motion-standard) ease;
     text-transform: uppercase;
@@ -240,7 +243,7 @@
 
 .btn-primary:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(199, 69, 30, 0.6);
+    box-shadow: 0 20px 40px rgba(238, 1, 50, 0.6);
 }
 
 .btn-secondary {
@@ -254,7 +257,7 @@
     text-decoration: none;
     font-family: var(--tech);
     font-size: 0.85rem;
-    font-weight: 400;
+    font-weight: 600;
     border-radius: 100px;
     transition: background var(--motion-standard) ease, border-color var(--motion-standard) ease, box-shadow var(--motion-standard) ease, color var(--motion-standard) ease, opacity var(--motion-standard) ease, transform var(--motion-standard) ease;
     text-transform: uppercase;
@@ -269,7 +272,7 @@
 
 .hero-scroll {
     position: absolute;
-    bottom: 2rem;
+    bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 3;
@@ -374,5 +377,16 @@
     .hero-scroll {
         flex-direction: column;
         align-items: center;
+    }
+}
+
+/* Fallback photo: keep the player in red in frame on narrow screens */
+@media (max-width: 768px) {
+    .hero-video-container {
+        background-position: 44% center !important;
+    }
+
+    .hero-video-container video {
+        object-position: 44% center;
     }
 }

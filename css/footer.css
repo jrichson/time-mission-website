@@ -81,7 +81,7 @@ html {
 .footer-title,
 .footer-column h4 {
     font-family: var(--tech);
-    font-weight: 400;
+    font-weight: 600;
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
@@ -181,6 +181,7 @@ html {
     min-height: var(--target-min);
     padding: 0.875rem 1.75rem;
     background: var(--gradient-primary);
+    background-origin: border-box;
     border: none;
     border-radius: var(--button-radius-pill);
     color: var(--white);
@@ -292,7 +293,7 @@ html {
 /* Location Dropdown */
 .footer-locations-title {
     font-family: var(--tech);
-    font-weight: 400;
+    font-weight: 600;
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
@@ -415,7 +416,7 @@ html {
     color: rgba(255, 255, 255, 0.56);
     font-family: var(--tech);
     font-size: 0.62rem;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.14em;
     line-height: 1.4;
     text-transform: uppercase;
@@ -466,7 +467,7 @@ html {
     cursor: pointer;
     font-family: var(--tech);
     font-size: 0.68rem;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.13em;
     list-style: none;
     text-transform: uppercase;

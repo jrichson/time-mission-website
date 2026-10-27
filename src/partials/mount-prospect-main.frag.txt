@@ -1,16 +1,13 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-<video id="heroVideo" autoplay muted loop playsinline webkit-playsinline poster="/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp" preload="none">
+<video id="heroVideo" autoplay muted loop playsinline webkit-playsinline poster="/assets/photos/experiences/light-floor-hero-poster-1200.webp" preload="none">
                 <source data-src="{{TM_MEDIA_BASE}}/assets/video/TM-Hero-bg-mobile-hero.mp4" data-media="(max-width: 768px)" type="video/mp4">
                 <source data-src="{{TM_MEDIA_BASE}}/assets/video/TM-Hero-bg-web-hero.mp4" type="video/mp4">
             </video>
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <div class="hero-eyebrow">
-                <span class="tagline-text no-cursor" id="taglineText">Time Mission Mount Prospect</span>
-            </div>
             <h1 class="hero-title">
                 <span class="visually-hidden hero-h1-seo">Time Mission Mount Prospect — 25+ Interactive Mission Rooms.</span>
                 <span class="line-1" aria-hidden="true">STEP INTO THE</span>
@@ -19,12 +16,12 @@
             <p class="hero-subtitle">Teams of 2-5 compete through 25+ immersive missions. Test your speed, strength, skill, and&nbsp;smarts.</p>
             <div class="hero-cta">
                 <a href="#" class="btn-primary btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets" data-tm-location="mount-prospect" data-tm-booking-url="https://book.mountprospect.timemission.com/timemissionmountprospect/onlinecheckout/en-us/home">
-                    Book Now
+                    Tickets
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <a href="#experiences" class="btn-secondary">See Missions</a>
+                <a href="/missions" class="btn-secondary">Explore Missions</a>
             </div>
         </div>
         <div class="hero-scroll">
@@ -43,7 +40,7 @@
     <section class="welcome" id="about">
         <div class="welcome-content reveal">
             <div class="section-badge">ABOUT US</div>
-            <h2 class="section-title u-nowrap">WHAT IS TIME MISSION?</h2>
+            <h2 class="section-title u-nowrap">WHAT'S THE MISSION?</h2>
             <p class="welcome-text">
                 Step into a real-life video game where behind every door is a new surprise. One ticket unlocks every mission, so race the clock to play them all or run your favorites over and over. Built for every age 6 to 106 and every skill level. Game&nbsp;on!
             </p>
@@ -115,7 +112,7 @@
             <div class="experience-card">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp 480w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-800.webp 800w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Glitch-Matrix.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <span class="experience-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span>
+                    <span class="experience-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/></svg>Mental</span>
                     <h3 class="experience-title">GLITCH MATRIX</h3>
                     <p class="experience-desc">Navigate a fractured digital world where reality bends and patterns hold the key.</p>
                     <div class="experience-tags">
@@ -128,7 +125,7 @@
             <div class="experience-card">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Big-Bang-480.webp 480w, /assets/photos/experiences/Time-Mission_Big-Bang-800.webp 800w, /assets/photos/experiences/Time-Mission_Big-Bang-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Big-Bang.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6.5 6v12M17.5 6v12M3 9.5v5M21 9.5v5M6.5 12h11"/></svg>Physical</span>
                     <h3 class="experience-title">BIG BANG</h3>
                     <p class="experience-desc">Witness the birth of the universe and harness cosmic energy.</p>
                     <div class="experience-tags">
@@ -154,7 +151,7 @@
             <div class="experience-card">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Server_Heist5-480.webp 480w, /assets/photos/experiences/Time-Mission_Server_Heist5-800.webp 800w, /assets/photos/experiences/Time-Mission_Server_Heist5-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Server_Heist5.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>Skill</span>
                     <h3 class="experience-title">SERVER HEIST</h3>
                     <p class="experience-desc">Infiltrate high-security systems in this high-stakes digital heist.</p>
                     <div class="experience-tags">
@@ -167,7 +164,7 @@
             <div class="experience-card">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Jungle-Temple-480.webp 480w, /assets/photos/experiences/Time-Mission_Jungle-Temple-800.webp 800w, /assets/photos/experiences/Time-Mission_Jungle-Temple-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Jungle-Temple.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6.5 6v12M17.5 6v12M3 9.5v5M21 9.5v5M6.5 12h11"/></svg>Physical</span>
                     <h3 class="experience-title">JUNGLE TEMPLE</h3>
                     <p class="experience-desc">Brave ancient traps and decode hieroglyphs in this lost temple.</p>
                     <div class="experience-tags">
@@ -180,7 +177,7 @@
             <div class="experience-card">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Pirates_Attack-480.webp 480w, /assets/photos/experiences/Time-Mission_Pirates_Attack-800.webp 800w, /assets/photos/experiences/Time-Mission_Pirates_Attack-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Pirates_Attack.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" width="1920" height="1440" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>Skill</span>
                     <h3 class="experience-title">PIRATES ATTACK</h3>
                     <p class="experience-desc">Defend your vessel from marauders. Aim true and work as a crew.</p>
                     <div class="experience-tags">
@@ -194,7 +191,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp 480w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-800.webp 800w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Glitch-Matrix.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <span class="experience-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/></svg>Mental</span>
+                    <span class="experience-badge mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/></svg>Mental</span>
                     <h3 class="experience-title">GLITCH MATRIX</h3>
                     <p class="experience-desc">Navigate a fractured digital world where reality bends and patterns hold the key.</p>
                     <div class="experience-tags">
@@ -207,7 +204,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Big-Bang-480.webp 480w, /assets/photos/experiences/Time-Mission_Big-Bang-800.webp 800w, /assets/photos/experiences/Time-Mission_Big-Bang-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Big-Bang.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/Time-Mission_Big-Bang.jpg" alt="Big Bang" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6.5 6v12M17.5 6v12M3 9.5v5M21 9.5v5M6.5 12h11"/></svg>Physical</span>
                     <h3 class="experience-title">BIG BANG</h3>
                     <p class="experience-desc">Witness the birth of the universe and harness cosmic energy.</p>
                     <div class="experience-tags">
@@ -233,7 +230,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Server_Heist5-480.webp 480w, /assets/photos/experiences/Time-Mission_Server_Heist5-800.webp 800w, /assets/photos/experiences/Time-Mission_Server_Heist5-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Server_Heist5.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/Time-Mission_Server_Heist5.jpeg" alt="Server Heist" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>Skill</span>
                     <h3 class="experience-title">SERVER HEIST</h3>
                     <p class="experience-desc">Infiltrate high-security systems in this high-stakes digital heist.</p>
                     <div class="experience-tags">
@@ -246,7 +243,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Jungle-Temple-480.webp 480w, /assets/photos/experiences/Time-Mission_Jungle-Temple-800.webp 800w, /assets/photos/experiences/Time-Mission_Jungle-Temple-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Jungle-Temple.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/Time-Mission_Jungle-Temple.jpg" alt="Jungle Temple" width="1920" height="1280" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Physical</span>
+                    <span class="experience-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6.5 6v12M17.5 6v12M3 9.5v5M21 9.5v5M6.5 12h11"/></svg>Physical</span>
                     <h3 class="experience-title">JUNGLE TEMPLE</h3>
                     <p class="experience-desc">Brave ancient traps and decode hieroglyphs in this lost temple.</p>
                     <div class="experience-tags">
@@ -259,7 +256,7 @@
             <div class="experience-card" aria-hidden="true">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Pirates_Attack-480.webp 480w, /assets/photos/experiences/Time-Mission_Pirates_Attack-800.webp 800w, /assets/photos/experiences/Time-Mission_Pirates_Attack-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Pirates_Attack.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img fetchpriority="low" src="/assets/photos/experiences/Time-Mission_Pirates_Attack.JPG" alt="Pirates Attack" width="1920" height="1440" loading="lazy" decoding="async"></picture>
                 <div class="experience-overlay">
-                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Skill</span>
+                    <span class="experience-badge skill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>Skill</span>
                     <h3 class="experience-title">PIRATES ATTACK</h3>
                     <p class="experience-desc">Defend your vessel from marauders. Aim true and work as a crew.</p>
                     <div class="experience-tags">
@@ -295,7 +292,7 @@
         </div>
         <div class="groups-cta-card reveal">
             <div class="section-badge">GROUPS & PARTIES</div>
-            <h2 class="section-title">CELEBRATE AT TIME&nbsp;MISSION</h2>
+            <h2 class="section-title">BRING THE WHOLE&nbsp;CREW</h2>
             <p class="welcome-text">Birthdays, team outings, or just a crew ready to compete. We handle the setup so you can focus on the&nbsp;fun.</p>
             <div class="groups-event-types">
                 <a href="/groups/birthdays" class="groups-event-type">

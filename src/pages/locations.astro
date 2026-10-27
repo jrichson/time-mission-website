@@ -48,32 +48,23 @@ const page = definePage({ canonicalPath: '/locations' });
     bodyClass="has-noise"
 >
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-locations.css?v=2" />
+        <link rel="stylesheet" href="/css/page-locations.css?v=3" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
 
     <div class="locations-page-main">
-        <section class="hero">
+        <section class="hero locations-hero">
+            <div class="locations-hero-map" aria-hidden="true">
+                <picture><source srcset="/assets/photos/nav/locations-map-720.webp 720w, /assets/photos/nav/locations-map-1200.webp 1200w" sizes="(max-width: 900px) 100vw, 55vw" type="image/webp"><img src="/assets/photos/nav/locations-map-1200.webp" alt="" width="1200" height="800" loading="eager" decoding="async"></picture>
+            </div>
             <div class="hero-content reveal">
                 <div class="section-badge">Find Us</div>
                 <h1 class="hero-title">OUR <span>LOCATIONS</span></h1>
                 <p class="hero-subtitle">
                     Time Mission is expanding across the globe. Find a location near you and start your adventure.
                 </p>
-            </div>
-        </section>
-
-        <section class="geo-answer-section" aria-labelledby="locations-answer-title">
-            <div class="geo-answer-inner">
-                <div class="section-badge">Official Location Status</div>
-                <h2 id="locations-answer-title">{locationsAnswer.heading}</h2>
-                <p class="geo-answer-lead">{locationsAnswer.summary}</p>
-                <details class="geo-disclosure">
-                    <summary>Read the full location guidance</summary>
-                    <p data-i18n-html={activeSiteProfile.id === 'eu' ? 'locations.fullGuidance' : undefined} set:html={locationsAnswer.textHtml ?? locationsAnswer.text}></p>
-                </details>
             </div>
         </section>
 
@@ -133,6 +124,18 @@ const page = definePage({ canonicalPath: '/locations' });
                         })}
                     </div>
                 ))}
+            </div>
+        </section>
+
+        <section class="geo-answer-section" aria-labelledby="locations-answer-title">
+            <div class="geo-answer-inner">
+                <div class="section-badge">Official Location Status</div>
+                <h2 id="locations-answer-title">{locationsAnswer.heading}</h2>
+                <p class="geo-answer-lead">{locationsAnswer.summary}</p>
+                <details class="geo-disclosure">
+                    <summary>Read the full location guidance</summary>
+                    <p data-i18n-html={activeSiteProfile.id === 'eu' ? 'locations.fullGuidance' : undefined} set:html={locationsAnswer.textHtml ?? locationsAnswer.text}></p>
+                </details>
             </div>
         </section>
 

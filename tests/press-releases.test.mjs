@@ -51,7 +51,7 @@ describe('press releases page', () => {
     expect(page).toContain('blogPostShowsInPressRoom');
     expect(page).toContain('press-releases.json');
     expect(page).toContain('pressReleases.map');
-    expect(page).toContain('/css/page-press.css?v=3');
+    expect(page).toContain('/css/page-press.css?v=5');
     expect(page).toContain('PressResourceCard');
     expect(page).toContain('!blogPostIsExternal(post)');
     expect(card).toContain('tm-resource-release-media');
@@ -94,7 +94,7 @@ describe('press releases page', () => {
     expect(nashvilleMigration).toContain("release.slug === 'nashville-announcement'");
     expect(nashvilleMigration).toContain('ON CONFLICT ("slug") DO UPDATE');
     expect(blogPage).toContain('tm-blog-article-hero--press');
-    expect(blogPage).toContain('/css/page-blog.css?v=3');
+    expect(blogPage).toContain('/css/page-blog.css?v=4');
     expect(blogPage).toContain("data-page-i18n={isPressRelease ? 'ignore' : undefined}");
     expect(blogPage).toContain('buildArticleGraph');
     expect(blogPage).toContain("newsArticle: isPressRelease");

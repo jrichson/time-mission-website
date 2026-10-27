@@ -7,6 +7,7 @@ import { buildHomeGraph, serializeGraph } from '../lib/schema/graph';
 import { homePageTaglines } from '../lib/page-taglines';
 import PageWidgetsScripts from '../components/PageWidgetsScripts.astro';
 import HomeTestimonials from '../components/HomeTestimonials.astro';
+import Leaderboard from '../components/Leaderboard.astro';
 import { activeSiteProfile } from '../lib/site-profile';
 import { splitHtmlSlot } from '../lib/regional-content';
 
@@ -31,13 +32,15 @@ const pageInit = {
     canonicalPath={page.canonicalPath}
 >
     <Fragment slot="head-extra">
-        <link rel="preload" as="image" href="/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp" type="image/webp" fetchpriority="high" />
+        <link rel="preload" as="image" href="/assets/photos/experiences/light-floor-hero-poster-1200.webp" type="image/webp" fetchpriority="high" />
         <link rel="stylesheet" href="/css/page-index.css?v=4" />
-        <link rel="stylesheet" href="/css/page-index-hero.css?v=3" />
+        <link rel="stylesheet" href="/css/page-index-hero.css?v=5" />
         <link rel="stylesheet" href="/css/page-index-intro-stats.css?v=1" />
+        <link rel="stylesheet" href="/css/page-index-how.css?v=4" />
         <link rel="stylesheet" href="/css/page-index-experiences.css?v=1" />
         <link rel="stylesheet" href="/css/page-index-groups.css?v=1" />
         <link rel="stylesheet" href="/css/page-index-flow.css?v=1" />
+        <link rel="stylesheet" href="/css/leaderboard.css?v=3" />
         <link rel="stylesheet" href="/css/faq.css?v=5" />
     </Fragment>
     <Fragment slot="json-ld">
@@ -46,9 +49,16 @@ const pageInit = {
     <div class="home-main">
         <Fragment set:html={indexMainBeforeProof} />
         {activeSiteProfile.id === 'us' && <HomeTestimonials />}
+        <section class="leaderboard-section" id="leaderboard">
+            <h2 class="section-title" data-i18n="leaderboard.homeTitle">Leaderboard</h2>
+            <p class="leaderboard-intro" data-i18n="leaderboard.intro">Every mission you beat adds to your team score. Here's who's on top right now.</p>
+            <Leaderboard limit={5} showViewAll />
+        </section>
         <Fragment set:html={indexMainAfterProof} />
     </div>
     <Fragment slot="after-site-scripts">
         <PageWidgetsScripts pageInit={pageInit} />
+        <script defer is:inline src="/js/leaderboard.js?v=3"></script>
+        <script defer is:inline src="/js/social-feed.js?v=1"></script>
     </Fragment>
 </SiteLayout>

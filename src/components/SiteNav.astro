@@ -114,11 +114,20 @@ const fallbackTickerI18n = locationTickerI18n || (fallbackTickerMessage && 'text
 const fallbackTickerBehavior: TickerBehavior = locationTickerMessage ? 'auto' : 'animated';
 const fallbackTickerSource = locationTickerMessage ? 'location' : 'default';
 
+// Mission Rewards links go to the selected venue's Roller login (set in nav.js); with no venue they open the selector.
+const accountLinks = [
+    { label: 'Edit Account', i18n: 'utility.editAccount', href: '/locations', icon: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>' },
+    { label: 'Manage Tickets', i18n: 'utility.manageTickets', href: '/locations', icon: '<path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 5v14" stroke-dasharray="2 2"/>' },
+    { label: 'Rewards', i18n: 'utility.rewards', href: '/locations', icon: '<path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8-4.3-4.1 5.9-.9z"/>' },
+];
+
+
 function externalLinkAttrs(href: string | null | undefined) {
     return /^https?:\/\//i.test(String(href || '').trim())
         ? { target: '_blank', rel: 'noopener' }
         : {};
 }
+import { megaMenus } from '../lib/mega-menus';
 ---
 
 <!-- Announcement Ticker -->
@@ -160,6 +169,48 @@ function externalLinkAttrs(href: string | null | undefined) {
     </div>
 )}
 
+<!-- Utility Bar: current location + hours (left), language, gift cards + account (right) -->
+<div class={`utility-bar${tickerMessages.length > 0 ? '' : ' utility-bar--no-ticker'}`} role="region" aria-label="Location and account" data-i18n-aria-label="utility.label">
+    <div class="utility-inner">
+        <div class="utility-left">
+            <svg class="utility-pin" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <a class="utility-location-name" id="utilityLocationName" href="/locations" hidden></a>
+            <button type="button" class="utility-choose" id="utilityChoose" data-utility-change-location data-i18n="utility.chooseLocation">Choose your location</button>
+            <span class="utility-hours" id="utilityHours" hidden></span>
+            <button type="button" class="utility-change" id="utilityChange" data-utility-change-location hidden><span class="utility-change-long" data-i18n="utility.changeLocation">Change location</span><span class="utility-change-short" data-i18n="utility.change">Change</span></button>
+        </div>
+        <div class="utility-right">
+            <LanguageSwitcher currentLang={currentLang} placement="desktop" />
+            <a class="utility-link" href="/gift-cards"><span class="bold-hover" data-i18n="utility.giftCards" data-label="Gift Cards">Gift Cards</span></a>
+            <div class="utility-account">
+                <button type="button" class="utility-account-btn" id="utilityAccountBtn" aria-haspopup="true" aria-expanded="false" aria-controls="utilityAccountMenu" aria-label="Open Mission Rewards menu" data-i18n-aria-label="utility.accountMenu">
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="4"></circle>
+                        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+                    </svg>
+                    <span class="utility-account-label bold-hover" data-i18n="utility.account" data-label="Mission Rewards">Mission Rewards</span>
+                    <svg class="utility-caret" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6,9 12,15 18,9"></polyline>
+                    </svg>
+                </button>
+                <ul class="utility-account-menu" id="utilityAccountMenu" hidden>
+                    {accountLinks.map((link) => (
+                        <li>
+                            <a href={link.href} data-tm-account-link data-tm-no-location-scope>
+                                <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={link.icon}></svg>
+                                <span data-i18n={link.i18n}>{link.label}</span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Navigation -->
 <nav class={`nav${tickerMessages.length > 0 ? '' : ' nav--no-ticker'}`} id="nav">
     <div class="nav-left">
@@ -177,15 +228,48 @@ function externalLinkAttrs(href: string | null | undefined) {
 
     <div class="nav-center">
         <ul class="nav-links">
-            <li><a href="/about" data-i18n="nav.about">About</a></li>
-            <li><a href="/missions" data-i18n="nav.missions">Missions</a></li>
-            <li><a href="/groups" data-i18n="nav.groups">Groups</a></li>
-            <li><a href="/faq" data-i18n="nav.faq">FAQ</a></li>
+            {[
+                { href: '/about', i18n: 'nav.about', label: 'About' },
+                { href: '/missions', i18n: 'nav.missions', label: 'Missions' },
+                { href: '/groups', i18n: 'nav.groups', label: 'Groups' },
+                { href: '/faq', i18n: 'nav.faq', label: 'FAQ' },
+            ].map((item) => {
+                const mega = megaMenus[item.href];
+                return (
+                    <li class={mega ? 'has-mega' : undefined}>
+                        <a href={item.href} data-i18n={item.i18n} data-label={item.label} aria-haspopup={mega ? 'true' : undefined}>{item.label}</a>
+                        {mega && (
+                            <div class="mega-panel">
+                                <div class="mega-cards" data-mega-random={mega.viewAll ? '3' : undefined}>
+                                    {mega.cards.map((card, index) => (
+                                        <a class="mega-card" href={card.href} hidden={mega.viewAll && index >= 3 ? true : undefined}>
+                                            <span class="mega-card-media"><img src={card.img} alt="" width="480" height="320" loading="lazy" decoding="async" /></span>
+                                            <span class="mega-card-title" data-i18n={card.i18n}>{card.title}</span>
+                                            <span class="mega-card-text">{card.text}</span>
+                                        </a>
+                                    ))}
+                                    {mega.viewAll && (
+                                        <a class="mega-card mega-card--all" href={mega.viewAll.href}>
+                                            <span class="mega-card-media mega-card-all-media"><span class="mega-card-all-count">All Missions</span><span class="mega-card-all-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+                                            <span class="mega-card-title">{mega.viewAll.title}</span>
+                                            <span class="mega-card-text">{mega.viewAll.text}</span>
+                                        </a>
+                                    )}
+                                </div>
+                                <ul class="mega-links">
+                                    {mega.links.map((link) => (
+                                        <li><a href={link.href} data-i18n={link.i18n}>{link.label}</a></li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </li>
+                );
+            })}
         </ul>
     </div>
 
     <div class="nav-right">
-        <LanguageSwitcher currentLang={currentLang} placement="desktop" />
         <button class="location-btn" id="locationBtn" aria-label="Change location" data-i18n-aria-label="nav.changeLocation">
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -196,6 +280,11 @@ function externalLinkAttrs(href: string | null | undefined) {
                 <polyline points="6,9 12,15 18,9"></polyline>
             </svg>
         </button>
-        <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets" {...bookingCtaAttrs}>{bookingCtaLabel}</a>
+        <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets" {...{ ...bookingCtaAttrs, 'data-i18n': undefined }}><span data-i18n="nav.bookNow">Book Now</span></a>
     </div>
 </nav>
+
+<!-- Mobile: BOOK pinned across the bottom of the screen (the nav button hides on small screens) -->
+<div class="mobile-book-bar">
+    <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets mobile-book-btn" {...{ ...bookingCtaAttrs, 'data-i18n': undefined }}><span data-i18n="nav.tickets">Tickets</span></a>
+</div>

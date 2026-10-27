@@ -1,5 +1,5 @@
     <!-- Hero -->
-    <section class="about-hero">
+    <section class="about-hero tm-page-header">
         <div class="about-hero-bg">
             <picture><source srcset="/assets/photos/venue/_Time-Mission_0078-480.webp 480w, /assets/photos/venue/_Time-Mission_0078-800.webp 800w, /assets/photos/venue/_Time-Mission_0078-1200.webp 1200w, /assets/photos/venue/_Time-Mission_0078.webp 1920w" sizes="100vw" type="image/webp"><img src="/assets/photos/venue/_Time-Mission_0078.jpg" alt="Time Mission venue" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="async"></picture>
         </div>
@@ -15,7 +15,7 @@
         <div class="what-is-inner">
             <div class="what-is-content reveal">
                 <div class="section-badge">OUR GAME</div>
-                <h2 class="section-title">WHAT IS TIME MISSION?</h2>
+                <h2 class="section-title">WHAT'S THE MISSION?</h2>
                 <p class="what-is-text">Time Mission is an immersive social gaming venue where teams of 2-5 compete through 25+ missions. Every mission is a different game, from brain-bending puzzles to full-body physical challenges. No headsets, no controllers, no sitting around. You <em>are</em> the&nbsp;game.</p>
                 <p class="what-is-text">Choose your session length, pick your missions, and play as many as you can. Each one lasts just a few minutes, so you keep moving, keep competing, and keep the energy&nbsp;high.</p>
                 <p class="what-is-text">Birthdays, team outings, field trips, bachelorette blowouts, or a crew out to settle who's really the best. Time Mission is built for every team, every&nbsp;occasion.</p>

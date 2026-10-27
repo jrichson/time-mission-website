@@ -1,15 +1,18 @@
 
         /* Page Header, override: contact needs extra nav clearance */
         .page-header {
-            padding: 140px clamp(1.5rem, 4vw, 2.5rem) 4.5rem;
+            padding: calc(140px + var(--tm-header-extra, 0px)) clamp(1.5rem, 4vw, 2.5rem) 4.5rem;
             text-align: center;
             background: linear-gradient(180deg, var(--black) 0%, var(--dark) 100%);
         }
 
         .section-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1.5rem;
         }
 
@@ -47,8 +50,11 @@
 
         .contact-form-card h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.8rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 0.5rem;
         }
 
@@ -148,6 +154,7 @@
             gap: 0.75rem;
             padding: 1rem 2rem;
             background: var(--gradient-primary);
+            background-origin: border-box;
             color: var(--white);
             border: none;
             border-radius: 100px;
@@ -164,7 +171,7 @@
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(199, 69, 30, 0.6);
+            box-shadow: 0 10px 30px rgba(238, 1, 50, 0.6);
         }
 
         .btn-submit svg {
@@ -182,8 +189,11 @@
 
         .locations-info h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.8rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 0.5rem;
         }
 
@@ -213,8 +223,11 @@
 
         .location-contact-card h3 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.2rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
@@ -279,8 +292,11 @@
 
         .general-contact h3 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.1rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1rem;
             color: var(--orange);
         }
@@ -303,7 +319,7 @@
         }
 
         @media (max-width: 480px) {
-            .page-header { padding: 120px 1.25rem 2.75rem; }
+            .page-header { padding: calc(120px + var(--tm-header-extra, 0px)) 1.25rem 2.75rem; }
             .section-title { font-size: 2rem; }
             .page-subtitle { font-size: 0.95rem; line-height: 1.6; }
             .contact-section { padding: 2rem 1.25rem 5rem; }

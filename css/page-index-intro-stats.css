@@ -25,7 +25,7 @@
     border-radius: 100px;
     font-family: var(--tech);
     font-size: 0.7rem;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--orange);
@@ -34,8 +34,11 @@
 
 .section-title {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(2.5rem, 5vw, 4rem);
-    letter-spacing: 0.02em;
+    letter-spacing: var(--display-tracking, 0.02em);
     margin-bottom: 1.5rem;
 }
 
@@ -67,7 +70,7 @@
     cursor: pointer;
     font-family: var(--tech);
     font-size: 0.72rem;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.12em;
     line-height: 1.5;
     list-style: none;
@@ -123,13 +126,14 @@
 
 /* "Learn About Time Mission", desktop shows inside welcome, mobile shows after stats */
 .welcome-learn-mobile {
-    display: none;
+    /* !important: the shared button rule forces display with !important */
+    display: none !important;
     margin: 2rem auto 0;
 }
 
 @media (max-width: 768px) {
     .welcome-learn-desktop { display: none !important; }
-    .welcome-learn-mobile { display: inline-flex; }
+    .welcome-learn-mobile { display: inline-flex !important; }
 }
 
 .stats-grid {
@@ -147,7 +151,7 @@
 .stats[data-stats-style="arcade-slots"] .stat-card {
     text-align: center;
     padding: 2rem 1.5rem;
-    background: linear-gradient(180deg, rgba(249, 164, 26, 0.08) 0%, rgba(199, 69, 30, 0.05) 100%);
+    background: linear-gradient(180deg, rgba(249, 164, 26, 0.08) 0%, rgba(238, 1, 50, 0.05) 100%);
     border: 2px solid rgba(249, 164, 26, 0.25);
     border-radius: 20px;
     position: relative;
@@ -187,6 +191,7 @@
     height: 60px;
     margin: 0 auto 1.25rem;
     background: var(--gradient-primary);
+    background-origin: border-box;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -208,8 +213,13 @@
 
 .stats[data-stats-style="arcade-slots"] .stat-number {
     font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
+    font-weight: var(--display-weight, 400);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 4rem;
     background: var(--gradient-accent);
+    background-origin: border-box;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -283,6 +293,10 @@
 
 .stats[data-stats-style="counter-wheels"] .stat-number {
     font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
+    font-weight: var(--display-weight, 400);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 2.5rem;
     color: var(--white);
     line-height: 1;
@@ -290,6 +304,10 @@
 
 .stats[data-stats-style="counter-wheels"] .stat-unit {
     font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
+    font-weight: var(--display-weight, 400);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 1rem;
     color: var(--orange);
 }
@@ -342,12 +360,13 @@
 }
 
 .stats[data-stats-style="flip-cards"] .stat-front {
-    background: linear-gradient(145deg, rgba(249, 164, 26, 0.1) 0%, rgba(199, 69, 30, 0.15) 100%);
+    background: linear-gradient(145deg, rgba(249, 164, 26, 0.1) 0%, rgba(238, 1, 50, 0.15) 100%);
     border: 1px solid rgba(249, 164, 26, 0.2);
 }
 
 .stats[data-stats-style="flip-cards"] .stat-back {
     background: var(--gradient-primary);
+    background-origin: border-box;
     transform: rotateY(180deg);
 }
 
@@ -370,8 +389,13 @@
 
 .stats[data-stats-style="flip-cards"] .stat-number {
     font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
+    font-weight: var(--display-weight, 400);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 3.5rem;
     background: var(--gradient-accent);
+    background-origin: border-box;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -388,6 +412,10 @@
 
 .stats[data-stats-style="flip-cards"] .stat-back-title {
     font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
+    font-weight: var(--display-weight, 400);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: 1.5rem;
     color: var(--white);
     margin-bottom: 0.5rem;
@@ -487,7 +515,7 @@
 
 .stat-number {
     font-family: var(--tech);
-    font-weight: 700;
+    font-weight: 800;
     font-size: clamp(2.25rem, 7vw, 3rem);
     color: var(--white);
     line-height: 1;
@@ -534,7 +562,7 @@
     position: absolute;
     font-family: var(--tech);
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--glow-color);
     pointer-events: none;
     white-space: nowrap;

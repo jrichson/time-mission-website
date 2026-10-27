@@ -67,23 +67,18 @@ html {
 
 @media (max-width: 768px) {
     body .hero .hero-video-container {
-        background-image: url('/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp');
+        background-image: url('/assets/photos/experiences/light-floor-hero-poster-1200.webp');
     }
 
     body .hero .hero-video-container.is-video-fallback {
-        background-image: url('/assets/photos/experiences/magma-mayhem-hero-poster-1200.webp');
+        background-image: url('/assets/photos/experiences/light-floor-hero-poster-1200.webp');
     }
 
     body .hero .hero-eyebrow,
     body .hero .hero-title,
-    body .hero .hero-title .line-2,
     body .hero .hero-subtitle,
     body .hero .hero-cta {
         animation: none;
-    }
-
-    body .hero .hero-title .line-2 {
-        background-position: 0% 50%;
     }
 }
 
@@ -136,8 +131,11 @@ body {
 
 .section-title--display {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(2.5rem, 5vw, 4rem);
-    letter-spacing: 0;
+    letter-spacing: var(--display-tracking, 0.02em);
 }
 
 .gtm-noscript-frame {

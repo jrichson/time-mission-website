@@ -1,0 +1,234 @@
+/* ==========================================
+   FAQ: editorial list
+   Hairline dividers instead of stacked boxed cards.
+   Loaded late in core; !important beats older per-page card styles.
+   ========================================== */
+
+:is(.faq-list, .mini-faq-grid, .faq-section, .event-page-faq-inner, div):has(> :is(.faq-item, .mini-faq-item)) {
+    gap: 0 !important;
+}
+
+.faq-item,
+.mini-faq-item {
+    margin: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+}
+
+:is(.faq-item, .mini-faq-item):first-child {
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Gradient rule under the open question */
+.faq-item.active,
+.mini-faq-item.open {
+    border-image: linear-gradient(90deg, #FAAE17, #EE0132 50%, #FF1BCE) 0 0 1 0 / 0 0 1px 0 !important;
+}
+
+.faq-question,
+.mini-faq-q {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 1.25rem !important;
+    text-align: left !important;
+    padding: 1.6rem 0 !important;
+    background: none !important;
+    text-align: left;
+    cursor: pointer;
+}
+
+.faq-question h3,
+.faq-question h4,
+.faq-question-text,
+.faq-question > span:first-of-type,
+.mini-faq-q,
+.mini-faq-q > span:first-of-type {
+    flex: 1;
+    font-family: var(--body) !important;
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem) !important;
+    font-weight: 500 !important;
+    line-height: 1.35;
+    color: var(--white-soft) !important;
+    transition: color var(--motion-fast, 0.15s) ease;
+}
+
+.faq-question:hover :is(h3, h4, .faq-question-text, span),
+.mini-faq-q:hover,
+.faq-item.active .faq-question :is(h3, h4, .faq-question-text, span),
+.mini-faq-item.open .mini-faq-q {
+    color: var(--white) !important;
+}
+
+
+/* Plus in a thin ring; turns into an x when open */
+.faq-icon,
+.faq-question > svg,
+.mini-faq-q > svg {
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.faq-icon {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px !important;
+    height: 36px !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    border-radius: 999px !important;
+    transition: border-color var(--motion-fast, 0.15s) ease, background var(--motion-fast, 0.15s) ease;
+}
+
+.faq-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+    color: var(--white) !important;
+}
+
+/* Bare-svg variants: plain plus, no ring (svg borders can't be rounded reliably) */
+.faq-question > svg,
+svg.faq-icon,
+.mini-faq-q > svg {
+    width: 20px !important;
+    height: 20px !important;
+    margin-left: auto !important;
+    margin-right: 0.5rem;
+    border: 0 !important;
+    color: var(--white) !important;
+}
+
+.faq-question:hover .faq-icon,
+.faq-item.active .faq-icon {
+    border-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.faq-item.active .faq-icon {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* Answer sits under the question text, not under the number */
+.faq-answer-content,
+.faq-answer > p,
+.mini-faq-a > p {
+    padding: 0 3.5rem 1.75rem 0 !important;
+    max-width: 52rem;
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
+    color: var(--gray-light) !important;
+}
+
+/* Collapsed answers take no space */
+.faq-item:not(.active) .faq-answer,
+.mini-faq-item:not(.open) .mini-faq-a {
+    grid-template-rows: 0fr !important;
+}
+
+.faq-item:not(.active) :is(.faq-answer-content, .faq-answer > p),
+.mini-faq-item:not(.open) .mini-faq-a > p {
+    padding-bottom: 0 !important;
+}
+
+@media (max-width: 768px) {
+    .faq-question,
+    .mini-faq-q {
+        gap: 0.9rem !important;
+        padding: 1.25rem 0 !important;
+    }
+
+
+    .faq-answer-content,
+    .faq-answer > p,
+    .mini-faq-a > p {
+        padding: 0 0 1.4rem 0 !important;
+        font-size: 0.95rem !important;
+    }
+}
+
+/* ==========================================
+   FAQ v3: each question is its own glass card (no hairlines over the grid)
+   ========================================== */
+:is(.faq-list, .mini-faq-grid, .faq-section, .event-page-faq-inner, div):has(> :is(.faq-item, .mini-faq-item)) {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+}
+
+.faq-item,
+.mini-faq-item,
+:is(.faq-item, .mini-faq-item):first-child {
+    position: relative !important;
+    isolation: isolate;
+    padding: 0 clamp(1.1rem, 2.5vw, 1.75rem) !important;
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.09)) !important;
+    border-radius: 18px !important;
+    border-image: none !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    transition: border-color var(--motion-standard, 0.3s) ease, background var(--motion-standard, 0.3s) ease;
+}
+
+.faq-item:hover,
+.mini-faq-item:hover {
+    border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Open card: soft brand tint + TM26 ring */
+.faq-item.active,
+.mini-faq-item.open {
+    border-color: transparent !important;
+    background:
+        radial-gradient(80% 140% at 0% 0%, rgba(250, 174, 23, 0.10), transparent 60%),
+        radial-gradient(80% 140% at 100% 100%, rgba(255, 27, 206, 0.12), transparent 60%),
+        rgba(255, 255, 255, 0.04) !important;
+}
+
+.faq-item.active::before,
+.mini-faq-item.open::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.faq-question,
+.mini-faq-q {
+    padding: 1.25rem 0 !important;
+}
+
+.faq-item.active .faq-icon {
+    border-color: transparent !important;
+    background: var(--gradient-tm26) !important;
+}
+
+.faq-answer-content,
+.faq-answer > p,
+.mini-faq-a > p {
+    padding-right: 3rem !important;
+    padding-bottom: 1.4rem !important;
+}
+
+@media (max-width: 768px) {
+    .faq-question,
+    .mini-faq-q {
+        padding: 1.05rem 0 !important;
+    }
+
+    .faq-answer-content,
+    .faq-answer > p,
+    .mini-faq-a > p {
+        padding-right: 0 !important;
+    }
+}

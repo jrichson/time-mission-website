@@ -1,6 +1,7 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import nav from '../data/site/navigation.json';
+import { megaMenus } from '../lib/mega-menus';
 
 interface Props {
     currentLang?: string;
@@ -31,6 +32,9 @@ const bookingCtaAttrs = {
     } : {}),
 };
 
+// Top level mirrors the desktop nav; everything else lives inside the expandable sections.
+const mobileTopLevel = ['/about', '/missions', '/groups', '/faq'];
+
 const navTranslationKeys: Record<string, string> = {
     '/': 'nav.home',
     '/about': 'nav.about',
@@ -46,11 +50,53 @@ const navTranslationKeys: Record<string, string> = {
 <!-- Full-Screen Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
     <ul class="mobile-menu-links">
-        {nav.primary.map((item) => (
-            <li>
-                <a href={item.href} data-i18n={navTranslationKeys[item.href]}>{item.label}</a>
-            </li>
-        ))}
+        {nav.primary.filter((item) => mobileTopLevel.includes(item.href)).map((item) => {
+            const mega = megaMenus[item.href];
+            if (!mega) {
+                return (
+                    <li>
+                        <a href={item.href} data-i18n={navTranslationKeys[item.href]}>{item.label}</a>
+                    </li>
+                );
+            }
+            return (
+                <li class="mobile-menu-group">
+                    <details name="mobile-menu-section">
+                        <summary>
+                            <span data-i18n={navTranslationKeys[item.href]}>{item.label}</span>
+                            <svg class="mobile-menu-chevron" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"></polyline></svg>
+                        </summary>
+                        <div class="mobile-mega">
+                            <div class="mobile-mega-cards" data-mega-random={mega.viewAll ? '3' : undefined}>
+                                {mega.cards.map((card, index) => (
+                                    <a class="mobile-mega-card" href={card.href} hidden={mega.viewAll && index >= 3 ? true : undefined}>
+                                        <img src={card.img} alt="" width="480" height="320" loading="lazy" decoding="async" />
+                                        <span class="mobile-mega-card-copy">
+                                            <span class="mobile-mega-card-title" data-i18n={card.i18n}>{card.title}</span>
+                                            <span class="mobile-mega-card-text">{card.text}</span>
+                                        </span>
+                                    </a>
+                                ))}
+                                {mega.viewAll && (
+                                    <a class="mobile-mega-card mobile-mega-card--all" href={mega.viewAll.href}>
+                                        <span class="mobile-mega-all-thumb" aria-hidden="true">25+</span>
+                                        <span class="mobile-mega-card-copy">
+                                            <span class="mobile-mega-card-title">{mega.viewAll.title} →</span>
+                                            <span class="mobile-mega-card-text">{mega.viewAll.text}</span>
+                                        </span>
+                                    </a>
+                                )}
+                            </div>
+                            <ul class="mobile-mega-links">
+                                {mega.links.map((link) => (
+                                    <li><a href={link.href} data-i18n={link.i18n}>{link.label}</a></li>
+                                ))}
+                            </ul>
+                        </div>
+                    </details>
+                </li>
+            );
+        })}
     </ul>
     <div class="mobile-menu-language">
         <LanguageSwitcher currentLang={currentLang} placement="mobile" />

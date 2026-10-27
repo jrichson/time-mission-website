@@ -1,22 +1,89 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import PressResourceCard from '../components/PressResourceCard.astro';
 import { definePage } from '../lib/define-page';
 import pressMain from '../partials/press-main.frag.txt?raw';
 import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+import { loadPressCoverage, loadPressReleases } from '../lib/press-room-data';
 
 const page = definePage({ canonicalPath: '/press' });
 const ld = serializeGraph(buildSimpleGraph([
     { label: 'Home', href: '/' },
     { label: 'Press', href: '/press' },
 ]));
+const coverageItems = (await loadPressCoverage()).slice(0, 3);
+const pressReleases = (await loadPressReleases()).slice(0, 5);
 ---
 
 <SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-resource-page">
     <Fragment slot="head-extra">
-        <link rel="stylesheet" href="/css/page-press.css?v=1" />
+        <link rel="stylesheet" href="/css/page-press.css?v=5" />
     </Fragment>
     <Fragment slot="json-ld">
         <script type="application/ld+json" is:inline set:html={ld}></script>
     </Fragment>
     <div set:html={pressMain} />
+
+    {coverageItems.length > 0 && (
+        <section class="tm-resource-section tm-press-block">
+            <div class="tm-resource-shell">
+                <div class="tm-press-block-head">
+                    <h2>In the News</h2>
+                    <a href="/press/in-the-news" class="tm-press-more">View all coverage <span aria-hidden="true">→</span></a>
+                </div>
+                <div class="tm-resource-release-list tm-resource-card-grid">
+                    {coverageItems.map((article, index) => (
+                        <PressResourceCard
+                            {...article}
+                            external
+                            variant="card"
+                            ignoreKickerI18n={false}
+                            ignoreSummaryI18n={false}
+                            loading={index < 3 ? 'eager' : 'lazy'}
+                        />
+                    ))}
+                </div>
+            </div>
+        </section>
+    )}
+
+    <section class="tm-resource-section tm-press-block">
+        <div class="tm-resource-shell">
+            <div class="tm-press-block-head">
+                <h2>Press Releases</h2>
+                <a href="/press/releases" class="tm-press-more">All press releases <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="tm-resource-release-list">
+                {pressReleases.map((release) => (
+                    <PressResourceCard {...release} variant="row" />
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="tm-resource-section tm-press-block">
+        <div class="tm-resource-shell">
+            <div class="tm-press-block-head">
+                <h2>Press Kit</h2>
+            </div>
+            <div class="tm-resource-grid tm-press-kit">
+                <a class="tm-resource-tile tm-resource-tile--link" href="/press/brand-guidelines">
+                    <h3>Brand Guidelines</h3>
+                    <p>Logo files, naming guidance, and simple usage rules for media and partners.</p>
+                </a>
+                <a class="tm-resource-tile tm-resource-tile--link" href="/press/images">
+                    <h3>Press Images</h3>
+                    <p>Official photography and logo assets for stories about Time Mission.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="tm-resource-section tm-press-contact">
+        <div class="tm-resource-shell">
+            <h2>Need a source, image, or quote?</h2>
+            <p>Send your deadline, outlet, topic, and image needs. We will route it to the right team.</p>
+            <a href="/contact" class="tm-resource-button">Contact Media Team</a>
+        </div>
+    </section>
 </SiteLayout>

@@ -48,6 +48,6 @@ describe('static Pages recovery', () => {
     expect(html).toContain("script-src 'self' 'sha256-abc'");
     expect(html).not.toContain('frame-ancestors');
     expect(fs.readFileSync(path.join(directory, '_headers'), 'utf8')).toContain("Content-Security-Policy: frame-ancestors 'self'");
-    expect(JSON.parse(fs.readFileSync(path.join(directory, '_routes.json'))).include).toEqual(['/api/contact', '/api/newsletter', '/api/klaviyo-signup', '/api/monitor-status']);
+    expect(JSON.parse(fs.readFileSync(path.join(directory, '_routes.json'))).include).toEqual(['/api/contact', '/api/newsletter', '/api/klaviyo-signup', '/api/monitor-status', '/api/social-feed']);
   });
 });

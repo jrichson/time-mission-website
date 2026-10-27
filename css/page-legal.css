@@ -7,7 +7,7 @@
 }
 
 .legal-page h2 {
-    font-family: var(--tech);
+    font-family: var(--tech); font-weight: 600;
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -71,7 +71,7 @@
 }
 
 .legal-updated {
-    font-family: var(--tech);
+    font-family: var(--tech); font-weight: 600;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;

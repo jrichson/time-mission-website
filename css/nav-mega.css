@@ -1,0 +1,414 @@
+/* ==========================================
+   DESKTOP MEGA MENUS
+   Hover/focus a nav item to open a glass panel of image cards + quick links.
+   Desktop only; phones use the full-screen mobile menu.
+   ========================================== */
+
+.mega-panel {
+    display: none;
+}
+
+@media (min-width: 1025px) and (hover: hover) {
+    /* Panel spans the glass nav; .nav (fixed) is its containing block */
+    .mega-panel {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 2rem;
+        position: absolute;
+        top: calc(100% + 12px);
+        left: 0;
+        right: 0;
+        padding: 1.5rem;
+        border-radius: 28px;
+        background: rgba(18, 18, 24, 0.86);
+        backdrop-filter: blur(24px) saturate(160%);
+        -webkit-backdrop-filter: blur(24px) saturate(160%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.08),
+            0 30px 60px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-6px);
+        transition: opacity 0.2s ease, transform 0.2s var(--ease-standard), visibility 0s linear 0.2s;
+        z-index: 1002;
+        text-align: left;
+    }
+
+    /* Invisible bridge so the pointer can travel from the link to the panel */
+    .mega-panel::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -16px;
+        height: 16px;
+    }
+
+    .has-mega:hover > .mega-panel,
+    .has-mega:focus-within > .mega-panel {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition-delay: 0.08s, 0.08s, 0s;
+    }
+
+    /* Keep the underline on the item whose panel is open */
+    .has-mega:hover > a,
+    .has-mega:focus-within > a {
+        color: var(--white);
+        font-weight: 700;
+        background-size: 100% 2px;
+    }
+
+    .mega-cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .mega-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        color: var(--white);
+        text-decoration: none;
+    }
+
+    .mega-card-media {
+        position: relative;
+        display: block;
+        aspect-ratio: 3 / 2;
+        margin-bottom: 0.5rem;
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--dark-light);
+    }
+
+    .mega-card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s var(--ease-standard), filter 0.3s ease;
+    }
+
+    /* Faint TM26 gradient stroke around the photo on hover */
+    .mega-card-media::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        border-radius: inherit;
+        background: var(--gradient-tm26);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+        opacity: 0;
+        transition: opacity var(--motion-standard) ease;
+        pointer-events: none;
+    }
+
+    .mega-card:hover .mega-card-media::after,
+    .mega-card:focus-visible .mega-card-media::after {
+        opacity: 0.85;
+    }
+
+    .mega-card:hover .mega-card-media img,
+    .mega-card:focus-visible .mega-card-media img {
+        transform: scale(1.06);
+        filter: brightness(1.1);
+    }
+
+    .mega-card-title {
+        font-family: var(--tech); font-weight: 600;
+        font-size: 0.82rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .mega-card-text {
+        font-size: 0.85rem;
+        line-height: 1.4;
+        color: var(--gray-light);
+    }
+
+    .mega-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 190px;
+        margin: 0;
+        padding: 0 0 0 1.5rem;
+        list-style: none;
+        border-left: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mega-links a {
+        display: block;
+        padding: 0.6rem 0.75rem;
+        border-radius: 10px;
+        color: var(--white-soft);
+        font-size: 0.92rem;
+        font-weight: 500;
+        text-decoration: none;
+        background: none;
+        transition: background var(--motion-fast) ease, color var(--motion-fast) ease;
+    }
+
+    .mega-links li:first-child a {
+        color: var(--white);
+        font-weight: 700;
+    }
+
+    .mega-links a:hover,
+    .mega-links a:focus-visible {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--white);
+        outline: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mega-panel,
+    .mega-card-media img {
+        transition: none !important;
+        transform: none !important;
+    }
+}
+
+/* ---- Mobile menu: the same sections as expandable groups with photo cards ---- */
+.mobile-menu-group details > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 0;
+    color: var(--white);
+    font-family: var(--tech);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    list-style: none;
+    cursor: pointer;
+}
+
+.mobile-menu-group details > summary::-webkit-details-marker {
+    display: none;
+}
+
+.mobile-menu-chevron {
+    width: 18px;
+    height: 18px;
+    transition: transform var(--motion-fast) ease;
+}
+
+.mobile-menu-group details[open] .mobile-menu-chevron {
+    transform: rotate(180deg);
+}
+
+.mobile-mega {
+    padding: 0 0 1.25rem;
+}
+
+.mobile-mega-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mobile-menu-links .mobile-mega-card {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.4rem 0;
+    font-family: var(--body);
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.mobile-mega-card img {
+    flex-shrink: 0;
+    display: block;
+    width: 84px !important;
+    height: 60px !important;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.mobile-mega-card-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.mobile-mega-card-title {
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.mobile-mega-card-text {
+    color: var(--gray-light);
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.35;
+}
+
+.mobile-mega-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    margin: 0.9rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mobile-menu-links .mobile-mega-links li {
+    border: 0;
+}
+
+.mobile-menu-links .mobile-mega-links a {
+    padding: 0.35rem 0;
+    color: var(--white-soft);
+    font-family: var(--body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* The bottom TICKETS bar already covers booking inside the open menu */
+.mobile-menu .mobile-menu-cta {
+    display: none !important;
+}
+
+/* Pool cards beyond the random three stay hidden */
+.mega-card[hidden],
+.mobile-mega-card[hidden] {
+    display: none !important;
+}
+
+/* "View All" tile: gradient panel with the mission count, unmistakably a "see everything" link */
+.mega-card-all-media {
+    position: relative;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    background:
+        radial-gradient(120% 90% at 0% 0%, rgba(250, 174, 23, 0.35), transparent 55%),
+        radial-gradient(120% 90% at 100% 100%, rgba(255, 27, 206, 0.4), transparent 55%),
+        linear-gradient(135deg, #2a0710, #1a0a1f) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.mega-card-all-count {
+    font-family: var(--display);
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    background: var(--gradient-tm26);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.mega-card-all-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: var(--gradient-tm26);
+    color: var(--white);
+    font-family: var(--tech);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: transform var(--motion-fast) ease;
+}
+
+.mega-card--all:hover .mega-card-all-cta {
+    transform: translateX(4px);
+}
+
+.mobile-mega-all-thumb {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 60px;
+    border-radius: 10px;
+    background: var(--gradient-tm26);
+    color: var(--white);
+    font-family: var(--display);
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* View All tile: no photo zoom/overlay on hover; the button flows like the other gradient buttons */
+.mega-card--all .mega-card-media::after {
+    display: none !important;
+}
+
+.mega-card--all .mega-card-all-media {
+    transition: border-color var(--motion-fast) ease;
+}
+
+.mega-card--all:hover .mega-card-all-media,
+.mega-card--all:focus-visible .mega-card-all-media {
+    border-color: rgba(255, 255, 255, 0.28);
+}
+
+.mega-card--all:hover .mega-card-all-cta,
+.mega-card--all:focus-visible .mega-card-all-cta {
+    transform: none;
+    background-image: linear-gradient(90deg, #FAAE17 0%, #F23929 17%, #EE0132 30%, #FF1BCE 50%, #EE0132 70%, #F23929 83%, #FAAE17 100%);
+    background-size: 200% 100%;
+    animation: tm26-flow 2.4s linear infinite;
+    box-shadow: 0 8px 24px rgba(238, 1, 50, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mega-card--all:hover .mega-card-all-cta { animation: none; }
+}
+
+/* View All tile, round 3: just "All Missions" + arrow */
+.mega-card--all .mega-card-all-count {
+    max-width: 9ch;
+    font-size: clamp(1.25rem, 1.6vw, 1.6rem);
+    line-height: 1.05;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.mega-card-all-arrow {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gradient-tm26);
+    color: var(--white);
+    box-shadow: 0 8px 22px rgba(238, 1, 50, 0.35);
+    transition: transform var(--motion-fast) ease;
+}
+
+.mega-card-all-arrow svg {
+    width: 18px;
+    height: 18px;
+}
+
+.mega-card--all:hover .mega-card-all-arrow,
+.mega-card--all:focus-visible .mega-card-all-arrow {
+    transform: translateX(4px);
+}
+
+.mega-card--all .mega-card-title,
+.mega-card--all .mega-card-text {
+    display: none;
+}

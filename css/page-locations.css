@@ -5,7 +5,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 120px 2rem 4rem;
+            padding: calc(120px + var(--tm-header-extra, 0px)) 2rem 4rem;
             background: radial-gradient(circle at 50% 30%, rgba(255, 107, 44, 0.08) 0%, transparent 50%);
             text-align: center;
         }
@@ -15,14 +15,18 @@
         }
 .hero-title {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(3rem, 8vw, 5rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1rem;
             line-height: 1;
         }
 
         .hero-title span {
             background: var(--gradient-accent);
+            background-origin: border-box;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -48,9 +52,12 @@
 
         .geo-answer-inner h2 {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.05;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin: 0 0 1rem;
             color: var(--white);
         }
@@ -76,7 +83,7 @@
             cursor: pointer;
             font-family: var(--tech);
             font-size: 0.72rem;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: 0.12em;
             line-height: 1.5;
             list-style: none;
@@ -138,7 +145,7 @@
         .loc-group-title {
             font-family: var(--tech);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--orange);
@@ -176,7 +183,7 @@
         .loc-state {
             font-family: var(--tech);
             font-size: 0.7rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.12em;
             color: var(--orange);
             text-transform: uppercase;
@@ -196,8 +203,11 @@
 
         .loc-name {
             font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+            text-transform: var(--display-case, none);
+            line-height: var(--display-leading, normal);
             font-size: 1.35rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             display: flex;
             align-items: center;
@@ -212,7 +222,7 @@
         }
 
         .loc-status {
-            font-family: var(--tech);
+            font-family: var(--tech); font-weight: 600;
             font-size: 0.68rem;
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -254,7 +264,7 @@
             border-radius: 100px;
             font-family: var(--tech);
             font-size: 0.6rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--cyan);
@@ -307,7 +317,301 @@
         }
 
         @media (max-width: 480px) {
-            .hero { padding: 100px 1rem 2.5rem; min-height: 50vh; }
+            .hero { padding: calc(100px + var(--tm-header-extra, 0px)) 1rem 2.5rem; min-height: 50vh; }
             .hero-title { font-size: 2rem; line-height: 1.15; }
             .locations-grid { padding-left: 0.75rem; padding-right: 0.75rem; }
         }
+
+/* ==========================================================================
+   Locations v3: map hero + glass venue cards
+   ========================================================================== */
+.locations-hero {
+    position: relative;
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    min-height: 0 !important;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: calc(150px + var(--tm-header-extra, 0px)) clamp(1.25rem, 4vw, 3rem) clamp(2rem, 4vw, 3rem) !important;
+    background: none !important;
+    text-align: left !important;
+}
+
+.locations-hero .hero-content {
+    order: 1;
+    max-width: 520px;
+}
+
+.locations-hero .section-badge {
+    justify-content: flex-start !important;
+    margin-left: 0 !important;
+}
+
+.locations-hero .hero-title {
+    font-size: clamp(2.2rem, 4.4vw, 3.6rem) !important;
+    margin: 0.8rem 0 1rem !important;
+}
+
+.locations-hero .hero-subtitle {
+    margin: 0 !important;
+    font-size: clamp(1rem, 1.3vw, 1.15rem) !important;
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.locations-hero-map {
+    order: 2;
+    border-radius: 28px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: 0 30px 80px -30px rgba(238, 1, 50, 0.35);
+}
+
+.locations-hero-map img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Region heading */
+.locations-grid {
+    padding: 1rem clamp(1.25rem, 4vw, 3rem) 3rem !important;
+    background: none !important;
+}
+
+.locations-list {
+    max-width: 1280px !important;
+    margin: 0 auto !important;
+}
+
+.loc-group {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem !important;
+    margin-bottom: 3rem !important;
+}
+
+.loc-group-title {
+    grid-column: 1 / -1;
+    margin: 0 0 0.25rem !important;
+    padding: 0 !important;
+    border: 0 !important;
+    color: var(--white) !important;
+    font-family: var(--display) !important;
+    font-weight: var(--display-weight, 700) !important;
+    font-size: clamp(1.2rem, 2vw, 1.6rem) !important;
+    letter-spacing: var(--display-tracking, 0.06em) !important;
+}
+
+.loc-group-title::after {
+    display: none !important;
+}
+
+/* Venue card */
+.loc-row {
+    position: relative;
+    isolation: isolate;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.9rem !important;
+    min-height: 100%;
+    padding: 1.4rem 1.4rem 1.25rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    border-radius: 22px !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    text-decoration: none;
+    transition: transform var(--motion-standard, 0.3s) ease, border-color var(--motion-standard, 0.3s) ease, background-color var(--motion-standard, 0.3s) ease !important;
+}
+
+.loc-row:hover,
+.loc-row:focus-visible {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    background:
+        radial-gradient(80% 120% at 0% 0%, rgba(250, 174, 23, 0.10), transparent 60%),
+        radial-gradient(80% 120% at 100% 100%, rgba(255, 27, 206, 0.12), transparent 60%),
+        rgba(255, 255, 255, 0.06) !important;
+}
+
+/* State chip: quiet glass, not orange */
+.loc-state {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 0 !important;
+    height: 26px !important;
+    padding: 0 0.6rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 0.62rem !important;
+    letter-spacing: 0.14em !important;
+}
+
+.loc-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    width: 100%;
+}
+
+.loc-name {
+    font-size: clamp(1.05rem, 1.5vw, 1.25rem) !important;
+    line-height: 1.15 !important;
+    color: var(--white) !important;
+}
+
+/* Status as a small pill with a live dot */
+.loc-status {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.45rem;
+    width: max-content;
+    margin: 0.1rem 0 0.2rem !important;
+    padding: 0.28rem 0.65rem 0.28rem 0.55rem !important;
+    border-radius: 999px;
+    background: rgba(46, 213, 115, 0.12);
+    color: #7cf0a8 !important;
+    font-size: 0.6rem !important;
+    letter-spacing: 0.14em !important;
+}
+
+.loc-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2ed573;
+    box-shadow: 0 0 8px #2ed573;
+}
+
+.loc-row.is-coming-soon .loc-status {
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.loc-row.is-coming-soon .loc-status::before {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: none;
+}
+
+.loc-address {
+    color: rgba(255, 255, 255, 0.6) !important;
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+}
+
+.loc-contact {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.2rem !important;
+    margin-top: auto !important;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    width: 100%;
+    font-size: 0.85rem !important;
+}
+
+.loc-contact-item,
+.loc-contact-muted {
+    color: rgba(255, 255, 255, 0.78) !important;
+    overflow-wrap: anywhere;
+}
+
+.loc-arrow {
+    position: absolute !important;
+    top: 1.35rem;
+    right: 1.35rem;
+    width: 34px !important;
+    height: 34px !important;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 50%;
+    color: var(--white) !important;
+    transition: transform var(--motion-standard, 0.3s) ease, background var(--motion-standard, 0.3s) ease, border-color var(--motion-standard, 0.3s) ease !important;
+}
+
+.loc-row:hover .loc-arrow {
+    transform: translateX(3px);
+    border-color: transparent;
+    background: var(--gradient-tm26);
+}
+
+/* The explainer now sits below the list */
+.geo-answer-section {
+    padding: 0 clamp(1.25rem, 4vw, 3rem) 3rem !important;
+    background: none !important;
+}
+
+.geo-answer-inner {
+    max-width: 1280px !important;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.geo-answer-inner h2 {
+    font-size: clamp(1.2rem, 2vw, 1.6rem) !important;
+}
+
+@media (max-width: 1100px) {
+    .loc-group {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .locations-hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding-top: calc(118px + var(--tm-header-extra, 0px)) !important;
+    }
+
+    .locations-hero-map {
+        order: 1;
+        border-radius: 22px;
+    }
+
+    .locations-hero .hero-content {
+        order: 2;
+        max-width: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .loc-group {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.75rem !important;
+    }
+
+    .locations-hero .hero-title {
+        font-size: clamp(1.8rem, 9vw, 2.4rem) !important;
+    }
+}
+
+/* Full-width grid; state prefix already lives in the name, so drop the chip */
+body .locations-grid {
+    max-width: 1280px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    box-sizing: border-box;
+}
+
+body .loc-row .loc-state {
+    display: none !important;
+}
+
+body .loc-row .loc-name {
+    padding-right: 2.75rem;
+    font-size: clamp(1rem, 1.3vw, 1.15rem) !important;
+}
+
+body .loc-row .loc-body {
+    gap: 0.55rem;
+}

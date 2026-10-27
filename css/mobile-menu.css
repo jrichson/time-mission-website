@@ -20,7 +20,7 @@
         z-index: 999;
         background: var(--black);
         padding:
-            calc(100px + env(safe-area-inset-top, 0px))
+            calc(var(--tm-ticker-height) + var(--tm-utility-height) + 96px + env(safe-area-inset-top, 0px))
             calc(1.5rem + env(safe-area-inset-right, 0px))
             calc(2rem + env(safe-area-inset-bottom, 0px))
             calc(1.5rem + env(safe-area-inset-left, 0px));
@@ -35,29 +35,12 @@
         visibility: visible;
     }
 
-    /* Move nav to top when mobile menu is open */
-    .nav.menu-open {
-        top: env(safe-area-inset-top, 0px);
+    body:has(.nav--no-ticker) .mobile-menu {
+        padding-top: calc(var(--tm-utility-height) + 96px + env(safe-area-inset-top, 0px));
     }
 
-    /* Hide ticker when mobile menu is open */
-    .ticker-bar.menu-hidden {
-        display: none;
-    }
-
-    /* Hide tickets when mobile menu is open */
-    .nav.menu-open .btn-tickets {
-        display: none !important;
-    }
-
-    /* Show city name next to pin when menu is open */
-    .nav.menu-open .location-btn {
-        display: flex;
-    }
-
-    .nav.menu-open .location-btn #locationText {
-        display: inline !important;
-    }
+    /* The header (ticker, utility bar, glass nav) stays exactly where it is while the menu is open;
+       the menu slides in underneath it. */
 
     .mobile-menu-links {
         list-style: none;
@@ -76,7 +59,7 @@
         text-decoration: none;
         font-family: var(--tech);
         font-size: 1rem;
-        font-weight: 400;
+        font-weight: 600;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         transition: color var(--motion-fast) ease;
@@ -129,12 +112,13 @@
         width: 100%;
         padding: 1rem;
         background: var(--gradient-primary);
+        background-origin: border-box;
         color: var(--white);
         text-align: center;
         text-decoration: none;
         font-family: var(--tech);
         font-size: 0.85rem;
-        font-weight: 400;
+        font-weight: 600;
         letter-spacing: 0.15em;
         text-transform: uppercase;
         border-radius: 100px;
@@ -158,5 +142,61 @@
     .language-switcher--mobile select {
         min-width: 6rem;
         text-align: center;
+    }
+}
+
+/* ---- Mobile BOOK bar: full-width button pinned to the bottom of the screen ---- */
+.mobile-book-bar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-book-bar {
+        display: block;
+        position: fixed;
+        left: 1rem;
+        right: 1rem;
+        bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+        z-index: 1000;
+    }
+
+    .mobile-book-bar .mobile-book-btn {
+        justify-content: center;
+        width: 100%;
+        min-height: 56px;
+        padding: 0 1.5rem;
+        font-size: 1.05rem;
+        letter-spacing: 0.1em;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 4px 18px var(--tm26-glow);
+        /* Always-on flowing gradient (same motion as the desktop hover) */
+        background-image: linear-gradient(90deg, #FAAE17 0%, #F23929 17%, #EE0132 30%, #FF1BCE 50%, #EE0132 70%, #F23929 83%, #FAAE17 100%) !important;
+        background-size: 200% 100% !important;
+        animation: tm26-flow 3s linear infinite;
+    }
+
+
+    /* The location selector's Book Now is redundant with the bottom TICKETS bar */
+    .location-dropdown .location-info-actions {
+        display: none !important;
+    }
+
+    /* Leave room so the bar never covers the end of the page */
+    body {
+        padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+    .mobile-book-bar .mobile-book-btn {
+        animation: none;
+    }
+}
+
+
+/* Phones: BOOK NOW sits in the nav and TICKETS in the bottom bar, so the hero keeps only Explore Missions */
+@media (max-width: 768px) {
+    .hero-cta .btn-tickets,
+    .hero-cta .btn-primary {
+        display: none !important;
     }
 }

@@ -53,6 +53,12 @@
         var visibleCount = 0;
 
         updateFilterCounts(hiddenMissionIds);
+        var titleCount = document.querySelector('.missions-count');
+        if (titleCount) {
+            titleCount.textContent = String(portalCards.filter(function (card) {
+                return !hiddenMissionIds[card.dataset.missionId];
+            }).length);
+        }
 
         portalCards.forEach(function (card) {
             var isVisible = !hiddenMissionIds[card.dataset.missionId] && cardMatchesFilter(card, filter);
@@ -98,6 +104,13 @@
             filterSection.classList.toggle('stuck', filterSection.getBoundingClientRect().top <= 60);
         }, { passive: true });
     }
+
+    // Deep link from the nav: /missions?filter=physical opens with that category selected
+    try {
+        var requestedFilter = new URLSearchParams(window.location.search).get('filter');
+        var requestedTab = requestedFilter && filterTabs.find(function (tab) { return tab.dataset.filter === requestedFilter; });
+        if (requestedTab) requestedTab.click();
+    } catch (e) { /* ignore malformed query */ }
 
     portalCards.forEach(function (card) {
         card.addEventListener('click', function (event) {

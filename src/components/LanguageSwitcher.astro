@@ -13,6 +13,9 @@ const languages = i18n.languages.filter((language) => activeSiteProfile.locales.
 const languageSurface = compileLanguageSurface(i18n as I18nCatalog);
 const currentCode = languageSurface.resolveLanguage(currentLang)?.code || languageSurface.defaultLanguage;
 const switcherId = `language-select-${placement}`;
+// Utility bar and location overlay get a styled menu with full language names; the select stays as the source of truth.
+const useMenu = placement === 'desktop' || placement === 'overlay';
+const currentLanguage = languages.find((language) => language.code === currentCode) || languages[0];
 const label = languageSurface.translateString('language.label', currentCode) || 'Language';
 ---
 
@@ -25,12 +28,31 @@ const label = languageSurface.translateString('language.label', currentCode) || 
             <path d="M12 3c2.25 2.4 3.4 5.4 3.4 9s-1.15 6.6-3.4 9c-2.25-2.4-3.4-5.4-3.4-9S9.75 5.4 12 3z"></path>
         </svg>
     </span>
-    <select id={switcherId} name="language" data-language-select data-i18n-aria-label="language.label" aria-label={label}>
+    <select id={switcherId} name="language" data-language-select data-i18n-aria-label="language.label" aria-label={label} class={useMenu ? 'visually-hidden' : undefined} tabindex={useMenu ? -1 : undefined}>
         {languages.map((language) => (
             <option value={language.code} selected={language.code === currentCode}>
-                {language.shortLabel}
+                {useMenu ? language.nativeLabel : language.shortLabel}
             </option>
         ))}
     </select>
+    {useMenu && (
+        <div class="language-menu" data-language-menu>
+            <button type="button" class="language-menu-btn" aria-haspopup="true" aria-expanded="false" data-i18n-aria-label="language.label" aria-label={label}>
+                <span class="bold-hover" data-language-menu-current data-label={currentLanguage?.nativeLabel}>{currentLanguage?.nativeLabel}</span>
+                <svg class="language-menu-caret" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+            </button>
+            <ul class="language-menu-list" hidden>
+                {languages.map((language) => (
+                    <li>
+                        <button type="button" lang={language.htmlLang} data-language-option={language.code} aria-current={language.code === currentCode ? 'true' : undefined}>
+                            {language.nativeLabel}
+                        </button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    )}
     <span class="language-switcher-status visually-hidden" data-language-status aria-live="polite"></span>
 </form>

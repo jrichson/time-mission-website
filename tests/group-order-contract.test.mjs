@@ -28,7 +28,7 @@ describe('canonical group order', () => {
     const navigation = JSON.parse(read('src/data/site/navigation.json'));
     const main = read('src/partials/groups-main.frag.txt');
     const mainOrder = Array.from(
-      main.matchAll(/data-tm-booking-kind="groups" data-tm-group-type="([^"]+)"/g),
+      main.matchAll(/<a href="\/groups\/([a-z-]+)" class="event-type-learn-more/g),
       (match) => match[1],
     );
 

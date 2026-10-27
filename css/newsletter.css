@@ -34,8 +34,11 @@
 
 .newsletter-section .newsletter-inner h2 {
     font-family: var(--display);
+    font-weight: var(--display-weight, 400);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
     font-size: clamp(2.5rem, 5vw, 4rem);
-    letter-spacing: 0.02em;
+    letter-spacing: var(--display-tracking, 0.02em);
     color: var(--white);
     margin-bottom: 0.75rem;
 }
@@ -149,7 +152,7 @@
     color: var(--black);
     font-family: var(--tech);
     font-size: 0.8rem;
-    font-weight: 400;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     cursor: pointer;
