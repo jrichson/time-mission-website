@@ -1207,3 +1207,29 @@
 .event-type-card .event-type-cta.btn-tickets:not(:hover):not(:focus-visible) {
     box-shadow: none !important;
 }
+
+/* Buttons size to their label (venues can swap in "25+ Group Inquire") and
+   stack when both can't fit side by side, so text never spills out. */
+.event-type-card .event-type-actions {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.event-type-card .event-type-actions .event-type-cta {
+    flex: 1 1 auto !important;
+    min-width: max-content !important;
+    padding-inline: 1.1rem !important;
+}
+
+/* Consistent rows: the two card buttons always stack full width */
+.event-type-card .event-type-actions {
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    gap: 0.55rem !important;
+}
+
+.event-type-card .event-type-actions .event-type-cta {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
