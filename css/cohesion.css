@@ -109,3 +109,65 @@ body .portals-section::before {
         bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
     }
 }
+
+/* ---- Light section test: stats on white with a color glow from each side ---- */
+body main section.stats:not(.hero):not(.about-hero) {
+    position: relative;
+    isolation: isolate;
+    margin: clamp(1rem, 3vw, 2.5rem) clamp(0.75rem, 2vw, 1.5rem) !important;
+    padding: clamp(3rem, 6vw, 5rem) 0 !important;
+    border-radius: 32px;
+    overflow: hidden;
+    background-color: #f7f6f8 !important;
+    color: #121214;
+}
+
+body main .stats::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(45% 90% at 0% 50%, rgba(250, 140, 23, 0.40), transparent 70%),
+        radial-gradient(45% 90% at 100% 50%, rgba(255, 27, 206, 0.36), transparent 70%);
+    filter: blur(8px);
+}
+
+body main .stats .stat-card {
+    border-color: rgba(18, 18, 20, 0.08) !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+    box-shadow: 0 18px 40px -22px rgba(18, 18, 20, 0.35), inset 0 1px 0 #fff !important;
+}
+
+body main .stats .stat-card::before {
+    opacity: 0.6;
+}
+
+body main .stats .stat-number,
+body main .stats .stat-number * {
+    color: #121214 !important;
+    text-shadow: none !important;
+}
+
+body main .stats .stat-label {
+    color: rgba(18, 18, 20, 0.62) !important;
+}
+
+body main .stats .stat-card:hover {
+    box-shadow: 0 24px 50px -20px rgba(238, 1, 50, 0.35), inset 0 1px 0 #fff !important;
+}
+
+@media (max-width: 768px) {
+    body main section.stats:not(.hero):not(.about-hero) {
+        padding: 1.25rem 0.85rem !important;
+        border-radius: 26px;
+    }
+
+    body main section.stats:not(.hero):not(.about-hero) .stats-grid {
+        padding: 0 !important;
+        gap: 0.75rem !important;
+    }
+}

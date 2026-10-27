@@ -7,7 +7,7 @@
         <div class="hero-content">
             <div class="section-badge">Groups & Events</div>
             <h1 class="hero-title">
-                YOUR NEXT EVENT,<br><span class="highlight">LEVELED UP</span>
+                YOUR CREW,<br><span class="highlight">GAME ON</span>
             </h1>
             <p class="hero-subtitle">
                 Whether it's a birthday, team outing, or private event, Time Mission delivers an unforgettable experience for groups of all sizes.
@@ -27,7 +27,7 @@
     <section class="event-types">
         <div class="event-types-header">
             <span class="event-types-eyebrow">Every Team, Every Occasion</span>
-            <h2 class="event-types-title" data-i18n-html="groups.eventsHeading">Time Mission <span class="highlight">Group Events</span></h2>
+            <h2 class="event-types-title" data-i18n-html="groups.eventsHeading">Pick Your <span class="highlight">Party</span></h2>
         </div>
         <div class="event-types-grid">
             <div class="event-type-card reveal">

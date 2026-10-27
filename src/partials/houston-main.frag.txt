@@ -40,7 +40,7 @@
     <section class="welcome" id="about">
         <div class="welcome-content reveal">
             <div class="section-badge">ABOUT US</div>
-            <h2 class="section-title">WHAT IS TIME MISSION?</h2>
+            <h2 class="section-title">WHAT'S THE MISSION?</h2>
             <p class="welcome-text">
                 Step into a real-life video game where behind every door is a new surprise. One ticket unlocks every mission, so race the clock to play them all or run your favorites over and over. Built for every age 6 to 106 and every skill level. Game&nbsp;on!
             </p>
@@ -292,7 +292,7 @@
         </div>
         <div class="groups-cta-card reveal">
             <div class="section-badge">GROUPS & PARTIES</div>
-            <h2 class="section-title">CELEBRATE AT TIME&nbsp;MISSION</h2>
+            <h2 class="section-title">BRING THE WHOLE&nbsp;CREW</h2>
             <p class="welcome-text">Birthdays, team outings, or just a crew ready to compete. We handle the setup so you can focus on the&nbsp;fun.</p>
             <div class="groups-event-types">
                 <a href="/groups/birthdays" class="groups-event-type">

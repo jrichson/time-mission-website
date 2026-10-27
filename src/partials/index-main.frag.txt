@@ -40,8 +40,8 @@
     <section class="welcome welcome--intro" id="about">
         <div class="intro-head reveal">
             <h2 class="section-title intro-title">
-                <span data-i18n="home.about.titleLine1">What is</span>
-                <span data-i18n="home.about.titleLine2">Time Mission?</span>
+                <span data-i18n="home.about.titleLine1">What's the</span>
+                <span data-i18n="home.about.titleLine2">Mission?</span>
             </h2>
             <p class="intro-lede" data-i18n="home.about.lede">A real-life video game where every door opens a new challenge. Your ticket unlocks all 25+ missions, so chase high scores, try new ones and replay your favorites.</p>
             <a href="/about" class="btn-secondary" data-i18n="home.about.learn">Learn About Time Mission</a>
@@ -297,7 +297,7 @@
         </div>
         <div class="groups-cta-card reveal">
             <div class="section-badge" data-i18n="home.groups.badge">GROUPS & PARTIES</div>
-            <h2 class="section-title" data-i18n="home.groups.title">CELEBRATE AT TIME&nbsp;MISSION</h2>
+            <h2 class="section-title" data-i18n="home.groups.title">BRING THE WHOLE&nbsp;CREW</h2>
             <p class="welcome-text" data-i18n="home.groups.intro">Birthdays, team outings, or just a crew ready to compete. We handle the setup so you can focus on the&nbsp;fun.</p>
             <div class="groups-event-types">
                 <a href="/groups/birthdays" class="groups-event-type">
