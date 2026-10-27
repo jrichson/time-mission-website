@@ -16,6 +16,10 @@
                 </a>
                 <a href="#" class="btn-secondary" data-tm-booking-trigger data-tm-booking-kind="groups" data-tm-group-type="field-trips" data-tm-default-label="Inquire Now">Inquire Now</a>
             </div>
+            <div class="stem-seals">
+                <picture class="stem-seal"><source srcset="/assets/photos/awards/best-in-stem-seal-160.webp 1x, /assets/photos/awards/best-in-stem-seal-320.webp 2x" type="image/webp"><img src="/assets/photos/awards/best-in-stem-seal.png" alt="Best in STEM award seal from STEM.org" width="160" height="209" loading="lazy" decoding="async"></picture>
+                <p class="stem-seals-label">Recognized by STEM.org</p>
+            </div>
         </div>
     </section>
 

@@ -94,7 +94,7 @@ describe('press releases page', () => {
     expect(nashvilleMigration).toContain("release.slug === 'nashville-announcement'");
     expect(nashvilleMigration).toContain('ON CONFLICT ("slug") DO UPDATE');
     expect(blogPage).toContain('tm-blog-article-hero--press');
-    expect(blogPage).toContain('/css/page-blog.css?v=3');
+    expect(blogPage).toContain('/css/page-blog.css?v=4');
     expect(blogPage).toContain("data-page-i18n={isPressRelease ? 'ignore' : undefined}");
     expect(blogPage).toContain('buildArticleGraph');
     expect(blogPage).toContain("newsArticle: isPressRelease");

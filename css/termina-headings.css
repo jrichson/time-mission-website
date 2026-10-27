@@ -19,7 +19,7 @@
     text-transform: var(--display-case, none);
     line-height: var(--display-leading, normal);
     font-weight: 700 !important;
-    letter-spacing: 0 !important;
+    letter-spacing: var(--display-tracking, 0.02em) !important;
     text-transform: uppercase;
     line-height: 1.08 !important;
 }

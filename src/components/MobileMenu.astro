@@ -79,7 +79,7 @@ const navTranslationKeys: Record<string, string> = {
                                 ))}
                                 {mega.viewAll && (
                                     <a class="mobile-mega-card mobile-mega-card--all" href={mega.viewAll.href}>
-                                        <img src={mega.viewAll.img} alt="" width="480" height="320" loading="lazy" decoding="async" />
+                                        <span class="mobile-mega-all-thumb" aria-hidden="true">25+</span>
                                         <span class="mobile-mega-card-copy">
                                             <span class="mobile-mega-card-title">{mega.viewAll.title} →</span>
                                             <span class="mobile-mega-card-text">{mega.viewAll.text}</span>

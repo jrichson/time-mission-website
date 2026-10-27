@@ -1416,7 +1416,9 @@
       "Players racing across a lit-up floor grid in a Time Mission room": "Spelers rennen over een verlichte vloer in een Time Mission-kamer",
       "A team aiming at targets in a glowing Time Mission room": "Een team mikt op doelen in een oplichtende Time Mission-kamer",
       "Tickets": "Tickets",
-      "The Missions": "De missies"
+      "The Missions": "De missies",
+      "Best in STEM award seal from STEM.org": "Best in STEM-awardzegel van STEM.org",
+      "Recognized by STEM.org": "Erkend door STEM.org"
     },
     "fr": {
       ", then lets those teams compete across": ", puis permet à ces équipes de s'affronter",
@@ -2627,7 +2629,9 @@
       "Players racing across a lit-up floor grid in a Time Mission room": "Des joueurs courent sur un sol lumineux dans une salle Time Mission",
       "A team aiming at targets in a glowing Time Mission room": "Une équipe vise des cibles dans une salle lumineuse Time Mission",
       "Tickets": "Billets",
-      "The Missions": "Les missions"
+      "The Missions": "Les missions",
+      "Best in STEM award seal from STEM.org": "Sceau du prix Best in STEM de STEM.org",
+      "Recognized by STEM.org": "Reconnu par STEM.org"
     },
     "es": {
       ", then lets those teams compete across": ", luego permite que esos equipos compitan en",
@@ -3838,7 +3842,9 @@
       "Players racing across a lit-up floor grid in a Time Mission room": "Jugadores corriendo sobre un suelo iluminado en una sala de Time Mission",
       "A team aiming at targets in a glowing Time Mission room": "Un equipo apuntando a objetivos en una sala luminosa de Time Mission",
       "Tickets": "Entradas",
-      "The Missions": "Las misiones"
+      "The Missions": "Las misiones",
+      "Best in STEM award seal from STEM.org": "Sello del premio Best in STEM de STEM.org",
+      "Recognized by STEM.org": "Reconocido por STEM.org"
     }
   },
   "_profiles": {

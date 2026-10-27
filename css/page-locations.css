@@ -19,7 +19,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: clamp(3rem, 8vw, 5rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1rem;
             line-height: 1;
         }
@@ -57,7 +57,7 @@
             line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.05;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin: 0 0 1rem;
             color: var(--white);
         }
@@ -207,7 +207,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: 1.35rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             display: flex;
             align-items: center;

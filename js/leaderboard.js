@@ -107,6 +107,38 @@
         if (current && slugs[current.slug || current.id]) select.value = current.slug || current.id;
     }
 
+    // Sliding gradient pill under the active period tab
+    function placeIndicator(board) {
+        var tabs = board.querySelector('.leaderboard-tabs');
+        var active = board.querySelector('.leaderboard-tab[aria-selected="true"]');
+        if (!tabs || !active) return;
+        var pill = tabs.querySelector('.leaderboard-tab-indicator');
+        if (!pill) {
+            pill = document.createElement('span');
+            pill.className = 'leaderboard-tab-indicator';
+            pill.setAttribute('aria-hidden', 'true');
+            tabs.insertBefore(pill, tabs.firstChild);
+            tabs.classList.add('has-indicator');
+        }
+        pill.style.width = active.offsetWidth + 'px';
+        pill.style.transform = 'translateX(' + active.offsetLeft + 'px)';
+    }
+
+    boards.forEach(function (board) {
+        placeIndicator(board);
+        board.querySelectorAll('.leaderboard-tab').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                board.querySelectorAll('.leaderboard-tab').forEach(function (t) {
+                    t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+                });
+                placeIndicator(board);
+            });
+        });
+    });
+    window.addEventListener('resize', function () { boards.forEach(placeIndicator); });
+    document.addEventListener('tm:language-changed', function () { boards.forEach(placeIndicator); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { boards.forEach(placeIndicator); });
+
     fetch(LEADERBOARD_URL, { headers: { accept: 'application/json' } })
         .then(function (res) { return res.ok ? res.json() : null; })
         .then(function (data) {

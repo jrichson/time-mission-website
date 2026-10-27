@@ -309,3 +309,42 @@ td.lb-col-score {
         color: var(--gray-light);
     }
 }
+
+/* Medal ranks: gold, silver, bronze */
+.lb-top-1 .lb-rank { background-image: linear-gradient(180deg, #FFF1B8 0%, #F6C744 45%, #B8860B 100%); }
+.lb-top-2 .lb-rank { background-image: linear-gradient(180deg, #FFFFFF 0%, #C9CED6 50%, #7E8792 100%); }
+.lb-top-3 .lb-rank { background-image: linear-gradient(180deg, #F7CFA6 0%, #CD7F32 50%, #7A3E12 100%); }
+
+/* Sliding pill: one gradient indicator glides between tabs */
+.leaderboard-tabs {
+    position: relative;
+    isolation: isolate;
+}
+
+.leaderboard-tab-indicator {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 0;
+    z-index: -1;
+    border-radius: 999px;
+    background: var(--gradient-tm26);
+    box-shadow: 0 6px 20px rgba(238, 1, 50, 0.35);
+    transition:
+        transform 0.45s cubic-bezier(0.65, 0, 0.2, 1.25),
+        width 0.45s cubic-bezier(0.65, 0, 0.2, 1.25);
+    pointer-events: none;
+}
+
+.leaderboard-tabs.has-indicator .leaderboard-tab[aria-selected="true"] {
+    background: none;
+}
+
+.leaderboard-tab {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .leaderboard-tab-indicator { transition: none; }
+}

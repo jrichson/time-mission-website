@@ -256,3 +256,95 @@
         filter: grayscale(0%) brightness(1);
     }
 }
+
+/* ==========================================
+   Testimonials refresh: grid texture, framed quote card, no orange haze
+   ========================================== */
+.testimonials {
+    padding: clamp(3rem, 6vw, 5rem) 0 !important;
+    border: 0 !important;
+    background:
+        radial-gradient(60% 80% at 50% 0%, rgba(238, 1, 50, 0.08), transparent 70%),
+        var(--dark) !important;
+}
+
+.testimonials::before {
+    display: block !important;
+    top: 0;
+    bottom: 0;
+    height: auto !important;
+    z-index: 0 !important;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) !important;
+    background-size: 80px 80px !important;
+    mask-image: radial-gradient(70% 90% at 50% 50%, #000 30%, transparent 100%);
+    -webkit-mask-image: radial-gradient(70% 90% at 50% 50%, #000 30%, transparent 100%);
+}
+
+.testimonials::after {
+    display: none !important;
+}
+
+.testimonials-scroll {
+    z-index: 1;
+}
+
+.testimonial-card {
+    padding: 0.5rem 1.25rem !important;
+}
+
+/* The slide stays full width for the carousel; the quote sits in a framed card */
+.testimonial-card > * {
+    max-width: 46rem;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.testimonial-card::before {
+    content: '\201C';
+    display: block;
+    height: 3.25rem;
+    margin: 0 auto 0.25rem;
+    font-family: var(--display);
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1;
+    background: var(--gradient-tm26);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.testimonial-rating {
+    font-size: 1.1rem !important;
+    letter-spacing: 0.35em !important;
+    text-shadow: none !important;
+    margin-bottom: 1rem !important;
+}
+
+.testimonial-text {
+    font-style: normal !important;
+    font-size: clamp(1.1rem, 2vw, 1.45rem) !important;
+    line-height: 1.55 !important;
+    color: var(--white) !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.testimonial-author {
+    gap: 0.75rem !important;
+}
+
+.testimonial-author .author-name {
+    font-family: var(--tech);
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.testimonial-author .author-location {
+    padding-left: 0.75rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--gray-light) !important;
+    font-size: 0.85rem;
+}

@@ -72,7 +72,7 @@
             line-height: var(--display-leading, normal);
             font-size: clamp(3rem, 7vw, 5.5rem);
             line-height: 1;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin-bottom: 1.25rem;
         }
@@ -294,7 +294,7 @@
             line-height: var(--display-leading, normal);
             font-size: clamp(2.25rem, 5vw, 3.75rem);
             line-height: 1.05;
-            letter-spacing: 0.01em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0 0 1.25rem;
         }
@@ -366,7 +366,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: 1.35rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin: 0 0 0.75rem;
             color: var(--white);
         }
@@ -426,6 +426,7 @@
 
         .event-page-split-copy h2 {
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
     font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
@@ -513,7 +514,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0 0 1rem;
         }
@@ -701,3 +702,35 @@
             .event-page-feature-card { padding: 1.5rem 1.25rem; }
             .event-page-section { padding-left: 1rem; padding-right: 1rem; }
         }
+
+/* Award seals (field trips hero) */
+.stem-seals {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.stem-seal img {
+    display: block;
+    width: 72px;
+    height: auto;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45));
+}
+
+.stem-seals-label {
+    margin: 0;
+    font-family: var(--tech);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--white-soft);
+}
+
+@media (max-width: 768px) {
+    .stem-seal img {
+        width: 58px;
+    }
+}

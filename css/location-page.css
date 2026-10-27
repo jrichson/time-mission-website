@@ -127,7 +127,7 @@
             font-size: clamp(4rem, 12vw, 10rem);
             font-weight: var(--display-weight, 400);
             line-height: 0.9;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1rem;
             animation: fadeInUp 0.8s ease 0.4s both;
             text-align: center;
@@ -388,7 +388,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1.5rem;
         }
 

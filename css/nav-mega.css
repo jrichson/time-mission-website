@@ -289,29 +289,63 @@
     display: none !important;
 }
 
-/* "View All" tile: dimmed photo with an arrow */
-.mega-card--all .mega-card-media {
+/* "View All" tile: gradient panel with the mission count, unmistakably a "see everything" link */
+.mega-card-all-media {
     position: relative;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    background:
+        radial-gradient(120% 90% at 0% 0%, rgba(250, 174, 23, 0.35), transparent 55%),
+        radial-gradient(120% 90% at 100% 100%, rgba(255, 27, 206, 0.4), transparent 55%),
+        linear-gradient(135deg, #2a0710, #1a0a1f) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.mega-card--all .mega-card-media img {
-    filter: brightness(0.45) saturate(0.8);
+.mega-card-all-count {
+    font-family: var(--display);
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    background: var(--gradient-tm26);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
-.mega-card-all-arrow {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
+.mega-card-all-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: var(--gradient-tm26);
     color: var(--white);
-    font-size: 2rem;
+    font-family: var(--tech);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     transition: transform var(--motion-fast) ease;
 }
 
-.mega-card--all:hover .mega-card-all-arrow {
-    transform: translateX(6px);
+.mega-card--all:hover .mega-card-all-cta {
+    transform: translateX(4px);
 }
 
-.mobile-mega-card--all img {
-    filter: brightness(0.45);
+.mobile-mega-all-thumb {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 60px;
+    border-radius: 10px;
+    background: var(--gradient-tm26);
+    color: var(--white);
+    font-family: var(--display);
+    font-size: 1.3rem;
+    font-weight: 700;
 }

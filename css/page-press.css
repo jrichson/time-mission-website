@@ -72,8 +72,11 @@ body.tm-resource-page {
 .tm-resource-tile h3,
 .tm-resource-empty h2,
 .tm-resource-release h2 {
-    font-family: var(--display, "Bebas Neue", sans-serif);
-    letter-spacing: 0;
+    font-family: var(--display);
+    text-transform: var(--display-case, none);
+    line-height: var(--display-leading, normal);
+    font-weight: var(--display-weight, 400);
+    letter-spacing: var(--display-tracking, 0.02em);
     text-wrap: balance;
 }
 
@@ -484,5 +487,187 @@ body.tm-resource-page {
 @media (prefers-reduced-motion: reduce) {
     .tm-resource-release-media img {
         transition: none;
+    }
+}
+
+/* ==========================================
+   Press / resource pages refresh (matches the v2 site)
+   ========================================== */
+.tm-resource-hero h1 {
+    max-width: 18ch !important;
+    font-size: clamp(1.8rem, 4vw, 3.4rem) !important;
+    line-height: 1.05 !important;
+}
+
+.tm-resource-section h2,
+.tm-resource-empty h2,
+.tm-resource-release h2 {
+    font-size: clamp(1.4rem, 2.6vw, 2.2rem) !important;
+    line-height: 1.1 !important;
+}
+
+.tm-resource-tile h3 {
+    font-size: clamp(1rem, 1.4vw, 1.2rem) !important;
+    line-height: 1.15 !important;
+}
+
+/* Buttons: same language as the rest of the site */
+.tm-resource-button,
+.tm-resource-secondary {
+    min-height: 48px;
+    padding: 0 1.75rem;
+    font-family: var(--tech);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.tm-resource-button {
+    background: var(--gradient-tm26) !important;
+    color: var(--white) !important;
+    box-shadow: 0 8px 24px var(--tm26-glow, rgba(238, 1, 50, 0.35)) !important;
+}
+
+.tm-resource-secondary {
+    position: relative;
+    isolation: isolate;
+    background: transparent !important;
+    border-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+.tm-resource-secondary::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.tm-resource-secondary:hover {
+    border-color: transparent !important;
+}
+
+.tm-resource-secondary:hover::before {
+    opacity: 1;
+}
+
+/* Sub-navigation: underline tabs, not pills */
+.tm-resource-subnav {
+    background: transparent !important;
+}
+
+.tm-resource-subnav-inner {
+    gap: 2rem !important;
+    padding-block: 0 !important;
+}
+
+.tm-resource-subnav a {
+    position: relative;
+    min-height: 56px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: none !important;
+    color: var(--gray-light) !important;
+    font-family: var(--tech);
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.14em;
+}
+
+.tm-resource-subnav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--gradient-tm26);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--motion-standard) ease;
+}
+
+.tm-resource-subnav a:hover,
+.tm-resource-subnav a[aria-current="page"] {
+    color: var(--white) !important;
+}
+
+.tm-resource-subnav a:hover::after,
+.tm-resource-subnav a[aria-current="page"]::after {
+    transform: scaleX(1);
+}
+
+/* Resource tiles: glass cards with a gradient top line and ring on hover */
+.tm-resource-tile {
+    position: relative;
+    isolation: isolate;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)) !important;
+    box-shadow: none !important;
+    transition: transform var(--motion-standard) ease !important;
+}
+
+.tm-resource-tile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 1.25rem;
+    right: 1.25rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--gradient-tm26);
+}
+
+.tm-resource-tile--link::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.tm-resource-tile--link:hover {
+    transform: translateY(-4px);
+}
+
+.tm-resource-tile--link:hover::after {
+    opacity: 1;
+}
+
+.tm-resource-tile > span {
+    color: var(--gray-light) !important;
+    font-family: var(--tech);
+    letter-spacing: 0.16em;
+}
+
+@media (max-width: 768px) {
+    .tm-resource-subnav-inner {
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        gap: 1.4rem !important;
+        scrollbar-width: none;
+    }
+
+    .tm-resource-subnav a {
+        flex: 0 0 auto;
+        min-height: 48px;
     }
 }

@@ -145,3 +145,12 @@
         transition: none;
     }
 }
+
+/* The missions carousel now follows the intro directly, so the two read as one section */
+.welcome--intro {
+    padding-bottom: 0 !important;
+}
+
+.welcome--intro + .experiences {
+    padding-top: clamp(2rem, 4vw, 3rem) !important;
+}

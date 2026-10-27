@@ -62,6 +62,7 @@
 
 .stats[data-stats-style="arcade-slots"] .stat-number {
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
     font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
@@ -130,6 +131,7 @@
 
 .stats[data-stats-style="counter-wheels"] .stat-number {
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
     font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
@@ -140,6 +142,7 @@
 
 .stats[data-stats-style="counter-wheels"] .stat-unit {
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
     font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
@@ -215,6 +218,7 @@
 
 .stats[data-stats-style="flip-cards"] .stat-number {
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
     font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
@@ -237,6 +241,7 @@
 
 .stats[data-stats-style="flip-cards"] .stat-back-title {
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
     font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);

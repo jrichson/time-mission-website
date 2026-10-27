@@ -30,6 +30,7 @@
     margin: 0;
     color: var(--white);
     font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
     text-transform: var(--display-case, none);
     line-height: var(--display-leading, normal);
     font-size: clamp(4.5rem, 10vw, 7rem);

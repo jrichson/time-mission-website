@@ -121,7 +121,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: 2rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 0.5rem;
         }
 
@@ -423,6 +423,7 @@
             border: none;
             border-radius: 50%;
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
     font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
@@ -441,6 +442,7 @@
 
 .step-title {
             font-family: var(--display);
+    letter-spacing: var(--display-tracking, 0.02em);
     font-weight: var(--display-weight, 400);
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
@@ -617,7 +619,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1rem;
         }
 

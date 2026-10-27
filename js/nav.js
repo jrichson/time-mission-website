@@ -660,6 +660,47 @@
         utilityHours.hidden = !utilityHours.textContent;
     }
 
+    // Mission Rewards: each venue's Roller account login. No venue (or none listed) opens the selector.
+    const ACCOUNT_LOGIN_URLS = {
+        manassas: 'https://book.manassas.timemission.com/onlinecheckout/en-us/login',
+        'mount-prospect': 'https://book.mountprospect.timemission.com/onlinecheckout/en-us/login',
+        'orland-park': 'https://book.orlandpark.timemission.com/onlinecheckout/en-us/login',
+        philadelphia: 'https://book.philadelphia.timemission.com/onlinecheckout/en-us/login',
+        houston: 'https://book.houston.timemission.com/onlinecheckout/en-us/login',
+    };
+
+    function accountLoginUrl() {
+        const loc = window.TM && window.TM.current;
+        return loc ? ACCOUNT_LOGIN_URLS[loc.slug || loc.id] || '' : '';
+    }
+
+    function syncAccountLinks() {
+        const url = accountLoginUrl();
+        document.querySelectorAll('[data-tm-account-link]').forEach(function (a) {
+            if (url) {
+                a.setAttribute('href', url);
+                a.setAttribute('target', '_blank');
+                a.setAttribute('rel', 'noopener');
+            } else {
+                a.setAttribute('href', '/locations');
+                a.removeAttribute('target');
+                a.removeAttribute('rel');
+            }
+        });
+    }
+
+    document.addEventListener('click', function (e) {
+        const link = e.target.closest && e.target.closest('[data-tm-account-link]');
+        if (!link || accountLoginUrl()) return;
+        const trigger = document.getElementById('utilityChange') || document.getElementById('utilityChoose');
+        if (!trigger) return;
+        e.preventDefault();
+        trigger.click();
+    });
+    document.addEventListener('tm:locations-ready', syncAccountLinks);
+    document.addEventListener('tm:location-changed', syncAccountLinks);
+    if (window.TM && window.TM.ready && typeof window.TM.ready.then === 'function') window.TM.ready.then(syncAccountLinks);
+
     // Mega-menu mission pools: show a random three each visit (server renders the first three).
     document.querySelectorAll('[data-mega-random]').forEach(function (group) {
         const count = parseInt(group.getAttribute('data-mega-random'), 10) || 3;
@@ -925,8 +966,9 @@
             tag.textContent = translate('location.nearest', 'Nearest');
             const oldTag = locationOverlay.querySelector('.location-nearest-tag');
             if (oldTag) oldTag.remove();
+            // Sits beside the distance (right side), not after the name, so long names don't push it around
             const label = nearest.link.querySelector('.location-link-label');
-            if (label) label.appendChild(tag);
+            if (label) label.after(tag);
             // Nothing chosen yet: phones pick the nearest venue for the visitor; desktop previews it.
             const current = window.TM && window.TM.current;
             if (forcePick || (!current && narrowPickerQuery.matches)) {

@@ -26,7 +26,7 @@
     line-height: var(--display-leading, normal);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: var(--display-weight, 400);
-    letter-spacing: 0.02em;
+    letter-spacing: var(--display-tracking, 0.02em);
     text-transform: uppercase;
     color: var(--white);
     margin: 0.5rem auto 1.25rem;
@@ -247,7 +247,7 @@
     line-height: var(--display-leading, normal);
     font-size: 2.4rem;
     font-weight: var(--display-weight, 400);
-    letter-spacing: 0.02em;
+    letter-spacing: var(--display-tracking, 0.02em);
     line-height: 1;
     margin-bottom: 0.75rem;
 }
@@ -705,3 +705,8 @@
         margin: 0.75rem 0 1.25rem;
     }
 }
+
+/* Status / Nearest sit right-aligned, just left of the distance */
+.location-overlay-left .location-group a > .location-nearest-tag { order: 1; flex-shrink: 0; }
+.location-overlay-left .location-group a > .coming-soon-tag { flex-shrink: 0; }
+.location-overlay-left .location-link-label { min-width: 0; }

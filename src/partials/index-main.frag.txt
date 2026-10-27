@@ -46,26 +46,6 @@
             <p class="intro-lede" data-i18n="home.about.lede">A real-life video game where every door opens a new challenge. Your ticket unlocks all 25+ missions, so chase high scores, try new ones and replay your favorites.</p>
             <a href="/about" class="btn-secondary" data-i18n="home.about.learn">Learn About Time Mission</a>
         </div>
-        <div class="intro-shots reveal">
-                <figure class="intro-shot">
-                    <picture>
-                        <source srcset="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1-800.webp 800w, /assets/photos/experiences/Time-Mission-Magma-Mayhem-1-1200.webp 1200w" sizes="(max-width: 768px) 80vw, 33vw" type="image/webp">
-                        <img src="/assets/photos/experiences/Time-Mission-Magma-Mayhem-1-800.webp" alt="Players racing across a lit-up floor grid in a Time Mission room" width="800" height="533" loading="lazy" decoding="async">
-                    </picture>
-                </figure>
-                <figure class="intro-shot">
-                    <picture>
-                        <source srcset="/assets/photos/experiences/_Time-Mission_0450-800.webp 800w, /assets/photos/experiences/_Time-Mission_0450-1200.webp 1200w" sizes="(max-width: 768px) 80vw, 33vw" type="image/webp">
-                        <img src="/assets/photos/experiences/_Time-Mission_0450-800.webp" alt="Two players working a mission challenge together at Time Mission" width="800" height="533" loading="lazy" decoding="async">
-                    </picture>
-                </figure>
-                <figure class="intro-shot">
-                    <picture>
-                        <source srcset="/assets/photos/experiences/Time-Mission_Big-Bang-800.webp 800w, /assets/photos/experiences/Time-Mission_Big-Bang-1200.webp 1200w" sizes="(max-width: 768px) 80vw, 33vw" type="image/webp">
-                        <img src="/assets/photos/experiences/Time-Mission_Big-Bang-800.webp" alt="A team aiming at targets in a glowing Time Mission room" width="800" height="533" loading="lazy" decoding="async">
-                    </picture>
-                </figure>
-        </div>
         <div class="intro-more">
             <details class="geo-disclosure welcome-geo-disclosure">
                     <summary data-i18n="home.about.summary">Read the full Time Mission overview</summary>
@@ -79,66 +59,8 @@
         </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="stats-grid">
-            <div class="stat-card reveal">
-                <div class="stat-icon">
-                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                        <path d="M3 9h18M9 21V9"/>
-                    </svg>
-                </div>
-                <div class="stat-number">25+</div>
-                <div class="stat-label" data-i18n="home.stats.missionRooms">Mission Rooms</div>
-            </div>
-            <div class="stat-card reveal">
-                <div class="stat-icon">
-                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12,6 12,12 16,14"/>
-                    </svg>
-                </div>
-                <div class="stat-number stat-minutes">
-                    <span class="minutes-counter" id="minutesCounter">60</span>
-                </div>
-                <div class="stat-label" data-i18n="home.stats.minutes">Minutes of Play</div>
-            </div>
-            <div class="stat-card reveal">
-                <div class="stat-icon">
-                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                </div>
-                <div class="stat-number">2<span class="stat-range-separator">-</span>5</div>
-                <div class="stat-label" data-i18n="home.stats.players">Players Per Team</div>
-            </div>
-            <div class="stat-card reveal">
-                <div class="stat-icon">
-                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    </svg>
-                </div>
-                <div class="stat-number stat-points-wrap" id="pointsWrap">
-                    <span class="points-counter" id="pointsCounter">0</span>
-                </div>
-                <div class="stat-label" data-i18n="home.stats.points">Collect Points!</div>
-            </div>
-        </div>
-        <a href="/about" class="btn-secondary welcome-learn-mobile" data-i18n="home.about.learn">Learn About Time Mission</a>
-    </section>
-
     <!-- Experiences Section -->
     <section class="experiences" id="experiences">
-        <div class="experiences-header reveal">
-            <div class="section-badge" data-i18n="home.missions.badge">THE MISSIONS</div>
-            <h2 class="section-title" data-i18n="home.missions.title">Unlimited Ways to Play</h2>
-            <p class="welcome-text u-measure-sm-centered" data-i18n="home.missions.intro">From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find&nbsp;out.</p>
-        </div>
-
         <div class="experiences-scroll" id="experiencesScroll">
             <div class="experience-card">
                 <picture><source srcset="/assets/photos/experiences/Time-Mission_Glitch-Matrix-480.webp 480w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-800.webp 800w, /assets/photos/experiences/Time-Mission_Glitch-Matrix-1200.webp 1200w, /assets/photos/experiences/Time-Mission_Glitch-Matrix.webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" type="image/webp"><img src="/assets/photos/experiences/Time-Mission_Glitch-Matrix.jpg" alt="Glitch Matrix" width="1920" height="1280" loading="lazy" fetchpriority="low" decoding="async"></picture>
@@ -314,6 +236,58 @@
         <div class="experiences-nav-mobile">
             <a href="/missions" class="btn-secondary" data-i18n="home.missions.viewAllMissions">View All Missions</a>
         </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <path d="M3 9h18M9 21V9"/>
+                    </svg>
+                </div>
+                <div class="stat-number">25+</div>
+                <div class="stat-label" data-i18n="home.stats.missionRooms">Mission Rooms</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                </div>
+                <div class="stat-number stat-minutes">
+                    <span class="minutes-counter" id="minutesCounter">60</span>
+                </div>
+                <div class="stat-label" data-i18n="home.stats.minutes">Minutes of Play</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="stat-number">2<span class="stat-range-separator">-</span>5</div>
+                <div class="stat-label" data-i18n="home.stats.players">Players Per Team</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </div>
+                <div class="stat-number stat-points-wrap" id="pointsWrap">
+                    <span class="points-counter" id="pointsCounter">0</span>
+                </div>
+                <div class="stat-label" data-i18n="home.stats.points">Collect Points!</div>
+            </div>
+        </div>
+        <a href="/about" class="btn-secondary welcome-learn-mobile" data-i18n="home.about.learn">Learn About Time Mission</a>
     </section>
 
     <!-- Groups & Parties CTA -->

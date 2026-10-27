@@ -1,0 +1,160 @@
+/* ==========================================
+   GROUPS & PARTIES CTA (homepage + venue pages)
+   Photo and copy side by side; event types as tiles with the gradient ring.
+   Loaded late in core so it overrides the older overlapping-card layout.
+   ========================================== */
+
+section.groups-cta {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: clamp(4rem, 7vw, 6.5rem) clamp(1.25rem, 3vw, 2rem) !important;
+    background: none !important;
+    min-height: 0 !important;
+}
+
+section.groups-cta::before,
+section.groups-cta::after {
+    display: none !important;
+}
+
+section.groups-cta .groups-cta-photo {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 460px;
+    margin: 0 !important;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+section.groups-cta .groups-cta-photo::after {
+    display: none !important;
+}
+
+section.groups-cta .groups-cta-photo picture,
+section.groups-cta .groups-cta-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
+section.groups-cta .groups-cta-card {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    max-width: none !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    text-align: left !important;
+}
+
+section.groups-cta .section-badge {
+    justify-content: flex-start;
+}
+
+section.groups-cta .welcome-text {
+    max-width: 34rem;
+    margin: 0 0 1.75rem !important;
+    text-align: left !important;
+}
+
+/* Event types: 3 x 2 tiles */
+section.groups-cta .groups-event-types {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem !important;
+    margin: 0 0 2rem !important;
+    max-width: none !important;
+}
+
+section.groups-cta .groups-event-type {
+    position: relative;
+    isolation: isolate;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.65rem !important;
+    min-height: 54px;
+    padding: 0.75rem 0.9rem !important;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    color: var(--white) !important;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-align: left;
+    transition: background var(--motion-fast) ease, transform var(--motion-fast) ease;
+}
+
+section.groups-cta .groups-event-type svg {
+    width: 20px !important;
+    height: 20px !important;
+    flex-shrink: 0;
+    color: var(--white) !important;
+    opacity: 0.85;
+}
+
+section.groups-cta .groups-event-type::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-fast) ease;
+    pointer-events: none;
+}
+
+section.groups-cta .groups-event-type:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-2px);
+}
+
+section.groups-cta .groups-event-type:hover::before {
+    opacity: 1;
+}
+
+section.groups-cta .groups-cta-buttons {
+    justify-content: flex-start !important;
+}
+
+@media (max-width: 900px) {
+    section.groups-cta {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+
+    section.groups-cta .groups-cta-photo {
+        min-height: 0;
+        height: 210px !important;
+        border-radius: 18px;
+    }
+
+    section.groups-cta .groups-event-types {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    section.groups-cta .groups-event-type {
+        min-height: 46px;
+        font-size: 0.8rem;
+    }
+}

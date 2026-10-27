@@ -29,7 +29,7 @@
     font-size: clamp(2rem, 4vw, 3.25rem);
     font-weight: var(--display-weight, 400);
     line-height: 1;
-    letter-spacing: 0.01em;
+    letter-spacing: var(--display-tracking, 0.02em);
     text-transform: uppercase;
     color: var(--white);
 }
@@ -168,8 +168,7 @@
         gap: 0.6rem;
     }
 
-    .footer-signup-fields input,
-    .footer-signup-fields input[type="text"] {
+    .footer-signup-fields input {
         flex: none;
         width: 100%;
         box-sizing: border-box;
@@ -209,4 +208,20 @@
    (coming-soon pages keep theirs, it's their main call to action) */
 .newsletter-section:not([data-tm-newsletter-visible]) {
     display: none !important;
+}
+
+/* Social icons: TM26 gradient on hover instead of orange */
+@media (hover: hover) {
+    .footer-social a:hover {
+        color: var(--white);
+    }
+
+    .footer-social a:hover svg[fill="currentColor"],
+    .footer-social a:hover svg [fill="currentColor"] {
+        fill: url(#tm26-icon-gradient);
+    }
+
+    .footer-social a:hover svg[stroke="currentColor"] {
+        stroke: url(#tm26-icon-gradient);
+    }
 }

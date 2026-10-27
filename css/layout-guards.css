@@ -28,10 +28,37 @@
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
 }
 
+/* Mission cards: crisp TM26 gradient ring and a soft brand glow below, instead of an orange haze */
+.experience-card {
+    isolation: isolate;
+}
+
+.experience-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: var(--gradient-tm26);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--motion-standard) ease;
+    pointer-events: none;
+}
+
+.experience-card:hover::after,
+.experience-card:focus-within::after {
+    opacity: 1;
+}
+
 .experience-card:hover {
     box-shadow:
-        0 18px 42px rgba(0, 0, 0, 0.45),
-        0 0 28px rgba(255, 107, 44, 0.18) !important;
+        0 24px 48px -12px rgba(0, 0, 0, 0.7),
+        0 18px 40px -18px rgba(238, 1, 50, 0.55),
+        0 10px 50px -20px rgba(255, 27, 206, 0.45) !important;
 }
 
 .hero,

@@ -114,11 +114,11 @@ const fallbackTickerI18n = locationTickerI18n || (fallbackTickerMessage && 'text
 const fallbackTickerBehavior: TickerBehavior = locationTickerMessage ? 'auto' : 'animated';
 const fallbackTickerSource = locationTickerMessage ? 'location' : 'default';
 
-// Account links are placeholders until the booking/account provider is wired up.
+// Mission Rewards links go to the selected venue's Roller login (set in nav.js); with no venue they open the selector.
 const accountLinks = [
-    { label: 'Edit Account', i18n: 'utility.editAccount', href: '#account', icon: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>' },
-    { label: 'Manage Tickets', i18n: 'utility.manageTickets', href: '#tickets', icon: '<path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 5v14" stroke-dasharray="2 2"/>' },
-    { label: 'Rewards', i18n: 'utility.rewards', href: '#rewards', icon: '<path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8-4.3-4.1 5.9-.9z"/>' },
+    { label: 'Edit Account', i18n: 'utility.editAccount', href: '/locations', icon: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>' },
+    { label: 'Manage Tickets', i18n: 'utility.manageTickets', href: '/locations', icon: '<path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 5v14" stroke-dasharray="2 2"/>' },
+    { label: 'Rewards', i18n: 'utility.rewards', href: '/locations', icon: '<path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8-4.3-4.1 5.9-.9z"/>' },
 ];
 
 
@@ -199,7 +199,7 @@ import { megaMenus } from '../lib/mega-menus';
                 <ul class="utility-account-menu" id="utilityAccountMenu" hidden>
                     {accountLinks.map((link) => (
                         <li>
-                            <a href={link.href}>
+                            <a href={link.href} data-tm-account-link data-tm-no-location-scope>
                                 <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={link.icon}></svg>
                                 <span data-i18n={link.i18n}>{link.label}</span>
                             </a>
@@ -250,7 +250,7 @@ import { megaMenus } from '../lib/mega-menus';
                                     ))}
                                     {mega.viewAll && (
                                         <a class="mega-card mega-card--all" href={mega.viewAll.href}>
-                                            <span class="mega-card-media"><img src={mega.viewAll.img} alt="" width="480" height="320" loading="lazy" decoding="async" /><span class="mega-card-all-arrow" aria-hidden="true">→</span></span>
+                                            <span class="mega-card-media mega-card-all-media"><span class="mega-card-all-count">25+</span><span class="mega-card-all-cta">View all missions <span aria-hidden="true">→</span></span></span>
                                             <span class="mega-card-title">{mega.viewAll.title}</span>
                                             <span class="mega-card-text">{mega.viewAll.text}</span>
                                         </a>

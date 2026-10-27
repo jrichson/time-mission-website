@@ -80,7 +80,7 @@
             line-height: var(--display-leading, normal);
             font-size: clamp(3rem, 7vw, 5.5rem);
             line-height: 1;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin-bottom: 1.5rem;
             text-wrap: balance;
@@ -125,7 +125,7 @@
             line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.05;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             color: var(--white);
             margin: 0 0 1rem;
         }
@@ -394,7 +394,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: 2rem;
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 0.5rem;
             line-height: 1;
         }
@@ -582,7 +582,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: clamp(2.5rem, 5vw, 4rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1rem;
         }
 

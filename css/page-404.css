@@ -65,7 +65,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: clamp(2rem, 5vw, 3.25rem);
-            letter-spacing: 0.02em;
+            letter-spacing: var(--display-tracking, 0.02em);
             margin-bottom: 1rem;
             line-height: 1.1;
         }
@@ -98,7 +98,7 @@
             text-transform: var(--display-case, none);
             line-height: var(--display-leading, normal);
             font-size: 1rem;
-            letter-spacing: 0.06em;
+            letter-spacing: var(--display-tracking, 0.02em);
             text-transform: uppercase;
             text-decoration: none;
             border-radius: 100px;
