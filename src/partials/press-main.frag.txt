@@ -1,6 +1,6 @@
     <section class="tm-resource-hero tm-resource-hero--compact tm-press-head">
         <div class="tm-resource-shell tm-resource-hero-copy">
-            <h1><span class="tm-press-brand">Time Mission</span> Press Room</h1>
+            <h1><img class="tm-press-logo" src="/assets/logo/time-mission-horizontal-white.svg" alt="Time Mission" width="1920" height="516" decoding="async"><span class="tm-press-title">Press Room</span></h1>
             <p>Official news, images, logo files, and media contacts in one place.</p>
         </div>
     </section>

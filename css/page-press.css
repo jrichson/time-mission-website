@@ -1130,3 +1130,28 @@ body.tm-resource-page {
 .tm-resource-release--card h2 {
     text-wrap: pretty;
 }
+
+/* ---- Round 4: horizontal logo lockup, card spacing ---- */
+.tm-press-logo {
+    display: block;
+    width: clamp(220px, 34vw, 420px);
+    height: auto;
+    margin: 0 auto 1rem;
+}
+
+.tm-press-title {
+    display: block;
+}
+
+.tm-press-block-head + .tm-resource-card-grid,
+.tm-press-block-head + .tm-resource-release-list {
+    margin-top: 1.75rem !important;
+}
+
+.tm-press-block .tm-resource-card-grid {
+    padding-top: 1.75rem !important;
+}
+
+.tm-resource-page .tm-resource-hero h1 .tm-press-logo {
+    margin-bottom: 0.4rem;
+}

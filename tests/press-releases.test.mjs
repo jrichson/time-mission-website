@@ -51,7 +51,7 @@ describe('press releases page', () => {
     expect(page).toContain('blogPostShowsInPressRoom');
     expect(page).toContain('press-releases.json');
     expect(page).toContain('pressReleases.map');
-    expect(page).toContain('/css/page-press.css?v=4');
+    expect(page).toContain('/css/page-press.css?v=5');
     expect(page).toContain('PressResourceCard');
     expect(page).toContain('!blogPostIsExternal(post)');
     expect(card).toContain('tm-resource-release-media');
