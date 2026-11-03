@@ -1,6 +1,6 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
-import { locationShowsComingSoon } from '../lib/location-status';
+import { locationOpeningLabel, locationOpeningLabelI18nKey, locationShowsComingSoon } from '../lib/location-status';
 import { allLocations } from '../data/locations';
 import {
     locationsForRegion,
@@ -31,12 +31,18 @@ function statusLabel(loc: (typeof allLocations)[number]) {
 
 function selectorBadge(loc: (typeof allLocations)[number]) {
     if (loc.slug === 'eindhoven') return 'NOW OPEN';
-    if (loc.slug === 'dallas' && activeSiteProfile.id === 'us') return 'Opening Soon';
+    if (loc.slug === 'dallas' && activeSiteProfile.id === 'us') return locationOpeningLabel(loc) || 'Opening Soon';
     if (loc.status === 'temporarily-closed'
         && (activeSiteProfile.id === 'us' || loc.region === 'europe')) {
         return statusLabel(loc);
     }
     return '';
+}
+
+function selectorBadgeI18n(loc: (typeof allLocations)[number]) {
+    if (loc.slug === 'eindhoven') return 'location.nowOpen';
+    if (loc.slug === 'dallas') return locationOpeningLabelI18nKey(loc) || 'location.openingSoon';
+    return undefined;
 }
 
 function statusClass(loc: (typeof allLocations)[number]) {
@@ -83,7 +89,7 @@ function locationLabelI18n(loc: (typeof allLocations)[number]) {
                     >
                         <span><span data-i18n={locationLabelI18n(loc)}>{locationListLabel(loc)}</span>{locationShowsComingSoon(loc) && '*'}</span>
                         {badge && (
-                            <span class="coming-soon-tag" data-i18n={loc.slug === 'eindhoven' ? 'location.nowOpen' : loc.slug === 'dallas' ? 'location.openingSoon' : undefined}>
+                            <span class="coming-soon-tag" data-i18n={selectorBadgeI18n(loc)}>
                                 {' '}{badge}
                             </span>
                         )}

@@ -45,6 +45,11 @@ export function locationOpeningLabel(loc: Pick<LocationRecord, 'openingDate' | '
     return `Opening ${monthNames[Number(match[2]) - 1]} ${Number(match[3])}, ${match[1]}`;
 }
 
+// Translations live under location.opening.<slug> in i18n.json.
+export function locationOpeningLabelI18nKey(loc: Pick<LocationRecord, 'openingDate' | 'openingLabel' | 'slug'>): string {
+    return locationOpeningLabel(loc) ? `location.opening.${loc.slug}` : '';
+}
+
 export function locationOpeningDateText(loc: Pick<LocationRecord, 'openingDate' | 'openingLabel'>): string {
     return locationOpeningLabel(loc).replace(/^Opening\s+/i, '');
 }

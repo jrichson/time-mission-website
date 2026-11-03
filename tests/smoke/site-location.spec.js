@@ -88,7 +88,7 @@ test('US location selector shows only the Dallas and Eindhoven callouts', async 
     .evaluateAll((links) => links.map((link) => link.getAttribute('data-tm-location-slug')));
 
   expect([...badgeSlugs].sort()).toEqual(['dallas', 'eindhoven']);
-  await expect(page.locator('#locationDropdown a[data-tm-location-slug="dallas"] .coming-soon-tag')).toHaveText('Opening Soon');
+  await expect(page.locator('#locationDropdown a[data-tm-location-slug="dallas"] .coming-soon-tag')).toHaveText('Opening Nov 13th');
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"] .coming-soon-tag')).toHaveText('NOW OPEN');
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]')).toHaveClass(/location-open-now/);
 });
