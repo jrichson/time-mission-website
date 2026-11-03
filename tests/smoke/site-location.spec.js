@@ -190,6 +190,20 @@ test('US locations omit tickers after runtime initialization and schedule refres
   }
 });
 
+test('Dallas pages show the opening-date ticker on the US site', async ({ page }) => {
+  for (const path of ['/dallas', '/dallas/signup', '/dallas/educators']) {
+    await page.goto(path);
+    await page.evaluate(async () => {
+      await window.TM.ready;
+      window.TMTickerSchedule?.refresh(new Date('2026-11-05T00:00:00Z'));
+    });
+    await expect(page.locator('.ticker-bar .ticker-item').first()).toHaveText('DALLAS OPENING NOV 13TH');
+    await expect(page.locator('#nav')).not.toHaveClass(/nav--no-ticker/);
+  }
+  await page.goto('/es/dallas');
+  await expect(page.locator('.ticker-bar .ticker-item').first()).toHaveText('DALLAS ABRE EL 13 DE NOV.');
+});
+
 test('desktop location selector hands Brussels off to the EU site', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop-only overlay path');
 

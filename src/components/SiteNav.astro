@@ -22,6 +22,7 @@ interface Props {
     bookingCtaRollerCheckout?: { url: string; locationSlug: string } | null;
     locationTicker?: string;
     locationTickerI18n?: string;
+    tickerEnabled?: boolean;
 }
 
 const {
@@ -35,6 +36,7 @@ const {
     bookingCtaRollerCheckout = null,
     locationTicker = '',
     locationTickerI18n = '',
+    tickerEnabled = true,
 } = Astro.props;
 const bookingCtaAttrs = {
     ...(bookingCtaIsBookingTrigger ? { 'data-tm-booking-trigger': '', 'data-tm-booking-kind': 'tickets' } : {}),
@@ -99,7 +101,7 @@ const tickerIsStatic = Boolean(
         (activeTickerBehavior === 'auto' && tickerMessageCanBeStatic(activeTickerMessage))
     ),
 );
-const tickerMessages: TickerMessage[] = activeSiteProfile.id === 'us' ? [] : activeTickerMessage
+const tickerMessages: TickerMessage[] = !tickerEnabled ? [] : activeTickerMessage
     ? tickerIsStatic
         ? [activeTickerMessage]
         : Array.from({ length: tickerCycles }, () => activeTickerMessage)
