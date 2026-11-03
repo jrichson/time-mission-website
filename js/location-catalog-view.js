@@ -66,7 +66,9 @@
 
     function comingSoonLabelForLocation(loc) {
         var openingLabel = openingLabelForLocation(loc);
-        if (openingLabel && openingLabel.toLowerCase() !== 'coming soon') return openingLabel;
+        if (openingLabel && openingLabel.toLowerCase() !== 'coming soon') {
+            return translate('location.opening.' + normalizeLocation(loc.slug || loc.id), openingLabel);
+        }
         return translate('location.comingSoon', openingLabel || 'Coming Soon');
     }
 

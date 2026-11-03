@@ -1,5 +1,5 @@
 ---
-import { locationShowsComingSoon } from '../lib/location-status';
+import { locationOpeningLabel, locationOpeningLabelI18nKey, locationShowsComingSoon } from '../lib/location-status';
 /**
  * Full-width footer matching the shared `footer-grid` page treatment.
  * Canonical site footer rendered by SiteLayout.
@@ -64,11 +64,14 @@ function hoursFallbackI18nForLocation(loc: LocationRecord | null): string {
     if (!loc) return '';
     const status = locationStatusBadge(loc);
     if (status === 'Coming Soon') return 'location.comingSoon';
+    if (status && status === locationOpeningLabel(loc)) return locationOpeningLabelI18nKey(loc);
     return status ? '' : 'location.hoursComingSoon';
 }
 
-function statusBadgeI18n(statusLabel: string): string | undefined {
-    return statusLabel === 'Coming Soon' ? 'location.comingSoon' : undefined;
+function statusBadgeI18n(loc: LocationRecord, statusLabel: string): string | undefined {
+    if (statusLabel === 'Coming Soon') return 'location.comingSoon';
+    if (statusLabel === locationOpeningLabel(loc)) return locationOpeningLabelI18nKey(loc) || undefined;
+    return undefined;
 }
 
 function euFooterI18nKey(loc: LocationRecord | null, prefix: string): string | undefined {
@@ -172,7 +175,7 @@ const hasPageLocation = Boolean(pageLocation);
                                         rel={locationHrefIsExternal(loc) ? 'noopener' : undefined}
                                     >
                                         <span><span data-i18n={euFooterI18nKey(loc, 'footer.location')}>{locationListLabel(loc)}</span>{locationShowsComingSoon(loc) && '*'}</span>{' '}
-                                        {statusLabel && <span class="coming-soon-tag" data-i18n={statusBadgeI18n(statusLabel)}>{statusLabel}</span>}
+                                        {statusLabel && <span class="coming-soon-tag" data-i18n={statusBadgeI18n(loc, statusLabel)}>{statusLabel}</span>}
                                     </a>
                                 );
                             })}

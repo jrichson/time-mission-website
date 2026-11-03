@@ -1,6 +1,7 @@
 ---
 import { allLocations } from '../data/locations';
 import { locationListLabel } from '../lib/location-list';
+import { locationOpeningLabel, locationOpeningLabelI18nKey } from '../lib/location-status';
 import { locationTeamSizeLabel } from '../lib/location-team-size';
 import { ticketPanelSelectOptions } from '../lib/site-contract';
 import { activeSiteProfile } from '../lib/site-profile';
@@ -29,13 +30,22 @@ function ticketLocationI18n(value: string) {
     return location?.region === 'europe' ? `footer.location.${location.slug}` : undefined;
 }
 
-function ticketStatusI18n(label: string) {
-    return /\(Coming Soon\)\s*$/.test(label) ? 'location.comingSoon' : undefined;
+function labelIsComingSoon(label: string) {
+    return /\(Coming Soon\)\s*$/.test(label);
+}
+
+function ticketStatusI18n(value: string, label: string) {
+    if (labelIsComingSoon(label)) return 'location.comingSoon';
+    const location = ticketLocations.get(value);
+    if (location && label.endsWith(`(${locationOpeningLabel(location)})`)) {
+        return locationOpeningLabelI18nKey(location) || undefined;
+    }
+    return undefined;
 }
 
 function ticketOptionBaseLabel(value: string, label: string) {
     const location = ticketLocations.get(value);
-    return ticketStatusI18n(label) && location ? locationListLabel(location) : label;
+    return labelIsComingSoon(label) && location ? locationListLabel(location) : label;
 }
 ---
 
@@ -69,14 +79,14 @@ function ticketOptionBaseLabel(value: string, label: string) {
                 <select id="ticketLocation">
                     <option value="" data-i18n="booking.locationPlaceholder">Select a location</option>
                     {ticketOptions.map((opt) => {
-                        const statusI18n = ticketStatusI18n(opt.label);
+                        const statusI18n = ticketStatusI18n(opt.value, opt.label);
                         return (
                             <option
                                 value={opt.value}
                                 data-i18n={ticketLocationI18n(opt.value)}
                                 data-i18n-status={statusI18n}
                             >
-                                {ticketOptionBaseLabel(opt.value, opt.label)}{statusI18n ? ' (Coming Soon)' : ''}
+                                {ticketOptionBaseLabel(opt.value, opt.label)}{labelIsComingSoon(opt.label) ? ' (Coming Soon)' : ''}
                             </option>
                         );
                     })}

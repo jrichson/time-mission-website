@@ -72,13 +72,24 @@ const sitePageHead = landingHead ? null : sitePageHeadForDoc(await getPublishedS
 const pageLocation = bodyDataLocation
     ? allLocations.find((loc) => loc.id === bodyDataLocation || loc.slug === bodyDataLocation)
     : null;
-const locationTickerI18n = activeSiteProfile.id === 'eu' && pageLocation?.region === 'europe'
-    ? `ticker.location.${pageLocation.slug}`
+// The US site hides the ticker except on these locations' pages and subpages.
+const usTickerLocationSlugs = new Set(['dallas']);
+const pathLocationSlug = canonicalPath.split('/')[1] || '';
+const usTickerLocation = activeSiteProfile.id === 'us'
+    ? [pageLocation?.slug, pathLocationSlug]
+        .filter((slug): slug is string => Boolean(slug) && usTickerLocationSlugs.has(slug as string))
+        .map((slug) => allLocations.find((loc) => loc.slug === slug))
+        .find(Boolean) ?? null
+    : null;
+const tickerLocation = usTickerLocation || pageLocation;
+const tickerEnabled = activeSiteProfile.id !== 'us' || Boolean(usTickerLocation);
+const locationTickerI18n = (activeSiteProfile.id === 'eu' && tickerLocation?.region === 'europe') || usTickerLocation
+    ? `ticker.location.${tickerLocation?.slug}`
     : '';
 const announcementBanner = announcementBannerViewForDoc(
     selectAnnouncementBanner(await getPublishedAnnouncementBanners(), {
-        locationSlug: pageLocation?.slug,
-        region: pageLocation?.region,
+        locationSlug: tickerLocation?.slug,
+        region: tickerLocation?.region,
     }),
 );
 const loadsBriqWidget = pageLocation?.bookingProvider === 'briq' && !!pageLocation.briqWidget;
@@ -169,8 +180,9 @@ const rendersGtmNoscript = activeSiteProfile.consentProfile === 'us_open' && Boo
                     bookingCtaI18n={bookingCtaI18n}
                     bookingCtaSignupFormId={bookingCtaSignupFormId}
                     bookingCtaRollerCheckout={bookingCtaRollerCheckout}
-                    locationTicker={pageLocation?.ticker}
+                    locationTicker={tickerLocation?.ticker}
                     locationTickerI18n={locationTickerI18n}
+                    tickerEnabled={tickerEnabled}
                 />
                 <LocationOverlay currentLang={lang} />
             </slot>
