@@ -6,6 +6,7 @@ export const GROUP_INQUIRY_LOCATION_SLUGS = [
     'orland-park',
     'houston',
     'philadelphia',
+    'dallas',
 ] as const;
 
 type GroupInquiryLocationSlug = (typeof GROUP_INQUIRY_LOCATION_SLUGS)[number];
@@ -23,6 +24,17 @@ export type JotformGroupFormConfig = {
 };
 
 const JOTFORM_GROUP_FORM_CONFIGS: Record<GroupInquiryLocationSlug, JotformGroupFormConfig> = {
+    dallas: {
+        formId: '263074857864168',
+        executionTrackerBuildDate: '1793830688768',
+        buildDate: '1793830688768',
+        pipedriveLocationValue: 'Dallas',
+        dealTitlePrefix: 'DAL',
+        specialistPhone: {
+            display: '469-722-0900',
+            href: 'tel:+14697220900',
+        },
+    },
     manassas: {
         formId: '261936424348059',
         executionTrackerBuildDate: '1784236513760',

@@ -1,3 +1,4 @@
+import { DALLAS_GROUP_FORM_SNAPSHOT } from '../cms/migration-data/20261104_dallas_group_form_snapshot';
 import { EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20261010_eindhoven_direct_checkout_snapshot';
 import { EINDHOVEN_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20261016_eindhoven_now_open_snapshot';
 import { EDISON_HOURS_SNAPSHOT } from '../cms/migration-data/20261019_edison_hours_snapshot';
@@ -88,7 +89,7 @@ describe('live-site-to-CMS sync snapshot', () => {
             EU_LOCATION_OPERATIONAL_SNAPSHOT.map((location) => [location.slug, location]),
         );
         const groupFormPatches = new Map(
-            HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT.map((location) => [location.slug, {
+            [...HOUSTON_PHILADELPHIA_JOTFORM_ROUTES_SNAPSHOT, DALLAS_GROUP_FORM_SNAPSHOT].map((location) => [location.slug, {
                 groupFormUrls: location.groupFormUrls,
             }]),
         );
@@ -322,6 +323,7 @@ describe('live-site-to-CMS sync snapshot', () => {
         expect(migrationIndex).toContain('20260810_090000_houston_philadelphia_jotform_routes');
         expect(migrationIndex).toContain('20260810_170000_houston_philadelphia_roller_routes');
         expect(migrationIndex).toContain('20260901_090000_houston_philadelphia_jotform_reactivation');
+        expect(migrationIndex).toContain('20261104_090000_dallas_group_form');
         expect(migrationIndex).toContain('20260811_210000_houston_back_to_school_pages');
         expect(temporaryRollerMigration).toContain('location.previousGroupFormUrl');
         expect(temporaryRollerMigration).toContain('await writeGroupFormUrls(db, false)');
