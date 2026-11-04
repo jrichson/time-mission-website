@@ -288,7 +288,7 @@ describe('Klaviyo backup forms', () => {
       if (String(loc.signupFormId || '').trim()) referenced.add(loc.signupFormId.trim());
     }
     expect([...referenced].sort()).toEqual(
-      expect.arrayContaining(['QYqsMS', 'SmY6Us', 'TwcrHA', 'TzbcnW', 'WC5BHF', 'WKi36B', 'XmbdNb', 'YAhjX2', 'YsG3eB']),
+      expect.arrayContaining(['SmY6Us', 'TwcrHA', 'TzbcnW', 'WC5BHF', 'WKi36B', 'XmbdNb', 'YAhjX2', 'YsG3eB']),
     );
     for (const formId of referenced) {
       expect(KLAVIYO_FORMS, `Klaviyo form ${formId} needs a backup entry`).toHaveProperty(formId);

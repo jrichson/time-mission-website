@@ -11,6 +11,21 @@ function read(relativePath) {
 }
 
 describe('location campaign pages', () => {
+  it('retires the Dallas free-ticket page while keeping paid booking and the opening date', () => {
+    const routes = JSON.parse(read('src/data/routes.json'));
+    const dallas = JSON.parse(read('data/locations.json')).locations.find((location) => location.slug === 'dallas');
+    expect(fs.existsSync(path.join(root, 'src/pages/dallas/signup.astro'))).toBe(false);
+    expect(routes.routes.some((route) => route.canonicalPath === '/dallas/signup')).toBe(false);
+    expect(dallas.signupUrl).toBeUndefined();
+    expect(dallas.bookingUrl).toBe('https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products');
+    expect(dallas.openingLabel).toBe('Opening Nov 13th');
+    for (const source of ['/dallas/signup', '/dallas/signup/', '/dallas/signup.html']) {
+      expect(routes.aliases).toContainEqual({ source, target: '/dallas', status: 301 });
+      expect(read('_redirects')).toContain(`${source} /dallas 301`);
+    }
+    expect(read('cms/migrations/20261104_090000_retire_dallas_signup.ts')).toContain('SET "published" = false');
+  });
+
   it('retires every School Night page to its location homepage', () => {
     const routes = JSON.parse(read('src/data/routes.json'));
     const redirects = read('_redirects');

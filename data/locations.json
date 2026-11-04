@@ -1105,8 +1105,7 @@
         "email": ""
       },
       "hours": {},
-      "bookingUrl": "",
-      "signupUrl": "/dallas/signup",
+      "bookingUrl": "https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products",
       "navLabel": "TX – Dallas",
       "mapUrl": "https://maps.google.com/?q=5307+E.+Mockingbird+Ln+Suite+200+%26+201+Dallas+TX+75206",
       "faqs": [],

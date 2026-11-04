@@ -379,8 +379,7 @@ describe('browser booking contracts', () => {
             id: 'dallas',
             slug: 'dallas',
             status: 'coming-soon',
-            bookingUrl: '',
-            signupUrl: '/dallas/signup',
+            bookingUrl: 'https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products',
             giftCardUrl: '',
             groupFormUrls: {},
           },
@@ -606,9 +605,9 @@ describe('browser booking contracts', () => {
         trigger: true,
       });
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'dallas' }))
-      .toBe('/dallas/signup');
+      .toBe('https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products');
     expect(window.TMBooking.getDestination({ kind: 'group-tickets', locationId: 'dallas' }))
-      .toBe('/dallas/signup');
+      .toBe('https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products');
     expect(window.TMBooking.getDestination({ kind: 'tickets', locationId: 'nashville' }))
       .toBe('/contact#location=nashville&type=updates');
     expect(window.TMBooking.getDestination({ kind: 'groups', groupType: 'corporate', locationId: 'dallas' }))
@@ -620,17 +619,17 @@ describe('browser booking contracts', () => {
     expect(window.LocationContext.getOverlayView('dallas'))
       .toMatchObject({
         cta: {
-          href: '/dallas/signup',
+          href: 'https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products',
           bookingUrl: '',
           trigger: false,
         },
-        bookLabelKey: 'location.ticketSignUp',
+        bookLabelKey: 'nav.bookNow',
       });
     expect(window.LocationContext.getLocationView('dallas'))
       .toMatchObject({
-        bookUrl: '/dallas/signup',
-        bookLabel: 'Ticket Sign-Up',
-        comingSoon: true,
+        bookUrl: '#',
+        bookLabel: 'Book Now',
+        comingSoon: false,
       });
     expect(window.LocationContext.getLocationView('nashville'))
       .toMatchObject({

@@ -612,16 +612,6 @@
       "status": 301
     },
     {
-      "id": "dallas-signup",
-      "canonicalPath": "/dallas/signup",
-      "redirectSources": [
-        "/dallas/signup.html"
-      ],
-      "outputFile": "dallas/signup.html",
-      "sitemap": true,
-      "status": 301
-    },
-    {
       "id": "creators",
       "canonicalPath": "/creators",
       "redirectSources": [
@@ -776,6 +766,21 @@
     }
   ],
   "aliases": [
+    {
+      "source": "/dallas/signup",
+      "target": "/dallas",
+      "status": 301
+    },
+    {
+      "source": "/dallas/signup/",
+      "target": "/dallas",
+      "status": 301
+    },
+    {
+      "source": "/dallas/signup.html",
+      "target": "/dallas",
+      "status": 301
+    },
     {
       "source": "/adult-birthday-parties",
       "target": "/groups/birthdays",

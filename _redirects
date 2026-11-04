@@ -333,7 +333,9 @@
 /dallas/educators.html /dallas/educators 301
 /dallas/teachers /dallas/educators 301
 /dallas/teachers.html /dallas/educators 301
-/dallas/signup.html /dallas/signup 301
+/dallas/signup /dallas 301
+/dallas/signup/ /dallas 301
+/dallas/signup.html /dallas 301
 
 # Creator Program
 /creators.html /creators 301
