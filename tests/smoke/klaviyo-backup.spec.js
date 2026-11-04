@@ -11,7 +11,7 @@ test('Educator signup shows the backup form when Klaviyo is blocked and submits 
     await route.fulfill({ json: { ok: true } });
   });
 
-  await page.goto('/houston/educators');
+  await page.goto('/houston/educators', { waitUntil: 'domcontentloaded' });
   const backup = page.locator('[data-tm-klaviyo-backup="YsG3eB"]');
   // A blocked script is detected right away; no waiting on the timer.
   await expect(backup).toBeVisible({ timeout: 2500 });
@@ -47,7 +47,7 @@ test('backup form stays hidden when Klaviyo renders its own form', async ({ page
     body: "document.querySelectorAll('[data-klaviyo-form-embed]').forEach(function (el) { el.appendChild(document.createElement('form')); });",
   }));
 
-  await page.goto('/houston/educators');
+  await page.goto('/houston/educators', { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(7000);
   await expect(page.locator('[data-tm-klaviyo-backup="YsG3eB"]')).toBeHidden();
 });
@@ -55,7 +55,7 @@ test('backup form stays hidden when Klaviyo renders its own form', async ({ page
 test('educator backup form asks for the school email', async ({ page }) => {
   await page.route(KLAVIYO_SCRIPTS, (route) => route.abort('blockedbyclient'));
 
-  await page.goto('/houston/educators');
+  await page.goto('/houston/educators', { waitUntil: 'domcontentloaded' });
   const backup = page.locator('[data-tm-klaviyo-backup="YsG3eB"]');
   await expect(backup).toBeVisible({ timeout: 10000 });
   await expect(backup.getByLabel('School Email (edu email) *')).toHaveAttribute('required', '');
@@ -69,7 +69,7 @@ test('slow Klaviyo rendering shows a loading message, not the backup', async ({ 
     body: "window.klaviyo = { push: function () {} }; setTimeout(function () { document.querySelectorAll('[data-klaviyo-form-embed]').forEach(function (el) { el.appendChild(document.createElement('form')); }); }, 6000);",
   }));
 
-  await page.goto('/houston/educators');
+  await page.goto('/houston/educators', { waitUntil: 'domcontentloaded' });
   const loading = page.locator('[data-tm-klaviyo-loading]');
   await expect(loading).toBeVisible();
   await expect(loading).toHaveText('Loading sign-up form…');
@@ -99,7 +99,7 @@ test('a loaded Klaviyo that never draws its form falls back after fifteen second
     body: 'window.klaviyo = { push: function () {} };',
   }));
 
-  await page.goto('/houston/educators');
+  await page.goto('/houston/educators', { waitUntil: 'domcontentloaded' });
   const backup = page.locator('[data-tm-klaviyo-backup="YsG3eB"]');
   // Past the old eight-second cutoff, slow phones still get the loading message.
   await page.waitForTimeout(10000);
