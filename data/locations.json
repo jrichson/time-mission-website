@@ -1105,8 +1105,7 @@
         "email": ""
       },
       "hours": {},
-      "bookingUrl": "",
-      "signupUrl": "/dallas/signup",
+      "bookingUrl": "https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products",
       "groupFormUrls": {
         "default": "/groups/inquire/dallas/default",
         "birthdays": "/groups/inquire/dallas/birthdays",

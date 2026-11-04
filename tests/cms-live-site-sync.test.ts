@@ -1,4 +1,5 @@
 import { DALLAS_GROUP_FORM_SNAPSHOT } from '../cms/migration-data/20261104_dallas_group_form_snapshot';
+import { DALLAS_SIGNUP_RETIREMENT_SNAPSHOT } from '../cms/migration-data/20261104_dallas_signup_retirement_snapshot';
 import { EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20261010_eindhoven_direct_checkout_snapshot';
 import { EINDHOVEN_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20261016_eindhoven_now_open_snapshot';
 import { EDISON_HOURS_SNAPSHOT } from '../cms/migration-data/20261019_edison_hours_snapshot';
@@ -161,6 +162,9 @@ describe('live-site-to-CMS sync snapshot', () => {
             // The blank published CMS gift-card field inherits the code-owned URL.
             if (location.slug === 'philadelphia') {
                 return { ...groupFormLocation, externalLinks: { ...groupFormLocation.externalLinks, giftCardUrl: 'https://book.philadelphia.timemission.com/giftcards/en-us/products' } };
+            }
+            if (location.slug === DALLAS_SIGNUP_RETIREMENT_SNAPSHOT.slug) {
+                return { ...groupFormLocation, externalLinks: { ...groupFormLocation.externalLinks, bookingUrl: DALLAS_SIGNUP_RETIREMENT_SNAPSHOT.bookingUrl } };
             }
             if (location.slug === EINDHOVEN_CHECKOUT_SNAPSHOT.slug) {
                 return {

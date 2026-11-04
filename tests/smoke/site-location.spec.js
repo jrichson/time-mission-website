@@ -93,13 +93,15 @@ test('US location selector shows only the Dallas and Eindhoven callouts', async 
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]')).toHaveClass(/location-open-now/);
 });
 
-test('Dallas signup page header CTA is labelled Ticket Sign-Up', async ({ page }) => {
-  await page.goto('/dallas/signup');
+test('Dallas offers booking without the retired free-ticket signup', async ({ page }) => {
+  await page.goto('/dallas');
   await page.evaluate(async () => { await window.TM.ready; });
 
   const cta = page.locator('.nav .btn-tickets').first();
-  await expect(cta).toHaveAttribute('href', '/dallas/signup');
-  await expect(cta).toContainText('Ticket Sign-Up');
+  await expect(cta).toHaveAttribute('data-tm-roller-checkout', /TimeMissiondallas/);
+  await expect(page.locator('a[href*="/dallas/signup"]')).toHaveCount(0);
+  await expect(page.locator('main')).not.toContainText('Ticket Sign-Up');
+  await expect(cta).toContainText('Book Now');
 });
 
 test('Scottsdale is coming soon and location lists mark upcoming venues', async ({ page }) => {
@@ -191,7 +193,7 @@ test('US locations omit tickers after runtime initialization and schedule refres
 });
 
 test('Dallas pages show the opening-date ticker on the US site', async ({ page }) => {
-  for (const path of ['/dallas', '/dallas/signup', '/dallas/educators']) {
+  for (const path of ['/dallas', '/dallas/creators', '/dallas/educators']) {
     await page.goto(path);
     await page.evaluate(async () => {
       await window.TM.ready;
