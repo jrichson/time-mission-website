@@ -161,11 +161,11 @@ test('Edison has a local location page whose action links lead to Supercharged N
   await expect(page.locator('.ticker-bar')).toHaveCount(0);
   await expect(page.locator('.hero .btn-location-book')).toHaveAttribute(
     'href',
-    'https://www.superchargednj.com/book-time-mission/',
+    'https://www.superchargednj.com/book-time-mission/?utm_source=paid&utm_campaign=edison',
   );
   await expect(page.locator('.final-cta .btn-location-book')).toHaveAttribute(
     'href',
-    'https://www.superchargednj.com/book-time-mission/',
+    'https://www.superchargednj.com/book-time-mission/?utm_source=paid&utm_campaign=edison',
   );
   await expect(page.locator('nav .btn-tickets')).toHaveAttribute(
     'href',
