@@ -1106,6 +1106,15 @@
       },
       "hours": {},
       "bookingUrl": "https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products",
+      "groupFormUrls": {
+        "default": "/groups/inquire/dallas/default",
+        "birthdays": "/groups/inquire/dallas/birthdays",
+        "corporate": "/groups/inquire/dallas/corporate",
+        "field-trips": "/groups/inquire/dallas/field-trips",
+        "bachelor-ette": "/groups/inquire/dallas/bachelor-ette",
+        "private-events": "/groups/inquire/dallas/private-events",
+        "holidays": "/groups/inquire/dallas/holidays"
+      },
       "navLabel": "TX – Dallas",
       "mapUrl": "https://maps.google.com/?q=5307+E.+Mockingbird+Ln+Suite+200+%26+201+Dallas+TX+75206",
       "faqs": [],

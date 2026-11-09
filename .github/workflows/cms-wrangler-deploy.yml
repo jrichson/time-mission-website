@@ -29,7 +29,7 @@ jobs:
   deploy-us:
     if: ${{ inputs.target == 'us' || inputs.target == 'both' }}
     name: Build and direct-upload US Pages
-    runs-on: ubuntu-latest
+    runs-on: macos-15
     timeout-minutes: 20
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

@@ -9,6 +9,21 @@ import {
 } from '../src/lib/group-form-context';
 
 describe('group inquiry Jotform account routing', () => {
+    it('uses the Dallas source form and specialist phone for all event routes', () => {
+        expect(jotformGroupFormConfigFor('dallas')).toEqual({
+            formId: '263074857864168',
+            executionTrackerBuildDate: '1793830688768',
+            buildDate: '1793830688768',
+            pipedriveLocationValue: 'Dallas',
+            dealTitlePrefix: 'DAL',
+            specialistPhone: {
+                display: '469-722-0900',
+                href: 'tel:+14697220900',
+            },
+        });
+        expect(groupInquiryPaths().filter((entry) => entry.location.slug === 'dallas')).toHaveLength(7);
+    });
+
     it('keeps the existing operator locations on the original form', () => {
         expect(jotformGroupFormConfigFor('manassas')).toMatchObject({
             formId: '261936424348059',
@@ -45,7 +60,7 @@ describe('group inquiry Jotform account routing', () => {
     });
 
     it('fails closed for a location without a configured Jotform account', () => {
-        expect(() => jotformGroupFormConfigFor('dallas')).toThrow(/Unsupported Jotform group inquiry location/);
+        expect(() => jotformGroupFormConfigFor('nashville')).toThrow(/Unsupported Jotform group inquiry location/);
     });
 
     it('publishes every configured franchise form through the shared on-site route', () => {

@@ -289,6 +289,7 @@ test('group inquiry deal titles use each CRM code and prefer organization over s
     'orland-park': 'OPK',
     houston: 'HOU',
     philadelphia: 'PHI',
+    dallas: 'DAL',
   };
 
   for (const [locationId, code] of Object.entries(locationCodes)) {
@@ -312,18 +313,39 @@ test('group inquiry deal titles use each CRM code and prefer organization over s
   }
 });
 
-test('Dallas group CTAs stay disabled when location data has blank group rows', async ({ page }) => {
+test('Dallas group CTAs open its shared form with the supplied account and phone', async ({ page }) => {
+  await page.goto('/groups');
+  await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
+
+  await page.evaluate(() => window.TMBooking.open({ kind: 'groups', groupType: 'corporate' }));
+  await page.locator('#ticketLocation').selectOption('dallas');
+  await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('aria-disabled', 'true');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('href', '/groups/inquire/dallas/corporate');
+  await page.locator('#ticketBookBtn').click();
+
+  await expect(page).toHaveURL(/\/groups\/inquire\/dallas\/corporate$/);
+  const form = page.locator('[data-tm-group-inquiry-form]');
+  await expect(form).toHaveAttribute('action', 'https://submit.jotform.com/submit/263074857864168');
+  await expect(form.locator('[name="formID"]')).toHaveValue('263074857864168');
+  await expect(form.locator('[name="q21_location"]')).toHaveValue('Dallas');
+  await expect(form.locator('[name="q23_typeA"]')).toHaveValue(/\/groups\/inquire\/dallas\/corporate$/);
+  await expect(page.locator('[data-tm-analytics-cta="group_form_phone"]'))
+    .toHaveAttribute('href', 'tel:+14697220900');
+  await expect(page.locator('[data-tm-analytics-cta="group_form_phone"]')).toContainText('469-722-0900');
+});
+
+test('group CTAs stay disabled when location data has blank group rows', async ({ page }) => {
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
   await page.evaluate(() => window.TMBooking.open({ kind: 'groups', groupType: 'corporate' }));
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
-  await page.locator('#ticketLocation').selectOption('dallas');
+  await page.locator('#ticketLocation').selectOption('nashville');
 
   await expect(page.locator('#ticketPanelTitle')).toContainText('Group Requests Unavailable');
-  await expect(page.locator('#ticketPanelIntro')).toContainText('Dallas');
+  await expect(page.locator('#ticketPanelIntro')).toContainText('Nashville');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('aria-disabled', 'true');
-  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', 'dallas');
+  await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', 'nashville');
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-group-type', 'corporate');
   await expect(page.locator('#ticketBookBtn')).not.toHaveAttribute('data-tm-booking-url', /./);
   await page.locator('#ticketBookBtn').evaluate((button) => button.click());
