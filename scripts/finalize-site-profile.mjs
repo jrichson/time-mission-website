@@ -296,18 +296,23 @@ function writeProfileRedirects() {
   const counterpartProfile = resolveSiteProfile({ TM_SITE_PROFILE: profile.id === 'eu' ? 'us' : 'eu' });
   for (const [canonicalPath, counterpartUrl] of externalRoutes) {
     const target = counterpartUrl || `${profile.counterpartOrigin}${canonicalPath}`;
-    regionalRedirects.push(
-      `${canonicalPath} ${target} 301`,
-    );
-    for (const locale of profile.locales) {
+    // Pages matches redirect sources exactly, so `/antwerp/` would otherwise 404
+    // on the US site instead of following `/antwerp` to the EU site.
+    const pushRegional = (source, destination) => {
+      regionalRedirects.push(`${source} ${destination} 301`);
+      if (source !== '/') regionalRedirects.push(`${source}/ ${destination} 301`);
+    };
+    pushRegional(canonicalPath, target);
+    // Include counterpart-only locales too (e.g. /nl/eindhoven arriving on the
+    // US site), so those land on the localized counterpart page instead of a 404.
+    const redirectLocales = new Set([...profile.locales, ...counterpartProfile.locales]);
+    for (const locale of redirectLocales) {
       if (locale === profile.defaultLocale) continue;
       const localizedTarget = new URL(target);
       if (localizedTarget.origin === profile.counterpartOrigin && counterpartProfile.locales.includes(locale)) {
         localizedTarget.pathname = localizedPath(localizedTarget.pathname, locale, counterpartProfile);
       }
-      regionalRedirects.push(
-        `/${locale}${canonicalPath} ${localizedTarget.toString()} 301`,
-      );
+      pushRegional(`/${locale}${canonicalPath}`, localizedTarget.toString());
     }
   }
   const aliases = [
