@@ -30,6 +30,8 @@ describe('Cloudflare Pages Functions bundle', () => {
         'functions/api/contact.js',
         'functions/api/newsletter.js',
         'functions/api/klaviyo-signup.js',
+        'functions/api/social-feed.js',
+        'functions/api/leaderboard.js',
       ],
       format: 'esm',
       metafile: true,
@@ -44,6 +46,8 @@ describe('Cloudflare Pages Functions bundle', () => {
         'functions/_shared/contact-routing-policy.mjs',
         'functions/_shared/form-handler.mjs',
         'functions/_shared/klaviyo-forms.mjs',
+        'functions/_shared/leaderboard.mjs',
+        'functions/_shared/leaderboard-locations.json',
       ]),
     );
     expect(Object.keys(result.metafile.inputs).every((input) => input.startsWith('functions/')))

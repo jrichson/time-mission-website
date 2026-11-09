@@ -83,7 +83,10 @@ const pressCoverageTrackingAttributes = external && publisher
                     </>
                 ) : kicker}
             </p>
-            <h2 id={`${id}-title`} data-page-i18n="ignore"><a class="tm-resource-release-title-link" href={href} {...externalLinkAttributes} {...pressCoverageTrackingAttributes}>{title}</a></h2>
+            <h2 id={`${id}-title`} data-page-i18n="ignore">
+                <a class="tm-resource-release-title-link" href={href} {...externalLinkAttributes} {...pressCoverageTrackingAttributes}
+                    data-tm-analytics-link-surface={external && publisher ? 'title' : undefined}>{title}</a>
+            </h2>
             {publisher && <p class="tm-resource-release-source"><span data-page-i18n="ignore">{publisher}</span></p>}
             <p data-page-i18n={ignoreSummaryI18n ? 'ignore' : undefined}>{summary}</p>
         </div>

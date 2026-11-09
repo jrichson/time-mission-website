@@ -193,7 +193,7 @@ test('West Nyack location page opens Briq inside the booking panel instead of an
   await page.evaluate(() => {
     window.__briqBookingOpened = 0;
   });
-  await page.locator('main .btn-tickets[data-tm-location="west-nyack"]').first().click();
+  await page.locator('main .btn-tickets[data-tm-location="west-nyack"]:visible').first().click();
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
   await expect(page.locator('#ticketPanel')).toHaveClass(/ticket-panel--briq/);
   await expect.poll(() => page.evaluate(() => window.__briqBookingOpened || 0)).toBeGreaterThan(0);

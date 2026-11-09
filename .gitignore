@@ -14,11 +14,14 @@ node_modules/
 
 # Tools
 .firecrawl/
+.wrangler/
 
 # Secrets / local env (PUBLIC_TM_MEDIA_BASE for R2-hosted hero MP4s)
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
 
 # Archive (dev experiments, not for production)
 _archive/

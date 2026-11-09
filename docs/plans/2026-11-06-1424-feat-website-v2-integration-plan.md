@@ -9,6 +9,18 @@ execution: code
 
 # Website v2 integration - Plan
 
+## Follow-up scope approved on November 6
+
+The user subsequently confirmed the provider's 100-result cap and requested a
+global default, venue-specific defaults on scoped URLs, and meaningful ranks
+instead of positions restarting on each page. After fresh reads found database
+error 1045 for Brussels, Antwerp and Eindhoven, the user explicitly chose the
+nine responding US venues for now. This supersedes the venue-only/no-aggregation
+parts of R7, R8 and KTD3 below. Global now means the top 100 reported scores across
+those US venues, with clear US coverage, tied ranks and no named-period or
+worldwide-completeness claim. Existing security, booking, locale and local-only
+release boundaries continue to apply.
+
 ## Goal Capsule
 
 - Objective: Visitors can use Jefferson's refreshed Time Mission site, complete their existing booking journeys, and see truthful venue leaderboard results on desktop and mobile.

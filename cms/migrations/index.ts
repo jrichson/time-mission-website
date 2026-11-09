@@ -1,3 +1,4 @@
+import * as migration_20261106_090000_leaderboard_description from './20261106_090000_leaderboard_description';
 import * as migration_20261025_090000_leaderboard_page from './20261025_090000_leaderboard_page';
 import * as migration_20261024_090000_location_search_titles from './20261024_090000_location_search_titles';
 import * as migration_20261023_090000_home_link_preview from './20261023_090000_home_link_preview';
@@ -458,5 +459,10 @@ export const migrations = [
     up: migration_20261025_090000_leaderboard_page.up,
     down: migration_20261025_090000_leaderboard_page.down,
     name: '20261025_090000_leaderboard_page'
+  },
+  {
+    up: migration_20261106_090000_leaderboard_description.up,
+    down: migration_20261106_090000_leaderboard_description.down,
+    name: '20261106_090000_leaderboard_description'
   },
 ];

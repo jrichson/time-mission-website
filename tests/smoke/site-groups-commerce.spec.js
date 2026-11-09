@@ -200,7 +200,7 @@ test('group page Book Now CTAs use group checkout when available', async ({ page
   await page.evaluate(() => window.TM.select('manassas'));
 
   const expectedHref = groupCheckoutUrl('manassas');
-  await page.locator('main .btn-primary.btn-tickets[data-tm-booking-kind="group-tickets"]').first().click();
+  await page.locator('main .btn-primary.btn-tickets[data-tm-booking-kind="group-tickets"]:visible').first().click();
   await page.waitForFunction(() => window.__rollerCheckoutShown === true);
   await expect(page.locator('#roller-checkout')).toHaveAttribute('data-checkout', expectedHref);
   await expect(page).toHaveURL(/\/groups\/corporate$/);
@@ -313,6 +313,11 @@ test('group inquiry deal titles use each CRM code and prefer organization over s
 });
 
 test('Dallas group CTAs stay disabled when location data has blank group rows', async ({ page }) => {
+  await page.addInitScript(catalog => {
+    const dallas = catalog.locations.find(location => location.id === 'dallas');
+    Object.assign(dallas, { groupFormUrls: {}, groupsUrl: '' });
+    window.TM_DATA = catalog;
+  }, require('../../dist/data/locations.json'));
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 

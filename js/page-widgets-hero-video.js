@@ -34,7 +34,8 @@
             });
         }
 
-        if (shouldLimitAutoplayMedia()) {
+        // Phones keep the poster instead of downloading a multi-megabyte background video.
+        if (shouldLimitAutoplayMedia() || window.matchMedia('(max-width: 768px)').matches) {
             heroVideoEl.removeAttribute('autoplay');
             heroVideoEl.removeAttribute('loop');
             heroVideoEl.preload = 'none';

@@ -333,10 +333,17 @@
             };
         }
         var cta = BookingJourney.resolveCtaView(loc, options || {});
-        if (kind === 'tickets' && cta && !cta.label && BookingJourney.isLeadOnlyComingSoon(loc)
-            && BookingJourney.resolveSignupUrl(loc)) {
-            cta.label = translate('location.ticketSignUp', 'Ticket Sign-Up');
-            cta.labelKey = 'location.ticketSignUp';
+        if (kind === 'tickets' && cta && !cta.label && loc) {
+            var view = getLocationView(loc);
+            var labelKey = view.externalUrl
+                ? (loc.region === 'europe' ? 'location.visitEuSite' : 'location.visitLocationSite')
+                : view.comingSoon
+                ? (BookingJourney.resolveSignupUrl(loc) ? 'location.ticketSignUp' : 'location.contactUs')
+                : opts.restoreNavLabel ? 'nav.bookNow' : '';
+            if (labelKey) {
+                cta.label = translate(labelKey, view.bookLabel);
+                cta.labelKey = labelKey;
+            }
         }
         return cta;
     }
@@ -384,9 +391,10 @@
 
     function applyBookingCtaView(el, cta) {
         BookingJourney.applyCtaView(el, cta);
+        // Parent text translation replaces icons; location language updates already translate these labels.
+        if (cta && cta.labelKey && (!el.children || !el.children.length)) el.setAttribute('data-i18n', cta.labelKey);
         if (cta && cta.klaviyoFormId) {
             el.setAttribute('data-tm-klaviyo-form-trigger', cta.klaviyoFormId);
-            if (cta.labelKey) el.setAttribute('data-i18n', cta.labelKey);
         } else {
             el.removeAttribute('data-tm-klaviyo-form-trigger');
         }

@@ -99,7 +99,7 @@ body .portals-section::before {
     }
 
     body .nav-right .btn-tickets {
-        min-height: 42px !important;
+        min-height: var(--target-comfortable) !important;
         padding: 0 1.15rem !important;
         font-size: 0.78rem !important;
     }

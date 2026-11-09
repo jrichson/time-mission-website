@@ -19,7 +19,7 @@ test.beforeEach(async ({ page }) => {
   await prepareSiteSmoke(page);
 });
 
-test('homepage loads core navigation and booking panel', async ({ page }) => {
+test('homepage loads core navigation and booking panel', async ({ page, isMobile }) => {
   test.slow();
 
   await gotoHome(page);
@@ -65,11 +65,11 @@ test('homepage loads core navigation and booking panel', async ({ page }) => {
     };
   });
   expect(heroMedia.backgroundImage).toMatch(/hero-poster(?:-(?:960|1200)\.webp|\.jpg)/);
-  expect(heroMedia.videoFallback).toBe(false);
+  expect(heroMedia.videoFallback).toBe(isMobile);
   expect(heroMedia.videoReady).toBe(false);
   expect(heroMedia.videoOpacity).toBe('0');
 
-  await page.locator('.hero-cta .btn-tickets').click();
+  await page.locator(isMobile ? '.mobile-book-btn' : '.hero-cta .btn-tickets').click();
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
   await expect(page.locator('#ticketLocation')).toBeVisible();
   await expect(page.locator('#ticketLocation')).toHaveValue('');
@@ -118,8 +118,9 @@ test('language switcher changes visible navigation text', async ({ page, isMobil
   await page.goto('/about');
   await expect.poll(() => page.evaluate(() => Boolean(window.__TM_I18N__?.translations?.es))).toBe(true);
 
-  await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
-  await expect(page.locator('.nav-links a[href="/es/about"]')).toHaveText('Acerca de');
+  await page.locator('.language-switcher--desktop .language-menu-btn').click();
+  await page.locator('.language-switcher--desktop [data-language-option="es"]').click();
+  await expect(page.locator('.nav-links > li > a[href="/es/about"]')).toHaveText('Acerca de');
   await expect.poll(() => page.evaluate(() => document.documentElement.lang)).toBe('es');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
 
@@ -137,7 +138,8 @@ test('language switcher keeps the current route', async ({ page, isMobile }) => 
   await page.goto('/groups/corporate');
   await expect.poll(() => page.evaluate(() => Boolean(window.__TM_I18N__?.translations?.es))).toBe(true);
 
-  await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
+  await page.locator('.language-switcher--desktop .language-menu-btn').click();
+  await page.locator('.language-switcher--desktop [data-language-option="es"]').click();
   await expect(page).toHaveURL(/\/es\/groups\/corporate$/);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     'href',
@@ -174,7 +176,8 @@ test('selected US language persists across location and FAQ navigation', async (
     await page.locator('.nav-menu-btn').click();
     await page.locator('.language-switcher--mobile [data-language-select]').selectOption('es');
   } else {
-    await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
+    await page.locator('.language-switcher--desktop .language-menu-btn').click();
+    await page.locator('.language-switcher--desktop [data-language-option="es"]').click();
   }
 
   await expect(page).toHaveURL(/\/es\/philadelphia\/?$/);
@@ -183,7 +186,7 @@ test('selected US language persists across location and FAQ navigation', async (
   await expect.poll(() => page.evaluate(() => window.TMI18n.getLanguage())).toBe('es');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_language'))).toBe('es');
 
-  await page.locator('#locationBtn').click();
+  await page.locator('#utilityLocationName').click();
   const manassas = page.locator('#locationDropdown a[data-tm-location-slug="manassas"]');
   await expect(manassas).toHaveAttribute('href', '/es/manassas');
   await manassas.click();
@@ -195,9 +198,9 @@ test('selected US language persists across location and FAQ navigation', async (
 
   if (isMobile) {
     await page.locator('.nav-menu-btn').click();
-    await page.locator('#mobileMenu a[data-i18n="nav.faq"]').click();
+    await page.locator('#mobileMenu .mobile-menu-links > li > a[data-i18n="nav.faq"]').click();
   } else {
-    await page.locator('.nav-links a[data-i18n="nav.faq"]').click();
+    await page.locator('.nav-links > li > a[data-i18n="nav.faq"]').click();
   }
 
   await expect(page).toHaveURL(/\/es\/manassas\/faq\/?$/);

@@ -65,7 +65,19 @@ body:has(.nav.scrolled) .utility-bar {
     color: var(--white);
 }
 
+.utility-location-name,
+.utility-link,
+.utility-choose,
+.utility-change,
+.utility-account-btn,
+.language-menu-btn {
+    min-width: var(--target-min);
+    min-height: var(--target-min);
+}
+
 .utility-location-name {
+    display: inline-flex;
+    align-items: center;
     font-weight: 700;
     color: var(--white);
     text-decoration: none;
@@ -119,6 +131,8 @@ body:has(.nav.scrolled) .utility-bar {
 }
 
 .utility-link {
+    display: inline-flex;
+    align-items: center;
     color: var(--white-soft);
     text-decoration: none;
     font-weight: 500;
@@ -248,6 +262,7 @@ body:has(.nav.scrolled) .utility-bar {
 .language-menu-list button {
     display: flex;
     align-items: center;
+    min-height: var(--target-min);
     gap: 0.7rem;
     width: 100%;
     padding: 0.65rem 0.75rem;

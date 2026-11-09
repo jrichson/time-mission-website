@@ -53,6 +53,70 @@ Defined in `js/analytics.js`. Keys must exist in `src/data/site/analytics-labels
 
 Small JSON-safe embed from `getPublicSiteContract()` (build time). Includes `locationsFingerprint`, location ids, EU external-location ids, booking presentation facts, and runtime event/storage keys for comparing the shipped roster hash to the fetched `locations.json` after `TM.load()` (non-PII analytics signal on mismatch).
 
+## `GET /api/leaderboard`
+
+Same-origin top-100 scores for the homepage and leaderboard page. Required `location` is one of
+`lincoln`, `west-nyack`, `manassas`, `philadelphia`, `mount-prospect`, `houston`,
+`orland-park`, `edison`, or `dallas`, or `global` for the combined US top 100. EU
+venues are currently unsupported: fresh provider calls for Brussels, Antwerp and
+Eindhoven returned `Platform database error 1045`. Optional `page`
+defaults to `0` and accepts decimal integers from `0` through `99`, without leading
+zeroes. Unknown or duplicate parameters and methods other than GET are rejected.
+
+Example: `/api/leaderboard?location=philadelphia&page=0` returns:
+
+```json
+{"location":"philadelphia","page":0,"pageSize":10,"totalRecords":0,"entries":[]}
+```
+
+Each populated entry contains `team` (text), `score` (integer), `location`
+(canonical venue slug) and `rank` (integer). Ranks are calculated from the reported
+scores across the selected top-100 dataset: ties share a rank, with competition
+ranking such as `1, 1, 3`. They do not restart on each page. Render team names as
+text. Pages contain at most ten entries, and `totalRecords` is at most 100.
+
+The global dataset combines the reported top 100 from each of the nine configured
+US venues, sorts by total score and retains the top 100 overall. This finds the
+top 100 among the scores returned by those connected venues without an unbounded
+history scan. All nine venue reads must succeed; partial results are never
+published as a complete US ranking. The provider returns no native global rank,
+stable team ID, snapshot timestamp or verified human definition of numeric period
+`0`. The UI therefore makes no weekly, monthly, all-time, unique-player or
+worldwide-completeness claim.
+
+The generic leaderboard page defaults to `global`. Explicit `?location=<slug>`
+overrides that default, and venue-scoped URLs use the existing URL context helper
+to choose their venue. A saved selection alone does not change a generic page's
+initial global view. Clearing the shared venue context returns to `global`.
+
+Errors return `{"error":"code"}` with one of these stable codes:
+
+| Status | Code | Meaning |
+| --- | --- | --- |
+| 400 / 405 | `invalid_request` | Invalid query or method; 405 includes `Allow: GET`. |
+| 400 | `unsupported_location` | The location has no verified provider mapping. |
+| 503 | `configuration_unavailable` | The private Pages secret is absent. |
+| 502 | `upstream_unavailable` | Provider transport, deadline, body or schema validation failed. |
+
+Set `TM_LEADERBOARD_AUTHENTICATION` as a Cloudflare Pages secret for each enabled
+environment, or in an ignored `.dev.vars` for local Pages testing. It is used only
+by the Function against the fixed Time Mission upstream. The Function supplies
+the required Time Mission Origin and rejects redirects. A single five-second
+deadline covers every required fetch and body read, including all nine requests
+for a global view. Each venue's ten provider pages are batched into one request,
+bounded to 64 KiB with strict UTF-8/JSON/schema validation. Missing pages,
+inconsistent totals or incomplete page lengths fail closed. The provider's JSON
+may have a `text/html` content type.
+
+Only normalized successful top-100 datasets are cached for 60 seconds, separately
+by selected venue/global scope and reused for pagination. Cache failures fall
+back to the provider. Errors use `no-store`.
+Every response supplies JSON content type and `X-Content-Type-Options: nosniff`;
+provider cookies, private URLs and raw errors are never forwarded.
+
+Handler fixtures cover the boundary without a real credential. They do not prove
+production secret configuration or current provider availability.
+
 ## Contract checks
 
 - Booking rules: `scripts/policies/booking-policies.cjs` via `scripts/check-booking-architecture.js`.

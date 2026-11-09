@@ -48,7 +48,7 @@ const navTranslationKeys: Record<string, string> = {
 ---
 
 <!-- Full-Screen Mobile Menu -->
-<div class="mobile-menu" id="mobileMenu">
+<div class="mobile-menu" id="mobileMenu" inert>
     <ul class="mobile-menu-links">
         {nav.primary.filter((item) => mobileTopLevel.includes(item.href)).map((item) => {
             const mega = megaMenus[item.href];

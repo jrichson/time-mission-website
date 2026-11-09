@@ -28,7 +28,7 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   );
   expect(expectedCount).toBeGreaterThan(0);
 
-  await page.locator('.hero-cta .btn-tickets').click();
+  await page.locator('.hero-cta .btn-tickets:visible, .mobile-book-bar .mobile-book-btn:visible').click();
 
   const options = page.locator('#ticketLocation option');
   await expect(options).toHaveCount(expectedCount + 1);
@@ -66,7 +66,7 @@ test('ticket panel options hydrate from location data', async ({ page }) => {
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-location', 'manassas');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('manassas');
-  await expect(page.locator('#locationText')).toContainText('Manassas');
+  await expect(page.locator('#utilityLocationName')).toContainText('Manassas');
 
   await expect(page.locator('#ticketLocation option[value="antwerp"]')).toHaveText('Belgium – Antwerp');
   await expect(page.locator('#ticketLocation option[value="brussels"]')).toHaveText('Belgium – Brussels');
@@ -81,7 +81,7 @@ test('ticket panel routes Europe selections to the right external destination wi
   });
 
   await page.goto('/?utm_source=paid&utm_campaign=eu');
-  await page.locator('.hero-cta .btn-tickets').click();
+  await page.locator('.hero-cta .btn-tickets:visible, .mobile-book-bar .mobile-book-btn:visible').click();
   await expectPopupUrl(
     page,
     () => page.locator('#ticketLocation').selectOption('antwerp'),
@@ -90,7 +90,7 @@ test('ticket panel routes Europe selections to the right external destination wi
   await expect(page).toHaveURL(/\/\?utm_source=paid&utm_campaign=eu$/);
 
   await page.goto('/?utm_source=paid&utm_campaign=eu');
-  await page.locator('.hero-cta .btn-tickets').click();
+  await page.locator('.hero-cta .btn-tickets:visible, .mobile-book-bar .mobile-book-btn:visible').click();
 
   await expectPopupUrl(
     page,
@@ -110,7 +110,7 @@ test('ticket panel Continue to Booking opens Roller checkout without a location-
 
   await gotoHome(page);
 
-  await page.locator('.hero-cta .btn-tickets').click();
+  await page.locator('.hero-cta .btn-tickets:visible, .mobile-book-bar .mobile-book-btn:visible').click();
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
 
   await page.locator('#ticketLocation').selectOption('manassas');
@@ -164,11 +164,11 @@ test('non-Roller external ticket booking renders direct provider links', async (
   await expect(ticketCtas.first()).toHaveAttribute('rel', /noopener/);
 });
 
-test('missions Book Now CTAs open the standard ticket booking flow', async ({ page }) => {
+test('missions page Book Now opens the standard ticket booking flow', async ({ page }) => {
   await page.goto('/missions');
   await expect.poll(() => page.evaluate(() => window.TM?.locations?.length || 0)).toBeGreaterThan(0);
 
-  await page.locator('.portal-cta.btn-book-now[data-tm-booking-trigger]').first().click();
+  await page.locator('.cta-section .btn-book-now[data-tm-booking-trigger]').click();
   await expect(page.locator('#ticketPanel')).toHaveClass(/active/);
   await expect(page.locator('#ticketLocation')).toBeVisible();
   await expect(page.locator('#ticketBookBtn')).toHaveAttribute('data-tm-booking-kind', 'tickets');

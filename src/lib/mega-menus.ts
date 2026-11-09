@@ -39,7 +39,7 @@ export const megaMenus: Record<string, {
             { label: 'All groups & parties', href: '/groups' },
             { label: 'Private Events', href: '/groups/private-events', i18n: 'home.groups.privateEvents' },
             { label: 'Holidays', href: '/groups/holidays', i18n: 'home.groups.holidays' },
-            { label: 'Plan an event', href: '/contact?type=event' },
+            { label: 'Plan an event', href: '/contact#type=event' },
         ],
     },
     '/about': {

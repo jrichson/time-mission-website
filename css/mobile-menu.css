@@ -33,6 +33,7 @@
     .mobile-menu.open {
         opacity: 1;
         visibility: visible;
+        transition: opacity 0.35s ease;
     }
 
     body:has(.nav--no-ticker) .mobile-menu {
@@ -168,10 +169,13 @@
         font-size: 1.05rem;
         letter-spacing: 0.1em;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 4px 18px var(--tm26-glow);
-        /* Always-on flowing gradient (same motion as the desktop hover) */
         background-image: linear-gradient(90deg, #FAAE17 0%, #F23929 17%, #EE0132 30%, #FF1BCE 50%, #EE0132 70%, #F23929 83%, #FAAE17 100%) !important;
         background-size: 200% 100% !important;
-        animation: tm26-flow 3s linear infinite;
+        transition: transform 120ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .mobile-book-bar .mobile-book-btn:active {
+        transform: scale(0.98);
     }
 
 
@@ -189,6 +193,10 @@
 @media (max-width: 768px) and (prefers-reduced-motion: reduce) {
     .mobile-book-bar .mobile-book-btn {
         animation: none;
+        transition: none;
+    }
+    .mobile-book-bar .mobile-book-btn:active {
+        transform: none;
     }
 }
 

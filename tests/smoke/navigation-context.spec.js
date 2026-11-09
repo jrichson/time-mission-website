@@ -34,7 +34,7 @@ for (const locale of locales) {
     await ready(page);
     await page.goForward({ waitUntil: 'domcontentloaded' });
     await ready(page);
-    await page.locator('#locationBtn').click();
+    await page.locator('#utilityLocationName').click();
     const link = page.locator(`#locationDropdown [data-tm-location-slug="${otherVenue}"]`);
     await expect(link).toHaveAttribute('href', destination.replace(`/${venue}/`, `/${otherVenue}/`));
     await link.click();
@@ -42,7 +42,7 @@ for (const locale of locales) {
     await ready(page);
     await expect.poll(() => page.evaluate(() => window.TM.current?.slug)).toBe(otherVenue);
     // Every internal shared link is also correct before click/new-tab navigation.
-    await expect(page.locator('.nav-links a[data-i18n="nav.faq"]')).toHaveAttribute('href', `${prefix}/${otherVenue}/faq`);
+    await expect(page.locator('.nav-links > li > a[data-i18n="nav.faq"]')).toHaveAttribute('href', `${prefix}/${otherVenue}/faq`);
   });
 }
 
@@ -54,8 +54,10 @@ test('language switch on a scoped article retains the venue and article', async 
   await article.click();
   await expect(page).toHaveURL(new RegExp(destination + '$'));
   await ready(page);
-  if (isMobile) await page.locator('#locationBtn').click();
-  await page.locator(isMobile ? '.language-switcher--overlay [data-language-select]' : '.language-switcher--desktop [data-language-select]').selectOption('es');
+  if (isMobile) await page.locator('#utilityLocationName').click();
+  const languageSwitcher = page.locator(isMobile ? '.language-switcher--overlay' : '.language-switcher--desktop');
+  await languageSwitcher.locator('.language-menu-btn').click();
+  await languageSwitcher.locator('[data-language-option="es"]').click();
   await expect(page).toHaveURL(new RegExp('/es' + destination + '$'));
   await ready(page);
   await expect.poll(() => page.evaluate(() => window.TM.current?.slug)).toBe(venue);

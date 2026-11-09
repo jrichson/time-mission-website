@@ -185,7 +185,7 @@ import { megaMenus } from '../lib/mega-menus';
         <div class="utility-right">
             <LanguageSwitcher currentLang={currentLang} placement="desktop" />
             <a class="utility-link" href="/gift-cards"><span class="bold-hover" data-i18n="utility.giftCards" data-label="Gift Cards">Gift Cards</span></a>
-            <div class="utility-account">
+            <div class="utility-account" hidden>
                 <button type="button" class="utility-account-btn" id="utilityAccountBtn" aria-haspopup="true" aria-expanded="false" aria-controls="utilityAccountMenu" aria-label="Open Mission Rewards menu" data-i18n-aria-label="utility.accountMenu">
                     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="8" r="4"></circle>
@@ -214,7 +214,7 @@ import { megaMenus } from '../lib/mega-menus';
 <!-- Navigation -->
 <nav class={`nav${tickerMessages.length > 0 ? '' : ' nav--no-ticker'}`} id="nav">
     <div class="nav-left">
-        <button class="nav-menu-btn" aria-label="Open menu" data-i18n-aria-label="nav.openMenu">
+        <button class="nav-menu-btn" aria-label="Open menu" data-i18n-aria-label="nav.openMenu" aria-controls="mobileMenu" aria-expanded="false">
             <div class="hamburger">
                 <span></span>
                 <span></span>
@@ -237,9 +237,9 @@ import { megaMenus } from '../lib/mega-menus';
                 const mega = megaMenus[item.href];
                 return (
                     <li class={mega ? 'has-mega' : undefined}>
-                        <a href={item.href} data-i18n={item.i18n} data-label={item.label} aria-haspopup={mega ? 'true' : undefined}>{item.label}</a>
+                        <a href={item.href} data-i18n={item.i18n} data-label={item.label} aria-expanded={mega ? 'false' : undefined} aria-controls={mega ? `mega-${item.href.slice(1)}` : undefined}>{item.label}</a>
                         {mega && (
-                            <div class="mega-panel">
+                            <div class="mega-panel" id={`mega-${item.href.slice(1)}`}>
                                 <div class="mega-cards" data-mega-random={mega.viewAll ? '3' : undefined}>
                                     {mega.cards.map((card, index) => (
                                         <a class="mega-card" href={card.href} hidden={mega.viewAll && index >= 3 ? true : undefined}>
@@ -280,11 +280,11 @@ import { megaMenus } from '../lib/mega-menus';
                 <polyline points="6,9 12,15 18,9"></polyline>
             </svg>
         </button>
-        <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets" {...{ ...bookingCtaAttrs, 'data-i18n': undefined }}><span data-i18n="nav.bookNow">Book Now</span></a>
+        <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets" {...bookingCtaAttrs}>{bookingCtaLabel}</a>
     </div>
 </nav>
 
 <!-- Mobile: BOOK pinned across the bottom of the screen (the nav button hides on small screens) -->
 <div class="mobile-book-bar">
-    <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets mobile-book-btn" {...{ ...bookingCtaAttrs, 'data-i18n': undefined }}><span data-i18n="nav.tickets">Tickets</span></a>
+    <a href={bookingCtaRollerCheckout?.url || bookingCtaHref} class="btn-tickets mobile-book-btn" {...bookingCtaAttrs}>{bookingCtaLabel}</a>
 </div>

@@ -7,7 +7,7 @@ module.exports = defineConfig({
   workers: 1,
   testDir: './tests/smoke',
   testMatch: isEuArtifact
-    ? ['**/eu-profile.spec.js', '**/csp.spec.js', '**/site-contract.spec.js', '**/navigation-context.spec.js']
+    ? ['**/eu-profile.spec.js', '**/csp.spec.js', '**/site-contract.spec.js', '**/navigation-context.spec.js', '**/mobile-performance.spec.js']
     : '**/*.spec.js',
   timeout: 30_000,
   expect: {

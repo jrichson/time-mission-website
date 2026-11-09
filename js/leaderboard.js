@@ -1,169 +1,166 @@
-// Leaderboard tables: renders rows into [data-leaderboard] from /data/leaderboard.json.
-// API later: point LEADERBOARD_URL at the endpoint; it should return the same shape
-// ({ periods: { week|month|all: [{ rank, team, locationSlug, missions, score }] } }).
 (function () {
     'use strict';
-
-    var LEADERBOARD_URL = '/data/leaderboard.json';
-    var boards = Array.prototype.slice.call(document.querySelectorAll('[data-leaderboard]'));
+    var boards = Array.from(document.querySelectorAll('[data-leaderboard]'));
     if (!boards.length || typeof fetch !== 'function') return;
-
-    function translate(key, fallback) {
-        if (window.TMI18n && typeof window.TMI18n.t === 'function') {
-            var value = window.TMI18n.t(key);
-            if (typeof value === 'string' && value) return value;
-        }
-        return fallback;
+    var venueNames = new Map();
+    Array.from(boards[0].querySelector('[data-leaderboard-location]').options).forEach(function (option) {
+        if (option.value && option.value !== 'global') venueNames.set(option.value, option.textContent);
+    });
+    var requests = new Map();
+    function supported(slug) { return slug === 'global' || venueNames.has(slug); }
+    function t(key) {
+        return window.TMI18n && window.TMI18n.t('leaderboard.' + key) || key;
     }
-
-    function currentLanguage() {
-        return (document.documentElement.getAttribute('lang') || 'en').slice(0, 2);
+    function text(tag, className, value) {
+        var node = document.createElement(tag);
+        node.className = className;
+        node.textContent = value;
+        return node;
     }
-
-    function ordinal(n) {
-        if (currentLanguage() !== 'en') return '#' + n;
-        var mod100 = n % 100;
-        var suffix = (mod100 >= 11 && mod100 <= 13) ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th');
-        return n + suffix.toUpperCase();
-    }
-
-    function locationName(slug) {
-        var loc = window.TM && typeof window.TM.get === 'function' ? window.TM.get(slug) : null;
-        if (loc) return loc.shortName || loc.name || slug;
-        return String(slug || '').replace(/-/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); });
-    }
-
-    function cell(tag, className, text) {
-        var el = document.createElement(tag);
-        if (className) el.className = className;
-        if (text !== undefined) el.textContent = text;
-        return el;
-    }
-
-    function render(board, data) {
-        var activeTab = board.querySelector('.leaderboard-tab[aria-selected="true"]');
-        var period = activeTab ? activeTab.dataset.period : 'week';
-        var select = board.querySelector('[data-leaderboard-location]');
-        var location = select ? select.value : '';
-        var limit = parseInt(board.dataset.limit, 10) || 5;
-        var rows = ((data.periods || {})[period] || []).filter(function (row) {
-            return !location || row.locationSlug === location;
-        });
-        if (location) {
-            rows = rows.map(function (row, i) { return Object.assign({}, row, { rank: i + 1 }); });
-        }
-        var searchInput = board.querySelector('[data-leaderboard-search]');
-        var query = searchInput ? searchInput.value.trim().toLowerCase() : '';
-        if (query) {
-            rows = rows.filter(function (row) {
-                return String(row.team).toLowerCase().indexOf(query) !== -1
-                    || locationName(row.locationSlug).toLowerCase().indexOf(query) !== -1;
+    function acquire(venue, page) {
+        var key = venue + ':' + page;
+        var request = requests.get(key);
+        if (!request) {
+            var controller = new AbortController();
+            var timer = setTimeout(function () { controller.abort(); }, 8000);
+            request = { controller: controller, users: 0 };
+            request.promise = fetch('/api/leaderboard?location=' + encodeURIComponent(venue) + '&page=' + page, {
+                headers: { accept: 'application/json' }, signal: controller.signal
+            }).then(async function (response) {
+                var data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'upstream_unavailable');
+                if (data.location !== venue || data.page !== page || data.pageSize !== 10 ||
+                    !Number.isSafeInteger(data.totalRecords) || data.totalRecords < 0 || data.totalRecords > 100 ||
+                    !Array.isArray(data.entries) || data.entries.length > 10 ||
+                    !data.entries.every(function (entry) { return typeof entry.team === 'string' && Number.isSafeInteger(entry.score)
+                        && Number.isSafeInteger(entry.rank) && entry.rank >= 1 && entry.rank <= 100
+                        && venueNames.has(entry.location) && (venue === 'global' || entry.location === venue); })) {
+                    throw new Error('upstream_unavailable');
+                }
+                return data;
+            }).finally(function () {
+                clearTimeout(timer);
+                if (requests.get(key) === request) requests.delete(key);
             });
+            requests.set(key, request);
         }
-        rows = rows.slice(0, limit);
-
-        var tbody = board.querySelector('[data-leaderboard-rows]');
-        tbody.textContent = '';
-        rows.forEach(function (row) {
-            var tr = document.createElement('tr');
-            if (row.rank <= 3) tr.className = 'lb-top lb-top-' + row.rank;
-            var rank = cell('td', 'lb-col-rank');
-            rank.appendChild(cell('span', 'lb-rank', ordinal(row.rank)));
-            tr.appendChild(rank);
-            var team = cell('td', 'lb-col-team', row.team);
-            team.appendChild(cell('span', 'lb-team-sub', locationName(row.locationSlug)));
-            tr.appendChild(team);
-            tr.appendChild(cell('td', 'lb-col-location', locationName(row.locationSlug)));
-            tr.appendChild(cell('td', 'lb-col-missions', String(row.missions)));
-            tr.appendChild(cell('td', 'lb-col-score', Number(row.score).toLocaleString()));
-            tbody.appendChild(tr);
-        });
-        var empty = board.querySelector('.leaderboard-empty');
-        if (empty) {
-            empty.hidden = rows.length > 0;
-            empty.textContent = query
-                ? translate('leaderboard.noMatch', 'No teams match your search.')
-                : translate('leaderboard.empty', 'No scores yet for this view.');
-        }
+        request.users++;
+        return {
+            promise: request.promise,
+            release: function () {
+                request.users--;
+                if (!request.users) {
+                    request.controller.abort();
+                    if (requests.get(key) === request) requests.delete(key);
+                }
+            }
+        };
     }
-
-    function fillLocations(board, data) {
-        var select = board.querySelector('[data-leaderboard-location]');
-        if (!select || select.options.length > 1) return;
-        var slugs = {};
-        Object.keys(data.periods || {}).forEach(function (key) {
-            (data.periods[key] || []).forEach(function (row) { slugs[row.locationSlug] = true; });
-        });
-        Object.keys(slugs).map(function (slug) { return { slug: slug, name: locationName(slug) }; })
-            .sort(function (a, b) { return a.name.localeCompare(b.name); })
-            .forEach(function (item) {
-                var option = document.createElement('option');
-                option.value = item.slug;
-                option.textContent = item.name;
-                select.appendChild(option);
-            });
-        // Default to the visitor's selected location when there is one on the board
-        var current = window.TM && window.TM.current;
-        if (current && slugs[current.slug || current.id]) select.value = current.slug || current.id;
-    }
-
-    // Sliding gradient pill under the active period tab
-    function placeIndicator(board) {
-        var tabs = board.querySelector('.leaderboard-tabs');
-        var active = board.querySelector('.leaderboard-tab[aria-selected="true"]');
-        if (!tabs || !active) return;
-        var pill = tabs.querySelector('.leaderboard-tab-indicator');
-        if (!pill) {
-            pill = document.createElement('span');
-            pill.className = 'leaderboard-tab-indicator';
-            pill.setAttribute('aria-hidden', 'true');
-            tabs.insertBefore(pill, tabs.firstChild);
-            tabs.classList.add('has-indicator');
-        }
-        pill.style.width = active.offsetWidth + 'px';
-        pill.style.transform = 'translateX(' + active.offsetLeft + 'px)';
-    }
-
     boards.forEach(function (board) {
-        placeIndicator(board);
-        board.querySelectorAll('.leaderboard-tab').forEach(function (tab) {
-            tab.addEventListener('click', function () {
-                board.querySelectorAll('.leaderboard-tab').forEach(function (t) {
-                    t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
-                });
-                placeIndicator(board);
+        var select = board.querySelector('[data-leaderboard-location]');
+        var search = board.querySelector('[data-leaderboard-search]');
+        var tbody = board.querySelector('[data-leaderboard-rows]');
+        var status = board.querySelector('[data-leaderboard-status]');
+        var caption = board.querySelector('[data-leaderboard-caption]');
+        var retry = board.querySelector('[data-leaderboard-retry]');
+        var pagination = board.querySelector('[data-leaderboard-pagination]');
+        var link = board.querySelector('[data-leaderboard-link]');
+        var limit = Number(board.dataset.limit);
+        var venue = 'global', page = 0, result = null, state = 'loading', version = 0, active = null;
+        function render(reveal) {
+            var bounds = reveal === true ? board.getBoundingClientRect() : null;
+            var animateRows = bounds && bounds.top < window.innerHeight && bounds.bottom > 0
+                && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var statusHadFocus = document.activeElement === status;
+            var label = venue === 'global' ? t('global') : venueNames.get(venue);
+            caption.textContent = label ? label + ' · ' + t('page') + ' ' + (page + 1) : t('scope');
+            if (link) {
+                var language = document.documentElement.lang.slice(0, 2);
+                var prefix = (window.location.pathname === '/' + language || window.location.pathname.indexOf('/' + language + '/') === 0) ? '/' + language : '';
+                link.href = prefix + '/leaderboard' + (supported(venue) ? '?location=' + encodeURIComponent(venue) : '');
+            }
+            board.setAttribute('aria-busy', state === 'loading' ? 'true' : 'false');
+            tbody.textContent = '';
+            var rows = result ? result.entries : [];
+            var query = search.value.trim().toLocaleLowerCase();
+            if (query) rows = rows.filter(function (row) { return row.team.toLocaleLowerCase().includes(query); });
+            rows = rows.slice(0, limit);
+            rows.forEach(function (row, index) {
+                var tr = document.createElement('tr');
+                tr.dataset.rank = row.rank;
+                var position = text('td', 'lb-col-rank', '');
+                position.appendChild(text('span', 'lb-rank', String(row.rank)));
+                tr.appendChild(position);
+                var team = text('td', 'lb-col-team', '');
+                if (row.rank === 1) team.appendChild(text('span', 'lb-leader-label', t('scoreToBeat')));
+                team.appendChild(text('span', 'lb-team-name', row.team));
+                team.appendChild(text('span', 'lb-team-location', ' ' + venueNames.get(row.location)));
+                tr.appendChild(team);
+                tr.appendChild(text('td', 'lb-col-location', venueNames.get(row.location)));
+                tr.appendChild(text('td', 'lb-col-score', row.score.toLocaleString(document.documentElement.lang)));
+                tbody.appendChild(tr);
+                if (animateRows) tr.animate([
+                    { opacity: 0, transform: 'translateY(6px)' },
+                    { opacity: 1, transform: 'translateY(0)' }
+                ], { duration: 240, delay: index * 20, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards' });
+            });
+            status.textContent = result ? (rows.length ? '' : t(result.entries.length ? 'noMatch' : 'empty')) : t(state);
+            status.hidden = !!rows.length;
+            retry.hidden = !['configuration', 'unavailable'].includes(state);
+            search.disabled = !result;
+            if (pagination) {
+                pagination.hidden = !result || !result.totalRecords;
+                board.querySelector('[data-leaderboard-page]').textContent = t('page') + ' ' + (page + 1);
+                board.querySelector('[data-leaderboard-prev]').disabled = page === 0;
+                board.querySelector('[data-leaderboard-next]').disabled = !result || !result.entries.length || (page + 1) * 10 >= result.totalRecords || page >= 99;
+            }
+            if (statusHadFocus && status.hidden) caption.focus({ preventScroll: true });
+        }
+        function load(slug, number, showResults) {
+            var controlHadFocus = document.activeElement === retry || pagination && pagination.contains(document.activeElement);
+            version++;
+            var currentVersion = version;
+            if (active) active.release();
+            active = null;
+            venue = slug || 'global';
+            page = number;
+            result = null;
+            select.value = supported(venue) ? venue : '';
+            state = !supported(venue) ? 'unsupported' : 'loading';
+            render();
+            if (state !== 'loading') return;
+            if (controlHadFocus || showResults) status.focus({ preventScroll: true });
+            if (showResults) board.querySelector('.leaderboard-card').scrollIntoView({ block: 'start' });
+            active = acquire(venue, page);
+            active.promise.then(function (data) {
+                if (currentVersion !== version) return;
+                result = data;
+                state = 'ready';
+                render(true);
+            }).catch(function (error) {
+                if (currentVersion !== version) return;
+                state = error.message === 'configuration_unavailable' ? 'configuration' : error.message === 'unsupported_location' ? 'unsupported' : 'unavailable';
+                render();
+            });
+        }
+        select.addEventListener('change', function () { search.value = ''; load(select.value, 0); });
+        search.addEventListener('input', render);
+        retry.addEventListener('click', function () { load(venue, page); });
+        if (pagination) {
+            board.querySelector('[data-leaderboard-prev]').addEventListener('click', function () { load(venue, page - 1, true); });
+            board.querySelector('[data-leaderboard-next]').addEventListener('click', function () { load(venue, page + 1, true); });
+        }
+        document.addEventListener('tm:language-changed', render);
+        var ready = window.TM && window.TM.ready || Promise.resolve();
+        ready.then(function () {
+            var parameter = new URLSearchParams(window.location.search).get('location');
+            var contextualVenue = window.TMNavigation && window.TMNavigation.pathLocation(window.location.pathname)
+                || document.body.dataset.location;
+            if (!version) load(parameter || contextualVenue || 'global', 0);
+            if (window.TM && window.TM.onChange) window.TM.onChange(function (location) {
+                search.value = '';
+                load(location && (location.slug || location.id) || 'global', 0);
             });
         });
     });
-    window.addEventListener('resize', function () { boards.forEach(placeIndicator); });
-    document.addEventListener('tm:language-changed', function () { boards.forEach(placeIndicator); });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { boards.forEach(placeIndicator); });
-
-    fetch(LEADERBOARD_URL, { headers: { accept: 'application/json' } })
-        .then(function (res) { return res.ok ? res.json() : null; })
-        .then(function (data) {
-            if (!data) return;
-            boards.forEach(function (board) {
-                var ready = window.TM && window.TM.ready && typeof window.TM.ready.then === 'function'
-                    ? window.TM.ready : Promise.resolve();
-                ready.then(function () {
-                    fillLocations(board, data);
-                    render(board, data);
-                });
-                board.querySelectorAll('.leaderboard-tab').forEach(function (tab) {
-                    tab.addEventListener('click', function () {
-                        board.querySelectorAll('.leaderboard-tab').forEach(function (t) {
-                            t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
-                        });
-                        render(board, data);
-                    });
-                });
-                var select = board.querySelector('[data-leaderboard-location]');
-                if (select) select.addEventListener('change', function () { render(board, data); });
-                var search = board.querySelector('[data-leaderboard-search]');
-                if (search) search.addEventListener('input', function () { render(board, data); });
-                document.addEventListener('tm:language-changed', function () { render(board, data); });
-            });
-        })
-        .catch(function () { /* leave the table empty */ });
 })();

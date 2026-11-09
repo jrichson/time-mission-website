@@ -33,6 +33,26 @@ test.beforeEach(async ({ page }) => {
   await prepareSiteSmoke(page);
 });
 
+test('EU leaderboard uses the US-wide default and keeps unavailable European venue context explicit', async ({ page }) => {
+  let requests = 0;
+  await page.route('**/api/leaderboard?*', route => {
+    requests++;
+    return route.fulfill({ json: { location: 'global', page: 0, pageSize: 10, totalRecords: 1,
+      entries: [{ team: 'Global fixture crew', score: 100, rank: 1, location: 'philadelphia' }] } });
+  });
+  const board = page.locator('[data-leaderboard]');
+  await page.goto('/leaderboard');
+  await expect(board.locator('caption')).toContainText('Global · US venues');
+  await expect(board.locator('tbody')).toContainText('Global fixture crew');
+  await page.goto('/antwerp/leaderboard');
+  await expect(board.locator('[role=status]')).toContainText('not available for this venue');
+  await expect(board.locator('tbody tr')).toHaveCount(0);
+  await page.goto('/antwerp/leaderboard?location=global');
+  await expect(board.locator('[data-leaderboard-location]')).toHaveValue('global');
+  await expect(board.locator('tbody')).toContainText('Global fixture crew');
+  expect(requests).toBe(2);
+});
+
 test('round-two Dutch heading emphasis survives static rendering and language updates', async ({ page, request }) => {
   const response = await request.get('/nl/groups/birthdays');
   expect(await response.text()).toContain('<span class="highlight">VERJAARDAGSFEESTJES</span>');
@@ -100,7 +120,7 @@ test('Dutch review copy survives reload and Eindhoven content fixes remain visib
   await expect(page.locator('#newsletter button[type="submit"]')).toHaveText('Schrijf je in');
   await expect(page.locator('#newsletter-given-name')).toHaveAttribute('placeholder', 'Voornaam');
   await expect(page.locator('.footer-loc-hours')).toContainText('Maandag14:00 – 22:00');
-  await expect(page.locator('.welcome .section-title')).toHaveText('WAT IS TIME MISSION?');
+  await expect(page.locator('.welcome .section-title')).toHaveText('WAT IS DE MISSIE?');
   await expect(page.locator('.hero-subtitle')).toContainText('Hoe snel, sterk, behendig en slim zijn jullie?');
   await page.reload();
   await waitForLanguageRuntime(page, true);
@@ -108,11 +128,13 @@ test('Dutch review copy survives reload and Eindhoven content fixes remain visib
 
   await page.goto('/nl/missions');
   await waitForLanguageRuntime(page, true);
-  await expect(page.locator('.hero-title')).toHaveText('EINDELOOS VEEL MANIEREN OM TE SPELEN');
+  await expect(page.locator('.missions-title')).toHaveText('De missies 30');
   await expect(page.locator('.mission-availability-note')).toContainText('verschilt per locatie');
   await expect(page.locator('.filter-tab[data-filter="mental"]')).toContainText('Breinbrekers');
   await page.locator('.filter-tab[data-filter="mental"]').click();
   await expect(page.locator('.filter-tab[data-filter="mental"]')).toHaveClass(/active/);
+  await expect(page.locator('.portal-card[data-category~="mental"]:visible')).toHaveCount(12);
+  await expect(page.locator('.portal-card:not([data-category~="mental"]):visible')).toHaveCount(0);
   await expect(page.locator('.portal-card').filter({ has: page.locator('.portal-title', { hasText: 'LOOKING GLASS' }) }).locator('.portal-desc'))
     .toHaveText('Jullie zijn observatieagenten in een geheime bunker. Jullie doelwit heeft niets door. Speur de beelden af op zoek naar bewijs.');
 
@@ -379,7 +401,8 @@ test('every localized EU route renders in each enabled language', async ({ page 
     route.startsWith(`${venue}/`) && expectedRoutes.includes(route.slice(venue.length))
   ));
   const sharedRoutes = expectedRoutes.filter((route) => !isVenueCopy(route));
-  expect(sharedRoutes).toHaveLength(39);
+  expect(sharedRoutes).toHaveLength(40);
+  expect(sharedRoutes).toContain('/leaderboard');
   expect(expectedRoutes.length).toBeGreaterThan(sharedRoutes.length);
 
   for (const locale of ['nl', 'fr', 'es']) {
@@ -437,12 +460,10 @@ test('selected EU language persists across location and FAQ navigation', async (
     await page.goto('/eindhoven');
     await waitForLanguageRuntime(page, true);
 
-    if (isMobile) {
-      await page.locator('#locationBtn').click();
-      await page.locator('.language-switcher--overlay [data-language-select]').selectOption(locale);
-    } else {
-      await page.locator('.language-switcher--desktop [data-language-select]').selectOption(locale);
-    }
+    if (isMobile) await page.locator('#utilityLocationName').click();
+    const languageSwitcher = page.locator(isMobile ? '.language-switcher--overlay' : '.language-switcher--desktop');
+    await languageSwitcher.locator('.language-menu-btn').click();
+    await languageSwitcher.locator(`[data-language-option="${locale}"]`).click();
 
     await expect(page).toHaveURL(new RegExp(`/${locale}/eindhoven/?$`));
     await waitForLanguageRuntime(page, true);
@@ -452,9 +473,9 @@ test('selected EU language persists across location and FAQ navigation', async (
 
     if (isMobile) {
       await page.locator('.nav-menu-btn').click();
-      await page.locator('#mobileMenu a[data-i18n="nav.faq"]').click();
+      await page.locator('#mobileMenu > .mobile-menu-links > li > a[data-i18n="nav.faq"]').click();
     } else {
-      await page.locator('.nav-links a[data-i18n="nav.faq"]').click();
+      await page.locator('.nav-links > li > a[data-i18n="nav.faq"]').click();
     }
     await expect(page).toHaveURL(new RegExp(`/${locale}/eindhoven/faq/?$`));
     await page.reload();
@@ -462,7 +483,7 @@ test('selected EU language persists across location and FAQ navigation', async (
     await expect.poll(() => page.evaluate(() => window.TM.current?.slug)).toBe('eindhoven');
     await expect(page.locator('html')).toHaveAttribute('lang', new RegExp(`^${locale}(?:-|$)`, 'i'));
 
-    await page.locator('#locationBtn').click();
+    await page.locator('#utilityLocationName').click();
     const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]');
     await expect(brussels).toHaveAttribute('href', `/${locale}/brussels/faq`);
     await brussels.click();
@@ -479,9 +500,9 @@ test('selected EU language persists across location and FAQ navigation', async (
 
     if (isMobile) {
       await page.locator('.nav-menu-btn').click();
-      await page.locator('#mobileMenu a[data-i18n="nav.faq"]').click();
+      await page.locator('#mobileMenu > .mobile-menu-links > li > a[data-i18n="nav.faq"]').click();
     } else {
-      await page.locator('.nav-links a[data-i18n="nav.faq"]').click();
+      await page.locator('.nav-links > li > a[data-i18n="nav.faq"]').click();
     }
 
     await expect(page).toHaveURL(new RegExp(`/${locale}/brussels/faq/?$`));
@@ -500,7 +521,7 @@ test('localized EU routes translate their announcement and footer chrome', async
       ticker: 'TIME MISSION ANTWERPEN',
       city: 'ANTWERPEN',
       tagline: 'Social gaming in het echt: teams strijden in immersive uitdagingen, dwars door tijd en ruimte.',
-      experience: 'ONTDEK',
+      explore: 'Ontdekken',
       address: 'Adres',
       hours: 'Openingstijden',
       directions: 'Routebeschrijving ↗',
@@ -516,7 +537,7 @@ test('localized EU routes translate their announcement and footer chrome', async
       ticker: 'SPÉCIAL SOIRÉE 🍸 – JEU - SAM',
       city: 'BRUXELLES',
       tagline: "Une aventure de jeu social où les équipes s'affrontent dans des défis immersifs à travers le temps et l'espace.",
-      experience: 'EXPÉRIENCE',
+      explore: 'Explorer',
       address: 'Adresse',
       hours: 'Horaires',
       directions: 'Itinéraire ↗',
@@ -532,7 +553,7 @@ test('localized EU routes translate their announcement and footer chrome', async
       ticker: '¡EINDHOVEN YA ESTÁ ABIERTO!',
       city: 'EINDHOVEN',
       tagline: 'Una aventura de juego social en la que los equipos compiten en desafíos inmersivos a través del tiempo y el espacio.',
-      experience: 'EXPERIENCIA',
+      explore: 'Explorar',
       address: 'Dirección',
       hours: 'Horarios',
       directions: 'Cómo llegar ↗',
@@ -559,7 +580,7 @@ test('localized EU routes translate their announcement and footer chrome', async
     }
     await expect(page.locator('.footer-locations-title')).toHaveText(route.city);
     await expect(page.locator('.footer-brand p')).toHaveText(route.tagline);
-    await expect(page.locator('.footer-title').first()).toHaveText(route.experience);
+    await expect(page.locator('.footer-title[data-i18n="footer.explore"]')).toHaveText(route.explore);
     await expect(page.locator('.footer-loc-label').first()).toHaveText(route.address);
     await expect(page.locator('.footer-loc-hours-summary')).toContainText(route.hours);
     await expect(page.locator('.footer-loc-map')).toHaveText(route.directions);
@@ -637,6 +658,14 @@ test('browser language produces a suggestion instead of a forced redirect', asyn
   expect(layout.card.right).toBeLessThanOrEqual(layout.viewportWidth);
   expect(layout.card.top).toBeGreaterThanOrEqual(0);
   expect(layout.card.bottom).toBeLessThanOrEqual(layout.viewportHeight);
+  if (layout.viewportWidth <= 768) {
+    const bookingButton = page.locator('.mobile-book-bar .mobile-book-btn');
+    await expect(bookingButton).toBeVisible();
+    const bookingBounds = await bookingButton.boundingBox();
+    expect(bookingBounds.width).toBeGreaterThanOrEqual(44);
+    expect(bookingBounds.height).toBeGreaterThanOrEqual(44);
+    expect(layout.card.bottom).toBeLessThanOrEqual(bookingBounds.y);
+  }
   if (layout.viewportWidth <= 480) {
     expect(layout.linkTop).toBeGreaterThanOrEqual(layout.copyBottom - 1);
   }
@@ -664,7 +693,13 @@ test('EU navigation lists Europe before the United States', async ({ page }) => 
   await expect(europeGroup.locator('a[data-tm-location-slug="eindhoven"] .coming-soon-tag'))
     .toHaveText('NOW OPEN');
   await expect(europeGroup.locator('a[data-tm-location-slug="eindhoven"]')).toHaveClass(/location-open-now/);
-  await expect(usGroup.locator('.coming-soon-tag')).toHaveCount(0);
+  await expect(usGroup.locator('.coming-soon-tag')).toHaveCount(4);
+  for (const slug of ['dallas', 'nashville', 'boston', 'scottsdale']) {
+    const location = usGroup.locator(`a[data-tm-location-slug="${slug}"]`);
+    await expect(location.locator('.coming-soon-tag')).toHaveText('Coming Soon');
+    await expect(location).toHaveAttribute('href', `https://www.timemission.com/${slug}`);
+    await expect(location).toHaveAttribute('data-tm-external-location', 'true');
+  }
 
   await page.goto('/locations');
   await expect(page.locator('.locations-list .loc-group').first())
@@ -799,21 +834,31 @@ for (const prefix of ['', '/nl', '/fr', '/es']) {
 
 for (const cta of ['.nav-right .btn-tickets', '.hero-cta a.btn-primary']) {
   // iDEAL payments fail inside the Roller overlay, so Book Now opens the checkout page itself.
-  test(`Eindhoven ${cta} opens the Roller checkout page`, async ({ page, context }) => {
+  test(`Eindhoven ${cta} opens the Roller checkout page`, async ({ page, context, isMobile }) => {
     const checkout = 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/en/products';
     await context.route('https://ecom.roller.app/**', (route) => route.fulfill({ contentType: 'text/html', body: '<title>Roller</title>' }));
     await page.goto('/eindhoven?code=OPEN50');
     await page.evaluate(async () => { await window.TM.ready; });
     await expect(page).toHaveTitle('Time Mission Eindhoven | Now Open!');
     await expect(page.locator('.ticker-bar').first()).toContainText('EINDHOVEN NOW OPEN!');
-    await expect(page.locator('.hero-cta a.btn-primary')).toHaveText('Book Now');
+    await expect(page.locator('.nav-right .btn-tickets')).toHaveText('Book Now');
+    await expect(page.locator('.hero-cta a.btn-primary')).toHaveText('Tickets');
+    await expect(page.locator('.hero-cta a.btn-primary')).toHaveAttribute('href', `${checkout}?code=OPEN50`);
     await expect(page.locator('[data-tm-klaviyo-form-trigger], [data-tm-form-name="eindhoven_signup"]')).toHaveCount(0);
     await expect(page.locator('script[src*="guest-agent"]')).toHaveCount(0);
+    const languageSuggestion = page.locator('[data-language-suggestion]');
+    if (await languageSuggestion.isVisible()) {
+      await languageSuggestion.locator('[data-language-suggestion-dismiss]').click();
+    }
+    // Phones use the fixed booking bar in place of the hero action.
+    const checkoutCta = page.locator(isMobile && cta === '.hero-cta a.btn-primary'
+      ? '.mobile-book-bar .mobile-book-btn' : cta).first();
 
     const [popup] = await Promise.all([
       context.waitForEvent('page'),
-      page.locator(cta).first().click(),
+      checkoutCta.click(),
     ]);
+    await popup.waitForURL(`${checkout}?code=OPEN50`);
     await popup.waitForLoadState('domcontentloaded');
     const opened = new URL(popup.url());
     expect(opened.origin + opened.pathname).toBe(checkout);
@@ -821,18 +866,25 @@ for (const cta of ['.nav-right .btn-tickets', '.hero-cta a.btn-primary']) {
     await expect(page.locator('#roller-checkout[data-checkout]')).toHaveCount(0);
   });
 
-  test(`Dutch Eindhoven ${cta} opens the Dutch Roller checkout`, async ({ page, context }) => {
+  test(`Dutch Eindhoven ${cta} opens the Dutch Roller checkout`, async ({ page, context, isMobile }) => {
     await context.route('https://ecom.roller.app/**', (route) => route.fulfill({ contentType: 'text/html', body: '<title>Roller</title>' }));
     await page.goto('/nl/eindhoven');
     await page.evaluate(async () => { await window.TM.ready; });
+    await expect(page.locator('.nav-right .btn-tickets')).toHaveText('Boek nu');
+    await expect(page.locator('.hero-cta a.btn-primary')).toHaveText('Tickets');
     // The link itself must point at the Dutch checkout so copying or opening it in a new tab works.
     await expect(page.locator(cta).first())
+      .toHaveAttribute('href', 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/nl/products');
+    const checkoutCta = page.locator(isMobile && cta === '.hero-cta a.btn-primary'
+      ? '.mobile-book-bar .mobile-book-btn' : cta).first();
+    await expect(checkoutCta)
       .toHaveAttribute('href', 'https://ecom.roller.app/timemissioneindhoven/onlinecheckout/nl/products');
 
     const [popup] = await Promise.all([
       context.waitForEvent('page'),
-      page.locator(cta).first().click(),
+      checkoutCta.click(),
     ]);
+    await popup.waitForURL('https://ecom.roller.app/timemissioneindhoven/onlinecheckout/nl/products');
     await popup.waitForLoadState('domcontentloaded');
     const opened = new URL(popup.url());
     expect(opened.origin + opened.pathname).toBe('https://ecom.roller.app/timemissioneindhoven/onlinecheckout/nl/products');

@@ -92,3 +92,9 @@
         grid-area: dismiss;
     }
 }
+
+@media (max-width: 768px) {
+    .language-suggestion {
+        bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    }
+}

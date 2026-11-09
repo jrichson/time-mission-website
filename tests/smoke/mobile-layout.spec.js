@@ -5,6 +5,18 @@ test.beforeEach(async ({ page }) => {
   await prepareSmokePage(page);
 });
 
+async function expectLabelFits(control) {
+  const bounds = await control.evaluate((element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const text = range.getBoundingClientRect();
+    const box = element.getBoundingClientRect();
+    return { left: text.left - box.left, right: box.right - text.right };
+  });
+  expect(bounds.left).toBeGreaterThanOrEqual(-1);
+  expect(bounds.right).toBeGreaterThanOrEqual(-1);
+}
+
 test.describe('Mobile location selector', () => {
   test.skip(({ isMobile }) => !isMobile, 'mobile-only test');
 
@@ -18,12 +30,12 @@ test.describe('Mobile location selector', () => {
     await expect(page).toHaveURL(/\/mount-prospect$/);
     await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('mount-prospect');
     await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
-    await expect(page.locator('#locationText')).toContainText('Mount Prospect');
+    await expect(page.locator('#utilityLocationName')).toContainText('Mount Prospect');
   });
 
   test('tapping a location link keeps the current page context', async ({ page }) => {
     await page.goto('/groups');
-    await page.locator('#locationBtn').first().click();
+    await page.locator('#utilityChoose').click();
     await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
 
     const philly = page.locator('#locationDropdown a[href*="philadelphia"]').first();
@@ -36,7 +48,7 @@ test.describe('Mobile location selector', () => {
 
   test('EU locations expose the counterpart-site handoff', async ({ page }) => {
     await page.goto('/groups?utm_source=paid&utm_campaign=eu');
-    await page.locator('#locationBtn').first().click();
+    await page.locator('#utilityChoose').click();
     await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
 
     const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
@@ -50,7 +62,7 @@ test.describe('Mobile location selector', () => {
 
   test('tapping Edison opens its local page and keeps Supercharged as the action destination', async ({ page }) => {
     await page.goto('/?utm_source=paid&utm_campaign=edison');
-    await page.locator('#locationBtn').first().click();
+    await page.locator('#utilityChoose').click();
     await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
 
     const edison = page.locator('#locationDropdown a[data-tm-location-slug="edison"]').first();
@@ -157,26 +169,24 @@ test.describe('small mobile (375x667)', () => {
 
   test('selected location is visible in the mobile header without overflow', async ({ page }) => {
     await page.goto('/mount-prospect');
-    const locBtn = page.locator('.location-btn').first();
-    const locationText = page.locator('#locationText');
-    const locationPin = locBtn.locator('svg').first();
+    const locBtn = page.locator('#utilityLocationName');
+    const locationText = locBtn;
+    const locationPin = page.locator('.utility-pin');
 
-    await expect(locBtn).toHaveClass(/has-location/);
+    await expect.poll(() => page.evaluate(() => window.TM?.current?.slug)).toBe('mount-prospect');
     await expect(locationText).toBeVisible();
     await expect(locationPin).toBeVisible();
     await expect(locationText).toContainText('Mount Prospect');
-    await expect(locBtn).toHaveAttribute('aria-label', 'Change location: Mount Prospect');
+    await expect(locBtn).toHaveAccessibleName('Mount Prospect');
+    await expect(locBtn).toHaveAttribute('href', '/mount-prospect');
 
-    const labelBox = await locationText.evaluate((el) => ({
-      clientWidth: el.clientWidth,
-      scrollWidth: el.scrollWidth,
-    }));
-    expect(labelBox.scrollWidth).toBeLessThanOrEqual(labelBox.clientWidth + 1);
+    await expectLabelFits(locationText);
 
     const box = await locBtn.boundingBox();
     expect(box).not.toBeNull();
     expect(box.width).toBeGreaterThanOrEqual(44);
     expect(box.height).toBeGreaterThanOrEqual(44);
+    await expect(page.locator('#utilityAccountBtn')).toBeHidden();
 
     const selectedLocationStyle = await locBtn.evaluate((el) => {
       const style = window.getComputedStyle(el);
@@ -192,7 +202,7 @@ test.describe('small mobile (375x667)', () => {
       borderRadius: '0px',
     });
 
-    await expect(locationPin).toHaveCSS('color', 'rgb(255, 107, 44)');
+    await expect(locationPin).toHaveCSS('color', 'rgb(255, 255, 255)');
 
     const overflow = await page.evaluate(() => {
       return {
@@ -223,9 +233,10 @@ test.describe('small mobile (375x667)', () => {
 
   test('location button preserves 44x44 tap target', async ({ page }) => {
     await page.goto('/');
-    const locBtn = page.locator('.location-btn').first();
+    const locBtn = page.locator('#utilityChoose');
     await locBtn.waitFor({ state: 'visible' });
-    await expect(locBtn).not.toHaveClass(/has-location/);
+    await expect(locBtn).toHaveAccessibleName('Choose your location');
+    await expect(page.locator('#utilityLocationName')).toBeHidden();
     const box = await locBtn.boundingBox();
     expect(box).not.toBeNull();
     expect(box.width).toBeGreaterThanOrEqual(44);
@@ -238,6 +249,7 @@ test.describe('small mobile (375x667)', () => {
     await ticketsBtn.waitFor({ state: 'visible' });
     const box = await ticketsBtn.boundingBox();
     expect(box).not.toBeNull();
+    expect(box.width).toBeGreaterThanOrEqual(44);
     expect(box.height).toBeGreaterThanOrEqual(48);
     const padding = await ticketsBtn.evaluate((el) => {
       const style = window.getComputedStyle(el);
@@ -253,8 +265,8 @@ test.describe('small mobile (375x667)', () => {
   test('open menu keeps the location label clear of the booking action', async ({ page }) => {
     const viewports = [320, 360, 375, 390, 430];
     const states = [
-      { path: '/', label: 'Select Location' },
-      { path: '/mount-prospect', label: 'Mount Prospect' },
+      { path: '/', label: 'Choose your location', selector: '#utilityChoose' },
+      { path: '/mount-prospect', label: 'Mount Prospect', selector: '#utilityLocationName' },
     ];
 
     for (const width of viewports) {
@@ -264,23 +276,31 @@ test.describe('small mobile (375x667)', () => {
         await page.goto(state.path);
         await page.locator('.nav-menu-btn').click();
 
-        const locationButton = page.locator('#locationBtn');
-        const locationText = page.locator('#locationText');
+        const locationControl = page.locator(state.selector);
         const navTickets = page.locator('.nav-right .btn-tickets');
+        const bottomTickets = page.locator('.mobile-book-btn');
 
-        await expect(locationText).toBeVisible();
-        await expect(locationText).toContainText(state.label);
-        await expect(navTickets).toBeHidden();
+        await expect(locationControl).toBeVisible();
+        await expect(locationControl).toContainText(state.label);
+        await expect(navTickets).toBeVisible();
+        await expect(bottomTickets).toBeVisible();
+        await expect(page.locator('.nav-menu-btn')).toHaveAttribute('aria-expanded', 'true');
 
-        const [buttonBox, labelBox] = await Promise.all([
-          locationButton.boundingBox(),
-          locationText.boundingBox(),
+        const [locationBox, navBookingBox, bottomBookingBox] = await Promise.all([
+          locationControl.boundingBox(),
+          navTickets.boundingBox(),
+          bottomTickets.boundingBox(),
         ]);
-        expect(buttonBox, `${width}px ${state.label} location button`).not.toBeNull();
-        expect(labelBox, `${width}px ${state.label} location label`).not.toBeNull();
-        expect(labelBox.x, `${width}px ${state.label} left edge`).toBeGreaterThanOrEqual(buttonBox.x - 1);
-        expect(labelBox.x + labelBox.width, `${width}px ${state.label} right edge`)
-          .toBeLessThanOrEqual(buttonBox.x + buttonBox.width + 1);
+        expect(locationBox, `${width}px ${state.label} location control`).not.toBeNull();
+        expect(navBookingBox, `${width}px nav booking action`).not.toBeNull();
+        expect(bottomBookingBox, `${width}px bottom booking action`).not.toBeNull();
+        expect(locationBox.x).toBeGreaterThanOrEqual(0);
+        expect(locationBox.x + locationBox.width).toBeLessThanOrEqual(width);
+        expect(locationBox.y + locationBox.height).toBeLessThanOrEqual(navBookingBox.y + 1);
+        expect(locationBox.y + locationBox.height).toBeLessThanOrEqual(bottomBookingBox.y);
+        await expectLabelFits(locationControl);
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+        expect(overflow).toBeLessThanOrEqual(1);
       }
     }
   });

@@ -28,14 +28,12 @@ test('homepage omits the retired Orland Park announcement ticker', async ({ page
 });
 
 test('desktop location selection keeps the current page context', async ({ page, isMobile }) => {
-  // Desktop-only: this flow uses the desktop `#locationBtn` in the nav.
-  // Mobile location selection lives inside the hamburger menu and is covered
-  // by the dedicated mobile location selector block below.
+  // Mobile selection has separate coverage for the compact utility bar.
   test.skip(isMobile, 'desktop-only flow (mobile path covered separately)');
 
   await page.goto('/groups/corporate?utm_source=test#details');
 
-  await page.locator('#locationBtn').click();
+  await page.locator('#utilityChoose').click();
   await expect(page.locator('#locationDropdown a[data-city="Philadelphia"]')).toHaveAttribute(
     'href',
     '/philadelphia/groups/corporate?utm_source=test#details'
@@ -43,7 +41,7 @@ test('desktop location selection keeps the current page context', async ({ page,
   await page.locator('#locationDropdown a[data-city="Philadelphia"]').click();
 
   await expect(page).toHaveURL(/\/philadelphia\/groups\/corporate\?utm_source=test#details$/);
-  await expect(page.locator('#locationText')).toContainText('Philadelphia');
+  await expect(page.locator('#utilityLocationName')).toContainText('Philadelphia');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });
 
@@ -51,7 +49,7 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   test.skip(isMobile, 'desktop-only overlay path');
 
   await page.goto('/?utm_source=paid&utm_campaign=eu');
-  await page.locator('#locationBtn').click();
+  await page.locator('#utilityChoose').click();
 
   const antwerp = page.locator('#locationDropdown a[data-tm-location-slug="antwerp"]').first();
   const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
@@ -81,19 +79,27 @@ test('desktop location selector previews Europe venues', async ({ page, isMobile
   await expect(page.locator('#locationInfo .location-info-book')).toHaveAttribute('href', 'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu');
 });
 
-test('US location selector shows only the Dallas and Eindhoven callouts', async ({ page }) => {
+test('US location selector distinguishes upcoming venues and newly opened Eindhoven', async ({ page }) => {
   await page.goto('/');
 
   const badgeSlugs = await page.locator('#locationDropdown a:has(.coming-soon-tag)')
     .evaluateAll((links) => links.map((link) => link.getAttribute('data-tm-location-slug')));
 
-  expect([...badgeSlugs].sort()).toEqual(['dallas', 'eindhoven']);
+  expect([...badgeSlugs].sort()).toEqual(['boston', 'dallas', 'eindhoven', 'nashville', 'scottsdale']);
+  for (const slug of ['boston', 'nashville', 'scottsdale']) {
+    await expect(page.locator(`#locationDropdown a[data-tm-location-slug="${slug}"] .coming-soon-tag`)).toHaveText('Coming Soon');
+  }
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="dallas"] .coming-soon-tag')).toHaveText('Opening Soon');
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"] .coming-soon-tag')).toHaveText('NOW OPEN');
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]')).toHaveClass(/location-open-now/);
 });
 
-test('Dallas signup page header CTA is labelled Ticket Sign-Up', async ({ page }) => {
+test('Dallas signup page header uses Ticket Sign-Up when booking is unavailable', async ({ page }) => {
+  await page.addInitScript(catalog => {
+    const dallas = catalog.locations.find(location => location.id === 'dallas');
+    Object.assign(dallas, { status: 'coming-soon', bookingUrl: '', rollerCheckoutUrl: '' });
+    window.TM_DATA = catalog;
+  }, require('../../dist/data/locations.json'));
   await page.goto('/dallas/signup');
   await page.evaluate(async () => { await window.TM.ready; });
 
@@ -114,7 +120,9 @@ test('Scottsdale is coming soon and location lists mark upcoming venues', async 
   expect(upcomingNames.every((name) => name.trim().endsWith('*'))).toBe(true);
   const openNames = await page.locator('.loc-row:not(.is-coming-soon) .loc-name').allTextContents();
   expect(openNames.every((name) => !name.includes('*'))).toBe(true);
-  await expect(page.locator('#locationDropdown a[data-tm-location-slug="scottsdale"]')).toContainText('AZ – Scottsdale*');
+  const scottsdalePicker = page.locator('#locationDropdown a[data-tm-location-slug="scottsdale"]');
+  await expect(scottsdalePicker.locator('.location-link-label')).toHaveText('AZ – Scottsdale');
+  await expect(scottsdalePicker.locator('.coming-soon-tag')).toHaveText('Coming Soon');
   await expect(page.locator('.footer-location-list a[href="/scottsdale"]')).toContainText('AZ – Scottsdale*');
 
   await scottsdale.click();
@@ -127,7 +135,9 @@ test('Scottsdale is coming soon and location lists mark upcoming venues', async 
 
   await page.goto('/es/locations');
   await page.evaluate(async () => { await window.TM.ready; });
-  await expect(page.locator('#locationDropdown a[data-tm-location-slug="scottsdale"]')).toContainText('Scottsdale*');
+  const spanishScottsdale = page.locator('#locationDropdown a[data-tm-location-slug="scottsdale"]');
+  await expect(spanishScottsdale.locator('.location-link-label')).toContainText('Scottsdale');
+  await expect(spanishScottsdale.locator('.coming-soon-tag')).toHaveText(i18nCatalog.translations.es['location.comingSoon']);
   const eindhoven = page.locator('#locationDropdown a[data-tm-location-slug="eindhoven"]');
   await expect(eindhoven).toContainText('¡YA ABIERTO!');
   await expect(eindhoven).not.toContainText('*');
@@ -137,7 +147,7 @@ test('Edison has a local location page whose action links lead to Supercharged N
   test.skip(isMobile, 'desktop-only overlay path');
 
   await page.goto('/?utm_source=paid&utm_campaign=edison');
-  await page.locator('#locationBtn').click();
+  await page.locator('#utilityChoose').click();
 
   const edison = page.locator('#locationDropdown a[data-tm-location-slug="edison"]').first();
   await expect(edison).toContainText('NJ – Edison');
@@ -163,7 +173,7 @@ test('Edison has a local location page whose action links lead to Supercharged N
   );
   await expect(page.locator('.final-cta .btn-location-book')).toHaveAttribute(
     'href',
-    'https://www.superchargednj.com/book-time-mission/',
+    'https://www.superchargednj.com/book-time-mission/?utm_source=paid&utm_campaign=edison',
   );
   await expect(page.locator('nav .btn-tickets')).toHaveAttribute(
     'href',
@@ -194,7 +204,7 @@ test('desktop location selector hands Brussels off to the EU site', async ({ pag
   test.skip(isMobile, 'desktop-only overlay path');
 
   await page.goto('/?utm_source=paid&utm_campaign=eu');
-  await page.locator('#locationBtn').click();
+  await page.locator('#utilityChoose').click();
 
   const brussels = page.locator('#locationDropdown a[data-tm-location-slug="brussels"]').first();
 
@@ -207,7 +217,7 @@ test('desktop location selector hands Brussels off to the EU site', async ({ pag
     'https://www.timemission.eu/brussels?utm_source=paid&utm_campaign=eu',
   );
   await expect(page).toHaveURL(/\/\?utm_source=paid&utm_campaign=eu$/);
-  await expect(page.locator('#locationText')).toContainText('Select Location');
+  await expect(page.locator('#utilityChoose')).toHaveText('Choose your location');
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBeNull();
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
 });
@@ -216,7 +226,7 @@ test('Europe location fallback links preserve tracking params', async ({ page, i
   test.skip(isMobile, 'desktop-only overlay path');
 
   await page.goto('/groups/corporate?utm_source=paid&utm_campaign=spring&book=1');
-  await page.locator('#locationBtn').click();
+  await page.locator('#utilityChoose').click();
 
   await expect(page.locator('#locationDropdown a[data-tm-location-slug="antwerp"]'))
     .toHaveAttribute('href', 'https://www.timemission.eu/antwerp?utm_source=paid&utm_campaign=spring');
@@ -241,17 +251,18 @@ test('hard refresh on shared pages clears stale saved location', async ({ page }
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBeNull();
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
   await expect.poll(() => page.evaluate(() => localStorage.getItem('timeMissionLocation'))).toBeNull();
-  await expect(page.locator('#locationText')).toContainText('Select Location');
+  await expect(page.locator('#utilityChoose')).toHaveText('Choose your location');
 });
 
 test('desktop location hover renders address map preview before selection', async ({ page, isMobile }) => {
   test.skip(isMobile, 'desktop-only preview path');
 
   await page.goto('/');
-  await page.locator('.language-switcher--desktop [data-language-select]').selectOption('es');
+  await page.locator('.language-switcher--desktop .language-menu-btn').click();
+  await page.locator('.language-switcher--desktop [data-language-option="es"]').click();
   await expect(page).toHaveURL(/\/es\/?$/);
   await waitForLanguageRuntime(page, true);
-  await page.locator('#locationBtn').click();
+  await page.locator('#utilityChoose').click();
   await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
   await expect(page.locator('#locationDropdown .location-dropdown-title')).toHaveText(i18nCatalog.translations.es['location.title']);
 
@@ -263,7 +274,7 @@ test('desktop location hover renders address map preview before selection', asyn
   await expect(page.locator('#locationInfo .location-info-name')).toContainText('Mount Prospect');
   await expect(page.locator('#locationInfo .location-info-address')).toContainText('132 Randhurst Village Drive');
   await expect(page.locator('#locationInfo .location-info-directions')).toContainText(i18nCatalog.translations.es['location.getDirections']);
-  await expect(page.locator('#locationInfo .location-info-hours')).toContainText(`${i18nCatalog.translations.es['location.day.mon']}:`);
+  await expect(page.locator('#locationInfo .location-hours-days').first()).toContainText(i18nCatalog.translations.es['location.day.mon']);
   await expect(page.locator('#locationInfo .location-info-book')).toContainText(i18nCatalog.translations.es['nav.bookNow']);
   await expect(page.locator('#locationInfo .location-info-contact')).toHaveCount(0);
   await expect(page.locator('#locationMap iframe')).toHaveAttribute('src', /google\.com\/maps/);
@@ -278,7 +289,7 @@ test('location page drives nav state and ticket panel default location', async (
   });
 
   await page.goto('/mount-prospect');
-  await expect(page.locator('#locationText')).toContainText('Mount Prospect');
+  await expect(page.locator('#utilityLocationName')).toContainText('Mount Prospect');
   await expect.poll(() => page.evaluate(() => window.TM?.current?.slug || null)).toBe('mount-prospect');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('tm_location'))).toBeNull();
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
@@ -348,7 +359,7 @@ test('Boston coming-soon page publishes the address and lead-only CTAs', async (
 
   await expect(page).toHaveTitle('Time Mission Boston, MA | Coming Soon');
   await expect(page.locator('.ticker-bar')).toHaveCount(0);
-  await expect(bostonMenuLink.locator('.coming-soon-tag')).toHaveCount(0);
+  await expect(bostonMenuLink.locator('.coming-soon-tag')).toHaveText('Coming Soon');
   await expect(page.locator('.nav-right .btn-tickets')).toHaveAttribute(
     'href',
     '/boston/contact#location=boston&type=updates'

@@ -45,7 +45,7 @@ test('site-progressive.js: reveal elements get .visible class on scroll', async 
     expect(errors, `Page errors on /:\n${errors.join('\n')}`).toHaveLength(0);
 });
 
-test('site-progressive.js: footer location toggle opens on click', async ({ page }) => {
+test('shared footer location controls work with the generated CSP', async ({ page }) => {
     const pageErrors = [];
     page.on('pageerror', (err) => pageErrors.push(err.message));
 
@@ -61,6 +61,21 @@ test('site-progressive.js: footer location toggle opens on click', async ({ page
 
     const parent = toggle.locator('..');
     await expect(parent).toHaveClass(/open/, { timeout: 3000 });
+    await expect(parent.locator('.footer-location-list')).toBeVisible();
+    await toggle.click();
+    await expect(parent).not.toHaveClass(/open/);
+
+    const venue = process.env.TM_SITE_PROFILE === 'eu' ? 'eindhoven' : 'philadelphia';
+    await page.goto('/' + venue, { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState('load');
+    const changeLocation = page.locator('.footer-loc-change');
+    await changeLocation.scrollIntoViewIfNeeded();
+    await changeLocation.click();
+    await expect(page.locator('#locationDropdown')).toHaveClass(/open/);
+    await expect(page.locator('#locationDropdown .location-dropdown-close')).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#locationDropdown')).not.toHaveClass(/open/);
+    await expect(changeLocation).toBeFocused();
 
     expect(pageErrors, `Page errors on / (footer toggle):\n${pageErrors.join('\n')}`).toHaveLength(0);
 });

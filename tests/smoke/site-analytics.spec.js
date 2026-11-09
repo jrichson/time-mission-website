@@ -41,12 +41,15 @@ test('analytics click delegation tracks phone and email clicks without PII', asy
     phone.id = 'tm-test-phone-link';
     phone.href = 'tel:+12158675309';
     phone.textContent = 'Call Test';
+    // Exercise analytics delegation without handing synthetic contacts to an OS app.
+    phone.addEventListener('click', (event) => event.preventDefault());
     document.body.appendChild(phone);
 
     const email = document.createElement('a');
     email.id = 'tm-test-email-link';
     email.href = 'mailto:test@example.com';
     email.textContent = 'Email Test';
+    email.addEventListener('click', (event) => event.preventDefault());
     document.body.appendChild(email);
   });
 
@@ -62,6 +65,7 @@ test('analytics click delegation tracks phone and email clicks without PII', asy
       hasEmail: !!emailEvent,
       phoneCtaId: phoneEvent?.parameters?.CTA_ID || '',
       emailCtaId: emailEvent?.parameters?.CTA_ID || '',
+      serializedEvents: JSON.stringify([phoneEvent, emailEvent]),
     };
   });
 
@@ -69,4 +73,6 @@ test('analytics click delegation tracks phone and email clicks without PII', asy
   expect(result.hasEmail).toBe(true);
   expect(result.phoneCtaId).toBe('phone_link');
   expect(result.emailCtaId).toBe('email_link');
+  expect(result.serializedEvents).not.toContain('+12158675309');
+  expect(result.serializedEvents).not.toContain('test@example.com');
 });

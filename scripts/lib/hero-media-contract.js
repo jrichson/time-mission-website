@@ -45,7 +45,7 @@ function inspectHeroVideoMarkup(html, label = 'hero markup') {
     errors.push(`${label}: hero video must keep preload="none" so the poster paints first`);
   }
   if (!Object.prototype.hasOwnProperty.call(video.attrs, 'autoplay')) {
-    errors.push(`${label}: hero video must include autoplay so mobile Safari can use its native muted inline autoplay path`);
+    errors.push(`${label}: hero video must include autoplay for native muted inline playback where media policy allows it`);
   }
   if (!video.sources.length) {
     errors.push(`${label}: hero video needs at least one <source data-src="...">`);

@@ -1439,7 +1439,8 @@
       "Party": "feest",
       "What's the": "Wat is",
       "Mission?": "de missie?",
-      "Players racing through a mission challenge": "Spelers in een missie-uitdaging"
+      "Players racing through a mission challenge": "Spelers in een missie-uitdaging",
+      "Explore the top 100 scores across US Time Mission venues, or choose a location to view its leaderboard.": "Bekijk de top 100 scores van Amerikaanse Time Mission-locaties of kies een locatie voor het plaatselijke klassement."
     },
     "fr": {
       ", then lets those teams compete across": ", puis permet à ces équipes de s'affronter",
@@ -2673,7 +2674,8 @@
       "Party": "fête",
       "What's the": "Quelle est",
       "Mission?": "la mission ?",
-      "Players racing through a mission challenge": "Joueurs lancés dans un défi de mission"
+      "Players racing through a mission challenge": "Joueurs lancés dans un défi de mission",
+      "Explore the top 100 scores across US Time Mission venues, or choose a location to view its leaderboard.": "Découvrez les 100 meilleurs scores des sites Time Mission aux États-Unis ou choisissez un lieu pour voir son classement."
     },
     "es": {
       ", then lets those teams compete across": ", luego permite que esos equipos compitan en",
@@ -3907,7 +3909,8 @@
       "Party": "fiesta",
       "What's the": "¿Cuál es",
       "Mission?": "la misión?",
-      "Players racing through a mission challenge": "Jugadores en un desafío de misión"
+      "Players racing through a mission challenge": "Jugadores en un desafío de misión",
+      "Explore the top 100 scores across US Time Mission venues, or choose a location to view its leaderboard.": "Explora las 100 mejores puntuaciones de las sedes de Time Mission de Estados Unidos o elige una sede para ver su clasificación."
     }
   },
   "_profiles": {
@@ -4419,6 +4422,10 @@
           "Edison — 25+ Interactive Mission Rooms Now Open.": "Edison — Más de 25 salas de misiones interactivas. Ya abierto.",
           "Yes. Online booking is available for Edison. Use Book Now to choose your date and time through our secure checkout.": "Sí. Ya puedes reservar en línea para Edison. Usa Reservar ahora para elegir la fecha y la hora a través de nuestro sistema de pago seguro.",
           "Tickets for Edison are available now. Choose your date, rally your team, and get ready to play.": "Las entradas para Edison ya están disponibles. Elige la fecha, reúne a tu equipo y prepárate para jugar.",
+          "Dallas — 25+ Interactive Mission Rooms Booking Now.": "Dallas — Más de 25 salas de misiones interactivas. Reservas abiertas.",
+          "Yes. Online booking is available for Dallas. Use Book Now to choose your date and time through our secure checkout.": "Sí. Ya puedes reservar en línea para Dallas. Usa Reservar ahora para elegir la fecha y la hora a través de nuestro sistema de pago seguro.",
+          "Tickets for Dallas are available now. Choose your date, rally your team, and get ready to play.": "Las entradas para Dallas ya están disponibles. Elige la fecha, reúne a tu equipo y prepárate para jugar.",
+          "Booking Now": "Reservas abiertas",
           "Ticket Sign-Up": "Registro de entradas",
           "Booking opens closer to launch. Use Ticket Sign-Up to hear first when Dallas tickets go on sale.": "Las reservas se abrirán cerca de la inauguración. Usa Registro de entradas para enterarte primero cuando salgan a la venta las entradas de Dallas.",
           "Sign up to hear first when Dallas tickets go on sale.": "Regístrate para enterarte primero cuando salgan a la venta las entradas de Dallas.",

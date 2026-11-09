@@ -40,7 +40,7 @@ const pageInit = {
         <link rel="stylesheet" href="/css/page-index-experiences.css?v=1" />
         <link rel="stylesheet" href="/css/page-index-groups.css?v=1" />
         <link rel="stylesheet" href="/css/page-index-flow.css?v=1" />
-        <link rel="stylesheet" href="/css/leaderboard.css?v=3" />
+        <link rel="stylesheet" href="/css/leaderboard.css?v=6" />
         <link rel="stylesheet" href="/css/faq.css?v=5" />
     </Fragment>
     <Fragment slot="json-ld">
@@ -51,14 +51,14 @@ const pageInit = {
         {activeSiteProfile.id === 'us' && <HomeTestimonials />}
         <section class="leaderboard-section" id="leaderboard">
             <h2 class="section-title" data-i18n="leaderboard.homeTitle">Leaderboard</h2>
-            <p class="leaderboard-intro" data-i18n="leaderboard.intro">Every mission you beat adds to your team score. Here's who's on top right now.</p>
+            <p class="leaderboard-intro" data-i18n="leaderboard.intro">Bring your crew. Set the score to beat.</p>
             <Leaderboard limit={5} showViewAll />
         </section>
         <Fragment set:html={indexMainAfterProof} />
     </div>
     <Fragment slot="after-site-scripts">
         <PageWidgetsScripts pageInit={pageInit} />
-        <script defer is:inline src="/js/leaderboard.js?v=3"></script>
+        <script defer is:inline src="/js/leaderboard.js?v=7"></script>
         <script defer is:inline src="/js/social-feed.js?v=1"></script>
     </Fragment>
 </SiteLayout>

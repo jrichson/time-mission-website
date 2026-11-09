@@ -6,6 +6,130 @@ import {
 } from './browser-contract-helpers.mjs';
 
 describe('browser location state contracts', () => {
+  it.each([
+    ['Tickets', 'nav.tickets', false],
+    ['Tickets', 'nav.tickets', true],
+    ['Book Your Adventure', 'home.cta.bookAdventure', false],
+    ['Book Your Adventure', 'home.cta.bookAdventure', true],
+  ])('preserves authored %s copy and icons through hydration and locale changes (%s, span: %s)', async (label, labelKey, textSpan) => {
+    function textNode(value) {
+      return { nodeType: 3, nodeValue: value, get textContent() { return this.nodeValue; } };
+    }
+    function markupCta(copy, navOwned = false) {
+      const cta = createAnchor('#', {
+        className: 'btn-tickets',
+        closestSelectors: navOwned ? ['.nav, .mobile-menu, .mobile-book-bar'] : [],
+      });
+      const svg = { nodeType: 1, tagName: 'SVG', textContent: '' };
+      const span = createAnchor('#', { attrs: { 'data-i18n': labelKey }, textContent: copy });
+      span.nodeType = 1;
+      cta.childNodes = [textSpan && !navOwned ? span : textNode(copy), svg];
+      Object.defineProperty(cta, 'children', { get: () => cta.childNodes.filter((child) => child.nodeType === 1) });
+      Object.defineProperty(cta, 'textContent', {
+        get: () => cta.childNodes.map((child) => child.textContent).join(''),
+        set: (value) => { cta.childNodes = [textNode(value)]; },
+      });
+      return { cta, svg, span };
+    }
+    const authored = markupCta(label);
+    const nav = markupCta('Book Now', true);
+    const { context, window, document } = createBrowserContext({
+      TM_DATA: { locations: [{ id: 'open', slug: 'open', status: 'open', bookingUrl: 'https://checkout.example/tickets' }] },
+      __TM_I18N__: {
+        defaultLanguage: 'en',
+        languages: [{ code: 'en' }, { code: 'es' }],
+        translations: {
+          en: { 'nav.bookNow': 'Book Now', [labelKey]: label },
+          es: { 'nav.bookNow': 'Reservar ahora', 'nav.tickets': 'Entradas', 'home.cta.bookAdventure': 'Reserva tu aventura' },
+        },
+      },
+    });
+    window.location.pathname = '/open';
+    document.documentElement = { lang: 'en', dataset: {} };
+    document.querySelectorAll = (selector) => {
+      if (selector === '.btn-tickets, .btn-book-now') return [authored.cta, nav.cta];
+      if (selector === '[data-i18n]') return [authored.cta, nav.cta, ...(authored.cta.children.includes(authored.span) ? [authored.span] : [])]
+        .filter((element) => element.hasAttribute('data-i18n'));
+      return [];
+    };
+    runScript('js/language-switcher.js', context);
+    await window.TMI18n.ready;
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    runScript('js/locations.js', context);
+    await window.TM.ready;
+
+    expect(authored.cta.textContent.trim()).toBe(label);
+    expect(authored.cta.children).toContain(authored.svg);
+    window.TMI18n.setLanguage('es');
+    const translated = labelKey === 'nav.tickets' ? 'Entradas' : 'Reserva tu aventura';
+    expect(authored.cta.children).toContain(authored.svg);
+    expect(authored.cta.textContent.trim()).toBe(textSpan ? translated : label);
+    expect(nav.cta.textContent.trim()).toBe('Reservar ahora');
+    expect(nav.cta.children).toContain(nav.svg);
+  });
+
+  it('updates ticket CTA labels and destinations through signup, closure, external and bookable venue changes', async () => {
+    const locations = [
+      { id: 'signup', slug: 'signup', status: 'coming-soon', signupFormId: 'AbC123' },
+      { id: 'closed', slug: 'closed', status: 'temporarily-closed', temporaryClosure: { ctaLabel: 'Get reopening news' } },
+      { id: 'external', slug: 'external', status: 'open', externalUrl: 'https://venue.example/', region: 'europe' },
+      { id: 'open', slug: 'open', status: 'open', bookingUrl: 'https://checkout.example/tickets' },
+      { id: 'signup-link', slug: 'signup-link', status: 'coming-soon', signupUrl: '/signup-link/signup' },
+    ];
+    const cta = createAnchor('#', {
+      className: 'btn-tickets', textContent: 'Book Now', closestSelectors: ['.nav, .mobile-menu, .mobile-book-bar'],
+    });
+    const { context, window, document } = createBrowserContext({ TM_DATA: { locations } });
+    document.querySelectorAll = (selector) => selector === '.btn-tickets, .btn-book-now' ? [cta] : [];
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    runScript('js/locations.js', context);
+    await window.TM.ready;
+
+    window.TM.select('signup');
+    expect(cta.textContent).toBe('Sign Up');
+    expect(cta.getAttribute('data-tm-klaviyo-form-trigger')).toBe('AbC123');
+    window.TM.select('closed');
+    expect(cta.textContent).toBe('Get reopening news');
+    expect(cta.href).toBe('/contact#location=closed&type=closure');
+    expect(cta.hasAttribute('data-tm-booking-trigger')).toBe(false);
+    window.TM.select('external');
+    expect(cta.textContent).toBe('Visit EU Site');
+    expect(cta.href).toBe('https://venue.example/');
+    expect(cta.hasAttribute('data-tm-booking-trigger')).toBe(false);
+    window.TM.select('open');
+    expect(cta.textContent).toBe('Book Now');
+    expect(cta.hasAttribute('data-tm-klaviyo-form-trigger')).toBe(false);
+    window.TM.select('signup-link');
+    expect(cta.textContent).toBe('Ticket Sign-Up');
+    expect(cta.href).toBe('/signup-link/signup');
+  });
+
+  it.each([
+    [{ timeZone: 'America/Chicago' }, { open: '12:00', close: '22:00', label: 'Friday hours' }],
+    [{ timeZone: 'Asia/Tokyo' }, { open: '12:00', close: '23:00', label: 'Saturday hours' }],
+    [{ timeZone: 'America/Chicago', specialHours: [{ date: '2026-11-06', name: 'Holiday', label: 'Closed' }] }, { label: 'Closed' }],
+    [{ timeZone: null }, null],
+    [{ timeZone: 'Invalid/Zone' }, null],
+    [{ timeZone: 'America/Chicago', status: 'temporarily-closed' }, null],
+  ])('uses the venue calendar and special hours, or suppresses unknown hours: %j', async (overrides, expected) => {
+    const location = {
+      id: 'venue', slug: 'venue', status: 'open',
+      hours: { fri: { open: '12:00', close: '22:00', label: 'Friday hours' }, sat: { open: '12:00', close: '23:00', label: 'Saturday hours' } },
+      ...overrides,
+    };
+    const { context, window } = createBrowserContext({ TM_DATA: { locations: [location] } });
+    context.Date = class extends Date { constructor(...args) { super(...(args.length ? args : ['2026-11-07T01:30:00Z'])); } };
+    runScript('js/booking-journey.js', context);
+    runScript('js/location-catalog-view.js', context);
+    runScript('js/locations.js', context);
+    await window.TM.ready;
+    window.TM.current = location;
+    expect(window.TM.getTodayHours()).toEqual(expected);
+    expect(window.TM.isOpenNow()).toBe(expected?.open ? overrides.timeZone === 'America/Chicago' : null);
+  });
+
   it('shows explicit opening labels and translates the generic coming-soon label', () => {
     const { context, window } = createBrowserContext({
       TMI18n: { text: (key, fallback) => key === 'location.comingSoon' ? 'Binnenkort' : fallback },

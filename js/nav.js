@@ -332,27 +332,84 @@
     const utilityBar = document.querySelector('.utility-bar');
 
     if (menuBtn && mobileMenu && navEl) {
+        function menuFocusable() {
+            return Array.from(mobileMenu.querySelectorAll('a[href], button:not([disabled]), summary, select, [tabindex="0"]'))
+                .filter(function (element) { return element.offsetParent !== null; });
+        }
+        function setMobileMenu(open, returnFocus) {
+            menuBtn.classList.toggle('active', open);
+            menuBtn.setAttribute('aria-expanded', String(open));
+            mobileMenu.classList.toggle('open', open);
+            mobileMenu.inert = !open;
+            navEl.classList.toggle('menu-open', open);
+            if (tickerBar) tickerBar.classList.toggle('menu-hidden', open);
+            if (utilityBar) utilityBar.classList.toggle('menu-hidden', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+            if (open) {
+                const first = menuFocusable()[0];
+                if (first) first.focus();
+            } else if (returnFocus) menuBtn.focus();
+        }
         menuBtn.addEventListener('click', () => {
-            menuBtn.classList.toggle('active');
-            mobileMenu.classList.toggle('open');
-            navEl.classList.toggle('menu-open');
-            if (tickerBar) tickerBar.classList.toggle('menu-hidden');
-            if (utilityBar) utilityBar.classList.toggle('menu-hidden');
-            document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+            setMobileMenu(!mobileMenu.classList.contains('open'), true);
         });
 
         // Close menu when clicking a nav link
         mobileMenu.querySelectorAll('.mobile-menu-links a').forEach(link => {
             link.addEventListener('click', () => {
-                menuBtn.classList.remove('active');
-                navEl.classList.remove('menu-open');
-                mobileMenu.classList.remove('open');
-                if (tickerBar) tickerBar.classList.remove('menu-hidden');
-                if (utilityBar) utilityBar.classList.remove('menu-hidden');
-                document.body.style.overflow = '';
+                setMobileMenu(false, false);
             });
         });
+        mobileMenu.addEventListener('keydown', function (event) {
+            if (event.key !== 'Tab' || !mobileMenu.classList.contains('open')) return;
+            const focusable = menuFocusable();
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (first && ((event.shiftKey && document.activeElement === first) || (!event.shiftKey && document.activeElement === last))) {
+                event.preventDefault();
+                (event.shiftKey ? last : first).focus();
+            }
+        });
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && mobileMenu.classList.contains('open')) setMobileMenu(false, true);
+        });
+        window.matchMedia('(min-width: 1025px)').addEventListener?.('change', function (event) {
+            if (event.matches && mobileMenu.classList.contains('open')) setMobileMenu(false, false);
+        });
     }
+
+    document.querySelectorAll('.has-mega').forEach(function (item) {
+        const trigger = item.querySelector('a');
+        const panel = item.querySelector('.mega-panel');
+        if (!trigger || !panel) return;
+        function setMegaMenu(open, dismissed) {
+            item.classList.toggle('is-open', open);
+            item.classList.toggle('is-dismissed', !!dismissed);
+            trigger.setAttribute('aria-expanded', String(open));
+        }
+        item.addEventListener('mouseenter', function () { setMegaMenu(true); });
+        item.addEventListener('mouseleave', function () {
+            if (!item.contains(document.activeElement)) setMegaMenu(false);
+        });
+        item.addEventListener('focusin', function () { setMegaMenu(true); });
+        item.addEventListener('focusout', function (event) {
+            if (!item.contains(event.relatedTarget)) setMegaMenu(false);
+        });
+        item.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                trigger.focus();
+                setMegaMenu(false, true);
+            } else if (event.key === 'ArrowDown' && event.target === trigger) {
+                const first = panel.querySelector('a[href]:not([hidden])');
+                if (first) {
+                    event.preventDefault();
+                    setMegaMenu(true);
+                    first.focus();
+                }
+            }
+        });
+    });
 
     function syncLocationDisplay(city) {
         const mainLocText = document.getElementById('locationText');
@@ -406,11 +463,14 @@
     }
 
     if (locationBtn && locationOverlay) {
+        let locationOpener = null;
         function openLocationOverlay() {
+            locationOpener = document.activeElement;
             locationOverlay.classList.add('open');
-            sortLocationsByDistance();
             if (navEl) navEl.classList.add('location-open');
             requestAnimationFrame(syncLocationSelectionLinks);
+            const close = locationOverlay.querySelector('.location-dropdown-close');
+            if (close && typeof close.focus === 'function') close.focus();
             // Defer scroll lock so it doesn't interrupt the overlay's fade-in transition
             requestAnimationFrame(function () {
                 requestAnimationFrame(function () {
@@ -422,6 +482,7 @@
             locationOverlay.classList.remove('open');
             if (navEl) navEl.classList.remove('location-open');
             document.body.style.overflow = '';
+            if (locationOpener && typeof locationOpener.focus === 'function') locationOpener.focus();
         }
 
         locationBtn.addEventListener('click', (e) => {
@@ -437,6 +498,9 @@
                 closeLocationOverlay();
             });
         }
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && locationOverlay.classList.contains('open')) closeLocationOverlay();
+        });
 
         // Close on clicking overlay background (not content)
         locationOverlay.addEventListener('click', (e) => {
@@ -529,13 +593,17 @@
     // Compact hours: consecutive days with the same hours collapse into one row ("Mon – Thu  12pm – 9pm").
     function renderHoursList(el, value) {
         if (!el) return;
+        const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(function (day) {
+            return translate('location.day.' + day.toLowerCase(), day);
+        });
         const lines = String(value || '').split('\n').map(function (line) { return line.trim(); }).filter(Boolean);
         const rows = [];
         const parsed = lines.every(function (line) {
             const match = line.match(/^([^:]+):\s*(.+)$/);
             if (!match) return false;
             const last = rows[rows.length - 1];
-            if (last && last.hours === match[2]) last.to = match[1];
+            const lastDay = last ? weekdays.indexOf(last.to || last.from) : -1;
+            if (last && last.hours === match[2] && lastDay >= 0 && weekdays.indexOf(match[1]) === lastDay + 1) last.to = match[1];
             else rows.push({ from: match[1], to: '', hours: match[2] });
             return true;
         });
@@ -646,16 +714,12 @@
         utilityHours.textContent = '';
         if (loc.status === 'coming-soon') {
             utilityHours.textContent = translate('location.comingSoon', 'Coming Soon');
+        } else if (loc.status === 'temporarily-closed') {
+            utilityHours.textContent = window.TMLocationViews
+                ? window.TMLocationViews.temporaryClosureLabelForLocation(loc)
+                : (loc.temporaryClosure && loc.temporaryClosure.label) || 'Temporarily Closed';
         } else if (today && today.label) {
-            const label = document.createElement('span');
-            label.className = 'utility-hours-label';
-            label.textContent = translate('utility.openToday', 'Open today:') + ' ';
-            utilityHours.appendChild(label);
-            const strong = document.createElement('strong');
-            strong.textContent = translateHoursText(today.label);
-            utilityHours.appendChild(strong);
-        } else if (loc.hours && Object.keys(loc.hours).length) {
-            utilityHours.textContent = translate('utility.closedToday', 'Closed today');
+            utilityHours.textContent = translateHoursText(today.label);
         }
         utilityHours.hidden = !utilityHours.textContent;
     }
@@ -863,12 +927,8 @@
         syncSearchPlaceholder();
     }
 
-    // Nearest location (Topgolf-style): ask for the browser position only when the selector
-    // opens, sort each region by Haversine distance, show the distance and mark the nearest.
-    // The position is remembered so the prompt doesn't repeat; blocked/unsupported falls back
-    // silently to the normal list.
-    const GEO_STORAGE_KEY = 'tm_geo_position';
-    const GEO_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+    // Remove coordinates saved by the earlier picker; nearby sorting is now ephemeral.
+    try { localStorage.removeItem('tm_geo_position'); } catch (e) { /* storage unavailable */ }
     let geoRequestInFlight = false;
 
     function distanceMiles(lat1, lon1, lat2, lon2) {
@@ -879,23 +939,6 @@
         const a = Math.pow(Math.sin(dLat / 2), 2)
             + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.pow(Math.sin(dLon / 2), 2);
         return 2 * R * Math.asin(Math.sqrt(a));
-    }
-
-    function readSavedPosition() {
-        try {
-            const saved = JSON.parse(localStorage.getItem(GEO_STORAGE_KEY) || 'null');
-            if (saved && typeof saved.lat === 'number' && typeof saved.lng === 'number'
-                && Date.now() - (saved.savedAt || 0) < GEO_MAX_AGE_MS) {
-                return saved;
-            }
-        } catch (e) { /* storage unavailable */ }
-        return null;
-    }
-
-    function savePosition(lat, lng) {
-        try {
-            localStorage.setItem(GEO_STORAGE_KEY, JSON.stringify({ lat: lat, lng: lng, savedAt: Date.now() }));
-        } catch (e) { /* storage unavailable */ }
     }
 
     function usesKilometers() {
@@ -917,7 +960,7 @@
         return geo;
     }
 
-    function applyDistanceOrder(position, forcePick) {
+    function applyDistanceOrder(position) {
         if (!locationOverlay || !position) return;
         let nearest = null;
         const groups = Array.from(locationOverlay.querySelectorAll('.location-group'));
@@ -969,14 +1012,6 @@
             // Sits beside the distance (right side), not after the name, so long names don't push it around
             const label = nearest.link.querySelector('.location-link-label');
             if (label) label.after(tag);
-            // Nothing chosen yet: phones pick the nearest venue for the visitor; desktop previews it.
-            const current = window.TM && window.TM.current;
-            if (forcePick || (!current && narrowPickerQuery.matches)) {
-                syncAllLocations(nearest.link.dataset.city, nearest.link.dataset.tmLocationSlug, { cta_id: 'nav_location_nearest' });
-                syncLocationSelectionLinks();
-            } else if (!current) {
-                showLocationInfo(nearest.link.dataset.tmLocationSlug);
-            }
         }
         locationOverlay.classList.add('has-distances');
     }
@@ -991,25 +1026,21 @@
         if (geoButton) geoButton.classList.toggle('is-loading', key === 'location.geoFinding');
     }
 
-    // Opening the selector reuses saved coords or asks quietly; the button asks again and reports problems.
-    function sortLocationsByDistance(fromButton) {
-        const saved = fromButton ? null : readSavedPosition();
-        if (saved) {
-            applyDistanceOrder(saved);
-            return;
-        }
+    function sortLocationsByDistance() {
         if (geoRequestInFlight || !window.isSecureContext || !navigator.geolocation) return;
         geoRequestInFlight = true;
-        if (fromButton) setGeoStatus('location.geoFinding', 'Finding your location…');
+        setGeoStatus('location.geoFinding', 'Finding your location…');
         navigator.geolocation.getCurrentPosition(function (pos) {
             geoRequestInFlight = false;
             setGeoStatus('');
             const position = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-            savePosition(position.lat, position.lng);
-            applyDistanceOrder(position, fromButton === true);
+            if (!Number.isFinite(position.lat) || Math.abs(position.lat) > 90 || !Number.isFinite(position.lng) || Math.abs(position.lng) > 180) {
+                setGeoStatus('location.geoFailed', "We couldn't find you. Try again or search above.");
+                return;
+            }
+            applyDistanceOrder(position);
         }, function (err) {
             geoRequestInFlight = false;
-            if (!fromButton) return; // quiet on open: keep the standard list
             if (err && err.code === 1) setGeoStatus('location.geoBlocked', 'Location is off for this site. Allow it in your browser or phone settings, then try again.');
             else setGeoStatus('location.geoFailed', "We couldn't find you. Try again or search above.");
         }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 10 * 60 * 1000 });
@@ -1019,7 +1050,7 @@
         if (!window.isSecureContext || !navigator.geolocation) {
             geoButton.hidden = true;
         } else {
-            geoButton.addEventListener('click', function () { sortLocationsByDistance(true); });
+            geoButton.addEventListener('click', sortLocationsByDistance);
         }
     }
 

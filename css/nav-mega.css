@@ -8,7 +8,7 @@
     display: none;
 }
 
-@media (min-width: 1025px) and (hover: hover) {
+@media (min-width: 1025px) {
     /* Panel spans the glass nav; .nav (fixed) is its containing block */
     .mega-panel {
         display: grid;
@@ -45,8 +45,9 @@
         height: 16px;
     }
 
-    .has-mega:hover > .mega-panel,
-    .has-mega:focus-within > .mega-panel {
+    .has-mega:not(.is-dismissed):hover > .mega-panel,
+    .has-mega:not(.is-dismissed):focus-within > .mega-panel,
+    .has-mega.is-open > .mega-panel {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);

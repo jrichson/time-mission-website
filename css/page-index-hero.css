@@ -194,6 +194,12 @@
     .hero-title .line-2 {
         transform: scale(1);
     }
+    .hero-title,
+    .hero-subtitle,
+    .hero-cta {
+        animation-duration: 0.35s;
+        animation-delay: 0s;
+    }
     .hero-subtitle {
         margin-bottom: 2rem;
     }

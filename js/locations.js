@@ -87,6 +87,7 @@
             groupType: options.groupType || options.pageGroupType || '',
             pageGroupType: options.pageGroupType || '',
             pageLocationSlug: options.pageLocationSlug || '',
+            restoreNavLabel: options.restoreNavLabel === true,
         });
     }
 
@@ -393,13 +394,14 @@
 
             const pageLocationSlug = getPageLocationSlug();
             const locView = loc ? getLocationView(loc.id || loc.slug) : null;
-            if (loc && locView && (locView.bookable || loc.status === 'coming-soon' || loc.status === 'temporarily-closed')) {
+            if (loc && locView && (locView.bookable || locView.externalUrl || loc.status === 'coming-soon' || loc.status === 'temporarily-closed')) {
                 document.querySelectorAll('.btn-tickets, .btn-book-now').forEach(el => {
                     const bookingKind = (el.getAttribute('data-tm-booking-kind') || 'tickets').toLowerCase();
                     if (bookingKind !== 'tickets') return;
                     if (el.hasAttribute('data-tm-roller-checkout')) return;
                     applyBookingCtaView(el, getBookingCtaView('tickets', locView.locationId || loc.id || loc.slug, {
                         pageLocationSlug: pageLocationSlug,
+                        restoreNavLabel: Boolean(el.closest('.nav, .mobile-menu, .mobile-book-bar')),
                     }));
                 });
             }
@@ -472,18 +474,35 @@
         },
 
         getTodayHours() {
-            if (!TM.current || !TM.current.hours) return null;
-            if (TM.current.status === 'temporarily-closed') return null;
-            const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-            const today = days[new Date().getDay()];
-            return TM.current.hours[today] || null;
+            const loc = TM.current;
+            if (!loc || !loc.timeZone || loc.status === 'temporarily-closed') return null;
+            try {
+                const parts = new Intl.DateTimeFormat('en-US', {
+                    timeZone: loc.timeZone, weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit',
+                }).formatToParts(new Date());
+                const part = (type) => parts.find((value) => value.type === type)?.value || '';
+                const date = part('year') + '-' + part('month') + '-' + part('day');
+                const special = (loc.specialHours || []).find((hours) => hours.date === date && hours.name && hours.label);
+                if (special) return { label: special.label };
+                return (loc.hours && loc.hours[part('weekday').toLowerCase()]) || null;
+            } catch (error) {
+                return null;
+            }
         },
 
         isOpenNow() {
             const hours = TM.getTodayHours();
             if (!hours || typeof hours.open !== 'string' || typeof hours.close !== 'string') return null;
-            const now = new Date();
-            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            let currentMinutes;
+            try {
+                const parts = new Intl.DateTimeFormat('en-US', {
+                    timeZone: TM.current.timeZone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+                }).formatToParts(new Date());
+                const part = (type) => Number(parts.find((value) => value.type === type)?.value);
+                currentMinutes = part('hour') * 60 + part('minute');
+            } catch (error) {
+                return null;
+            }
             const [openH, openM] = hours.open.split(':').map(Number);
             const [closeH, closeM] = hours.close.split(':').map(Number);
             if (Number.isNaN(openH) || Number.isNaN(closeH)) return null;
@@ -533,6 +552,11 @@
         document.querySelectorAll('.footer-loc-change').forEach(el => {
             el.addEventListener('click', (e) => {
                 e.preventDefault();
+                const locationButton = document.getElementById('locationBtn');
+                if (locationButton) {
+                    locationButton.click();
+                    return;
+                }
                 const overlay = document.getElementById('locationDropdown');
                 const navEl = document.getElementById('nav');
                 if (!overlay) return;

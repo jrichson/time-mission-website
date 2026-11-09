@@ -55,11 +55,13 @@
                 return total;
             }
 
+            var halfWidth = getHalfWidth();
+            window.addEventListener('resize', function () { halfWidth = getHalfWidth(); });
+
             function wrapPos(pos) {
-                var halfW = getHalfWidth();
-                if (halfW <= 0) return pos;
-                while (pos >= halfW) pos -= halfW;
-                while (pos < 0) pos += halfW;
+                if (halfWidth <= 0) return pos;
+                while (pos >= halfWidth) pos -= halfWidth;
+                while (pos < 0) pos += halfWidth;
                 return pos;
             }
 
@@ -78,13 +80,14 @@
             }
 
             function startAutoScroll() {
-                if (animationId || reduceMotion) return;
-                animationId = requestAnimationFrame(autoScroll);
-                if (stepMode && !stepTimer) {
+                if (animationId || stepTimer || reduceMotion) return;
+                if (stepMode) {
                     stepTimer = window.setInterval(function () {
                         if (isTouching || Date.now() - lastTouchEnd < 5000) return;
                         smoothSlide(1);
                     }, 2800);
+                } else {
+                    animationId = requestAnimationFrame(autoScroll);
                 }
             }
 
