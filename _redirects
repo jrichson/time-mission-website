@@ -159,6 +159,26 @@
 /marq-e /houston 301
 /marqe /houston 301
 /mountprospect /mount-prospect 301
+# Retired per-city blog posts still crawled by Google (Search Console 404s, 2026-11).
+/blog/houston /houston 301
+/blog/lincoln /lincoln 301
+/blog/mount-prospect /mount-prospect 301
+/blog/orland-park /orland-park 301
+/blog/philadelphia /philadelphia 301
+/blog/west-nyack /west-nyack 301
+/blog/manassas /manassas 301
+/blog/dallas /dallas 301
+/blog/nashville /nashville 301
+/blog/antwerp https://timemission.eu/antwerp 301
+/blog/brussels https://timemission.eu/brussels 301
+/blog/eindhoven https://timemission.eu/eindhoven 301
+
+# Other legacy URLs Google reports as 404.
+/mount-prospect-il /mount-prospect 301
+/mount-prospect-il/ /mount-prospect 301
+/philadelphia/educator /philadelphia/educators 301
+/tickets /locations 301
+
 /mountprospect/* /mount-prospect/:splat 301
 /westnyack /west-nyack 301
 /westnyack/* /west-nyack/:splat 301
@@ -261,6 +281,16 @@
 /antwerp/school-field-trips https://timemission.eu/antwerp 301
 /antwerp/team-building https://timemission.eu/antwerp 301
 /antwerp/youth-group-camp https://timemission.eu/antwerp 301
+/brussels/adult-birthday-parties https://timemission.eu/brussels 301
+/brussels/bachelorette-party https://timemission.eu/brussels 301
+/brussels/bus-tour https://timemission.eu/brussels 301
+/brussels/corporate-events https://timemission.eu/brussels 301
+/brussels/date-night-ideas https://timemission.eu/brussels 301
+/brussels/family-gathering https://timemission.eu/brussels 301
+/brussels/kids-birthday-party https://timemission.eu/brussels 301
+/brussels/school-field-trips https://timemission.eu/brussels 301
+/brussels/team-building https://timemission.eu/brussels 301
+/brussels/youth-group-camp https://timemission.eu/brussels 301
 
 /lincoln/adult-birthday-parties /groups/birthdays 301
 /lincoln/bachelorette-party /groups/bachelor-ette 301
