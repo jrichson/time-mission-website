@@ -4578,6 +4578,15 @@
           "Lincoln, RI"
         ]
       }
+    },
+    "eu": {
+      "translations": {
+        "es": {
+          "Missions | Time Mission": "Misiones en Amberes, Bruselas y Eindhoven | Time Mission Europa",
+          "Explore 25+ action-packed challenge rooms at Time Mission. From speed to strategy, each mission tests something different.": "Descubre más de 25 salas de desafíos en Time Mission Europa, con centros en Amberes, Bruselas y Eindhoven. De la velocidad a la estrategia, cada misión pone a prueba algo distinto.",
+          "From brain-benders to full-body challenges, every mission brings a different kind of rush. Think you know your play style? There is only one way to find out.": "De los rompecabezas mentales a los retos físicos, cada misión ofrece una emoción distinta en nuestros centros de Amberes, Bruselas y Eindhoven. ¿Crees que conoces tu estilo de juego? Solo hay una forma de averiguarlo."
+        }
+      }
     }
   },
   "routes": {
