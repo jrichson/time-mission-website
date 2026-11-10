@@ -141,3 +141,38 @@ test('Creator pages share one form and the backup preselects the page location',
   expect(submitted).toContain('creator_location=Orland+Park');
   expect(submitted).toContain('creator_platform=TikTok');
 });
+
+test('Nashville ticket sign-up shows the free ticket backup when Klaviyo is blocked', async ({ page }) => {
+  await page.route(KLAVIYO_SCRIPTS, (route) => route.abort('blockedbyclient'));
+  let submitted = null;
+  await page.route('**/api/klaviyo-signup', async (route) => {
+    submitted = route.request().postData();
+    await route.fulfill({ json: { ok: true } });
+  });
+
+  await page.goto('/nashville/signup');
+  await expect(page.locator('.klaviyo-form-XHnsxT')).toBeAttached();
+  const backup = page.locator('[data-tm-klaviyo-backup="XHnsxT"]');
+  await expect(backup).toBeVisible({ timeout: 2500 });
+  await expect(backup).toContainText('Msg & data rates may apply');
+  await expect(backup.getByRole('img', { name: 'Time Mission Nashville. Coming soon! Sign up for free tickets' }))
+    .toHaveAttribute('src', '/assets/photos/promos/nashville-free-ticket-signup-1000.webp');
+
+  await backup.getByLabel('First name').fill('Ana');
+  await backup.getByLabel('Email *', { exact: true }).fill('ana@example.com');
+  await backup.getByLabel('Phone number').fill('615-555-0100');
+  await backup.getByRole('button', { name: 'Unlock Free Tickets!' }).click();
+
+  await expect(page.locator('[data-tm-klaviyo-backup-success]')).toContainText('You’re in!');
+  expect(submitted).toContain('klaviyo_form_id=XHnsxT');
+  expect(submitted).toContain('backup_reason=blocked');
+
+  const registration = await page.evaluate(() => window.dataLayer.find((entry) => (
+    entry?.event_name === 'COMPLETE_REGISTRATION' && entry?.form_id === 'XHnsxT'
+  )));
+  expect(registration).toMatchObject({
+    conversion_source: 'klaviyo_form',
+    form_name: 'nashville_ticket_signup',
+    parameters: { FORM_ID: 'XHnsxT', LOCATION_SLUG: 'nashville', PROVIDER: 'klaviyo_backup' },
+  });
+});

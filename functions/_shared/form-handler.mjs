@@ -501,7 +501,7 @@ export function validateKlaviyoSignupSubmission(raw, env = {}) {
     listId: config.listId,
     location: config.location,
     phone: '',
-    properties: {},
+    properties: { ...config.properties },
     smsConsent: false,
   };
 

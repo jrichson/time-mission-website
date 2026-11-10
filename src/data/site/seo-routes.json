@@ -371,6 +371,12 @@
     "ogImage": "/assets/photos/promos/creators-filming-1200.webp",
     "twitterImage": "/assets/photos/promos/creators-filming-1200.webp"
   },
+  "/nashville/signup": {
+    "title": "Nashville Free Ticket Sign-Up | Time Mission",
+    "description": "Sign up for free opening day tickets at Time Mission Nashville, coming soon to 209 10th Avenue South. We'll send your code before tickets drop.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
   "/west-nyack/creators": {
     "title": "Creator Program | Time Mission West Nyack",
     "description": "Apply to the Time Mission Creator Program at Time Mission West Nyack. Tell us about you and your audience, and our team will reach out about collab opportunities.",

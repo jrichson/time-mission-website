@@ -15,6 +15,8 @@ export const KLAVIYO_ACCOUNTS = Object.freeze({
   eu: 'YccPJs',
 });
 
+const SMS_CONSENT = 'By submitting this form, you consent to receive informational (e.g., order updates) and/or marketing texts (e.g., cart reminders) from Time Mission including texts sent by autodialer. Consent is not a condition of purchase. Msg & data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP or clicking the unsubscribe link (where available).';
+
 const EDUCATOR_CONSENT = 'By submitting this form, you agree to receive your promo code and related emails from Time Mission, including marketing emails such as field trip and group information. Consent is not a condition of purchase. You can unsubscribe at any time using the link in any email.';
 const EDUCATOR_SUCCESS = {
   title: 'Submitted ✅ Thank you',
@@ -65,11 +67,40 @@ export const KLAVIYO_FORMS = Object.freeze({
       { name: 'phone', label: 'Phone Number', type: 'tel', autocomplete: 'tel', klaviyo: 'phone_number' },
     ],
     submitLabel: 'Unlock Free Tickets!',
-    consent: 'By submitting this form, you consent to receive informational (e.g., order updates) and/or marketing texts (e.g., cart reminders) from Time Mission including texts sent by autodialer. Consent is not a condition of purchase. Msg & data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP or clicking the unsubscribe link (where available).',
+    consent: SMS_CONSENT,
     smsConsent: true,
     success: {
       title: "You're on the list!",
       text: 'Watch your inbox for your free ticket code and first dibs on booking.',
+    },
+  },
+  XHnsxT: {
+    site: 'us',
+    listId: 'XWWK3L',
+    location: 'nashville',
+    title: 'Nashville free ticket sign-up',
+    // The Klaviyo form tags signups with Venue: Nashville; the backup does too.
+    properties: { Venue: 'Nashville' },
+    // Same banner as the Klaviyo form, served from our domain so blockers don't hide it.
+    image: {
+      src: '/assets/photos/promos/nashville-free-ticket-signup-1000.webp',
+      srcset: '/assets/photos/promos/nashville-free-ticket-signup-480.webp 480w, /assets/photos/promos/nashville-free-ticket-signup-800.webp 800w, /assets/photos/promos/nashville-free-ticket-signup-1000.webp 1000w',
+      width: 1000,
+      height: 614,
+      alt: 'Time Mission Nashville. Coming soon! Sign up for free tickets',
+    },
+    intro: 'FREE opening day tickets are coming to Time Mission Nashville! Sign up and we’ll send your code straight to your inbox before they drop.',
+    fields: [
+      { name: 'given_name', label: 'First name', type: 'text', autocomplete: 'given-name', klaviyo: 'first_name' },
+      { name: 'email', label: 'Email', type: 'email', autocomplete: 'email', required: true, klaviyo: 'email' },
+      { name: 'phone', label: 'Phone number', type: 'tel', autocomplete: 'tel', klaviyo: 'phone_number' },
+    ],
+    submitLabel: 'Unlock Free Tickets!',
+    consent: SMS_CONSENT,
+    smsConsent: true,
+    success: {
+      title: 'You’re in!',
+      text: 'Check your inbox. We’ll send your free ticket code before tickets drop. First come, first served!',
     },
   },
   // One form for /creators and every /<location>/creators page; visitors pick their location.
