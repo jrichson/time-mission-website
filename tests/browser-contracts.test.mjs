@@ -48,7 +48,7 @@ describe('browser data, consent, and i18n contracts', () => {
       }
     }
 
-    for (const locationId of ['manassas', 'mount-prospect', 'orland-park', 'houston', 'philadelphia']) {
+    for (const locationId of ['manassas', 'mount-prospect', 'orland-park', 'houston', 'philadelphia', 'dallas']) {
       const forms = byId.get(locationId)?.groupFormUrls || {};
       expect(forms.default).toBe(`/groups/inquire/${locationId}/default`);
       expect(forms['private-events']).toBe(`/groups/inquire/${locationId}/private-events`);

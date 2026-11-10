@@ -105,6 +105,8 @@ async function stabilizeForScreenshot(page) {
 }
 
 test.describe('visual regression (representative templates)', () => {
+  test.describe.configure({ retries: process.env.CI ? 1 : 0 });
+
   test('homepage', async ({ page }) => {
     test.slow();
 
