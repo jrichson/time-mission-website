@@ -1,0 +1,38 @@
+---
+import KlaviyoEmbedForm from '../../components/KlaviyoEmbedForm.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { definePage } from '../../lib/define-page';
+import { buildSimpleGraph, serializeGraph } from '../../lib/schema/graph';
+import { allLocations } from '../../data/locations';
+import { locationCtaView } from '../../lib/location-view';
+
+const page = definePage({ canonicalPath: '/nashville/signup' });
+const formId = 'XHnsxT';
+const nashville = allLocations.find((loc) => loc.slug === 'nashville');
+if (!nashville) throw new Error('nashville missing from src/data/locations');
+const cta = locationCtaView(nashville);
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: 'Nashville', href: '/nashville' },
+    { label: 'Ticket Sign-Up', href: page.canonicalPath },
+]));
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-promo-page tm-signup-embed-page" bodyDataLocation="nashville"
+    bookingCtaHref={cta.href}
+    bookingCtaLabel={cta.label}
+    bookingCtaI18n={cta.i18n}
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-promo.css?v=10" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <section class="tm-signup-embed" aria-labelledby="nashville-signup-title">
+        <h1 id="nashville-signup-title" class="visually-hidden">Time Mission Nashville Ticket Sign-Up</h1>
+        <div class="tm-signup-embed__form">
+            <KlaviyoEmbedForm formId={formId} formName="nashville_ticket_signup" />
+        </div>
+    </section>
+</SiteLayout>

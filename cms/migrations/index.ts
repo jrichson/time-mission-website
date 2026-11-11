@@ -1,3 +1,4 @@
+import * as migration_20261110_090000_nashville_signup_page from './20261110_090000_nashville_signup_page';
 import * as migration_20261104_090000_dallas_group_form from './20261104_090000_dallas_group_form';
 import * as migration_20261104_090000_retire_dallas_signup from './20261104_090000_retire_dallas_signup';
 import * as migration_20261024_090000_location_search_titles from './20261024_090000_location_search_titles';
@@ -470,5 +471,10 @@ export const migrations = [
     up: migration_20261104_090000_dallas_group_form.up,
     down: migration_20261104_090000_dallas_group_form.down,
     name: '20261104_090000_dallas_group_form'
+  },
+  {
+    up: migration_20261110_090000_nashville_signup_page.up,
+    down: migration_20261110_090000_nashville_signup_page.down,
+    name: '20261110_090000_nashville_signup_page'
   },
 ];

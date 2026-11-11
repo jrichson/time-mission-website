@@ -1155,6 +1155,7 @@
       },
       "hours": {},
       "bookingUrl": "",
+      "signupUrl": "/nashville/signup",
       "navLabel": "TN – Nashville",
       "mapUrl": "https://maps.google.com/?q=209+10th+Avenue+South+Suite+217A+Nashville+TN+37203",
       "faqs": [

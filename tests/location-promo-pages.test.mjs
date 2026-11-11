@@ -11,6 +11,20 @@ function read(relativePath) {
 }
 
 describe('location campaign pages', () => {
+  it('sends Nashville ticket sign-ups to the free ticket Klaviyo form', () => {
+    const routes = JSON.parse(read('src/data/routes.json'));
+    const nashville = JSON.parse(read('data/locations.json')).locations.find((location) => location.slug === 'nashville');
+    expect(read('src/pages/nashville/signup.astro')).toContain("const formId = 'XHnsxT';");
+    expect(routes.routes).toContainEqual(expect.objectContaining({
+      canonicalPath: '/nashville/signup',
+      outputFile: 'nashville/signup.html',
+    }));
+    expect(nashville.status).toBe('coming-soon');
+    expect(nashville.signupUrl).toBe('/nashville/signup');
+    expect(read('_redirects')).toContain('/nashville/signup.html /nashville/signup 301');
+    expect(read('cms/migrations/index.ts')).toContain("name: '20261110_090000_nashville_signup_page'");
+  });
+
   it('retires the Dallas free-ticket page while keeping paid booking and the opening date', () => {
     const routes = JSON.parse(read('src/data/routes.json'));
     const dallas = JSON.parse(read('data/locations.json')).locations.find((location) => location.slug === 'dallas');

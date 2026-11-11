@@ -695,6 +695,16 @@
       "status": 301
     },
     {
+      "id": "nashville-signup",
+      "canonicalPath": "/nashville/signup",
+      "redirectSources": [
+        "/nashville/signup.html"
+      ],
+      "outputFile": "nashville/signup.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
       "id": "west-nyack-creators",
       "canonicalPath": "/west-nyack/creators",
       "redirectSources": [
