@@ -107,9 +107,15 @@ test('contact page only shows direct info for the selected location', async ({ p
   await expect(page.locator('[data-location-contact-card]')).not.toContainText('Houston');
 
   await page.locator('#location').selectOption('dallas');
+  await expect(page.locator('[data-location-contact-card]')).toBeVisible();
+  await expect(page.locator('[data-location-contact-name]')).toHaveText('Dallas');
+  await expect(page.locator('[data-location-contact-phone]')).toHaveText('(469) 722-0900');
+  await expect(page.locator('[data-location-contact-email]')).toHaveText('dallas@timemission.com');
+
+  await page.locator('#location').selectOption('boston');
   await expect(page.locator('[data-location-contact-card]')).toBeHidden();
   await expect(page.locator('[data-location-contact-empty]')).toBeVisible();
-  await expect(page.locator('[data-location-contact-empty]')).toContainText('Dallas');
+  await expect(page.locator('[data-location-contact-empty]')).toContainText('Boston');
 });
 
 test('contact page still accepts historical query prefill links', async ({ page }) => {

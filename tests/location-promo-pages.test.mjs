@@ -25,14 +25,15 @@ describe('location campaign pages', () => {
     expect(read('cms/migrations/index.ts')).toContain("name: '20261110_090000_nashville_signup_page'");
   });
 
-  it('retires the Dallas free-ticket page while keeping paid booking and the opening date', () => {
+  it('retires the Dallas free-ticket page while keeping paid booking now that Dallas is open', () => {
     const routes = JSON.parse(read('src/data/routes.json'));
     const dallas = JSON.parse(read('data/locations.json')).locations.find((location) => location.slug === 'dallas');
     expect(fs.existsSync(path.join(root, 'src/pages/dallas/signup.astro'))).toBe(false);
     expect(routes.routes.some((route) => route.canonicalPath === '/dallas/signup')).toBe(false);
     expect(dallas.signupUrl).toBeUndefined();
     expect(dallas.bookingUrl).toBe('https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products');
-    expect(dallas.openingLabel).toBe('Opening Nov 13th');
+    expect(dallas.status).toBe('open');
+    expect(dallas.openingLabel).toBeUndefined();
     for (const source of ['/dallas/signup', '/dallas/signup/', '/dallas/signup.html']) {
       expect(routes.aliases).toContainEqual({ source, target: '/dallas', status: 301 });
       expect(read('_redirects')).toContain(`${source} /dallas 301`);

@@ -13,8 +13,9 @@ interface Props {
 const { slug } = Astro.props;
 const location = allLocations.find((l) => l.slug === slug);
 if (!location) throw new Error(`${slug} missing from src/data/locations`);
-// Eindhoven opened on 16 October 2026 and keeps its launch page layout.
-if (location.status !== 'coming-soon' && !(slug === 'eindhoven' && location.status === 'open')) {
+// Eindhoven (16 October 2026) and Dallas (13 November 2026) opened and keep their launch page layout.
+const OPENED_LAUNCH_PAGE_SLUGS = new Set(['eindhoven', 'dallas']);
+if (location.status !== 'coming-soon' && !(OPENED_LAUNCH_PAGE_SLUGS.has(slug) && location.status === 'open')) {
     throw new Error(`${slug} is not configured as a coming-soon location`);
 }
 

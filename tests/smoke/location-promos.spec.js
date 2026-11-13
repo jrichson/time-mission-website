@@ -145,10 +145,12 @@ test('Nashville educators register before opening for January 2027 play', async 
   await expectResponsivePromoSplit(page, isMobile);
 });
 
-test('Dallas educators can register for opening offer updates', async ({ page, isMobile }) => {
+test('Dallas educators can register for educator offer updates', async ({ page, isMobile }) => {
   await page.goto('/dallas/educators');
   await expect(page).toHaveTitle('Dallas Educator Offers: Be the First to Know | Time Mission');
-  await expect(page.locator('.tm-promo-landing__eyebrow')).toHaveText('Dallas · Opening November 2026');
+  await expect(page.locator('.tm-promo-landing__eyebrow')).toHaveText('Dallas · Now Open');
+  await expect(page.locator('.tm-promo-landing__copy')).toContainText('Time Mission Dallas is now open');
+  await expect(page.locator('main')).not.toContainText('countdown');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Be the First to Know');
   await expect(page.locator('.tm-promo-landing__back')).toHaveAttribute('href', '/dallas');
   await expect(page.locator('.tm-promo-landing__copy')).toContainText('Sign up now to get first access to an exclusive teacher and educator offer!');

@@ -1,0 +1,41 @@
+// Dallas opened on 13 November 2026, with the same hours as Houston.
+export const DALLAS_NOW_OPEN_SNAPSHOT = {
+  slug: 'dallas',
+  addressLine1: '5321 E. Mockingbird Ln',
+  previousAddressLine1: '5307 E. Mockingbird Ln',
+  ticker: 'DALLAS NOW OPEN',
+  previousTicker: 'DALLAS OPENING NOV 13TH',
+  hours: {
+    mon: { open: '12:00', close: '22:00', label: '12pm - 10pm' },
+    tue: { open: '12:00', close: '22:00', label: '12pm - 10pm' },
+    wed: { open: '12:00', close: '22:00', label: '12pm - 10pm' },
+    thu: { open: '12:00', close: '22:00', label: '12pm - 10pm' },
+    fri: { open: '12:00', close: '23:00', label: '12pm - 11pm' },
+    sat: { open: '10:00', close: '23:00', label: '10am - 11pm' },
+    sun: { open: '10:00', close: '22:00', label: '10am - 10pm' },
+  },
+  page: {
+    path: '/dallas',
+    title: 'Time Mission Dallas, TX | Now Open',
+    metaTitle: 'Time Mission Dallas, TX | Now Open',
+    metaDescription: 'Time Mission Dallas is now open at 5321 E. Mockingbird Ln in Dallas, TX. Book your mission now.',
+    robots: 'index,follow',
+    ogImage: '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg',
+    twitterImage: '/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg',
+  },
+  previousPage: {
+    title: 'Time Mission Dallas, TX | Coming Soon',
+    metaTitle: 'Time Mission Dallas, TX | Coming Soon',
+    metaDescription: 'Time Mission Dallas is coming soon in Dallas, TX. Contact the location team for launch timing and opening updates.',
+  },
+  educatorsPage: {
+    path: '/dallas/educators',
+    title: 'Dallas Educator Offers: Be the First to Know | Time Mission',
+    metaTitle: 'Dallas Educator Offers: Be the First to Know | Time Mission',
+    metaDescription: 'Time Mission Dallas is now open. Sign up for first access to an exclusive teacher and educator offer.',
+    robots: 'index,follow',
+    ogImage: '/assets/photos/promos/houston-educators-control-room-1200.webp',
+    twitterImage: '/assets/photos/promos/houston-educators-control-room-1200.webp',
+  },
+  previousEducatorsMetaDescription: 'Time Mission Dallas opens November 2026. Sign up for first access to an exclusive teacher and educator offer.',
+} as const;
