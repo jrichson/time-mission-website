@@ -13,7 +13,7 @@ import {
     BRUSSELS_LATE_NIGHT_TICKER_SNAPSHOT,
 } from '../cms/migration-data/20261022_brussels_late_night_special_snapshot';
 import { ANTWERP_TICKER_SNAPSHOT } from '../cms/migration-data/20261007_antwerp_ticker_snapshot';
-import { DALLAS_OPENING_TICKER_SNAPSHOT } from '../cms/migration-data/20261102_dallas_opening_ticker_snapshot';
+import { DALLAS_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20261113_dallas_now_open_snapshot';
 import { SCOTTSDALE_LOCATION_SNAPSHOT, SCOTTSDALE_PAGE_SNAPSHOT } from '../cms/migration-data/20261001_scottsdale_snapshot';
 import { EINDHOVEN_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20260925_eindhoven_checkout_snapshot';
 import { EDISON_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20260918_edison_now_open_snapshot';
@@ -125,8 +125,8 @@ describe('live-site-to-CMS sync snapshot', () => {
                 ? { ...operationalLocation, ticker: ANTWERP_TICKER_SNAPSHOT.ticker }
                 : location.slug === BRUSSELS_LATE_NIGHT_TICKER_SNAPSHOT.slug
                 ? { ...operationalLocation, ticker: BRUSSELS_LATE_NIGHT_TICKER_SNAPSHOT.ticker }
-                : location.slug === DALLAS_OPENING_TICKER_SNAPSHOT.slug
-                ? { ...operationalLocation, ticker: DALLAS_OPENING_TICKER_SNAPSHOT.ticker }
+                : location.slug === DALLAS_NOW_OPEN_SNAPSHOT.slug
+                ? { ...operationalLocation, ticker: DALLAS_NOW_OPEN_SNAPSHOT.ticker }
                 : REMOVED_TICKER_LOCATIONS.some((slug) => slug === location.slug)
                 ? { ...operationalLocation, ticker: '' }
                 : operationalLocation;
@@ -165,7 +165,12 @@ describe('live-site-to-CMS sync snapshot', () => {
                 return { ...groupFormLocation, externalLinks: { ...groupFormLocation.externalLinks, giftCardUrl: 'https://book.philadelphia.timemission.com/giftcards/en-us/products' } };
             }
             if (location.slug === DALLAS_SIGNUP_RETIREMENT_SNAPSHOT.slug) {
-                return { ...groupFormLocation, externalLinks: { ...groupFormLocation.externalLinks, bookingUrl: DALLAS_SIGNUP_RETIREMENT_SNAPSHOT.bookingUrl } };
+                return {
+                    ...groupFormLocation,
+                    hours: DALLAS_NOW_OPEN_SNAPSHOT.hours,
+                    address: { ...groupFormLocation.address, line1: DALLAS_NOW_OPEN_SNAPSHOT.addressLine1 },
+                    externalLinks: { ...groupFormLocation.externalLinks, bookingUrl: DALLAS_SIGNUP_RETIREMENT_SNAPSHOT.bookingUrl },
+                };
             }
             if (location.slug === EINDHOVEN_CHECKOUT_SNAPSHOT.slug) {
                 return {
@@ -248,6 +253,8 @@ describe('live-site-to-CMS sync snapshot', () => {
                 EINDHOVEN_SIGNUP_PAGE_SNAPSHOT,
                 HOME_LINK_PREVIEW_PAGE_SNAPSHOT,
                 ...LOCATION_SEARCH_TITLES_PAGE_SNAPSHOT,
+                DALLAS_NOW_OPEN_SNAPSHOT.page,
+                DALLAS_NOW_OPEN_SNAPSHOT.educatorsPage,
             ]
                 .map((page) => [page.path, page]),
         );
