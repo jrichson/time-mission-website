@@ -21,7 +21,8 @@ module.exports = defineConfig({
   webServer: {
     command: `npx wrangler pages dev dist --port ${previewPort}`,
     url: `http://127.0.0.1:${previewPort}`,
-    reuseExistingServer: !process.env.CI,
+    // A release must test its own build: never attach to a server that is already running.
+    reuseExistingServer: !process.env.CI && !process.env.TM_RELEASE_COMMIT,
     timeout: 120_000,
   },
   projects: [

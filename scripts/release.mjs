@@ -2,19 +2,23 @@
 /**
  * The only supported way to put the website into production.
  *
- *   npm run release -- [--cms=auto|skip|force] [--only=us|eu] [--dry-run] [--skip-live-checks]
+ *   npm run release -- [--cms=auto|skip|force] [--only=us|eu] [--serial] [--dry-run] [--skip-live-checks]
  *
  * 1. Refuses to run unless HEAD is a clean, pushed commit.
  * 2. Builds from a fresh checkout of that commit, so local edits, untracked
  *    files, and stale build output can never reach production.
  * 3. Deploys the Railway CMS first (its start-up migrations must run before the
- *    static build reads CMS content), then the US and EU Pages sites.
- * 4. Verifies the live sites serve that commit with tracking intact.
+ *    static build reads CMS content).
+ * 4. Builds and verifies the US and EU sites side by side, each in its own checkout
+ *    on its own ports (--serial runs them one after the other). Nothing is deployed
+ *    unless every site passes.
+ * 5. Deploys the sites, then verifies the live sites serve that commit with tracking intact.
  */
 import fs from 'node:fs';
+import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 import { CMS_PRODUCTION, RELEASE_PROFILES } from '../config/deployment-targets.mjs';
@@ -40,6 +44,7 @@ function option(name, fallback) {
 const cmsMode = option('cms', 'auto');
 const only = option('only', '');
 const dryRun = process.argv.includes('--dry-run');
+const serial = process.argv.includes('--serial');
 const skipLiveChecks = process.argv.includes('--skip-live-checks');
 if (!['auto', 'skip', 'force'].includes(cmsMode)) fail('--cms must be auto, skip, or force.');
 if (only && !RELEASE_PROFILES.includes(only)) fail(`--only must be one of ${RELEASE_PROFILES.join(', ')}.`);
@@ -64,6 +69,46 @@ function run(command, args, options = {}) {
   if (result.status !== 0) {
     throw new Error(`${[command, ...args].join(' ')} failed (exit ${result.status ?? 'signal'})`);
   }
+}
+
+/** Run a command without blocking, prefixing each output line so parallel runs stay readable. */
+function runLabelled(label, command, args, options = {}) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, {
+      cwd: options.cwd || root,
+      env: options.env || process.env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    for (const [stream, out] of [[child.stdout, process.stdout], [child.stderr, process.stderr]]) {
+      let pending = '';
+      stream.setEncoding('utf8');
+      stream.on('data', (chunk) => {
+        const lines = (pending + chunk).split('\n');
+        pending = lines.pop();
+        for (const line of lines) out.write(`[${label}] ${line}\n`);
+      });
+      stream.on('end', () => {
+        if (pending) out.write(`[${label}] ${pending}\n`);
+      });
+    }
+    child.on('error', reject);
+    child.on('close', (status) => {
+      if (status === 0) resolve();
+      else reject(new Error(`[${label}] ${[path.basename(command), ...args].join(' ')} failed (exit ${status ?? 'signal'})`));
+    });
+  });
+}
+
+/** A port nothing is listening on, so a release never tests another process's server. */
+function freePort() {
+  return new Promise((resolve, reject) => {
+    const server = net.createServer();
+    server.on('error', reject);
+    server.listen(0, '127.0.0.1', () => {
+      const { port } = server.address();
+      server.close(() => resolve(port));
+    });
+  });
 }
 
 function git(args, options) {
@@ -125,8 +170,8 @@ async function deployCms(worktree) {
   if (!response.ok) throw new Error(`CMS API returned ${response.status} after deploy.`);
 }
 
-function createWorktree(commit) {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), `tm-release-${commit.slice(0, 7)}-`));
+function createWorktree(commit, profile) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), `tm-release-${commit.slice(0, 7)}-${profile}-`));
   run('git', ['worktree', 'add', '--detach', dir, commit]);
   for (const file of ENV_FILES) {
     const source = path.join(root, file);
@@ -176,25 +221,57 @@ async function main() {
     return;
   }
 
-  step('Preparing a clean checkout');
-  const worktree = createWorktree(head);
+  step(profiles.length > 1 ? 'Preparing a clean checkout for each site' : 'Preparing a clean checkout');
+  // One checkout per site: each build writes its own dist and generated route files.
+  const worktrees = new Map();
   const deployed = [];
   let failure = null;
   try {
-    run(npm, ['ci', '--no-audit', '--no-fund'], { cwd: worktree });
-    run(npm, ['ci', '--no-audit', '--no-fund', '--prefix', 'cms'], { cwd: worktree });
+    for (const profile of profiles) worktrees.set(profile, createWorktree(head, profile));
+    await Promise.all(profiles.map(async (profile) => {
+      const cwd = worktrees.get(profile);
+      await runLabelled(profile, npm, ['ci', '--no-audit', '--no-fund'], { cwd });
+      await runLabelled(profile, npm, ['ci', '--no-audit', '--no-fund', '--prefix', 'cms'], { cwd });
+    }));
 
     if (cms.deploy) {
       step('Deploying the CMS');
-      await deployCms(worktree);
+      await deployCms(worktrees.get(profiles[0]));
       deployed.push('cms');
     }
 
     const releaseEnv = { ...process.env, TM_RELEASE_COMMIT: head, TM_RELEASE_MESSAGE: subject };
+    const verifySite = async (profile) => runLabelled(
+      profile,
+      process.execPath,
+      ['scripts/deploy-pages-profile.mjs', profile, '--build', '--no-deploy'],
+      {
+        cwd: worktrees.get(profile),
+        env: {
+          ...releaseEnv,
+          TM_SMOKE_PORT: String(await freePort()),
+          TM_PROVIDER_PORT: String(await freePort()),
+        },
+      },
+    );
+    const names = profiles.map((profile) => profile.toUpperCase()).join(' and ');
+    if (serial || profiles.length === 1) {
+      for (const profile of profiles) {
+        step(`Building and verifying ${profile.toUpperCase()}`);
+        await verifySite(profile);
+      }
+    } else {
+      step(`Building and verifying ${names} side by side`);
+      const results = await Promise.allSettled(profiles.map(verifySite));
+      const failed = results.filter((result) => result.status === 'rejected');
+      if (failed.length) throw new Error(failed.map((result) => result.reason.message).join('; '));
+    }
+
+    // Every site passed, so deploy them. This step reuses the verified build.
     for (const profile of profiles) {
-      step(`Building, verifying, and deploying ${profile.toUpperCase()}`);
-      run(process.execPath, ['scripts/deploy-pages-profile.mjs', profile, '--build'], {
-        cwd: worktree,
+      step(`Deploying ${profile.toUpperCase()}`);
+      run(process.execPath, ['scripts/deploy-pages-profile.mjs', profile], {
+        cwd: worktrees.get(profile),
         env: releaseEnv,
       });
       deployed.push(profile);
@@ -203,14 +280,14 @@ async function main() {
     if (!skipLiveChecks) {
       step('Verifying the live sites');
       run(process.execPath, ['scripts/verify-live.mjs', '--commit', head, '--profiles', profiles.join(',')], {
-        cwd: worktree,
+        cwd: worktrees.get(profiles[0]),
       });
     }
   } catch (error) {
     const partial = deployed.length ? ` Already deployed: ${deployed.join(', ')}.` : ' Nothing was deployed.';
     failure = `${error.message}.${partial}`;
   } finally {
-    removeWorktree(worktree);
+    for (const dir of worktrees.values()) removeWorktree(dir);
   }
   if (failure) fail(failure);
 
