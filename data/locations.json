@@ -1106,20 +1106,60 @@
       "shortName": "Dallas",
       "venueName": null,
       "region": "us",
-      "status": "coming-soon",
+      "status": "open",
       "address": {
-        "line1": "5307 E. Mockingbird Ln",
+        "line1": "5321 E. Mockingbird Ln",
         "line2": "Suite 200 & 201",
         "city": "Dallas",
         "state": "TX",
         "zip": "75206",
         "country": "United States"
       },
-      "contact": {
-        "phone": "",
-        "email": ""
+      "geo": {
+        "latitude": 32.8378434,
+        "longitude": -96.7755481
       },
-      "hours": {},
+      "contact": {
+        "phone": "(469) 722-0900",
+        "email": "dallas@timemission.com"
+      },
+      "hours": {
+        "mon": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12pm - 10pm"
+        },
+        "tue": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12pm - 10pm"
+        },
+        "wed": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12pm - 10pm"
+        },
+        "thu": {
+          "open": "12:00",
+          "close": "22:00",
+          "label": "12pm - 10pm"
+        },
+        "fri": {
+          "open": "12:00",
+          "close": "23:00",
+          "label": "12pm - 11pm"
+        },
+        "sat": {
+          "open": "10:00",
+          "close": "23:00",
+          "label": "10am - 11pm"
+        },
+        "sun": {
+          "open": "10:00",
+          "close": "22:00",
+          "label": "10am - 10pm"
+        }
+      },
       "bookingUrl": "https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products",
       "groupFormUrls": {
         "default": "/groups/inquire/dallas/default",
@@ -1131,18 +1171,17 @@
         "holidays": "/groups/inquire/dallas/holidays"
       },
       "navLabel": "TX – Dallas",
-      "mapUrl": "https://maps.google.com/?q=5307+E.+Mockingbird+Ln+Suite+200+%26+201+Dallas+TX+75206",
+      "mapUrl": "https://maps.google.com/?q=5321+E.+Mockingbird+Ln+Suite+200+%26+201+Dallas+TX+75206",
       "faqs": [],
-      "ticker": "DALLAS OPENING NOV 13TH",
-      "openingLabel": "Opening Nov 13th",
+      "ticker": "DALLAS NOW OPEN",
       "giftCardUrl": "",
       "countryCode": "US",
       "locale": null,
-      "timeZone": null,
+      "timeZone": "America/Chicago",
       "currency": null,
-      "phoneE164": null,
+      "phoneE164": "+14697220900",
       "hreflang": null,
-      "localBusinessSchemaEligible": false
+      "localBusinessSchemaEligible": true
     },
     {
       "id": "nashville",

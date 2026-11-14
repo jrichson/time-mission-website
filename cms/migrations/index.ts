@@ -1,4 +1,5 @@
-import * as migration_20261113_090000_manassas_group_pages from './20261113_090000_manassas_group_pages';
+import * as migration_20261114_090000_manassas_group_pages from './20261114_090000_manassas_group_pages';
+import * as migration_20261113_090000_dallas_now_open from './20261113_090000_dallas_now_open';
 import * as migration_20261110_090000_nashville_signup_page from './20261110_090000_nashville_signup_page';
 import * as migration_20261104_090000_dallas_group_form from './20261104_090000_dallas_group_form';
 import * as migration_20261104_090000_retire_dallas_signup from './20261104_090000_retire_dallas_signup';
@@ -479,8 +480,13 @@ export const migrations = [
     name: '20261110_090000_nashville_signup_page'
   },
   {
-    up: migration_20261113_090000_manassas_group_pages.up,
-    down: migration_20261113_090000_manassas_group_pages.down,
-    name: '20261113_090000_manassas_group_pages'
+    up: migration_20261113_090000_dallas_now_open.up,
+    down: migration_20261113_090000_dallas_now_open.down,
+    name: '20261113_090000_dallas_now_open'
+  },
+  {
+    up: migration_20261114_090000_manassas_group_pages.up,
+    down: migration_20261114_090000_manassas_group_pages.down,
+    name: '20261114_090000_manassas_group_pages'
   },
 ];
