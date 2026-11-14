@@ -83,4 +83,17 @@ describe('release guard', () => {
     const workflow = read('.github/workflows/cms-wrangler-deploy.yml');
     expect(workflow.match(/TM_RELEASE_COMMIT: \$\{\{ github\.sha \}\}/g)).toHaveLength(3);
   });
+
+  it('tests each release build on its own server and deploys only after every site passes', () => {
+    const noReuse = 'reuseExistingServer: !process.env.CI && !process.env.TM_RELEASE_COMMIT';
+    expect(read('playwright.config.js')).toContain(noReuse);
+    expect(read('playwright.providers.config.cjs')).toContain(noReuse);
+    expect(read('scripts/check-img-alt-axe.js')).toContain('if (alreadyUp && mustOwnServer)');
+
+    const release = read('scripts/release.mjs');
+    expect(release).toContain("TM_SMOKE_PORT: String(await freePort())");
+    expect(release).toContain("TM_PROVIDER_PORT: String(await freePort())");
+    expect(release).toContain("['scripts/deploy-pages-profile.mjs', profile, '--build', '--no-deploy']");
+    expect(release.indexOf("'--build', '--no-deploy'")).toBeLessThan(release.indexOf("step(`Deploying ${profile.toUpperCase()}`)"));
+  });
 });

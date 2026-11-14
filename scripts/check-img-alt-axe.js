@@ -31,7 +31,10 @@ if (!outputFiles || !outputFiles.length) {
   process.exit(1);
 }
 
-const BASE_URL = 'http://127.0.0.1:4173';
+const PORT = Number(process.env.TM_SMOKE_PORT || 4173);
+const BASE_URL = `http://127.0.0.1:${PORT}`;
+// A release must scan its own build, so it never attaches to a server that is already running.
+const mustOwnServer = Boolean(process.env.CI || process.env.TM_RELEASE_COMMIT);
 
 // Violation IDs to check — image/video a11y rules
 const TARGET_IDS = new Set([
@@ -47,7 +50,7 @@ async function waitForServer(maxMs = 30_000) {
   const start = Date.now();
   while (Date.now() - start < maxMs) {
     const alive = await new Promise((resolve) => {
-      const sock = net.createConnection({ host: '127.0.0.1', port: 4173 });
+      const sock = net.createConnection({ host: '127.0.0.1', port: PORT });
       sock.once('connect', () => { sock.destroy(); resolve(true); });
       sock.once('error', () => { sock.destroy(); resolve(false); });
     });
@@ -65,11 +68,15 @@ async function main() {
   try {
     // Start preview server if not already running
     const alreadyUp = await waitForServer(1500);
+    if (alreadyUp && mustOwnServer) {
+      console.error(`check-img-alt-axe: port ${PORT} is already in use; stop the server on it and run again.`);
+      process.exit(1);
+    }
     if (!alreadyUp) {
       const isWin = process.platform === 'win32';
       serverChild = require('node:child_process').spawn(
         isWin ? 'npm.cmd' : 'npm',
-        ['run', 'preview:test'],
+        ['run', 'preview:astro', '--', '--host', '127.0.0.1', '--port', String(PORT)],
         { cwd: root, stdio: 'ignore', detached: !isWin }
       );
       const ready = await waitForServer(30_000);

@@ -1,5 +1,6 @@
 const { defineConfig, devices } = require('@playwright/test');
-const baseURL = process.env.TM_PROVIDER_BASE_URL || 'http://127.0.0.1:4189';
+const providerPort = Number(process.env.TM_PROVIDER_PORT || 4189);
+const baseURL = process.env.TM_PROVIDER_BASE_URL || `http://127.0.0.1:${providerPort}`;
 module.exports = defineConfig({
   testDir: './tests/providers',
   timeout: 60000,
@@ -10,8 +11,9 @@ module.exports = defineConfig({
   outputDir: 'test-results/providers/artifacts',
   use: { baseURL, screenshot: 'only-on-failure', trace: 'retain-on-failure' },
   webServer: process.env.TM_PROVIDER_BASE_URL ? undefined : {
-    command: 'npx wrangler pages dev dist --port 4189', url: baseURL,
-    reuseExistingServer: !process.env.CI, timeout: 120000,
+    command: `npx wrangler pages dev dist --port ${providerPort}`, url: baseURL,
+    // A release must test its own build: never attach to a server that is already running.
+    reuseExistingServer: !process.env.CI && !process.env.TM_RELEASE_COMMIT, timeout: 120000,
   },
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
