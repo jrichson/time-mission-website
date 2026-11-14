@@ -54,6 +54,8 @@ export interface LocalBusinessNode {
         validThrough: string;
     }>;
     sameAs?: string[];
+    areaServed?: string[];
+    containedInPlace?: { '@type': 'Place'; name: string };
 }
 
 const DEFAULT_VENUE_IMAGE = `${baseUrl}/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg`;
@@ -143,5 +145,7 @@ export function localBusinessNode(loc: LocationRecord, canonicalPath: string, no
             validThrough: hours.date,
         }));
     }
+    if (loc.localFacts?.areaServed?.length) node.areaServed = loc.localFacts.areaServed;
+    if (loc.localFacts?.containedIn) node.containedInPlace = { '@type': 'Place', name: loc.localFacts.containedIn };
     return node;
 }

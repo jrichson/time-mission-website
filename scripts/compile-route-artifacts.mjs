@@ -185,7 +185,14 @@ function compileLocationRouteManifest(registry, locationsDocument) {
     prefixableRouteAliases.push([alias.source, target]);
   }
 
+  // Real pages under a location, e.g. /manassas/groups/corporate. They win over the shared
+  // page of the same name, which every other location still serves behind its prefix.
+  const locationOwnedPaths = routes
+    .map((route) => normalizePath(route.canonicalPath))
+    .filter((canonicalPath) => locationPaths.some((locationPath) => canonicalPath.startsWith(`${locationPath}/`)));
+
   return {
+    locationOwnedPaths,
     locationRouteEntries,
     prefixableCanonicalPaths,
     prefixableRouteAliases,
@@ -203,6 +210,7 @@ function writeLocationRouteManifest(manifest) {
     `export const LOCATION_ROUTE_ENTRIES = ${JSON.stringify(manifest.locationRouteEntries, null, 2)};`,
     `export const PREFIXABLE_CANONICAL_PATHS = ${JSON.stringify(manifest.prefixableCanonicalPaths, null, 2)};`,
     `export const PREFIXABLE_ROUTE_ALIASES = ${JSON.stringify(manifest.prefixableRouteAliases, null, 2)};`,
+    `export const LOCATION_OWNED_PATHS = ${JSON.stringify(manifest.locationOwnedPaths, null, 2)};`,
     '',
   ].join('\n');
   fs.mkdirSync(path.dirname(routeManifestPath), { recursive: true });

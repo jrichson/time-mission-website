@@ -7,7 +7,7 @@ import {
   resolveLocationRedirectUrl,
   resolveLocationRouteRequest,
 } from '../functions/_shared/location-route-normalizer.mjs';
-import { LOCATION_ROUTE_LOCALES, COUNTERPART_ORIGIN, COUNTERPART_LOCALES } from '../functions/_shared/location-route-manifest.mjs';
+import { LOCATION_ROUTE_LOCALES, COUNTERPART_ORIGIN, COUNTERPART_LOCALES, LOCATION_OWNED_PATHS } from '../functions/_shared/location-route-manifest.mjs';
 
 describe('location route normalizer', () => {
   it('preserves the page and supported locale in counterpart redirects', () => {
@@ -156,10 +156,27 @@ describe('location route normalizer', () => {
     for (const { canonicalPath, externalUrl } of locationRouteEntries()) {
       if (externalUrl) continue;
       for (const sharedPath of sharedPagePaths) {
+        // A location with its own page at this path serves that page instead (next test).
+        if (LOCATION_OWNED_PATHS.includes(`${canonicalPath}${sharedPath}`)) continue;
         expect(resolveLocationRouteRequest(`https://timemission.com${canonicalPath}${sharedPath}`))
           .toEqual({ redirectUrl: '', assetPath: sharedPath });
       }
     }
+  });
+
+  it('lets a location with its own group pages serve them instead of the shared page', () => {
+    expect(LOCATION_OWNED_PATHS).toContain('/manassas/groups/corporate');
+    expect(resolveLocationRouteRequest('https://timemission.com/manassas/groups/corporate'))
+      .toEqual({ redirectUrl: '', assetPath: '' });
+    expect(resolveLocationRouteRequest('https://timemission.com/manassas/groups'))
+      .toEqual({ redirectUrl: '', assetPath: '' });
+    expect(resolveLocationRouteRequest('https://timemission.com/manassas/groups/corporate.html'))
+      .toEqual({ redirectUrl: 'https://timemission.com/manassas/groups/corporate', assetPath: '' });
+    expect(resolveLocationRouteRequest('https://timemission.com/manassas-mall/groups/birthdays'))
+      .toEqual({ redirectUrl: 'https://timemission.com/manassas/groups/birthdays', assetPath: '' });
+    // Other locations keep the shared page.
+    expect(resolveLocationRouteRequest('https://timemission.com/philadelphia/groups/corporate'))
+      .toEqual({ redirectUrl: '', assetPath: '/groups/corporate' });
   });
 
   it('canonicalizes every alternate location source before serving migrated shared pages', () => {

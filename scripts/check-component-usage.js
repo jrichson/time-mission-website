@@ -40,6 +40,7 @@ const locationPageShellComponentRe = /<(?:Open|ComingSoon)LocationPageShell\b[^>
 const educatorPageShellRe = /import\s+EducatorPage\s+from\s+['"][^'"]+EducatorPage\.astro['"][\s\S]*<EducatorPage\b/;
 const creatorPageShellRe = /import\s+CreatorPage\s+from\s+['"][^'"]+CreatorPage\.astro['"][\s\S]*<CreatorPage\b/;
 const holidayPartyPageShellRe = /import\s+HolidayPartyPage\s+from\s+['"][^'"]+HolidayPartyPage\.astro['"][\s\S]*<HolidayPartyPage\b/;
+const localGroupPageShellRe = /import\s+LocalGroupPage\s+from\s+['"][^'"]+LocalGroupPage\.astro['"][\s\S]*<LocalGroupPage\b/;
 const locationPromotionPageShellRe = /import\s+LocationPromotionPage\s+from\s+['"][^'"]+LocationPromotionPage\.astro['"][\s\S]*<LocationPromotionPage\b/;
 
 function hasDefinePageSource(text) {
@@ -57,6 +58,7 @@ function usesPageShell(text) {
     || educatorPageShellRe.test(text)
     || creatorPageShellRe.test(text)
     || holidayPartyPageShellRe.test(text)
+    || localGroupPageShellRe.test(text)
     || locationPromotionPageShellRe.test(text);
 }
 
@@ -126,6 +128,7 @@ for (const shellRel of [
   path.join('src', 'components', 'EducatorPage.astro'),
   path.join('src', 'components', 'CreatorPage.astro'),
   path.join('src', 'components', 'HolidayPartyPage.astro'),
+  path.join('src', 'components', 'LocalGroupPage.astro'),
 ]) {
   const shellFile = path.join(root, shellRel);
   if (!fs.existsSync(shellFile)) {

@@ -8,6 +8,7 @@ import { getSeoForRoute } from './seo/catalog';
 import { locationPurchaseTermsFaqItemHtml } from './location-policy-faq';
 import { locationTeamSize } from './location-team-size';
 import { applyTmMediaBase } from './tm-media';
+import { LOCAL_GROUP_TYPES, hasLocalGroupPage, localFactsHtml, localGroupPath } from './local-venue-pages';
 import routes from '../data/routes.json';
 import { activeSiteProfile, routeServesProfile } from './site-profile';
 
@@ -103,6 +104,7 @@ function withLocationTemplateTokens(mainRaw: string, location: LocationRecord): 
     resolved = replaceToken(resolved, 'BOOKING_FAQ_QUESTION', bookingFaqQuestion);
     resolved = replaceToken(resolved, 'BOOKING_FAQ_ANSWER', bookingFaqAnswer);
     resolved = replaceRawToken(resolved, 'LOCATION_POLICY_FAQ_ITEM', locationPurchaseTermsFaqItemHtml(location));
+    resolved = replaceRawToken(resolved, 'LOCATION_LOCAL_FACTS', localFactsHtml(location));
     resolved = replaceToken(resolved, 'FINAL_CTA_TITLE', finalCtaTitle);
     resolved = replaceToken(resolved, 'FINAL_CTA_TEXT', finalCtaText);
     return resolved;
@@ -166,6 +168,8 @@ function localSubpages(location: LocationRecord): LocalSubpage[] {
             && route.sitemap === true
             && routeServesProfile(route, activeSiteProfile)
             && !/\/rules$/.test(route.canonicalPath)
+            // The venue's own group pages are linked from the Groups card icons, not listed again.
+            && !/\/groups(\/|$)/.test(route.canonicalPath.slice(prefix.length - 1))
         ))
         .map((route) => {
             const segment = route.canonicalPath.slice(prefix.length);
@@ -203,6 +207,23 @@ ${listed.map((page) => `                    <li><a href="${escapeHtml(page.href)
     return `${html.slice(0, end)}${nav}${html.slice(end)}`;
 }
 
+// Venues with their own group pages link the Groups card straight to them, so visitors and
+// crawlers reach the local page instead of the national one.
+function withLocalGroupLinks(mainRaw: string, location: LocationRecord): string {
+    let html = mainRaw;
+    for (const type of LOCAL_GROUP_TYPES) {
+        if (!hasLocalGroupPage(location.slug, type)) continue;
+        html = html.replace(
+            `href="/groups/${type}" class="groups-event-type"`,
+            `href="${localGroupPath(location.slug, type)}" class="groups-event-type"`,
+        );
+    }
+    if (hasLocalGroupPage(location.slug)) {
+        html = html.replace('href="/groups" class="btn-start-planning"', `href="${localGroupPath(location.slug)}" class="btn-start-planning"`);
+    }
+    return html;
+}
+
 export function buildOpenLocationPage({
     mainRaw,
     slug,
@@ -216,7 +237,7 @@ export function buildOpenLocationPage({
         canonicalPath,
         ld: locationJsonLd(location),
         location,
-        mainHtml: applyTmMediaBase(withLocalSubpageLinks(withTemporaryClosureStrip(withLocationTemplateTokens(mainRaw, location), location), location)),
+        mainHtml: applyTmMediaBase(withLocalGroupLinks(withLocalSubpageLinks(withTemporaryClosureStrip(withLocationTemplateTokens(mainRaw, location), location), location), location)),
         page: definePage({ canonicalPath }),
         pageInit: cityPageInit(location, locationPageTaglines(slug)),
     };

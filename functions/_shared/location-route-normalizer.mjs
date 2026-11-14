@@ -6,7 +6,10 @@ import {
   DYNAMIC_SHARED_PREFIXES,
   COUNTERPART_LOCALES,
   COUNTERPART_ORIGIN,
+  LOCATION_OWNED_PATHS,
 } from './location-route-manifest.mjs';
+
+const locationOwnedPaths = new Set(LOCATION_OWNED_PATHS);
 
 const LOCATION_PREFIXED_ASSET_PREFIXES = [
   '/_astro/',
@@ -169,6 +172,14 @@ function resolveLocationPath(pathname) {
   const sharedPath = sharedRouteByCompactPath.get(compactRoutePath(suffixPath)) || dynamicSharedPath;
   const targetSuffix = sharedPath ? (sharedPath === '/' ? '' : sharedPath) : suffixPath;
   const targetPath = `${canonicalPath}${targetSuffix}`;
+
+  // The location has its own page here: serve it, not the shared page of the same name.
+  if (locationOwnedPaths.has(targetPath)) {
+    return {
+      redirectPath: sourcePath === targetPath ? '' : targetPath,
+      assetPath: '',
+    };
+  }
 
   return {
     redirectPath: sourcePath === targetPath ? '' : targetPath,

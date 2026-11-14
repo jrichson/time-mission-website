@@ -324,7 +324,7 @@
                 </a>
             </div>
             <div class="groups-cta-buttons">
-                <a href="#" class="btn-group-tickets btn-tickets" data-tm-booking-trigger data-tm-booking-kind="tickets" data-tm-location="manassas">Book Now
+                <a href="#" class="btn-group-tickets btn-tickets" data-tm-booking-trigger data-tm-booking-kind="group-tickets" data-tm-location="manassas">Book Now
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
                 <a href="/groups" class="btn-start-planning">Learn More
@@ -384,6 +384,8 @@
 
         </div>
     </section>
+
+{{LOCATION_LOCAL_FACTS}}
 
     <!-- Mini FAQ -->
     <section class="mini-faq u-scroll-anchor-lg" id="faq">

@@ -361,3 +361,37 @@ export const PREFIXABLE_ROUTE_ALIASES = [
     "/locations"
   ]
 ];
+export const LOCATION_OWNED_PATHS = [
+  "/philadelphia/educators",
+  "/houston/educators",
+  "/houston/spinandscore/rules",
+  "/mount-prospect/educators",
+  "/manassas/educators",
+  "/orland-park/educators",
+  "/brussels/back-to-school-sale",
+  "/brussels/late-night-special",
+  "/nashville/educators",
+  "/dallas/educators",
+  "/philadelphia/creators",
+  "/houston/creators",
+  "/dallas/creators",
+  "/orland-park/creators",
+  "/mount-prospect/creators",
+  "/manassas/creators",
+  "/nashville/creators",
+  "/nashville/signup",
+  "/west-nyack/creators",
+  "/lincoln/creators",
+  "/philadelphia/holiday-party",
+  "/houston/holiday-party",
+  "/orland-park/holiday-party",
+  "/mount-prospect/holiday-party",
+  "/manassas/holiday-party",
+  "/manassas/groups",
+  "/manassas/groups/birthdays",
+  "/manassas/groups/corporate",
+  "/manassas/groups/holidays",
+  "/manassas/groups/field-trips",
+  "/manassas/groups/private-events",
+  "/manassas/groups/bachelor-ette"
+];

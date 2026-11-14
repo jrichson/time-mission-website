@@ -1,0 +1,94 @@
+---
+// Venue-specific group pages: /<venue>/groups (hub, no `type`) and /<venue>/groups/<type>.
+// Copy and facts come from src/data/site/local-group-pages.json and data/locations.json.
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import {
+    buildLocalGroupTypePage,
+    buildLocalGroupsHubPage,
+    localGroupPath,
+    type LocalGroupType,
+} from '../lib/local-venue-pages';
+import { buildGroupEventGraph, serializeGraph } from '../lib/schema/graph';
+import { getSeoForRoute } from '../lib/seo/catalog';
+import { applyTmMediaBase } from '../lib/tm-media';
+import groupsMain from '../partials/groups-main.frag.txt?raw';
+import birthdaysMain from '../partials/birthdays-main.frag.txt?raw';
+import corporateMain from '../partials/corporate-main.frag.txt?raw';
+import holidaysMain from '../partials/holidays-main.frag.txt?raw';
+import fieldTripsMain from '../partials/field-trips-main.frag.txt?raw';
+import privateEventsMain from '../partials/private-events-main.frag.txt?raw';
+import bachelorEtteMain from '../partials/bachelor-ette-main.frag.txt?raw';
+
+interface Props {
+    slug: string;
+    type?: LocalGroupType;
+}
+
+const TYPES: Record<LocalGroupType, { body: string; serviceType: string; hero: string; heroLarge: string }> = {
+    birthdays: { body: birthdaysMain, serviceType: 'PartyService', hero: '/assets/photos/TM-Groups', heroLarge: '/assets/photos/TM-Groups.webp 1920w' },
+    corporate: { body: corporateMain, serviceType: 'BusinessEvent', hero: '/assets/photos/groups/corporate-events', heroLarge: '/assets/photos/groups/corporate-events-1600.webp 1600w' },
+    holidays: { body: holidaysMain, serviceType: 'BusinessEvent', hero: '/assets/photos/groups/holiday-parties', heroLarge: '/assets/photos/groups/holiday-parties-1600.webp 1600w' },
+    'field-trips': { body: fieldTripsMain, serviceType: 'EducationalOrganization', hero: '/assets/photos/groups/field-trips', heroLarge: '/assets/photos/groups/field-trips-1600.webp 1600w' },
+    'private-events': { body: privateEventsMain, serviceType: 'EventVenue', hero: '/assets/photos/venue/_Time-Mission_0024', heroLarge: '/assets/photos/venue/_Time-Mission_0024.webp 1920w' },
+    'bachelor-ette': { body: bachelorEtteMain, serviceType: 'PartyService', hero: '/assets/photos/groups/bachelor-bachelorette', heroLarge: '/assets/photos/groups/bachelor-bachelorette-1600.webp 1600w' },
+};
+
+const { slug, type } = Astro.props;
+const typeConfig = type ? TYPES[type] : undefined;
+const local = type
+    ? buildLocalGroupTypePage(slug, type, typeConfig!.body)
+    : buildLocalGroupsHubPage(slug, groupsMain);
+const page = definePage({ canonicalPath: local.canonicalPath });
+const seo = getSeoForRoute(page.canonicalPath);
+const hubPath = localGroupPath(slug);
+const crumbs = [
+    { label: 'Home', href: '/' },
+    { label: local.location.shortName, href: `/${slug}` },
+    { label: 'Groups', href: hubPath },
+    ...(type ? [{ label: local.copy.breadcrumb, href: page.canonicalPath }] : []),
+];
+const ld = serializeGraph(
+    buildGroupEventGraph({
+        canonicalPath: page.canonicalPath,
+        crumbs,
+        serviceName: local.copy.serviceName,
+        serviceType: typeConfig?.serviceType ?? 'EventVenue',
+        serviceDescription: seo.description,
+        venueSlug: slug,
+    }),
+);
+const mainHtml = applyTmMediaBase(local.mainHtml);
+const heroSrcset = typeConfig
+    ? `${typeConfig.hero}-480.webp 480w, ${typeConfig.hero}-800.webp 800w, ${typeConfig.hero}-1200.webp 1200w, ${typeConfig.heroLarge}`
+    : '';
+---
+
+<SiteLayout
+    canonicalPath={page.canonicalPath}
+    bodyClass="has-noise"
+    bodyDataLocation={slug}
+>
+    <Fragment slot="head-extra">
+        {typeConfig ? (
+            <link rel="preload" as="image" href={`${typeConfig.hero}-480.webp`} imagesrcset={heroSrcset} imagesizes="100vw" type="image/webp" fetchpriority="high" />
+        ) : (
+            <Fragment>
+                <link rel="preload" as="image" href="/assets/video/groups-hero-poster-960.webp" type="image/webp" fetchpriority="high" media="(max-width: 768px)" />
+                <link rel="preload" as="image" href="/assets/video/groups-hero-poster.jpg" fetchpriority="high" media="(min-width: 769px)" />
+            </Fragment>
+        )}
+        <link rel="stylesheet" href="/css/faq.css?v=5" />
+        <link rel="stylesheet" href={typeConfig ? '/css/page-group-event.css?v=1' : '/css/page-groups.css?v=1'} />
+        <link rel="stylesheet" href="/css/local-venue.css?v=1" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <div set:html={mainHtml} />
+    <Fragment slot="after-site-scripts">
+        {typeConfig
+            ? <script is:inline defer src="/js/page-group-event-after.js?v=1"></script>
+            : <script is:inline defer src="/js/page-groups-after.js?v=1"></script>}
+    </Fragment>
+</SiteLayout>
