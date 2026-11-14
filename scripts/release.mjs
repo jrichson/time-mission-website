@@ -2,7 +2,7 @@
 /**
  * The only supported way to put the website into production.
  *
- *   npm run release -- [--cms=auto|skip|force] [--only=us|eu] [--serial] [--dry-run] [--skip-live-checks]
+ *   npm run release -- [--cms=auto|skip|force] [--only=us|eu] [--serial] [--verify-only] [--dry-run] [--skip-live-checks]
  *
  * 1. Refuses to run unless HEAD is a clean, pushed commit.
  * 2. Builds from a fresh checkout of that commit, so local edits, untracked
@@ -45,6 +45,8 @@ const cmsMode = option('cms', 'auto');
 const only = option('only', '');
 const dryRun = process.argv.includes('--dry-run');
 const serial = process.argv.includes('--serial');
+// Build and verify every site exactly as a release would, but deploy nothing.
+const verifyOnly = process.argv.includes('--verify-only');
 const skipLiveChecks = process.argv.includes('--skip-live-checks');
 if (!['auto', 'skip', 'force'].includes(cmsMode)) fail('--cms must be auto, skip, or force.');
 if (only && !RELEASE_PROFILES.includes(only)) fail(`--only must be one of ${RELEASE_PROFILES.join(', ')}.`);
@@ -201,7 +203,9 @@ async function main() {
   const subject = git(['log', '-1', '--format=%s', head]).stdout;
 
   const liveCommit = await liveReleaseCommit();
-  const cms = only === 'eu' && cmsMode === 'auto'
+  const cms = verifyOnly
+    ? { deploy: false, reason: 'verify only; nothing is deployed' }
+    : only === 'eu' && cmsMode === 'auto'
     ? { deploy: false, reason: 'EU-only release; the CMS serves the US build' }
     : cmsDeployDecision({ mode: cmsMode, liveCommit, cmsChangedSinceLive: cmsChangedSince(liveCommit) });
 
@@ -268,7 +272,7 @@ async function main() {
     }
 
     // Every site passed, so deploy them. This step reuses the verified build.
-    for (const profile of profiles) {
+    for (const profile of verifyOnly ? [] : profiles) {
       step(`Deploying ${profile.toUpperCase()}`);
       run(process.execPath, ['scripts/deploy-pages-profile.mjs', profile], {
         cwd: worktrees.get(profile),
@@ -277,7 +281,7 @@ async function main() {
       deployed.push(profile);
     }
 
-    if (!skipLiveChecks) {
+    if (!skipLiveChecks && !verifyOnly) {
       step('Verifying the live sites');
       run(process.execPath, ['scripts/verify-live.mjs', '--commit', head, '--profiles', profiles.join(',')], {
         cwd: worktrees.get(profiles[0]),
@@ -291,6 +295,10 @@ async function main() {
   }
   if (failure) fail(failure);
 
+  if (verifyOnly) {
+    console.log(`\n✓ Verified ${head.slice(0, 7)} (${profiles.join(', ')}). Nothing was deployed.`);
+    return;
+  }
   console.log(`\n✓ Released ${head.slice(0, 7)} (${deployed.join(', ')}).`);
 }
 

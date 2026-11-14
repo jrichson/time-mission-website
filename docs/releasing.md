@@ -25,6 +25,7 @@ Options:
 | `--dry-run` | Show the plan (commit, CMS decision, sites) without deploying. |
 | `--cms=skip` / `--cms=force` | Override the automatic CMS decision. |
 | `--only=us` / `--only=eu` | Release one region. |
+| `--verify-only` | Build and verify every site exactly as a release would, then stop. Nothing is deployed, including the CMS. |
 | `--serial` | Build and verify the sites one after the other instead of side by side. Use it if the parallel run makes timing-sensitive smoke tests fail. |
 | `--skip-live-checks` | Skip step 5; run `npm run verify:live` yourself afterwards. |
 
