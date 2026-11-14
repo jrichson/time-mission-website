@@ -38,6 +38,7 @@ const isTemporarilyClosed = cityPage.location.status === 'temporarily-closed';
     bookingCtaI18n={bookingCta.i18n}
 >
     <Fragment slot="head-extra">
+        {cityPage.location.localFacts && <link rel="stylesheet" href="/css/local-venue.css?v=1" />}
         <LocationPageHeadLinks pageCss={pageCss} />
         {isTemporarilyClosed && <link rel="stylesheet" href="/css/temporary-closure.css?v=1" />}
     </Fragment>

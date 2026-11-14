@@ -62,7 +62,13 @@ export function buildGroupEventGraph(opts: {
     serviceType: string;
     serviceDescription: string;
     faqs?: unknown[];
+    /** Venue-specific group pages: the venue that hosts the event. */
+    venueSlug?: string;
 }): Graph {
+    const venue = opts.venueSlug ? allLocations.find((l) => l.slug === opts.venueSlug) : undefined;
+    if (opts.venueSlug && !venue) throw new Error(`buildGroupEventGraph: unknown slug ${opts.venueSlug}`);
+    // Reuse the venue page's business node (same @id) so the service and the venue are one entity.
+    const business = venue ? localBusinessNode(venue, `/${venue.slug}`) : null;
     const nodes: unknown[] = [
         organizationNode(),
         breadcrumbNode(opts.crumbs),
@@ -71,8 +77,11 @@ export function buildGroupEventGraph(opts: {
             name: opts.serviceName,
             serviceType: opts.serviceType,
             description: opts.serviceDescription,
+            providerId: business ? business['@id'] : undefined,
+            areaServed: venue?.localFacts ? (venue.localFacts.areaServed ?? [venue.localFacts.area]) : undefined,
         }),
     ];
+    if (business) nodes.push(business);
     return withContext(nodes);
 }
 

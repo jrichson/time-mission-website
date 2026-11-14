@@ -468,6 +468,21 @@
       "name": "Time Mission Manassas",
       "shortName": "Manassas",
       "venueName": "Manassas Mall",
+      "localFacts": {
+        "area": "Manassas, VA",
+        "summary": "Time Mission Manassas is inside Manassas Mall on Sudley Road in Northern Virginia, with free parking at the mall.",
+        "areaServed": ["Manassas", "Manassas Park", "Prince William County", "Fairfax County", "Loudoun County", "Northern Virginia"],
+        "containedIn": "Manassas Mall",
+        "rating": "Rated 5.0 stars on Google by more than 3,000 guests.",
+        "ratingCheckedOn": "2026-11-13",
+        "items": [
+          { "label": "Where", "text": "Inside Manassas Mall, 8300 Sudley Rd, Suite A2, Manassas, VA 20109." },
+          { "label": "Parking", "text": "Parking is free in the Manassas Mall lots." },
+          { "label": "Buses", "text": "The mall has bus parking and easy drop-off for school and tour buses." },
+          { "label": "Getting here", "text": "The mall is on Sudley Road, close to I-66, Route 28 and the Prince William Parkway." },
+          { "label": "Who comes", "text": "Guests come from across Northern Virginia: Prince William County and nearby Fairfax and Loudoun, including Manassas Park, Gainesville, Bristow, Centreville, Haymarket and Woodbridge." }
+        ]
+      },
       "region": "us",
       "status": "open",
       "address": {

@@ -29,6 +29,19 @@ export interface LocationRecord {
     name: string;
     shortName: string;
     venueName: string | null;
+    /** Verified, venue-specific visitor facts. Only venues with this record get local group pages. */
+    localFacts?: {
+        area: string;
+        summary: string;
+        items: Array<{ label: string; text: string }>;
+        /** Places the venue draws guests from, for schema.org areaServed. */
+        areaServed?: string[];
+        /** The mall or complex the venue is inside, for schema.org containedInPlace. */
+        containedIn?: string;
+        /** Public rating line. Re-check the source and update ratingCheckedOn when editing. */
+        rating?: string;
+        ratingCheckedOn?: string;
+    };
     region: string;
     status: 'open' | 'coming-soon' | 'temporarily-closed';
     temporaryClosure?: {

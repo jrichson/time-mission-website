@@ -6,6 +6,7 @@ import { EDISON_HOURS_SNAPSHOT } from '../cms/migration-data/20261019_edison_hou
 import { BRUSSELS_HOURS_SNAPSHOT } from '../cms/migration-data/20261020_brussels_hours_snapshot';
 import { DALLAS_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261016_dallas_signup_page_snapshot';
 import { NASHVILLE_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261110_nashville_signup_page_snapshot';
+import { MANASSAS_GROUP_PAGES_SNAPSHOT } from '../cms/migration-data/20261113_manassas_group_pages_snapshot';
 import { CREATOR_PAGES_SNAPSHOT } from '../cms/migration-data/20261021_creator_pages_snapshot';
 import { HOLIDAY_PARTY_PAGES_SNAPSHOT } from '../cms/migration-data/20261022_holiday_party_pages_snapshot';
 import {
@@ -242,6 +243,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 NASHVILLE_SIGNUP_PAGE_SNAPSHOT,
                 ...CREATOR_PAGES_SNAPSHOT,
                 ...HOLIDAY_PARTY_PAGES_SNAPSHOT,
+                ...MANASSAS_GROUP_PAGES_SNAPSHOT,
                 ...BRUSSELS_LATE_NIGHT_SPECIAL_PAGE_SNAPSHOT,
                 ...BRUSSELS_BACK_TO_SCHOOL_PAGE_SNAPSHOT,
                 ...US_SCHOOL_NIGHT_PAGE_SNAPSHOT,

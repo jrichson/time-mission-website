@@ -30,6 +30,9 @@ export function serviceNode(opts: {
     name: string;
     serviceType: string;
     description: string;
+    /** Venue pages: the venue's own business node provides the service, in its own area. */
+    providerId?: string;
+    areaServed?: string[];
 }): ServiceNode {
     return {
         '@type': 'Service',
@@ -37,8 +40,8 @@ export function serviceNode(opts: {
         name: opts.name,
         serviceType: opts.serviceType,
         description: opts.description,
-        provider: { '@id': org['@id'] },
-        areaServed: openCities(),
+        provider: { '@id': opts.providerId || org['@id'] },
+        areaServed: opts.areaServed || openCities(),
         url: `${activeSiteProfile.origin}${opts.canonicalPath}`,
     };
 }

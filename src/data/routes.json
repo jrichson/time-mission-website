@@ -773,6 +773,76 @@
       "outputFile": "manassas/holiday-party.html",
       "sitemap": true,
       "status": 301
+    },
+    {
+      "id": "manassas-groups",
+      "canonicalPath": "/manassas/groups",
+      "redirectSources": [
+        "/manassas/groups.html"
+      ],
+      "outputFile": "manassas/groups.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "manassas-groups-birthdays",
+      "canonicalPath": "/manassas/groups/birthdays",
+      "redirectSources": [
+        "/manassas/groups/birthdays.html"
+      ],
+      "outputFile": "manassas/groups/birthdays.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "manassas-groups-corporate",
+      "canonicalPath": "/manassas/groups/corporate",
+      "redirectSources": [
+        "/manassas/groups/corporate.html"
+      ],
+      "outputFile": "manassas/groups/corporate.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "manassas-groups-holidays",
+      "canonicalPath": "/manassas/groups/holidays",
+      "redirectSources": [
+        "/manassas/groups/holidays.html"
+      ],
+      "outputFile": "manassas/groups/holidays.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "manassas-groups-field-trips",
+      "canonicalPath": "/manassas/groups/field-trips",
+      "redirectSources": [
+        "/manassas/groups/field-trips.html"
+      ],
+      "outputFile": "manassas/groups/field-trips.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "manassas-groups-private-events",
+      "canonicalPath": "/manassas/groups/private-events",
+      "redirectSources": [
+        "/manassas/groups/private-events.html"
+      ],
+      "outputFile": "manassas/groups/private-events.html",
+      "sitemap": true,
+      "status": 301
+    },
+    {
+      "id": "manassas-groups-bachelor-ette",
+      "canonicalPath": "/manassas/groups/bachelor-ette",
+      "redirectSources": [
+        "/manassas/groups/bachelor-ette.html"
+      ],
+      "outputFile": "manassas/groups/bachelor-ette.html",
+      "sitemap": true,
+      "status": 301
     }
   ],
   "aliases": [

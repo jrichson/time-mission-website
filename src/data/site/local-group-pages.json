@@ -1,0 +1,191 @@
+{
+  "_comment": "Copy for the venue-specific group pages at /<venue>/groups and /<venue>/groups/<type>. A venue gets these pages only when it has an entry here AND a localFacts record in data/locations.json. Every statement must be true for that venue: do not copy an entry to another venue and swap the city name. {phone} is replaced with the venue's phone number.",
+  "manassas": {
+    "badge": "Manassas, VA",
+    "heroVenueLine": "in Manassas",
+    "sharedFaqs": {
+      "whereAnswer": "At Time Mission Manassas, inside Manassas Mall at 8300 Sudley Rd, Suite A2, Manassas, VA 20109. The mall is on Sudley Road, close to I-66, Route 28 and the Prince William Parkway.",
+      "parkingAnswer": "Yes. Parking is free in the Manassas Mall lots, and the mall has bus parking and easy drop-off."
+    },
+    "hub": {
+      "serviceName": "Group Events at Time Mission Manassas",
+      "breadcrumb": "Groups",
+      "answerTitle": "Group events and parties in Manassas, VA",
+      "answer": "Time Mission Manassas hosts birthdays, corporate events, school field trips, private events, bachelor and bachelorette parties and holiday parties inside Manassas Mall at 8300 Sudley Rd in Northern Virginia. Groups split into teams of 2 to 5 and play through 25+ interactive mission rooms. Parking is free at the mall.",
+      "moreTitle": "More ways to bring a group to Manassas",
+      "more": [
+        {
+          "id": "team-building",
+          "title": "Team building",
+          "text": "Coworkers split into teams of 2 to 5 and compete across the mission rooms with live scoring.",
+          "linkLabel": "See corporate events in Manassas",
+          "type": "corporate"
+        },
+        {
+          "id": "family-gatherings",
+          "title": "Family gatherings",
+          "text": "Reunions and family days work for ages 6 and up. Kids ages 6 to 13 play with an adult in their group.",
+          "linkLabel": "See private events in Manassas",
+          "type": "private-events"
+        },
+        {
+          "id": "youth-groups-and-camps",
+          "title": "Youth groups and camps",
+          "text": "Camps, scout troops, church groups and sports teams play in teams of 2 to 5, with an adult in each group of younger kids. Sessions run 60, 90 or 120 minutes, and the mall has bus parking.",
+          "linkLabel": "See field trips in Manassas",
+          "type": "field-trips"
+        },
+        {
+          "id": "bus-tours",
+          "title": "Bus tours",
+          "text": "Tour groups get bus parking and easy drop-off at Manassas Mall and play together in teams. Send an inquiry with your date and headcount.",
+          "linkLabel": "Plan a private event in Manassas",
+          "type": "private-events"
+        },
+        {
+          "id": "date-night",
+          "title": "Date night",
+          "text": "Couples and double dates play as a team of 2 to 5 and take on as many missions as they can in one session.",
+          "linkLabel": "See Time Mission Manassas",
+          "href": "/manassas"
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Where are group events held in Manassas?",
+          "a": "{whereAnswer}"
+        },
+        {
+          "q": "Is parking free for groups at Time Mission Manassas?",
+          "a": "{parkingAnswer}"
+        },
+        {
+          "q": "How do I book a group at Time Mission Manassas?",
+          "a": "Book group tickets online for Manassas, or send an inquiry with your date and headcount and the Manassas team will reply. You can also call {phone}."
+        }
+      ]
+    },
+    "types": {
+      "birthdays": {
+        "serviceName": "Birthday Parties at Time Mission Manassas",
+        "breadcrumb": "Birthday Parties",
+        "answerTitle": "Birthday parties in Manassas, VA",
+        "answer": "Time Mission Manassas hosts kids' and adult birthday parties inside Manassas Mall at 8300 Sudley Rd in Northern Virginia. Guests ages 6 and up split into teams of 2 to 5 and play through 25+ interactive mission rooms. Parking is free, and birthday packages for Manassas can be booked online.",
+        "faqs": [
+          {
+            "q": "Where are birthday parties held in Manassas?",
+            "a": "{whereAnswer}"
+          },
+          {
+            "q": "Is parking free for birthday party guests?",
+            "a": "{parkingAnswer}"
+          },
+          {
+            "q": "How do I book a birthday party at Time Mission Manassas?",
+            "a": "Choose a birthday package for Manassas online, or send an inquiry with your date and guest count. You can also call {phone}."
+          }
+        ]
+      },
+      "corporate": {
+        "serviceName": "Corporate Events at Time Mission Manassas",
+        "breadcrumb": "Corporate Events",
+        "answerTitle": "Corporate events and team building in Manassas, VA",
+        "answer": "Time Mission Manassas hosts corporate events, team building, client appreciation and office outings inside Manassas Mall at 8300 Sudley Rd in Northern Virginia. Coworkers split into teams of 2 to 5 and compete across 25+ interactive mission rooms with live scoring. Parking is free, and teams can book group tickets online or send an inquiry for a larger event.",
+        "faqs": [
+          {
+            "q": "Where do corporate events take place in Manassas?",
+            "a": "{whereAnswer}"
+          },
+          {
+            "q": "Is there free parking for our team?",
+            "a": "{parkingAnswer}"
+          },
+          {
+            "q": "How do we book a team event at Time Mission Manassas?",
+            "a": "Book group tickets online for Manassas, or send an inquiry with your date and headcount and the Manassas team will reply. You can also call {phone}."
+          }
+        ]
+      },
+      "field-trips": {
+        "serviceName": "School Field Trips at Time Mission Manassas",
+        "breadcrumb": "Field Trips",
+        "answerTitle": "School field trips in Manassas, VA",
+        "answer": "Time Mission Manassas hosts school field trips, camps and youth groups inside Manassas Mall at 8300 Sudley Rd in Northern Virginia. Students ages 6 and up work in teams of 2 to 5 through 25+ mission rooms built around problem solving and teamwork. The mall has bus parking and easy drop-off, and parking is free.",
+        "faqs": [
+          {
+            "q": "Where do field trips take place in Manassas?",
+            "a": "{whereAnswer}"
+          },
+          {
+            "q": "Can a school bus park at Time Mission Manassas?",
+            "a": "{parkingAnswer}"
+          },
+          {
+            "q": "How do schools book a field trip in Manassas?",
+            "a": "Send an inquiry with your date, grade level and student count and the Manassas team will reply with options. You can also call {phone}."
+          }
+        ]
+      },
+      "bachelor-ette": {
+        "serviceName": "Bachelor and Bachelorette Parties at Time Mission Manassas",
+        "breadcrumb": "Bach Parties",
+        "answerTitle": "Bachelor and bachelorette parties in Manassas, VA",
+        "answer": "Time Mission Manassas hosts bachelor and bachelorette parties inside Manassas Mall at 8300 Sudley Rd in Northern Virginia. The group splits into teams of 2 to 5 and competes across 25+ interactive mission rooms with live scoring. Parking is free, and group tickets for Manassas can be booked online.",
+        "faqs": [
+          {
+            "q": "Where are bachelor and bachelorette parties held in Manassas?",
+            "a": "{whereAnswer}"
+          },
+          {
+            "q": "Is parking free for our party?",
+            "a": "{parkingAnswer}"
+          },
+          {
+            "q": "How do we book a bachelor or bachelorette party in Manassas?",
+            "a": "Book group tickets online for Manassas, or send an inquiry with your date and group size. You can also call {phone}."
+          }
+        ]
+      },
+      "private-events": {
+        "serviceName": "Private Events at Time Mission Manassas",
+        "breadcrumb": "Private Events",
+        "answerTitle": "Private events and venue rentals in Manassas, VA",
+        "answer": "Time Mission Manassas hosts private events and full-venue rentals inside Manassas Mall at 8300 Sudley Rd in Northern Virginia. Guests split into teams of 2 to 5 and play through 25+ interactive mission rooms. Parking is free, and the Manassas team plans each private event by inquiry.",
+        "faqs": [
+          {
+            "q": "Where are private events held in Manassas?",
+            "a": "{whereAnswer}"
+          },
+          {
+            "q": "Is parking free for private event guests?",
+            "a": "{parkingAnswer}"
+          },
+          {
+            "q": "How do I plan a private event at Time Mission Manassas?",
+            "a": "Send an inquiry with your date, headcount and the kind of event, and the Manassas team will reply with options. You can also call {phone}."
+          }
+        ]
+      },
+      "holidays": {
+        "serviceName": "Holiday Parties at Time Mission Manassas",
+        "breadcrumb": "Holiday Parties",
+        "answerTitle": "Holiday parties in Manassas, VA",
+        "answer": "Time Mission Manassas hosts holiday parties for offices, friends and families inside Manassas Mall at 8300 Sudley Rd in Northern Virginia. Guests split into teams of 2 to 5 and compete across 25+ interactive mission rooms. Parking is free, and holiday party packages for Manassas can be booked online.",
+        "faqs": [
+          {
+            "q": "Where are holiday parties held in Manassas?",
+            "a": "{whereAnswer}"
+          },
+          {
+            "q": "Is parking free for holiday party guests?",
+            "a": "{parkingAnswer}"
+          },
+          {
+            "q": "How do I book a holiday party at Time Mission Manassas?",
+            "a": "Choose a holiday party package for Manassas online, or send an inquiry with your date and guest count. You can also call {phone}."
+          }
+        ]
+      }
+    }
+  }
+}
