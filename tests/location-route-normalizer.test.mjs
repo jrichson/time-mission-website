@@ -164,19 +164,13 @@ describe('location route normalizer', () => {
     }
   });
 
-  it('lets a location with its own group pages serve them instead of the shared page', () => {
-    expect(LOCATION_OWNED_PATHS).toContain('/manassas/groups/corporate');
+  it('serves the shared group pages for Manassas while its own group pages are unpublished', () => {
+    expect(LOCATION_OWNED_PATHS).not.toContain('/manassas/groups');
+    expect(LOCATION_OWNED_PATHS).not.toContain('/manassas/groups/corporate');
     expect(resolveLocationRouteRequest('https://timemission.com/manassas/groups/corporate'))
-      .toEqual({ redirectUrl: '', assetPath: '' });
-    expect(resolveLocationRouteRequest('https://timemission.com/manassas/groups'))
-      .toEqual({ redirectUrl: '', assetPath: '' });
-    expect(resolveLocationRouteRequest('https://timemission.com/manassas/groups/corporate.html'))
-      .toEqual({ redirectUrl: 'https://timemission.com/manassas/groups/corporate', assetPath: '' });
-    expect(resolveLocationRouteRequest('https://timemission.com/manassas-mall/groups/birthdays'))
-      .toEqual({ redirectUrl: 'https://timemission.com/manassas/groups/birthdays', assetPath: '' });
-    // Other locations keep the shared page.
-    expect(resolveLocationRouteRequest('https://timemission.com/philadelphia/groups/corporate'))
       .toEqual({ redirectUrl: '', assetPath: '/groups/corporate' });
+    expect(resolveLocationRouteRequest('https://timemission.com/manassas/groups'))
+      .toEqual({ redirectUrl: '', assetPath: '/groups' });
   });
 
   it('canonicalizes every alternate location source before serving migrated shared pages', () => {

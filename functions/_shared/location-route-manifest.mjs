@@ -386,12 +386,5 @@ export const LOCATION_OWNED_PATHS = [
   "/houston/holiday-party",
   "/orland-park/holiday-party",
   "/mount-prospect/holiday-party",
-  "/manassas/holiday-party",
-  "/manassas/groups",
-  "/manassas/groups/birthdays",
-  "/manassas/groups/corporate",
-  "/manassas/groups/holidays",
-  "/manassas/groups/field-trips",
-  "/manassas/groups/private-events",
-  "/manassas/groups/bachelor-ette"
+  "/manassas/holiday-party"
 ];

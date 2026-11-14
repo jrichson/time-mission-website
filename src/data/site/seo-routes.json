@@ -424,47 +424,5 @@
     "description": "Every Thursday to Saturday from 6 PM, get 90 minutes across 25+ interactive mission rooms plus a robot-made cocktail for €31.99 per person.",
     "ogImage": "/assets/photos/promos/brussels-late-night-1200.webp",
     "twitterImage": "/assets/photos/promos/brussels-late-night-1200.webp"
-  },
-  "/manassas/groups": {
-    "title": "Group Events & Parties in Manassas, VA | Time Mission",
-    "description": "Birthdays, team building, field trips, bachelorette parties and more at Time Mission Manassas in Northern Virginia. 25+ mission rooms, free parking at Manassas Mall.",
-    "ogImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg",
-    "twitterImage": "/assets/photos/experiences/Time-Mission_Magma_Mayhem-2.jpg"
-  },
-  "/manassas/groups/birthdays": {
-    "title": "Birthday Parties in Manassas, VA | Time Mission Northern Virginia",
-    "description": "Kids, teen and adult birthday parties at Time Mission Manassas, inside Manassas Mall in Northern Virginia. 25+ interactive missions for ages 6 and up. Free parking.",
-    "ogImage": "/assets/photos/TM-Groups.jpg",
-    "twitterImage": "/assets/photos/TM-Groups.jpg"
-  },
-  "/manassas/groups/corporate": {
-    "title": "Corporate Events in Manassas, VA | Time Mission Northern Virginia",
-    "description": "Corporate events, team building and client appreciation in Manassas, VA. 25+ interactive missions at Manassas Mall, serving Prince William, Fairfax and Loudoun. Free parking.",
-    "ogImage": "/assets/photos/groups/corporate-events.jpg",
-    "twitterImage": "/assets/photos/groups/corporate-events.jpg"
-  },
-  "/manassas/groups/holidays": {
-    "title": "Holiday Party Venues in Northern Virginia | Time Mission Manassas",
-    "description": "Office, family and friends holiday parties at Time Mission Manassas, inside Manassas Mall in Northern Virginia. 25+ interactive missions, teams of 2 to 5, free parking.",
-    "ogImage": "/assets/photos/groups/holiday-parties.jpg",
-    "twitterImage": "/assets/photos/groups/holiday-parties.jpg"
-  },
-  "/manassas/groups/field-trips": {
-    "title": "Field Trips in Northern Virginia | Time Mission Manassas",
-    "description": "School field trips, camps and youth groups in Manassas, VA. 25+ hands-on missions, bus parking at Manassas Mall, serving Prince William, Fairfax and Loudoun schools.",
-    "ogImage": "/assets/photos/groups/field-trips.jpg",
-    "twitterImage": "/assets/photos/groups/field-trips.jpg"
-  },
-  "/manassas/groups/private-events": {
-    "title": "Private Event Venue in Manassas, VA | Time Mission Buyouts",
-    "description": "Private events and full-venue rentals at Time Mission Manassas, inside Manassas Mall in Northern Virginia. 25+ interactive missions and free parking.",
-    "ogImage": "/assets/photos/venue/_Time-Mission_0024.jpg",
-    "twitterImage": "/assets/photos/venue/_Time-Mission_0024.jpg"
-  },
-  "/manassas/groups/bachelor-ette": {
-    "title": "Bachelor & Bachelorette Parties in Manassas, VA | Time Mission",
-    "description": "Bachelor and bachelorette parties at Time Mission Manassas in Northern Virginia. Compete in teams of 2 to 5 across 25+ missions at Manassas Mall. Free parking.",
-    "ogImage": "/assets/photos/groups/bachelor-bachelorette.jpg",
-    "twitterImage": "/assets/photos/groups/bachelor-bachelorette.jpg"
   }
 }
