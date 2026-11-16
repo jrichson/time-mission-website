@@ -12,9 +12,10 @@ Run it from the branch you want live after `git push`.
 ## What it does
 
 1. **Checks the commit.** Refuses tracked, uncommitted changes and any HEAD that differs from `origin/<branch>`. Production must always be reproducible from git.
-2. **Builds from a fresh checkout** of that commit in a temporary directory, with `npm ci`. Local edits, untracked files, and old `dist/` output cannot reach production. Your `.env` files are copied in.
+2. **Builds from fresh checkouts** of that commit in temporary directories, one per site, with `npm ci`. Local edits, untracked files, and old `dist/` output cannot reach production. Your `.env` files are copied in.
 3. **Deploys the CMS first** (Railway `time-mission-website`), then waits until it is running. The CMS runs its Payload migrations on start. The static build reads CMS pages, banners, blog posts, and SEO, so it has to come second. The CMS is skipped automatically when `cms/` has not changed since the live release.
-4. **Builds, verifies, and deploys the US site, then the EU site** through `scripts/deploy-pages-profile.mjs`: source checks, strict CMS read, artifact checks, smoke tests, and a Direct Upload tagged with the commit SHA.
+4. **Builds and verifies the US and EU sites side by side** through `scripts/deploy-pages-profile.mjs --build --no-deploy`: source checks, strict CMS read, artifact checks, and smoke tests. Each site gets its own checkout and its own free ports, and the test servers never attach to a server that is already running, so a local preview cannot be tested by mistake. Output lines are prefixed `[us]` or `[eu]`. If either site fails, neither is deployed.
+   **Then deploys both sites** from the verified builds as Direct Uploads tagged with the commit SHA.
 5. **Verifies the live sites** with `npm run verify:live`. This confirms each region serves the released commit, the response-header CSP is still `frame-ancestors` only, and GTM is loaded with Meta, Google, and TikTok hosts allowed. It also runs the live provider and tracking browser suite.
 
 Options:
@@ -24,6 +25,8 @@ Options:
 | `--dry-run` | Show the plan (commit, CMS decision, sites) without deploying. |
 | `--cms=skip` / `--cms=force` | Override the automatic CMS decision. |
 | `--only=us` / `--only=eu` | Release one region. |
+| `--verify-only` | Build and verify every site exactly as a release would, then stop. Nothing is deployed, including the CMS. |
+| `--serial` | Build and verify the sites one after the other instead of side by side. Use it if the parallel run makes timing-sensitive smoke tests fail. |
 | `--skip-live-checks` | Skip step 5; run `npm run verify:live` yourself afterwards. |
 
 You need to be logged in to `wrangler` and `railway`. EU values that are public (GTM, Turnstile site key) have defaults in `config/deployment-targets.mjs`. The EU D1 database ID is looked up with `wrangler d1 list` unless `EU_D1_DATABASE_ID` is set.

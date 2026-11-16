@@ -23,11 +23,13 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const requestedProfile = String(process.argv[2] || '').trim().toLowerCase();
 const buildBeforeDeploy = process.argv.includes('--build');
 const preview = process.argv.includes('--preview');
+// Build and verify only. The release runs this for every site first, then deploys them.
+const verifyOnly = process.argv.includes('--no-deploy');
 const allowUnreleased = process.argv.includes('--allow-unreleased');
 const releaseCommit = String(process.env.TM_RELEASE_COMMIT || '').trim();
 const previewBranch = 'eu-preview';
 if (!['us', 'eu'].includes(requestedProfile)) {
-  console.error('Usage: node scripts/deploy-pages-profile.mjs <us|eu>');
+  console.error('Usage: node scripts/deploy-pages-profile.mjs <us|eu> [--build] [--no-deploy] [--preview]');
   process.exit(1);
 }
 if (preview && requestedProfile !== 'eu') {
@@ -120,6 +122,10 @@ try {
     });
   }
 
+  if (verifyOnly) {
+    console.log(`${requestedProfile.toUpperCase()} is built and verified; not deploying yet.`);
+    process.exit(0);
+  }
   artifact = createCloudflareDeploymentArtifact(root, requestedProfile, process.env, {
     deploymentMode: preview ? 'preview' : 'production',
   });
