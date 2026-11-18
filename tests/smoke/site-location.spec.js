@@ -105,6 +105,16 @@ test('Dallas offers booking without the retired free-ticket signup', async ({ pa
   await expect(cta).toContainText('Book Now');
 });
 
+test('Nashville header books on Roller while the page keeps the free-ticket sign-up', async ({ page }) => {
+  await page.goto('/nashville');
+  await page.evaluate(async () => { await window.TM.ready; });
+
+  const cta = page.locator('.nav .btn-tickets').first();
+  await expect(cta).toHaveAttribute('data-tm-roller-checkout', /book\.nashville\.timemission\.com\/timemissionnashville\//);
+  await expect(cta).toContainText('Book Now');
+  await expect(page.locator('main a[href*="/nashville/signup"]').first()).toBeVisible();
+});
+
 test('Scottsdale is coming soon and location lists mark upcoming venues', async ({ page }) => {
   await page.goto('/locations');
 

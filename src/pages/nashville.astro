@@ -4,6 +4,12 @@ import { buildComingSoonLocationPage } from '../lib/location-page-shell';
 
 const slug = 'nashville';
 const cityPage = buildComingSoonLocationPage(slug);
+// Tickets are on sale before opening: the header CTA opens the Roller checkout,
+// while every other Nashville CTA still goes to the free-ticket sign-up.
+const rollerCheckout = {
+    url: 'https://book.nashville.timemission.com/timemissionnashville/onlinecheckout/en-us/home',
+    locationSlug: slug,
+};
 ---
 
-<ComingSoonLocationPageShell cityPage={cityPage} />
+<ComingSoonLocationPageShell cityPage={cityPage} bookingCtaRollerCheckout={rollerCheckout} />
