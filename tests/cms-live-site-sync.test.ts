@@ -3,7 +3,7 @@ import { DALLAS_SIGNUP_RETIREMENT_SNAPSHOT } from '../cms/migration-data/2026110
 import { EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT } from '../cms/migration-data/20261010_eindhoven_direct_checkout_snapshot';
 import { EINDHOVEN_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20261016_eindhoven_now_open_snapshot';
 import { EDISON_HOURS_SNAPSHOT } from '../cms/migration-data/20261019_edison_hours_snapshot';
-import { BRUSSELS_HOURS_SNAPSHOT } from '../cms/migration-data/20261020_brussels_hours_snapshot';
+import { BRUSSELS_HOURS_SNAPSHOT } from '../cms/migration-data/20261123_brussels_hours_snapshot';
 import { DALLAS_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261016_dallas_signup_page_snapshot';
 import { NASHVILLE_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261110_nashville_signup_page_snapshot';
 import { MANASSAS_GROUP_PAGES_SNAPSHOT } from '../cms/migration-data/20261113_manassas_group_pages_snapshot';
@@ -56,6 +56,14 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 function readJson(relativePath: string): unknown {
     return JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
+}
+
+// CMS rows store a closed day's open/close as null; data/locations.json omits them.
+function withoutNullHourFields(hours: Record<string, Record<string, unknown>>) {
+    return Object.fromEntries(Object.entries(hours).map(([day, row]) => [
+        day,
+        Object.fromEntries(Object.entries(row).filter(([, value]) => value != null)),
+    ]));
 }
 
 describe('live-site-to-CMS sync snapshot', () => {
@@ -199,7 +207,7 @@ describe('live-site-to-CMS sync snapshot', () => {
             return location.slug === BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT.slug
                 ? {
                     ...groupFormLocation,
-                    hours: BRUSSELS_HOURS_SNAPSHOT.hours,
+                    hours: withoutNullHourFields(BRUSSELS_HOURS_SNAPSHOT.hours),
                     groupFormUrls: BRUSSELS_OPERATIONAL_DETAILS_SNAPSHOT.groupFormUrls,
                 }
                 : groupFormLocation;
