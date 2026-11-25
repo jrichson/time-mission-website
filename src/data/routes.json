@@ -878,7 +878,7 @@
     },
     {
       "source": "/team-building",
-      "target": "/groups/private-events",
+      "target": "/groups/corporate",
       "status": 301
     },
     {
@@ -893,27 +893,27 @@
     },
     {
       "source": "/youth-group-camp",
-      "target": "/groups/private-events",
+      "target": "/groups",
       "status": 301
     },
     {
       "source": "/youth-group",
-      "target": "/groups/private-events",
+      "target": "/groups",
       "status": 301
     },
     {
       "source": "/family-gathering",
-      "target": "/groups/holidays",
+      "target": "/groups",
       "status": 301
     },
     {
       "source": "/bus-tour",
-      "target": "/groups/private-events",
+      "target": "/groups",
       "status": 301
     },
     {
       "source": "/bus-tours",
-      "target": "/groups/private-events",
+      "target": "/groups",
       "status": 301
     },
     {
