@@ -41,6 +41,7 @@ const educatorPageShellRe = /import\s+EducatorPage\s+from\s+['"][^'"]+EducatorPa
 const creatorPageShellRe = /import\s+CreatorPage\s+from\s+['"][^'"]+CreatorPage\.astro['"][\s\S]*<CreatorPage\b/;
 const holidayPartyPageShellRe = /import\s+HolidayPartyPage\s+from\s+['"][^'"]+HolidayPartyPage\.astro['"][\s\S]*<HolidayPartyPage\b/;
 const localGroupPageShellRe = /import\s+LocalGroupPage\s+from\s+['"][^'"]+LocalGroupPage\.astro['"][\s\S]*<LocalGroupPage\b/;
+const staffSignupPageShellRe = /import\s+StaffSignupPage\s+from\s+['"][^'"]+StaffSignupPage\.astro['"][\s\S]*<StaffSignupPage\b/;
 const locationPromotionPageShellRe = /import\s+LocationPromotionPage\s+from\s+['"][^'"]+LocationPromotionPage\.astro['"][\s\S]*<LocationPromotionPage\b/;
 
 function hasDefinePageSource(text) {
@@ -59,7 +60,8 @@ function usesPageShell(text) {
     || creatorPageShellRe.test(text)
     || holidayPartyPageShellRe.test(text)
     || localGroupPageShellRe.test(text)
-    || locationPromotionPageShellRe.test(text);
+    || locationPromotionPageShellRe.test(text)
+    || staffSignupPageShellRe.test(text);
 }
 
 /** Pages that intentionally omit SiteLayout but still declare page metadata. */
@@ -129,6 +131,7 @@ for (const shellRel of [
   path.join('src', 'components', 'CreatorPage.astro'),
   path.join('src', 'components', 'HolidayPartyPage.astro'),
   path.join('src', 'components', 'LocalGroupPage.astro'),
+  path.join('src', 'components', 'StaffSignupPage.astro'),
 ]) {
   const shellFile = path.join(root, shellRel);
   if (!fs.existsSync(shellFile)) {
