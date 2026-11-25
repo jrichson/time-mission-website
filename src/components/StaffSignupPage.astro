@@ -1,0 +1,50 @@
+---
+// Unlisted /<location>/signup page that venue staff share by QR code.
+// Not linked from the site, kept out of the sitemap and marked noindex
+// (seo-robots.json, the CMS site page row, and the X-Robots-Tag rule in _headers.tmpl).
+import KlaviyoEmbedForm from './KlaviyoEmbedForm.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { definePage } from '../lib/define-page';
+import { buildSimpleGraph, serializeGraph } from '../lib/schema/graph';
+import { allLocations } from '../data/locations';
+import { locationCtaView } from '../lib/location-view';
+
+interface Props {
+    formId: string;
+    locationSlug: string;
+}
+
+const { formId, locationSlug } = Astro.props;
+const location = allLocations.find((loc) => loc.slug === locationSlug);
+if (!location) throw new Error(`${locationSlug} missing from src/data/locations`);
+const page = definePage({ canonicalPath: `/${locationSlug}/signup` });
+const cta = locationCtaView(location);
+const titleId = `${locationSlug}-signup-title`;
+const ld = serializeGraph(buildSimpleGraph([
+    { label: 'Home', href: '/' },
+    { label: location.shortName, href: `/${locationSlug}` },
+    { label: 'Sign Up', href: page.canonicalPath },
+]));
+---
+
+<SiteLayout canonicalPath={page.canonicalPath} bodyClass="has-noise tm-promo-page tm-signup-embed-page" bodyDataLocation={locationSlug}
+    bookingCtaHref={cta.href}
+    bookingCtaLabel={cta.label}
+    bookingCtaI18n={cta.i18n}
+>
+    <Fragment slot="head-extra">
+        <link rel="stylesheet" href="/css/page-promo.css?v=11" />
+    </Fragment>
+    <Fragment slot="json-ld">
+        <script type="application/ld+json" is:inline set:html={ld}></script>
+    </Fragment>
+    <section class="tm-signup-embed" aria-labelledby={titleId}>
+        <div class="tm-signup-embed__form">
+            <div class="tm-signup-embed__header">
+                <h1 id={titleId} class="tm-signup-embed__title">{`Join the ${location.name} list`}</h1>
+                <p class="tm-signup-embed__intro">Sign up for emails and texts about new missions, events and offers.</p>
+            </div>
+            <KlaviyoEmbedForm formId={formId} formName={`${locationSlug.replace(/-/g, '_')}_staff_signup`} />
+        </div>
+    </section>
+</SiteLayout>

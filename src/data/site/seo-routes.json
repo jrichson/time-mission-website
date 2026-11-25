@@ -424,5 +424,41 @@
     "description": "Every Thursday to Saturday from 6 PM, get 90 minutes across 25+ interactive mission rooms plus a robot-made cocktail for €31.99 per person.",
     "ogImage": "/assets/photos/promos/brussels-late-night-1200.webp",
     "twitterImage": "/assets/photos/promos/brussels-late-night-1200.webp"
+  },
+  "/philadelphia/signup": {
+    "title": "Sign Up | Time Mission Philadelphia",
+    "description": "Sign up for emails and texts from Time Mission Philadelphia about new missions, events and offers.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
+  "/houston/signup": {
+    "title": "Sign Up | Time Mission Houston",
+    "description": "Sign up for emails and texts from Time Mission Houston about new missions, events and offers.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
+  "/manassas/signup": {
+    "title": "Sign Up | Time Mission Manassas",
+    "description": "Sign up for emails and texts from Time Mission Manassas about new missions, events and offers.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
+  "/mount-prospect/signup": {
+    "title": "Sign Up | Time Mission Mount Prospect",
+    "description": "Sign up for emails and texts from Time Mission Mount Prospect about new missions, events and offers.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
+  "/orland-park/signup": {
+    "title": "Sign Up | Time Mission Orland Park",
+    "description": "Sign up for emails and texts from Time Mission Orland Park about new missions, events and offers.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
+  },
+  "/dallas/signup": {
+    "title": "Sign Up | Time Mission Dallas",
+    "description": "Sign up for emails and texts from Time Mission Dallas about new missions, events and offers.",
+    "ogImage": "/assets/photos/TM-Groups-1200.webp",
+    "twitterImage": "/assets/photos/TM-Groups-1200.webp"
   }
 }

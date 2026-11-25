@@ -20,6 +20,32 @@
 /license.xml
   Content-Type: application/rsl+xml; charset=utf-8
 
+# Staff QR sign-up pages (and their Spanish copies) stay out of search results.
+/philadelphia/signup
+  X-Robots-Tag: noindex
+/houston/signup
+  X-Robots-Tag: noindex
+/manassas/signup
+  X-Robots-Tag: noindex
+/mount-prospect/signup
+  X-Robots-Tag: noindex
+/orland-park/signup
+  X-Robots-Tag: noindex
+/dallas/signup
+  X-Robots-Tag: noindex
+/es/philadelphia/signup
+  X-Robots-Tag: noindex
+/es/houston/signup
+  X-Robots-Tag: noindex
+/es/manassas/signup
+  X-Robots-Tag: noindex
+/es/mount-prospect/signup
+  X-Robots-Tag: noindex
+/es/orland-park/signup
+  X-Robots-Tag: noindex
+/es/dallas/signup
+  X-Robots-Tag: noindex
+
 # Houston Guest Agent hybrid mode requests microphone access only after user action.
 /houston
   ! Permissions-Policy

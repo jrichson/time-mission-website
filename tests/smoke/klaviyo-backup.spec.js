@@ -136,6 +136,7 @@ test('Creator pages share one form and the backup preselects the page location',
   await backup.getByLabel('Audience size (followers) *').selectOption('5K to 25K');
   await backup.getByRole('button', { name: 'Submit Application' }).click();
 
+  await expect(page.locator('[data-tm-klaviyo-backup-success]')).toBeVisible();
   await expect(page.locator('[data-tm-klaviyo-backup-success]')).toContainText('Application received!');
   expect(submitted).toContain('klaviyo_form_id=WKi36B');
   expect(submitted).toContain('creator_location=Orland+Park');
@@ -163,6 +164,7 @@ test('Nashville ticket sign-up shows the free ticket backup when Klaviyo is bloc
   await backup.getByLabel('Phone number').fill('615-555-0100');
   await backup.getByRole('button', { name: 'Unlock Free Tickets!' }).click();
 
+  await expect(page.locator('[data-tm-klaviyo-backup-success]')).toBeVisible();
   await expect(page.locator('[data-tm-klaviyo-backup-success]')).toContainText('You’re in!');
   expect(submitted).toContain('klaviyo_form_id=XHnsxT');
   expect(submitted).toContain('backup_reason=blocked');
@@ -174,5 +176,40 @@ test('Nashville ticket sign-up shows the free ticket backup when Klaviyo is bloc
     conversion_source: 'klaviyo_form',
     form_name: 'nashville_ticket_signup',
     parameters: { FORM_ID: 'XHnsxT', LOCATION_SLUG: 'nashville', PROVIDER: 'klaviyo_backup' },
+  });
+});
+
+test('Staff QR sign-up page is noindex and shows the backup when Klaviyo is blocked', async ({ page }) => {
+  await page.route(KLAVIYO_SCRIPTS, (route) => route.abort('blockedbyclient'));
+  let submitted = null;
+  await page.route('**/api/klaviyo-signup', async (route) => {
+    submitted = route.request().postData();
+    await route.fulfill({ json: { ok: true } });
+  });
+
+  await page.goto('/philadelphia/signup');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Join the Time Mission Philadelphia list');
+  await expect(page.locator('.klaviyo-form-TdKs4g')).toBeAttached();
+  const backup = page.locator('[data-tm-klaviyo-backup="TdKs4g"]');
+  await expect(backup).toBeVisible({ timeout: 2500 });
+  await expect(backup).toContainText('Reply STOP to unsubscribe');
+
+  await backup.getByLabel('Email *', { exact: true }).fill('ana@example.com');
+  await backup.getByLabel('Phone number').fill('215-555-0100');
+  await backup.getByRole('button', { name: 'Sign Up' }).click();
+
+  // The success box is always in the DOM; wait for it to show so the submit has finished.
+  const success = page.locator('[data-tm-klaviyo-backup-success]');
+  await expect(success).toBeVisible();
+  await expect(success).toContainText("Thanks, you're signed up!");
+  expect(submitted).toContain('klaviyo_form_id=TdKs4g');
+
+  const registration = await page.evaluate(() => window.dataLayer.find((entry) => (
+    entry?.event_name === 'COMPLETE_REGISTRATION' && entry?.form_id === 'TdKs4g'
+  )));
+  expect(registration).toMatchObject({
+    form_name: 'philadelphia_staff_signup',
+    parameters: { FORM_ID: 'TdKs4g', LOCATION_SLUG: 'philadelphia', PROVIDER: 'klaviyo_backup' },
   });
 });

@@ -46,6 +46,31 @@ function educatorForm(listId, location) {
   };
 }
 
+// Staff "Website Signup (Staff Embed)" forms on the unlisted /<location>/signup QR pages.
+// All share list Y5tNnh and differ only by the Venue the form tags signups with.
+const STAFF_SIGNUP_CONSENT = 'By submitting this form, you agree to receive marketing emails and recurring automated marketing text messages from Time Mission at the number provided. Consent is not a condition of purchase. Msg frequency varies. Msg & data rates may apply. Reply STOP to unsubscribe or HELP for help.';
+
+function staffSignupForm(location, venue) {
+  return {
+    site: 'us',
+    listId: 'Y5tNnh',
+    location,
+    title: `${venue} website signup (staff QR)`,
+    properties: { Venue: venue },
+    fields: [
+      { name: 'email', label: 'Email', type: 'email', autocomplete: 'email', required: true, klaviyo: 'email' },
+      { name: 'phone', label: 'Phone number', type: 'tel', autocomplete: 'tel', klaviyo: 'phone_number' },
+    ],
+    submitLabel: 'Sign Up',
+    consent: STAFF_SIGNUP_CONSENT,
+    smsConsent: true,
+    success: {
+      title: "Thanks, you're signed up!",
+      text: '',
+    },
+  };
+}
+
 export const KLAVIYO_FORMS = Object.freeze({
   QYqsMS: {
     site: 'us',
@@ -167,6 +192,12 @@ export const KLAVIYO_FORMS = Object.freeze({
   WC5BHF: educatorForm('RPQ58e', 'nashville'),
   SmY6Us: educatorForm('VrpjHs', 'orland-park'),
   YAhjX2: educatorForm('XSawW7', 'philadelphia'),
+  TdKs4g: staffSignupForm('philadelphia', 'Philadelphia'),
+  XZcy3N: staffSignupForm('houston', 'Houston'),
+  SKKE6Y: staffSignupForm('manassas', 'Manassas'),
+  RrFyyG: staffSignupForm('mount-prospect', 'Mount Prospect'),
+  VzwmTf: staffSignupForm('orland-park', 'Orland Park'),
+  VA7BVB: staffSignupForm('dallas', 'Dallas'),
 });
 
 /** Returns the form's backup config, or null if it is unknown or belongs to the other site. */

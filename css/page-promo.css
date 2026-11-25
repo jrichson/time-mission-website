@@ -23,6 +23,25 @@
     max-width: 40rem;
 }
 
+.tm-signup-embed__header {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.tm-signup-embed__title {
+    margin: 0 0 0.5rem;
+    font-family: var(--display);
+    font-size: clamp(1.75rem, 6vw, 2.75rem);
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--white);
+}
+
+.tm-signup-embed__intro {
+    margin: 0;
+    color: var(--gray);
+}
+
 .tm-promo-landing {
     padding-top: var(--promo-page-offset);
     background:

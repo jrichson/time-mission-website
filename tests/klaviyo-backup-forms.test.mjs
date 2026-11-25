@@ -236,6 +236,34 @@ describe('Klaviyo backup forms', () => {
     });
   });
 
+  it('sends staff QR sign-ups to the shared website list with the venue the Klaviyo form sets', async () => {
+    const calls = [];
+    const response = await handleFormRequest({
+      env: baseEnv({ KLAVIYO_API_KEY: 'klaviyo-private-key' }),
+      fetchImpl: recordingFetch(calls),
+      formType: 'klaviyo-signup',
+      request: signupRequest({
+        klaviyo_form_id: 'RrFyyG',
+        email: 'guest@example.com',
+        phone: '847-555-0100',
+        Venue: 'Somewhere else',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    expect(JSON.parse(calls[1].init.body).data.attributes).toMatchObject({
+      email: 'guest@example.com',
+      phone_number: '+18475550100',
+      properties: { Venue: 'Mount Prospect', klaviyo_backup_form_id: 'RrFyyG', location: 'mount-prospect' },
+    });
+    const subscribe = JSON.parse(calls[2].init.body).data;
+    expect(subscribe.relationships.list.data.id).toBe('Y5tNnh');
+    expect(subscribe.attributes.profiles.data[0].attributes.subscriptions).toEqual({
+      email: { marketing: { consent: 'SUBSCRIBED' } },
+      sms: { marketing: { consent: 'SUBSCRIBED' } },
+    });
+  });
+
   it('never subscribes educator phone numbers to SMS', async () => {
     const calls = [];
     await handleFormRequest({
@@ -318,7 +346,7 @@ describe('Klaviyo backup forms', () => {
       if (String(loc.signupFormId || '').trim()) referenced.add(loc.signupFormId.trim());
     }
     expect([...referenced].sort()).toEqual(
-      expect.arrayContaining(['SmY6Us', 'TwcrHA', 'TzbcnW', 'WC5BHF', 'WKi36B', 'XHnsxT', 'XmbdNb', 'YAhjX2', 'YsG3eB']),
+      expect.arrayContaining(['RrFyyG', 'SKKE6Y', 'SmY6Us', 'TdKs4g', 'TwcrHA', 'TzbcnW', 'VA7BVB', 'VzwmTf', 'WC5BHF', 'WKi36B', 'XHnsxT', 'XZcy3N', 'XmbdNb', 'YAhjX2', 'YsG3eB']),
     );
     for (const formId of referenced) {
       expect(KLAVIYO_FORMS, `Klaviyo form ${formId} needs a backup entry`).toHaveProperty(formId);

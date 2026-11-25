@@ -773,24 +773,69 @@
       "outputFile": "manassas/holiday-party.html",
       "sitemap": true,
       "status": 301
+    },
+    {
+      "id": "philadelphia-signup",
+      "canonicalPath": "/philadelphia/signup",
+      "redirectSources": [
+        "/philadelphia/signup.html"
+      ],
+      "outputFile": "philadelphia/signup.html",
+      "sitemap": false,
+      "status": 301
+    },
+    {
+      "id": "houston-signup",
+      "canonicalPath": "/houston/signup",
+      "redirectSources": [
+        "/houston/signup.html"
+      ],
+      "outputFile": "houston/signup.html",
+      "sitemap": false,
+      "status": 301
+    },
+    {
+      "id": "manassas-signup",
+      "canonicalPath": "/manassas/signup",
+      "redirectSources": [
+        "/manassas/signup.html"
+      ],
+      "outputFile": "manassas/signup.html",
+      "sitemap": false,
+      "status": 301
+    },
+    {
+      "id": "mount-prospect-signup",
+      "canonicalPath": "/mount-prospect/signup",
+      "redirectSources": [
+        "/mount-prospect/signup.html"
+      ],
+      "outputFile": "mount-prospect/signup.html",
+      "sitemap": false,
+      "status": 301
+    },
+    {
+      "id": "orland-park-signup",
+      "canonicalPath": "/orland-park/signup",
+      "redirectSources": [
+        "/orland-park/signup.html"
+      ],
+      "outputFile": "orland-park/signup.html",
+      "sitemap": false,
+      "status": 301
+    },
+    {
+      "id": "dallas-signup",
+      "canonicalPath": "/dallas/signup",
+      "redirectSources": [
+        "/dallas/signup.html"
+      ],
+      "outputFile": "dallas/signup.html",
+      "sitemap": false,
+      "status": 301
     }
   ],
   "aliases": [
-    {
-      "source": "/dallas/signup",
-      "target": "/dallas",
-      "status": 301
-    },
-    {
-      "source": "/dallas/signup/",
-      "target": "/dallas",
-      "status": 301
-    },
-    {
-      "source": "/dallas/signup.html",
-      "target": "/dallas",
-      "status": 301
-    },
     {
       "source": "/adult-birthday-parties",
       "target": "/groups/birthdays",

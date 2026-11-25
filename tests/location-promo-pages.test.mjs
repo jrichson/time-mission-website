@@ -25,19 +25,47 @@ describe('location campaign pages', () => {
     expect(read('cms/migrations/index.ts')).toContain("name: '20261110_090000_nashville_signup_page'");
   });
 
+  it('gives each open location an unlisted, noindex staff sign-up page for QR codes', () => {
+    const routes = JSON.parse(read('src/data/routes.json'));
+    const robots = JSON.parse(read('src/data/site/seo-robots.json'));
+    const locations = JSON.parse(read('data/locations.json')).locations;
+    const sitemap = read('sitemap.xml');
+    const staffForms = {
+      philadelphia: 'TdKs4g',
+      houston: 'XZcy3N',
+      manassas: 'SKKE6Y',
+      'mount-prospect': 'RrFyyG',
+      'orland-park': 'VzwmTf',
+      dallas: 'VA7BVB',
+    };
+    for (const [slug, formId] of Object.entries(staffForms)) {
+      const canonicalPath = `/${slug}/signup`;
+      expect(read(`src/pages/${slug}/signup.astro`)).toContain(`formId="${formId}" locationSlug="${slug}"`);
+      expect(routes.routes).toContainEqual(expect.objectContaining({
+        canonicalPath,
+        outputFile: `${slug}/signup.html`,
+        sitemap: false,
+      }));
+      expect(robots.rules).toContainEqual({ match: 'exact', path: canonicalPath, robots: 'noindex,follow' });
+      expect(read('_headers.tmpl')).toContain(`${canonicalPath}\n  X-Robots-Tag: noindex`);
+      expect(read('_redirects')).toContain(`${canonicalPath}.html ${canonicalPath} 301`);
+      expect(sitemap).not.toContain(`${canonicalPath}<`);
+      const location = locations.find((loc) => loc.slug === slug);
+      expect(location.signupUrl).toBeUndefined();
+    }
+  });
+
   it('retires the Dallas free-ticket page while keeping paid booking now that Dallas is open', () => {
     const routes = JSON.parse(read('src/data/routes.json'));
     const dallas = JSON.parse(read('data/locations.json')).locations.find((location) => location.slug === 'dallas');
-    expect(fs.existsSync(path.join(root, 'src/pages/dallas/signup.astro'))).toBe(false);
-    expect(routes.routes.some((route) => route.canonicalPath === '/dallas/signup')).toBe(false);
+    // /dallas/signup is now the unlisted staff QR page, not the free-ticket form.
+    expect(read('src/pages/dallas/signup.astro')).not.toContain('QYqsMS');
     expect(dallas.signupUrl).toBeUndefined();
     expect(dallas.bookingUrl).toBe('https://ecom.roller.app/TimeMissiondallas/onlinecheckout/en-US/products');
     expect(dallas.status).toBe('open');
     expect(dallas.openingLabel).toBeUndefined();
-    for (const source of ['/dallas/signup', '/dallas/signup/', '/dallas/signup.html']) {
-      expect(routes.aliases).toContainEqual({ source, target: '/dallas', status: 301 });
-      expect(read('_redirects')).toContain(`${source} /dallas 301`);
-    }
+    expect(routes.aliases.some((alias) => alias.source.startsWith('/dallas/signup'))).toBe(false);
+    expect(read('_redirects')).not.toContain('/dallas/signup /dallas 301');
     expect(read('cms/migrations/20261104_090000_retire_dallas_signup.ts')).toContain('SET "published" = false');
   });
 

@@ -8,6 +8,7 @@ import { DALLAS_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261016_dall
 import { NASHVILLE_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261110_nashville_signup_page_snapshot';
 import { MANASSAS_GROUP_PAGES_SNAPSHOT } from '../cms/migration-data/20261113_manassas_group_pages_snapshot';
 import { CREATOR_PAGES_SNAPSHOT } from '../cms/migration-data/20261021_creator_pages_snapshot';
+import { STAFF_SIGNUP_PAGES_SNAPSHOT } from '../cms/migration-data/20261125_staff_signup_pages_snapshot';
 import { HOLIDAY_PARTY_PAGES_SNAPSHOT } from '../cms/migration-data/20261022_holiday_party_pages_snapshot';
 import {
     BRUSSELS_LATE_NIGHT_SPECIAL_PAGE_SNAPSHOT,
@@ -234,6 +235,7 @@ describe('live-site-to-CMS sync snapshot', () => {
             metaDescription: seo.description,
             robots:
                 routePath === '/404' || routePath === '/contact-thank-you'
+                    || STAFF_SIGNUP_PAGES_SNAPSHOT.some((page) => page.path === routePath)
                     ? 'noindex,follow'
                     : 'index,follow',
             ogImage: seo.ogImage,
@@ -255,6 +257,7 @@ describe('live-site-to-CMS sync snapshot', () => {
                 DALLAS_SIGNUP_PAGE_SNAPSHOT,
                 NASHVILLE_SIGNUP_PAGE_SNAPSHOT,
                 ...CREATOR_PAGES_SNAPSHOT,
+                ...STAFF_SIGNUP_PAGES_SNAPSHOT,
                 ...HOLIDAY_PARTY_PAGES_SNAPSHOT,
                 ...MANASSAS_GROUP_PAGES_SNAPSHOT,
                 ...BRUSSELS_LATE_NIGHT_SPECIAL_PAGE_SNAPSHOT,

@@ -119,7 +119,7 @@ const klaviyoCompany = KLAVIYO_ACCOUNTS[config.site as 'us' | 'eu'];
     </form>
     <div class="tm-klaviyo-backup__success" data-tm-klaviyo-backup-success hidden>
         <p class="tm-klaviyo-backup__success-title">{config.success.title}</p>
-        <p>{config.success.text}</p>
+        {config.success.text && <p>{config.success.text}</p>}
     </div>
 </div>
 <script is:inline src="/js/klaviyo-fallback.js?v=6" defer></script>

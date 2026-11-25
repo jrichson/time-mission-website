@@ -14,6 +14,8 @@ import {
     landingShouldAppearInSitemap,
 } from '../lib/payload/load';
 import { compilePublicUrlSurface, type PublicUrlRegistry } from '../lib/public-url-surface';
+import robots from '../data/site/seo-robots.json';
+import { resolveRobotsForRoute, type RobotsRule } from '../lib/seo/route-patterns';
 import { activeSiteProfile, isInternalLocation, localizedPath, routeServesProfile } from '../lib/site-profile';
 
 export const prerender = true;
@@ -47,6 +49,8 @@ export const GET: APIRoute = async () => {
             ? isInternalLocation(location, activeSiteProfile)
             : route.sitemap === true;
         if (!shouldInclude || !routeServesProfile(route, activeSiteProfile)) continue;
+        // Noindex pages (e.g. the unlisted staff QR sign-up pages) never belong in the sitemap.
+        if (resolveRobotsForRoute(canonicalPath, robots as { rules: RobotsRule[] }).startsWith('noindex')) continue;
 
         addLocalizedUrls(canonicalPath);
     }

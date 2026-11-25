@@ -13,6 +13,7 @@ describe('CMS existing-page seed migration', () => {
       'cms/migration-data/20261001_scottsdale_snapshot.ts',
       'cms/migration-data/20261016_dallas_signup_page_snapshot.ts',
       'cms/migration-data/20261021_creator_pages_snapshot.ts',
+      'cms/migration-data/20261125_staff_signup_pages_snapshot.ts',
       'cms/migration-data/20261022_holiday_party_pages_snapshot.ts',
       'cms/migration-data/20261022_brussels_late_night_special_snapshot.ts',
       'cms/migration-data/20261110_nashville_signup_page_snapshot.ts',

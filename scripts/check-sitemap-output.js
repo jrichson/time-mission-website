@@ -17,6 +17,18 @@ const locationsDocument = JSON.parse(
 );
 const locations = Array.isArray(locationsDocument.locations) ? locationsDocument.locations : [];
 const profile = resolveSiteProfile(process.env);
+const robotsRules = JSON.parse(
+    fs.readFileSync(path.join(root, 'src', 'data', 'site', 'seo-robots.json'), 'utf8'),
+).rules;
+
+function isNoindex(canonicalPath) {
+    const rule = robotsRules.find((r) => (
+        (r.match === 'exact' && r.path === canonicalPath)
+        || (r.match === 'prefix' && r.path && canonicalPath.startsWith(r.path))
+        || r.match === 'default'
+    ));
+    return Boolean(rule && rule.robots.startsWith('noindex'));
+}
 
 contract.baseUrl = profile.origin;
 contract.rootHome = `${profile.origin}/`;
@@ -33,7 +45,7 @@ for (const route of registry.routes || []) {
     const shouldInclude = location
         ? isInternalLocation(location, profile)
         : route.sitemap === true;
-    if (!shouldInclude || !routeServesProfile(route, profile)) continue;
+    if (!shouldInclude || !routeServesProfile(route, profile) || isNoindex(route.canonicalPath)) continue;
     for (const locale of profile.locales) {
         contract.sitemapUrls.push(
             `${profile.origin}${localizedPath(route.canonicalPath, locale, profile)}`,

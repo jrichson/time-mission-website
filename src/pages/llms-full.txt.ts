@@ -4,6 +4,8 @@ import routes from '../data/routes.json';
 import faqsData from '../data/site/faqs.json';
 import groupsData from '../data/site/groups.json';
 import seoRoutes from '../data/site/seo-routes.json';
+import robots from '../data/site/seo-robots.json';
+import { resolveRobotsForRoute, type RobotsRule } from '../lib/seo/route-patterns';
 import geoAnswerBlocksData from '../data/site/geo-answer-blocks.json';
 import { sortLocationsForList } from '../lib/location-list';
 import { activeSiteProfile, isInternalLocation } from '../lib/site-profile';
@@ -123,6 +125,7 @@ function seoRows(): string {
             const location = allLocations.find(({ slug }) =>
                 route.canonicalPath === `/${slug}` || route.canonicalPath.startsWith(`/${slug}/`),
             );
+            if (resolveRobotsForRoute(route.canonicalPath, robots as { rules: RobotsRule[] }).startsWith('noindex')) return false;
             return location ? isInternalLocation(location, activeSiteProfile) : route.sitemap === true;
         })
         .map((route) => route.canonicalPath)
