@@ -386,5 +386,11 @@ export const LOCATION_OWNED_PATHS = [
   "/houston/holiday-party",
   "/orland-park/holiday-party",
   "/mount-prospect/holiday-party",
-  "/manassas/holiday-party"
+  "/manassas/holiday-party",
+  "/philadelphia/signup",
+  "/houston/signup",
+  "/manassas/signup",
+  "/mount-prospect/signup",
+  "/orland-park/signup",
+  "/dallas/signup"
 ];
