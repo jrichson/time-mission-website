@@ -294,7 +294,7 @@ export const PREFIXABLE_ROUTE_ALIASES = [
   ],
   [
     "/team-building",
-    "/groups/private-events"
+    "/groups/corporate"
   ],
   [
     "/school-field-trips",
@@ -306,23 +306,23 @@ export const PREFIXABLE_ROUTE_ALIASES = [
   ],
   [
     "/youth-group-camp",
-    "/groups/private-events"
+    "/groups"
   ],
   [
     "/youth-group",
-    "/groups/private-events"
+    "/groups"
   ],
   [
     "/family-gathering",
-    "/groups/holidays"
+    "/groups"
   ],
   [
     "/bus-tour",
-    "/groups/private-events"
+    "/groups"
   ],
   [
     "/bus-tours",
-    "/groups/private-events"
+    "/groups"
   ],
   [
     "/house-rules",
