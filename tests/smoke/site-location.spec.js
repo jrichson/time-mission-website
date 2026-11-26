@@ -411,8 +411,14 @@ test('location pages render footer contact details with accordion hours', async 
   await expect(hours).not.toHaveAttribute('open', '');
   await hours.locator('.footer-loc-hours-summary').click();
   await expect(hours).toHaveAttribute('open', '');
-  await expect(hours.locator('.footer-hours-row')).toHaveCount(7);
-  await expect(hours.locator('.footer-hours-row').first()).toContainText('Monday');
+  // Upcoming holiday rows (if any) sit above the seven weekday rows.
+  const rows = hours.locator('.footer-hours-row');
+  const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const count = await rows.count();
+  expect(count).toBeGreaterThanOrEqual(7);
+  for (const [index, day] of weekdays.entries()) {
+    await expect(rows.nth(count - 7 + index)).toContainText(day);
+  }
 });
 
 test('Houston location page renders launch footer contact hours from location data', async ({ page }) => {
