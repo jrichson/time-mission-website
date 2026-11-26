@@ -84,6 +84,8 @@ const footerAddressParts = locationAddressLines(pageLocation);
 const footerPhone = String(pageLocation?.contact.phone || '').trim();
 const footerPhoneHref = locationPhoneHref(pageLocation);
 const footerHoursRows = locationHoursRows(pageLocation);
+// Holiday rows ("Mon, Dec 21") keep their own text; only weekday rows use the footer.day.* keys.
+const footerWeekdays = new Set(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
 const footerHoursFallback = hoursFallbackForLocation(pageLocation);
 const footerHoursFallbackI18n = hoursFallbackI18nForLocation(pageLocation);
 const footerLocationNameI18n = euFooterI18nKey(pageLocation, 'footer.city');
@@ -212,7 +214,7 @@ const hasPageLocation = Boolean(pageLocation);
                         {footerHoursRows.length ? (
                             footerHoursRows.map((row) => (
                                 <div class="footer-hours-row">
-                                    <span data-i18n={`footer.day.${row.day.slice(0, 3).toLowerCase()}`}>{row.day}</span>
+                                    <span data-i18n={footerWeekdays.has(row.day) ? `footer.day.${row.day.slice(0, 3).toLowerCase()}` : undefined}>{row.day}</span>
                                     <span>{row.label}</span>
                                 </div>
                             ))

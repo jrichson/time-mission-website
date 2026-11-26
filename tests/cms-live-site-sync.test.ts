@@ -4,6 +4,7 @@ import { EINDHOVEN_DIRECT_CHECKOUT_SNAPSHOT } from '../cms/migration-data/202610
 import { EINDHOVEN_NOW_OPEN_SNAPSHOT } from '../cms/migration-data/20261016_eindhoven_now_open_snapshot';
 import { EDISON_HOURS_SNAPSHOT } from '../cms/migration-data/20261019_edison_hours_snapshot';
 import { BRUSSELS_HOURS_SNAPSHOT } from '../cms/migration-data/20261123_brussels_hours_snapshot';
+import { HOLIDAY_HOURS_VA_IL_SNAPSHOT } from '../cms/migration-data/20261126_holiday_hours_va_il_snapshot';
 import { DALLAS_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261016_dallas_signup_page_snapshot';
 import { NASHVILLE_SIGNUP_PAGE_SNAPSHOT } from '../cms/migration-data/20261110_nashville_signup_page_snapshot';
 import { MANASSAS_GROUP_PAGES_SNAPSHOT } from '../cms/migration-data/20261113_manassas_group_pages_snapshot';
@@ -60,11 +61,12 @@ function readJson(relativePath: string): unknown {
 }
 
 // CMS rows store a closed day's open/close as null; data/locations.json omits them.
+function withoutNullFields(row: Record<string, unknown>) {
+    return Object.fromEntries(Object.entries(row).filter(([, value]) => value != null));
+}
+
 function withoutNullHourFields(hours: Record<string, Record<string, unknown>>) {
-    return Object.fromEntries(Object.entries(hours).map(([day, row]) => [
-        day,
-        Object.fromEntries(Object.entries(row).filter(([, value]) => value != null)),
-    ]));
+    return Object.fromEntries(Object.entries(hours).map(([day, row]) => [day, withoutNullFields(row)]));
 }
 
 describe('live-site-to-CMS sync snapshot', () => {
@@ -155,15 +157,21 @@ describe('live-site-to-CMS sync snapshot', () => {
                     hours: { ...currentHoursLocation.hours, ...noonHoursPatch },
                 }
                 : currentHoursLocation;
-            const addressCorrectedLocation = location.slug === EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.slug
+            const holidayHoursLocation = HOLIDAY_HOURS_VA_IL_SNAPSHOT.locations.some((slug) => slug === location.slug)
                 ? {
                     ...currentNoonHoursLocation,
+                    specialHours: HOLIDAY_HOURS_VA_IL_SNAPSHOT.specialHours.map(withoutNullFields),
+                }
+                : currentNoonHoursLocation;
+            const addressCorrectedLocation = location.slug === EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.slug
+                ? {
+                    ...holidayHoursLocation,
                     address: {
-                        ...currentNoonHoursLocation.address,
+                        ...holidayHoursLocation.address,
                         zip: EINDHOVEN_ADDRESS_CORRECTION_SNAPSHOT.location.zip,
                     },
                 }
-                : currentNoonHoursLocation;
+                : holidayHoursLocation;
             const groupFormPatch = location.slug === EINDHOVEN_GROUP_FORM_SNAPSHOT.slug
                 ? EINDHOVEN_GROUP_FORM_SNAPSHOT
                 : groupFormPatches.get(location.slug);

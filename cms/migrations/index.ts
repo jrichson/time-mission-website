@@ -1,4 +1,5 @@
 import * as migration_20261125_090000_staff_signup_pages from './20261125_090000_staff_signup_pages';
+import * as migration_20261126_090000_holiday_hours_va_il from './20261126_090000_holiday_hours_va_il';
 import * as migration_20261114_100000_unpublish_manassas_group_pages from './20261114_100000_unpublish_manassas_group_pages';
 import * as migration_20261123_090000_brussels_hours from './20261123_090000_brussels_hours';
 import * as migration_20261114_090000_manassas_group_pages from './20261114_090000_manassas_group_pages';
@@ -506,5 +507,10 @@ export const migrations = [
     up: migration_20261125_090000_staff_signup_pages.up,
     down: migration_20261125_090000_staff_signup_pages.down,
     name: '20261125_090000_staff_signup_pages'
+  },
+  {
+    up: migration_20261126_090000_holiday_hours_va_il.up,
+    down: migration_20261126_090000_holiday_hours_va_il.down,
+    name: '20261126_090000_holiday_hours_va_il'
   },
 ];
